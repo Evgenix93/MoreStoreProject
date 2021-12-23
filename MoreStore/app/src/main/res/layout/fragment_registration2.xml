@@ -89,7 +89,7 @@
         android:letterSpacing="0.02"
         android:lineSpacingExtra="3sp"
         android:text="@string/you_can_get_code_after"
-        android:textColor="@color/gray1"
+        android:textColor="@color/gray2"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -102,7 +102,7 @@
         android:letterSpacing="0.02"
         android:lineSpacingExtra="3sp"
         android:text=" 1:59"
-        android:textColor="@color/gray1"
+        android:textColor="@color/gray2"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView4" />

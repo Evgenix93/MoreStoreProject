@@ -42,4 +42,75 @@
     <string name="delivery_content">Курьер доставит товар покупателю.\nВ пределах одного города доступна\nопция самовывоза</string>
     <string name="get_money_title">Получите ваши деньги</string>
     <string name="get_money_content">Деньги за проданный товар поступят\nвам на карту в течение 1 дня после\nподтверждения получения товара\nПокупателем</string>
+    <string name="onboarding1_text">Приветствуем вас на ресейл площадке\nдля продажи брендовых вещей\nи любителей моды</string>
+
+    <string name="onboarding2_info">Мы подберём вам вещи,\nподходящие по размеру</string>
+
+    <string name="onboarding_suggestion">Советуем указать по два-три размера в блоке.\nИх можно будет изменить в настройках профиля.</string>
+
+    <string name="top">Верх</string>
+
+    <string name="choose_sizes">Укажите до трёх размеров (INT)</string>
+
+    <string name="xxs">XXS</string>
+
+    <string name="xs">XS</string>
+
+    <string name="s">S</string>
+
+    <string name="m">M</string>
+
+    <string name="l">L</string>
+
+    <string name="xl">XL</string>
+
+    <string name="bottom">Низ</string>
+
+    <string name="shoos">Обувь</string>
+
+    <string name="next">Продолжить</string>
+
+    <string name="_38">38</string>
+
+    <string name="_38_5">38.5</string>
+
+    <string name="_39">39</string>
+
+    <string name="_39_5">39.5</string>
+
+    <string name="_40">40</string>
+
+    <string name="_40_5">40.5</string>
+
+    <string name="second_life">Вторая жизнь</string>
+
+    <string name="onboarding5_info1">Давая вещам вторую жизнь, мы снижаем\nпотребление натуральных и синтетических\nматериалов, затрачиваемых\nна её производство.</string>
+
+    <string name="onbording5_info2">Если вы не нашли нового хозяина в течение\n2 месяцев, то мы поможем сдать вещи\nв благотворительные организации\nили пункты переработки материалов.</string>
+
+    <string name="register">Зарегистрируйтесь</string>
+
+    <string name="and_get">и получите</string>
+
+    <string name="_15_percents">15%</string>
+
+    <string name="on_first">на первый</string>
+
+    <string name="order_with_promocode">звказ по промокоду</string>
+
+    <string name="morestore1">MORESTORE1</string>
+
+    <string name="enter_as_guest">Войти как гость</string>
+
+    <string name="auth">Авторизоваться</string>
+
+    <string name="create_account">Создать аккаунт</string>
+
+    <string name="enter_with_phone_or_email">Войти через телефон или почту</string>
+
+    <string name="to_register">Зарегистрироваться</string>
+
+    <string name="for_her">Для нее</string>
+
+    <string name="for_him">Для него</string>
 </resources>

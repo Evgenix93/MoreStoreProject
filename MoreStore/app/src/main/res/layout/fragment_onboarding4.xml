@@ -92,6 +92,7 @@
         android:id="@+id/materialButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        style="@style/buttonStyle"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="16dp"
