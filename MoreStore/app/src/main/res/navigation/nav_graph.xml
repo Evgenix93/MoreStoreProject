@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/onboarding1Fragment">
+
+    <fragment
+        android:id="@+id/onboarding1Fragment"
+        android:name="com.project.morestore.fragments.Onboarding1Fragment"
+        android:label="Onboarding1Fragment" >
+        <action
+            android:id="@+id/action_onboarding1Fragment_to_onboarding2Fragment"
+            app:destination="@id/onboarding2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onboarding2Fragment"
+        android:name="com.project.morestore.fragments.Onboarding2Fragment"
+        android:label="Onboarding2Fragment" >
+        <action
+            android:id="@+id/action_onboarding2Fragment_to_onboarding3Fragment"
+            app:destination="@id/onboarding3Fragment" />
+        <argument
+            android:name="isMale"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/onboarding3Fragment"
+        android:name="com.project.morestore.fragments.Onboarding3Fragment"
+        android:label="Onboarding3Fragment" >
+        <action
+            android:id="@+id/action_onboarding3Fragment_to_onboarding4Fragment"
+            app:destination="@id/onboarding4Fragment" />
+        <argument
+            android:name="isMale"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/onboarding4Fragment"
+        android:name="com.project.morestore.fragments.Onboarding4Fragment"
+        android:label="Onboarding4Fragment" >
+        <action
+            android:id="@+id/action_onboarding4Fragment_to_onboarding5Fragment"
+            app:destination="@id/onboarding5Fragment" />
+        <argument
+            android:name="isMale"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/onboarding5Fragment"
+        android:name="com.project.morestore.fragments.Onboarding5Fragment"
+        android:label="Onboarding5Fragment" >
+        <argument
+            android:name="isMale"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_onboarding5Fragment_to_onboarding6FemaleFragment"
+            app:destination="@id/onboarding6FemaleFragment" />
+        <action
+            android:id="@+id/action_onboarding5Fragment_to_onboarding6MaleFragment"
+            app:destination="@id/onboarding6MaleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onboarding6FemaleFragment"
+        android:name="com.project.morestore.fragments.Onboarding6FemaleFragment"
+        android:label="Onboarding6FemaleFragment" />
+    <fragment
+        android:id="@+id/onboarding6MaleFragment"
+        android:name="com.project.morestore.fragments.Onboarding6MaleFragment"
+        android:label="Onboarding6MaleFragment" />
+</navigation>
