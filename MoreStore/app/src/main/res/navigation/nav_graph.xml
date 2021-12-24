@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/firstLaunchFragment">
+
+    <fragment
+        android:id="@+id/firstLaunchFragment"
+        android:name="com.project.morestore.fragments.FirstLaunchFragment"
+        android:label="FirstLaunchFragment" />
+    <fragment
+        android:id="@+id/registration1Fragment"
+        android:name="com.project.morestore.fragments.Registration1Fragment"
+        android:label="Registration1Fragment" >
+        <action
+            android:id="@+id/action_registration1Fragment_to_registration2Fragment"
+            app:destination="@id/registration2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registration2Fragment"
+        android:name="com.project.morestore.fragments.Registration2Fragment"
+        android:label="Registration2Fragment" >
+        <argument
+            android:name="phoneOrEmail"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_registration2Fragment_to_registration3Fragment"
+            app:destination="@id/registration3Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registration3Fragment"
+        android:name="com.project.morestore.fragments.Registration3Fragment"
+        android:label="Registration3Fragment" >
+        <argument
+            android:name="phoneOrEmail"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_registration3Fragment_to_registration4Fragment"
+            app:destination="@id/registration4Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registration4Fragment"
+        android:name="com.project.morestore.fragments.Registration4Fragment"
+        android:label="Registration4Fragment" >
+        <argument
+            android:name="phoneOrEmail"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_registration4Fragment_to_registration2Fragment"
+            app:destination="@id/registration2Fragment" />
+    </fragment>
+</navigation>

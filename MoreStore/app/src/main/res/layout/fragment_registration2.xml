@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/registerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -33,7 +33,7 @@
         android:background="@drawable/ic_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/registerTextView" />
 
     <TextView
         android:id="@+id/textView2"
@@ -67,8 +67,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
+        android:id="@+id/phoneEmailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
         android:fontFamily="@font/manrope_bold"
         android:letterSpacing="0.02"
         android:lineSpacingExtra="3sp"
@@ -91,7 +93,7 @@
         android:text="@string/you_can_get_code_after"
         android:textColor="@color/gray2"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/confirmBtn"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -104,7 +106,7 @@
         android:text=" 1:59"
         android:textColor="@color/gray2"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/confirmBtn"
         app:layout_constraintStart_toEndOf="@+id/textView4" />
 
     <TextView
@@ -119,6 +121,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirmBtn"
+        style="@style/buttonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/green"
+        android:text="Подтвердить"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
 
 
 

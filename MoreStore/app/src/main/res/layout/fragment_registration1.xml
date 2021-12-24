@@ -9,7 +9,7 @@
         android:id="@+id/toolbar"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/registerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -23,6 +23,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
+        android:id="@+id/phoneEmailEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -31,9 +32,10 @@
         android:background="@drawable/ic_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/registerTextView" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/getCodeBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/buttonStyle"
@@ -44,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/get_code"
-        android:textAppearance="@style/bold_16"/>
+        />
 
 
 
