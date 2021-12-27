@@ -25,5 +25,7 @@ class Onboarding5Fragment: Fragment(R.layout.fragment_onboarding5) {
                     Onboarding5FragmentDirections.actionOnboarding5FragmentToOnboarding6FemaleFragment()
                 )
         }
+
+        binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 }

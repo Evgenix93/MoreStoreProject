@@ -22,5 +22,7 @@ class Onboarding3Fragment: Fragment(R.layout.fragment_onboarding3) {
                 )
             )
         }
+
+        binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 }

@@ -13,11 +13,11 @@
         android:layout_marginTop="16dp"
         android:text="@string/how_service_work"
         android:textAppearance="@style/bold_20"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/backIcon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/backIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="21dp"
@@ -48,18 +48,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view9"
         app:tabSelectedTextColor="@color/black"
-        app:tabRippleColor="@color/black">
+        app:tabTextAppearance="@style/bold_16"
+        app:tabTextColor="@color/gray2"
+        >
 
 
         <com.google.android.material.tabs.TabItem
-            style="@style/bold_16"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/to_buyers"
+
+
+
             />
 
         <com.google.android.material.tabs.TabItem
-            style="@style/bold_16"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/to_sellers" />

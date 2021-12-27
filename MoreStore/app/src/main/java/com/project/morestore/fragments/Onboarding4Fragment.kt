@@ -33,6 +33,8 @@ class Onboarding4Fragment: Fragment(R.layout.fragment_onboarding4) {
             )
         }
 
+        binding.backIcon.setOnClickListener { findNavController().popBackStack() }
+
 
     }
 }

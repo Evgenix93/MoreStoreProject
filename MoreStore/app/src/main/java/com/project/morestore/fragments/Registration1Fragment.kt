@@ -14,6 +14,7 @@ class Registration1Fragment: Fragment(R.layout.fragment_registration1)  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setClickListeners()
+        initToolbar()
     }
 
     private fun setClickListeners(){
@@ -21,5 +22,10 @@ class Registration1Fragment: Fragment(R.layout.fragment_registration1)  {
             findNavController().navigate(Registration1FragmentDirections.actionRegistration1FragmentToRegistration2Fragment(binding.phoneEmailEditText.text.toString()))
 
         }
+
+    }
+
+    private fun initToolbar(){
+        binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 }
