@@ -113,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -125,9 +125,9 @@
                     android:text="@string/xxs"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -139,9 +139,9 @@
                     android:text="@string/xs"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -153,9 +153,9 @@
                     android:text="@string/s"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -167,9 +167,9 @@
                     android:text="@string/m"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -181,9 +181,9 @@
                     android:text="@string/l"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -195,7 +195,7 @@
                     android:text="@string/xl"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -239,7 +239,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -251,9 +251,9 @@
                     android:text="@string/xxs"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -265,9 +265,9 @@
                     android:text="@string/xs"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -279,9 +279,9 @@
                     android:text="@string/s"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -293,9 +293,9 @@
                     android:text="@string/m"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -307,9 +307,9 @@
                     android:text="@string/l"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -321,7 +321,7 @@
                     android:text="@string/xl"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -365,7 +365,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -377,9 +377,9 @@
                     android:text="@string/_38"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -391,9 +391,9 @@
                     android:text="@string/_38_5"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -405,9 +405,9 @@
                     android:text="@string/_39"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -419,9 +419,9 @@
                     android:text="@string/_39_5"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp">
@@ -433,9 +433,9 @@
                     android:text="@string/_40"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.project.morestore.util.SizeCard
                 style="@style/sizeCard"
                 android:layout_width="54dp"
                 android:layout_height="40dp"
@@ -449,7 +449,7 @@
                     android:text="@string/_40_5"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.project.morestore.util.SizeCard>
         </LinearLayout>
     </HorizontalScrollView>
 

@@ -44,7 +44,7 @@ class Registration2Fragment : Fragment(R.layout.fragment_registration2) {
     }
 
     private fun initToolbar() {
-        binding.toolbar.titleTextView.text = "Подтвержденин номера"
+        binding.toolbar.titleTextView.text = "Подтверждение номера"
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 }

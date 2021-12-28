@@ -67,9 +67,7 @@
             @color/black
         </item>
 
-        <item name="android:lineSpacingExtra">
-            2sp
-        </item>
+
 
         <item name="android:fontFamily">
             @font/manrope_bold
@@ -132,6 +130,8 @@
     <item name="android:background">@drawable/button</item>
 
     <item name="android:textAppearance">@style/buttonText</item>
+        <item name="android:textColor">@color/white</item>
+
 
     <item name="textAllCaps">false</item>
     </style>
@@ -151,6 +151,12 @@
     <item name="cardElevation">0dp</item>
 
 </style>
+
+    <style name="edit_text">
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:singleLine">true</item>
+    </style>
 
 
 </resources>
