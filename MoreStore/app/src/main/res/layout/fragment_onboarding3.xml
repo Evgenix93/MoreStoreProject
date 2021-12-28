@@ -92,11 +92,13 @@
         android:id="@+id/materialCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:buttonTint="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/view4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3"
-        android:button="@drawable/ic_checkbox"/>
+        android:button="@drawable/checkbox"
+        app:useMaterialThemeColors="false"
+        android:minWidth="30dp"
+        android:minHeight="30dp"/>
 
 
     <TextView
@@ -126,8 +128,10 @@
         app:layout_constraintBottom_toTopOf="@+id/view5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view4"
-        android:button="@drawable/ic_checkbox"
-        app:buttonTint="@color/black"/>
+        android:minWidth="30dp"
+        android:minHeight="30dp"
+        android:button="@drawable/checkbox"
+        app:useMaterialThemeColors="false"/>
 
 
     <TextView
@@ -193,8 +197,10 @@
         app:layout_constraintBottom_toTopOf="@+id/view6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view5"
-        app:buttonTint="@color/black"
-        android:button="@drawable/ic_checkbox"/>
+        android:minWidth="30dp"
+        android:minHeight="30dp"
+        android:button="@drawable/checkbox"
+        app:useMaterialThemeColors="false"/>
 
     <View
         android:id="@+id/view6"
@@ -235,8 +241,10 @@
         app:layout_constraintBottom_toTopOf="@+id/view7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view6"
-        app:buttonTint="@color/black"
-        android:button="@drawable/ic_checkbox"/>
+        android:button="@drawable/checkbox"
+        app:useMaterialThemeColors="false"
+        android:minWidth="30dp"
+        android:minHeight="30dp"/>
 
     <View
         android:id="@+id/view7"
@@ -277,8 +285,10 @@
         app:layout_constraintBottom_toTopOf="@+id/view8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view7"
-        app:buttonTint="@color/black"
-        android:button="@drawable/ic_checkbox"/>
+        android:button="@drawable/checkbox"
+        app:useMaterialThemeColors="false"
+        android:minWidth="30dp"
+        android:minHeight="30dp"/>
 
 
     <View
