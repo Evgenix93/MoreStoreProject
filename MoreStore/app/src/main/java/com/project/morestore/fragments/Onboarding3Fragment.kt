@@ -1,5 +1,6 @@
 package com.project.morestore.fragments
 
+import android.graphics.MaskFilter
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -24,5 +25,11 @@ class Onboarding3Fragment: Fragment(R.layout.fragment_onboarding3) {
         }
 
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
+        binding.allCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            binding.luxuryCheckBox.isChecked = isChecked
+            binding.middleCheckBox.isChecked = isChecked
+            binding.massCheckBox.isChecked = isChecked
+            binding.economyCheckBox.isChecked = isChecked
+        }
     }
 }
