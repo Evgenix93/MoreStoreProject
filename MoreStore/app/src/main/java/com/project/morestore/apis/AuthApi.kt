@@ -6,6 +6,8 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Query
+import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface AuthApi {
 
@@ -24,6 +26,7 @@ interface AuthApi {
     suspend fun getNewCode(@Query("phone") phone: String?, @Query("email") email: String?): Response<RegistrationResponse>
 
 
-
+    @POST("user/registration")
+    suspend fun emailRegister(@Body requestBody: RegistrationData): Response<RegistrationResponse>
 
 }
