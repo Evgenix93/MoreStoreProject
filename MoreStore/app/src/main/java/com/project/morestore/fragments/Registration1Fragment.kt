@@ -1,17 +1,23 @@
 package com.project.morestore.fragments
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration1Binding
+import com.project.morestore.models.RegistrationResponse
+import com.project.morestore.mvpviews.AuthMvpView
+import com.project.morestore.presenters.AuthPresenter
+import com.project.morestore.util.isEmailValid
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class Registration1Fragment: Fragment(R.layout.fragment_registration1)  {
+class Registration1Fragment : MvpAppCompatFragment(R.layout.fragment_registration1), AuthMvpView {
     private val binding: FragmentRegistration1Binding by viewBinding()
+    private val presenter by moxyPresenter { AuthPresenter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -19,23 +25,33 @@ class Registration1Fragment: Fragment(R.layout.fragment_registration1)  {
         initToolbar()
     }
 
-    private fun setClickListeners(){
+    private fun setClickListeners() {
         binding.getCodeBtn.setOnClickListener {
-            findNavController().navigate(Registration1FragmentDirections.actionRegistration1FragmentToRegistration2Fragment(binding.phoneEmailEditText.text.toString()))
-
+            presenter.phoneRegister1(binding.phoneEmailEditText.text.toString())
         }
 
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun initKeyBoard(){
-        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        binding.phoneEmailEditText.setOnEditorActionListener { textView, i, keyEvent ->
-            true
-        }
+
+    override fun success(result: Any) {
+        findNavController().navigate(
+            Registration1FragmentDirections.actionRegistration1FragmentToRegistration2Fragment(
+                binding.phoneEmailEditText.text.toString(),
+                (result as RegistrationResponse).user?.toInt()!!
+            )
+        )
+    }
+
+    override fun error(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun loading() {
+        Log.d("mylog", "loading")
 
     }
 }

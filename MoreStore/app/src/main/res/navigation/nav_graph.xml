@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_registration2Fragment_to_onboarding1Fragment"
             app:destination="@id/onboarding1Fragment" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/registration3Fragment"
@@ -40,6 +43,12 @@
         <action
             android:id="@+id/action_registration3Fragment_to_registration4Fragment"
             app:destination="@id/registration4Fragment" />
+        <argument
+            android:name="code"
+            app:argType="integer" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/registration4Fragment"
@@ -49,8 +58,8 @@
             android:name="phoneOrEmail"
             app:argType="string" />
         <action
-            android:id="@+id/action_registration4Fragment_to_registration2Fragment"
-            app:destination="@id/registration2Fragment" />
+            android:id="@+id/action_registration4Fragment_to_registration5Fragment"
+            app:destination="@id/registration5Fragment" />
     </fragment>
 
 
@@ -125,6 +134,17 @@
         <action
             android:id="@+id/action_splashScreenFragment_to_firstLaunchFragment"
             app:destination="@id/firstLaunchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registration5Fragment"
+        android:name="com.project.morestore.fragments.Registration5Fragment"
+        android:label="Registration5Fragment" >
+        <argument
+            android:name="phoneOrEmail"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_registration5Fragment_to_onboarding1Fragment"
+            app:destination="@id/onboarding1Fragment" />
     </fragment>
 
 </navigation>

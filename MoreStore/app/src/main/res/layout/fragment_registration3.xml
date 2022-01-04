@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/nameEditText"
         style="@style/edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/ic_field"
-        android:hint="Александр"
+        tools:hint="Александр"
         android:textAppearance="@style/regular_16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,9 +68,10 @@
         android:text="@string/last_name"
         android:textAppearance="@style/regular_16"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
 
     <EditText
+        android:id="@+id/surnameEditText"
         style="@style/edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -78,7 +79,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/ic_field"
-        android:hint="Иванов"
+        tools:hint="Иванов"
         android:textAppearance="@style/regular_16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

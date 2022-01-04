@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/codeEditText"
         style="@style/edit_text"
         android:inputType="number"
         android:layout_width="0dp"
@@ -52,7 +52,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/codeEditText" />
 
     <TextView
         android:id="@+id/textView3"
@@ -99,19 +99,22 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:id="@+id/timerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
         android:layout_marginBottom="28dp"
         android:fontFamily="@font/manrope_regular"
         android:letterSpacing="0.02"
         android:lineSpacingExtra="3sp"
-        android:text=" 1:59"
+        tools:text=" 1:59"
         android:textColor="@color/gray2"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/confirmBtn"
         app:layout_constraintStart_toEndOf="@+id/textView4" />
 
     <TextView
+        android:id="@+id/getNewCodeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
@@ -119,10 +122,11 @@
         android:text="@string/get_new_code"
         android:textColor="@color/green"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/confirmBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/confirmBtn"
@@ -133,7 +137,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/green"
-        android:text="Подтвердить"
+        android:text="@string/confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
