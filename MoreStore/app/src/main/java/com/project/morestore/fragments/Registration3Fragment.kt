@@ -3,7 +3,6 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -15,9 +14,9 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registration3), AuthMvpView {
-    private val binding: FragmentRegistration3Binding by viewBinding()
     private val args: Registration3FragmentArgs by navArgs()
     private val presenter by moxyPresenter { AuthPresenter() }
+    private val binding: FragmentRegistration3Binding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,12 +25,15 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     private fun setClickListeners() {
+        val isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
         binding.nextBtn.setOnClickListener {
-            presenter.phoneRegister3(
+            presenter.register(
                 code = args.code,
-                userId = args.userId,
+                user = args.userId,
                 name = binding.nameEditText.text.toString(),
-                surname = binding.surnameEditText.text.toString()
+                surname = binding.surnameEditText.text.toString(),
+                step = 3,
+                type = if(isEmail) 2 else 1
             )
 
 

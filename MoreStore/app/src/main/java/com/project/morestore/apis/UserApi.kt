@@ -1,5 +1,6 @@
 package com.project.morestore.apis
 
+import com.project.morestore.models.RegistrationResponse
 import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -15,7 +16,7 @@ interface UserApi {
         @Query("sex") sex: String?,
         @Query("step") step: Int?,
         @Query("code") code: Int?
-    ): Response<Unit>
+    ): Response<RegistrationResponse>
 
 
 }

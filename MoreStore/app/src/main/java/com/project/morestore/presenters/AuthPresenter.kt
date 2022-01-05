@@ -1,43 +1,57 @@
 package com.project.morestore.presenters
 
-<<<<<<< HEAD
+import com.project.morestore.util.isEmailValid
+
+
 import android.util.Log
 import com.project.morestore.models.RegistrationData
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.util.isPhoneValid
-=======
-import com.project.morestore.mvpviews.AuthMvpView
-import com.project.morestore.repositories.AuthRepository
->>>>>>> origin/main
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 
-class AuthPresenter: MvpPresenter<AuthMvpView>() {
-<<<<<<< HEAD
+class AuthPresenter : MvpPresenter<AuthMvpView>() {
+
     private val repository = AuthRepository()
 
 
-    fun phoneRegister1(phone: String){
+    fun register(
+        phone: String? = null,
+        email: String? = null,
+        step: Int,
+        type: Int,
+        user: Int? = null,
+        code: Int? = null,
+        name: String? = null,
+        surname: String? = null
+    ) {
         presenterScope.launch {
-            if(!phone.isPhoneValid()){
+            if (phone != null && !phone.isPhoneValid()) {
                 viewState.error("телефон указан неверно")
                 return@launch
             }
+            if(email != null && !email.isEmailValid()){
+                viewState.error("почта указана неверно")
+                return@launch
+            }
             viewState.loading()
-            val response = repository.phoneRegister(RegistrationData(
-                step = 1,
-                phone = phone,
-                type = 1,
-                user = null,
-                code = null,
-                name = null,
-                surname = null
-            ))
-            when(response?.code()){
+            val response = repository.register(
+                RegistrationData(
+                    step = step,
+                    phone = phone,
+                    email = email,
+                    type = type,
+                    user = user,
+                    code = code,
+                    name = name,
+                    surname = surname
+                )
+            )
+            when (response?.code()) {
                 200 -> viewState.success(response.body()!!)
-                400 -> getNewCode(phone)
+                400 -> if(step == 1) getNewCode(phone, email)
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
             }
@@ -45,62 +59,21 @@ class AuthPresenter: MvpPresenter<AuthMvpView>() {
         }
 
 
-
     }
 
-    fun phoneRegister2(code: Int, userId: Int){
-        presenterScope.launch {
-            viewState.loading()
-            val response = repository.phoneRegister(RegistrationData(
-                step = 2,
-                user = userId,
-                code = code,
-                type = 1,
-                phone = null,
-                name = null,
-                surname = null
-            ))
-            when(response?.code()){
-                200 -> viewState.success(response.body()!!)
-                400 -> viewState.error("ошибка")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-            }
-        }
-    }
 
-    fun phoneRegister3(code: Int, userId: Int, name: String, surname: String){
-        presenterScope.launch {
-            viewState.loading()
-            val response = repository.phoneRegister(RegistrationData(
-                step = 3,
-                user = userId,
-                code = code,
-                type = 1,
-                phone = null,
-                name = name,
-                surname = surname
-            ))
-            when(response?.code()){
-                200 -> {
-                    repository.setupToken(response.body()?.token!!)
-                    viewState.success(response.body()!!)
-                }
-                400 -> viewState.error("ошибка")
-                null -> viewState.error("нет игтернета")
-                else -> viewState.error("ошибка")
-            }
-        }
 
-    }
 
-    fun getNewCode(phone: String? = null, email: String? = null){
+
+    fun getNewCode(phone: String? = null, email: String? = null) {
         presenterScope.launch {
             Log.d("mylog", "getNewCode")
             viewState.loading()
             val response = repository.getNewCode(phone, email)
             when (response?.code()) {
-                200 -> {}
+                200 -> {
+                    viewState.success(response.body()!!)
+                }
                 400 -> viewState.error("ошибка")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
@@ -109,49 +82,13 @@ class AuthPresenter: MvpPresenter<AuthMvpView>() {
     }
 
 
-=======
 
 
-   fun emailRegister1(email: String){
-       presenterScope.launch {
-         val response = repository.emailRegister1(email)
-           if (response == null)
-               viewState.error("Нет сети")
-           else{
-              when (response.code()){
-                  200 -> viewState.success(response.body()!!)
-                  else -> viewState.error("Ошибка регистрации")
-              }
-           }
-       }
-   }
 
-   fun emailRegister2(user: Int, code: Int){
-       presenterScope.launch {
-           val response = repository.emailRegister2(user, code)
-           if (response == null)
-               viewState.error("Нет сети")
-           else{
-               when (response.code()){
-                   200 -> viewState.success(response.body()!!)
-                   else -> viewState.error("Ошибка регистрации")
-               }
-           }
-       }
-   }
 
-   fun emailRegister3(user: Int, code: Int, name:String, surname: String){
-       presenterScope.launch {
-           val response = repository.emailRegister3(user, code, name, surname)
-           if (response == null)
-               viewState.error("Нет сети")
-           else{
-               when (response.code()){
-                   200 -> viewState.success(response.body()!!)
-                   else -> viewState.error("Ошибка регистрации")
-               }
-           }
-       }
-   }
->>>>>>> origin/main
+
+
+
+
+
 }

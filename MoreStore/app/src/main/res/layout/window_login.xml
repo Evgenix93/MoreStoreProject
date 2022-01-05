@@ -61,6 +61,7 @@
         app:layout_constraintTop_toTopOf="@+id/yandexImageView" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/loginBtn"
         style="@style/buttonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

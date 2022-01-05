@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_registration1Fragment_to_registration2Fragment"
             app:destination="@id/registration2Fragment" />
+        <argument
+            android:name="isLogin"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/registration2Fragment"
@@ -32,6 +35,9 @@
         <argument
             android:name="userId"
             app:argType="integer" />
+        <argument
+            android:name="isLogin"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/registration3Fragment"
@@ -146,5 +152,13 @@
             android:id="@+id/action_registration5Fragment_to_onboarding1Fragment"
             app:destination="@id/onboarding1Fragment" />
     </fragment>
+    <dialog
+        android:id="@+id/loginDialog"
+        android:name="com.project.morestore.LoginDialog"
+        android:label="LoginDialog" >
+        <action
+            android:id="@+id/action_loginDialog_to_registration1Fragment"
+            app:destination="@id/registration1Fragment" />
+    </dialog>
 
 </navigation>

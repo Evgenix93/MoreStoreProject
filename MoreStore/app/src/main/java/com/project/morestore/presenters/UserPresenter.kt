@@ -21,20 +21,17 @@ class UserPresenter : MvpPresenter<UserMvpView>() {
         code: Int? = null
     ) {
         presenterScope.launch {
-            if(email != null){
-                if(!email.isEmailValid()){
-                    viewState.error("почта указана неверно")
-                    return@launch
-                }
+            val unmaskedPhone =  phone?.filter { it != '(' && it != ')' && it != '-' }
+            if(email != null && !email.isEmailValid()){
+                viewState.error("почта указана неверно")
+                return@launch
             }
-            if(phone != null){
-                if(!phone.isPhoneValid()){
-                    viewState.error("телефон указан неверно")
-                    return@launch
-                }
+            if(unmaskedPhone != null && !unmaskedPhone.isPhoneValid()){
+                viewState.error("телефон указан неверно")
+                return@launch
             }
             val response = repository.changeUserData(
-                phone = phone,
+                phone = unmaskedPhone,
                 email = email,
                 name = name,
                 surname = surname,

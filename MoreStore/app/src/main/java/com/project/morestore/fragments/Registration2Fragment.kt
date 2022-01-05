@@ -20,10 +20,12 @@ class Registration2Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     private val binding: FragmentRegistration2Binding by viewBinding()
     private val args: Registration2FragmentArgs by navArgs()
     private val presenter by moxyPresenter { AuthPresenter() }
-    private val isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
+    private var isEmail = false
+    private lateinit var timer: CountDownTimer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isEmail =  args.phoneOrEmail.contains(Regex("[a-z]"))
         setClickListeners()
         initToolbar()
         initText()
@@ -34,13 +36,19 @@ class Registration2Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     private fun setClickListeners() {
         binding.confirmBtn.setOnClickListener {
-            presenter.phoneRegister2(binding.codeEditText.text.toString().toInt(), args.userId)
+            presenter.register(
+                    code = binding.codeEditText.text.toString().toInt(),
+                    user = args.userId,
+                    step = 2,
+                    type = if(isEmail) 2 else 1
+                )
+
         }
 
         binding.getNewCodeTextView.setOnClickListener {
-            if(isEmail){
+            if (isEmail) {
                 presenter.getNewCode(email = args.phoneOrEmail)
-            }else{
+            } else {
                 presenter.getNewCode(phone = args.phoneOrEmail)
             }
             binding.getNewCodeTextView.isVisible = false
@@ -57,23 +65,24 @@ class Registration2Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun initText(){
+    private fun initText() {
         if (isEmail) {
             binding.textView2.text = "В течении 2 минут вы получите письмо с кодом"
             binding.textView3.text = "подтверждения на почту"
             binding.phoneEmailTextView.text = args.phoneOrEmail
-        }else{
+        } else {
             binding.textView2.text = "В течении 2 минут вы получите смс с кодом"
             binding.textView3.text = "подтверждения на номер"
             binding.phoneEmailTextView.text = args.phoneOrEmail
         }
     }
 
-    private fun initCounter(){
-        object : CountDownTimer(120000, 1000) {
+    private fun initCounter() {
+          timer = object : CountDownTimer(120000, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
-                binding.timerTextView.text = "${millisUntilFinished/60000}:${ millisUntilFinished/1000 - (millisUntilFinished/60000) * 60 }"
+                binding.timerTextView.text =
+                    "${millisUntilFinished / 60000}:${millisUntilFinished / 1000 - (millisUntilFinished / 60000) * 60}"
             }
 
             override fun onFinish() {
@@ -84,20 +93,24 @@ class Registration2Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         }.start()
     }
 
-    override fun success(result: Any) {
-        val navController = findNavController()
-        if (navController.previousBackStackEntry?.destination?.id == R.id.registration4Fragment) {
-            navController.navigate(Registration2FragmentDirections.actionRegistration2FragmentToOnboarding1Fragment())
+    override fun onDestroyView() {
+        super.onDestroyView()
+        timer.cancel()
+    }
 
-        } else {
-            navController.navigate(
+    override fun success(result: Any) {
+        if((result as RegistrationResponse).code == null){
+            return
+        }
+        val navController = findNavController()
+        navController.navigate(
                 Registration2FragmentDirections.actionRegistration2FragmentToRegistration3Fragment(
                     args.phoneOrEmail,
-                    code = (result as RegistrationResponse).code!!,
+                    code = result.code!!,
                     userId = result.user?.toInt()!!
                 )
             )
-        }
+
 
 
     }

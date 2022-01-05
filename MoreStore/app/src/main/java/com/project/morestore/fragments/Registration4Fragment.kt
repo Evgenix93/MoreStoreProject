@@ -43,8 +43,9 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     private fun setClickListeners() {
+        val isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
         binding.getCodeBtn.setOnClickListener {
-            if (!args.phoneOrEmail.contains(Regex("[a-z]")) || args.phoneOrEmail.isEmpty()) {
+            if (!isEmail) {
                 presenter.changeUserData(email = binding.phoneEmailEditText.text.toString())
             }else{
                 presenter.changeUserData(phone = binding.phoneEmailEditText.text.toString())

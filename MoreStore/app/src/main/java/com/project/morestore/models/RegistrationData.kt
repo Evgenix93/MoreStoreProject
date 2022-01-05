@@ -6,6 +6,7 @@ import com.squareup.moshi.JsonClass
 data class RegistrationData(
     val step: Int,
     val phone: String?,
+    val email: String?,
     val type: Int,
     val user: Int?,
     val code: Int?,

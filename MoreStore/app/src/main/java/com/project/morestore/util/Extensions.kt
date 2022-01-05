@@ -7,5 +7,5 @@ fun String.isEmailValid(): Boolean {
 }
 
 fun String.isPhoneValid(): Boolean {
-    return android.util.Patterns.PHONE.matcher(this).matches()
+    return android.util.Patterns.PHONE.matcher(this).matches() && (this.length == 12 || this.length == 11)
 }

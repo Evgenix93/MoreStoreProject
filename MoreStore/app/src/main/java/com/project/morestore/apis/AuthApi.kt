@@ -6,20 +6,13 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Query
-import retrofit2.http.GET
-import retrofit2.http.POST
+
+
 
 interface AuthApi {
 
     @POST("user/registration")
     suspend fun phoneRegister1(@Body data: RegistrationData): Response<RegistrationResponse?>?
-
-    @POST("user/registration")
-    suspend fun phoneRegister2(@Body data: RegistrationData): Response<RegistrationResponse>
-
-    @POST("user/registration")
-    suspend fun phoneRegister3(@Body data: RegistrationData): Response<RegistrationResponse>
-
 
 
     @POST("user/new_code_sms")
@@ -28,5 +21,8 @@ interface AuthApi {
 
     @POST("user/registration")
     suspend fun emailRegister(@Body requestBody: RegistrationData): Response<RegistrationResponse>
+
+    @POST("user/login")
+    suspend fun login1(@Body data: RegistrationData): Response<RegistrationResponse>
 
 }

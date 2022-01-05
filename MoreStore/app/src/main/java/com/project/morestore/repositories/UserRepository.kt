@@ -1,5 +1,6 @@
 package com.project.morestore.repositories
 
+import com.project.morestore.models.RegistrationResponse
 import com.project.morestore.singletones.Network
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
@@ -16,7 +17,7 @@ class UserRepository {
         sex: String? = null,
         step: Int? = null,
         code: Int? = null
-    ): Response<Unit>? {
+    ): Response<RegistrationResponse>? {
         return try {
             userApi.changeUserData(
                 email = email,

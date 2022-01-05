@@ -11,7 +11,6 @@ import com.project.morestore.databinding.FragmentRegistration1Binding
 import com.project.morestore.models.RegistrationResponse
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.presenters.AuthPresenter
-import com.project.morestore.util.isEmailValid
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -27,7 +26,12 @@ class Registration1Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     private fun setClickListeners() {
         binding.getCodeBtn.setOnClickListener {
-            presenter.phoneRegister1(binding.phoneEmailEditText.text.toString())
+            val isEmail = binding.phoneEmailEditText.text.toString().contains(Regex("[a-z]"))
+            if(isEmail) {
+                presenter.register(email = binding.phoneEmailEditText.text.toString(), step = 1, type = 2)
+            }else{
+                presenter.register(phone = binding.phoneEmailEditText.text.toString(), step = 1, type = 1)
+            }
         }
 
     }
@@ -41,7 +45,8 @@ class Registration1Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         findNavController().navigate(
             Registration1FragmentDirections.actionRegistration1FragmentToRegistration2Fragment(
                 binding.phoneEmailEditText.text.toString(),
-                (result as RegistrationResponse).user?.toInt()!!
+                (result as RegistrationResponse).user?.toInt()!!,
+                false
             )
         )
     }
