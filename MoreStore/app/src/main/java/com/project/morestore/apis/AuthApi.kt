@@ -1,5 +1,6 @@
 package com.project.morestore.apis
 
+import com.project.morestore.models.PhotoData
 import com.project.morestore.models.RegistrationData
 import com.project.morestore.models.RegistrationResponse
 import retrofit2.Response
@@ -21,5 +22,8 @@ interface AuthApi {
 
     @POST("user/login")
     suspend fun login(@Body data: RegistrationData): Response<RegistrationResponse>
+
+    @POST("upload/photo")
+    suspend fun uploadPhoto(@Body photoData: PhotoData): Response<Unit>?
 
 }

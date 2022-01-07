@@ -1,8 +1,12 @@
 package com.project.morestore.repositories
 
 import android.content.Context
+
 import com.project.morestore.models.CommonEntity
 import com.project.morestore.models.Size
+
+import com.project.morestore.models.Category
+
 import com.project.morestore.singletones.Network
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,7 +23,18 @@ class ProductRepository(private val context: Context) {
         }catch (e: Throwable){
             if(e is IOException){
                 null
-            }else{
+            }else{    Response.error(400, "".toResponseBody(null))
+            }}}
+
+
+
+    suspend fun getCategories(): Response<List<Category>>? {
+        return try {
+            Network.onboardingApi.getCategories()
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
                 Response.error(400, "".toResponseBody(null))
             }
         }
@@ -55,10 +70,25 @@ class ProductRepository(private val context: Context) {
 
     }
 
-    companion object{
+    companion object {
         const val USER_PREFS = "user_prefs"
         const val TOP_SIZES_KEY = "top_sizes_key"
         const val BOTTOM_SIZES_KEY = "bottom_sizes_key"
         const val SHOES_SIZES_KEY = "shoes_sizes_key"
+    }
+
+        suspend fun safeCategories(categoryIdList: List<Int>): Boolean {
+        return try {
+            withContext(Dispatchers.IO) {
+                val sharedPrefs = context.getSharedPreferences("categories", Context.MODE_PRIVATE)
+                val categoryIdStringSet = categoryIdList.map { it.toString() }.toMutableSet()
+                sharedPrefs.edit().apply {
+                    clear()
+                    putStringSet("categoryIdList", categoryIdStringSet)
+                }.commit()
+            }
+        } catch (e: Throwable) {
+            false
+        }
     }
 }

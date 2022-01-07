@@ -1,5 +1,7 @@
 package com.project.morestore.presenters
 
+import android.content.Context
+import android.net.Uri
 import com.project.morestore.util.isEmailValid
 
 
@@ -12,9 +14,10 @@ import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 
-class AuthPresenter : MvpPresenter<AuthMvpView>() {
+class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
 
-    private val repository = AuthRepository()
+    private val repository = AuthRepository(context)
+    private var photoUri: Uri? = null
 
 
     fun register(
@@ -51,10 +54,16 @@ class AuthPresenter : MvpPresenter<AuthMvpView>() {
             )
             when (response?.code()) {
                 200 -> {
-                    if(step == 3){
-                        repository.setupToken(response.body()?.token!!)
+                    if (step == 3)
+                        repository.setupToken(response.body()!!.token!!)
+                    if (photoUri != null) {
+                        Log.d("Debug", "photoUri = $photoUri")
+                        uploadPhoto(photoUri!!)
                     }
-                    viewState.success(response.body()!!)
+                    else {
+                        Log.d("Debug", "photoUri = null")
+                        viewState.success(response.body()!!)
+                    }
                 }
                 400 -> if(step == 1) getNewCode(phone, email)
                 null -> viewState.error("нет интернета")
@@ -108,6 +117,8 @@ class AuthPresenter : MvpPresenter<AuthMvpView>() {
                 else -> viewState.error("ошибка")
             }
         }
+
+
     }
 
 
@@ -130,10 +141,22 @@ class AuthPresenter : MvpPresenter<AuthMvpView>() {
         }
     }
 
+    fun safePhotoUri(uri: Uri){
+        photoUri = uri
+    }
 
 
-
-
+  private fun uploadPhoto(uri: Uri){
+     presenterScope.launch {
+         val response = repository.uploadPhoto(uri)
+         when (response?.code()) {
+             200 -> {viewState.success(Unit)}
+             400 -> {}
+             null -> viewState.error("нет интернета")
+             else -> viewState.error("ошибка")
+         }
+     }
+   }
 
 
 

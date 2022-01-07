@@ -1,15 +1,23 @@
 package com.project.morestore.repositories
 
+import android.content.Context
+import android.net.Uri
+import android.util.Base64
 import android.util.Log
+import com.project.morestore.models.Photo
+import com.project.morestore.models.PhotoData
 import com.project.morestore.models.RegistrationData
 import com.project.morestore.models.RegistrationResponse
 import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
-class AuthRepository {
+class AuthRepository(private val context: Context) {
 
     private val authApi = Network.authApi
 
@@ -59,6 +67,31 @@ class AuthRepository {
         Token.token = "Bearer $token"
     }
 
+   suspend fun uploadPhoto(uri: Uri): Response<Unit>? {
+      return withContext(Dispatchers.IO) {
+           val file = File(context.cacheDir, "photo.jpeg")
+           context.contentResolver.openInputStream(uri).use { input ->
+               file.outputStream().use { output ->
+                   input?.copyTo(output)
+               }
 
+           }
+           val photo = Photo("jpeg", Base64.encodeToString(file.readBytes(), Base64.DEFAULT))
+           val photoData = PhotoData(
+               "EditUser",
+               7,
+               listOf(photo)
+           )
+           try {
+           Network.authApi.uploadPhoto(photoData)
+       }catch (e: Exception){
+               if(e is IOException) {
+                   null
+               }else{
+                   Response.error(400, "".toResponseBody(null))
+               }
+       }
+       }
+   }
 
 }
