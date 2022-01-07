@@ -16,7 +16,7 @@ import moxy.ktx.moxyPresenter
 
 class Registration1Fragment : MvpAppCompatFragment(R.layout.fragment_registration1), AuthMvpView {
     private val binding: FragmentRegistration1Binding by viewBinding()
-    private val presenter by moxyPresenter { AuthPresenter() }
+    private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -19,7 +19,7 @@ import moxy.ktx.moxyPresenter
 class Registration2Fragment : MvpAppCompatFragment(R.layout.fragment_registration2), AuthMvpView {
     private val binding: FragmentRegistration2Binding by viewBinding()
     private val args: Registration2FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { AuthPresenter() }
+    private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
     private var isEmail = false
     private lateinit var timer: CountDownTimer
 
