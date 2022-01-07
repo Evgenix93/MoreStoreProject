@@ -14,7 +14,7 @@ import com.google.android.material.button.MaterialButton
 import com.project.morestore.databinding.WindowLoginBinding
 
 class LoginDialog: DialogFragment() {
-    private val binding: WindowLoginBinding by viewBinding()
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = layoutInflater.inflate(R.layout.window_login, ConstraintLayout(requireContext()), true)

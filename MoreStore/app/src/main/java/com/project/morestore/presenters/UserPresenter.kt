@@ -1,5 +1,7 @@
 package com.project.morestore.presenters
 
+import android.util.Log
+import com.project.morestore.models.Size
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.isEmailValid
@@ -41,7 +43,14 @@ class UserPresenter : MvpPresenter<UserMvpView>() {
             )
 
             when(response?.code()){
-                200 -> viewState.success()
+                200 -> {
+                    if(response.body()?.email?.err != null || response.body()?.phone?.err != null){
+                        Log.d("mylog", response.body()?.email?.err.toString())
+                        viewState.error("ошибка")
+                        return@launch
+                    }
+                    viewState.success()
+                }
                 400 -> viewState.error("ошибка")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
@@ -49,4 +58,9 @@ class UserPresenter : MvpPresenter<UserMvpView>() {
 
         }
     }
+
+
+
+
+
 }

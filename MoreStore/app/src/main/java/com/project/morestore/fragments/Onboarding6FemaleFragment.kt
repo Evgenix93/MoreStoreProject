@@ -13,9 +13,17 @@ class Onboarding6FemaleFragment: Fragment(R.layout.fragment_first_launch) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.createAccountBtn.text = "Авторизоваться"
-        binding.backIcon.setOnClickListener { findNavController().popBackStack() }
+        initText()
+        setClickListeners()
 
+    }
+
+    private fun setClickListeners(){
+        binding.backIcon.setOnClickListener { findNavController().popBackStack() }
+    }
+
+    private fun initText(){
+        binding.createAccountBtn.text = "Авторизоваться"
     }
 
 }

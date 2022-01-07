@@ -50,7 +50,12 @@ class AuthPresenter : MvpPresenter<AuthMvpView>() {
                 )
             )
             when (response?.code()) {
-                200 -> viewState.success(response.body()!!)
+                200 -> {
+                    if(step == 3){
+                        repository.setupToken(response.body()?.token!!)
+                    }
+                    viewState.success(response.body()!!)
+                }
                 400 -> if(step == 1) getNewCode(phone, email)
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
@@ -59,6 +64,50 @@ class AuthPresenter : MvpPresenter<AuthMvpView>() {
         }
 
 
+    }
+
+    fun login(
+        phone: String? = null,
+        email: String? = null,
+        step: Int,
+        type: Int,
+        user: Int? = null,
+        code: Int? = null
+    ){
+        presenterScope.launch {
+            if (phone != null && !phone.isPhoneValid()) {
+                viewState.error("телефон указан неверно")
+                return@launch
+            }
+            if(email != null && !email.isEmailValid()){
+                viewState.error("почта указана неверно")
+                return@launch
+            }
+            viewState.loading()
+            val response = repository.login(
+                RegistrationData(
+                phone = phone,
+                    email = email,
+                    step = step,
+                    type = type,
+                    user = user,
+                    code = code,
+                    name = null,
+                    surname = null
+            ))
+
+            when(response?.code()){
+                200 -> {
+                    if(step == 2){
+                        repository.setupToken(response.body()?.token!!)
+                    }
+                    viewState.success(response.body()!!)
+                }
+                400 -> viewState.error("ошибка")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+            }
+        }
     }
 
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/sizeCard"
+    android:layout_width="54dp"
+    android:layout_height="40dp">
+
+    <TextView
+        android:id="@+id/sizeNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:text="@string/xxs"
+        android:textAppearance="@style/medium_16"
+        android:textColor="@color/black" />
+
+
+
+</com.google.android.material.card.MaterialCardView>

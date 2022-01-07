@@ -16,6 +16,11 @@ class Onboarding6MaleFragment: Fragment(R.layout.fragment_onboarding6) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setClickListeners()
+
+    }
+
+    private fun setClickListeners(){
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 

@@ -98,106 +98,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topTextView" />
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView2"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/topSizeCardsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:listitem="@layout/item_size_card"
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chooseSizeTextView">
 
-        <LinearLayout
-            android:id="@+id/sizesList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/xxs"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/xs"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/s"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/m"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/l"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/xl"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-        </LinearLayout>
-    </HorizontalScrollView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 
     <TextView
@@ -210,7 +122,7 @@
         android:textAppearance="@style/bold_16"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2" />
+        app:layout_constraintTop_toBottomOf="@+id/topSizeCardsList" />
 
     <TextView
         android:id="@+id/chooseSizeTextView2"
@@ -224,8 +136,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bottomTextView" />
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bottomSizeCardsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -234,96 +146,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chooseSizeTextView2">
 
-        <LinearLayout
-            android:id="@+id/sizesList2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/xxs"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/xs"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/s"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/m"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/l"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/xl"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-        </LinearLayout>
-    </HorizontalScrollView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 
     <TextView
@@ -336,7 +160,7 @@
         android:textAppearance="@style/bold_16"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomSizeCardsList" />
 
     <TextView
         android:id="@+id/chooseSizeTextView3"
@@ -350,8 +174,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shoosTextView" />
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView3"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shoesSizeCardsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -360,98 +184,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chooseSizeTextView3">
 
-        <LinearLayout
-            android:id="@+id/sizesList3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/_38"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/_38_5"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/_39"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/_39_5"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/_40"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-
-            <com.project.morestore.util.SizeCard
-                style="@style/sizeCard"
-                android:layout_width="54dp"
-                android:layout_height="40dp"
-
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/_40_5"
-                    android:textAppearance="@style/medium_16"
-                    android:textColor="@color/black" />
-            </com.project.morestore.util.SizeCard>
-        </LinearLayout>
-    </HorizontalScrollView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/continueBtn"

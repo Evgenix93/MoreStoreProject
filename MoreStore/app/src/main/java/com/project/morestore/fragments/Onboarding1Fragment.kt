@@ -14,7 +14,13 @@ class Onboarding1Fragment : Fragment(R.layout.fragment_onboarding1) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //(requireActivity() as MainActivity).changeStatusBarColor()
+        setClickListeners()
+
+    }
+
+
+
+    private fun setClickListeners(){
         binding.forMaleBtn.setOnClickListener {
             findNavController().navigate(
                 Onboarding1FragmentDirections.actionOnboarding1FragmentToOnboarding2Fragment(

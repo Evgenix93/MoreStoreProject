@@ -15,11 +15,16 @@ class Onboarding5Fragment: Fragment(R.layout.fragment_onboarding5) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setClickListeners()
+
+    }
+
+    private fun setClickListeners(){
         binding.continueBtn.setOnClickListener{
             if (args.isMale)
-            findNavController().navigate(
-                Onboarding5FragmentDirections.actionOnboarding5FragmentToOnboarding6MaleFragment()
-            )
+                findNavController().navigate(
+                    Onboarding5FragmentDirections.actionOnboarding5FragmentToOnboarding6MaleFragment()
+                )
             else
                 findNavController().navigate(
                     Onboarding5FragmentDirections.actionOnboarding5FragmentToOnboarding6FemaleFragment()

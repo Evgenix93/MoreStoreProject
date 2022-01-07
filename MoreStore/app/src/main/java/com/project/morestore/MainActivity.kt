@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun changeStatusBarColor(colorRes: Int){
+    private fun changeStatusBarColor(colorRes: Int){
         window?.apply {
             clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 

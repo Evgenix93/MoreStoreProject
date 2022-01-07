@@ -16,7 +16,7 @@ class AuthRepository {
 
     suspend fun register(data: RegistrationData): Response<RegistrationResponse?>?{
         return try {
-            authApi.phoneRegister1(data)
+            authApi.register(data)
         }catch (e: Throwable){
             Log.d("mylog", e.message.toString() )
             if(e is IOException) {
@@ -27,11 +27,20 @@ class AuthRepository {
         }
     }
 
-    //suspend fun login(data: RegistrationData): Response<RegistrationResponse>?{
+    suspend fun login(data: RegistrationData): Response<RegistrationResponse>?{
+        return try {
+            authApi.login(data)
+        }catch (e: Throwable){
+            if(e is IOException){
+                null
+            }else{
+                Response.error(400, "".toResponseBody(null))
+            }
+        }
 
 
 
-    //}
+    }
 
 
     suspend fun getNewCode(phone: String? = null, email: String? = null): Response<RegistrationResponse>? {

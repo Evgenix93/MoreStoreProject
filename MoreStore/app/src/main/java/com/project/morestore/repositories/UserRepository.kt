@@ -1,12 +1,18 @@
 package com.project.morestore.repositories
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.project.morestore.models.RegistrationResponse
+import com.project.morestore.models.Size
+import com.project.morestore.models.SizeJsonAdapter
 import com.project.morestore.singletones.Network
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException
 
-class UserRepository {
+class UserRepository() {
     private val userApi = Network.userApi
 
     suspend fun changeUserData(
@@ -37,4 +43,7 @@ class UserRepository {
         }
 
     }
+
+
+
 }

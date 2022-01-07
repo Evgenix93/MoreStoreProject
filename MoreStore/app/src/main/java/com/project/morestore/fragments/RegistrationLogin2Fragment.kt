@@ -16,9 +16,9 @@ import com.project.morestore.presenters.AuthPresenter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class Registration2Fragment : MvpAppCompatFragment(R.layout.fragment_registration2), AuthMvpView {
+class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_registration2), AuthMvpView {
     private val binding: FragmentRegistration2Binding by viewBinding()
-    private val args: Registration2FragmentArgs by navArgs()
+    private val args: RegistrationLogin2FragmentArgs by navArgs()
     private val presenter by moxyPresenter { AuthPresenter() }
     private var isEmail = false
     private lateinit var timer: CountDownTimer
@@ -36,12 +36,22 @@ class Registration2Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     private fun setClickListeners() {
         binding.confirmBtn.setOnClickListener {
-            presenter.register(
+            if(!args.isLogin) {
+                presenter.register(
                     code = binding.codeEditText.text.toString().toInt(),
                     user = args.userId,
                     step = 2,
-                    type = if(isEmail) 2 else 1
+                    type = if (isEmail) 2 else 1
                 )
+            }else{
+                presenter.login(
+                    code = binding.codeEditText.text.toString().toInt(),
+                    user = args.userId,
+                    step = 2,
+                    type = if (isEmail) 2 else 1
+
+                )
+            }
 
         }
 
@@ -99,17 +109,21 @@ class Registration2Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     override fun success(result: Any) {
-        if((result as RegistrationResponse).code == null){
+        if(args.isLogin){
+            Toast.makeText(requireContext(), "Вход выполнен", Toast.LENGTH_SHORT).show()
             return
         }
-        val navController = findNavController()
-        navController.navigate(
-                Registration2FragmentDirections.actionRegistration2FragmentToRegistration3Fragment(
+
+        if((result as RegistrationResponse).code != null) {
+            val navController = findNavController()
+            navController.navigate(
+                RegistrationLogin2FragmentDirections.actionRegistration2FragmentToRegistration3Fragment(
                     args.phoneOrEmail,
                     code = result.code!!,
                     userId = result.user?.toInt()!!
                 )
             )
+        }
 
 
 

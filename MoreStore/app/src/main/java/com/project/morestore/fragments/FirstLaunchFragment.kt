@@ -1,12 +1,18 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.LoginDialog
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFirstLaunchBinding
+import com.project.morestore.models.PropertyType
+import com.project.morestore.singletones.Network
+import kotlinx.coroutines.launch
 
 class FirstLaunchFragment: Fragment(R.layout.fragment_first_launch) {
     private val binding: FragmentFirstLaunchBinding by viewBinding()
@@ -20,7 +26,8 @@ class FirstLaunchFragment: Fragment(R.layout.fragment_first_launch) {
 
     private fun setClickListeners(){
         binding.createAccountBtn.setOnClickListener {
-            LoginDialog().show(childFragmentManager, null)
+            findNavController().navigate(FirstLaunchFragmentDirections.actionFirstLaunchFragmentToLoginDialog())
+
         }
     }
 
