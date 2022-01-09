@@ -5,7 +5,7 @@ import android.content.Context
 import com.project.morestore.models.Size
 import com.project.morestore.mvpviews.OnBoardingMvpView
 
-import com.project.morestore.mvpviews.OnboardingMvpView
+
 
 import com.project.morestore.repositories.ProductRepository
 import kotlinx.coroutines.launch
@@ -15,6 +15,7 @@ import moxy.presenterScope
 
 class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
     private val repository = ProductRepository(context)
+    private val categoryIdList = mutableListOf<Int>()
 
     fun getAllSizes(){
         presenterScope.launch {
@@ -46,7 +47,7 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
 
 
 
-    private val categoryIdList = mutableListOf<Int>()
+
 
     fun getCategories(){
         presenterScope.launch {
@@ -63,7 +64,7 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
     fun safeCategories(){
         presenterScope.launch {
            if (repository.safeCategories(categoryIdList))
-               viewState.success(Unit)
+               viewState.success()
             else
                 viewState.error("Ошибка")
         }

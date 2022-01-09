@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -33,7 +34,7 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     private fun setClickListeners() {
-     /*   val isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
+        val isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
         binding.nextBtn.setOnClickListener {
             presenter.register(
                 code = args.code,
@@ -43,7 +44,7 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
                 step = 3,
                 type = if(isEmail) 2 else 1
             )
-        }*/
+        }
 
         binding.photoImageView.setOnClickListener{
             filePickerLauncher.launch(arrayOf("image/*"))
@@ -68,7 +69,13 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         }
     }
 
+    private fun showLoading(loading: Boolean){
+        binding.nextBtn.isEnabled = !loading
+        binding.loader.isVisible = loading
+    }
+
     override fun success(result: Any) {
+        showLoading(false)
         findNavController().navigate(
             Registration3FragmentDirections.actionRegistration3FragmentToRegistration4Fragment(
                 args.phoneOrEmail
@@ -78,11 +85,13 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     override fun error(message: String) {
-        Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
+        showLoading(false)
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
     override fun loading() {
+        showLoading(true)
 
     }
 }

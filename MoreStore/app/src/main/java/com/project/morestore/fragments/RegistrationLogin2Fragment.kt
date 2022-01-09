@@ -19,7 +19,7 @@ import moxy.ktx.moxyPresenter
 class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_registration2), AuthMvpView {
     private val binding: FragmentRegistration2Binding by viewBinding()
     private val args: RegistrationLogin2FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { AuthPresenter() }
+    private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
     private var isEmail = false
     private lateinit var timer: CountDownTimer
 
@@ -103,12 +103,18 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
         }.start()
     }
 
+    private fun showLoading(loading: Boolean){
+        binding.confirmBtn.isEnabled = !loading
+        binding.loader.isVisible = loading
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         timer.cancel()
     }
 
     override fun success(result: Any) {
+        showLoading(false)
         if(args.isLogin){
             Toast.makeText(requireContext(), "Вход выполнен", Toast.LENGTH_SHORT).show()
             return
@@ -130,11 +136,13 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
     }
 
     override fun error(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
     override fun loading() {
+        showLoading(true)
 
     }
 }

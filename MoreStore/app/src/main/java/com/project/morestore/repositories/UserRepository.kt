@@ -3,6 +3,7 @@ package com.project.morestore.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import com.project.morestore.models.RegistrationResponse
+import com.project.morestore.models.RegistrationResponse2
 import com.project.morestore.models.Size
 import com.project.morestore.models.SizeJsonAdapter
 import com.project.morestore.singletones.Network
@@ -31,6 +32,29 @@ class UserRepository() {
                 name = name,
                 surname = surname,
                 sex = sex,
+                step = step,
+                code = code
+            )
+        } catch (e: Throwable) {
+            if(e is IOException) {
+                null
+            }else{
+                Response.error(400, "".toResponseBody(null))
+            }
+        }
+
+    }
+
+    suspend fun changeUserData2(
+        phone: String? = null,
+        email: String? = null,
+        step: Int? = null,
+        code: Int? = null
+    ): Response<RegistrationResponse2>? {
+        return try {
+            userApi.changeUserData2(
+                email = email,
+                phone = phone,
                 step = step,
                 code = code
             )

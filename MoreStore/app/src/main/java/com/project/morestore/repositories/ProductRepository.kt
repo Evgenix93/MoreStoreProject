@@ -30,7 +30,7 @@ class ProductRepository(private val context: Context) {
 
     suspend fun getCategories(): Response<List<Category>>? {
         return try {
-            Network.onboardingApi.getCategories()
+            onBoardingApi.getCategories()
         } catch (e: Exception) {
             if (e is IOException) {
                 null
@@ -70,12 +70,7 @@ class ProductRepository(private val context: Context) {
 
     }
 
-    companion object {
-        const val USER_PREFS = "user_prefs"
-        const val TOP_SIZES_KEY = "top_sizes_key"
-        const val BOTTOM_SIZES_KEY = "bottom_sizes_key"
-        const val SHOES_SIZES_KEY = "shoes_sizes_key"
-    }
+
 
         suspend fun safeCategories(categoryIdList: List<Int>): Boolean {
         return try {
@@ -90,5 +85,12 @@ class ProductRepository(private val context: Context) {
         } catch (e: Throwable) {
             false
         }
+    }
+
+    companion object {
+        const val USER_PREFS = "user_prefs"
+        const val TOP_SIZES_KEY = "top_sizes_key"
+        const val BOTTOM_SIZES_KEY = "bottom_sizes_key"
+        const val SHOES_SIZES_KEY = "shoes_sizes_key"
     }
 }

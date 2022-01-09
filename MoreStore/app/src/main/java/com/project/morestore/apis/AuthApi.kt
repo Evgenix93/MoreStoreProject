@@ -13,7 +13,7 @@ import retrofit2.http.Query
 interface AuthApi {
 
     @POST("user/registration")
-    suspend fun register(@Body data: RegistrationData): Response<RegistrationResponse?>?
+    suspend fun register(@Body data: RegistrationData): Response<RegistrationResponse>?
 
 
     @POST("user/new_code_sms")

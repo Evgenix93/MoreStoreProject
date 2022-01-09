@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -76,13 +77,20 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 
+    private fun showLoading(loading: Boolean){
+        binding.continueBtn.isEnabled = !loading
+        binding.loader.isVisible = loading
+    }
+
 
 
     override fun loading() {
+        showLoading(true)
 
     }
 
     override fun loaded(result: List<Any>) {
+        showLoading(false)
         topSizeCardAdapter.updateList((result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() })
         bottomSizeCardAdapter.updateList((result).filter { it.id_category == 2 }.sortedBy { it.toInt() })
         shoesSizeCardAdapter.updateList((result).filter { it.id_category == 3 }
@@ -93,11 +101,13 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
     }
 
     override fun error(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
     override fun success() {
+        showLoading(false)
         findNavController().navigate(
             Onboarding2FragmentDirections.actionOnboarding2FragmentToOnboarding3Fragment(
                 args.isMale

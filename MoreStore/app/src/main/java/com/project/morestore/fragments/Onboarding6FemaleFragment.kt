@@ -8,7 +8,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFirstLaunchBinding
 
-class Onboarding6FemaleFragment: Fragment(R.layout.fragment_first_launch) {
+class Onboarding6FemaleFragment : Fragment(R.layout.fragment_first_launch) {
     private val binding: FragmentFirstLaunchBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -18,11 +18,16 @@ class Onboarding6FemaleFragment: Fragment(R.layout.fragment_first_launch) {
 
     }
 
-    private fun setClickListeners(){
+    private fun setClickListeners() {
+        binding.createAccountBtn.setOnClickListener {
+            findNavController().navigate(
+                Onboarding6FemaleFragmentDirections.actionOnboarding6FemaleFragmentToLoginDialog()
+            )
+        }
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun initText(){
+    private fun initText() {
         binding.createAccountBtn.text = "Авторизоваться"
     }
 

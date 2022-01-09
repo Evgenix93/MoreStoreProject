@@ -20,6 +20,7 @@ import java.lang.reflect.Type
 import java.sql.Types
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
 import androidx.annotation.NonNull
+import androidx.core.view.isVisible
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.redmadrobot.inputmask.MaskedTextChangedListener
@@ -30,7 +31,7 @@ import moxy.ktx.moxyPresenter
 class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registration1), UserMvpView {
     private val binding: FragmentRegistration1Binding by viewBinding()
     private val args: Registration4FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { UserPresenter() }
+    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,7 +90,13 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     }
 
+    private fun showLoading(loading: Boolean){
+        binding.getCodeBtn.isEnabled = !loading
+        binding.loader.isVisible = loading
+    }
+
     override fun success() {
+        showLoading(false)
         findNavController().navigate(
             Registration4FragmentDirections.actionRegistration4FragmentToRegistration5Fragment(
                 binding.phoneEmailEditText.text.toString()
@@ -99,10 +106,12 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     override fun error(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun loading() {
+        showLoading(true)
 
     }
 

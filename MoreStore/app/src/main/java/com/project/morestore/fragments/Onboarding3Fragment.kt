@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,16 +12,18 @@ import com.project.morestore.R
 import com.project.morestore.adapters.CategoryAdapter
 import com.project.morestore.databinding.FragmentOnboarding3Binding
 import com.project.morestore.models.Category
-import com.project.morestore.mvpviews.OnboardingMvpView
+import com.project.morestore.mvpviews.OnBoardingMvpView
+
 import com.project.morestore.presenters.ProductPresenter
 import com.project.morestore.util.AutoClearedValue
+import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3), OnboardingMvpView {
+class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3), OnBoardingMvpView {
     private val binding: FragmentOnboarding3Binding by viewBinding()
     private val args: Onboarding3FragmentArgs by navArgs()
-    private var categoryAdapter: CategoryAdapter by AutoClearedValue()
+    private var categoryAdapter: CategoryAdapter by autoCleared()
     private val presenter by moxyPresenter { ProductPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,25 +62,34 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
         presenter.getCategories()
     }
 
-    override fun success(result: Any) {
-       /* findNavController().navigate(
+    private fun showLoading(loading: Boolean){
+        binding.continueBtn.isEnabled = !loading
+        binding.loader.isVisible = loading
+    }
+
+    override fun success() {
+        showLoading(false)
+        findNavController().navigate(
             Onboarding3FragmentDirections.actionOnboarding3FragmentToOnboarding4Fragment(
                 args.isMale
             )
-        )*/
-        Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+        )
+
     }
 
     override fun error(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun loading() {
+        showLoading(true)
 
     }
 
-    override fun loaded(list: List<Any>) {
-        val categories = list as List<Category>
+    override fun loaded(result: List<Any>) {
+        showLoading(false)
+        val categories = result as List<Category>
         categoryAdapter.updateList(categories)
     }
 }

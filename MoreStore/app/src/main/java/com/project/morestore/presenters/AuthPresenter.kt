@@ -151,7 +151,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
          val response = repository.uploadPhoto(uri)
          when (response?.code()) {
              200 -> {viewState.success(Unit)}
-             400 -> {}
+             400 -> {viewState.error("ошибка")}
              null -> viewState.error("нет интернета")
              else -> viewState.error("ошибка")
          }

@@ -17,7 +17,7 @@ import moxy.ktx.moxyPresenter
 
 class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registration2), UserMvpView {
     private val binding: FragmentRegistration2Binding by viewBinding()
-    private val presenter by moxyPresenter { UserPresenter() }
+    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private val args: Registration5FragmentArgs by navArgs()
     private var isEmail = false
     private lateinit var timer: CountDownTimer
@@ -41,13 +41,13 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     private fun setClickListeners() {
         binding.confirmBtn.setOnClickListener {
             if (!isEmail) {
-                presenter.changeUserData(
+                presenter.changeUserData2(
                     phone = args.phoneOrEmail,
                     step = 2,
                     code = binding.codeEditText.text.toString().toInt()
                 )
             }else{
-                presenter.changeUserData(
+                presenter.changeUserData2(
                     email = args.phoneOrEmail,
                     step = 2,
                     code = binding.codeEditText.text.toString().toInt()
@@ -55,6 +55,18 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
             }
 
+        }
+
+        binding.getNewCodeTextView.setOnClickListener {
+            if (isEmail) {
+                presenter.getNewCode(email = args.phoneOrEmail)
+            } else {
+                presenter.getNewCode(phone = args.phoneOrEmail)
+            }
+            binding.getNewCodeTextView.isVisible = false
+            binding.textView4.isVisible = true
+            binding.timerTextView.isVisible = true
+            initCounter()
         }
     }
 
@@ -86,6 +98,11 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         }
     }
 
+    private fun showLoading(loading: Boolean){
+        binding.confirmBtn.isEnabled = !loading
+        binding.loader.isVisible = loading
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         timer.cancel()
@@ -93,16 +110,19 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
 
     override fun success() {
+        showLoading(false)
         findNavController().navigate(Registration5FragmentDirections.actionRegistration5FragmentToOnboarding1Fragment())
 
     }
 
     override fun error(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
     override fun loading() {
+        showLoading(true)
 
     }
 }

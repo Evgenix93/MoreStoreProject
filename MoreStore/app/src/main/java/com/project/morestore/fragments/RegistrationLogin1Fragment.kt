@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -17,7 +18,7 @@ import moxy.ktx.moxyPresenter
 
 class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_registration1), AuthMvpView {
     private val binding: FragmentRegistration1Binding by viewBinding()
-    private val presenter by moxyPresenter { AuthPresenter() }
+    private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
     private val args: RegistrationLogin1FragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,8 +70,14 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
         }
     }
 
+    private fun showLoading(loading: Boolean){
+        binding.getCodeBtn.isEnabled = !loading
+        binding.loader.isVisible = loading
+    }
+
 
     override fun success(result: Any) {
+        showLoading(false)
         findNavController().navigate(
             RegistrationLogin1FragmentDirections.actionRegistration1FragmentToRegistration2Fragment(
                 binding.phoneEmailEditText.text.toString(),
@@ -81,11 +88,13 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
     }
 
     override fun error(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun loading() {
         Log.d("mylog", "loading")
+        showLoading(true)
 
     }
 }

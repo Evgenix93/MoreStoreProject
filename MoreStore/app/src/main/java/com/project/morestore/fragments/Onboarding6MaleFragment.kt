@@ -11,7 +11,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentOnboarding6Binding
 
-class Onboarding6MaleFragment: Fragment(R.layout.fragment_onboarding6) {
+class Onboarding6MaleFragment : Fragment(R.layout.fragment_onboarding6) {
     private val binding: FragmentOnboarding6Binding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -20,7 +20,12 @@ class Onboarding6MaleFragment: Fragment(R.layout.fragment_onboarding6) {
 
     }
 
-    private fun setClickListeners(){
+    private fun setClickListeners() {
+        binding.createAccountBtn.setOnClickListener {
+            findNavController().navigate(
+                Onboarding6MaleFragmentDirections.actionOnboarding6MaleFragmentToLoginDialog()
+            )
+        }
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 
