@@ -12,6 +12,7 @@ import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.File
@@ -30,7 +31,16 @@ class AuthRepository(private val context: Context) {
             if (e is IOException) {
                 null
             } else {
-                Response.error(400, "".toResponseBody(null))
+                try {
+                    val response = authApi.registerGetError(data)
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
             }
         }
     }
@@ -42,7 +52,16 @@ class AuthRepository(private val context: Context) {
             if (e is IOException) {
                 null
             } else {
-                Response.error(400, "".toResponseBody(null))
+                try {
+                    val response = authApi.loginGetError(data)
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
             }
         }
 
@@ -60,7 +79,16 @@ class AuthRepository(private val context: Context) {
             if (e is IOException) {
                 null
             } else {
-                Response.error(400, "".toResponseBody(null))
+                try {
+                    val response = authApi.getNewCodeGetError(phone, email)
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
             }
         }
     }
@@ -96,7 +124,16 @@ class AuthRepository(private val context: Context) {
                 if (e is IOException) {
                     null
                 } else {
-                    Response.error(400, "".toResponseBody(null))
+                    try {
+                        val response = authApi.uploadPhotoGetError(photoData)
+                        if(response.code() == 500){
+                            Response.error(500, "".toResponseBody(null))
+                        }else {
+                            Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                        }
+                    }catch (e: Throwable){
+                        Response.error(400, "ошибка".toResponseBody(null))
+                    }
                 }
             }
         }

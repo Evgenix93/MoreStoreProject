@@ -8,9 +8,12 @@ import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.isEmailValid
 import com.project.morestore.util.isPhoneValid
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
+import okhttp3.ResponseBody
 
 class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     private val repository = UserRepository()
@@ -51,13 +54,17 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
                         if (response.body()?.email?.err != null || response.body()?.phone?.err != null) {
                             Log.d("mylog", response.body()?.email?.err.toString())
-                            viewState.error("ошибка")
+                            viewState.error(response.body()?.email?.err ?: response.body()?.phone?.err.toString())
                             return@launch
                         }
 
                     viewState.success()
                 }
-                400 -> viewState.error("ошибка")
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
             }
@@ -94,7 +101,11 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 200 -> {
                     viewState.success()
                 }
-                400 -> viewState.error("ошибка")
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
             }
@@ -111,11 +122,26 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 200 -> {
                     viewState.success()
                 }
-                400 -> viewState.error("ошибка")
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
             }
         }
+    }
+
+
+    private suspend fun getStringFromResponse(body: ResponseBody): String {
+        return withContext(Dispatchers.IO) {
+            val str = body.string()
+            Log.d("mylog", str)
+            str
+        }
+
+
     }
 
 

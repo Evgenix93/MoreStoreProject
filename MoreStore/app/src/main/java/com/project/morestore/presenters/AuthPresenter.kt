@@ -10,9 +10,12 @@ import com.project.morestore.models.RegistrationData
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.util.isPhoneValid
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
+import okhttp3.ResponseBody
 
 class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
 
@@ -35,7 +38,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                 viewState.error("телефон указан неверно")
                 return@launch
             }
-            if(email != null && !email.isEmailValid()){
+            if (email != null && !email.isEmailValid()) {
                 viewState.error("почта указана неверно")
                 return@launch
             }
@@ -59,13 +62,28 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                     if (photoUri != null) {
                         Log.d("Debug", "photoUri = $photoUri")
                         uploadPhoto(photoUri!!)
-                    }
-                    else {
+                    } else {
                         Log.d("Debug", "photoUri = null")
                         viewState.success(response.body()!!)
                     }
+
+
                 }
-                400 -> if(step == 1) getNewCode(phone, email)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    if (step == 1) {
+                        if (bodyString.contains("Этот номер зарегистрирован") || bodyString
+                                .contains("Эта почта зарегистрирована")
+                        ) {
+                            getNewCode(phone, email)
+                        } else {
+                            viewState.error(bodyString)
+                        }
+                    }else{
+                        viewState.error(bodyString)
+                    }
+                }
+                500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
             }
@@ -82,20 +100,20 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         type: Int,
         user: Int? = null,
         code: Int? = null
-    ){
+    ) {
         presenterScope.launch {
             if (phone != null && !phone.isPhoneValid()) {
                 viewState.error("телефон указан неверно")
                 return@launch
             }
-            if(email != null && !email.isEmailValid()){
+            if (email != null && !email.isEmailValid()) {
                 viewState.error("почта указана неверно")
                 return@launch
             }
             viewState.loading()
             val response = repository.login(
                 RegistrationData(
-                phone = phone,
+                    phone = phone,
                     email = email,
                     step = step,
                     type = type,
@@ -103,16 +121,21 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                     code = code,
                     name = null,
                     surname = null
-            ))
+                )
+            )
 
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> {
-                    if(step == 2){
+                    if (step == 2) {
                         repository.setupToken(response.body()?.token!!)
                     }
                     viewState.success(response.body()!!)
                 }
-                400 -> viewState.error("ошибка")
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
             }
@@ -120,9 +143,6 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
 
 
     }
-
-
-
 
 
     fun getNewCode(phone: String? = null, email: String? = null) {
@@ -134,33 +154,49 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                 200 -> {
                     viewState.success(response.body()!!)
                 }
-                400 -> viewState.error("ошибка")
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
             }
         }
     }
 
-    fun safePhotoUri(uri: Uri){
+    fun safePhotoUri(uri: Uri) {
         photoUri = uri
     }
 
 
-  private fun uploadPhoto(uri: Uri){
-     presenterScope.launch {
-         val response = repository.uploadPhoto(uri)
-         when (response?.code()) {
-             200 -> {viewState.success(Unit)}
-             400 -> {viewState.error("ошибка")}
-             null -> viewState.error("нет интернета")
-             else -> viewState.error("ошибка")
-         }
-     }
-   }
+    private fun uploadPhoto(uri: Uri) {
+        presenterScope.launch {
+            val response = repository.uploadPhoto(uri)
+            when (response?.code()) {
+                200 -> {
+                    viewState.success(Unit)
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+            }
+        }
+    }
+
+    private suspend fun getStringFromResponse(body: ResponseBody): String {
+        return withContext(Dispatchers.IO) {
+            val str = body.string()
+            Log.d("mylog", str)
+            str
+        }
 
 
-
-
+    }
 
 
 }

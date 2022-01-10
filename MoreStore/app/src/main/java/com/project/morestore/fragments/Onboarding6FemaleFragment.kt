@@ -2,6 +2,7 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -24,7 +25,12 @@ class Onboarding6FemaleFragment : Fragment(R.layout.fragment_first_launch) {
                 Onboarding6FemaleFragmentDirections.actionOnboarding6FemaleFragmentToLoginDialog()
             )
         }
-        binding.backIcon.setOnClickListener { findNavController().popBackStack() }
+
+        binding.backIcon.isVisible = true
+        binding.backIcon.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
     }
 
     private fun initText() {

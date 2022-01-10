@@ -1,6 +1,7 @@
 package com.project.morestore.presenters
 
 import android.content.Context
+import android.util.Log
 
 import com.project.morestore.models.Size
 import com.project.morestore.mvpviews.OnBoardingMvpView
@@ -8,9 +9,12 @@ import com.project.morestore.mvpviews.OnBoardingMvpView
 
 
 import com.project.morestore.repositories.ProductRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
+import okhttp3.ResponseBody
 
 
 class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
@@ -23,7 +27,11 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
             val response = repository.getAllSizes()
             when(response?.code()){
                 200 -> viewState.loaded(response.body()!!)
-                400 -> viewState.error("ошибка")
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
 
@@ -54,7 +62,11 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
             val response = repository.getCategories()
             when(response?.code()){
                 200 -> viewState.loaded(response.body()!!)
-                400 -> viewState.error("Ошибка")
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("Нет интернета")
                 else -> viewState.error("Ошибка")
             }
@@ -75,6 +87,17 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
           categoryIdList.add(id)
        else
            categoryIdList.remove(id)
+    }
+
+
+    private suspend fun getStringFromResponse(body: ResponseBody): String {
+        return withContext(Dispatchers.IO) {
+            val str = body.string()
+            Log.d("mylog", str)
+            str
+        }
+
+
     }
 
 

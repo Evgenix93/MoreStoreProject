@@ -23,7 +23,17 @@ class ProductRepository(private val context: Context) {
         }catch (e: Throwable){
             if(e is IOException){
                 null
-            }else{    Response.error(400, "".toResponseBody(null))
+            }else{
+                try {
+                    val response = onBoardingApi.getAllSizesGetError()
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
             }}}
 
 
@@ -35,7 +45,16 @@ class ProductRepository(private val context: Context) {
             if (e is IOException) {
                 null
             } else {
-                Response.error(400, "".toResponseBody(null))
+                try {
+                    val response = onBoardingApi.getCategoriesGetError()
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
             }
         }
     }
