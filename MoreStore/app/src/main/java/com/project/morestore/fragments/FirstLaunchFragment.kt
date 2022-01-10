@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.LoginDialog
+import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFirstLaunchBinding
 import com.project.morestore.models.PropertyType
@@ -19,8 +20,8 @@ class FirstLaunchFragment: Fragment(R.layout.fragment_first_launch) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideBottomNavBar()
         setClickListeners()
-
     }
 
 
@@ -29,8 +30,15 @@ class FirstLaunchFragment: Fragment(R.layout.fragment_first_launch) {
             findNavController().navigate(FirstLaunchFragmentDirections.actionFirstLaunchFragmentToLoginDialog())
 
         }
+
+        binding.guestLoginBtn.setOnClickListener{
+            findNavController().navigate(FirstLaunchFragmentDirections.actionFirstLaunchFragmentToMainFragment())
+        }
     }
 
-
+   private fun hideBottomNavBar(){
+       val mainActivity = activity as MainActivity
+       mainActivity.showBottomNavBar(false)
+   }
 
 }

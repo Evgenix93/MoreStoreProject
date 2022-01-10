@@ -139,4 +139,13 @@ class AuthRepository(private val context: Context) {
         }
     }
 
+    fun checkToken(): Boolean{
+        Log.d("Debug", "token isEmpty = ${Token.token.isEmpty()}")
+        return Token.token.isEmpty()
+    }
+
+    fun clearToken(){
+        Token.token = ""
+    }
+
 }

@@ -116,7 +116,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
     override fun success(result: Any) {
         showLoading(false)
         if(args.isLogin){
-            Toast.makeText(requireContext(), "Вход выполнен", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(RegistrationLogin2FragmentDirections.actionRegistration2FragmentToMainFragment())
             return
         }
 
