@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/firstLaunchFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_firstLaunchFragment_to_loginDialog"
             app:destination="@id/loginDialog" />
+        <action
+            android:id="@+id/action_firstLaunchFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/registration1Fragment"
@@ -42,6 +45,9 @@
         <argument
             android:name="isLogin"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_registration2Fragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/registration3Fragment"
@@ -172,5 +178,32 @@
             android:id="@+id/action_loginDialog_to_registration1Fragment"
             app:destination="@id/registration1Fragment" />
     </dialog>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.project.morestore.fragments.MainFragment"
+        android:label="MainFragment" />
+    <fragment
+        android:id="@+id/catalogFragment"
+        android:name="com.project.morestore.fragments.CatalogFragment"
+        android:label="CatalogFragment" />
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="com.project.morestore.fragments.CreateFragment"
+        android:label="CreateFragment" />
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.project.morestore.fragments.MessagesFragment"
+        android:label="MessagesFragment" />
+    <fragment
+        android:id="@+id/cabinetFragment"
+        android:name="com.project.morestore.fragments.CabinetFragment"
+        android:label="CabinetFragment" >
+        <action
+            android:id="@+id/action_cabinetFragment_to_loginDialog"
+            app:destination="@id/loginDialog" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_firstLaunchFragment3"
+            app:destination="@id/firstLaunchFragment" />
+    </fragment>
 
 </navigation>

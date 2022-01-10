@@ -125,4 +125,8 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         showLoading(true)
 
     }
+
+    override fun loaded(result: Any) {
+        TODO("Not yet implemented")
+    }
 }

@@ -6,5 +6,4 @@
     <include layout="@layout/toolbar_main"
         android:id="@+id/toolbarMain"/>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

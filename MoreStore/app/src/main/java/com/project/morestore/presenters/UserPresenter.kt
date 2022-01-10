@@ -118,8 +118,13 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun checkToken(){
+        viewState.loaded(authRepository.checkToken())
+    }
 
-
-
+   fun clearToken(){
+       authRepository.clearToken()
+       viewState.success()
+   }
 
 }

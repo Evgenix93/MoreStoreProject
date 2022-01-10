@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration1Binding
 import com.project.morestore.models.RegistrationResponse
@@ -23,6 +24,7 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideBottomNavBar()
         setClickListeners()
         initToolbar()
     }
@@ -96,5 +98,10 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
         Log.d("mylog", "loading")
         showLoading(true)
 
+    }
+
+    private fun hideBottomNavBar(){
+        val mainActivity = activity as MainActivity
+        mainActivity.showBottomNavBar(false)
     }
 }

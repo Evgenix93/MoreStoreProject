@@ -16,8 +16,7 @@ interface UserMvpView: MvpView {
     @OneExecution
     fun loading()
 
-
-
-
+    @OneExecution
+    fun loaded(result: Any)
 
 }

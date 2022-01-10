@@ -7,6 +7,7 @@ import com.project.morestore.models.RegistrationResponse2
 import com.project.morestore.models.Size
 import com.project.morestore.models.SizeJsonAdapter
 import com.project.morestore.singletones.Network
+import com.project.morestore.singletones.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
