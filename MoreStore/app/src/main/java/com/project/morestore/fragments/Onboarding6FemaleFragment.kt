@@ -26,6 +26,10 @@ class Onboarding6FemaleFragment : Fragment(R.layout.fragment_first_launch) {
             )
         }
 
+        binding.guestLoginBtn.setOnClickListener {
+            findNavController().navigate(Onboarding6FemaleFragmentDirections.actionOnboarding6FemaleFragmentToMainFragment())
+        }
+
         binding.backIcon.isVisible = true
         binding.backIcon.setOnClickListener {
             findNavController().popBackStack()
