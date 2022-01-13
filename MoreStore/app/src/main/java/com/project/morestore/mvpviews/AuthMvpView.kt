@@ -13,4 +13,6 @@ interface AuthMvpView: MvpView {
     fun error(message: String)
     @OneExecution
     fun loading()
+    @OneExecution
+    fun showOnBoarding()
 }

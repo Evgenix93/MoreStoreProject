@@ -29,6 +29,18 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
         initToolbar()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(args.resumeRegister){
+            val isEmail = binding.phoneEmailEditText.text.toString().contains(Regex("[a-z]"))
+            if(isEmail) {
+                presenter.getNewCode(email = binding.phoneEmailEditText.text.toString())
+            }else{
+                presenter.getNewCode(phone = binding.phoneEmailEditText.text.toString())
+            }
+        }
+    }
+
     private fun setClickListeners() {
         binding.getCodeBtn.setOnClickListener {
             val isEmail = binding.phoneEmailEditText.text.toString().contains(Regex("[a-z]"))
@@ -91,12 +103,21 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     override fun error(message: String) {
         showLoading(false)
+        //if(message == "401"){
+           // val isEmail = binding.phoneEmailEditText.text.toString().contains(Regex("[a-z]"))
+
+            //return
+        //}
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun loading() {
         Log.d("mylog", "loading")
         showLoading(true)
+
+    }
+
+    override fun showOnBoarding() {
 
     }
 

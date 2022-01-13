@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/firstLaunchFragment">
+    app:startDestination="@id/splashScreenFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -24,6 +24,9 @@
             app:destination="@id/registration2Fragment" />
         <argument
             android:name="isLogin"
+            app:argType="boolean" />
+        <argument
+            android:name="resumeRegister"
             app:argType="boolean" />
     </fragment>
     <fragment
@@ -48,6 +51,12 @@
         <action
             android:id="@+id/action_registration2Fragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_registration2Fragment_to_resumeRegisterDialog"
+            app:destination="@id/resumeRegisterDialog" />
+        <action
+            android:id="@+id/action_registration2Fragment_to_onboarding1Fragment2"
+            app:destination="@id/onboarding1Fragment" />
     </fragment>
     <fragment
         android:id="@+id/registration3Fragment"
@@ -183,11 +192,18 @@
         <action
             android:id="@+id/action_loginDialog_to_registration1Fragment"
             app:destination="@id/registration1Fragment" />
+        <action
+            android:id="@+id/action_loginDialog_to_loginSocialFragment"
+            app:destination="@id/loginSocialFragment" />
     </dialog>
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.project.morestore.fragments.MainFragment"
-        android:label="MainFragment" />
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_onboarding1Fragment"
+            app:destination="@id/onboarding1Fragment" />
+    </fragment>
     <fragment
         android:id="@+id/catalogFragment"
         android:name="com.project.morestore.fragments.CatalogFragment"
@@ -210,6 +226,46 @@
         <action
             android:id="@+id/action_cabinetFragment_to_firstLaunchFragment3"
             app:destination="@id/firstLaunchFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/resumeRegisterDialog"
+        android:name="com.project.morestore.ResumeRegisterDialog"
+        android:label="ResumeRegisterDialog" >
+        <argument
+            android:name="isEmail"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_resumeRegisterDialog_to_registration3Fragment"
+            app:destination="@id/registration3Fragment" />
+        <argument
+            android:name="phoneOrEmail"
+            app:argType="string" />
+        <argument
+            android:name="code"
+            app:argType="integer" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_resumeRegisterDialog_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/loginSocialFragment"
+        android:name="com.project.morestore.fragments.LoginSocialFragment"
+        android:label="LoginSocialFragment" >
+        <argument
+            android:name="socialType"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_loginSocialFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_loginSocialFragment_to_registration3Fragment"
+            app:destination="@id/registration3Fragment" />
+        <action
+            android:id="@+id/action_loginSocialFragment_to_onboarding1Fragment"
+            app:destination="@id/onboarding1Fragment" />
     </fragment>
 
 </navigation>

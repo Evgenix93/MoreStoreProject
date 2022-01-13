@@ -1,6 +1,7 @@
 package com.project.morestore.presenters
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.Size
 import com.project.morestore.mvpviews.UserMvpView
@@ -16,8 +17,9 @@ import moxy.presenterScope
 import okhttp3.ResponseBody
 
 class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
-    private val repository = UserRepository()
+    private val repository = UserRepository(context)
     private val authRepository = AuthRepository(context)
+    private var photoUri: Uri? = null
 
     fun changeUserData(
         phone: String? = null,
@@ -39,6 +41,14 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 viewState.error("телефон указан неверно")
                 return@launch
             }
+            if(step == null && phone == null && email == null && name.isNullOrBlank()){
+                viewState.error("укажите имя")
+                return@launch
+            }
+            if(step == null && phone == null && email == null && surname.isNullOrBlank()){
+                viewState.error("укажите фамилию")
+                return@launch
+            }
             val response = repository.changeUserData(
                 phone = unmaskedPhone,
                 email = email,
@@ -51,8 +61,13 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
             when(response?.code()){
                 200 -> {
+                    if (photoUri != null) {
+                        Log.d("Debug", "photoUri = $photoUri")
+                        uploadPhoto(photoUri!!)
+                        return@launch
+                    }
 
-                        if (response.body()?.email?.err != null || response.body()?.phone?.err != null) {
+                    if (response.body()?.email?.err != null || response.body()?.phone?.err != null) {
                             Log.d("mylog", response.body()?.email?.err.toString())
                             viewState.error(response.body()?.email?.err ?: response.body()?.phone?.err.toString())
                             return@launch
@@ -118,6 +133,29 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             Log.d("mylog", "getNewCode")
             viewState.loading()
             val response = authRepository.getNewCode(phone, email)
+            when (response?.code()) {
+                200 -> {
+                    viewState.success()
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+            }
+        }
+    }
+
+    fun safePhotoUri(uri: Uri) {
+        photoUri = uri
+    }
+
+
+    private fun uploadPhoto(uri: Uri) {
+        presenterScope.launch {
+            val response = repository.uploadPhoto(uri)
             when (response?.code()) {
                 200 -> {
                     viewState.success()

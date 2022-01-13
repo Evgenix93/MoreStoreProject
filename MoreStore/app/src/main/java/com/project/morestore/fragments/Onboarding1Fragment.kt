@@ -15,6 +15,7 @@ class Onboarding1Fragment : Fragment(R.layout.fragment_onboarding1) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setClickListeners()
+        hideBottomNavBar()
 
     }
 
@@ -35,5 +36,10 @@ class Onboarding1Fragment : Fragment(R.layout.fragment_onboarding1) {
                 )
             )
         }
+    }
+
+    private fun hideBottomNavBar(){
+        val mainActivity = activity as MainActivity
+        mainActivity.showBottomNavBar(false)
     }
 }

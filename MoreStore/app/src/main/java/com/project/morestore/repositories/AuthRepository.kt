@@ -4,10 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
-import com.project.morestore.models.Photo
-import com.project.morestore.models.PhotoData
-import com.project.morestore.models.RegistrationData
-import com.project.morestore.models.RegistrationResponse
+import com.project.morestore.models.*
 import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +22,7 @@ class AuthRepository(private val context: Context) {
 
     suspend fun register(data: RegistrationData): Response<RegistrationResponse>? {
         return try {
+            clearToken()
             authApi.register(data)
         } catch (e: Throwable) {
             Log.d("mylog", e.message.toString())
@@ -47,6 +45,7 @@ class AuthRepository(private val context: Context) {
 
     suspend fun login(data: RegistrationData): Response<RegistrationResponse>? {
         return try {
+            clearToken()
             authApi.login(data)
         } catch (e: Throwable) {
             if (e is IOException) {
@@ -68,12 +67,38 @@ class AuthRepository(private val context: Context) {
 
     }
 
+    suspend fun getUserData(): Response<User>?{
+        Log.d("mylog", "getUserData")
+        return try {
+            authApi.getUserData()
+        }catch (e: Throwable){
+            if(e is IOException){
+                null
+            }else{
+                Log.d("mylog", e.message.toString())
+                Response.error(400, "ошибка".toResponseBody(null))
+                //try {
+                   // val response = authApi.loginGetError(data)
+                   // if(response.code() == 500){
+                      //  Response.error(500, "".toResponseBody(null))
+                   // }else {
+                     //   Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                   // }
+                //}catch (e: Throwable){
+                 //   Response.error(400, "ошибка".toResponseBody(null))
+               // }
+
+            }
+        }
+    }
+
 
     suspend fun getNewCode(
         phone: String? = null,
         email: String? = null
     ): Response<RegistrationResponse>? {
         return try {
+            clearToken()
             authApi.getNewCode(phone, email)
         } catch (e: Throwable) {
             if (e is IOException) {
@@ -93,51 +118,40 @@ class AuthRepository(private val context: Context) {
         }
     }
 
+    suspend fun getSocialLoginUrl(type: SocialType): Response<String>?{
+        return try {
+            clearToken()
+            authApi.getSocialLoginUrl(type)
+        }catch (e: Throwable){
+            if(e is IOException){
+                null
+            }else{
+                Response.error(400, "ошибка".toResponseBody(null))
+            }
+        }
+    }
+
+    suspend fun loginSocial(url: String): Response<RegistrationResponse>?{
+        return try {
+            clearToken()
+            authApi.loginSocial(url)
+        }catch (e: Throwable){
+            if(e is IOException){
+                null
+            }else{
+                Response.error(400, "ошибка".toResponseBody(null))
+            }
+        }
+
+    }
+
     fun setupToken(token: String) {
         Token.token = "Bearer $token"
     }
 
-    suspend fun uploadPhoto(uri: Uri): Response<Unit>? {
-        return withContext(Dispatchers.IO) {
-            val file = File(
-                context.cacheDir,
-                "photo.${context.contentResolver.getType(uri)?.substringAfter('/') ?: "jpg"}"
-            )
-            context.contentResolver.openInputStream(uri).use { input ->
-                file.outputStream().use { output ->
-                    input?.copyTo(output)
-                }
 
-            }
-            val photo = Photo(
-                file.name.substringAfter('.'),
-                Base64.encodeToString(file.readBytes(), Base64.DEFAULT)
-            )
-            val photoData = PhotoData(
-                "EditUser",
-                7,
-                listOf(photo)
-            )
-            try {
-                Network.authApi.uploadPhoto(photoData)
-            } catch (e: Exception) {
-                if (e is IOException) {
-                    null
-                } else {
-                    try {
-                        val response = authApi.uploadPhotoGetError(photoData)
-                        if(response.code() == 500){
-                            Response.error(500, "".toResponseBody(null))
-                        }else {
-                            Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
-                        }
-                    }catch (e: Throwable){
-                        Response.error(400, "ошибка".toResponseBody(null))
-                    }
-                }
-            }
-        }
-    }
+
+
 
     fun checkToken(): Boolean{
         Log.d("Debug", "token isEmpty = ${Token.token.isEmpty()}")

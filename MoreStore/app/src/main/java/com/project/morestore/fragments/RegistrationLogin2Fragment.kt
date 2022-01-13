@@ -11,12 +11,14 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration2Binding
 import com.project.morestore.models.RegistrationResponse
+import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.presenters.AuthPresenter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_registration2), AuthMvpView {
+class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_registration2),
+    AuthMvpView {
     private val binding: FragmentRegistration2Binding by viewBinding()
     private val args: RegistrationLogin2FragmentArgs by navArgs()
     private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
@@ -25,7 +27,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        isEmail =  args.phoneOrEmail.contains(Regex("[a-z]"))
+        isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
         setClickListeners()
         initToolbar()
         initText()
@@ -36,16 +38,16 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     private fun setClickListeners() {
         binding.confirmBtn.setOnClickListener {
-            if(!args.isLogin) {
+            if (!args.isLogin) {
                 presenter.register(
-                    code = binding.codeEditText.text.toString().toInt(),
+                    code = binding.codeEditText.text.toString().toIntOrNull(),
                     user = args.userId,
                     step = 2,
                     type = if (isEmail) 2 else 1
                 )
-            }else{
+            } else {
                 presenter.login(
-                    code = binding.codeEditText.text.toString().toInt(),
+                    code = binding.codeEditText.text.toString().toIntOrNull(),
                     user = args.userId,
                     step = 2,
                     type = if (isEmail) 2 else 1
@@ -88,7 +90,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
     }
 
     private fun initCounter() {
-          timer = object : CountDownTimer(120000, 1000) {
+        timer = object : CountDownTimer(120000, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 binding.timerTextView.text =
@@ -103,7 +105,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
         }.start()
     }
 
-    private fun showLoading(loading: Boolean){
+    private fun showLoading(loading: Boolean) {
         binding.confirmBtn.isEnabled = !loading
         binding.loader.isVisible = loading
     }
@@ -115,28 +117,42 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     override fun success(result: Any) {
         showLoading(false)
-        if(args.isLogin){
-            findNavController().navigate(RegistrationLogin2FragmentDirections.actionRegistration2FragmentToMainFragment())
-            return
-        }
-
-        if((result as RegistrationResponse).code != null) {
+        if (result is User) {
             val navController = findNavController()
-            navController.navigate(
-                RegistrationLogin2FragmentDirections.actionRegistration2FragmentToRegistration3Fragment(
-                    args.phoneOrEmail,
-                    code = result.code!!,
-                    userId = result.user?.toInt()!!
+                navController.navigate(
+                    RegistrationLogin2FragmentDirections.actionRegistration2FragmentToRegistration3Fragment(
+                        args.phoneOrEmail,
+                        code = binding.codeEditText.text.toString().toInt(),
+                        userId = result.id
+                    )
                 )
-            )
-        }
 
+
+
+        }
 
 
     }
 
     override fun error(message: String) {
         showLoading(false)
+        if (message == "401") {
+            if(!args.isLogin) {
+                findNavController().navigate(
+                    RegistrationLogin2FragmentDirections.actionRegistration2FragmentToResumeRegisterDialog(
+                        isEmail = isEmail,
+                        phoneOrEmail = args.phoneOrEmail,
+                        code = binding.codeEditText.text.toString().toInt(),
+                        userId = args.userId
+                    )
+                )
+
+            }else{
+                findNavController().navigate(RegistrationLogin2FragmentDirections.actionRegistration2FragmentToMainFragment())
+            }
+            return
+
+        }
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
@@ -144,5 +160,9 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
     override fun loading() {
         showLoading(true)
 
+    }
+
+    override fun showOnBoarding() {
+        findNavController().navigate(RegistrationLogin2FragmentDirections.actionRegistration2FragmentToOnboarding1Fragment())
     }
 }

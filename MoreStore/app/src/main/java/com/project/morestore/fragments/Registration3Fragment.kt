@@ -15,14 +15,16 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration3Binding
 
 import com.project.morestore.mvpviews.AuthMvpView
+import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.AuthPresenter
+import com.project.morestore.presenters.UserPresenter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.io.File
 
-class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registration3), AuthMvpView {
+class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registration3), UserMvpView {
     private val args: Registration3FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
+    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private val binding: FragmentRegistration3Binding by viewBinding()
     private lateinit var filePickerLauncher: ActivityResultLauncher<Array<String>>
 
@@ -34,16 +36,9 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     private fun setClickListeners() {
-        val isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
+        //val isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
         binding.nextBtn.setOnClickListener {
-            presenter.register(
-                code = args.code,
-                user = args.userId,
-                name = binding.nameEditText.text.toString(),
-                surname = binding.surnameEditText.text.toString(),
-                step = 3,
-                type = if(isEmail) 2 else 1
-            )
+            presenter.changeUserData(name = binding.nameEditText.text.toString(), surname = binding.surnameEditText.text.toString())
         }
 
         binding.photoImageView.setOnClickListener{
@@ -74,7 +69,7 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         binding.loader.isVisible = loading
     }
 
-    override fun success(result: Any) {
+    override fun success() {
         showLoading(false)
         findNavController().navigate(
             Registration3FragmentDirections.actionRegistration3FragmentToRegistration4Fragment(
@@ -92,6 +87,10 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     override fun loading() {
         showLoading(true)
+
+    }
+
+    override fun loaded(result: Any) {
 
     }
 }

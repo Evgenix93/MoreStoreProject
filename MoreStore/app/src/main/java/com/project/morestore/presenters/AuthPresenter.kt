@@ -7,8 +7,12 @@ import com.project.morestore.util.isEmailValid
 
 import android.util.Log
 import com.project.morestore.models.RegistrationData
+import com.project.morestore.models.SocialType
+import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.repositories.AuthRepository
+import com.project.morestore.repositories.ProductRepository
+import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.isPhoneValid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +24,8 @@ import okhttp3.ResponseBody
 class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
 
     private val repository = AuthRepository(context)
-    private var photoUri: Uri? = null
+    private val productRepository = ProductRepository(context)
+
 
 
     fun register(
@@ -43,6 +48,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                 return@launch
             }
             viewState.loading()
+
             val response = repository.register(
                 RegistrationData(
                     step = step,
@@ -57,15 +63,24 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             )
             when (response?.code()) {
                 200 -> {
-                    if (step == 3)
+                    if(step == 2) {
                         repository.setupToken(response.body()!!.token!!)
-                    if (photoUri != null) {
-                        Log.d("Debug", "photoUri = $photoUri")
-                        uploadPhoto(photoUri!!)
-                    } else {
-                        Log.d("Debug", "photoUri = null")
+                        getUserData()
+                    }
+                    if(step == 1){
                         viewState.success(response.body()!!)
                     }
+                    //if(step == 3) {
+                       // if (photoUri != null) {
+                         //   Log.d("Debug", "photoUri = $photoUri")
+                        //    uploadPhoto(photoUri!!)
+                      //  }else{
+                        //    viewState.success(response.body()!!)
+                      //  }
+                    //}//else {
+                       // Log.d("Debug", "photoUri = null")
+                      //  viewState.success(response.body()!!)
+                   // }
 
 
                 }
@@ -76,6 +91,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                                 .contains("Эта почта зарегистрирована")
                         ) {
                             getNewCode(phone, email)
+                            //viewState.error("401")
                         } else {
                             viewState.error(bodyString)
                         }
@@ -128,8 +144,10 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                 200 -> {
                     if (step == 2) {
                         repository.setupToken(response.body()?.token!!)
+                        getUserData()
+                    }else {
+                        viewState.success(response.body()!!)
                     }
-                    viewState.success(response.body()!!)
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -142,6 +160,27 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         }
 
 
+    }
+
+    fun getUserData(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = repository.getUserData()
+            when(response?.code()){
+                200 -> {
+                    val user = response.body()!!
+                    if(checkUserData(user)){
+                        //viewState.error("401")
+                            viewState.error("401")
+                    }else{
+                        viewState.success(user)
+                    }
+
+                }
+                400 -> {viewState.error("Ошибка")}
+                null -> viewState.error("Нет интернета")
+            }
+        }
     }
 
 
@@ -165,28 +204,48 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         }
     }
 
-    fun safePhotoUri(uri: Uri) {
-        photoUri = uri
-    }
-
-
-    private fun uploadPhoto(uri: Uri) {
+    fun getSocialLoginUrl(type: String){
+        viewState.loading()
         presenterScope.launch {
-            val response = repository.uploadPhoto(uri)
-            when (response?.code()) {
-                200 -> {
-                    viewState.success(Unit)
-                }
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
+            val response = repository.getSocialLoginUrl(SocialType(type))
+            when(response?.code()){
+                200 -> viewState.success(response.body()!!)
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
+                null -> viewState.error("Нет интернета")
             }
         }
     }
+
+    fun loginSocial(url: String){
+        viewState.loading()
+        presenterScope.launch {
+            val response = repository.loginSocial(url)
+            when(response?.code()){
+                200 -> {
+                    repository.setupToken(response.body()?.token!!)
+                    viewState.success(response.body()!!)
+                }
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("Нет интернета")
+            }
+        }
+    }
+
+    fun loadOnBoardingViewed(){
+        presenterScope.launch {
+            if(productRepository.loadOnBoardingViewed()){
+                viewState.error("401")
+            }else{
+                viewState.showOnBoarding()
+            }
+        }
+    }
+
+
+
+
 
     private suspend fun getStringFromResponse(body: ResponseBody): String {
         return withContext(Dispatchers.IO) {
@@ -195,6 +254,11 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             str
         }
 
+
+    }
+
+    private fun checkUserData(user: User): Boolean{
+        return user.name != null && user.surname != null && user.email != null && user.phone != null
 
     }
 

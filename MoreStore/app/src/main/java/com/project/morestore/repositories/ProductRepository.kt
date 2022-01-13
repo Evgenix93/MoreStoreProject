@@ -94,11 +94,11 @@ class ProductRepository(private val context: Context) {
         suspend fun safeCategories(categoryIdList: List<Int>): Boolean {
         return try {
             withContext(Dispatchers.IO) {
-                val sharedPrefs = context.getSharedPreferences("categories", Context.MODE_PRIVATE)
+                val sharedPrefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
                 val categoryIdStringSet = categoryIdList.map { it.toString() }.toMutableSet()
                 sharedPrefs.edit().apply {
                     clear()
-                    putStringSet("categoryIdList", categoryIdStringSet)
+                    putStringSet(CATEGORIES, categoryIdStringSet)
                 }.commit()
             }
         } catch (e: Throwable) {
@@ -106,10 +106,54 @@ class ProductRepository(private val context: Context) {
         }
     }
 
+    suspend fun loadSizes(): List<MutableSet<String>?>{
+        return withContext(Dispatchers.IO){
+            val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
+            val set = prefs.getStringSet(TOP_SIZES_KEY, null)
+            val set2 = prefs.getStringSet(BOTTOM_SIZES_KEY, null)
+            val set3 = prefs.getStringSet(SHOES_SIZES_KEY, null)
+            listOf(set,set2,set3)
+        }
+    }
+
+    suspend fun loadCategories(): MutableSet<String>?{
+        return withContext(Dispatchers.IO){
+            val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
+            prefs.getStringSet(CATEGORIES, null)
+        }
+    }
+
+    suspend fun saveOnBoardingViewed(): Boolean{
+        return try {
+            withContext(Dispatchers.IO) {
+                val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
+                prefs.edit().putBoolean(ONBOARDINGVIEWED, true).commit()
+
+            }
+        }catch (e: Throwable){
+            false
+        }
+    }
+
+    suspend fun loadOnBoardingViewed(): Boolean{
+        return try {
+            withContext(Dispatchers.IO) {
+                val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
+                prefs.getBoolean(ONBOARDINGVIEWED, false)
+
+            }
+        }catch (e: Throwable){
+            false
+        }
+
+    }
+
     companion object {
         const val USER_PREFS = "user_prefs"
         const val TOP_SIZES_KEY = "top_sizes_key"
         const val BOTTOM_SIZES_KEY = "bottom_sizes_key"
         const val SHOES_SIZES_KEY = "shoes_sizes_key"
+        const val CATEGORIES = "categoryIdList"
+        const val ONBOARDINGVIEWED = "viewedOnBoarding"
     }
 }

@@ -44,7 +44,7 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     private fun setClickListeners() {
-        val isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
+        val isEmail = args.phoneOrEmail.contains(Regex("[a-z]")) || args.phoneOrEmail.isEmpty()
         binding.getCodeBtn.setOnClickListener {
             if (!isEmail) {
                 presenter.changeUserData(email = binding.phoneEmailEditText.text.toString())
@@ -60,7 +60,7 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     private fun initEditText() {
-        if (!args.phoneOrEmail.contains(Regex("[a-z]")) || args.phoneOrEmail.isEmpty()) {
+        if (!args.phoneOrEmail.contains(Regex("[a-z]")) && args.phoneOrEmail.isNotEmpty()) {
             binding.registerTextView.text = "Почта"
             binding.phoneEmailEditText.inputType =
                 android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS

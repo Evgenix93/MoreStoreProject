@@ -24,30 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_google"
-        app:layout_constraintEnd_toStartOf="@+id/faceBookImageView"
+        app:layout_constraintEnd_toStartOf="@+id/okImageView"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/vkImageView"
         app:layout_constraintTop_toTopOf="@+id/vkImageView" />
-
-    <ImageView
-        android:id="@+id/faceBookImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_facebook"
-        app:layout_constraintEnd_toStartOf="@+id/yandexImageView"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/googleImageView"
-        app:layout_constraintTop_toTopOf="@+id/googleImageView" />
-
-    <ImageView
-        android:id="@+id/yandexImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_yandex"
-        app:layout_constraintEnd_toStartOf="@+id/okImageView"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/faceBookImageView"
-        app:layout_constraintTop_toTopOf="@+id/faceBookImageView" />
 
     <ImageView
         android:id="@+id/okImageView"
@@ -57,8 +37,8 @@
         android:src="@drawable/ic_ok"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/yandexImageView"
-        app:layout_constraintTop_toTopOf="@+id/yandexImageView" />
+        app:layout_constraintStart_toEndOf="@+id/googleImageView"
+        app:layout_constraintTop_toTopOf="@+id/googleImageView" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/loginBtn"

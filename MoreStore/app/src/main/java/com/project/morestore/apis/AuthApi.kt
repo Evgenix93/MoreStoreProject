@@ -1,13 +1,8 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.PhotoData
-import com.project.morestore.models.RegistrationData
-import com.project.morestore.models.RegistrationResponse
+import com.project.morestore.models.*
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Query
-
+import retrofit2.http.*
 
 
 interface AuthApi {
@@ -34,10 +29,15 @@ interface AuthApi {
     @POST("user/login")
     suspend fun loginGetError(@Body data: RegistrationData): Response<String>
 
-    @POST("upload/photo")
-    suspend fun uploadPhoto(@Body photoData: PhotoData): Response<Unit>
 
-    @POST("upload/photo")
-    suspend fun uploadPhotoGetError(@Body photoData: PhotoData): Response<String>
+
+    @GET("user/islogin")
+    suspend fun getUserData(): Response<User>
+
+    @POST("user/login/social/get_url")
+    suspend fun getSocialLoginUrl(@Body type: SocialType): Response<String>
+
+    @GET()
+    suspend fun loginSocial(@Url url: String): Response<RegistrationResponse>
 
 }

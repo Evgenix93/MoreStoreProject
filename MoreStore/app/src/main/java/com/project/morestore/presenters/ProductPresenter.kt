@@ -5,7 +5,7 @@ import android.util.Log
 
 import com.project.morestore.models.Size
 import com.project.morestore.mvpviews.OnBoardingMvpView
-
+import com.project.morestore.repositories.AuthRepository
 
 
 import com.project.morestore.repositories.ProductRepository
@@ -19,6 +19,7 @@ import okhttp3.ResponseBody
 
 class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
     private val repository = ProductRepository(context)
+    private val authRepository = AuthRepository(context)
     private val categoryIdList = mutableListOf<Int>()
 
     fun getAllSizes(){
@@ -88,6 +89,18 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
        else
            categoryIdList.remove(id)
     }
+
+    fun saveOnBoardingViewed(){
+        presenterScope.launch {
+            repository.saveOnBoardingViewed()
+        }
+    }
+
+    fun changeToGuestMode(){
+        authRepository.clearToken()
+    }
+
+
 
 
     private suspend fun getStringFromResponse(body: ResponseBody): String {

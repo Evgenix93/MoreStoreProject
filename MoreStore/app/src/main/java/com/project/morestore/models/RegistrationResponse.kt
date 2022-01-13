@@ -9,5 +9,6 @@ data class RegistrationResponse(
     val code: Int?,
     val token: String?,
     val email: ChangePhoneEmailInfo?,
-    val phone: ChangePhoneEmailInfo?
+    val phone: ChangePhoneEmailInfo?,
+    val RES: TokenData?
 )

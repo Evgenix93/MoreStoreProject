@@ -44,13 +44,13 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
                 presenter.changeUserData2(
                     phone = args.phoneOrEmail,
                     step = 2,
-                    code = binding.codeEditText.text.toString().toInt()
+                    code = binding.codeEditText.text.toString().toIntOrNull()
                 )
             }else{
                 presenter.changeUserData2(
                     email = args.phoneOrEmail,
                     step = 2,
-                    code = binding.codeEditText.text.toString().toInt()
+                    code = binding.codeEditText.text.toString().toIntOrNull()
                 )
 
             }
