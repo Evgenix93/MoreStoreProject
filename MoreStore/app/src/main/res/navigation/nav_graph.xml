@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/filterFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -266,6 +266,32 @@
         <action
             android:id="@+id/action_loginSocialFragment_to_onboarding1Fragment"
             app:destination="@id/onboarding1Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/brandsFragment"
+        android:name="com.project.morestore.fragments.BrandsFragment"
+        android:label="BrandsFragment" />
+    <fragment
+        android:id="@+id/regionsFragment"
+        android:name="com.project.morestore.fragments.RegionsFragment"
+        android:label="RegionsFragment" />
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.project.morestore.fragments.CategoriesFragment"
+        android:label="CategoriesFragment" />
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.project.morestore.fragments.FilterFragment"
+        android:label="FilterFragment" >
+        <action
+            android:id="@+id/action_filterFragment_to_categoriesFragment"
+            app:destination="@id/categoriesFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_brandsFragment"
+            app:destination="@id/brandsFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_regionsFragment"
+            app:destination="@id/regionsFragment" />
     </fragment>
 
 </navigation>

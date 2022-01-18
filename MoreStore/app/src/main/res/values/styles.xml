@@ -164,4 +164,22 @@
     </style>
 
 
+<style name="semibold_14">
+    <item name="android:textSize">14sp</item>
+    <item name="android:fontFamily">@font/manrope_semibold</item>
+    <item name="android:lineSpacingExtra">3sp</item>
+    <item name="android:textColor">@color/black</item>
+</style>
+
+    <style name="semibold_12">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/manrope_semibold</item>
+    </style>
+
+    <style name="bold_24">
+        <item name="android:textSize">24sp</item>
+         <item name="android:fontFamily">@font/raleway_bold</item>
+         <item name="android:fontFeatureSettings">pnum, lnum</item>
+    </style>
+
 </resources>

@@ -7,7 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
     <color name="gray1">#D9D9D9</color>
     <color name="gray2">#9A9A9A</color>
     <color name="gray3">#F4F4F4</color>
@@ -16,24 +15,29 @@
     <color name="green3">#E8F8C0</color>
     <color name="green4">#DBF6C6</color>
     <color name="green5">#15A51B</color>
-
-
-
-
-
-
-
     <color name="green6">#15A51B</color>
-
     <color name="green7">#DBF6C6</color>
-
-
-
     <color name="gray5">#E5E5E5</color>
-
     <color name="gray6">#D5CFD1</color>
     <color name="gray7">#EAEAEA</color>
-
     <color name="gray4">#C4CCCF</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="blue">#D1EBF3</color>
+    <color name="purple">#DFDDE6</color>
+    <color name="pink">#F4D6E2</color>
+    <color name="yellow2">#F6EBC6</color>
+    <color name="blue2">#D1E2F3</color>
+    <color name="brown">#EFDAC5</color>
+    <color name="green8">#C6F6E5</color>
+    <color name="green9">#DBF6C6</color>
+    <color name="blue3">#007FBE</color>
+    <color name="gray9">#929292</color>
+    <color name="green10">#2A9C4A</color>
+    <color name="brown2">#6A3511</color>
+    <color name="brown3">#D4B491</color>
+    <color name="silver">#E9EBEC</color>
+    <color name="peach">#F6E0CB</color>
+    <color name="purple2">#83107F</color>
+    <color name="purple3">#FF1280</color>
+    <color name="yellow3">#FFD648</color>
 </resources>
