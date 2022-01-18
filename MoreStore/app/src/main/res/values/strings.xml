@@ -122,6 +122,9 @@
     <string name="place">Разместить</string>
     <string name="messages">Сообщения</string>
     <string name="cabinet">Кабинет</string>
+    <string name="do_you_want_search_in_st_pet">Хотите искать объявления в Санкт-Петербурге?</string>
+    <string name="yes">ДА</string>
+    <string name="no_change_region">НЕТ, СМЕНИТЬ РЕГИОН</string>
     <string name="banner_title">Черный снова в моде</string>
     <string name="banner_content">Стильные брендовые вещи,\nкоторые дополнят любой\nгардероб</string>
     <string name="all_category">Все товары</string>

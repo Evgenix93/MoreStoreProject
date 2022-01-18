@@ -33,11 +33,11 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         presenterScope.launch {
             viewState.loading()
             val unmaskedPhone =  phone?.filter { it != '(' && it != ')' && it != '-' }
-            if(email != null && !email.isEmailValid()){
+            if(email != null && !email.trim().isEmailValid()){
                 viewState.error("почта указана неверно")
                 return@launch
             }
-            if(unmaskedPhone != null && !unmaskedPhone.isPhoneValid()){
+            if(unmaskedPhone != null && !unmaskedPhone.trim().isPhoneValid()){
                 viewState.error("телефон указан неверно")
                 return@launch
             }
@@ -50,8 +50,8 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 return@launch
             }
             val response = repository.changeUserData(
-                phone = unmaskedPhone,
-                email = email,
+                phone = unmaskedPhone?.trim(),
+                email = email?.trim(),
                 name = name,
                 surname = surname,
                 sex = sex,
@@ -97,17 +97,17 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         presenterScope.launch {
             viewState.loading()
             val unmaskedPhone =  phone?.filter { it != '(' && it != ')' && it != '-' }
-            if(email != null && !email.isEmailValid()){
+            if(email != null && !email.trim().isEmailValid()){
                 viewState.error("почта указана неверно")
                 return@launch
             }
-            if(unmaskedPhone != null && !unmaskedPhone.isPhoneValid()){
+            if(unmaskedPhone != null && !unmaskedPhone.trim().isPhoneValid()){
                 viewState.error("телефон указан неверно")
                 return@launch
             }
             val response = repository.changeUserData2(
-                phone = unmaskedPhone,
-                email = email,
+                phone = unmaskedPhone?.trim(),
+                email = email?.trim(),
                 step = step,
                 code = code
             )
@@ -132,7 +132,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         presenterScope.launch {
             Log.d("mylog", "getNewCode")
             viewState.loading()
-            val response = authRepository.getNewCode(phone, email)
+            val response = authRepository.getNewCode(phone?.trim(), email?.trim())
             when (response?.code()) {
                 200 -> {
                     viewState.success()

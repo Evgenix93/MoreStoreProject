@@ -39,11 +39,11 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         surname: String? = null
     ) {
         presenterScope.launch {
-            if (phone != null && !phone.isPhoneValid()) {
+            if (phone != null && !phone.trim().isPhoneValid()) {
                 viewState.error("телефон указан неверно")
                 return@launch
             }
-            if (email != null && !email.isEmailValid()) {
+            if (email != null && !email.trim().isEmailValid()) {
                 viewState.error("почта указана неверно")
                 return@launch
             }
@@ -52,8 +52,8 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             val response = repository.register(
                 RegistrationData(
                     step = step,
-                    phone = phone,
-                    email = email,
+                    phone = phone?.trim(),
+                    email = email?.trim(),
                     type = type,
                     user = user,
                     code = code,
@@ -118,19 +118,19 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         code: Int? = null
     ) {
         presenterScope.launch {
-            if (phone != null && !phone.isPhoneValid()) {
+            if (phone != null && !phone.trim().isPhoneValid()) {
                 viewState.error("телефон указан неверно")
                 return@launch
             }
-            if (email != null && !email.isEmailValid()) {
+            if (email != null && !email.trim().isEmailValid()) {
                 viewState.error("почта указана неверно")
                 return@launch
             }
             viewState.loading()
             val response = repository.login(
                 RegistrationData(
-                    phone = phone,
-                    email = email,
+                    phone = phone?.trim(),
+                    email = email?.trim(),
                     step = step,
                     type = type,
                     user = user,
@@ -188,7 +188,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         presenterScope.launch {
             Log.d("mylog", "getNewCode")
             viewState.loading()
-            val response = repository.getNewCode(phone, email)
+            val response = repository.getNewCode(phone?.trim(), email?.trim())
             when (response?.code()) {
                 200 -> {
                     viewState.success(response.body()!!)
@@ -238,7 +238,9 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             if(productRepository.loadOnBoardingViewed()){
                 viewState.error("401")
             }else{
-                viewState.showOnBoarding()
+                if(!repository.checkToken()) {
+                    viewState.showOnBoarding()
+                }
             }
         }
     }
