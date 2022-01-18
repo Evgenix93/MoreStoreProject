@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/in_stock"
+        android:textAppearance="@style/regular_16"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/newWithTagCheckBox"
+        app:layout_constraintStart_toEndOf="@+id/newWithTagCheckBox"
+        app:layout_constraintTop_toTopOf="@+id/newWithTagCheckBox" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/booked"
+        android:textAppearance="@style/regular_16"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/newWithotuTagCheckBox"
+        app:layout_constraintStart_toEndOf="@+id/newWithotuTagCheckBox"
+        app:layout_constraintTop_toTopOf="@+id/newWithotuTagCheckBox" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/sold_products"
+        android:textAppearance="@style/regular_16"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/ExcellentCheckBox"
+        app:layout_constraintStart_toEndOf="@+id/ExcellentCheckBox"
+        app:layout_constraintTop_toTopOf="@+id/ExcellentCheckBox" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/newWithTagCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:button="@drawable/checkbox"
+        android:minWidth="30dp"
+        android:minHeight="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:useMaterialThemeColors="false" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/newWithotuTagCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:button="@drawable/checkbox"
+        android:minWidth="30dp"
+        android:minHeight="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view8"
+        app:useMaterialThemeColors="false" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/ExcellentCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:button="@drawable/checkbox"
+        android:minWidth="30dp"
+        android:minHeight="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view10"
+        app:useMaterialThemeColors="false" />
+
+    <View
+        android:id="@+id/view10"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/gray1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newWithotuTagCheckBox" />
+
+    <View
+        android:id="@+id/view8"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newWithTagCheckBox" />
+
+    <View
+        android:id="@+id/view9"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/gray1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ExcellentCheckBox" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showProductsBtn"
+        style="@style/buttonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="14dp"
+        android:text="Показать 621 предложение"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

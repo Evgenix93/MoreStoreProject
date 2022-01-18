@@ -124,5 +124,15 @@
     <string name="cabinet">Кабинет</string>
     <string name="do_you_want_search_in_st_pet">Хотите искать объявления в Санкт-Петербурге?</string>
     <string name="yes">ДА</string>
-    <string name="no_change_region">НЕТ, СМЕНИТЬ РЕГИОН</string>
+    <string name="no_change_region">СМЕНИТЬ РЕГИОН</string>
+    <string name="booked_product_info">Продавец уже договорился с покупателем\nи находится на этапе сделки. Товар может\nбыть снова доступен, если сделка\nне совершится.</string>
+    <string name="deal_submitted">Сделка одобрена</string>
+    <string name="submitted_deal_info">Перейти в корзину для оформления заказа</string>
+    <string name="product_booked">Товар забронирован</string>
+    <string name="sold">Уже купили</string>
+    <string name="sold_out_info">Товар уже нашел нового собственника, но вы\nеще можете связаться с продавцом. Вдруг у\nнего есть что-то похожее.</string>
+    <string name="in_stock">В наличии</string>
+    <string name="booked">Забронированные</string>
+    <string name="sold_products">Проданные</string>
+    <string name="search_everywhere">ИСКАТЬ ВЕЗДЕ</string>
 </resources>

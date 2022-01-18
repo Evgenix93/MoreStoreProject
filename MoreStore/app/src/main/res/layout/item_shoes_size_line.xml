@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <TextView
+        android:id="@+id/WTextView"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="center"
+        android:text="38"
+        android:textAppearance="@style/regular_14"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/view10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view8" />
+
+    <TextView
+        android:id="@+id/ITRUFRTextView"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="39"
+        android:textAppearance="@style/regular_14"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/view10"
+        app:layout_constraintStart_toEndOf="@+id/WTextView"
+        app:layout_constraintTop_toBottomOf="@+id/view8" />
+
+    <TextView
+        android:id="@+id/USTextView"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="8"
+        android:textAppearance="@style/regular_14"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/view10"
+        app:layout_constraintStart_toEndOf="@+id/ITRUFRTextView"
+        app:layout_constraintTop_toBottomOf="@+id/view8" />
+
+    <TextView
+        android:id="@+id/UKTextView"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="5"
+        android:textAppearance="@style/regular_14"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/view10"
+        app:layout_constraintStart_toEndOf="@+id/USTextView"
+        app:layout_constraintTop_toBottomOf="@+id/view8" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/sizeCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/checkbox"
+        android:minWidth="30dp"
+        android:minHeight="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/view10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view8"
+        app:useMaterialThemeColors="false" />
+
+    <View
+        android:id="@+id/view10"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gray1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/view8"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gray1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,10 @@
+package com.project.morestore.models
+
+data class SizeLine(
+    val int: String,
+    val w: String,
+    val itRuFr: String,
+    val us: String,
+    val uk: String,
+    var isSelected: Boolean
+)

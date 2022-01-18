@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/changeRegionFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -267,5 +267,37 @@
             android:id="@+id/action_loginSocialFragment_to_onboarding1Fragment"
             app:destination="@id/onboarding1Fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/filterSizesFragment"
+        android:name="com.project.morestore.fragments.FilterSizesFragment"
+        android:label="FilterSizesFragment" />
+    <fragment
+        android:id="@+id/filterMaterialsFragment"
+        android:name="com.project.morestore.fragments.FilterMaterialsFragment"
+        android:label="FilterMaterialsFragment" />
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.project.morestore.fragments.ProductDetailsFragment"
+        android:label="ProductDetailsFragment" />
+    <fragment
+        android:id="@+id/changeRegionFragment"
+        android:name="com.project.morestore.fragments.ChangeRegionFragment"
+        android:label="ChangeRegionFragment" />
+    <fragment
+        android:id="@+id/filterForWhoFragment"
+        android:name="com.project.morestore.fragments.FilterForWhoFragment"
+        android:label="FilterForWhoFragment" />
+    <fragment
+        android:id="@+id/filterConditionFragment"
+        android:name="com.project.morestore.fragments.FilterConditionFragment"
+        android:label="FilterConditionFragment" />
+    <fragment
+        android:id="@+id/filterStyleFragment"
+        android:name="com.project.morestore.fragments.FilterStyleFragment"
+        android:label="FilterStyleFragment" />
+    <fragment
+        android:id="@+id/filterProductStatusFragment"
+        android:name="com.project.morestore.fragments.FilterProductStatusFragment"
+        android:label="FilterProductStatusFragment" />
 
 </navigation>
