@@ -1,10 +1,497 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar_main"
-        android:id="@+id/toolbarMain"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/toolbarMain"
+            layout="@layout/toolbar_main" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager2"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarMain" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView"
+            android:layout_width="166dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="40dp"
+            app:cardBackgroundColor="@color/blue"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewPager2">
+
+            <TextView
+                style="@style/semibold_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/all_category" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/all" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView4"
+            android:layout_width="166dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="@color/purple"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewPager2">
+
+            <TextView
+                style="@style/semibold_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/category1_name" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/bag" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView5"
+            android:layout_width="166dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/pink"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+            <TextView
+                style="@style/semibold_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/shoes" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/shoes" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView6"
+            android:layout_width="166dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="@color/yellow2"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView4">
+
+            <TextView
+                style="@style/semibold_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/category3_name" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/clothes" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView7"
+            android:layout_width="166dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/blue2"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView5">
+
+            <TextView
+                style="@style/semibold_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/outerwear" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/outerwear" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView8"
+            android:layout_width="166dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="@color/brown"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView6">
+
+            <TextView
+                style="@style/semibold_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/accessories" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/acessories" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView9"
+            android:layout_width="166dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/green8"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView7">
+
+            <TextView
+                style="@style/semibold_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/sport_tourism" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/sport_tourism" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="166dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="@color/green9"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView8">
+
+            <TextView
+                style="@style/semibold_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/category7_name" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/kids" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/bold_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/brands"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView9" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView10"
+            android:layout_width="108dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/materialCardView12"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_zara" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView12"
+            android:layout_width="108dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/materialCardView11"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/materialCardView10"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_h_m" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView11"
+            android:layout_width="108dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="10dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/materialCardView12"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_stradivarius" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView14"
+            android:layout_width="108dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/materialCardView13"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView10">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_levi_s" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView13"
+            android:layout_width="108dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/materialCardView15"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/materialCardView14"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView12">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_mango" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView15"
+            android:layout_width="108dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/materialCardView13"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView11">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_lacoste" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/moreBrandsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/more_brands"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView15"
+            android:textAppearance="@style/medium_16"
+            android:textColor="@color/green"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="14dp"
+            android:src="@drawable/ic_arrow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView15"
+            />
+
+        <TextView
+            android:id="@+id/forWomenTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/for_women"
+            app:layout_constraintTop_toBottomOf="@+id/moreBrandsTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/bold_20"/>
+
+        <TextView
+            android:id="@+id/newOffersTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_20_new_offers"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/forWomenTextView"
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/mobile"
+            android:textColor="@color/gray2"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/forWomenRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toBottomOf="@+id/newOffersTextView"
+            android:layout_marginTop="16dp"/>
+
+        <ImageView
+            android:id="@+id/arrowImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/forWomenRecyclerView"
+            android:layout_marginEnd="14dp"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:id="@+id/offersTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_356_offers"
+            android:textAppearance="@style/medium_16"
+            android:textColor="@color/green"
+            app:layout_constraintTop_toBottomOf="@+id/forWomenRecyclerView"
+            app:layout_constraintEnd_toStartOf="@+id/arrowImageView"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:id="@+id/forKidsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/for_kids"
+            app:layout_constraintTop_toBottomOf="@+id/offersTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/bold_20"/>
+
+        <TextView
+            android:id="@+id/newOffersKidsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_135_offers"
+            android:textAppearance="@style/mobile"
+            android:textColor="@color/gray2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/forKidsTextView"
+            android:layout_marginStart="10dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/forKidsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toBottomOf="@+id/newOffersKidsTextView"
+            android:layout_marginTop="16dp"/>
+
+        <ImageView
+            android:id="@+id/arrow2ImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/forKidsRecyclerView"
+            android:layout_marginEnd="14dp"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_546_offers"
+            app:layout_constraintEnd_toStartOf="@+id/arrow2ImageView"
+            app:layout_constraintTop_toBottomOf="@+id/forKidsRecyclerView"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="17dp"
+            android:textAppearance="@style/medium_16"
+            android:textColor="@color/green"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

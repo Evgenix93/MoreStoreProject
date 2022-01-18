@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/regionCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:button="@drawable/checkbox"
+        android:minWidth="30dp"
+        android:minHeight="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:useMaterialThemeColors="false" />
+
+    <TextView
+        android:id="@+id/regionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        android:textAppearance="@style/regular_14"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/regionCheckBox"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Все города" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray1"
+        app:layout_constraintTop_toBottomOf="@+id/regionCheckBox"
+        android:layout_marginTop="12dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

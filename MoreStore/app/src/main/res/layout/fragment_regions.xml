@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/ic_field"
+        android:hint="@string/start_enter_town"
+        android:paddingStart="49dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAppearance="@style/regular_14"
+        android:singleLine="true"/>
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText3"
+        app:layout_constraintStart_toStartOf="@+id/editText3"
+        app:layout_constraintTop_toTopOf="@+id/editText3"
+        app:srcCompat="@drawable/ic_magnifying_glass" />
+
+    <ImageView
+        android:id="@+id/imageView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText3"
+        app:srcCompat="@drawable/ic_mappin" />
+
+    <TextView
+        android:id="@+id/textView42"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/st_petersburg"
+        app:layout_constraintStart_toEndOf="@+id/imageView25"
+        app:layout_constraintTop_toBottomOf="@+id/editText3"
+        android:textAppearance="@style/regular_14"
+        android:textColor="@color/green"/>
+
+    <TextView
+        android:id="@+id/textView43"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/popular_variants"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView42"
+        android:textAppearance="@style/bold_24"/>
+
+    <View
+        android:id="@+id/divider1View"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/gray1"
+        app:layout_constraintTop_toBottomOf="@+id/textView43" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/regionsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/showOffersBtn"
+        app:layout_constraintTop_toBottomOf="@+id/divider1View" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showOffersBtn"
+        style="@style/buttonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="14dp"
+        android:text="@string/show_offers"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+         />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

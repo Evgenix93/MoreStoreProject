@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/banner_background"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        style="@style/bold_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/banner_title"
+         />
+
+    <TextView
+        style="@style/regular_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/banner_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="58dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/banner_image"
+        android:layout_marginStart="177dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_handpointing"
+        android:layout_marginStart="310dp"
+        android:layout_marginTop="121dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrows"
+        android:layout_marginStart="303dp"
+        android:layout_marginTop="112dp"/>
+
+</com.google.android.material.card.MaterialCardView>

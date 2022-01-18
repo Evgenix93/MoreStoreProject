@@ -41,7 +41,7 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
     }
 
     private fun initRecyclerView() {
-        categoryAdapter = CategoryAdapter(requireContext()) { id, isChecked ->
+        categoryAdapter = CategoryAdapter(true, requireContext()) { id, isChecked ->
             presenter.addRemoveCategoryId(id, isChecked)
         }
         with(binding.categoriesRecyclerView) {

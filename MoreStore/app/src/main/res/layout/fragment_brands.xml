@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include layout="@layout/toolbar_filter"
+        android:id="@+id/toolbarFilter"/>
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/segment"
+        android:textAppearance="@style/bold_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarFilter" />
+
+    <TextView
+        android:id="@+id/textView39"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/see_all"
+        android:textAppearance="@style/regular_16"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarFilter" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView23"
+        android:background="@color/gray1"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/segmentsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/textView40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/brand_from_list"
+        android:textAppearance="@style/bold_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/segmentsRecyclerView" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/ic_field"
+        android:hint="@string/start_to_enter_brand"
+        android:paddingStart="49dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView40"
+        android:singleLine="true"
+        android:textAppearance="@style/regular_14"/>
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText3"
+        app:layout_constraintStart_toStartOf="@+id/editText3"
+        app:layout_constraintTop_toTopOf="@+id/editText3"
+        app:srcCompat="@drawable/ic_magnifying_glass" />
+
+    <TextView
+        android:id="@+id/textView41"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/_0_9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText3"
+        android:textAppearance="@style/bold_20"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/brands09RecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textView41"
+        tools:layout_editor_absoluteX="-26dp" />
+
+    <TextView
+        android:id="@+id/aBrandsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brands09RecyclerView"
+        android:text="@string/a"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:textAppearance="@style/bold_20"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/brandsARecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/aBrandsTextView"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showOffersBtn"
+        style="@style/buttonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="14dp"
+        android:text="@string/show_offers"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brandsARecyclerView" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
