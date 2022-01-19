@@ -30,11 +30,25 @@
         android:layout_marginTop="17dp"
         android:layout_marginEnd="10dp"
         android:text="@string/new_items"
+        android:editable="false"
         android:textAppearance="@style/regular_14"
         android:textColor="@color/gray2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarFilter"
-        android:clickable="false"/>
+        android:clickable="true"
+        android:dropDownAnchor="@id/anchor"
+        android:dropDownWidth="170dp"
+        android:drawableBottom="@color/white"
+        android:background="@color/white"/>
+
+    <View
+        android:id="@+id/anchor"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toStartOf="@+id/typeAutoCompleteTextView"
+        app:layout_constraintTop_toBottomOf="@+id/typeAutoCompleteTextView" />
 
     <View
         android:id="@+id/view3"
@@ -42,7 +56,8 @@
         android:layout_height="1dp"
         android:layout_marginTop="12dp"
         android:background="@color/gray1"
-        app:layout_constraintTop_toBottomOf="@+id/sortingTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/sortingTextView"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/whoTextView"
@@ -129,6 +144,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider2View" />
 
     <ImageView
+        android:id="@+id/showProductsGreenDotImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -156,6 +172,16 @@
         android:textAppearance="@style/bold_16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3View" />
+
+    <ImageView
+        android:id="@+id/stylesGreenDotImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_ellipse"
+        app:layout_constraintEnd_toStartOf="@+id/arrow4ImageView"
+        app:layout_constraintTop_toBottomOf="@+id/divider4View" />
 
     <TextView
         android:id="@+id/allCategories"
@@ -230,14 +256,6 @@
         android:src="@drawable/ic_polygon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider4View" />
-
-    <View
-        android:id="@+id/divider5View"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/gray1"
-        app:layout_constraintTop_toBottomOf="@+id/allStyles" />
 
     <TextView
         android:id="@+id/brandTextView"
@@ -358,6 +376,16 @@
 
 
     <ImageView
+        android:id="@+id/conditionsGreenDotImageView"
+        android:layout_width="9dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_ellipse"
+        app:layout_constraintEnd_toStartOf="@+id/arrow6ImageView"
+        app:layout_constraintTop_toBottomOf="@+id/divider7View" />
+
+    <ImageView
         android:id="@+id/arrow6ImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -397,6 +425,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sizeTextView" />
 
+
+    <ImageView
+        android:id="@+id/sizesGreenDotImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_ellipse"
+        app:layout_constraintEnd_toStartOf="@+id/arrow7ImageView"
+        app:layout_constraintTop_toBottomOf="@+id/divider8View" />
 
     <ImageView
         android:id="@+id/arrow7ImageView"
@@ -440,6 +478,26 @@
 
 
     <ImageView
+        android:id="@+id/colorsGreenDotImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_ellipse"
+        app:layout_constraintEnd_toStartOf="@+id/arrow8ImageView"
+        app:layout_constraintTop_toBottomOf="@+id/divider9View" />
+
+    <View
+        android:id="@+id/divider5View"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/gray1"
+        app:layout_constraintTop_toBottomOf="@+id/allStyles"
+        tools:layout_editor_absoluteX="-5dp" />
+
+    <ImageView
         android:id="@+id/arrow8ImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -479,6 +537,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialsTextView" />
 
+
+    <ImageView
+        android:id="@+id/materialsGreenDotImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_ellipse"
+        app:layout_constraintEnd_toStartOf="@+id/arrow9ImageView"
+        app:layout_constraintTop_toBottomOf="@+id/divider10View" />
 
     <ImageView
         android:id="@+id/arrow9ImageView"

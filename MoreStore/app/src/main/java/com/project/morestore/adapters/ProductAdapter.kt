@@ -12,10 +12,15 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductBinding
 
-class ProductAdapter(val count: Int) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter(val count: Int, val onClick: () -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
-    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ProductViewHolder(view: View, onClick: () -> Unit) : RecyclerView.ViewHolder(view) {
         private val binding: ItemProductBinding by viewBinding()
+        init {
+            itemView.setOnClickListener {
+                onClick()
+            }
+        }
         fun bind(){
             Log.d("mylog", "bind")
             val crossedStr = binding.productOldPriceTextView.text.toSpannable().apply { setSpan(StrikethroughSpan(), 0, binding.productOldPriceTextView.text.length ,0) }
@@ -28,7 +33,9 @@ class ProductAdapter(val count: Int) : RecyclerView.Adapter<ProductAdapter.Produ
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         return ProductViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
-        )
+        ){
+            onClick()
+        }
 
     }
 

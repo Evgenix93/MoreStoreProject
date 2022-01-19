@@ -245,6 +245,7 @@
                 android:id="@+id/buyersCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/chatBtn">
 
                 <TextView
@@ -299,6 +300,7 @@
                 android:id="@+id/promoteInfoCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/buyersCard">
 
                 <TextView
@@ -336,6 +338,7 @@
                 android:id="@+id/productIsBookedCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
@@ -383,6 +386,7 @@
                 android:id="@+id/dealIsSubmittedCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
@@ -429,6 +433,7 @@
                 android:id="@+id/productSoldCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
@@ -475,7 +480,9 @@
                 android:id="@+id/firstPurchaseInfoCard"
                 android:layout_width="match_parent"
                 android:layout_height="76dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/gray3"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toEndOf="parent"

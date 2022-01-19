@@ -131,11 +131,11 @@
     <string name="product_booked">Товар забронирован</string>
     <string name="sold">Уже купили</string>
     <string name="sold_out_info">Товар уже нашел нового собственника, но вы\nеще можете связаться с продавцом. Вдруг у\nнего есть что-то похожее.</string>
-    <string name="in_stock">В наличии</string>
+    <string name="in_stock2">В наличии</string>
     <string name="booked">Забронированные</string>
     <string name="sold_products">Проданные</string>
     <string name="search_everywhere">ИСКАТЬ ВЕЗДЕ</string>
-    <string name="no_change_region">НЕТ, СМЕНИТЬ РЕГИОН</string>
+
     <string name="banner_title">Черный снова в моде</string>
     <string name="banner_content">Стильные брендовые вещи,\nкоторые дополнят любой\nгардероб</string>
     <string name="all_category">Все товары</string>

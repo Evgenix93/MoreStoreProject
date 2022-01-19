@@ -10,28 +10,59 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CursorAdapter
+import android.widget.GridLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
 import com.project.morestore.R
+import com.project.morestore.adapters.MainFragmenViewPagerAdapter
+import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.databinding.FragmentMainBinding
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.presenters.AuthPresenter
+import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class MainFragment: MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
     private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
     private val binding: FragmentMainBinding by viewBinding()
+    private var productAdapter: ProductAdapter by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showBottomNavBar()
         presenter.loadOnBoardingViewed()
         initToolbar()
+        initLists()
+        initViewPager()
+    }
+
+
+    private fun initLists(){
+        productAdapter = ProductAdapter(6){findNavController().navigate(MainFragmentDirections.actionMainFragmentToProductDetailsFragment())}
+        with(binding.forWomenRecyclerView){
+            adapter = productAdapter
+            layoutManager = GridLayoutManager(requireContext(), 2)
+
+        }
+
+        with(binding.forKidsRecyclerView){
+            adapter = productAdapter
+            layoutManager = GridLayoutManager(requireContext(), 2)
+
+        }
+
+
+    }
+
+    private fun initViewPager(){
+        binding.viewPager2.adapter = MainFragmenViewPagerAdapter(this)
+        binding.dots.setViewPager2(binding.viewPager2)
     }
 
     private fun showBottomNavBar(){

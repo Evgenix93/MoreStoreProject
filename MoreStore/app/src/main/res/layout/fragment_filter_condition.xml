@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/toolbar"
+    <include layout="@layout/toolbar_filter"
         android:id="@+id/toolbar"/>
 
     <TextView
@@ -55,6 +55,7 @@
         android:id="@+id/newWithTagCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:button="@drawable/checkbox"
@@ -68,6 +69,7 @@
         android:id="@+id/newWithotuTagCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="12dp"
         android:button="@drawable/checkbox"
@@ -81,6 +83,7 @@
         android:id="@+id/ExcellentCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="12dp"
         android:button="@drawable/checkbox"
@@ -94,6 +97,7 @@
         android:id="@+id/goodCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="12dp"
         android:button="@drawable/checkbox"

@@ -25,6 +25,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbarMain" />
 
+        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+            android:id="@+id/dots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:dotsColor="@color/gray1"
+            app:dotsSize="8dp"
+            app:dotsSpacing="6dp"
+            app:dotsWidthFactor="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewPager2"
+            app:selectedDotColor="@color/black" />
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
             android:layout_width="166dp"
@@ -416,7 +430,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/forWomenRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/newOffersTextView"
             android:layout_marginTop="16dp"/>
 
@@ -467,7 +481,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/forKidsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/newOffersKidsTextView"
             android:layout_marginTop="16dp"/>
 
@@ -484,13 +498,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_546_offers"
-            app:layout_constraintEnd_toStartOf="@+id/arrow2ImageView"
-            app:layout_constraintTop_toBottomOf="@+id/forKidsRecyclerView"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="17dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="31dp"
+            android:text="@string/_546_offers"
             android:textAppearance="@style/medium_16"
-            android:textColor="@color/green"/>
+            android:textColor="@color/green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/arrow2ImageView"
+            app:layout_constraintTop_toBottomOf="@+id/forKidsRecyclerView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

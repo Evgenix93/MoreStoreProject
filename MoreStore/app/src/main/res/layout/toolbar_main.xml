@@ -12,7 +12,28 @@
     app:logo="@drawable/ic_logo_more_store"
     app:menu="@menu/menu_toolbar"
     android:background="@color/white"
-    />
+    >
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/filterBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:backgroundTint="@color/white"
+        app:strokeColor="@color/gray1"
+        app:strokeWidth="1dp"
+        app:cornerRadius="8dp"
+        app:icon="@drawable/ic_sliders"
+        app:iconTint="@color/green"
+        app:elevation="0dp"
+        android:text="Фильтр"
+        android:fontFamily="@font/manrope_medium"
+        android:textSize="14sp"
+        android:textColor="@color/gray2"
+        android:textAllCaps="false"/>
+
+
+</com.google.android.material.appbar.MaterialToolbar>
 
     <View
         android:layout_width="match_parent"

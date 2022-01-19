@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/catalogFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -203,11 +203,24 @@
         <action
             android:id="@+id/action_mainFragment_to_onboarding1Fragment"
             app:destination="@id/onboarding1Fragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/catalogFragment"
         android:name="com.project.morestore.fragments.CatalogFragment"
-        android:label="CatalogFragment" />
+        android:label="CatalogFragment" >
+        <action
+            android:id="@+id/action_catalogFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_catalogFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
+        <action
+            android:id="@+id/action_catalogFragment_to_changeRegionFragment"
+            app:destination="@id/changeRegionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createFragment"
         android:name="com.project.morestore.fragments.CreateFragment"
@@ -282,7 +295,11 @@
     <fragment
         android:id="@+id/changeRegionFragment"
         android:name="com.project.morestore.fragments.ChangeRegionFragment"
-        android:label="ChangeRegionFragment" />
+        android:label="ChangeRegionFragment" >
+        <action
+            android:id="@+id/action_changeRegionFragment_to_autoLocationFragment"
+            app:destination="@id/autoLocationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/filterForWhoFragment"
         android:name="com.project.morestore.fragments.FilterForWhoFragment"
@@ -324,6 +341,28 @@
         <action
             android:id="@+id/action_filterFragment_to_regionsFragment"
             app:destination="@id/regionsFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_filterSizesFragment"
+            app:destination="@id/filterSizesFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_filterMaterialsFragment"
+            app:destination="@id/filterMaterialsFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_filterProductStatusFragment"
+            app:destination="@id/filterProductStatusFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_filterForWhoFragment"
+            app:destination="@id/filterForWhoFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_filterStyleFragment"
+            app:destination="@id/filterStyleFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_filterConditionFragment"
+            app:destination="@id/filterConditionFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/autoLocationFragment"
+        android:name="com.project.morestore.fragments.AutoLocationFragment"
+        android:label="AutoLocationFragment" />
 
 </navigation>

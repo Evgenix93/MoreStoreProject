@@ -2,7 +2,9 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
@@ -18,6 +20,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
+        initToolBar()
     }
 
 
@@ -35,7 +38,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "42",
                 "32",
                 "32",
-                false
+                true
             ),
             SizeLine(
                 "XS",
@@ -43,7 +46,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "44",
                 "34",
                 "34",
-                false
+                true
             ),
             SizeLine(
                 "S",
@@ -51,7 +54,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "46",
                 "36",
                 "36",
-                false
+                true
             ),
             SizeLine(
                 "M",
@@ -59,7 +62,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "48",
                 "38",
                 "38",
-                false
+                true
             ),
             SizeLine(
                 "L",
@@ -67,7 +70,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "50",
                 "40",
                 "40",
-                false
+                true
             ),
             SizeLine(
                 "XL",
@@ -75,7 +78,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "52",
                 "42",
                 "42",
-                false
+                true
             ),
             SizeLine(
                 "XXL",
@@ -83,7 +86,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "54",
                 "44",
                 "44",
-                false
+                true
             ),
             SizeLine(
                 "3XL",
@@ -91,7 +94,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "56",
                 "46",
                 "46",
-                false
+                true
             ),
             SizeLine(
                 "4XL",
@@ -99,7 +102,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "58",
                 "48",
                 "48",
-                false
+                true
             ),
             SizeLine(
                 "5XL",
@@ -107,7 +110,7 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "60",
                 "50",
                 "60",
-                false
+                true
             ),
             SizeLine(
                 "",
@@ -115,17 +118,31 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
                 "",
                 "",
                 "",
-                false
+                true
             )
 
 
         )
 
-        sizeAdapter.updateList(if(FilterState.chosenSizes.isNotEmpty()) FilterState.chosenSizes else sizeList)
+        sizeAdapter.updateList(if(FilterState.chosenSizes.isNotEmpty()){
+            val allNotSelected = FilterState.chosenSizes.all { !it.isSelected }
+            if(allNotSelected){
+                for(size in FilterState.chosenSizes){
+                    size.isSelected = true
+                }
+            }
+            FilterState.chosenSizes
+        } else sizeList)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    private fun initToolBar(){
+        binding.toolbar.titleTextView.text = "Размер"
+        binding.toolbar.actionTextView.text = "Сбросить"
+        binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
+    }
+
+    override fun onStop() {
+        super.onStop()
         FilterState.chosenSizes = sizeAdapter.getChosenSizes()
     }
 }

@@ -2,7 +2,9 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.project.morestore.R
@@ -15,6 +17,7 @@ class FilterForWhoFragment : Fragment(R.layout.fragment_filter_for_who) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRadioButtons()
+        initToolBar()
     }
 
     private fun initRadioButtons() {
@@ -40,8 +43,14 @@ class FilterForWhoFragment : Fragment(R.layout.fragment_filter_for_who) {
         radioBtn.isChecked = true
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    private fun initToolBar(){
+        binding.toolbar.titleTextView.text = "Кому"
+        binding.toolbar.actionTextView.isVisible = false
+        binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
+    }
+
+    override fun onStop() {
+        super.onStop()
         FilterState.chosenForWho = listOf(
             binding.forWomenCheckBox.isChecked,
             binding.forMenCheckBox.isChecked,

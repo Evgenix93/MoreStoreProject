@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,6 +22,7 @@ class ProductDetailsFragment: Fragment(R.layout.fragment_product) {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
         initList()
+        initToolBar()
     }
 
     private fun initViewPager(){
@@ -36,8 +38,14 @@ class ProductDetailsFragment: Fragment(R.layout.fragment_product) {
 
     }
 
+    private fun initToolBar(){
+        binding.toolbar.titleTextView.text = "Вечернее платье"
+        binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
+        binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
+    }
+
     private fun initList(){
-        productAdapter = ProductAdapter(4)
+        productAdapter = ProductAdapter(4){}
         with(binding.productList){
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)

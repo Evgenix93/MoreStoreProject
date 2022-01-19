@@ -41,6 +41,16 @@ class FilterFragment: Fragment(R.layout.fragment_filter) {
         binding.allBrands.isVisible = FilterState.isAllBrands
         binding.regionsGreenDotImageView.isVisible = !FilterState.regions.all { it }
         binding.allRegions.isVisible = FilterState.regions.all { it }
+        //binding.showProductsGreenDotImageView.isVisible = com.project.morestore.singletones.FilterState.chosenProductStatus
+        //val allSelected = com.project.morestore.singletones.FilterState.chosenStyles.all { it } || com.project.morestore.singletones.FilterState.chosenStyles.all { !it }
+        binding.stylesGreenDotImageView.isVisible = (com.project.morestore.singletones.FilterState.chosenStyles.all { it } || com.project.morestore.singletones.FilterState.chosenStyles.all { !it }).not()
+        binding.allStyles.isVisible = com.project.morestore.singletones.FilterState.chosenStyles.all { it } || com.project.morestore.singletones.FilterState.chosenStyles.all { !it }
+        binding.conditionsGreenDotImageView.isVisible = (com.project.morestore.singletones.FilterState.chosenConditions.all { it } || com.project.morestore.singletones.FilterState.chosenConditions.all { !it }).not()
+        binding.allConditions.isVisible = com.project.morestore.singletones.FilterState.chosenConditions.all { it } || com.project.morestore.singletones.FilterState.chosenConditions.all { !it }
+        binding.sizesGreenDotImageView.isVisible = (com.project.morestore.singletones.FilterState.chosenSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.chosenSizes.all { !it.isSelected }).not()
+        binding.allSizes.isVisible = com.project.morestore.singletones.FilterState.chosenSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.chosenSizes.all { !it.isSelected }
+        binding.materialsGreenDotImageView.isVisible = (com.project.morestore.singletones.FilterState.chosenMaterials.all { it.isSelected } || com.project.morestore.singletones.FilterState.chosenMaterials.all { !it.isSelected }).not()
+        binding.allMaterials.isVisible = com.project.morestore.singletones.FilterState.chosenMaterials.all { it.isSelected } || com.project.morestore.singletones.FilterState.chosenMaterials.all { !it.isSelected }
     }
 
     private fun setClickListeners(){
@@ -53,12 +63,42 @@ class FilterFragment: Fragment(R.layout.fragment_filter) {
         binding.searchRegionTextView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToRegionsFragment())
         }
+
+        binding.whoTextView.setOnClickListener {
+            findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterForWhoFragment())
+        }
+
+        binding.showItemsTextView.setOnClickListener {
+            findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterProductStatusFragment())
+        }
+
+        binding.styleTextView.setOnClickListener {
+            findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterStyleFragment())
+        }
+
+        binding.conditionTextView.setOnClickListener {
+            findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterConditionFragment())
+        }
+
+        binding.sizeTextView.setOnClickListener {
+            findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterSizesFragment())
+        }
+
+        binding.materialsTextView.setOnClickListener {
+            findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterMaterialsFragment())
+        }
+
+        binding.colorTextView.setOnClickListener {
+
+        }
     }
 
     private fun initAutoCompleteTextView(){
         val types = resources.getStringArray(R.array.type_array)
-        ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, types).also { adapter ->
+        ArrayAdapter(requireContext(), R.layout.item_suggestion_textview, types).also { adapter ->
             binding.typeAutoCompleteTextView.setAdapter(adapter)
         }
+        binding.typeAutoCompleteTextView.setOnClickListener { binding.typeAutoCompleteTextView.showDropDown() }
+        binding.typeAutoCompleteTextView.dropDownAnchor
     }
 }
