@@ -312,7 +312,21 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/priceTextView"
+        android:paddingStart="30dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        android:inputType="number"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/from"
+        app:layout_constraintTop_toTopOf="@+id/editText2"
+        app:layout_constraintBottom_toBottomOf="@+id/editText2"
+        app:layout_constraintStart_toStartOf="@+id/editText2"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/regular_16"/>
 
     <EditText
         android:id="@+id/editText"
@@ -324,7 +338,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/editText2"
-        app:layout_constraintTop_toBottomOf="@+id/priceTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/priceTextView"
+        android:paddingStart="30dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        android:inputType="number"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/until"
+        app:layout_constraintTop_toTopOf="@+id/editText"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintStart_toStartOf="@+id/editText"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/regular_16"/>
 
     <View
         android:id="@+id/divider7View"

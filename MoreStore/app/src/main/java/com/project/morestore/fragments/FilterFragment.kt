@@ -36,9 +36,10 @@ class FilterFragment: Fragment(R.layout.fragment_filter) {
             binding.categoriesGreenDotImageView.isVisible = !isAllCategories
             binding.allCategories.isVisible = isAllCategories
         }*/
-        Log.d("Debug", "isAllBrands = ${FilterState.isAllBrands}")
+        //Log.d("Debug", "isAllBrands = ${FilterState.isAllBrands}")
         binding.brandsGreenDotImageView.isVisible = !FilterState.isAllBrands
         binding.allBrands.isVisible = FilterState.isAllBrands
+        Log.d("Debug", "isAllChecked = ${FilterState.regions.all { it }}")
         binding.regionsGreenDotImageView.isVisible = !FilterState.regions.all { it }
         binding.allRegions.isVisible = FilterState.regions.all { it }
     }
@@ -52,6 +53,10 @@ class FilterFragment: Fragment(R.layout.fragment_filter) {
         }
         binding.searchRegionTextView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToRegionsFragment())
+        }
+
+        binding.colorTextView.setOnClickListener {
+            findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToColorsFragment())
         }
     }
 

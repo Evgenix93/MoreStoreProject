@@ -3,7 +3,9 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.FilterState
@@ -22,6 +24,7 @@ class BrandsFragment: Fragment(R.layout.fragment_brands) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initToolbar()
         initSegmentsRecyclerView()
         init0_9BrandsRecyclerView()
         initABrandsRecyclerView()
@@ -62,7 +65,7 @@ class BrandsFragment: Fragment(R.layout.fragment_brands) {
         FilterState.segments = segmentsAdapter.segments
         FilterState.brands9 = brands9Adapter.brands9Checked
         FilterState.brandsA = brandsAAdapter.brandsAChecked
-        FilterState.isAllBrands = segmentsAdapter.segments.all{it} && brands9Adapter.brands9Checked.all{it} && brandsAAdapter.brandsAChecked.all{it}
+        FilterState.isAllBrands = (segmentsAdapter.segments.all{!it} && brands9Adapter.brands9Checked.all{!it} && brandsAAdapter.brandsAChecked.all{!it}) || (segmentsAdapter.segments.all{it} && brands9Adapter.brands9Checked.all{it} && brandsAAdapter.brandsAChecked.all{it})
     }
 
     private fun loadFilter(){
@@ -81,6 +84,14 @@ class BrandsFragment: Fragment(R.layout.fragment_brands) {
         if(FilterState.brandsA.isNotEmpty()){
             brandsAAdapter.brandsAChecked = FilterState.brandsA.toMutableList()
             brandsAAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun initToolbar(){
+        binding.toolbarFilter.titleTextView.text = "Бренд или сегмент"
+        binding.toolbarFilter.actionTextView.text = "Сбросить"
+        binding.toolbarFilter.imageView2.setOnClickListener{
+            findNavController().popBackStack()
         }
     }
 }

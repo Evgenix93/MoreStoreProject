@@ -32,7 +32,7 @@ class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
     )
 
 
-    var regionsChecked = regions.map { false }.toMutableList()
+    var regionsChecked = regions.map { true }.toMutableList()
 
 
     class RegionViewHolder(
