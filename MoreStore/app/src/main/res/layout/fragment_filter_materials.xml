@@ -31,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
+        android:src="@drawable/ic_magnifying_glass"
 
         app:layout_constraintBottom_toBottomOf="@+id/searchEditText"
         app:layout_constraintStart_toStartOf="@+id/searchEditText"

@@ -294,7 +294,7 @@
         android:id="@+id/brandsGreenDotImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/arrow5ImageView"
+        app:layout_constraintEnd_toStartOf="@id/arrow5ImageView"
         app:layout_constraintTop_toBottomOf="@+id/divider5View"
         android:src="@drawable/ic_ellipse"
         android:layout_marginTop="20dp"

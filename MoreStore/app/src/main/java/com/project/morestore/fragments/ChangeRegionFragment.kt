@@ -15,6 +15,7 @@ class ChangeRegionFragment : Fragment(R.layout.fragment_change_region) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initToolbar()
         binding.searchEditText.setAdapter(
             ArrayAdapter<String>(
                 requireContext(),
@@ -29,5 +30,9 @@ class ChangeRegionFragment : Fragment(R.layout.fragment_change_region) {
         }
 
         binding.view12.setOnClickListener { findNavController().navigate(ChangeRegionFragmentDirections.actionChangeRegionFragmentToAutoLocationFragment()) }
+    }
+
+    private fun initToolbar(){
+        binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 }

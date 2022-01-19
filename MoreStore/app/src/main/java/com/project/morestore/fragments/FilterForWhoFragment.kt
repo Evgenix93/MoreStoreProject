@@ -21,6 +21,11 @@ class FilterForWhoFragment : Fragment(R.layout.fragment_filter_for_who) {
     }
 
     private fun initRadioButtons() {
+        if(FilterState.chosenForWho.isNotEmpty()){
+            binding.forWomenCheckBox.isChecked = FilterState.chosenForWho[0]
+            binding.forMenCheckBox.isChecked = FilterState.chosenForWho[1]
+            binding.forKidsCheckBox.isChecked = FilterState.chosenForWho[2]
+        }
         binding.forWomenCheckBox.setOnClickListener {
             setupRadioButton(binding.forWomenCheckBox)
         }
