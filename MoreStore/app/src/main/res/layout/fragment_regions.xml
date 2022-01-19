@@ -5,6 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <include layout="@layout/toolbar_filter"
+        android:id="@+id/toolbarFilter"/>
+
     <EditText
         android:id="@+id/editText3"
         android:layout_width="0dp"
@@ -18,7 +21,7 @@
         android:paddingEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarFilter"
         android:textAppearance="@style/regular_14"
         android:singleLine="true"/>
 

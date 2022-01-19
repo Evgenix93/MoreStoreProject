@@ -217,6 +217,8 @@
     <string name="st_petersburg">Санкт-Петербург</string>
     <string name="popular_variants">Популярные варианты</string>
     <string name="nothing_found">Ничего не найдено. Пожалуйста,\nизмените фильтры.</string>
+    <string name="from">от</string>
+    <string name="until">до</string>
     <string-array name="type_array">
         <item>Новое</item>
         <item>Дешевле</item>

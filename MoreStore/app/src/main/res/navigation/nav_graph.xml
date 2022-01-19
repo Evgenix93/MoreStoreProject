@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/catalogFragment">
+    app:startDestination="@id/filterFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -359,7 +359,14 @@
         <action
             android:id="@+id/action_filterFragment_to_filterConditionFragment"
             app:destination="@id/filterConditionFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_colorsFragment"
+            app:destination="@id/colorsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/colorsFragment"
+        android:name="com.project.morestore.fragments.ColorsFragment"
+        android:label="ColorsFragment" />
     <fragment
         android:id="@+id/autoLocationFragment"
         android:name="com.project.morestore.fragments.AutoLocationFragment"

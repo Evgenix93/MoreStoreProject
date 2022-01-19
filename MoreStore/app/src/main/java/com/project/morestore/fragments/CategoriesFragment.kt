@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.CheckBox
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.FilterState
 import com.project.morestore.R
@@ -17,6 +19,7 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initToolbar()
         initCheckBoxes()
         loadFilter()
     }
@@ -120,5 +123,13 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
         FilterState.isAllCategories = binding.allCategoriesCheckBox.isChecked
         FilterState.categories = checkBoxes.map{it.isChecked}
         Log.d("Debug", "safeFilter")
+    }
+
+    private fun initToolbar(){
+        binding.toolbarFilter.titleTextView.text = "Категории"
+        binding.toolbarFilter.actionTextView.isVisible = false
+        binding.toolbarFilter.imageView2.setOnClickListener{
+            findNavController().popBackStack()
+        }
     }
 }

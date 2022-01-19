@@ -64,6 +64,10 @@ class FilterFragment: Fragment(R.layout.fragment_filter) {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToRegionsFragment())
         }
 
+        binding.colorTextView.setOnClickListener {
+            findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToColorsFragment())
+        }
+
         binding.whoTextView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterForWhoFragment())
         }
