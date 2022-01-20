@@ -75,41 +75,41 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     }
 
     private fun setClickListeners() {
-        binding.categoriesTextView.setOnClickListener {
+        binding.categoryClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToCategoriesFragment())
         }
-        binding.brandTextView.setOnClickListener {
+        binding.brandClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToBrandsFragment())
         }
-        binding.searchRegionTextView.setOnClickListener {
+        binding.regionClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToRegionsFragment())
         }
 
-        binding.colorTextView.setOnClickListener {
+        binding.colorClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToColorsFragment())
         }
 
-        binding.whoTextView.setOnClickListener {
+        binding.forWhoClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterForWhoFragment())
         }
 
-        binding.showItemsTextView.setOnClickListener {
+        binding.showProductsClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterProductStatusFragment())
         }
 
-        binding.styleTextView.setOnClickListener {
+        binding.stylesClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterStyleFragment())
         }
 
-        binding.conditionTextView.setOnClickListener {
+        binding.conditionClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterConditionFragment())
         }
 
-        binding.sizeTextView.setOnClickListener {
+        binding.sizeClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterSizesFragment())
         }
 
-        binding.materialsTextView.setOnClickListener {
+        binding.materialsClickView.setOnClickListener {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterMaterialsFragment())
         }
 

@@ -23,6 +23,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarFilter" />
 
+
+
     <AutoCompleteTextView
         android:id="@+id/typeAutoCompleteTextView"
         android:layout_width="wrap_content"
@@ -36,6 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarFilter"
         android:clickable="true"
+        android:focusable="false"
         android:dropDownAnchor="@id/anchor"
         android:dropDownWidth="170dp"
         android:drawableBottom="@color/white"
@@ -81,6 +84,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/whoTextView" />
 
+    <View
+        android:id="@+id/forWhoClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/divider2View"
+        app:layout_constraintTop_toBottomOf="@+id/view3"/>
+
+
+
+
 
     <ImageView
         android:id="@+id/arrowImageView"
@@ -121,6 +138,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2View" />
 
+
+
     <TextView
         android:id="@+id/inStockTextView"
         android:layout_width="wrap_content"
@@ -131,6 +150,17 @@
         android:textColor="@color/gray2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showItemsTextView" />
+
+    <View
+        android:id="@+id/showProductsClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/divider3View"
+        app:layout_constraintTop_toBottomOf="@+id/divider2View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
     <ImageView
@@ -194,6 +224,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoriesTextView" />
 
+    <View
+        android:id="@+id/categoryClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/divider4View"
+        app:layout_constraintTop_toBottomOf="@+id/divider3View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <ImageView
         android:id="@+id/arrow3ImageView"
@@ -246,6 +287,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/styleTextView" />
 
+    <View
+        android:id="@+id/stylesClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/divider5View"
+        app:layout_constraintTop_toBottomOf="@+id/divider4View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <ImageView
         android:id="@+id/arrow4ImageView"
@@ -278,6 +330,17 @@
         android:textColor="@color/gray2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/brandTextView" />
+
+    <View
+        android:id="@+id/brandClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/divider6View"
+        app:layout_constraintTop_toBottomOf="@+id/divider5View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
     <ImageView
@@ -402,6 +465,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/conditionTextView" />
 
+    <View
+        android:id="@+id/conditionClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/divider8View"
+        app:layout_constraintTop_toBottomOf="@+id/divider7View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <ImageView
         android:id="@+id/conditionsGreenDotImageView"
@@ -453,6 +527,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sizeTextView" />
 
+    <View
+        android:id="@+id/sizeClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/divider9View"
+        app:layout_constraintTop_toBottomOf="@+id/divider8View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <ImageView
         android:id="@+id/sizesGreenDotImageView"
@@ -503,6 +588,17 @@
         android:textColor="@color/gray2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/colorTextView" />
+
+    <View
+        android:id="@+id/colorClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/divider10View"
+        app:layout_constraintTop_toBottomOf="@+id/divider9View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
     <ImageView
@@ -566,6 +662,17 @@
         app:layout_constraintTop_toBottomOf="@+id/materialsTextView" />
 
 
+    <View
+        android:id="@+id/materialsClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/divider11View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider10View" />
+
     <ImageView
         android:id="@+id/materialsGreenDotImageView"
         android:layout_width="wrap_content"
@@ -616,6 +723,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchRegionTextView" />
 
+
+    <View
+        android:id="@+id/regionClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/divider12View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider11View" />
 
     <ImageView
         android:id="@+id/arrow10ImageView"
