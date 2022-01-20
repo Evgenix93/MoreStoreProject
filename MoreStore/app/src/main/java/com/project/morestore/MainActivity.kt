@@ -1,16 +1,14 @@
 package com.project.morestore
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.view.WindowManager
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.databinding.ActivityMainBinding
-import com.project.morestore.databinding.FragmentMainBinding
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +17,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val list1 = mutableListOf(1, 2, 3, 4, 5)
+        val list2 = list1
+        list2.removeFirst()
+        Log.d("MyTest", "list1 = $list1, list2 = $list2")
     }
 
     override fun onStart() {

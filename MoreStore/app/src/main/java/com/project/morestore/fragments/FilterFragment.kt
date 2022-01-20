@@ -52,8 +52,8 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         Log.d("Debug", "isAllBrands = ${FilterState.isAllBrands}")
         binding.brandsGreenDotImageView.isVisible = !FilterState.isAllBrands
         binding.allBrands.isVisible = FilterState.isAllBrands
-        binding.regionsGreenDotImageView.isVisible = !FilterState.regions.all { it }
-        binding.allRegions.isVisible = FilterState.regions.all { it }
+        binding.regionsGreenDotImageView.isVisible = !FilterState.regions.all { it.isChecked }
+        binding.allRegions.isVisible = FilterState.regions.all { it.isChecked }
         //binding.showProductsGreenDotImageView.isVisible = com.project.morestore.singletones.FilterState.chosenProductStatus
         //val allSelected = com.project.morestore.singletones.FilterState.chosenStyles.all { it } || com.project.morestore.singletones.FilterState.chosenStyles.all { !it }
         binding.stylesGreenDotImageView.isVisible =

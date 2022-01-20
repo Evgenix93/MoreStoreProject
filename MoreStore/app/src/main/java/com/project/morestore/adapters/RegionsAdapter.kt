@@ -7,77 +7,122 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
-import com.project.morestore.databinding.ItemBrandBinding
 import com.project.morestore.databinding.ItemRegionBinding
+import com.project.morestore.models.MaterialLine
+import com.project.morestore.models.Region
 
 class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
-    private val regions = listOf(
-        "Все города",
-        "Москва, Московская область",
-        "Санкт-Петербург, Ленинградская область",
-        "Нижний Новгород, Нижегородская область",
-        "Новосибирск, Новосибирская область",
-        "Екатеринбург, Свердловская область",
-        "Казань, Республика Татарстан",
-        "Челябинск, Челябинская область",
-        "Омск, Омская область",
-        "Самара, Самарская область",
-        "Ростов-на-Дону, Ростовская область",
-        "Уфа, Республика Башкортостан",
-        "Красноярск, Красноярский край",
-        "Воронеж, Воронежская область",
-        "Пермь, Пермский край",
-        "Волгоград, Волгоградская область",
-        "Краснодар, Краснодарский край"
+    private var regions = listOf(
+        Region("Все города", true),
+        Region("Москва, Московская область", true),
+        Region("Санкт-Петербург, Ленинградская область", true),
+        Region("Нижний Новгород, Нижегородская область", true),
+        Region("Новосибирск, Новосибирская область", true),
+        Region("Екатеринбург, Свердловская область", true),
+        Region("Казань, Республика Татарстан", true),
+        Region("Челябинск, Челябинская область", true),
+        Region("Омск, Омская область", true),
+        Region("Самара, Самарская область", true),
+        Region("Ростов-на-Дону, Ростовская область", true),
+        Region("Уфа, Республика Башкортостан", true),
+        Region("Красноярск, Красноярский край", true),
+        Region("Воронеж, Воронежская область", true),
+        Region("Пермь, Пермский край",true),
+        Region("Волгоград, Волгоградская область", true),
+        Region("Краснодар, Краснодарский край",true)
     )
 
-
-    var regionsChecked = regions.map { true }.toMutableList()
-
-
-    class RegionViewHolder(
-        view: View,
-        private val regionsChecked: MutableList<Boolean>,
-        private val isAllChecked: (Boolean) -> Unit
-    ) : RecyclerView.ViewHolder(view) {
+    class RegionViewHolder(view: View, val onAllMaterial: (isChecked: Boolean) -> Unit, val onChecked: (isChecked: Boolean, position: Int) -> Unit) :
+        RecyclerView.ViewHolder(view) {
         private val binding: ItemRegionBinding by viewBinding()
-        fun bind(brand: String,  position: Int) {
-            binding.regionTextView.text = brand
-            binding.regionCheckBox.isChecked = regionsChecked[position]
-            binding.regionCheckBox.setOnCheckedChangeListener { _, isChecked ->
-                if (position == 0) {
-                    if (isChecked) {
-                        Log.d("Debug", "isAllChecked = true")
-                        regionsChecked[position] = isChecked
-                        isAllChecked(isChecked)
-                    } else if (regionsChecked.all { it }) {
-                        regionsChecked[position] = isChecked
-                        isAllChecked(isChecked)
-                    }
-                } else {
-                     regionsChecked[position] = isChecked
+
+        fun bind(region: Region, onMaterialChecked: (isChecked: Boolean) -> Unit,
+                 onCheckBoxClick: (isChecked: Boolean) -> Unit) {
+            binding.regionTextView.text = region.name
+            binding.regionCheckBox.isChecked = region.isChecked
+
+            //binding.ExcellentCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            //onMaterialChecked(isChecked)
+
+
+            //}
+
+            binding.regionCheckBox.setOnClickListener {
+                if(region.name == "Все города"){
+                    onAllMaterial(binding.regionCheckBox.isChecked)
+                }else {
+                    //onCheckBoxClick(binding.ExcellentCheckBox.isChecked)
+                    onChecked(binding.regionCheckBox.isChecked, adapterPosition)
                 }
             }
+
+
+
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegionViewHolder {
         return RegionViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_region, parent, false),
-            regionsChecked
-        ){
-            regionsChecked.forEachIndexed {index,_->
-                regionsChecked[index] = it
-            }
-            notifyDataSetChanged()
-        }
+            { allMaterialChecked ->
+                for (region in regions) {
+                    region.isChecked = allMaterialChecked
+                }
+                Log.d("mylog", "onAllMaterial")
+
+                notifyDataSetChanged()
+
+            },{isChecked, position ->
+                regions[position].isChecked = isChecked
+                if(!isChecked){
+                    regions[0].isChecked = false
+                    notifyItemChanged(0)
+                }else{
+                    if(regions.all { it.isChecked || it.name == "Все города" }){
+                        regions[0].isChecked = true
+                        notifyItemChanged(0)
+                    }
+                }
+            })
+
     }
 
     override fun onBindViewHolder(holder: RegionViewHolder, position: Int) {
-        holder.bind(regions[position], position)
+        holder.bind(regions[position], { isChecked  ->
+            regions[position].isChecked = isChecked
+
+        },{ isChecked ->
+            if(!isChecked){
+                regions[0].isChecked = false
+                notifyItemChanged(0)
+            }else{
+                if(regions.all { it.isChecked || it.name == "Все материалы" }){
+                    regions[0].isChecked = true
+                    notifyItemChanged(0)
+                }
+            }
+
+        })
+
+
+
     }
 
     override fun getItemCount(): Int {
+
         return regions.size
+
+
     }
+
+    fun getChosenMaterials(): List<Region>{
+        return regions
+    }
+
+    fun updateList(newList: List<Region>) {
+        regions = newList
+        notifyDataSetChanged()
+    }
+
 }
