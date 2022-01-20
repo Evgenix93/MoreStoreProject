@@ -39,18 +39,19 @@ class RegionsFragment: Fragment(R.layout.fragment_regions) {
 
    private fun safeFilter(){
        Log.d("Debug", "safeFilter")
-       Log.d("Debug", "${regionsAdapter.regionsChecked}")
-        if (regionsAdapter.regionsChecked.all{ !it })
-            regionsAdapter.regionsChecked.forEachIndexed{index,_->
-                regionsAdapter.regionsChecked[index] = true
+       //Log.d("Debug", "${regionsAdapter.regionsChecked}")
+         val regions = regionsAdapter.getChosenMaterials()
+        if (regions.all{ !it.isChecked })
+            regions.forEachIndexed{index,_->
+                regions[index].isChecked = true
             }
-        FilterState.regions = regionsAdapter.regionsChecked
+        FilterState.regions = regions
     }
    private fun loadFilter(){
         if(FilterState.regions.isNotEmpty()) {
             Log.d("Debug", "loadFilter")
-            regionsAdapter.regionsChecked = FilterState.regions.toMutableList()
-            regionsAdapter.notifyDataSetChanged()
+            regionsAdapter.updateList(FilterState.regions)
+
         }
     }
 
