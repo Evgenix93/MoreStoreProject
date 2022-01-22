@@ -36,22 +36,13 @@ class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
         RecyclerView.ViewHolder(view) {
         private val binding: ItemRegionBinding by viewBinding()
 
-        fun bind(region: Region, onMaterialChecked: (isChecked: Boolean) -> Unit,
-                 onCheckBoxClick: (isChecked: Boolean) -> Unit) {
+        fun bind(region: Region) {
             binding.regionTextView.text = region.name
             binding.regionCheckBox.isChecked = region.isChecked
-
-            //binding.ExcellentCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            //onMaterialChecked(isChecked)
-
-
-            //}
-
             binding.regionCheckBox.setOnClickListener {
                 if(region.name == "Все города"){
                     onAllMaterial(binding.regionCheckBox.isChecked)
                 }else {
-                    //onCheckBoxClick(binding.ExcellentCheckBox.isChecked)
                     onChecked(binding.regionCheckBox.isChecked, adapterPosition)
                 }
             }
@@ -89,34 +80,14 @@ class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RegionViewHolder, position: Int) {
-        holder.bind(regions[position], { isChecked  ->
-            regions[position].isChecked = isChecked
-
-        },{ isChecked ->
-            if(!isChecked){
-                regions[0].isChecked = false
-                notifyItemChanged(0)
-            }else{
-                if(regions.all { it.isChecked || it.name == "Все материалы" }){
-                    regions[0].isChecked = true
-                    notifyItemChanged(0)
-                }
-            }
-
-        })
-
-
-
+        holder.bind(regions[position])
     }
 
     override fun getItemCount(): Int {
-
         return regions.size
-
-
     }
 
-    fun getChosenMaterials(): List<Region>{
+    fun getCurrentRegions(): List<Region>{
         return regions
     }
 

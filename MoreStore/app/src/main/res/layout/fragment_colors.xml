@@ -229,6 +229,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view24"
         app:srcCompat="@drawable/ic_color"
+        app:tint="@color/orange"
          />
 
     <View
@@ -357,6 +358,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view20"
         app:srcCompat="@drawable/ic_color"
+        app:tint="@color/red"
          />
 
     <View

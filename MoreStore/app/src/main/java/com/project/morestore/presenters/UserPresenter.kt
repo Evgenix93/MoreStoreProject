@@ -73,7 +73,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                             return@launch
                         }
 
-                    viewState.success()
+                    viewState.success(Unit)
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -114,7 +114,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
             when(response?.code()){
                 200 -> {
-                    viewState.success()
+                    viewState.success(Unit)
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -135,7 +135,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             val response = authRepository.getNewCode(phone?.trim(), email?.trim())
             when (response?.code()) {
                 200 -> {
-                    viewState.success()
+                    viewState.successNewCode()
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -158,7 +158,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             val response = repository.uploadPhoto(uri)
             when (response?.code()) {
                 200 -> {
-                    viewState.success()
+                    viewState.success(Unit)
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -189,7 +189,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
    fun clearToken(){
        authRepository.clearToken()
-       viewState.success()
+       viewState.success(Unit)
    }
 
 }

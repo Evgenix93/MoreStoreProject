@@ -62,6 +62,7 @@ class ProductRepository(private val context: Context) {
     suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>): Boolean{
         return try {
             withContext(Dispatchers.IO){
+                //error("error")
                 val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
                 val stringSet = mutableSetOf<String>()
                 val stringSet2 = mutableSetOf<String>()

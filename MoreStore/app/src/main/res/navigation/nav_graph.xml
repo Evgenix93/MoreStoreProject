@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/filterFragment">
+    app:startDestination="@id/changeRegionFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -85,6 +85,9 @@
         <action
             android:id="@+id/action_registration4Fragment_to_registration5Fragment"
             app:destination="@id/registration5Fragment" />
+        <action
+            android:id="@+id/action_registration4Fragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 
 

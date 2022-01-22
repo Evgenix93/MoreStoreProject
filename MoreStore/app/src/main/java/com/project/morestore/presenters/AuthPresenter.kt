@@ -191,7 +191,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             val response = repository.getNewCode(phone?.trim(), email?.trim())
             when (response?.code()) {
                 200 -> {
-                    viewState.success(response.body()!!)
+                    viewState.successNewCode()
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -260,7 +260,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
     }
 
     private fun checkUserData(user: User): Boolean{
-        return user.name != null && user.surname != null && user.email != null && user.phone != null
+        return user.name != null && user.surname != null && user.phone != null
 
     }
 

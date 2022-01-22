@@ -45,10 +45,18 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     private fun setClickListeners() {
         val isEmail = args.phoneOrEmail.contains(Regex("[a-z]")) || args.phoneOrEmail.isEmpty()
+        if (!isEmail) {
+            binding.skipStepTextView.isVisible = true
+            binding.skipStepTextView.setOnClickListener {
+                findNavController().navigate(
+                    Registration4FragmentDirections.actionRegistration4FragmentToMainFragment()
+                )
+            }
+        }
         binding.getCodeBtn.setOnClickListener {
             if (!isEmail) {
                 presenter.changeUserData(email = binding.phoneEmailEditText.text.toString())
-            }else{
+            } else {
                 presenter.changeUserData(phone = binding.phoneEmailEditText.text.toString())
             }
         }
@@ -90,12 +98,12 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     }
 
-    private fun showLoading(loading: Boolean){
+    private fun showLoading(loading: Boolean) {
         binding.getCodeBtn.isEnabled = !loading
         binding.loader.isVisible = loading
     }
 
-    override fun success() {
+    override fun success(result: Any) {
         showLoading(false)
         findNavController().navigate(
             Registration4FragmentDirections.actionRegistration4FragmentToRegistration5Fragment(
@@ -117,6 +125,10 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     override fun loaded(result: Any) {
         TODO("Not yet implemented")
+    }
+
+    override fun successNewCode() {
+
     }
 
 }

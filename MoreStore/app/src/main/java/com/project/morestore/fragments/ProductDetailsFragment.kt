@@ -1,7 +1,9 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.text.style.StrikethroughSpan
 import android.view.View
+import androidx.core.text.toSpannable
 import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,6 +25,7 @@ class ProductDetailsFragment: Fragment(R.layout.fragment_product) {
         initViewPager()
         initList()
         initToolBar()
+        initViews()
     }
 
     private fun initViewPager(){
@@ -52,5 +55,11 @@ class ProductDetailsFragment: Fragment(R.layout.fragment_product) {
             setHasFixedSize(true)
         }
 
+    }
+
+    private fun initViews(){
+        val crossedStr = binding.productOldPriceTextView.text.toSpannable().apply { setSpan(
+            StrikethroughSpan(), 0, binding.productOldPriceTextView.text.length ,0) }
+        binding.productOldPriceTextView.text = crossedStr
     }
 }

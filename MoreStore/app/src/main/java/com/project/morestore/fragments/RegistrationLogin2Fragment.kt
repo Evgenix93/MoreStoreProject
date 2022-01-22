@@ -63,10 +63,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
             } else {
                 presenter.getNewCode(phone = args.phoneOrEmail)
             }
-            binding.getNewCodeTextView.isVisible = false
-            binding.textView4.isVisible = true
-            binding.timerTextView.isVisible = true
-            initCounter()
+
         }
 
 
@@ -164,5 +161,13 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     override fun showOnBoarding() {
         findNavController().navigate(RegistrationLogin2FragmentDirections.actionRegistration2FragmentToOnboarding1Fragment())
+    }
+
+    override fun successNewCode() {
+        showLoading(false)
+        binding.getNewCodeTextView.isVisible = false
+        binding.textView4.isVisible = true
+        binding.timerTextView.isVisible = true
+        initCounter()
     }
 }

@@ -63,10 +63,7 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
             } else {
                 presenter.getNewCode(phone = args.phoneOrEmail)
             }
-            binding.getNewCodeTextView.isVisible = false
-            binding.textView4.isVisible = true
-            binding.timerTextView.isVisible = true
-            initCounter()
+
         }
     }
 
@@ -109,7 +106,7 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
 
-    override fun success() {
+    override fun success(result: Any) {
         showLoading(false)
         findNavController().navigate(Registration5FragmentDirections.actionRegistration5FragmentToOnboarding1Fragment())
 
@@ -128,5 +125,13 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     override fun loaded(result: Any) {
         TODO("Not yet implemented")
+    }
+
+    override fun successNewCode() {
+        showLoading(false)
+        binding.getNewCodeTextView.isVisible = false
+        binding.textView4.isVisible = true
+        binding.timerTextView.isVisible = true
+        initCounter()
     }
 }

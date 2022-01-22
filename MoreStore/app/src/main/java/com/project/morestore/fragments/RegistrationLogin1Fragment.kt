@@ -121,6 +121,10 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     }
 
+    override fun successNewCode() {
+
+    }
+
     private fun hideBottomNavBar(){
         val mainActivity = activity as MainActivity
         mainActivity.showBottomNavBar(false)

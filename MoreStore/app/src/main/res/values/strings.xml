@@ -219,6 +219,7 @@
     <string name="nothing_found">Ничего не найдено. Пожалуйста,\nизмените фильтры.</string>
     <string name="from">от</string>
     <string name="until">до</string>
+    <string name="skip">Пропустить</string>
     <string-array name="type_array">
         <item>Новое</item>
         <item>Дешевле</item>

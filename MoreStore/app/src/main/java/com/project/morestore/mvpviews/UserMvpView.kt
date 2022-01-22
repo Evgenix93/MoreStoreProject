@@ -8,7 +8,7 @@ import moxy.viewstate.strategy.alias.SingleState
 interface UserMvpView: MvpView {
 
     @OneExecution
-    fun success()
+    fun success(result: Any)
 
     @OneExecution
     fun error(message: String)
@@ -18,5 +18,8 @@ interface UserMvpView: MvpView {
 
     @OneExecution
     fun loaded(result: Any)
+
+    @OneExecution
+    fun successNewCode()
 
 }

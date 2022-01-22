@@ -69,7 +69,7 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         binding.loader.isVisible = loading
     }
 
-    override fun success() {
+    override fun success(result: Any) {
         showLoading(false)
         findNavController().navigate(
             Registration3FragmentDirections.actionRegistration3FragmentToRegistration4Fragment(
@@ -91,6 +91,10 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     override fun loaded(result: Any) {
+
+    }
+
+    override fun successNewCode() {
 
     }
 }

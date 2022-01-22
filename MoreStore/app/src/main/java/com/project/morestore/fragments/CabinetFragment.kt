@@ -35,7 +35,7 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         }
     }
 
-    override fun success() {
+    override fun success(result: Any) {
         findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToFirstLaunchFragment3())
     }
 

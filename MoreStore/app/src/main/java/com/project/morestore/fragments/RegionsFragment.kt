@@ -40,7 +40,7 @@ class RegionsFragment: Fragment(R.layout.fragment_regions) {
    private fun safeFilter(){
        Log.d("Debug", "safeFilter")
        //Log.d("Debug", "${regionsAdapter.regionsChecked}")
-         val regions = regionsAdapter.getChosenMaterials()
+         val regions = regionsAdapter.getCurrentRegions()
         if (regions.all{ !it.isChecked })
             regions.forEachIndexed{index,_->
                 regions[index].isChecked = true
