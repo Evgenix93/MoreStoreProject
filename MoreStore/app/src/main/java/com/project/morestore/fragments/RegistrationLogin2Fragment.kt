@@ -163,7 +163,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
         findNavController().navigate(RegistrationLogin2FragmentDirections.actionRegistration2FragmentToOnboarding1Fragment())
     }
 
-    override fun successNewCode() {
+    override fun successNewCode(result: Any) {
         showLoading(false)
         binding.getNewCodeTextView.isVisible = false
         binding.textView4.isVisible = true

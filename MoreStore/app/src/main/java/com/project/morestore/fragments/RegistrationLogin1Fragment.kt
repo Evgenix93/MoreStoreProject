@@ -121,7 +121,16 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     }
 
-    override fun successNewCode() {
+    override fun successNewCode(result: Any) {
+        showLoading(false)
+            findNavController().navigate(
+                RegistrationLogin1FragmentDirections.actionRegistration1FragmentToRegistration2Fragment(
+                    binding.phoneEmailEditText.text.toString(),
+                    (result as RegistrationResponse).user?.toInt()!!,
+                    args.isLogin
+                )
+            )
+
 
     }
 

@@ -16,5 +16,5 @@ interface AuthMvpView: MvpView {
     @OneExecution
     fun showOnBoarding()
     @OneExecution
-    fun successNewCode()
+    fun successNewCode(result: Any)
 }
