@@ -14,34 +14,21 @@ class MaterialAdapter : RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder>
 
     private var list = listOf<MaterialLine>()
 
-
-
     class MaterialViewHolder(view: View, val onAllMaterial: (isChecked: Boolean) -> Unit, val onChecked: (isChecked: Boolean, position: Int) -> Unit) :
         RecyclerView.ViewHolder(view) {
         private val binding: ItemMaterialLineBinding by viewBinding()
 
-        fun bind(material: MaterialLine, onMaterialChecked: (isChecked: Boolean) -> Unit,
-        onCheckBoxClick: (isChecked: Boolean) -> Unit) {
+        fun bind(material: MaterialLine) {
             binding.materialNameTextView.text = material.name
             binding.ExcellentCheckBox.isChecked = material.isSelected
-
-            //binding.ExcellentCheckBox.setOnCheckedChangeListener { _, isChecked ->
-                    //onMaterialChecked(isChecked)
-
-
-            //}
 
             binding.ExcellentCheckBox.setOnClickListener {
                 if(material.name == "Все материалы"){
                     onAllMaterial(binding.ExcellentCheckBox.isChecked)
                 }else {
-                    //onCheckBoxClick(binding.ExcellentCheckBox.isChecked)
                     onChecked(binding.ExcellentCheckBox.isChecked, adapterPosition)
                 }
             }
-
-
-
         }
 
     }
@@ -54,8 +41,7 @@ class MaterialAdapter : RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder>
                 material.isSelected = allMaterialChecked
             }
             Log.d("mylog", "onAllMaterial")
-
-            notifyDataSetChanged()
+             notifyDataSetChanged()
 
         },{isChecked, position ->
                 list[position].isSelected = isChecked
@@ -73,34 +59,14 @@ class MaterialAdapter : RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder>
     }
 
     override fun onBindViewHolder(holder: MaterialViewHolder, position: Int) {
-        holder.bind(list[position], { isChecked  ->
-            list[position].isSelected = isChecked
-
-        },{ isChecked ->
-            if(!isChecked){
-                list[0].isSelected = false
-                notifyItemChanged(0)
-            }else{
-                if(list.all { it.isSelected || it.name == "Все материалы" }){
-                    list[0].isSelected = true
-                    notifyItemChanged(0)
-                }
-            }
-
-        })
-
-
-
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int {
-
         return list.size
-
-
     }
 
-    fun getChosenMaterials(): List<MaterialLine>{
+    fun getCurrentMaterials(): List<MaterialLine>{
         return list
     }
 

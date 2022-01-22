@@ -84,7 +84,7 @@ class FilterMaterialsFragment: Fragment(R.layout.fragment_filter_materials) {
 
     override fun onStop() {
         super.onStop()
-        FilterState.chosenMaterials = materialAdapter.getChosenMaterials()
+        FilterState.chosenMaterials = materialAdapter.getCurrentMaterials()
 
     }
 
