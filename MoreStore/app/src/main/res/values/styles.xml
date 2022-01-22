@@ -198,4 +198,8 @@
          <item name="android:fontFeatureSettings">pnum, lnum</item>
     </style>
 
+    <style name="MoreStoreSearchView" parent="Base.Widget.AppCompat.SearchView">
+        <item name="searchIcon">@drawable/ic_magnifying_glass</item>
+    </style>
+
 </resources>

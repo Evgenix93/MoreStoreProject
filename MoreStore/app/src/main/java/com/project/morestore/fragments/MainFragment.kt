@@ -3,19 +3,24 @@ package com.project.morestore.fragments
 import android.content.Context
 import android.database.Cursor
 import android.database.MatrixCursor
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.CursorAdapter
-import android.widget.GridLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
 import com.project.morestore.R
@@ -48,13 +53,13 @@ class MainFragment: MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
         with(binding.forWomenRecyclerView){
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
-
+            isNestedScrollingEnabled = false
         }
 
         with(binding.forKidsRecyclerView){
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
-
+            isNestedScrollingEnabled = false
         }
 
 
@@ -71,18 +76,30 @@ class MainFragment: MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
     }
 
     private fun initToolbar(){
-        val searchView = binding.toolbarMain.materialToolbar.menu.findItem(R.id.search).actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
+        val toolbar = binding.toolbarMain.materialToolbar
+        val searchItem = toolbar.menu.findItem(R.id.search)
+        searchItem.setOnMenuItemClickListener {
+           binding.toolbarMain.searchFrameLayout.isVisible = true
+           it.isVisible = false
+           toolbar.menu.findItem(R.id.favorite).isVisible = false
+           toolbar.menu.findItem(R.id.cart).isVisible = false
+           toolbar.logo = null
+           binding.toolbarMain.backImageView.isVisible = true
+           true
+        }
+        binding.toolbarMain.clearImageView.setOnClickListener{
+           binding.toolbarMain.searchEditText.text.clear()
+        }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                searchView.suggestionsAdapter = initSuggestions()
-                return true
-            }
+        binding.toolbarMain.backImageView.setOnClickListener {
+            binding.toolbarMain.backImageView.isVisible = false
+            binding.toolbarMain.searchFrameLayout.isVisible = false
+            searchItem.isVisible = true
+            toolbar.menu.findItem(R.id.favorite).isVisible = true
+            toolbar.menu.findItem(R.id.cart).isVisible = true
+            toolbar.logo = ResourcesCompat.getDrawable(resources, R.drawable.ic_logo_more_store, null)
+        }
 
-        })
     }
 
     private fun initSuggestions(): androidx.cursoradapter.widget.CursorAdapter {
