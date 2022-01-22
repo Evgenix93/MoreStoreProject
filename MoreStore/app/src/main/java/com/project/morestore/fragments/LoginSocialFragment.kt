@@ -86,7 +86,7 @@ class LoginSocialFragment : MvpAppCompatFragment(R.layout.fragment_social_login)
 
     }
 
-    override fun successNewCode() {
+    override fun successNewCode(result: Any) {
 
     }
 

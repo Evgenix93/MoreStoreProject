@@ -178,7 +178,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
 
     }
 
-    override fun successNewCode() {
+    override fun successNewCode(result: Any) {
 
     }
 }
