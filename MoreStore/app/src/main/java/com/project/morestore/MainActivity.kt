@@ -17,10 +17,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val list1 = mutableListOf(1, 2, 3, 4, 5)
-        val list2 = list1
-        list2.removeFirst()
-        Log.d("MyTest", "list1 = $list1, list2 = $list2")
     }
 
     override fun onStart() {

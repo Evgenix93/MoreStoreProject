@@ -9,10 +9,17 @@
     android:id="@+id/materialToolbar"
     android:layout_width="match_parent"
     android:layout_height="65dp"
-    app:logo="@drawable/ic_logo_more_store"
-    app:menu="@menu/menu_toolbar"
     android:background="@color/white"
-    >
+    app:menu="@menu/menu_toolbar"
+    app:logo="@drawable/ic_logo_more_store">
+
+    <ImageView
+        android:id="@+id/backImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_back"
+        android:visibility="gone"
+        android:layout_marginStart="11dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/filterBtn"
@@ -31,6 +38,37 @@
         android:textSize="14sp"
         android:textColor="@color/gray2"
         android:textAllCaps="false"/>
+
+         <FrameLayout
+             android:id="@+id/searchFrameLayout"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginEnd="10dp"
+             android:layout_marginStart="19dp"
+             android:visibility="gone">
+        <AutoCompleteTextView
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_field"
+            android:singleLine="true"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black2"
+            android:drawableStart="@drawable/ic_magnifying_glass"
+            android:paddingStart="15dp"
+            android:paddingEnd="40dp"
+            android:drawablePadding="13dp"
+            />
+
+           <ImageView
+               android:id="@+id/clearImageView"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@drawable/ic_x"
+               android:layout_gravity="end|center_vertical"
+               android:layout_marginEnd="13dp"/>
+
+         </FrameLayout>
 
 
 </com.google.android.material.appbar.MaterialToolbar>

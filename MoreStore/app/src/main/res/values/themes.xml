@@ -16,6 +16,9 @@
         <item name="colorOnSurface">@color/black</item>
         <item name="toolbarStyle">@style/toolbarStyle</item>
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
+        <item name="searchIcon">@drawable/ic_magnifying_glass</item>
+        <item name="android:searchIcon">@drawable/ic_magnifying_glass</item>
+
     </style>
 
     <style name="toolbarStyle" parent="Widget.MaterialComponents.Toolbar">

@@ -28,8 +28,8 @@ class BrandsAdapter(private val is0_9Brands: Boolean) :
         "Among US (0)",
         "ANDETTA (12)"
     )
-    var brands9Checked = brands9.map { false }.toMutableList()
-    var brandsAChecked = brandsA.map { false }.toMutableList()
+   private var brands9Checked = brands9.map { false }.toMutableList()
+   private var brandsAChecked = brandsA.map { false }.toMutableList()
 
     class BrandViewHolder(
         view: View,
@@ -72,5 +72,22 @@ class BrandsAdapter(private val is0_9Brands: Boolean) :
             brands9.size
         else
             brandsA.size
+    }
+
+    fun updateBrands9Checked(newList: MutableList<Boolean>){
+        brands9Checked = newList
+        notifyDataSetChanged()
+    }
+    fun updateBrandsAChecked(newList: MutableList<Boolean>){
+        brandsAChecked = newList
+        notifyDataSetChanged()
+    }
+
+    fun loadBrands9Checked(): List<Boolean>{
+        return brands9Checked
+    }
+
+    fun loadBrandsAChecked(): List<Boolean>{
+        return brandsAChecked
     }
 }
