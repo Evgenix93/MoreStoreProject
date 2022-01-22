@@ -191,7 +191,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             val response = repository.getNewCode(phone?.trim(), email?.trim())
             when (response?.code()) {
                 200 -> {
-                    viewState.successNewCode()
+                    viewState.successNewCode(response.body()!!)
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
