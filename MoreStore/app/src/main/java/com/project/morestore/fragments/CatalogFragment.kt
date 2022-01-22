@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
+import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentCatalogBinding
 import com.project.morestore.util.autoCleared
 
@@ -49,18 +51,39 @@ class CatalogFragment: Fragment(R.layout.fragment_catalog) {
     }
 
     private fun initToolbar(){
-        val searchView = binding.toolbarMain.materialToolbar.menu.findItem(R.id.search).actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
+        val toolbar = binding.toolbarMain.materialToolbar
+        val searchItem = toolbar.menu.findItem(R.id.search)
+        searchItem.setOnMenuItemClickListener {
+            binding.toolbarMain.searchFrameLayout.isVisible = true
+            it.isVisible = false
+            toolbar.menu.findItem(R.id.favorite).isVisible = false
+            toolbar.menu.findItem(R.id.cart).isVisible = false
+            binding.toolbarMain.backImageView.isVisible = true
+            binding.toolbarMain.filterBtn.isVisible = false
+            true
+        }
+        binding.toolbarMain.clearImageView.setOnClickListener {
+            binding.toolbarMain.searchEditText.text.clear()
+        }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                searchView.suggestionsAdapter = initSuggestions()
-                return true
-            }
+        binding.toolbarMain.backImageView.setOnClickListener {
+            binding.toolbarMain.backImageView.isVisible = false
+            binding.toolbarMain.searchFrameLayout.isVisible = false
+            searchItem.isVisible = true
+            toolbar.menu.findItem(R.id.favorite).isVisible = true
+            toolbar.menu.findItem(R.id.cart).isVisible = true
+            binding.toolbarMain.filterBtn.isVisible = true
+        }
 
-        })
+        binding.toolbarMain.searchEditText.setAdapter(
+            SuggestionArrayAdapter(
+                requireContext(),
+                R.layout.item_suggestion_textview,
+                listOf("Плащ мужской", "Плащ женский", "Плащ-палатка", "Плащ дождевик")
+            )
+        )
+
+        binding.toolbarMain.searchEditText.dropDownAnchor = R.id.anchor
 
         binding.toolbarMain.filterBtn.isVisible = true
         binding.toolbarMain.materialToolbar.logo = null

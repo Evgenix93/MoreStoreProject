@@ -10,13 +10,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="29dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/ic_field"
         android:dropDownAnchor="@id/anchor"
-        android:popupElevation="0dp"
         android:paddingStart="49dp"
         android:paddingEnd="30dp"
+        android:popupElevation="0dp"
         android:singleLine="true"
         android:textAppearance="@style/regular_14"
         android:textColor="@color/black2"
@@ -29,9 +29,10 @@
         android:id="@+id/anchor"
         android:layout_width="0dp"
         android:layout_height="66dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/searchEditText" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/line"

@@ -26,6 +26,7 @@ import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.MainFragmenViewPagerAdapter
 import com.project.morestore.adapters.ProductAdapter
+import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentMainBinding
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.presenters.AuthPresenter
@@ -33,7 +34,7 @@ import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class MainFragment: MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
+class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
     private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
     private val binding: FragmentMainBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
@@ -48,15 +49,16 @@ class MainFragment: MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
     }
 
 
-    private fun initLists(){
-        productAdapter = ProductAdapter(6){findNavController().navigate(MainFragmentDirections.actionMainFragmentToProductDetailsFragment())}
-        with(binding.forWomenRecyclerView){
+    private fun initLists() {
+        productAdapter =
+            ProductAdapter(6) { findNavController().navigate(MainFragmentDirections.actionMainFragmentToProductDetailsFragment()) }
+        with(binding.forWomenRecyclerView) {
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
             isNestedScrollingEnabled = false
         }
 
-        with(binding.forKidsRecyclerView){
+        with(binding.forKidsRecyclerView) {
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
             isNestedScrollingEnabled = false
@@ -65,30 +67,30 @@ class MainFragment: MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
 
     }
 
-    private fun initViewPager(){
+    private fun initViewPager() {
         binding.viewPager2.adapter = MainFragmenViewPagerAdapter(this)
         binding.dots.setViewPager2(binding.viewPager2)
     }
 
-    private fun showBottomNavBar(){
+    private fun showBottomNavBar() {
         val mainActivity = activity as MainActivity
         mainActivity.showBottomNavBar(true)
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         val toolbar = binding.toolbarMain.materialToolbar
         val searchItem = toolbar.menu.findItem(R.id.search)
         searchItem.setOnMenuItemClickListener {
-           binding.toolbarMain.searchFrameLayout.isVisible = true
-           it.isVisible = false
-           toolbar.menu.findItem(R.id.favorite).isVisible = false
-           toolbar.menu.findItem(R.id.cart).isVisible = false
-           toolbar.logo = null
-           binding.toolbarMain.backImageView.isVisible = true
-           true
+            binding.toolbarMain.searchFrameLayout.isVisible = true
+            it.isVisible = false
+            toolbar.menu.findItem(R.id.favorite).isVisible = false
+            toolbar.menu.findItem(R.id.cart).isVisible = false
+            toolbar.logo = null
+            binding.toolbarMain.backImageView.isVisible = true
+            true
         }
-        binding.toolbarMain.clearImageView.setOnClickListener{
-           binding.toolbarMain.searchEditText.text.clear()
+        binding.toolbarMain.clearImageView.setOnClickListener {
+            binding.toolbarMain.searchEditText.text.clear()
         }
 
         binding.toolbarMain.backImageView.setOnClickListener {
@@ -97,8 +99,19 @@ class MainFragment: MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
             searchItem.isVisible = true
             toolbar.menu.findItem(R.id.favorite).isVisible = true
             toolbar.menu.findItem(R.id.cart).isVisible = true
-            toolbar.logo = ResourcesCompat.getDrawable(resources, R.drawable.ic_logo_more_store, null)
+            toolbar.logo =
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_logo_more_store, null)
         }
+
+        binding.toolbarMain.searchEditText.setAdapter(
+            SuggestionArrayAdapter(
+                requireContext(),
+                R.layout.item_suggestion_textview,
+                listOf("Плащ мужской", "Плащ женский", "Плащ-палатка", "Плащ дождевик")
+            )
+        )
+
+        binding.toolbarMain.searchEditText.dropDownAnchor = R.id.anchor
 
     }
 
@@ -113,35 +126,32 @@ class MainFragment: MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
         items.add("Плащ дождевик");
 
 
+        // Cursor
+        val columns = arrayOf("_id", "text");
+        val temp = arrayOf<Any>(0, "default")
+
+        val cursor = MatrixCursor(columns);
 
 
+        for (i in 0 until items.size) {
 
-            // Cursor
-            val columns = arrayOf("_id", "text");
-            val temp = arrayOf<Any>(0, "default")
+            temp[0] = i;
+            temp[1] = items.get(i);
 
-            val cursor = MatrixCursor(columns);
-
-
-            for (i in 0 until items.size) {
-
-                temp[0] = i;
-                temp[1] = items.get(i);
-
-                cursor.addRow(temp);
-            }
+            cursor.addRow(temp);
+        }
 
 
 
 
-        return object : androidx.cursoradapter.widget.CursorAdapter(requireContext(), cursor){
+        return object : androidx.cursoradapter.widget.CursorAdapter(requireContext(), cursor) {
             override fun newView(p0: Context?, p1: Cursor?, p2: ViewGroup?): View {
                 return LayoutInflater.from(p0).inflate(R.layout.item_suggestion, p2, false)
 
             }
 
             override fun bindView(p0: View?, p1: Context?, p2: Cursor?) {
-                val textView =p0?.findViewById<TextView>(R.id.suggestionTextView)
+                val textView = p0?.findViewById<TextView>(R.id.suggestionTextView)
 
                 val str = p2?.getString(1)
                 textView?.text = str
@@ -165,6 +175,10 @@ class MainFragment: MvpAppCompatFragment(R.layout.fragment_main), AuthMvpView {
 
     override fun showOnBoarding() {
         findNavController().navigate(MainFragmentDirections.actionMainFragmentToOnboarding1Fragment())
+
+    }
+
+    override fun successNewCode() {
 
     }
 }

@@ -50,6 +50,7 @@
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:popupElevation="0dp"
             android:background="@drawable/ic_field"
             android:singleLine="true"
             android:textAppearance="@style/regular_14"

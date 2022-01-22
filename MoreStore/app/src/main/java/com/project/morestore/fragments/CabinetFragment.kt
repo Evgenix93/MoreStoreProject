@@ -54,4 +54,8 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
             findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToLoginDialog())
         }
     }
+
+    override fun successNewCode() {
+
+    }
 }
