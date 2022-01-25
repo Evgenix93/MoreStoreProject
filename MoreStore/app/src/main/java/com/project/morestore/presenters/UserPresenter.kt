@@ -3,7 +3,6 @@ package com.project.morestore.presenters
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.project.morestore.models.Size
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.UserRepository
@@ -184,7 +183,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
 
     fun checkToken(){
-        viewState.loaded(authRepository.checkToken())
+        viewState.loaded(authRepository.isTokenEmpty())
     }
 
    fun clearToken(){

@@ -17,19 +17,16 @@ class ChangeRegionFragment : Fragment(R.layout.fragment_change_region) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initEditText()
-
-
-
-
-
-
-
-        binding.crossIcon.setOnClickListener {
-            binding.searchEditText.setText("")
-        }
-
-        binding.view12.setOnClickListener { findNavController().navigate(ChangeRegionFragmentDirections.actionChangeRegionFragmentToAutoLocationFragment()) }
+        hideBottomNav()
+        setClickListeners()
     }
+
+
+
+
+
+
+
 
     private fun initToolbar(){
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
@@ -44,9 +41,20 @@ class ChangeRegionFragment : Fragment(R.layout.fragment_change_region) {
 
             )
         )
-        binding.searchEditText.setOnFocusChangeListener { view, focused ->
-            (activity as MainActivity).showBottomNavBar(!focused)
-        }
+
 
     }
-}
+
+    private fun hideBottomNav(){
+        (activity as MainActivity).showBottomNavBar(false)
+    }
+
+    private fun setClickListeners(){
+        binding.crossIcon.setOnClickListener {
+            binding.searchEditText.setText("")
+        }
+
+        binding.view12.setOnClickListener { findNavController().navigate(ChangeRegionFragmentDirections.actionChangeRegionFragmentToAutoLocationFragment()) }
+    }
+
+    }

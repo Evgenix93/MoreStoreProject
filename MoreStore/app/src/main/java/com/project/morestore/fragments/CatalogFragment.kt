@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.SuggestionArrayAdapter
@@ -30,6 +31,7 @@ class CatalogFragment: Fragment(R.layout.fragment_catalog) {
         initList()
         initToolbar()
         setClickListeners()
+        showBottomNav()
 
 
     }
@@ -139,5 +141,9 @@ class CatalogFragment: Fragment(R.layout.fragment_catalog) {
             }
 
         }
+    }
+
+    private fun showBottomNav(){
+        (activity as MainActivity).showBottomNavBar(true)
     }
 }

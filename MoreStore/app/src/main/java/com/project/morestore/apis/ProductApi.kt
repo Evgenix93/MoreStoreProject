@@ -7,5 +7,5 @@ import retrofit2.http.Query
 interface ProductApi {
 
     @GET("product")
-    suspend fun getProducts(@Query("optionally") options: String): Response<List<Product>>
+    suspend fun getProducts(@Query("optionally") options: String): Response<Unit>
 }

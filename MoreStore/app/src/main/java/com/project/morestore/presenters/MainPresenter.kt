@@ -18,7 +18,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
             if(productRepository.loadOnBoardingViewed()){
                 viewState.loaded(Unit)
             }else{
-                if(!authRepository.checkToken()) {
+                if(!authRepository.isTokenEmpty()) {
                     viewState.showOnBoarding()
                 }else{
                     viewState.loaded(Unit)
