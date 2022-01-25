@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -35,27 +36,12 @@ class LoginSocialFragment : MvpAppCompatFragment(R.layout.fragment_social_login)
             presenter.getUserData()
             return
         }
-        if (result is User) {
-            if(result.name != null && result.phone != null && result.surname != null){
-                presenter.loadOnBoardingViewed()
-                //findNavController().navigate(LoginSocialFragmentDirections.actionLoginSocialFragmentToMainFragment())
-                return
-            }
-            findNavController().navigate(
-                LoginSocialFragmentDirections.actionLoginSocialFragmentToRegistration3Fragment(
-                    code = 0,
-                    phoneOrEmail = result.email ?: result.phone.orEmpty(),
-                    userId = result.id
-                )
-            )
-            return
-        }
         binding.webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
-                return if (request?.url.toString().contains("?code")) {
+                return if (request?.url.toString().contains("?code") || request?.url.toString().contains("?state")) {
                     presenter.loginSocial(request?.url.toString())
                     true
                 } else {
@@ -64,30 +50,38 @@ class LoginSocialFragment : MvpAppCompatFragment(R.layout.fragment_social_login)
             }
 
         }
+        binding.webView.settings.userAgentString = "Chrome/56.0.0.0 Mobile"
+        binding.webView.settings.javaScriptEnabled = true
         binding.webView.loadUrl(result as String)
 
     }
 
     override fun error(message: String) {
-        if(message == "401"){
-            findNavController().navigate(LoginSocialFragmentDirections.actionLoginSocialFragmentToMainFragment())
-            return
-        }
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     }
 
     override fun loading() {
 
     }
 
-    override fun showOnBoarding() {
-        findNavController().navigate(LoginSocialFragmentDirections.actionLoginSocialFragmentToOnboarding1Fragment())
 
-    }
 
     override fun successNewCode(result: Any) {
 
+    }
+
+    override fun registrationComplete(complete: Boolean, user: User) {
+        if(complete) {
+            findNavController().navigate(LoginSocialFragmentDirections.actionLoginSocialFragmentToMainFragment())
+        }else{
+            findNavController().navigate(
+                    LoginSocialFragmentDirections.actionLoginSocialFragmentToRegistration3Fragment(
+                        code = 0,
+                        phoneOrEmail = user.email ?: user.phone.orEmpty(),
+                        userId = user.id
+                    )
+                )
+        }
     }
 
 }

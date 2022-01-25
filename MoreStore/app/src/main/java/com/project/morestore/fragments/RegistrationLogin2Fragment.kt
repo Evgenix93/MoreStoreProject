@@ -114,27 +114,32 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     override fun success(result: Any) {
         showLoading(false)
-        if (result is User) {
-            val navController = findNavController()
-                navController.navigate(
-                    RegistrationLogin2FragmentDirections.actionRegistration2FragmentToRegistration3Fragment(
-                        args.phoneOrEmail,
-                        code = binding.codeEditText.text.toString().toInt(),
-                        userId = result.id
-                    )
-                )
-
-
-
-        }
-
-
     }
 
     override fun error(message: String) {
         showLoading(false)
-        if (message == "401") {
-            if(!args.isLogin) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun loading() {
+        showLoading(true)
+
+    }
+
+
+
+    override fun successNewCode(result: Any) {
+        showLoading(false)
+        binding.getNewCodeTextView.isVisible = false
+        binding.textView4.isVisible = true
+        binding.timerTextView.isVisible = true
+        initCounter()
+    }
+
+    override fun registrationComplete(complete: Boolean, user: User) {
+        showLoading(false)
+        if(complete) {
+            if (!args.isLogin) {
                 findNavController().navigate(
                     RegistrationLogin2FragmentDirections.actionRegistration2FragmentToResumeRegisterDialog(
                         isEmail = isEmail,
@@ -144,30 +149,19 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
                     )
                 )
 
-            }else{
+            } else {
                 findNavController().navigate(RegistrationLogin2FragmentDirections.actionRegistration2FragmentToMainFragment())
             }
-            return
-
+        }else{
+            val navController = findNavController()
+                navController.navigate(
+                    RegistrationLogin2FragmentDirections.actionRegistration2FragmentToRegistration3Fragment(
+                        args.phoneOrEmail,
+                        code = binding.codeEditText.text.toString().toInt(),
+                        userId = user.id
+                    )
+                )
         }
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
-    }
-
-    override fun loading() {
-        showLoading(true)
-
-    }
-
-    override fun showOnBoarding() {
-        findNavController().navigate(RegistrationLogin2FragmentDirections.actionRegistration2FragmentToOnboarding1Fragment())
-    }
-
-    override fun successNewCode(result: Any) {
-        showLoading(false)
-        binding.getNewCodeTextView.isVisible = false
-        binding.textView4.isVisible = true
-        binding.timerTextView.isVisible = true
-        initCounter()
     }
 }

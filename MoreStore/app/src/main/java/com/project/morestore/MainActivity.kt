@@ -1,9 +1,12 @@
 package com.project.morestore
 
+import android.content.Context
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -17,6 +20,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+
+
+
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        showBottomNavBar(true)
     }
 
     override fun onStart() {

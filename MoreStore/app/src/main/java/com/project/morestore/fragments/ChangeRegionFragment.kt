@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentChangeRegionBinding
@@ -15,14 +16,8 @@ class ChangeRegionFragment : Fragment(R.layout.fragment_change_region) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        binding.searchEditText.setAdapter(
-            SuggestionArrayAdapter(
-                requireContext(),
-                R.layout.item_suggestion_textview,
-                listOf("Саранск","Саров", "Саратов", "Сарапул ")
+        initEditText()
 
-            )
-        )
 
 
 
@@ -38,5 +33,20 @@ class ChangeRegionFragment : Fragment(R.layout.fragment_change_region) {
 
     private fun initToolbar(){
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
+    }
+
+    private fun initEditText(){
+        binding.searchEditText.setAdapter(
+            SuggestionArrayAdapter(
+                requireContext(),
+                R.layout.item_suggestion_textview,
+                listOf("Саранск","Саров", "Саратов", "Сарапул ")
+
+            )
+        )
+        binding.searchEditText.setOnFocusChangeListener { view, focused ->
+            (activity as MainActivity).showBottomNavBar(!focused)
+        }
+
     }
 }

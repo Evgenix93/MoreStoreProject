@@ -170,10 +170,9 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                 200 -> {
                     val user = response.body()!!
                     if(checkUserData(user)){
-                        //viewState.error("401")
-                            viewState.error("401")
+                        viewState.registrationComplete(true, user)
                     }else{
-                        viewState.success(user)
+                        viewState.registrationComplete(false, user)
                     }
 
                 }
@@ -233,17 +232,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         }
     }
 
-    fun loadOnBoardingViewed(){
-        presenterScope.launch {
-            if(productRepository.loadOnBoardingViewed()){
-                viewState.error("401")
-            }else{
-                if(!repository.checkToken()) {
-                    viewState.showOnBoarding()
-                }
-            }
-        }
-    }
+
 
 
 

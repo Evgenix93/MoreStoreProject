@@ -12,6 +12,7 @@ import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration1Binding
 import com.project.morestore.models.RegistrationResponse
+import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.presenters.AuthPresenter
 import moxy.MvpAppCompatFragment
@@ -117,9 +118,7 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     }
 
-    override fun showOnBoarding() {
 
-    }
 
     override fun successNewCode(result: Any) {
         showLoading(false)
@@ -131,6 +130,10 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
                 )
             )
 
+
+    }
+
+    override fun registrationComplete(complete: Boolean, user: User) {
 
     }
 

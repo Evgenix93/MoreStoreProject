@@ -40,11 +40,11 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
     }
 
     override fun error(message: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun loading() {
-        TODO("Not yet implemented")
+
     }
 
     override fun loaded(result: Any) {
