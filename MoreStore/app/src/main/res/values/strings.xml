@@ -220,6 +220,7 @@
     <string name="from">от</string>
     <string name="until">до</string>
     <string name="skip">Пропустить</string>
+    <string name="product_name_brand_name">Название товара или бренда</string>
     <string-array name="type_array">
         <item>Новое</item>
         <item>Дешевле</item>
