@@ -24,7 +24,7 @@ import okhttp3.ResponseBody
 class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
 
     private val repository = AuthRepository(context)
-    
+
 
 
 
