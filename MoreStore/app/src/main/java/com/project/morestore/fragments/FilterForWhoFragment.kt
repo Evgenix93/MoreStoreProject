@@ -21,10 +21,10 @@ class FilterForWhoFragment : Fragment(R.layout.fragment_filter_for_who) {
     }
 
     private fun initRadioButtons() {
-        if(FilterState.chosenForWho.isNotEmpty()){
-            binding.forWomenCheckBox.isChecked = FilterState.chosenForWho[0]
-            binding.forMenCheckBox.isChecked = FilterState.chosenForWho[1]
-            binding.forKidsCheckBox.isChecked = FilterState.chosenForWho[2]
+        if(FilterState.filter.chosenForWho.isNotEmpty()){
+            binding.forWomenCheckBox.isChecked = FilterState.filter.chosenForWho[0]
+            binding.forMenCheckBox.isChecked = FilterState.filter.chosenForWho[1]
+            binding.forKidsCheckBox.isChecked = FilterState.filter.chosenForWho[2]
         }
         binding.forWomenCheckBox.setOnClickListener {
             setupRadioButton(binding.forWomenCheckBox)
@@ -56,7 +56,7 @@ class FilterForWhoFragment : Fragment(R.layout.fragment_filter_for_who) {
 
     override fun onStop() {
         super.onStop()
-        FilterState.chosenForWho = listOf(
+        FilterState.filter.chosenForWho = listOf(
             binding.forWomenCheckBox.isChecked,
             binding.forMenCheckBox.isChecked,
             binding.forKidsCheckBox.isChecked

@@ -3,8 +3,13 @@ package com.project.morestore.repositories
 import android.content.Context
 import android.util.Log
 import com.project.morestore.models.*
+import android.util.Log
+import com.project.morestore.models.*
+
+import com.project.morestore.singletones.FilterState
 
 import com.project.morestore.singletones.Network
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -170,7 +175,9 @@ class ProductRepository(private val context: Context) {
 
 
     suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>): Boolean{
-        return try {
+       // return try {
+    //suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>){
+       /* return try {
             withContext(Dispatchers.IO){
                 //error("error")
                 val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
@@ -196,14 +203,108 @@ class ProductRepository(private val context: Context) {
             }
         }catch (e: Throwable){
             false
+        }*/
+        val sizeList = listOf(
+            SizeLine(
+                "XXS",
+                "26-27",
+                "42",
+                "32",
+                "32",
+                true
+            ),
+            SizeLine(
+                "XS",
+                "28-29",
+                "44",
+                "34",
+                "34",
+                true
+            ),
+            SizeLine(
+                "S",
+                "30-31",
+                "46",
+                "36",
+                "36",
+                true
+            ),
+            SizeLine(
+                "M",
+                "32-33",
+                "48",
+                "38",
+                "38",
+                true
+            ),
+            SizeLine(
+                "L",
+                "34-35",
+                "50",
+                "40",
+                "40",
+                true
+            ),
+            SizeLine(
+                "XL",
+                "36-37",
+                "52",
+                "42",
+                "42",
+                true
+            ),
+            SizeLine(
+                "XXL",
+                "38-39",
+                "54",
+                "44",
+                "44",
+                true
+            ),
+            SizeLine(
+                "3XL",
+                "40-41",
+                "56",
+                "46",
+                "46",
+                true
+            ),
+            SizeLine(
+                "4XL",
+                "42-43",
+                "58",
+                "48",
+                "48",
+                true
+            ),
+            SizeLine(
+                "5XL",
+                "44-45",
+                "60",
+                "50",
+                "60",
+                true
+            ),
+            SizeLine(
+                "",
+                "",
+                "",
+                "",
+                "",
+                true
+            )
+        )
+        topSizesList.forEachIndexed{index, size ->
+           if(sizeList[index].int == size.name)
+               sizeList[index].isSelected = size.chosen ?: false
         }
-
+        FilterState.filter.chosenSizes = sizeList
     }
 
 
 
-        suspend fun safeCategories(categoryIdList: List<Int>): Boolean {
-        return try {
+         fun safeCategories(segmentsChecked: List<Boolean>) {
+        /*return try {
             withContext(Dispatchers.IO) {
                 val sharedPrefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
                 val categoryIdStringSet = categoryIdList.map { it.toString() }.toMutableSet()
@@ -214,6 +315,29 @@ class ProductRepository(private val context: Context) {
             }
         } catch (e: Throwable) {
             false
+        }*/
+       FilterState.filter.segments = segmentsChecked
+       FilterState.filter.isAllBrands = segmentsChecked.all{!it}
+    }
+
+   suspend fun safeFilter(): Boolean {
+       return try {
+           withContext(Dispatchers.IO) {
+               val filterJsonString = Moshi.Builder().build().adapter(Filter::class.java).toJson(FilterState.filter)
+               val sharedPrefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
+               sharedPrefs.edit().putString(FILTER_KEY, filterJsonString).commit()
+           }
+       } catch (e: Throwable) {
+           false
+       }
+   }
+
+    suspend fun loadFilter(){
+        withContext(Dispatchers.IO){
+            val sharedPrefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
+            val filterJsonString = sharedPrefs.getString(FILTER_KEY, null)
+            if (filterJsonString != null)
+                FilterState.filter = Moshi.Builder().build().adapter(Filter::class.java).fromJson(filterJsonString)!!
         }
     }
 
@@ -259,6 +383,34 @@ class ProductRepository(private val context: Context) {
 
     }
 
+    suspend fun getProductCategoriesAdults(): Response<List<ProductCategoryAdults>>?{
+        return try {
+            Network.productApi.getProductCategoriesAdults()
+        }catch (e: Throwable){
+            Log.e("Debug", e.message.orEmpty(), e)
+            if(e is IOException)
+                null
+            else
+                Response.error(400, "".toResponseBody())
+        }
+    }
+
+    suspend fun getProductCategoriesKids(): Response<List<ProductCategoryKids1>>?{
+        return try {
+            Network.productApi.getProductCategoriesKids()
+        }catch (e: Throwable){
+            Log.e("Debug", e.message.orEmpty(), e)
+            if(e is IOException)
+                null
+            else
+                Response.error(400, "".toResponseBody())
+        }
+    }
+
+    fun loadForWho(): List<Boolean>{
+        return  FilterState.filter.chosenForWho
+    }
+
     companion object {
         const val USER_PREFS = "user_prefs"
         const val TOP_SIZES_KEY = "top_sizes_key"
@@ -267,5 +419,6 @@ class ProductRepository(private val context: Context) {
         const val CATEGORIES = "categoryIdList"
         const val ONBOARDINGVIEWED = "viewedOnBoarding"
         const val PRODUCT_OPTIONS = "service,user,category,property,statistics,brand,category,property_open_category"
+        const val FILTER_KEY = "filter"
     }
 }

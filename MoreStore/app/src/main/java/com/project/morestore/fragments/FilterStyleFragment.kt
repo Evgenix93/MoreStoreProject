@@ -20,14 +20,14 @@ class FilterStyleFragment : Fragment(R.layout.fragment_filter_style) {
     }
 
     private fun bind() {
-        if (FilterState.chosenStyles.isEmpty()) {
+        if (FilterState.filter.chosenStyles.isEmpty()) {
             return
         } else {
-            val allNotSelected = FilterState.chosenStyles.all { !it }
-            binding.newWithTagCheckBox.isChecked = if(allNotSelected) true else FilterState.chosenStyles[0]
-            binding.newWithotuTagCheckBox.isChecked = if(allNotSelected) true else FilterState.chosenStyles[1]
-            binding.ExcellentCheckBox.isChecked = if(allNotSelected) true else FilterState.chosenStyles[2]
-            binding.goodCheckBox.isChecked = if(allNotSelected) true else FilterState.chosenStyles[3]
+            val allNotSelected = FilterState.filter.chosenStyles.all { !it }
+            binding.newWithTagCheckBox.isChecked = FilterState.filter.chosenStyles[0]
+            binding.newWithotuTagCheckBox.isChecked = FilterState.filter.chosenStyles[1]
+            binding.ExcellentCheckBox.isChecked = FilterState.filter.chosenStyles[2]
+            binding.goodCheckBox.isChecked = FilterState.filter.chosenStyles[3]
         }
     }
 
@@ -39,7 +39,7 @@ class FilterStyleFragment : Fragment(R.layout.fragment_filter_style) {
 
     override fun onStop() {
         super.onStop()
-        FilterState.chosenStyles = listOf(
+        FilterState.filter.chosenStyles = listOf(
             binding.newWithTagCheckBox.isChecked,
             binding.newWithotuTagCheckBox.isChecked,
             binding.ExcellentCheckBox.isChecked,

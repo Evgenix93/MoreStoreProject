@@ -20,13 +20,13 @@ class FilterProductStatusFragment: Fragment(R.layout.fragment_filter_product_sta
 
     private fun bind(){
 
-        if(FilterState.chosenProductStatus.isEmpty()){
+        if(FilterState.filter.chosenProductStatus.isEmpty()){
             return
         }
-        val allNotSelected = FilterState.chosenProductStatus.all { !it }
-        binding.newWithTagCheckBox.isChecked = if(allNotSelected) true else FilterState.chosenProductStatus[0]
-        binding.newWithotuTagCheckBox.isChecked = if(allNotSelected) true else FilterState.chosenProductStatus[1]
-        binding.ExcellentCheckBox.isChecked = if(allNotSelected) true else FilterState.chosenProductStatus[2]
+        val allNotSelected = FilterState.filter.chosenProductStatus.all { !it }
+        binding.newWithTagCheckBox.isChecked = if(allNotSelected) true else FilterState.filter.chosenProductStatus[0]
+        binding.newWithotuTagCheckBox.isChecked = if(allNotSelected) true else FilterState.filter.chosenProductStatus[1]
+        binding.ExcellentCheckBox.isChecked = if(allNotSelected) true else FilterState.filter.chosenProductStatus[2]
 
     }
     private fun initToolBar(){
@@ -37,7 +37,7 @@ class FilterProductStatusFragment: Fragment(R.layout.fragment_filter_product_sta
 
     override fun onStop() {
         super.onStop()
-        FilterState.chosenProductStatus = listOf(binding.newWithTagCheckBox.isChecked, binding.newWithotuTagCheckBox.isChecked,
+        FilterState.filter.chosenProductStatus = listOf(binding.newWithTagCheckBox.isChecked, binding.newWithotuTagCheckBox.isChecked,
         binding.ExcellentCheckBox.isChecked)
     }
 }

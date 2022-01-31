@@ -1,19 +1,17 @@
 package com.project.morestore.repositories
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
 import com.project.morestore.models.*
+import com.project.morestore.singletones.FilterState
 import com.project.morestore.singletones.Network
-import com.project.morestore.singletones.Token
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
 import java.io.File
 import java.io.IOException
 
@@ -182,5 +180,26 @@ class UserRepository(val context: Context) {
 
     }
 
+    suspend fun saveFilter(): Boolean {
+        return try {
+            withContext(Dispatchers.IO) {
+                val filterJsonString = Moshi.Builder().build().adapter(Filter::class.java).toJson(
+                    FilterState.filter)
+                val sharedPrefs = context.getSharedPreferences(ProductRepository.USER_PREFS, Context.MODE_PRIVATE)
+                sharedPrefs.edit().putString(ProductRepository.FILTER_KEY, filterJsonString).commit()
+            }
+        } catch (e: Throwable) {
+            Log.e("Debug", e.message.orEmpty(), e)
+            false
+        }
+    }
+
+     fun saveColors(colors: List<Color>){
+        FilterState.filter.colors = colors
+    }
+
+    fun loadColors(): List<Color>{
+        return FilterState.filter.colors
+    }
 
 }

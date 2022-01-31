@@ -53,6 +53,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initLists()
         initViewPager()
         setClickListeners()
+        loadFilter()
     }
 
 
@@ -199,6 +200,9 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         }
     }
 
+    private fun loadFilter(){
+        presenter.loadFilter()
+    }
 
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()

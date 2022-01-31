@@ -3,7 +3,8 @@ package com.project.morestore.models
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class MaterialLine(
-    val name: String,
-    var isSelected: Boolean
+ data class ProductCategory2(
+     val id: Int,
+     val name: String,
+     val isChecked: Boolean?
 )
