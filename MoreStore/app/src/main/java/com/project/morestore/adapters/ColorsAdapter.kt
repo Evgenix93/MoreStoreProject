@@ -46,34 +46,52 @@ class ColorsAdapter(private val context: Context): RecyclerView.Adapter<ColorsAd
 
         fun bind(color: Color, position:Int,  context: Context){
             binding.colorTextView.text = color.name
-            if(color.name == "Все цвета") {
-                binding.allColorsCheckBox.isVisible = true
-                binding.colorImageView.isVisible = false
-            } else
-            if(color.name == "разноцветный") {
-                binding.allColorsCheckBox.isVisible = false
-                binding.colorImageView.setImageResource(R.drawable.color2)
+            when (color.name) {
+                "Все цвета" -> {
+                    binding.allColorsCheckBox.isVisible = true
+                    binding.colorImageView.isVisible = false
+                }
+                "разноцветный" -> {
+                    binding.allColorsCheckBox.isVisible = false
+                    binding.colorImageView.isVisible = true
+                    binding.colorImageView.imageTintList = null
+                    binding.colorImageView.setImageResource(R.drawable.color2)
+                }
+                "белый" -> {
+                    binding.allColorsCheckBox.isVisible = false
+                    binding.colorImageView.isVisible = true
+                    binding.colorImageView.imageTintList = null
+                    binding.colorImageView.setImageResource(R.drawable.ic_circle)
+                }
+                else -> {
+                    binding.colorImageView.isVisible = true
+                    binding.colorImageView.setImageResource(R.drawable.ic_color)
+                    binding.allColorsCheckBox.isVisible = false
+                    binding.colorImageView.imageTintList = ColorStateList.valueOf(context.resources.getColor(color.color))
+                }
             }
-            else if(color.name == "белый")
-                binding.colorImageView.setImageResource(R.drawable.ic_circle)
-            else
-               binding.colorImageView.imageTintList = ColorStateList.valueOf(context.resources.getColor(color.color))
-            if(color.isChecked){
+            if(color.isChecked)
+                if(color.name == "Все цвета")
+                    binding.allColorsCheckBox.isChecked = true
+                else {
                 binding.colorImageView.strokeColor = ColorStateList.valueOf(context.resources.getColor(R.color.green))
-                binding.colorImageView.strokeWidth = 5f
+                binding.colorImageView.strokeWidth = 7f
             }
+            else
+                if(color.name == "Все цвета")
+                    binding.allColorsCheckBox.isChecked = false
             else{
                 binding.colorImageView.strokeColor = null
                 binding.colorImageView.strokeWidth = 0f
             }
+
             itemView.setOnClickListener{
                 color.isChecked = !color.isChecked
-                binding.allColorsCheckBox.isChecked = color.isChecked
                 if(color.name == "Все цвета"){
                     onAllColors(color.isChecked)
                 }
                 else{
-                    onChecked(color.isChecked, adapterPosition)
+                    onChecked(color.isChecked, position)
                 }
             }
         }
@@ -91,11 +109,13 @@ class ColorsAdapter(private val context: Context): RecyclerView.Adapter<ColorsAd
                 colors[position].isChecked = isChecked
                 if(!isChecked){
                     colors[0].isChecked = false
-                    notifyItemChanged(0)
+                    notifyDataSetChanged()
                 }else{
                     if(colors.all { it.isChecked || it.name == "Все цвета" }){
                         colors[0].isChecked = true
-                        notifyItemChanged(0)
+                        notifyDataSetChanged()
+                    }else{
+                       notifyItemChanged(position)
                     }
                 }
             })
