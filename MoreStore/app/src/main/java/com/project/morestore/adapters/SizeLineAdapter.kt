@@ -30,8 +30,9 @@ class SizeLineAdapter : RecyclerView.Adapter<SizeLineAdapter.SizeLineViewHolder>
 
             binding.sizeCheckBox.setOnClickListener {
                 onCheckBoxClicked(binding.sizeCheckBox.isChecked, adapterPosition)
-
-
+            }
+            if(adapterPosition == 0){
+                binding.view8.isVisible = true
             }
 
             if (otherSize) {

@@ -1,9 +1,7 @@
 package com.project.morestore.singletones
 
-import com.project.morestore.apis.AuthApi
+import com.project.morestore.apis.*
 
-import com.project.morestore.apis.OnboardingApi
-import com.project.morestore.apis.UserApi
 import com.project.morestore.util.TokenInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -33,4 +31,12 @@ object Network {
 
     val onBoardingApi: OnboardingApi
     get() = retrofit.create()
+
+    val productApi: ProductApi
+    get() = retrofit.create()
+
+    val filterApi: FilterApi
+    get() = retrofit.create()
+
+
 }

@@ -3,12 +3,17 @@ package com.project.morestore.presenters
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.project.morestore.models.ProductBrand
+import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.repositories.AuthRepository
+import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.isEmailValid
 import com.project.morestore.util.isPhoneValid
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
@@ -18,7 +23,10 @@ import okhttp3.ResponseBody
 class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     private val repository = UserRepository(context)
     private val authRepository = AuthRepository(context)
+    private val productRepository = ProductRepository(context)
     private var photoUri: Uri? = null
+    private var searchJob: Job? = null
+    private var searchJob2: Job? = null
 
     fun changeUserData(
         phone: String? = null,
@@ -168,6 +176,143 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 else -> viewState.error("ошибка")
             }
         }
+    }
+
+    fun getAllSizes() {
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getAllSizes()
+            when(response?.code()){
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+    }
+
+    fun getAllCities(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getCities()
+            when(response?.code()){
+            200 -> viewState.loaded(response.body()!!)
+            400 -> {
+                val bodyString = getStringFromResponse(response.errorBody()!!)
+                viewState.error(bodyString)
+            }
+            500 -> viewState.error("500 Internal Server Error")
+            null -> viewState.error("нет интернета")
+            else -> viewState.error("ошибка")
+
+        }
+
+
+
+        }
+    }
+
+    fun getAllCategorySegments(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getCategories()
+            when(response?.code()){
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+
+
+        }
+    }
+
+    fun getAllBrands(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getBrands()
+            when(response?.code()){
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+    }
+
+    fun getCityByCoordinates(coordinates: String){
+        presenterScope.launch {
+            viewState.loading()
+            val response = repository.getCityByCoordinates(coordinates)
+            when(response?.code()){
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+    }
+
+    fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>){
+        searchJob = flow
+            .debounce(3000)
+            .mapLatest { query ->
+                withContext(Dispatchers.IO) {
+                    regions.filter { it.name.contains(query, true) }
+                }
+
+            }
+            .onEach { result ->
+                viewState.loaded(result)
+
+            }.launchIn(presenterScope)
+
+    }
+
+    fun collectBrandsSearchFlow(flow: Flow<String>, brands: List<ProductBrand>){
+        searchJob2 = flow
+            .debounce(3000)
+            .mapLatest { query ->
+                withContext(Dispatchers.IO) {
+                    brands.filter { it.name.contains(query, true) }
+                }
+
+            }
+            .onEach { result ->
+                viewState.loaded(result)
+
+            }.launchIn(presenterScope)
+
+    }
+
+    fun cancelJob(){
+        searchJob?.cancel()
+        searchJob2?.cancel()
     }
 
 

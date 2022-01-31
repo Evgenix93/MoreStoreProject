@@ -17,4 +17,7 @@ interface MainMvpView: MvpView {
     @OneExecution
     fun showOnBoarding()
 
+    @OneExecution
+    fun loadedSuggestions(list: List<String>)
+
 }

@@ -4,10 +4,11 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Region(
+data class ProductBrand(
     val id: Long,
     val name: String,
-    @Json(name = "id_country")
-    val idCountry: Long,
+    @Json(name = "id_category")
+    val idCategory: Long,
     var isChecked: Boolean?
+
 )

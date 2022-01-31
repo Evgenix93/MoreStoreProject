@@ -1,11 +1,8 @@
 package com.project.morestore.repositories
 
 import android.content.Context
-
-import com.project.morestore.models.CommonEntity
-import com.project.morestore.models.Size
-
-import com.project.morestore.models.Category
+import android.util.Log
+import com.project.morestore.models.*
 
 import com.project.morestore.singletones.Network
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +13,7 @@ import java.io.IOException
 
 class ProductRepository(private val context: Context) {
     private val onBoardingApi = Network.onBoardingApi
+    private val productApi = Network.productApi
 
     suspend fun getAllSizes(): Response<List<Size>>?{
         return try {
@@ -58,6 +56,118 @@ class ProductRepository(private val context: Context) {
             }
         }
     }
+
+    suspend fun getProducts(filter: List<String>): Response<List<Product>>?{
+        return try {
+            productApi.getProducts(PRODUCT_OPTIONS, filter.joinToString(";"))
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.getProductsGetError(PRODUCT_OPTIONS, filter.joinToString(";"))
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(404,   "не найдено".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getYouMayLikeProducts(limit: Int, userId: Int): Response<List<Product>>?{
+        return try {
+            productApi.getYouMayLikeProducts(limit, userId)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.getYouMayLikeProductsGetError(limit, userId)
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getSearchSuggestions(query: String): Response<List<String>>?{
+        return try {
+            productApi.getSearchSuggestions(query)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.getSearchSuggestionsGetError(query)
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getCities(): Response<List<Region>>?{
+        return try {
+            productApi.getCities()
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.getCitiesGetError()
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getBrands(): Response<List<ProductBrand>>?{
+        return try {
+            productApi.getAllBrands()
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.getAllBrandsGetError()
+                    if(response.code() == 500){
+                        Response.error(500, "".toResponseBody(null))
+                    }else {
+                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    }
+                }catch (e: Throwable){
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+
 
     suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>): Boolean{
         return try {
@@ -156,5 +266,6 @@ class ProductRepository(private val context: Context) {
         const val SHOES_SIZES_KEY = "shoes_sizes_key"
         const val CATEGORIES = "categoryIdList"
         const val ONBOARDINGVIEWED = "viewedOnBoarding"
+        const val PRODUCT_OPTIONS = "service,user,category,property,statistics,brand,category,property_open_category"
     }
 }

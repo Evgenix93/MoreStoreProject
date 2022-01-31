@@ -9,22 +9,32 @@ import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductBinding
+import com.project.morestore.models.Product
 
-class ProductAdapter(val count: Int, val onClick: () -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter(val count: Int, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+    private var list = listOf<Product>()
 
-    class ProductViewHolder(view: View, onClick: () -> Unit) : RecyclerView.ViewHolder(view) {
+    class ProductViewHolder(view: View, onClick: (position: Int) -> Unit) : RecyclerView.ViewHolder(view) {
         private val binding: ItemProductBinding by viewBinding()
         init {
             itemView.setOnClickListener {
-                onClick()
+                onClick(adapterPosition)
             }
         }
-        fun bind(){
+        fun bind(product: Product){
             Log.d("mylog", "bind")
-            val crossedStr = binding.productOldPriceTextView.text.toSpannable().apply { setSpan(StrikethroughSpan(), 0, binding.productOldPriceTextView.text.length ,0) }
+            val crossedStr = "${product.price} ₽".toSpannable().apply { setSpan(StrikethroughSpan(), 0, length ,0) }
             binding.productOldPriceTextView.text = crossedStr
+            binding.likesCountTextView.text = product.statistic.wishlist.total.toString()
+            binding.productNameTextView.text = product.name
+            binding.productPriceTextView.text = "${product.sale} ₽"
+
+            Glide.with(itemView)
+                .load(product.photo[0].photo)
+                .into(binding.productImageView)
 
         }
 
@@ -33,20 +43,25 @@ class ProductAdapter(val count: Int, val onClick: () -> Unit) : RecyclerView.Ada
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         return ProductViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
-        ){
-            onClick()
+        ){ position ->
+            onClick(list[position])
         }
 
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        holder.bind()
+        holder.bind(list[position])
 
     }
 
     override fun getItemCount(): Int {
-        return count
+        return list.size
 
+    }
+
+    fun updateList(newList: List<Product>){
+        list = newList
+        notifyDataSetChanged()
     }
 
 }

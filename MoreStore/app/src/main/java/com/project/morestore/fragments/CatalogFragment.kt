@@ -4,15 +4,20 @@ import android.content.Context
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -20,11 +25,20 @@ import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentCatalogBinding
+import com.project.morestore.models.Product
+import com.project.morestore.mvpviews.MainMvpView
+import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.sendBlocking
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class CatalogFragment: Fragment(R.layout.fragment_catalog) {
+class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvpView {
     private val binding: FragmentCatalogBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
+    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    //private val args: CatalogFragmentArgs? by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,19 +46,29 @@ class CatalogFragment: Fragment(R.layout.fragment_catalog) {
         initToolbar()
         setClickListeners()
         showBottomNav()
-
-
+        loadProducts( arguments?.getString("query"), listOf())
     }
 
-    private fun setClickListeners(){
-        binding.changeRegionTextView.setOnClickListener { findNavController().navigate(CatalogFragmentDirections.actionCatalogFragmentToChangeRegionFragment()) }
+    private fun setClickListeners() {
+        binding.changeRegionTextView.setOnClickListener {
+            findNavController().navigate(
+                CatalogFragmentDirections.actionCatalogFragmentToChangeRegionFragment()
+            )
+        }
+
+        binding.searchBtn.setOnClickListener {
+            presenter.getProducts(binding.toolbarMain.searchEditText.text.toString(), listOf())
+        }
     }
 
 
-
-    private fun initList(){
-        productAdapter = ProductAdapter(10){findNavController().navigate(CatalogFragmentDirections.actionCatalogFragmentToProductDetailsFragment())}
-        with(binding.productList){
+    private fun initList() {
+        productAdapter = ProductAdapter(10) {
+            findNavController().navigate(
+                CatalogFragmentDirections.actionCatalogFragmentToProductDetailsFragment(it)
+            )
+        }
+        with(binding.productList) {
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
             setHasFixedSize(true)
@@ -52,7 +76,7 @@ class CatalogFragment: Fragment(R.layout.fragment_catalog) {
         }
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         val toolbar = binding.toolbarMain.materialToolbar
         val searchItem = toolbar.menu.findItem(R.id.search)
         searchItem.setOnMenuItemClickListener {
@@ -92,6 +116,49 @@ class CatalogFragment: Fragment(R.layout.fragment_catalog) {
         binding.toolbarMain.filterBtn.setOnClickListener {
             findNavController().navigate(CatalogFragmentDirections.actionCatalogFragmentToFilterFragment())
         }
+
+        val searchEditText = binding.toolbarMain.searchEditText
+
+        val searchFlow = kotlinx.coroutines.flow.callbackFlow<kotlin.String> {
+            val searchListener =
+                object : TextWatcher {
+                    override fun beforeTextChanged(
+                        p0: CharSequence?,
+                        p1: Int,
+                        p2: Int,
+                        p3: Int
+                    ) {
+
+                    }
+
+                    override fun onTextChanged(
+                        newText: CharSequence?,
+                        p1: Int,
+                        p2: Int,
+                        p3: Int
+                    ) {
+                        sendBlocking(newText.toString())
+
+                    }
+
+                    override fun afterTextChanged(p0: Editable?) {
+                        binding.searchBtn.isVisible = !p0.isNullOrEmpty()
+                    }
+
+                }
+            searchEditText.addTextChangedListener(searchListener)
+            awaitClose { searchEditText.removeTextChangedListener(searchListener) }
+        }
+        presenter.collectSearchFlow(searchFlow)
+
+
+
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.cancelSearchJob()
     }
 
     private fun initSuggestions(): androidx.cursoradapter.widget.CursorAdapter {
@@ -103,9 +170,6 @@ class CatalogFragment: Fragment(R.layout.fragment_catalog) {
         items.add("Плащ женский");
         items.add("Плащ-палатка");
         items.add("Плащ дождевик");
-
-
-
 
 
         // Cursor
@@ -126,14 +190,14 @@ class CatalogFragment: Fragment(R.layout.fragment_catalog) {
 
 
 
-        return object : androidx.cursoradapter.widget.CursorAdapter(requireContext(), cursor){
+        return object : androidx.cursoradapter.widget.CursorAdapter(requireContext(), cursor) {
             override fun newView(p0: Context?, p1: Cursor?, p2: ViewGroup?): View {
                 return LayoutInflater.from(p0).inflate(R.layout.item_suggestion, p2, false)
 
             }
 
             override fun bindView(p0: View?, p1: Context?, p2: Cursor?) {
-                val textView =p0?.findViewById<TextView>(R.id.suggestionTextView)
+                val textView = p0?.findViewById<TextView>(R.id.suggestionTextView)
 
                 val str = p2?.getString(1)
                 textView?.text = str
@@ -143,7 +207,45 @@ class CatalogFragment: Fragment(R.layout.fragment_catalog) {
         }
     }
 
-    private fun showBottomNav(){
+    private fun showBottomNav() {
         (activity as MainActivity).showBottomNavBar(true)
+    }
+
+    private fun loadProducts(queryStr: String?, filter: List<String>) {
+        presenter.getProducts(queryStr, filter)
+
+    }
+
+    override fun loaded(result: Any) {
+        binding.loader.isVisible = false
+        productAdapter.updateList(result as List<Product>)
+
+
+    }
+
+    override fun loading() {
+        binding.loader.isVisible = true
+
+    }
+
+    override fun error(message: String) {
+        binding.loader.isVisible = false
+
+    }
+
+    override fun showOnBoarding() {
+
+    }
+
+    override fun loadedSuggestions(list: List<String>) {
+        binding.loader.isVisible = false
+        binding.toolbarMain.searchEditText.setAdapter(
+            SuggestionArrayAdapter(
+                requireContext(),
+                R.layout.item_suggestion_textview,
+                list
+            )
+        )
+        binding.toolbarMain.searchEditText.showDropDown()
     }
 }

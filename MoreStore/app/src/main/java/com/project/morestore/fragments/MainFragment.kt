@@ -34,6 +34,9 @@ import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.AuthPresenter
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.flow.callbackFlow
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -49,12 +52,19 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initToolbar()
         initLists()
         initViewPager()
+        setClickListeners()
     }
 
 
     private fun initLists() {
         productAdapter =
-            ProductAdapter(6) { findNavController().navigate(MainFragmentDirections.actionMainFragmentToProductDetailsFragment()) }
+            ProductAdapter(6) {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToProductDetailsFragment(
+                        it
+                    )
+                )
+            }
         with(binding.forWomenRecyclerView) {
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -106,16 +116,41 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 ResourcesCompat.getDrawable(resources, R.drawable.ic_logo_more_store, null)
         }
 
-        binding.toolbarMain.searchEditText.setAdapter(
-            SuggestionArrayAdapter(
-                requireContext(),
-                R.layout.item_suggestion_textview,
-                listOf("Плащ мужской", "Плащ женский", "Плащ-палатка", "Плащ дождевик")
-            )
-        )
 
-        binding.toolbarMain.searchEditText.dropDownAnchor = R.id.anchor
+        val searchEditText = binding.toolbarMain.searchEditText
+        searchEditText.dropDownAnchor = R.id.anchor
 
+        val searchFlow = callbackFlow<String> {
+            val searchListener = object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(newText: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    sendBlocking(newText.toString())
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    binding.searchBtn.isVisible = !p0.isNullOrEmpty()
+
+                }
+            }
+
+            searchEditText.addTextChangedListener(searchListener)
+            awaitClose { searchEditText.removeTextChangedListener(searchListener) }
+        }
+
+        presenter.collectSearchFlow(searchFlow)
+
+
+    }
+
+    private fun setClickListeners() {
+        binding.searchBtn.setOnClickListener {
+            val query = binding.toolbarMain.searchEditText.text.toString()
+            findNavController().navigate(R.id.catalogFragment, Bundle().apply { putString("query", query) })
+        }
     }
 
     private fun initSuggestions(): androidx.cursoradapter.widget.CursorAdapter {
@@ -165,8 +200,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
 
-
     override fun error(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
@@ -182,7 +217,18 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         findNavController().navigate(MainFragmentDirections.actionMainFragmentToOnboarding1Fragment())
     }
 
+    override fun loadedSuggestions(list: List<String>) {
+        binding.toolbarMain.searchEditText.setAdapter(
+            SuggestionArrayAdapter(
+                requireContext(),
+                R.layout.item_suggestion_textview,
+                list
+            )
+        )
 
+        binding.toolbarMain.searchEditText.showDropDown()
+
+    }
 
 
 }

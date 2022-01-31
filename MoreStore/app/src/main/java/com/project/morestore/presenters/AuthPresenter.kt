@@ -169,6 +169,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             when(response?.code()){
                 200 -> {
                     val user = response.body()!!
+                    repository.setupUserId(user.id)
                     if(checkUserData(user)){
                         viewState.registrationComplete(true, user)
                     }else{

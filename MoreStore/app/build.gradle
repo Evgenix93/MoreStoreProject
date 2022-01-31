@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id "androidx.navigation.safeargs.kotlin"
     id 'kotlin-kapt'
+    id("kotlin-parcelize")
 }
 
 android {
@@ -90,4 +91,7 @@ dependencies {
 
     //dots
     implementation 'com.tbuonomo:dotsindicator:4.2'
+
+    //location
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 }

@@ -1,6 +1,7 @@
 package com.project.morestore.models
 
 data class SizeLine(
+    val id: Int,
     val int: String,
     val w: String,
     val itRuFr: String,

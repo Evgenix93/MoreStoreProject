@@ -29,6 +29,7 @@
         app:layout_constraintTop_toTopOf="@+id/searchEditText" />
 
     <View
+        android:id="@+id/view33"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="18dp"
@@ -41,8 +42,11 @@
 
     <TextView
         android:id="@+id/autoLocationResultTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:text="Ваш город Москва?"
         android:textAppearance="@style/regular_16"
         android:textColor="@color/black"
@@ -73,5 +77,16 @@
         android:text="Да"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminateTint="@color/green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

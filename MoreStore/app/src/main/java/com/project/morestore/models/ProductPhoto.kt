@@ -1,19 +1,16 @@
 package com.project.morestore.models
 
 import android.os.Parcelable
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class User(
-    val id: Int,
-    val name: String?,
-    val phone: String?,
-    val email: String?,
-    val surname: String?,
-    val avatar: UserAvatar?
-
-
-
+data class ProductPhoto(
+    val id: Long,
+    val photo: String,
+    val type: Int,
+    @Json(name = "id_type")
+    val idType: Int
 ): Parcelable

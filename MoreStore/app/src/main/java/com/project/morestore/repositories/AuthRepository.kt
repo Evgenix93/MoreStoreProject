@@ -149,6 +149,14 @@ class AuthRepository(private val context: Context) {
         Token.token = "Bearer $token"
     }
 
+    fun setupUserId(userId: Int){
+        Token.userId = userId
+    }
+
+    fun getUserId(): Int{
+        return Token.userId
+    }
+
 
 
 

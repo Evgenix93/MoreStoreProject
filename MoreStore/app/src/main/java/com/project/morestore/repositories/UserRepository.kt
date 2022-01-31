@@ -154,5 +154,33 @@ class UserRepository(val context: Context) {
         }
     }
 
+    suspend fun getCityByCoordinates(coordinates: String): Response<Address>?{
+        return try {
+            userApi.getCityByCoords(coordinates)
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.getCityByCoordsGetError(coordinates)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
 
 }

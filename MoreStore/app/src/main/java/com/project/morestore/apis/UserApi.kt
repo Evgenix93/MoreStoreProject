@@ -1,10 +1,12 @@
 package com.project.morestore.apis
 
+import com.project.morestore.models.Address
 import com.project.morestore.models.PhotoData
 import com.project.morestore.models.RegistrationResponse
 import com.project.morestore.models.RegistrationResponse2
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -55,6 +57,14 @@ interface UserApi {
 
     @POST("upload/photo")
     suspend fun uploadPhotoGetError(@Body photoData: PhotoData): Response<String>
+
+    @GET("geo/geocoder")
+    suspend fun getCityByCoords(@Query("coords") coords: String): Response<Address>
+
+    @GET("geo/geocoder")
+    suspend fun getCityByCoordsGetError(@Query("coords") coords: String): Response<String>
+
+
 
 
 }

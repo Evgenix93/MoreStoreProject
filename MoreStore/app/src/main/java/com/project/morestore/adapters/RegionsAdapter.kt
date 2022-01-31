@@ -12,7 +12,7 @@ import com.project.morestore.models.MaterialLine
 import com.project.morestore.models.Region
 
 class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
-    private var regions = listOf(
+    /*private var regions = listOf(
         Region("Все города", true),
         Region("Москва, Московская область", true),
         Region("Санкт-Петербург, Ленинградская область", true),
@@ -30,7 +30,9 @@ class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
         Region("Пермь, Пермский край",true),
         Region("Волгоград, Волгоградская область", true),
         Region("Краснодар, Краснодарский край",true)
-    )
+    )*/
+
+    private var regions = listOf<Region>()
 
     class RegionViewHolder(view: View, val onAllMaterial: (isChecked: Boolean) -> Unit, val onChecked: (isChecked: Boolean, position: Int) -> Unit) :
         RecyclerView.ViewHolder(view) {
@@ -38,7 +40,7 @@ class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
 
         fun bind(region: Region) {
             binding.regionTextView.text = region.name
-            binding.regionCheckBox.isChecked = region.isChecked
+            binding.regionCheckBox.isChecked = region.isChecked ?: false
             binding.regionCheckBox.setOnClickListener {
                 if(region.name == "Все города"){
                     onAllMaterial(binding.regionCheckBox.isChecked)
@@ -70,7 +72,7 @@ class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
                     regions[0].isChecked = false
                     notifyItemChanged(0)
                 }else{
-                    if(regions.all { it.isChecked || it.name == "Все города" }){
+                    if(regions.all { it.isChecked == true || it.name == "Все города" }){
                         regions[0].isChecked = true
                         notifyItemChanged(0)
                     }

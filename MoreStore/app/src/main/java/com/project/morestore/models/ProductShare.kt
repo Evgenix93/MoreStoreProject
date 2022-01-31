@@ -4,9 +4,8 @@ import android.os.Parcelable
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
-@JsonClass (generateAdapter = true)
+@JsonClass(generateAdapter = true)
 @Parcelize
-data class Category(
-    val id: Int,
-    val name: String
-): Parcelable
+data class ProductShare(
+    val total: Int
+    ): Parcelable
