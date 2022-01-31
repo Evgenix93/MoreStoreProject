@@ -202,4 +202,72 @@ class UserRepository(val context: Context) {
         return FilterState.filter.colors
     }
 
+    fun saveMaterials(materials: List<MaterialLine>){
+        FilterState.filter.chosenMaterials = materials
+    }
+
+    fun loadMaterials(): List<MaterialLine>{
+        return FilterState.filter.chosenMaterials
+    }
+
+    fun saveConditions(conditions: List<Boolean>){
+        FilterState.filter.chosenConditions = conditions
+    }
+
+    fun loadConditions(): List<Boolean>{
+        return FilterState.filter.chosenConditions
+
+    }
+
+    fun saveForWho(forWho: List<Boolean>){
+        FilterState.filter.chosenForWho = forWho
+    }
+
+    fun loadForWho(): List<Boolean>{
+        return FilterState.filter.chosenForWho
+
+    }
+
+    fun saveTopSizes(sizes: List<SizeLine>){
+        FilterState.filter.chosenTopSizes = sizes
+    }
+
+    fun loadTopSizes(): List<SizeLine>{
+        return FilterState.filter.chosenTopSizes
+    }
+
+    fun saveBottomSizes(sizes: List<SizeLine>){
+        FilterState.filter.chosenBottomSizes = sizes
+    }
+
+    fun loadBottomSizes(): List<SizeLine>{
+        return FilterState.filter.chosenBottomSizes
+    }
+
+    fun saveShoosSizes(sizes: List<SizeLine>){
+        FilterState.filter.chosenShoosSizes = sizes
+    }
+
+    fun loadShoosSizes(): List<SizeLine>{
+        return FilterState.filter.chosenShoosSizes
+    }
+
+    fun saveProductStatuses(statuses: List<Boolean>){
+        FilterState.filter.chosenProductStatus = statuses
+    }
+
+    fun loadProductStatuses(): List<Boolean>{
+        return FilterState.filter.chosenProductStatus
+    }
+
+    fun saveStyles(styles: List<Boolean>){
+        FilterState.filter.chosenStyles = styles
+    }
+
+    fun loadStyles(): List<Boolean>{
+        return FilterState.filter.chosenStyles
+    }
+
+
+
 }

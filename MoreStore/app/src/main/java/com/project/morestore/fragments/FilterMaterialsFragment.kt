@@ -11,17 +11,24 @@ import com.project.morestore.R
 import com.project.morestore.adapters.MaterialAdapter
 import com.project.morestore.databinding.FragmentFilterMaterialsBinding
 import com.project.morestore.models.MaterialLine
+import com.project.morestore.mvpviews.UserMvpView
+import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.autoCleared
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class FilterMaterialsFragment: Fragment(R.layout.fragment_filter_materials) {
+class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_materials), UserMvpView {
     private val binding: FragmentFilterMaterialsBinding by viewBinding()
     private var materialAdapter: MaterialAdapter by autoCleared()
+    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    private val defaultMaterials = generateList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
         initToolBar()
+        loadFilterMaterials()
     }
 
 
@@ -32,7 +39,7 @@ class FilterMaterialsFragment: Fragment(R.layout.fragment_filter_materials) {
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
-        materialAdapter.updateList(generateList())
+        materialAdapter.updateList(defaultMaterials)
 
 
 
@@ -80,11 +87,36 @@ class FilterMaterialsFragment: Fragment(R.layout.fragment_filter_materials) {
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
     }
 
+    private fun loadFilterMaterials(){
+        presenter.loadMaterials()
+    }
+
 
 
     override fun onStop() {
         super.onStop()
-        FilterState.filter.chosenMaterials = materialAdapter.getCurrentMaterials()
+        presenter.saveMaterials(materialAdapter.getCurrentMaterials())
+
+    }
+
+    override fun success(result: Any) {
+
+    }
+
+    override fun error(message: String) {
+
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun loaded(result: Any) {
+        materialAdapter.updateList(result as List<MaterialLine>)
+
+    }
+
+    override fun successNewCode() {
 
     }
 

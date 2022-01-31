@@ -8,15 +8,20 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFilterConditionBinding
+import com.project.morestore.mvpviews.UserMvpView
+import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class FilterConditionFragment: Fragment(R.layout.fragment_filter_condition) {
+class FilterConditionFragment: MvpAppCompatFragment(R.layout.fragment_filter_condition), UserMvpView {
     private val binding: FragmentFilterConditionBinding by viewBinding()
+    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bind()
         initToolBar()
+        loadFilterConditions()
     }
 
     private fun bind(){
@@ -36,9 +41,40 @@ class FilterConditionFragment: Fragment(R.layout.fragment_filter_condition) {
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
     }
 
+    private fun loadFilterConditions(){
+        presenter.loadConditions()
+
+    }
+
     override fun onStop() {
         super.onStop()
-        FilterState.filter.chosenConditions = listOf(binding.newWithTagCheckBox.isChecked, binding.newWithotuTagCheckBox.isChecked,
-        binding.ExcellentCheckBox.isChecked, binding.goodCheckBox.isChecked)
+        presenter.saveConditions(listOf(binding.newWithTagCheckBox.isChecked, binding.newWithotuTagCheckBox.isChecked,
+        binding.ExcellentCheckBox.isChecked, binding.goodCheckBox.isChecked))
+    }
+
+    override fun success(result: Any) {
+
+    }
+
+    override fun error(message: String) {
+
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun loaded(result: Any) {
+        val conditions = result as List<Boolean>
+        binding.newWithTagCheckBox.isChecked = conditions[0]
+        binding.newWithotuTagCheckBox.isChecked =  conditions[1]
+        binding.ExcellentCheckBox.isChecked =  conditions[2]
+        binding.goodCheckBox.isChecked =  conditions[3]
+
+
+    }
+
+    override fun successNewCode() {
+
     }
 }

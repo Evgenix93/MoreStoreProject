@@ -25,7 +25,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     private val repository = UserRepository(context)
     private val authRepository = AuthRepository(context)
     private val productRepository = ProductRepository(context)
-    private val productRepository = ProductRepository(context)
+
 
     private var photoUri: Uri? = null
     private var searchJob: Job? = null
@@ -465,5 +465,92 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         val colors = repository.loadColors()
         if(colors.isNotEmpty())
          viewState.loaded(colors)
+    }
+
+    fun saveMaterials(materials: List<MaterialLine>){
+        repository.saveMaterials(materials)
+    }
+
+    fun loadMaterials(){
+        val materials = repository.loadMaterials()
+        if(materials.isNotEmpty())
+            viewState.loaded(materials)
+    }
+
+    fun saveConditions(conditions: List<Boolean>){
+        repository.saveConditions(conditions)
+    }
+
+    fun loadConditions(){
+        val conditions = repository.loadConditions()
+        if(conditions.isNotEmpty()){
+            viewState.loaded(conditions)
+        }
+    }
+
+    fun saveForWho(forWho: List<Boolean>){
+        repository.saveForWho(forWho)
+    }
+
+    fun loadForWho(){
+        val forWho = repository.loadForWho()
+        if(forWho.isNotEmpty()){
+            viewState.loaded(forWho)
+        }
+    }
+
+    fun saveTopSizes(sizes: List<SizeLine>){
+        repository.saveTopSizes(sizes)
+    }
+
+    fun loadTopSizes(){
+        val sizes = repository.loadTopSizes()
+        if(sizes.isNotEmpty()){
+            viewState.loaded(sizes)
+        }
+    }
+
+    fun saveBottomSizes(sizes: List<SizeLine>){
+        repository.saveBottomSizes(sizes)
+    }
+
+    fun loadBottomSizes(){
+        val sizes = repository.loadBottomSizes()
+        if(sizes.isNotEmpty()){
+            viewState.loaded(sizes)
+        }
+    }
+
+    fun saveShoosSizes(sizes: List<SizeLine>){
+        repository.saveShoosSizes(sizes)
+    }
+
+    fun loadShoosSizes(){
+        val sizes = repository.loadShoosSizes()
+        if(sizes.isNotEmpty()){
+            viewState.loaded(sizes)
+        }
+    }
+
+    fun saveProductStatuses(statuses: List<Boolean>){
+        repository.saveProductStatuses(statuses)
+    }
+
+    fun loadProductStatuses(){
+        val statuses = repository.loadProductStatuses()
+        if(statuses.isNotEmpty()){
+            viewState.loaded(statuses)
+        }
+    }
+
+    fun saveStyles(styles: List<Boolean>){
+        repository.saveStyles(styles)
+    }
+
+    fun loadStyles(){
+        val styles = repository.loadStyles()
+        if(styles.isNotEmpty()){
+            viewState.loaded(styles)
+        }
     }
 }

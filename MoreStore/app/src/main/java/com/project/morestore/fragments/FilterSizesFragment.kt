@@ -32,6 +32,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         super.onViewCreated(view, savedInstanceState)
         initList()
         initToolBar()
+        loadFilterSizes()
     }
 
 
@@ -245,6 +246,10 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         binding.loader.isVisible = loading
     }
 
+    private fun loadFilterSizes(){
+        presenter.loadTopSizes()
+    }
+
     override fun onStop() {
         super.onStop()
         //FilterState.chosenSizes = sizeAdapter.getChosenSizes()
@@ -254,6 +259,9 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
             sizeLine.isSelected = chosenTopSizes[index].isSelected
         }
         }
+
+        presenter.saveTopSizes(chosenTopSizes)
+        presenter.saveBottomSizes(chosenBottomSizes)
 
     }
 
@@ -274,13 +282,24 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
     override fun loaded(result: Any) {
         showLoading(false)
-        val listTopSizes =
-            (result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() }
+        if((result as List<*>)[0] is Size) {
+            val listTopSizes =
+                (result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() }
+                    .map { convertSizeToSizeLine(it) }
+            sizeAdapter.updateList(listTopSizes)
+            val listBottomSizes = result.filter { it.id_category == 2 }.sortedBy { it.toInt() }
                 .map { convertSizeToSizeLine(it) }
-        sizeAdapter.updateList(listTopSizes)
-        val listBottomSizes = result.filter { it.id_category == 2 }.sortedBy { it.toInt() }
-            .map { convertSizeToSizeLine(it) }
-        bottomSizeList = listBottomSizes
+            bottomSizeList = listBottomSizes
+            topSizeList = listTopSizes
+        }else{
+            val sizes = result as List<SizeLine>
+            if(topSizeList.size == sizes.size){
+                topSizeList.forEachIndexed { index, sizeLine ->
+                    sizeLine.isSelected = sizes[index].isSelected
+                }
+                sizeAdapter.updateList(topSizeList)
+            }
+        }
 
 
     }

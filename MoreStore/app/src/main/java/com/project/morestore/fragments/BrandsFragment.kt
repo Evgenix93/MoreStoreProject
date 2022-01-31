@@ -114,7 +114,9 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
     //}
 
     private fun safeFilter() {
-        FilterState.segments = segmentsAdapter.loadSegmentsChecked()
+        com.project.morestore.singletones.FilterState.filter.brands = brandsAdapter.getCurrentList()
+        com.project.morestore.singletones.FilterState.filter.segments = segmentsAdapter.loadSegments2Checked()
+        //FilterState.segments = segmentsAdapter.loadSegmentsChecked()
        // FilterState.brands9 = brands9Adapter.loadBrands9Checked()
        // FilterState.brandsA = brandsAAdapter.loadBrandsAChecked()
         //FilterState.isAllBrands = (segmentsAdapter.loadSegmentsChecked()
@@ -124,10 +126,10 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
 
     private fun loadFilter() {
 
-        if (FilterState.segments.isNotEmpty()) {
-            Log.d("Debug", "loadFilter")
-            segmentsAdapter.updateSegmentsChecked(FilterState.segments.toMutableList())
-        }
+        //if (FilterState.segments.isNotEmpty()) {
+           // Log.d("Debug", "loadFilter")
+            //segmentsAdapter.updateSegmentsChecked(FilterState.segments.toMutableList())
+       // }
 
         //if (FilterState.brands9.isNotEmpty()) {
            // Log.d("Debug", "loadFilter brands9")
@@ -172,13 +174,21 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
         val list = result as List<*>
         if(list.isNotEmpty()){
             if(list[0] is Category){
-                segmentsAdapter.updateList(list as List<Category>)
+                if(com.project.morestore.singletones.FilterState.filter.segments.isEmpty()) {
+                    segmentsAdapter.updateList(list as List<Category>)
+                }else{
+                    segmentsAdapter.updateSegmentsChecked(com.project.morestore.singletones.FilterState.filter.segments.toMutableList())
+                }
             }else{
                 if(brands.isEmpty()){
                     brands = list as List<ProductBrand>
                     presenter.collectBrandsSearchFlow(searchFlow, brands)
                 }
-                brandsAdapter.updateList(list as List<ProductBrand>)
+                if(com.project.morestore.singletones.FilterState.filter.brands.size == list.size) {
+                    brandsAdapter.updateList(com.project.morestore.singletones.FilterState.filter.brands)
+                }else{
+                    brandsAdapter.updateList(list as List<ProductBrand>)
+                }
             }
         }
 

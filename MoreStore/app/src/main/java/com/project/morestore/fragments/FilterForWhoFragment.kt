@@ -9,23 +9,24 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFilterForWhoBinding
+import com.project.morestore.mvpviews.UserMvpView
+import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class FilterForWhoFragment : Fragment(R.layout.fragment_filter_for_who) {
+class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_who), UserMvpView {
     private val binding: FragmentFilterForWhoBinding by viewBinding()
+    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRadioButtons()
         initToolBar()
+        loadFilterForWho()
     }
 
     private fun initRadioButtons() {
-        if(FilterState.filter.chosenForWho.isNotEmpty()){
-            binding.forWomenCheckBox.isChecked = FilterState.filter.chosenForWho[0]
-            binding.forMenCheckBox.isChecked = FilterState.filter.chosenForWho[1]
-            binding.forKidsCheckBox.isChecked = FilterState.filter.chosenForWho[2]
-        }
         binding.forWomenCheckBox.setOnClickListener {
             setupRadioButton(binding.forWomenCheckBox)
         }
@@ -54,12 +55,42 @@ class FilterForWhoFragment : Fragment(R.layout.fragment_filter_for_who) {
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
     }
 
+    private fun loadFilterForWho(){
+        presenter.loadForWho()
+
+    }
+
     override fun onStop() {
         super.onStop()
-        FilterState.filter.chosenForWho = listOf(
+        presenter.saveForWho(listOf(
             binding.forWomenCheckBox.isChecked,
             binding.forMenCheckBox.isChecked,
             binding.forKidsCheckBox.isChecked
-        )
+        ))
+    }
+
+    override fun success(result: Any) {
+
+    }
+
+    override fun error(message: String) {
+
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun loaded(result: Any) {
+        val forWho = result as List<Boolean>
+        binding.forWomenCheckBox.isChecked = forWho[0]
+        binding.forMenCheckBox.isChecked = forWho[1]
+        binding.forKidsCheckBox.isChecked = forWho[2]
+
+
+    }
+
+    override fun successNewCode() {
+
     }
 }

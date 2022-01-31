@@ -36,7 +36,6 @@ class RegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), UserMvpV
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initRegionsRecyclerView()
-        loadFilter()
         initEditText()
     }
 
@@ -57,18 +56,18 @@ class RegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), UserMvpV
        Log.d("Debug", "safeFilter")
        //Log.d("Debug", "${regionsAdapter.regionsChecked}")
          val regions = regionsAdapter.getCurrentRegions()
-        if (regions.all{ it.isChecked != true })
-            regions.forEachIndexed{index,_->
-                regions[index].isChecked = true
-            }
-        FilterState.regions = regions
+        //if (regions.all{ it.isChecked != true })
+            //regions.forEachIndexed{index,_->
+               // regions[index].isChecked = true
+           // }
+        com.project.morestore.singletones.FilterState.filter.regions = regions
     }
    private fun loadFilter(){
-        if(FilterState.regions.isNotEmpty()) {
-            Log.d("Debug", "loadFilter")
-            regionsAdapter.updateList(FilterState.regions)
+       // if(FilterState.regions.isNotEmpty()) {
+           // Log.d("Debug", "loadFilter")
+           // regionsAdapter.updateList(FilterState.regions)
 
-        }
+        //}
     }
 
     private fun initToolbar() {
@@ -142,7 +141,11 @@ class RegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), UserMvpV
             presenter.collectRegionSearchFlow(searchFlow, regions)
         }
         val list = (result as List<Region>).filter { it.idCountry == 1.toLong() }
-        regionsAdapter.updateList(list)
+        if(list.size == com.project.morestore.singletones.FilterState.filter.regions.size){
+            regionsAdapter.updateList(com.project.morestore.singletones.FilterState.filter.regions)
+        }else {
+            regionsAdapter.updateList(list)
+        }
 
 
 

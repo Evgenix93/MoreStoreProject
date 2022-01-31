@@ -3,8 +3,6 @@ package com.project.morestore.repositories
 import android.content.Context
 import android.util.Log
 import com.project.morestore.models.*
-import android.util.Log
-import com.project.morestore.models.*
 
 import com.project.morestore.singletones.FilterState
 
@@ -174,7 +172,7 @@ class ProductRepository(private val context: Context) {
 
 
 
-    suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>): Boolean{
+    suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>){
        // return try {
     //suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>){
        /* return try {
@@ -206,6 +204,7 @@ class ProductRepository(private val context: Context) {
         }*/
         val sizeList = listOf(
             SizeLine(
+                0,
                 "XXS",
                 "26-27",
                 "42",
@@ -214,6 +213,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "XS",
                 "28-29",
                 "44",
@@ -222,6 +222,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "S",
                 "30-31",
                 "46",
@@ -230,6 +231,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "M",
                 "32-33",
                 "48",
@@ -238,6 +240,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "L",
                 "34-35",
                 "50",
@@ -246,6 +249,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "XL",
                 "36-37",
                 "52",
@@ -254,6 +258,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "XXL",
                 "38-39",
                 "54",
@@ -262,6 +267,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "3XL",
                 "40-41",
                 "56",
@@ -270,6 +276,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "4XL",
                 "42-43",
                 "58",
@@ -278,6 +285,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "5XL",
                 "44-45",
                 "60",
@@ -286,6 +294,7 @@ class ProductRepository(private val context: Context) {
                 true
             ),
             SizeLine(
+                0,
                 "",
                 "",
                 "",
@@ -298,7 +307,7 @@ class ProductRepository(private val context: Context) {
            if(sizeList[index].int == size.name)
                sizeList[index].isSelected = size.chosen ?: false
         }
-        FilterState.filter.chosenSizes = sizeList
+        FilterState.filter.chosenTopSizes = sizeList
     }
 
 
