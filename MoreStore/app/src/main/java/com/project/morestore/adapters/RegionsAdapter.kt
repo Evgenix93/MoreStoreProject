@@ -13,23 +13,23 @@ import com.project.morestore.models.Region
 
 class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
     private var regions = listOf(
-        Region("Все города", true),
-        Region("Москва, Московская область", true),
-        Region("Санкт-Петербург, Ленинградская область", true),
-        Region("Нижний Новгород, Нижегородская область", true),
-        Region("Новосибирск, Новосибирская область", true),
-        Region("Екатеринбург, Свердловская область", true),
-        Region("Казань, Республика Татарстан", true),
-        Region("Челябинск, Челябинская область", true),
-        Region("Омск, Омская область", true),
-        Region("Самара, Самарская область", true),
-        Region("Ростов-на-Дону, Ростовская область", true),
-        Region("Уфа, Республика Башкортостан", true),
-        Region("Красноярск, Красноярский край", true),
-        Region("Воронеж, Воронежская область", true),
-        Region("Пермь, Пермский край",true),
-        Region("Волгоград, Волгоградская область", true),
-        Region("Краснодар, Краснодарский край",true)
+        Region("Все города", false),
+        Region("Москва, Московская область", false),
+        Region("Санкт-Петербург, Ленинградская область", false),
+        Region("Нижний Новгород, Нижегородская область", false),
+        Region("Новосибирск, Новосибирская область", false),
+        Region("Екатеринбург, Свердловская область", false),
+        Region("Казань, Республика Татарстан", false),
+        Region("Челябинск, Челябинская область", false),
+        Region("Омск, Омская область", false),
+        Region("Самара, Самарская область", false),
+        Region("Ростов-на-Дону, Ростовская область", false),
+        Region("Уфа, Республика Башкортостан", false),
+        Region("Красноярск, Красноярский край", false),
+        Region("Воронеж, Воронежская область", false),
+        Region("Пермь, Пермский край",false),
+        Region("Волгоград, Волгоградская область", false),
+        Region("Краснодар, Краснодарский край",false)
     )
 
     class RegionViewHolder(view: View, val onAllMaterial: (isChecked: Boolean) -> Unit, val onChecked: (isChecked: Boolean, position: Int) -> Unit) :

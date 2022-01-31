@@ -39,38 +39,38 @@ class FilterMaterialsFragment: Fragment(R.layout.fragment_filter_materials) {
     }
 
     private fun generateList(): List<MaterialLine>{
-        return if(FilterState.chosenMaterials.isNotEmpty()){
-            val allNotSelected = FilterState.chosenMaterials.all { !it.isSelected }
-            if(allNotSelected){
-                for(material in FilterState.chosenMaterials){
+        return if(FilterState.filter.chosenMaterials.isNotEmpty()){
+            val allNotSelected = FilterState.filter.chosenMaterials.all { !it.isSelected }
+           /* if(allNotSelected){
+                for(material in FilterState.filter.chosenMaterials){
                     material.isSelected = true
                 }
-            }
-            FilterState.chosenMaterials
+            }*/
+            FilterState.filter.chosenMaterials
         } else listOf(
             MaterialLine(
             "Все материалы",
-                true),
+                false),
             MaterialLine("Акрил",
-                true),
+                false),
             MaterialLine("Альпака",
-                true),
+                false),
             MaterialLine("Ангора",
-                true),
+                false),
             MaterialLine("Атлас",
-                true),
+                false),
             MaterialLine("Ацетат",
-                true),
+                false),
             MaterialLine("Бархат",
-                true),
+                false),
             MaterialLine("Бисер",
-                true),
+                false),
             MaterialLine("Вельвет",
-                true),
+                false),
             MaterialLine("Велюр",
-                true),
+                false),
             MaterialLine("Вискоза",
-                true)
+                false)
         )
     }
 
@@ -84,7 +84,7 @@ class FilterMaterialsFragment: Fragment(R.layout.fragment_filter_materials) {
 
     override fun onStop() {
         super.onStop()
-        FilterState.chosenMaterials = materialAdapter.getCurrentMaterials()
+        FilterState.filter.chosenMaterials = materialAdapter.getCurrentMaterials()
 
     }
 

@@ -66,13 +66,17 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     private fun setClickListeners(){
         binding.continueBtn.setOnClickListener {
-            presenter.saveSizes(
+           /* presenter.saveSizes(
                 topSizeCardAdapter.getChosenSizes(),
                 bottomSizeCardAdapter.getChosenSizes(),
                 shoesSizeCardAdapter.getChosenSizes()
-            )
+            )*/
 
-
+         presenter.saveSizes(
+             topSizeCardAdapter.getSizes(),
+             bottomSizeCardAdapter.getSizes(),
+             shoesSizeCardAdapter.getSizes()
+         )
         }
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }

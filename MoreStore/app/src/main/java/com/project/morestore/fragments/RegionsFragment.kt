@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.project.morestore.FilterState
 import com.project.morestore.R
 import com.project.morestore.adapters.RegionsAdapter
 import com.project.morestore.databinding.FragmentRegionsBinding
+import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.autoCleared
 
 class RegionsFragment: Fragment(R.layout.fragment_regions) {
@@ -41,16 +41,16 @@ class RegionsFragment: Fragment(R.layout.fragment_regions) {
        Log.d("Debug", "safeFilter")
        //Log.d("Debug", "${regionsAdapter.regionsChecked}")
          val regions = regionsAdapter.getCurrentRegions()
-        if (regions.all{ !it.isChecked })
+       /* if (regions.all{ !it.isChecked })
             regions.forEachIndexed{index,_->
                 regions[index].isChecked = true
-            }
-        FilterState.regions = regions
+            }*/
+        FilterState.filter.regions = regions
     }
    private fun loadFilter(){
-        if(FilterState.regions.isNotEmpty()) {
+        if(FilterState.filter.regions.isNotEmpty()) {
             Log.d("Debug", "loadFilter")
-            regionsAdapter.updateList(FilterState.regions)
+            regionsAdapter.updateList(FilterState.filter.regions)
 
         }
     }

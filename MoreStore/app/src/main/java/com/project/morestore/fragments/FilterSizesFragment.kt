@@ -124,14 +124,14 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
 
         )
 
-        sizeAdapter.updateList(if(FilterState.chosenSizes.isNotEmpty()){
-            val allNotSelected = FilterState.chosenSizes.all { !it.isSelected }
+        sizeAdapter.updateList(if(FilterState.filter.chosenSizes.isNotEmpty()){
+            val allNotSelected = FilterState.filter.chosenSizes.all { !it.isSelected }
             if(allNotSelected){
-                for(size in FilterState.chosenSizes){
+                for(size in FilterState.filter.chosenSizes){
                     size.isSelected = true
                 }
             }
-            FilterState.chosenSizes
+            FilterState.filter.chosenSizes
         } else sizeList)
     }
 
@@ -143,6 +143,6 @@ class FilterSizesFragment: Fragment(R.layout.fragment_filter_sizes_colthes) {
 
     override fun onStop() {
         super.onStop()
-        FilterState.chosenSizes = sizeAdapter.getChosenSizes()
+        FilterState.filter.chosenSizes = sizeAdapter.getChosenSizes()
     }
 }

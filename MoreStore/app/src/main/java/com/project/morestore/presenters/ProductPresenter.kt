@@ -3,18 +3,24 @@ package com.project.morestore.presenters
 import android.content.Context
 import android.util.Log
 
+
 import com.project.morestore.models.Size
 import com.project.morestore.mvpviews.OnBoardingMvpView
 import com.project.morestore.repositories.AuthRepository
 
 
 import com.project.morestore.repositories.ProductRepository
+import com.project.morestore.singletones.FilterState
+import com.project.morestore.singletones.Network
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
+import retrofit2.Response
+import java.io.IOException
 
 
 class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
@@ -45,11 +51,13 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
     fun saveSizes(topSizes: List<Size>, bottomSizes: List<Size>, shoesSizes: List<Size>){
         presenterScope.launch {
             viewState.loading()
-            if(repository.saveSizes(topSizes, bottomSizes, shoesSizes)){
+            /*if(repository.saveSizes(topSizes, bottomSizes, shoesSizes)){
                 viewState.success()
             }else{
                 viewState.error("ошибка")
-            }
+            }*/
+            repository.saveSizes(topSizes, bottomSizes, shoesSizes)
+            viewState.success()
         }
     }
 
@@ -74,13 +82,15 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
         }
     }
 
-    fun safeCategories(){
-        presenterScope.launch {
+    fun safeCategories(segmentsChecked: List<Boolean>){
+       /* presenterScope.launch {
            if (repository.safeCategories(categoryIdList))
                viewState.success()
             else
                 viewState.error("Ошибка")
-        }
+        }*/
+        repository.safeCategories(segmentsChecked)
+        viewState.success()
     }
 
     fun addRemoveCategoryId(id: Int, isChecked: Boolean){
@@ -100,7 +110,14 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
         authRepository.clearToken()
     }
 
-
+   fun safeFilter(){
+       presenterScope.launch{
+           if (repository.safeFilter())
+               viewState.success()
+           else
+               viewState.error("Ошибка")
+       }
+   }
 
 
     private suspend fun getStringFromResponse(body: ResponseBody): String {

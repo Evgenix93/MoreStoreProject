@@ -5,18 +5,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.project.morestore.FilterState
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFilterBinding
+import com.project.morestore.mvpviews.UserMvpView
+import com.project.morestore.presenters.UserPresenter
+import com.project.morestore.singletones.FilterState
 import kotlinx.coroutines.launch
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class FilterFragment : Fragment(R.layout.fragment_filter) {
+class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpView {
     private val binding: FragmentFilterBinding by viewBinding()
+    private val presenter by moxyPresenter{ UserPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,20 +33,20 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     }
 
     private fun showGreenDots() {
-        if (com.project.morestore.singletones.FilterState.chosenForWho.isNotEmpty()) {
+        if (FilterState.filter.chosenForWho.isNotEmpty()) {
             binding.forWomenTextView.text =
-                if (com.project.morestore.singletones.FilterState.chosenForWho[0]) "Женщинам"
-                else if (com.project.morestore.singletones.FilterState.chosenForWho[1]) "Мужчинам"
+                if (FilterState.filter.chosenForWho[0]) "Женщинам"
+                else if (FilterState.filter.chosenForWho[1]) "Мужчинам"
                 else
                     "Детям"
         }
 
         binding.showProductsGreenDotImageView.isVisible =
-            if (com.project.morestore.singletones.FilterState.chosenProductStatus.isEmpty()) true
-            else (com.project.morestore.singletones.FilterState.chosenProductStatus.all { it } || com.project.morestore.singletones.FilterState.chosenProductStatus.all { !it }).not()
+            if (FilterState.filter.chosenProductStatus.isEmpty()) true
+            else (FilterState.filter.chosenProductStatus.all { it } || FilterState.filter.chosenProductStatus.all { !it }).not()
 
-        binding.categoriesGreenDotImageView.isVisible = !FilterState.isAllCategories
-        binding.allCategories.isVisible = FilterState.isAllCategories
+        binding.categoriesGreenDotImageView.isVisible = (FilterState.filter.categories.all{it.isChecked ?: false} || FilterState.filter.categories.all{!(it.isChecked ?: false)}).not()
+        binding.allCategories.isVisible = (FilterState.filter.categories.all{it.isChecked ?: false} || FilterState.filter.categories.all{!(it.isChecked ?: false)})
         Log.d("Debug", "showGreenDots")
         /* viewLifecycleOwner.lifecycleScope.launch{
              val sharedPrefs = requireContext().getSharedPreferences("categories_shared_prefs", Context.MODE_PRIVATE)
@@ -49,29 +55,32 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
              binding.categoriesGreenDotImageView.isVisible = !isAllCategories
              binding.allCategories.isVisible = isAllCategories
          }*/
-        Log.d("Debug", "isAllBrands = ${FilterState.isAllBrands}")
-        binding.brandsGreenDotImageView.isVisible = !FilterState.isAllBrands
-        binding.allBrands.isVisible = FilterState.isAllBrands
-        binding.regionsGreenDotImageView.isVisible = !FilterState.regions.all { it.isChecked }
-        binding.allRegions.isVisible = FilterState.regions.all { it.isChecked }
+        Log.d("Debug", "isAllBrands = ${FilterState.filter.isAllBrands}")
+        binding.brandsGreenDotImageView.isVisible = !FilterState.filter.isAllBrands
+        binding.allBrands.isVisible = FilterState.filter.isAllBrands
+        binding.regionsGreenDotImageView.isVisible = (com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked } || FilterState.filter.regions.all { !it.isChecked }).not()
+        binding.allRegions.isVisible = com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked } || FilterState.filter.regions.all { !it.isChecked }
         //binding.showProductsGreenDotImageView.isVisible = com.project.morestore.singletones.FilterState.chosenProductStatus
         //val allSelected = com.project.morestore.singletones.FilterState.chosenStyles.all { it } || com.project.morestore.singletones.FilterState.chosenStyles.all { !it }
         binding.stylesGreenDotImageView.isVisible =
-            (com.project.morestore.singletones.FilterState.chosenStyles.all { it } || com.project.morestore.singletones.FilterState.chosenStyles.all { !it }).not()
+            (com.project.morestore.singletones.FilterState.filter.chosenStyles.all { it } || FilterState.filter.chosenStyles.all { !it }).not()
         binding.allStyles.isVisible =
-            com.project.morestore.singletones.FilterState.chosenStyles.all { it } || com.project.morestore.singletones.FilterState.chosenStyles.all { !it }
+            com.project.morestore.singletones.FilterState.filter.chosenStyles.all { it } || FilterState.filter.chosenStyles.all { !it }
         binding.conditionsGreenDotImageView.isVisible =
-            (com.project.morestore.singletones.FilterState.chosenConditions.all { it } || com.project.morestore.singletones.FilterState.chosenConditions.all { !it }).not()
+            (com.project.morestore.singletones.FilterState.filter.chosenConditions.all { it } || FilterState.filter.chosenConditions.all { !it }).not()
         binding.allConditions.isVisible =
-            com.project.morestore.singletones.FilterState.chosenConditions.all { it } || com.project.morestore.singletones.FilterState.chosenConditions.all { !it }
+            com.project.morestore.singletones.FilterState.filter.chosenConditions.all { it } || FilterState.filter.chosenConditions.all { !it }
         binding.sizesGreenDotImageView.isVisible =
-            (com.project.morestore.singletones.FilterState.chosenSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.chosenSizes.all { !it.isSelected }).not()
+            (com.project.morestore.singletones.FilterState.filter.chosenSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenSizes.all { !it.isSelected }).not()
         binding.allSizes.isVisible =
-            com.project.morestore.singletones.FilterState.chosenSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.chosenSizes.all { !it.isSelected }
+            com.project.morestore.singletones.FilterState.filter.chosenSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenSizes.all { !it.isSelected }
         binding.materialsGreenDotImageView.isVisible =
-            (com.project.morestore.singletones.FilterState.chosenMaterials.all { it.isSelected } || com.project.morestore.singletones.FilterState.chosenMaterials.all { !it.isSelected }).not()
+            (com.project.morestore.singletones.FilterState.filter.chosenMaterials.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenMaterials.all { !it.isSelected }).not()
         binding.allMaterials.isVisible =
-            com.project.morestore.singletones.FilterState.chosenMaterials.all { it.isSelected } || com.project.morestore.singletones.FilterState.chosenMaterials.all { !it.isSelected }
+            com.project.morestore.singletones.FilterState.filter.chosenMaterials.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenMaterials.all { !it.isSelected }
+
+        binding.colorsGreenDotImageView.isVisible = (FilterState.filter.colors.all{it.isChecked} || FilterState.filter.colors.all{!it.isChecked}).not()
+        binding.allColors.isVisible = FilterState.filter.colors.all{it.isChecked} || FilterState.filter.colors.all{!it.isChecked}
     }
 
     private fun setClickListeners() {
@@ -113,6 +122,9 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterMaterialsFragment())
         }
 
+        binding.safeFilterBtn.setOnClickListener{
+            saveFilter()
+        }
 
     }
 
@@ -127,5 +139,29 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
     private fun initToolBar(){
         binding.toolbarFilter.imageView2.setOnClickListener { findNavController().popBackStack() }
+    }
+
+    private fun saveFilter(){
+        presenter.saveFilter()
+    }
+
+    override fun success(result: Any) {
+        Toast.makeText(requireContext(), "Фильтр сохранен", Toast.LENGTH_LONG).show()
+    }
+
+    override fun error(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun loading() {
+        TODO("Not yet implemented")
+    }
+
+    override fun loaded(result: Any) {
+        TODO("Not yet implemented")
+    }
+
+    override fun successNewCode() {
+        TODO("Not yet implemented")
     }
 }

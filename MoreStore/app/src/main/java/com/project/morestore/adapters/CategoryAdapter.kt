@@ -24,13 +24,15 @@ class CategoryAdapter(
         Category(4, "Эконом")
     )
     private var isAllChecked = false
-    private var segmentsChecked = segments2.map { false }.toMutableList()
+    private var segments1Checked = mutableListOf<Boolean>()
+    private var segments2Checked = segments2.map { false }.toMutableList()
 
 
     class Holder(
         view: View,
         private val context: Context,
-        private val segmentsChecked: MutableList<Boolean>,
+        private val segments1Checked: MutableList<Boolean>,
+        private val segments2Checked: MutableList<Boolean>,
         private val checkBoxClick: (Int, Boolean) -> Unit,
         private val allCheckCallback: (Boolean) -> Unit
     ) : RecyclerView.ViewHolder(view) {
@@ -52,10 +54,12 @@ class CategoryAdapter(
             if (isOnboarding)
                 binding.categoryCheckBox.isChecked = isAllChecked
               else
-                binding.categoryCheckBox.isChecked = segmentsChecked[position]
+                binding.categoryCheckBox.isChecked = segments2Checked[position]
             binding.categoryCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if(!isOnboarding)
-                segmentsChecked[position] = isChecked
+                segments2Checked[position] = isChecked
+                else
+                    segments1Checked[position] = isChecked
                 if (category.id == 0) {
                     Log.d("Debug", "allCheck")
                     allCheckCallback(isChecked)
@@ -67,23 +71,29 @@ class CategoryAdapter(
 
     fun updateList(newList: List<Category>) {
         segments1 = listOf(Category(0, "Выбрать все")) + newList
+        segments1Checked = segments1.map{false}.toMutableList()
         notifyDataSetChanged()
     }
 
     fun updateSegmentsChecked(newList: MutableList<Boolean>){
-        segmentsChecked = newList
+        segments2Checked = newList
         notifyDataSetChanged()
     }
 
-    fun loadSegmentsChecked(): MutableList<Boolean>{
-        return segmentsChecked
+    fun loadSegments1Checked(): List<Boolean>{
+        return segments1Checked.apply { removeFirst() }
+    }
+
+    fun loadSegments2Checked(): MutableList<Boolean>{
+        return segments2Checked
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_category, parent, false),
             context,
-            segmentsChecked,
+            segments1Checked,
+            segments2Checked,
             checkBoxClick
         ) {
             isAllChecked = it

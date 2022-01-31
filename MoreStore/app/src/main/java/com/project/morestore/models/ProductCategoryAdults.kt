@@ -3,7 +3,9 @@ package com.project.morestore.models
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Region(
+data  class ProductCategoryAdults(
+    val id: Int,
     val name: String,
-    var isChecked: Boolean
+    val sub: List<ProductCategory>,
+    var isChecked: Boolean?
 )

@@ -27,7 +27,10 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-
-
+  fun loadFilter(){
+      presenterScope.launch{
+          productRepository.loadFilter()
+      }
+  }
 
 }

@@ -3,8 +3,10 @@ package com.project.morestore.presenters
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.project.morestore.models.*
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.repositories.AuthRepository
+import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.isEmailValid
 import com.project.morestore.util.isPhoneValid
@@ -18,6 +20,8 @@ import okhttp3.ResponseBody
 class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     private val repository = UserRepository(context)
     private val authRepository = AuthRepository(context)
+    private val productRepository = ProductRepository(context)
+
     private var photoUri: Uri? = null
 
     fun changeUserData(
@@ -31,20 +35,20 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     ) {
         presenterScope.launch {
             viewState.loading()
-            val unmaskedPhone =  phone?.filter { it != '(' && it != ')' && it != '-' }
-            if(email != null && !email.trim().isEmailValid()){
+            val unmaskedPhone = phone?.filter { it != '(' && it != ')' && it != '-' }
+            if (email != null && !email.trim().isEmailValid()) {
                 viewState.error("почта указана неверно")
                 return@launch
             }
-            if(unmaskedPhone != null && !unmaskedPhone.trim().isPhoneValid()){
+            if (unmaskedPhone != null && !unmaskedPhone.trim().isPhoneValid()) {
                 viewState.error("телефон указан неверно")
                 return@launch
             }
-            if(step == null && phone == null && email == null && name.isNullOrBlank()){
+            if (step == null && phone == null && email == null && name.isNullOrBlank()) {
                 viewState.error("укажите имя")
                 return@launch
             }
-            if(step == null && phone == null && email == null && surname.isNullOrBlank()){
+            if (step == null && phone == null && email == null && surname.isNullOrBlank()) {
                 viewState.error("укажите фамилию")
                 return@launch
             }
@@ -58,7 +62,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 code = code
             )
 
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> {
                     if (photoUri != null) {
                         Log.d("Debug", "photoUri = $photoUri")
@@ -67,10 +71,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                     }
 
                     if (response.body()?.email?.err != null || response.body()?.phone?.err != null) {
-                            Log.d("mylog", response.body()?.email?.err.toString())
-                            viewState.error(response.body()?.email?.err ?: response.body()?.phone?.err.toString())
-                            return@launch
-                        }
+                        Log.d("mylog", response.body()?.email?.err.toString())
+                        viewState.error(
+                            response.body()?.email?.err ?: response.body()?.phone?.err.toString()
+                        )
+                        return@launch
+                    }
 
                     viewState.success(Unit)
                 }
@@ -95,12 +101,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     ) {
         presenterScope.launch {
             viewState.loading()
-            val unmaskedPhone =  phone?.filter { it != '(' && it != ')' && it != '-' }
-            if(email != null && !email.trim().isEmailValid()){
+            val unmaskedPhone = phone?.filter { it != '(' && it != ')' && it != '-' }
+            if (email != null && !email.trim().isEmailValid()) {
                 viewState.error("почта указана неверно")
                 return@launch
             }
-            if(unmaskedPhone != null && !unmaskedPhone.trim().isPhoneValid()){
+            if (unmaskedPhone != null && !unmaskedPhone.trim().isPhoneValid()) {
                 viewState.error("телефон указан неверно")
                 return@launch
             }
@@ -111,7 +117,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 code = code
             )
 
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> {
                     viewState.success(Unit)
                 }
@@ -182,13 +188,138 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
 
-    fun checkToken(){
+    fun checkToken() {
         viewState.loaded(authRepository.isTokenEmpty())
     }
 
-   fun clearToken(){
-       authRepository.clearToken()
-       viewState.success(Unit)
-   }
+    fun clearToken() {
+        authRepository.clearToken()
+        viewState.success(Unit)
+    }
 
+    fun saveFilter() {
+        presenterScope.launch {
+            if (repository.saveFilter())
+                viewState.success(Unit)
+            else
+                viewState.error("Ошибка сохранения")
+        }
+    }
+
+    fun getProductCategories() {
+        presenterScope.launch {
+            val chosenForWho = productRepository.loadForWho()
+            chosenForWho.forEachIndexed { index, isChecked ->
+                if (isChecked)
+                    when (index) {
+                        2 -> {
+                            val response = productRepository.getProductCategoriesKids()
+                            when (response?.code()) {
+                                null -> viewState.error("Нет интернета")
+                                200 -> {viewState.loaded(filterProductCategoriesKids(response.body()!!))}
+                                400 -> viewState.error("Ошибка")
+                            }
+                        }
+                        0 -> {
+                            val response = productRepository.getProductCategoriesAdults()
+                            when (response?.code()) {
+                                null -> viewState.error("Нет интернета")
+                                200 -> {
+                                    viewState.loaded(filterProductCategoriesAdults(response.body()!!, false))
+                                }
+                                400 -> viewState.error("Ошибка")
+                            }
+                        }
+                        1 -> {
+                            val response = productRepository.getProductCategoriesAdults()
+                            when (response?.code()) {
+                                null -> viewState.error("Нет интернета")
+                                200 -> {
+                                    viewState.loaded(filterProductCategoriesAdults(response.body()!!, true))
+                                }
+                                400 -> viewState.error("Ошибка")
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun filterProductCategoriesAdults(productCategoriesAdults: List<ProductCategoryAdults>, isMan: Boolean): List<ProductCategory> {
+        val productCategories = mutableListOf<ProductCategory>()
+        productCategoriesAdults.forEach {
+            when (it.name) {
+                "Женская одежда" -> if (!isMan) productCategories.addAll(it.sub)
+                "Мужская одежда" -> if (isMan) productCategories.addAll(it.sub)
+                "Аксессуары" -> productCategories.add(ProductCategory(it.id, it.name, null))
+                else -> productCategories.addAll(it.sub)
+            }
+
+        }
+
+        return productCategories
+        /* val productCategories = mutableListOf<ProductCategory1>()
+      val chosenForWho = repository.loadForWho()
+      chosenForWho.forEachIndexed{index, isChecked ->
+          if(isChecked)
+              when(index){
+                  0 -> {
+                     list.forEach{
+                     //    if(it.name == "Одежда, обувь, аксессуары") {
+                              //   Log.d("Debug", "subIsList = ${it.sub is List<*>}")
+                               //  Log.d("Debug" ,"sub = ${it.sub}")
+                             (it.sub as List<ProductCategory1>).forEach { productCategory ->
+                                 when (productCategory.name) {
+                                     "Женская одежда" -> productCategories.addAll(productCategory.sub as List<ProductCategory1>)
+                                     "Мужская одежда" -> {}
+                                     else -> productCategories.add(productCategory)
+                                 }
+                             }
+                        // }
+                     }
+                  }
+                  1 -> {
+                      list.forEach{
+                        //  if(it.name == "Одежда, обувь, аксессуары")
+                              (it.sub as List<ProductCategory1>).forEach{productCategory ->
+                                  when(productCategory.name){
+                                      "Женская одежда" -> {}
+                                      "Мужская одежда" -> productCategories.addAll(productCategory.sub as List<ProductCategory1>)
+                                      else -> productCategories.add(productCategory)
+                                  }
+                              }
+                      }
+                  }
+                  2 -> {
+                     // list.forEach{
+                       //   if(it.name == "Детская одежда и обувь")
+                       //       (it.sub as List<ProductCategory1>) .forEach{productCategory ->
+                         //        if(productCategory.name == "Для девочек")
+                           //          productCategories.addAll(productCategory.sub as List<ProductCategory1>)
+                             // }
+                      }
+                  }
+              }
+      }
+     return productCategories*/
+    }
+
+    private fun filterProductCategoriesKids(productCategoriesKids: List<ProductCategoryKids1>): List<ProductCategory> {
+        val productCategories = mutableListOf<ProductCategory>()
+        productCategoriesKids.forEach {
+            if(it.name == "Детская одежда и обувь")
+                productCategories.addAll(it.sub)
+        }
+        return productCategories
+    }
+
+     fun saveColors(colors: List<Color>){
+        repository.saveColors(colors)
+    }
+
+    fun loadColors(){
+        val colors = repository.loadColors()
+        if(colors.isNotEmpty())
+         viewState.loaded(colors)
+    }
 }

@@ -7,11 +7,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.project.morestore.FilterState
 import com.project.morestore.R
 import com.project.morestore.adapters.BrandsAdapter
 import com.project.morestore.adapters.CategoryAdapter
 import com.project.morestore.databinding.FragmentBrandsBinding
+import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.autoCleared
 
 class BrandsFragment : Fragment(R.layout.fragment_brands) {
@@ -60,27 +60,27 @@ class BrandsFragment : Fragment(R.layout.fragment_brands) {
     }
 
     private fun safeFilter() {
-        FilterState.segments = segmentsAdapter.loadSegmentsChecked()
-        FilterState.brands9 = brands9Adapter.loadBrands9Checked()
-        FilterState.brandsA = brandsAAdapter.loadBrandsAChecked()
-        FilterState.isAllBrands = (segmentsAdapter.loadSegmentsChecked()
-            .all { !it } && brands9Adapter.loadBrands9Checked().all { !it } && brandsAAdapter.loadBrandsAChecked().all { !it }) || (segmentsAdapter.loadSegmentsChecked()
+        FilterState.filter.segments = segmentsAdapter.loadSegments2Checked()
+        FilterState.filter.brands9 = brands9Adapter.loadBrands9Checked()
+        FilterState.filter.brandsA = brandsAAdapter.loadBrandsAChecked()
+        FilterState.filter.isAllBrands = (segmentsAdapter.loadSegments2Checked()
+            .all { !it } && brands9Adapter.loadBrands9Checked().all { !it } && brandsAAdapter.loadBrandsAChecked().all { !it }) || (segmentsAdapter.loadSegments2Checked()
             .all { it } && brands9Adapter.loadBrands9Checked().all { it } && brandsAAdapter.loadBrandsAChecked().all { it })
     }
 
     private fun loadFilter() {
 
-        if (FilterState.segments.isNotEmpty()) {
+        if (FilterState.filter.segments.isNotEmpty()) {
             Log.d("Debug", "loadFilter")
-            segmentsAdapter.updateSegmentsChecked(FilterState.segments.toMutableList())
+            segmentsAdapter.updateSegmentsChecked(FilterState.filter.segments.toMutableList())
         }
 
-        if (FilterState.brands9.isNotEmpty()) {
+        if (FilterState.filter.brands9.isNotEmpty()) {
             Log.d("Debug", "loadFilter brands9")
-            brands9Adapter.updateBrands9Checked(FilterState.brands9.toMutableList())
+            brands9Adapter.updateBrands9Checked(FilterState.filter.brands9.toMutableList())
         }
-        if (FilterState.brandsA.isNotEmpty()) {
-            brandsAAdapter.updateBrandsAChecked(FilterState.brandsA.toMutableList())
+        if (FilterState.filter.brandsA.isNotEmpty()) {
+            brandsAAdapter.updateBrandsAChecked(FilterState.filter.brandsA.toMutableList())
         }
     }
 

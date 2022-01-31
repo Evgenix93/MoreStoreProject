@@ -49,6 +49,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initToolbar()
         initLists()
         initViewPager()
+        loadFilter()
     }
 
 
@@ -164,7 +165,9 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         }
     }
 
-
+    private fun loadFilter(){
+        presenter.loadFilter()
+    }
 
     override fun error(message: String) {
 

@@ -15,7 +15,6 @@ import com.project.morestore.models.Category
 import com.project.morestore.mvpviews.OnBoardingMvpView
 
 import com.project.morestore.presenters.ProductPresenter
-import com.project.morestore.util.AutoClearedValue
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -53,7 +52,7 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
 
     private fun setClickListeners() {
         binding.continueBtn.setOnClickListener {
-            presenter.safeCategories()
+            presenter.safeCategories(categoryAdapter.loadSegments1Checked())
         }
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
