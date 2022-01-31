@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/splashScreenFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -376,6 +376,12 @@
         <action
             android:id="@+id/action_filterFragment_to_colorsFragment"
             app:destination="@id/colorsFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_filterKidsSizesFragment"
+            app:destination="@id/filterKidsSizesFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_filterShoosSizesFragment"
+            app:destination="@id/filterShoosSizesFragment" />
     </fragment>
     <fragment
         android:id="@+id/colorsFragment"
@@ -385,5 +391,13 @@
         android:id="@+id/autoLocationFragment"
         android:name="com.project.morestore.fragments.AutoLocationFragment"
         android:label="AutoLocationFragment" />
+    <fragment
+        android:id="@+id/filterShoosSizesFragment"
+        android:name="com.project.morestore.fragments.FilterShoosSizesFragment"
+        android:label="FilterShoosSizesFragment" />
+    <fragment
+        android:id="@+id/filterKidsSizesFragment"
+        android:name="com.project.morestore.fragments.FilterKidsSizesFragment"
+        android:label="FilterKidsSizesFragment" />
 
 </navigation>

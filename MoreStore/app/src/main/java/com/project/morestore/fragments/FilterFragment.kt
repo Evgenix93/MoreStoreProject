@@ -111,7 +111,20 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
         }
 
         binding.sizeClickView.setOnClickListener {
-            findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterSizesFragment())
+            val isShoos = FilterState.filter.categories.any { it.name == "Обувь" && it.isChecked == true } && !FilterState.filter.categories.any { it.isChecked == true && it.name != "Обувь" }
+            val isCloth = !FilterState.filter.categories.any { it.name == "Обувь" && it.isChecked == true } && FilterState.filter.categories.any { it.isChecked == true }
+
+            if(isCloth) {
+                findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterSizesFragment())
+            }
+            if(isShoos){
+                findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterShoosSizesFragment())
+
+            }
+            if(!isShoos && !isCloth){
+                findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterKidsSizesFragment())
+            }
+
         }
 
         binding.materialsClickView.setOnClickListener {

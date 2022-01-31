@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.ProductCategoriesAdapter
-import com.project.morestore.databinding.FragmentCategoriesBinding
+
 import com.project.morestore.models.ProductCategory
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
@@ -20,7 +20,7 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class CategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categories), UserMvpView {
-    private val binding: FragmentCategoriesBinding by viewBinding()
+    private val binding:  by viewBinding()
     private lateinit var checkBoxes: List<CheckBox>
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private var productCategoriesAdapter: ProductCategoriesAdapter by autoCleared()
