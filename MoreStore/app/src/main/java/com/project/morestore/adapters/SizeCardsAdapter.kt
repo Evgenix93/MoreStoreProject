@@ -83,7 +83,6 @@ class SizeCardsAdapter : RecyclerView.Adapter<SizeCardsAdapter.SizeCardViewHolde
     }
 
     fun getSizes(): List<Size>{
-        Log.d("Debug", "list 1item.chosen = ${list[0].chosen}")
         return list
     }
 }
