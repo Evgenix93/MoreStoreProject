@@ -52,8 +52,8 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
              binding.allCategories.isVisible = isAllCategories
          }*/
         Log.d("Debug", "isAllBrands = ${FilterState.filter.isAllBrands}")
-        binding.brandsGreenDotImageView.isVisible = !FilterState.filter.isAllBrands
-        binding.allBrands.isVisible = FilterState.filter.isAllBrands
+        binding.brandsGreenDotImageView.isVisible = FilterState.filter.brands.any { it.isChecked == true } && FilterState.filter.brands.all { it.isChecked == true }.not()
+        binding.allBrands.isVisible = !binding.brandsGreenDotImageView.isVisible
         binding.regionsGreenDotImageView.isVisible = (com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked == true } || FilterState.filter.regions.all { it.isChecked == false }).not()
         binding.allRegions.isVisible = com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked == true } || FilterState.filter.regions.all { it.isChecked == false }
         //binding.showProductsGreenDotImageView.isVisible = com.project.morestore.singletones.FilterState.chosenProductStatus
@@ -67,9 +67,14 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
         binding.allConditions.isVisible =
             com.project.morestore.singletones.FilterState.filter.chosenConditions.all { it } || FilterState.filter.chosenConditions.all { !it }
         binding.sizesGreenDotImageView.isVisible =
-            (com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { !it.isSelected }).not()
-        binding.allSizes.isVisible =
-            com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { !it.isSelected }
+            (com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { !it.isSelected }).not() ||
+                    (com.project.morestore.singletones.FilterState.filter.chosenBottomSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenBottomSizes.all { !it.isSelected }).not() ||
+                    (com.project.morestore.singletones.FilterState.filter.chosenShoosSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenShoosSizes.all { !it.isSelected }).not()
+
+
+
+        binding.allSizes.isVisible = !binding.sizesGreenDotImageView.isVisible
+            //com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { !it.isSelected }
         binding.materialsGreenDotImageView.isVisible =
             (com.project.morestore.singletones.FilterState.filter.chosenMaterials.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenMaterials.all { !it.isSelected }).not()
         binding.allMaterials.isVisible =

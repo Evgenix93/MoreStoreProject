@@ -11,7 +11,7 @@ import com.project.morestore.databinding.ItemSizeCardBinding
 import com.project.morestore.models.Size
 import com.project.morestore.util.SizeCard
 
-class SizeCardsAdapter : RecyclerView.Adapter<SizeCardsAdapter.SizeCardViewHolder>() {
+class SizeCardsAdapter(val isLimit: Boolean) : RecyclerView.Adapter<SizeCardsAdapter.SizeCardViewHolder>() {
     private var list = listOf<Size>()
     private val chosenSizes = mutableListOf<Size>()
 
@@ -51,11 +51,14 @@ class SizeCardsAdapter : RecyclerView.Adapter<SizeCardsAdapter.SizeCardViewHolde
                 notifyItemChanged(position)
                 chosenSizes.remove(list[position])
             } else {
-                if (chosenSizes.size < 3) {
+                if (chosenSizes.size < 3 && isLimit) {
                     list[position].chosen = true
                     Log.d("Debug", "size.chosen = ${list[position].chosen}")
                     notifyItemChanged(position)
                     chosenSizes.add(list[position])
+                }else{
+                    list[position].chosen = true
+                    notifyItemChanged(position)
                 }
             }
         }

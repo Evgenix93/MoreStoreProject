@@ -37,11 +37,19 @@ class RegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), UserMvpV
         initToolbar()
         initRegionsRecyclerView()
         initEditText()
+        initViews()
+
     }
 
     override fun onStop() {
         super.onStop()
         safeFilter()
+    }
+
+    private fun initViews(){
+        if(com.project.morestore.singletones.FilterState.filter.currentLocation != null){
+            binding.textView42.text = com.project.morestore.singletones.FilterState.filter.currentLocation!!.name
+        }
     }
 
     private fun initRegionsRecyclerView(){
@@ -141,10 +149,20 @@ class RegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), UserMvpV
             presenter.collectRegionSearchFlow(searchFlow, regions)
         }
         val list = (result as List<Region>).filter { it.idCountry == 1.toLong() }
-        if(list.size == com.project.morestore.singletones.FilterState.filter.regions.size){
+        if(list.size + 1 == com.project.morestore.singletones.FilterState.filter.regions.size){
+            if(com.project.morestore.singletones.FilterState.filter.currentLocation != null && !com.project.morestore.singletones.FilterState.filter.isCurrentLocationFirstLoaded){
+                com.project.morestore.singletones.FilterState.filter.regions.first { it.id == com.project.morestore.singletones.FilterState.filter.currentLocation?.id }.apply { isChecked = true }
+                com.project.morestore.singletones.FilterState.filter.isCurrentLocationFirstLoaded = true
+            }
+            Log.d("mylog3", "updateList")
             regionsAdapter.updateList(com.project.morestore.singletones.FilterState.filter.regions)
         }else {
-            regionsAdapter.updateList(list)
+            if(com.project.morestore.singletones.FilterState.filter.currentLocation != null && !com.project.morestore.singletones.FilterState.filter.isCurrentLocationFirstLoaded){
+                list.first { it.id == com.project.morestore.singletones.FilterState.filter.currentLocation?.id }.apply { isChecked = true }
+                com.project.morestore.singletones.FilterState.filter.isCurrentLocationFirstLoaded = true
+            }
+
+            regionsAdapter.updateList(listOf(Region(0, "Все города", 1, false)) + list)
         }
 
 

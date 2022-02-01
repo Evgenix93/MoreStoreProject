@@ -41,9 +41,9 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
     }
 
     private fun initLists(){
-        topSizeCardAdapter = SizeCardsAdapter()
-        bottomSizeCardAdapter = SizeCardsAdapter()
-        shoesSizeCardAdapter = SizeCardsAdapter()
+        topSizeCardAdapter = SizeCardsAdapter(false)
+        bottomSizeCardAdapter = SizeCardsAdapter(false)
+        shoesSizeCardAdapter = SizeCardsAdapter(false)
         with(binding.topSizeCardsList) {
             adapter = topSizeCardAdapter
             layoutManager =
@@ -183,15 +183,15 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
             topSizeCardAdapter.updateList(topSizes)
         }
         if(bottomSizes.size == FilterState.filter.chosenBottomSizes.size){
-            topSizeCardAdapter.updateList(FilterState.filter.chosenBottomSizes.map { Size(it.id, it.int, 2, it.isSelected) })
+            bottomSizeCardAdapter.updateList(FilterState.filter.chosenBottomSizes.map { Size(it.id, it.int, 2, it.isSelected) })
         }else{
-            topSizeCardAdapter.updateList(bottomSizes)
+            bottomSizeCardAdapter.updateList(bottomSizes)
         }
 
         if(shoosSizes.size == FilterState.filter.chosenShoosSizes.size){
-            topSizeCardAdapter.updateList(FilterState.filter.chosenShoosSizes.map { Size(it.id, it.int, 3, it.isSelected) })
+            shoesSizeCardAdapter.updateList(FilterState.filter.chosenShoosSizes.map { Size(it.id, it.int, 3, it.isSelected) })
         }else{
-            topSizeCardAdapter.updateList(shoosSizes)
+            shoesSizeCardAdapter.updateList(shoosSizes)
         }
 
     }

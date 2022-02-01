@@ -14,12 +14,14 @@ import com.project.morestore.databinding.FragmentChangeRegionBinding
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
+import com.project.morestore.singletones.FilterState
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_region), UserMvpView {
     private val binding: FragmentChangeRegionBinding by viewBinding()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    private var cities = listOf<Region>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,6 +56,16 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
         }
 
         binding.view12.setOnClickListener { findNavController().navigate(ChangeRegionFragmentDirections.actionChangeRegionFragmentToAutoLocationFragment()) }
+        binding.chooseRegionBtn.setOnClickListener {
+            FilterState.filter.currentLocation = cities.first { it.name == binding.searchEditText.text.toString() }
+            if(FilterState.filter.regions.isNotEmpty()){
+                FilterState.filter.regions.first { it.name == binding.searchEditText.text.toString() }.apply { isChecked = true }
+            }else{
+                cities.first { it.name == binding.searchEditText.text.toString() }.apply { isChecked = true }
+                FilterState.filter.regions = cities
+            }
+            findNavController().popBackStack()
+        }
     }
 
     override fun success(result: Any) {
@@ -70,14 +82,15 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
     }
 
     override fun loaded(result: Any) {
-        val citiesList = (result as List<Region>).filter { it.idCountry == 1.toLong() }.map { it.name }
+        val citiesList = (result as List<Region>).filter { it.idCountry == 1.toLong() }
+        cities = citiesList
         Log.d("mylog", citiesList.toString())
         binding.searchEditText.setAdapter(
             SuggestionArrayAdapter(
                 requireContext(),
                 R.layout.item_suggestion_textview,
                 //listOf("каол", "fdf", "defoi")
-            citiesList
+            citiesList.map { it.name }
             )
         )
 

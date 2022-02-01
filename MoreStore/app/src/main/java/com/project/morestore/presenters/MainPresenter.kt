@@ -43,9 +43,9 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
             viewState.loading()
             val response = if(queryStr != null){
                 val filterList = filter + listOf("text=$queryStr")
-                productRepository.getProducts(filterList)
+                productRepository.getProducts(queryStr, filterList)
             }else{
-                productRepository.getProducts(filter)
+                productRepository.getProducts(queryStr, filter)
             }
             when(response?.code()){
                 200 -> viewState.loaded(response.body()!!)

@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -22,7 +23,7 @@ import moxy.ktx.moxyPresenter
 class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_colthes),
     UserMvpView {
     private val binding: FragmentFilterSizesColthesBinding by viewBinding()
-    private val sizeAdapter = SizeLineAdapter()
+    private val sizeAdapter = SizeLineAdapter(false)
     private var topSizeList = listOf<SizeLine>()
     private var bottomSizeList = listOf<SizeLine>()
 
@@ -32,7 +33,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         super.onViewCreated(view, savedInstanceState)
         initList()
         initToolBar()
-        loadFilterSizes()
+        //loadFilterSizes()
     }
 
 
@@ -45,7 +46,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
         presenter.getAllSizes()
 
-        topSizeList = listOf(
+        val list = listOf(
             SizeLine(
                 0,
                 "XXS",
@@ -286,18 +287,25 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
             val listTopSizes =
                 (result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() }
                     .map { convertSizeToSizeLine(it) }
-            sizeAdapter.updateList(listTopSizes)
+            sizeAdapter.updateList(listTopSizes + listOf(SizeLine(0, "", "", "", "", "", false)))
             val listBottomSizes = result.filter { it.id_category == 2 }.sortedBy { it.toInt() }
                 .map { convertSizeToSizeLine(it) }
             bottomSizeList = listBottomSizes
             topSizeList = listTopSizes
+            Log.d("mylog2", topSizeList.size.toString())
+            loadFilterSizes()
+
         }else{
+            Log.d("mylog2", "filterSizes")
+
             val sizes = result as List<SizeLine>
-            if(topSizeList.size == sizes.size){
-                topSizeList.forEachIndexed { index, sizeLine ->
-                    sizeLine.isSelected = sizes[index].isSelected
-                }
-                sizeAdapter.updateList(topSizeList)
+            Log.d("mylog2", "${topSizeList.size} topSizes")
+            Log.d("mylog2", sizes.size.toString())
+
+
+            if(topSizeList.size + 1 == sizes.size){
+                Log.d("mylog2", "filterSizes")
+                sizeAdapter.updateList(sizes)
             }
         }
 

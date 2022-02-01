@@ -28,6 +28,7 @@ import com.project.morestore.adapters.MainFragmenViewPagerAdapter
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentMainBinding
+import com.project.morestore.models.Product
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.mvpviews.MainMvpView
@@ -77,6 +78,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             layoutManager = GridLayoutManager(requireContext(), 2)
             isNestedScrollingEnabled = false
         }
+
+        presenter.getProducts(null, listOf())
 
 
     }
@@ -210,6 +213,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     override fun loaded(result: Any) {
+        if(result is List<*>)
+        productAdapter.updateList(result as List<Product>)
 
     }
 

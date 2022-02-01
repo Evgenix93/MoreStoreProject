@@ -32,7 +32,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
     }
 
     private fun initList(){
-        sizeAdapter = SizeLineAdapter()
+        sizeAdapter = SizeLineAdapter(true)
         with(binding.sizesList) {
             adapter = sizeAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -278,10 +278,10 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
             val listShoosSizes =
                 (result as List<Size>).filter { it.id_category == 3 }.sortedBy { it.toInt() }
                     .map { convertSizeToSizeLine(it) }
-            if(FilterState.filter.chosenShoosSizes.size == listShoosSizes.size){
-                sizeAdapter.updateList(FilterState.filter.chosenShoosSizes)
+            if(FilterState.filter.chosenShoosSizes.size == listShoosSizes.size + 1){
+                sizeAdapter.updateList(FilterState.filter.chosenShoosSizes)//+ listOf(SizeLine(0, "", "", "", "", "", false)))
             }else {
-                sizeAdapter.updateList(listShoosSizes)
+                sizeAdapter.updateList(listShoosSizes + listOf(SizeLine(0, "", "", "", "", "", false)))
             }
             shoosSizes = listShoosSizes
 

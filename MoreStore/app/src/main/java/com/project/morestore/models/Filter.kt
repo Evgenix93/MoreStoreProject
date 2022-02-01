@@ -19,5 +19,7 @@ data class Filter(
     var segments: List<Boolean> = emptyList<Boolean>(),
     var brands: List<ProductBrand> = emptyList<ProductBrand>(),
     var regions: List<Region> = emptyList<Region>(),
-    var colors: List<Color> = emptyList()
+    var colors: List<Color> = emptyList(),
+    var currentLocation: Region? = null,
+    var isCurrentLocationFirstLoaded: Boolean = false
 )

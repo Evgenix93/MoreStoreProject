@@ -60,9 +60,36 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    suspend fun getProducts(filter: List<String>): Response<List<Product>>?{
+    suspend fun getProducts(query: String? = null, filter: List<String>): Response<List<Product>>?{
         return try {
-            productApi.getProducts(PRODUCT_OPTIONS, filter.joinToString(";"))
+            var categoryStr = listOf<String>()
+            var brandsStr = listOf<String>()
+            var citiesStr = listOf<String>()
+            var queryStr = listOf<String>()
+
+            if(FilterState.filter.categories.isNotEmpty()){
+                 categoryStr = FilterState.filter.categories.map { "id_category=${it.id}" }
+            }
+            if(FilterState.filter.brands.isNotEmpty()){
+                 brandsStr = FilterState.filter.brands.map { "id_brand=${it.id}" }
+            }
+            if(FilterState.filter.regions.isNotEmpty()){
+                citiesStr = FilterState.filter.regions.map { "id_city=${it.id}" }
+            }
+
+            if(!query.isNullOrEmpty()) {
+                queryStr = listOf("text=${query.orEmpty()}")
+            }
+
+            if(filter.isEmpty()){
+                productApi.getProducts(PRODUCT_OPTIONS, filter.joinToString())
+            }else {
+
+                productApi.getProducts(
+                    PRODUCT_OPTIONS,
+                    (categoryStr + brandsStr + citiesStr + queryStr).joinToString(";")
+                )
+            }
         } catch (e: Exception) {
             if (e is IOException) {
                 null

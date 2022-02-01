@@ -38,9 +38,9 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
 
     private fun initLists() {
-        topSizeCardAdapter = SizeCardsAdapter()
-        bottomSizeCardAdapter = SizeCardsAdapter()
-        shoesSizeCardAdapter = SizeCardsAdapter()
+        topSizeCardAdapter = SizeCardsAdapter(true)
+        bottomSizeCardAdapter = SizeCardsAdapter(true)
+        shoesSizeCardAdapter = SizeCardsAdapter(true)
         with(binding.topSizeCardsList) {
             adapter = topSizeCardAdapter
             layoutManager =

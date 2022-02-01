@@ -46,7 +46,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         initToolbar()
         setClickListeners()
         showBottomNav()
-        loadProducts( arguments?.getString("query"), listOf())
+        loadProducts( arguments?.getString("query"), listOf("dfd", "fdf"))
     }
 
     private fun setClickListeners() {
@@ -72,7 +72,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
             setHasFixedSize(true)
-            productAdapter.notifyDataSetChanged()
+
         }
     }
 
@@ -213,6 +213,10 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
     private fun loadProducts(queryStr: String?, filter: List<String>) {
         presenter.getProducts(queryStr, filter)
+
+    }
+
+    private fun loadCities(){
 
     }
 
