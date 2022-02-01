@@ -68,13 +68,13 @@ class ProductRepository(private val context: Context) {
             var queryStr = listOf<String>()
 
             if(FilterState.filter.categories.isNotEmpty()){
-                 categoryStr = FilterState.filter.categories.map { "id_category=${it.id}" }
+                 categoryStr = FilterState.filter.categories.filter { it.isChecked == true }.map { "id_category=${it.id}" }
             }
             if(FilterState.filter.brands.isNotEmpty()){
-                 brandsStr = FilterState.filter.brands.map { "id_brand=${it.id}" }
+                 brandsStr = FilterState.filter.brands.filter { it.isChecked == true }.map { "id_brand=${it.id}" }
             }
             if(FilterState.filter.regions.isNotEmpty()){
-                citiesStr = FilterState.filter.regions.map { "id_city=${it.id}" }
+                citiesStr = FilterState.filter.regions.filter { it.isChecked == true }.map { "id_city=${it.id}" }
             }
 
             if(!query.isNullOrEmpty()) {

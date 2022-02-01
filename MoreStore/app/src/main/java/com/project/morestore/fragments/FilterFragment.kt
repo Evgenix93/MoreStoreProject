@@ -54,8 +54,8 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
         Log.d("Debug", "isAllBrands = ${FilterState.filter.isAllBrands}")
         binding.brandsGreenDotImageView.isVisible = FilterState.filter.brands.any { it.isChecked == true } && FilterState.filter.brands.all { it.isChecked == true }.not()
         binding.allBrands.isVisible = !binding.brandsGreenDotImageView.isVisible
-        binding.regionsGreenDotImageView.isVisible = (com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked == true } || FilterState.filter.regions.all { it.isChecked == false }).not()
-        binding.allRegions.isVisible = com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked == true } || FilterState.filter.regions.all { it.isChecked == false }
+        binding.regionsGreenDotImageView.isVisible = FilterState.filter.regions.any { it.isChecked == true } && FilterState.filter.regions.all { it.isChecked == true }.not()//(com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked == true } || FilterState.filter.regions.all { it.isChecked == false }).not()
+        binding.allRegions.isVisible = !binding.regionsGreenDotImageView.isVisible//com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked == true } || FilterState.filter.regions.all { it.isChecked == false }
         //binding.showProductsGreenDotImageView.isVisible = com.project.morestore.singletones.FilterState.chosenProductStatus
         //val allSelected = com.project.morestore.singletones.FilterState.chosenStyles.all { it } || com.project.morestore.singletones.FilterState.chosenStyles.all { !it }
         binding.stylesGreenDotImageView.isVisible =
