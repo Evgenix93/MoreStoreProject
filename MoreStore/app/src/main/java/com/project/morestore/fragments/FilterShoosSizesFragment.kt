@@ -41,7 +41,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
 
         presenter.getAllSizes()
 
-        shoosSizes = listOf(
+        val list = listOf(
             SizeLine(
                 0,
                 "XXS",

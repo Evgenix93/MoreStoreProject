@@ -262,7 +262,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         }
 
         presenter.saveTopSizes(chosenTopSizes)
-        presenter.saveBottomSizes(chosenBottomSizes)
+        presenter.saveBottomSizes(chosenBottomSizes + listOf(chosenTopSizes.last()))
 
     }
 
