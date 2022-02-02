@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class SizeLine(
-    val id: Int,
+    var id: Int,
     val int: String,
     val w: String,
     val itRuFr: String,

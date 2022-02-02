@@ -239,7 +239,7 @@ class ProductRepository(private val context: Context) {
                 "42",
                 "32",
                 "32",
-                true
+                false
             ),
             SizeLine(
                 0,
@@ -248,7 +248,7 @@ class ProductRepository(private val context: Context) {
                 "44",
                 "34",
                 "34",
-                true
+                false
             ),
             SizeLine(
                 0,
@@ -257,7 +257,7 @@ class ProductRepository(private val context: Context) {
                 "46",
                 "36",
                 "36",
-                true
+                false
             ),
             SizeLine(
                 0,
@@ -266,7 +266,7 @@ class ProductRepository(private val context: Context) {
                 "48",
                 "38",
                 "38",
-                true
+                false
             ),
             SizeLine(
                 0,
@@ -275,7 +275,7 @@ class ProductRepository(private val context: Context) {
                 "50",
                 "40",
                 "40",
-                true
+                false
             ),
             SizeLine(
                 0,
@@ -284,57 +284,13 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                true
-            ),
-            SizeLine(
-                0,
-                "XXL",
-                "38-39",
-                "54",
-                "44",
-                "44",
-                true
-            ),
-            SizeLine(
-                0,
-                "3XL",
-                "40-41",
-                "56",
-                "46",
-                "46",
-                true
-            ),
-            SizeLine(
-                0,
-                "4XL",
-                "42-43",
-                "58",
-                "48",
-                "48",
-                true
-            ),
-            SizeLine(
-                0,
-                "5XL",
-                "44-45",
-                "60",
-                "50",
-                "60",
-                true
-            ),
-            SizeLine(
-                0,
-                "",
-                "",
-                "",
-                "",
-                "",
-                true
+                false
             )
         )
         topSizesList.forEachIndexed{index, size ->
            if(sizeList[index].int == size.name)
                sizeList[index].isSelected = size.chosen ?: false
+               sizeList[index].id = size.id
         }
         FilterState.filter.chosenTopSizes = sizeList
     }
