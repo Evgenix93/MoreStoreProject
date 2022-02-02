@@ -9,6 +9,7 @@ data class ProductBrand(
     val name: String,
     @Json(name = "id_category")
     val idCategory: Long,
-    var isChecked: Boolean?
+    var isChecked: Boolean?,
+    var isWished: Boolean?
 
 )

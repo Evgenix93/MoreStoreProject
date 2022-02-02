@@ -34,11 +34,12 @@ class CategoryAdapter(
         private val segments1Checked: MutableList<Boolean>,
         private val segments2Checked: MutableList<Boolean>,
         private val checkBoxClick: (Int, Boolean) -> Unit,
+        private val checkBoxClick2: (Int, Boolean) -> Unit,
         private val allCheckCallback: (Boolean) -> Unit
     ) : RecyclerView.ViewHolder(view) {
         private val binding: ItemCategoryBinding by viewBinding()
 
-        fun bind(category: Category, isAllChecked: Boolean, position: Int, isOnboarding: Boolean) {
+        fun bind(category: Category, isAllChecked: Boolean, position: Int, isOnboarding: Boolean, isChecked: Boolean) {
             binding.titleTextView.text = category.name
             when (category.id) {
                 1 -> binding.descriptionTextView.text =
@@ -54,10 +55,12 @@ class CategoryAdapter(
             if (isOnboarding)
                 binding.categoryCheckBox.isChecked = isAllChecked
               else
-                binding.categoryCheckBox.isChecked = segments2Checked[position]
+                binding.categoryCheckBox.isChecked = isChecked
+            Log.d("mylog", "checked ${segments2Checked[position]}")
             binding.categoryCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if(!isOnboarding)
-                segments2Checked[position] = isChecked
+               // segments2Checked[position] = isChecked
+                   checkBoxClick2(adapterPosition, isChecked)
                 else
                     segments1Checked[position] = isChecked
                 if (category.id == 0) {
@@ -77,6 +80,7 @@ class CategoryAdapter(
 
     fun updateSegmentsChecked(newList: MutableList<Boolean>){
         segments2Checked = newList
+        Log.d("mylog", "segments $segments2Checked")
         notifyDataSetChanged()
     }
 
@@ -94,18 +98,21 @@ class CategoryAdapter(
             context,
             segments1Checked,
             segments2Checked,
-            checkBoxClick
-        ) {
+            checkBoxClick,
+            {position, isChecked ->
+              segments2Checked[position] = isChecked
+            },
+         {
             isAllChecked = it
             notifyDataSetChanged()
-        }
+        })
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         if (isOnboarding)
-            holder.bind(segments1[position], isAllChecked, position, isOnboarding)
+            holder.bind(segments1[position], isAllChecked, position, isOnboarding, segments2Checked[position])
         else
-            holder.bind(segments2[position], isAllChecked, position, isOnboarding)
+            holder.bind(segments2[position], isAllChecked, position, isOnboarding, segments2Checked[position])
     }
 
     override fun getItemCount(): Int {

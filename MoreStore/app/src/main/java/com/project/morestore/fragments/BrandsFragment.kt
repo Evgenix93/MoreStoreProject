@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,11 +48,13 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
         getCategorySegments()
         initSearch()
         getBrands()
+
     }
 
     override fun onStop() {
         super.onStop()
         safeFilter()
+
     }
 
     private fun initSegmentsRecyclerView() {
@@ -62,7 +67,10 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
     }
 
     private fun initBrandsRecyclerView() {
-        brandsAdapter = BrandsAdapter(true)
+        brandsAdapter = BrandsAdapter(){ brandId ->
+            presenter.addBrandsToWishList(listOf(brandId))
+
+        }
         with(binding.brandsRecyclerView) {
             adapter = brandsAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -157,9 +165,19 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
         presenter.getAllBrands()
     }
 
+    private fun getBrandWishList(){
+        presenter.getBrandWishList()
+    }
+
     override fun success(result: Any) {
-
-
+        brandsAdapter.updateWishedInfo(result as List<Long>, false)
+        val brand = brandsAdapter.getCurrentList().find { it.id == result.first() }
+        val message = if(brand?.isWished == true) "Добавлено в избранное" else "Удалено из избранного"
+        val toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).apply {
+            view = LayoutInflater.from(requireContext()).inflate(R.layout.toast, null)
+            (view as TextView).text = message
+        }
+        toast.show()
     }
 
     override fun error(message: String) {
@@ -175,11 +193,14 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
         if(list.isNotEmpty()){
             if(list[0] is Category){
                 if(com.project.morestore.singletones.FilterState.filter.segments.isEmpty()) {
-                    segmentsAdapter.updateList(list as List<Category>)
+                    Log.d("mylog", "segments empty")
+                    //segmentsAdapter.updateList(list as List<Category>)
                 }else{
+                    Log.d("mylog", com.project.morestore.singletones.FilterState.filter.segments.toString())
                     segmentsAdapter.updateSegmentsChecked(com.project.morestore.singletones.FilterState.filter.segments.toMutableList())
                 }
-            }else{
+            }
+            if(list[0] is ProductBrand){
                 if(brands.isEmpty()){
                     brands = list as List<ProductBrand>
                     presenter.collectBrandsSearchFlow(searchFlow, brands)
@@ -189,7 +210,15 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
                 }else{
                     brandsAdapter.updateList(list as List<ProductBrand>)
                 }
+                getBrandWishList()
             }
+
+            if(list[0] is Long){
+                //getBrandWishList()
+                brandsAdapter.updateWishedInfo(list as List<Long>, true)
+            }
+
+
         }
 
     }

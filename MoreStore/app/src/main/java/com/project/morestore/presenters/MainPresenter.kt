@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.project.morestore.models.Product
+import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
@@ -73,6 +74,50 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
                 null -> viewState.error("нет интернета")
             }
         }
+    }
+
+    fun changeUserCity(city: String? = null, region: Region? = null){
+        presenterScope.launch {
+            viewState.loading()
+            val filter = userRepository.getFilter()
+            city ?: run {
+                filter.currentLocation = null
+                filter.isCurrentLocationChosen = true
+                userRepository.updateFilter(filter)
+                viewState.loaded(Unit)
+                return@launch
+            }
+            region?.let {
+                filter.currentLocation = region
+                filter.isCurrentLocationFirstLoaded = false
+                filter.isCurrentLocationChosen = true
+                userRepository.updateFilter(filter)
+                viewState.loaded(Unit)
+                return@launch
+            }
+            val cities = productRepository.getCities()?.body()
+            cities ?: run {
+                viewState.error("Ошибка")
+                return@launch
+            }
+            val foundCity = cities.find { it.name == city }
+            foundCity ?: run {
+                viewState.error("Ошибка")
+                return@launch
+            }
+            filter.currentLocation = foundCity
+            filter.isCurrentLocationFirstLoaded = false
+            filter.isCurrentLocationChosen = true
+            userRepository.updateFilter(filter)
+            Log.d("mylog", filter.currentLocation?.name.orEmpty())
+            viewState.loaded(Unit)
+        }
+
+
+    }
+
+    fun getFilter(){
+        viewState.loaded(userRepository.getFilter())
     }
 
     fun collectSearchFlow(flow: Flow<String>){

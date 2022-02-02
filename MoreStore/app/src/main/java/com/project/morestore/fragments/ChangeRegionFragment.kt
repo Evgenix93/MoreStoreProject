@@ -60,18 +60,21 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
             if(binding.searchEditText.text.isNullOrEmpty()){
                 return@setOnClickListener
             }
-            FilterState.filter.currentLocation = cities.first { it.name == binding.searchEditText.text.toString() }
+            presenter.changeUserCity(binding.searchEditText.text.toString())
+            /*FilterState.filter.currentLocation = cities.first { it.name == binding.searchEditText.text.toString() }
             if(FilterState.filter.regions.isNotEmpty()){
                 FilterState.filter.regions.first { it.name == binding.searchEditText.text.toString() }.apply { isChecked = true }
             }else{
                 cities.first { it.name == binding.searchEditText.text.toString() }.apply { isChecked = true }
                 FilterState.filter.regions = cities
             }
-            findNavController().popBackStack()
+            findNavController().popBackStack()*/
+
         }
     }
 
     override fun success(result: Any) {
+        findNavController().popBackStack()
 
     }
 

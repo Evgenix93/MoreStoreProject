@@ -1,9 +1,6 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.Address
-import com.project.morestore.models.PhotoData
-import com.project.morestore.models.RegistrationResponse
-import com.project.morestore.models.RegistrationResponse2
+import com.project.morestore.models.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -63,6 +60,23 @@ interface UserApi {
 
     @GET("geo/geocoder")
     suspend fun getCityByCoordsGetError(@Query("coords") coords: String): Response<String>
+
+    @POST("wishlist/brand")
+    suspend fun addBrandsToWishList(@Body wishList: BrandWishList): Response<Unit>
+
+    @POST("wishlist/brand")
+    suspend fun addBrandsToWishListGetError(@Body wishList: BrandWishList): Response<String>
+
+    @GET("wishlist/brand")
+    suspend fun getBrandWishList(): Response<List<ProductBrand>>
+
+    @GET("wishlist/brand")
+    suspend fun getBrandWishListGetError(): Response<String>
+
+
+
+
+
 
 
 

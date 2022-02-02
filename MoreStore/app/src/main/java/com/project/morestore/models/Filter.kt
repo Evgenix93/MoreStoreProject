@@ -21,5 +21,6 @@ data class Filter(
     var regions: List<Region> = emptyList<Region>(),
     var colors: List<Color> = emptyList(),
     var currentLocation: Region? = null,
-    var isCurrentLocationFirstLoaded: Boolean = false
+    var isCurrentLocationFirstLoaded: Boolean = false,
+    var isCurrentLocationChosen: Boolean = false
 )

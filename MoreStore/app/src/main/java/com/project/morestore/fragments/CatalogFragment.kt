@@ -25,6 +25,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentCatalogBinding
+import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -42,6 +43,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadFilter()
         initList()
         initToolbar()
         setClickListeners()
@@ -54,6 +56,15 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
             findNavController().navigate(
                 CatalogFragmentDirections.actionCatalogFragmentToChangeRegionFragment()
             )
+        }
+
+        binding.yesTextView.setOnClickListener {
+            presenter.changeUserCity("Санкт-Петербург")
+        }
+
+        binding.AllRegionsTextView.setOnClickListener {
+            presenter.changeUserCity(null)
+
         }
 
         binding.searchBtn.setOnClickListener {
@@ -216,13 +227,21 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
     }
 
-    private fun loadCities(){
-
+    private fun loadFilter(){
+        presenter.getFilter()
     }
 
     override fun loaded(result: Any) {
         binding.loader.isVisible = false
+        if(result is Unit){
+            binding.changeRegionCard.isVisible = false
+            loadProducts(null)
+        }
+        if(result is List<*>)
         productAdapter.updateList(result as List<Product>)
+
+        if(result is Filter)
+            binding.changeRegionCard.isVisible = !result.isCurrentLocationChosen
 
 
     }

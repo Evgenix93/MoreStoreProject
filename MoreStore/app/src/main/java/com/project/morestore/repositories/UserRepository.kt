@@ -180,6 +180,62 @@ class UserRepository(val context: Context) {
 
     }
 
+    suspend fun addBrandsToWishList(wishList: BrandWishList): Response<Unit>?{
+        return try {
+            userApi.addBrandsToWishList(wishList)
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.addBrandsToWishListGetError(wishList)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
+    suspend fun getBrandWishList(): Response<List<ProductBrand>>?{
+        return try {
+            userApi.getBrandWishList()
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.getBrandWishListGetError()
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
 
 
     suspend fun saveFilter(): Boolean {

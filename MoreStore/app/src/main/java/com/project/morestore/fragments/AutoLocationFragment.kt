@@ -12,7 +12,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentAutoregionBinding
@@ -65,12 +68,32 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
 
     private fun getCity(){
         try {
+            showLoading(true)
             val locationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
-            locationProvider.lastLocation.addOnCompleteListener { task ->
+            val cancelToken = object : CancellationToken() {
+                override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
+                    return this
+
+                }
+
+                override fun isCancellationRequested(): Boolean {
+                    return false
+
+                }
+            }
+            locationProvider.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, cancelToken ).addOnCompleteListener { task ->
                 if(task.isSuccessful){
                     Log.d("mylog", task.result.longitude.toString())
-                    presenter.getCityByCoordinates("${task.result.latitude},${task.result.longitude}")
+                    task.result?.let {
+                        presenter.getCityByCoordinates("${it.latitude},${it.longitude}")
+                    }
+                    task.result ?: run {
+                        showLoading(false)
+                        Toast.makeText(requireContext(), "ошибка", Toast.LENGTH_SHORT).show()
+                        binding.autoLocationResultTextView.text = "К сожалению нам не удалось определить\nваш населённый пункт"
+                    }
                 }else{
+                    showLoading(false)
                     Toast.makeText(requireContext(), "ошибка", Toast.LENGTH_SHORT).show()
                     binding.autoLocationResultTextView.text = "К сожалению нам не удалось определить\nваш населённый пункт"
                 }

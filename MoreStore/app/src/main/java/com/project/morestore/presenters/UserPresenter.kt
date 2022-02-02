@@ -289,6 +289,9 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             val filter = repository.getFilter()
             region?.let {
                 filter.currentLocation = region
+                filter.isCurrentLocationFirstLoaded = false
+                filter.isCurrentLocationChosen = true
+                repository.updateFilter(filter)
                 viewState.success(Unit)
                 return@launch
             }
@@ -297,11 +300,57 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 viewState.error("Ошибка")
                 return@launch
             }
-            filter.currentLocation = cities.find { it.name == city }
+            val foundCity = cities.find { it.name == city }
+            foundCity ?: run {
+                viewState.error("Ошибка")
+                return@launch
+            }
+            filter.currentLocation = foundCity
+            filter.isCurrentLocationFirstLoaded = false
+            filter.isCurrentLocationChosen = true
             repository.updateFilter(filter)
+            viewState.success(Unit)
         }
 
 
+    }
+
+    fun addBrandsToWishList(brandsIds: List<Long>){
+        presenterScope.launch {
+            viewState.loading()
+            val wishList = BrandWishList(brandsIds)
+            val response = repository.addBrandsToWishList(wishList)
+            when (response?.code()){
+                200 -> viewState.success(brandsIds)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+        }
+    }
+
+    fun getBrandWishList(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = repository.getBrandWishList()
+            when (response?.code()){
+            200 -> viewState.loaded(response.body()!!.map { it.id })
+            400 -> {
+                val bodyString = getStringFromResponse(response.errorBody()!!)
+                viewState.error(bodyString)
+            }
+            500 -> viewState.error("500 Internal Server Error")
+            null -> viewState.error("нет интернета")
+            else -> viewState.error("ошибка")
+
+        }
+
+        }
     }
 
     fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>){

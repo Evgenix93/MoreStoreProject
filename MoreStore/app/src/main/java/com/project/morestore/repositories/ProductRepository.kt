@@ -78,7 +78,9 @@ class ProductRepository(private val context: Context) {
             }
 
             if(!filter.isCurrentLocationFirstLoaded && filter.currentLocation != null){
-                citiesStr + listOf("id_city=${filter.currentLocation?.id}")
+                Log.d("mylog", "load current location")
+                citiesStr = citiesStr + listOf("id_city=${filter.currentLocation?.id}")
+                Log.d("mylog", "citystr = $citiesStr")
             }
 
             if(!query.isNullOrEmpty()) {
