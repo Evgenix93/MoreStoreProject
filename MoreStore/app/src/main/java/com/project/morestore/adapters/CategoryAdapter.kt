@@ -56,7 +56,7 @@ class CategoryAdapter(
                 binding.categoryCheckBox.isChecked = isAllChecked
               else
                 binding.categoryCheckBox.isChecked = isChecked
-            
+
             binding.categoryCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if(!isOnboarding)
                // segments2Checked[position] = isChecked
