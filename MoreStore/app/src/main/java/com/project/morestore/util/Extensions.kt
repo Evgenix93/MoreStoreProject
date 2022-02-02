@@ -1,5 +1,8 @@
 package com.project.morestore.util
 
+import android.text.TextUtils
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 
 fun String.isEmailValid(): Boolean {
@@ -8,4 +11,10 @@ fun String.isEmailValid(): Boolean {
 
 fun String.isPhoneValid(): Boolean {
     return android.util.Patterns.PHONE.matcher(this).matches() && (this.length == 12 || this.length == 11)
+}
+
+fun AutoCompleteTextView.showDropdown(adapter: ArrayAdapter<String>?) {
+    if(!TextUtils.isEmpty(this.text.toString())){
+        adapter?.filter?.filter(null)
+    }
 }
