@@ -117,7 +117,7 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
 
     override fun success(result: Any) {
         showLoading(false)
-        findNavController().popBackStack(R.id.catalogFragment, true)
+        findNavController().popBackStack(R.id.catalogFragment, false)
 
     }
 
