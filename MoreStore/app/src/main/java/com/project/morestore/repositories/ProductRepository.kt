@@ -285,6 +285,15 @@ class ProductRepository(private val context: Context) {
                 "42",
                 "42",
                 false
+            ),
+            com.project.morestore.models.SizeLine(
+                0,
+                "",
+                "",
+                "",
+                "",
+                "",
+                false
             )
         )
         topSizesList.forEachIndexed{index, size ->
