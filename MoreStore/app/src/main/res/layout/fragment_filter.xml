@@ -17,16 +17,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/sortingClickView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"/>
 
     <TextView
         android:id="@+id/sortingTextView"
@@ -54,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:clickable="false"
-        android:focusable="true"
+        android:focusable="false"
         android:dropDownAnchor="@id/anchor"
         android:dropDownWidth="170dp"
         android:drawableBottom="@color/white"
@@ -77,6 +67,18 @@
         android:background="@color/gray1"
         app:layout_constraintTop_toBottomOf="@+id/sortingTextView"
         tools:layout_editor_absoluteX="0dp" />
+
+    <View
+        android:id="@+id/sortingClickView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/view3"/>
+
 
     <TextView
         android:id="@+id/whoTextView"

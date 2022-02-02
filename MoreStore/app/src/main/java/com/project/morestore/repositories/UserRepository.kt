@@ -180,7 +180,7 @@ class UserRepository(val context: Context) {
 
     }
 
-    suspend fun addBrandsToWishList(wishList: BrandWishList): Response<Unit>?{
+    suspend fun addBrandsToWishList(wishList: BrandWishList): Response<List<Long>>?{
         return try {
             userApi.addBrandsToWishList(wishList)
         } catch (e: Throwable) {

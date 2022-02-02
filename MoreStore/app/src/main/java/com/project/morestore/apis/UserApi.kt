@@ -62,7 +62,7 @@ interface UserApi {
     suspend fun getCityByCoordsGetError(@Query("coords") coords: String): Response<String>
 
     @POST("wishlist/brand")
-    suspend fun addBrandsToWishList(@Body wishList: BrandWishList): Response<Unit>
+    suspend fun addBrandsToWishList(@Body wishList: BrandWishList): Response<List<Long>>
 
     @POST("wishlist/brand")
     suspend fun addBrandsToWishListGetError(@Body wishList: BrandWishList): Response<String>

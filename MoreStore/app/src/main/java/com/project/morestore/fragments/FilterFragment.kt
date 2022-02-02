@@ -29,7 +29,7 @@ import moxy.ktx.moxyPresenter
 class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpView {
     private val binding: FragmentFilterBinding by viewBinding()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
-    private var isShowingDropDown = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(null)
@@ -228,14 +228,9 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
 
         binding.sortingClickView.setOnClickListener {
             Log.d("Debug", "${binding.typeAutoCompleteTextView.isPopupShowing}")
-            if(isShowingDropDown) {
-                binding.typeAutoCompleteTextView.dismissDropDown()
-                isShowingDropDown = false
-            }
-            else {
-                binding.typeAutoCompleteTextView.showDropDown()
-                isShowingDropDown = true
-            }
+            binding.typeAutoCompleteTextView.showDropDown()
+
+
         }
     }
 

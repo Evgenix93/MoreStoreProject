@@ -181,6 +181,7 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
     }
 
     override fun error(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 

@@ -321,7 +321,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             val wishList = BrandWishList(brandsIds)
             val response = repository.addBrandsToWishList(wishList)
             when (response?.code()){
-                200 -> viewState.success(brandsIds)
+                200 -> viewState.success(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)
