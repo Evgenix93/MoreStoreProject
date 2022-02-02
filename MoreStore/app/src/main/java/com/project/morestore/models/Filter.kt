@@ -11,7 +11,7 @@ data class Filter(
     var chosenBottomSizes: List<SizeLine> = listOf(),
     var chosenShoosSizes: List<SizeLine> = listOf(),
 
-    var chosenProductStatus: List<Boolean> = listOf<Boolean>(),
+    var chosenProductStatus: List<Boolean> = listOf<Boolean>(true, true, false),
     var chosenStyles: List<Boolean> = listOf<Boolean>(),
     var isAllCategories: Boolean = true,
     var categories: List<ProductCategory> = listOf(),
