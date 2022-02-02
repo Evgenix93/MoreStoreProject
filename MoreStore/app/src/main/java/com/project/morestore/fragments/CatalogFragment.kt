@@ -46,7 +46,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         initToolbar()
         setClickListeners()
         showBottomNav()
-        loadProducts( arguments?.getString("query"), listOf("dfd", "fdf"))
+        loadProducts( arguments?.getString("query"))
     }
 
     private fun setClickListeners() {
@@ -57,7 +57,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         }
 
         binding.searchBtn.setOnClickListener {
-            presenter.getProducts(binding.toolbarMain.searchEditText.text.toString(), listOf())
+            presenter.getProducts(binding.toolbarMain.searchEditText.text.toString())
         }
     }
 
@@ -211,8 +211,8 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         (activity as MainActivity).showBottomNavBar(true)
     }
 
-    private fun loadProducts(queryStr: String?, filter: List<String>) {
-        presenter.getProducts(queryStr, filter)
+    private fun loadProducts(queryStr: String?) {
+        presenter.getProducts(queryStr)
 
     }
 

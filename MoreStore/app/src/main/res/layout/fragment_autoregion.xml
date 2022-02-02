@@ -47,7 +47,7 @@
         android:gravity="center"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:text="Ваш город Москва?"
+        tools:text="Ваш город Москва?"
         android:textAppearance="@style/regular_16"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,9 +60,10 @@
         style="@style/buttonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="8dp"
-        android:text="Нет"
+        android:text="@string/no"
         app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -72,9 +73,10 @@
         style="@style/buttonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="8dp"
-        android:text="Да"
+        android:text="@string/yes2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

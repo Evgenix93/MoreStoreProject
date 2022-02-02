@@ -180,6 +180,8 @@ class UserRepository(val context: Context) {
 
     }
 
+
+
     suspend fun saveFilter(): Boolean {
         return try {
             withContext(Dispatchers.IO) {
@@ -192,6 +194,14 @@ class UserRepository(val context: Context) {
             Log.e("Debug", e.message.orEmpty(), e)
             false
         }
+    }
+
+    fun getFilter(): Filter{
+        return FilterState.filter
+    }
+
+    fun updateFilter(filter: Filter){
+        FilterState.filter = filter
     }
 
      fun saveColors(colors: List<Color>){

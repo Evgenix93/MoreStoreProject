@@ -60,43 +60,43 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    suspend fun getProducts(query: String? = null, filter: List<String>): Response<List<Product>>?{
+    suspend fun getProducts(query: String? = null, filter: Filter): Response<List<Product>>?{
         return try {
             var categoryStr = listOf<String>()
             var brandsStr = listOf<String>()
             var citiesStr = listOf<String>()
             var queryStr = listOf<String>()
 
-            if(FilterState.filter.categories.isNotEmpty()){
-                 categoryStr = FilterState.filter.categories.filter { it.isChecked == true }.map { "id_category=${it.id}" }
+            if(filter.categories.isNotEmpty()){
+                 categoryStr = filter.categories.filter { it.isChecked == true }.map { "id_category=${it.id}" }
             }
-            if(FilterState.filter.brands.isNotEmpty()){
-                 brandsStr = FilterState.filter.brands.filter { it.isChecked == true }.map { "id_brand=${it.id}" }
+            if(filter.brands.isNotEmpty()){
+                 brandsStr = filter.brands.filter { it.isChecked == true }.map { "id_brand=${it.id}" }
             }
-            if(FilterState.filter.regions.isNotEmpty()){
-                citiesStr = FilterState.filter.regions.filter { it.isChecked == true }.map { "id_city=${it.id}" }
+            if(filter.regions.isNotEmpty()){
+                citiesStr = filter.regions.filter { it.isChecked == true }.map { "id_city=${it.id}" }
+            }
+
+            if(!filter.isCurrentLocationFirstLoaded && filter.currentLocation != null){
+                citiesStr + listOf("id_city=${filter.currentLocation?.id}")
             }
 
             if(!query.isNullOrEmpty()) {
                 queryStr = listOf("text=${query.orEmpty()}")
             }
 
-            if(filter.isEmpty()){
-                productApi.getProducts(PRODUCT_OPTIONS, filter.joinToString())
-            }else {
-
-                productApi.getProducts(
+            productApi.getProducts(
                     PRODUCT_OPTIONS,
                     (categoryStr + brandsStr + citiesStr + queryStr).joinToString(";")
                 )
-            }
+
         } catch (e: Exception) {
             if (e is IOException) {
                 null
             } else {
                 Log.d("mylog", e.message.toString())
                 try {
-                    val response = productApi.getProductsGetError(PRODUCT_OPTIONS, filter.joinToString(";"))
+                    val response = productApi.getProductsGetError(PRODUCT_OPTIONS, listOf<String>().joinToString(";"))
                     if(response.code() == 500){
                         Response.error(500, "".toResponseBody(null))
                     }else {

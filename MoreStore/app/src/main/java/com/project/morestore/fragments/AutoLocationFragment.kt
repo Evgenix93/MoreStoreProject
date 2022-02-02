@@ -17,6 +17,7 @@ import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentAutoregionBinding
 import com.project.morestore.models.Address
+import com.project.morestore.models.Filter
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import moxy.MvpAppCompatFragment
@@ -26,13 +27,19 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
     private val binding: FragmentAutoregionBinding by viewBinding()
     private lateinit var permissionsLauncher: ActivityResultLauncher<String>
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    private lateinit var filter: Filter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         showBottomNav()
+        getFilter()
         initPermissionsLauncher()
         getPermissions()
+    }
+
+    private fun setClickListeners(){
+
     }
 
     private fun initToolbar(){
@@ -75,12 +82,19 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
         }
     }
 
+    private fun getFilter(){
+        presenter.getFilter()
+    }
+
     private fun showLoading(loading: Boolean){
         binding.loader.isVisible = loading
     }
 
+
+
     override fun success(result: Any) {
         showLoading(false)
+        findNavController().popBackStack(R.id.catalogFragment, true)
 
     }
 
@@ -99,7 +113,19 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
 
     override fun loaded(result: Any) {
         showLoading(false)
-        binding.autoLocationResultTextView.text = (result as Address).fullCity.name
+        if(result is Address) {
+            binding.autoLocationResultTextView.text = "Ваш город ${result.fullCity.name}?"
+            binding.yesBtn.isVisible = true
+            binding.noBtn.isVisible = true
+            binding.yesBtn.setOnClickListener {
+                presenter.changeUserCity(result.fullCity.name)
+            }
+            binding.noBtn.setOnClickListener {
+                findNavController().popBackStack(R.id.catalogFragment, true)
+            }
+        }
+
+
     }
 
     override fun successNewCode() {

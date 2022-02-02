@@ -283,6 +283,27 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun changeUserCity(city: String? = null, region: Region? = null){
+        presenterScope.launch {
+            viewState.loading()
+            val filter = repository.getFilter()
+            region?.let {
+                filter.currentLocation = region
+                viewState.success(Unit)
+                return@launch
+            }
+            val cities = productRepository.getCities()?.body()
+            cities ?: run {
+                viewState.error("Ошибка")
+                return@launch
+            }
+            filter.currentLocation = cities.find { it.name == city }
+            repository.updateFilter(filter)
+        }
+
+
+    }
+
     fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>){
         searchJob = flow
             .debounce(3000)
@@ -455,6 +476,10 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 productCategories.addAll(it.sub)
         }
         return productCategories
+    }
+
+    fun getFilter(){
+        viewState.loaded(repository.getFilter())
     }
 
      fun saveColors(colors: List<Color>){

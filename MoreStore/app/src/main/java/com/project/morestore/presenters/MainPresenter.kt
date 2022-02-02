@@ -7,6 +7,7 @@ import com.project.morestore.models.Product
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
+import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -19,6 +20,7 @@ import okhttp3.ResponseBody
 class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
     private val authRepository = AuthRepository(context)
     private val productRepository = ProductRepository(context)
+    private val userRepository = UserRepository(context)
     private var searchJob: Job? = null
 
 
@@ -37,16 +39,12 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getProducts(queryStr: String? = null, filter: List<String>){
+    fun getProducts(queryStr: String? = null){
         Log.d("mylog", "getProducts")
         presenterScope.launch {
             viewState.loading()
-            val response = if(queryStr != null){
-                val filterList = filter + listOf("text=$queryStr")
-                productRepository.getProducts(queryStr, filterList)
-            }else{
-                productRepository.getProducts(queryStr, filter)
-            }
+            val response = productRepository.getProducts(queryStr, userRepository.getFilter())
+
             when(response?.code()){
                 200 -> viewState.loaded(response.body()!!)
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))

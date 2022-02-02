@@ -79,7 +79,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             isNestedScrollingEnabled = false
         }
 
-        presenter.getProducts(null, listOf())
+        presenter.getProducts(null)
 
 
     }

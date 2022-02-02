@@ -57,6 +57,9 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
 
         binding.view12.setOnClickListener { findNavController().navigate(ChangeRegionFragmentDirections.actionChangeRegionFragmentToAutoLocationFragment()) }
         binding.chooseRegionBtn.setOnClickListener {
+            if(binding.searchEditText.text.isNullOrEmpty()){
+                return@setOnClickListener
+            }
             FilterState.filter.currentLocation = cities.first { it.name == binding.searchEditText.text.toString() }
             if(FilterState.filter.regions.isNotEmpty()){
                 FilterState.filter.regions.first { it.name == binding.searchEditText.text.toString() }.apply { isChecked = true }
