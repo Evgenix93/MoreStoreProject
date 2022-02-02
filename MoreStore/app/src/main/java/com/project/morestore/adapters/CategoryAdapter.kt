@@ -56,7 +56,7 @@ class CategoryAdapter(
                 binding.categoryCheckBox.isChecked = isAllChecked
               else
                 binding.categoryCheckBox.isChecked = isChecked
-            Log.d("mylog", "checked ${segments2Checked[position]}")
+            
             binding.categoryCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if(!isOnboarding)
                // segments2Checked[position] = isChecked
@@ -110,7 +110,7 @@ class CategoryAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         if (isOnboarding)
-            holder.bind(segments1[position], isAllChecked, position, isOnboarding, segments2Checked[position])
+            holder.bind(segments1[position], isAllChecked, position, isOnboarding, false)
         else
             holder.bind(segments2[position], isAllChecked, position, isOnboarding, segments2Checked[position])
     }
