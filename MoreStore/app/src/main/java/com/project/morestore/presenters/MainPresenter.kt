@@ -3,6 +3,7 @@ package com.project.morestore.presenters
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.MainMvpView
@@ -40,11 +41,11 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getProducts(queryStr: String? = null){
+    fun getProducts(queryStr: String? = null, isFiltered: Boolean){
         Log.d("mylog", "getProducts")
         presenterScope.launch {
             viewState.loading()
-            val response = productRepository.getProducts(queryStr, userRepository.getFilter())
+            val response = productRepository.getProducts(queryStr, if(isFiltered) userRepository.getFilter() else Filter())
 
             when(response?.code()){
                 200 -> viewState.loaded(response.body()!!)

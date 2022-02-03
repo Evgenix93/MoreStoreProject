@@ -144,7 +144,7 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
                 presenter.changeUserCity(result.fullCity.name)
             }
             binding.noBtn.setOnClickListener {
-                findNavController().popBackStack(R.id.catalogFragment, true)
+                findNavController().popBackStack(R.id.catalogFragment, false)
             }
         }
 

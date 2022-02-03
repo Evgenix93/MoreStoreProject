@@ -68,7 +68,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         }
 
         binding.searchBtn.setOnClickListener {
-            presenter.getProducts(binding.toolbarMain.searchEditText.text.toString())
+            presenter.getProducts(binding.toolbarMain.searchEditText.text.toString(), true)
         }
     }
 
@@ -223,7 +223,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     }
 
     private fun loadProducts(queryStr: String?) {
-        presenter.getProducts(queryStr)
+        presenter.getProducts(queryStr, true)
 
     }
 
