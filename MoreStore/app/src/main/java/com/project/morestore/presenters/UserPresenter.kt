@@ -414,10 +414,15 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun saveFilter() {
         presenterScope.launch {
             if (repository.saveFilter())
-                viewState.success(Unit)
+                viewState.success("Фильтр сохранен")
             else
                 viewState.error("Ошибка сохранения")
         }
+    }
+
+    fun clearFilter(){
+        repository.clearFilter()
+        viewState.success("Фильтр очищен")
     }
 
     fun getProductCategories() {
@@ -470,52 +475,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             }
 
         }
-
         return productCategories
-        /* val productCategories = mutableListOf<ProductCategory1>()
-      val chosenForWho = repository.loadForWho()
-      chosenForWho.forEachIndexed{index, isChecked ->
-          if(isChecked)
-              when(index){
-                  0 -> {
-                     list.forEach{
-                     //    if(it.name == "Одежда, обувь, аксессуары") {
-                              //   Log.d("Debug", "subIsList = ${it.sub is List<*>}")
-                               //  Log.d("Debug" ,"sub = ${it.sub}")
-                             (it.sub as List<ProductCategory1>).forEach { productCategory ->
-                                 when (productCategory.name) {
-                                     "Женская одежда" -> productCategories.addAll(productCategory.sub as List<ProductCategory1>)
-                                     "Мужская одежда" -> {}
-                                     else -> productCategories.add(productCategory)
-                                 }
-                             }
-                        // }
-                     }
-                  }
-                  1 -> {
-                      list.forEach{
-                        //  if(it.name == "Одежда, обувь, аксессуары")
-                              (it.sub as List<ProductCategory1>).forEach{productCategory ->
-                                  when(productCategory.name){
-                                      "Женская одежда" -> {}
-                                      "Мужская одежда" -> productCategories.addAll(productCategory.sub as List<ProductCategory1>)
-                                      else -> productCategories.add(productCategory)
-                                  }
-                              }
-                      }
-                  }
-                  2 -> {
-                     // list.forEach{
-                       //   if(it.name == "Детская одежда и обувь")
-                       //       (it.sub as List<ProductCategory1>) .forEach{productCategory ->
-                         //        if(productCategory.name == "Для девочек")
-                           //          productCategories.addAll(productCategory.sub as List<ProductCategory1>)
-                             // }
-                      }
-                  }
-              }
-      }
-     return productCategories*/
     }
 
     private fun filterProductCategoriesKids(productCategoriesKids: List<ProductCategoryKids1>): List<ProductCategory> {
@@ -627,4 +587,5 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             viewState.loaded(styles)
         }
     }
+
 }

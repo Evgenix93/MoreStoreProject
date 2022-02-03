@@ -1,28 +1,19 @@
 package com.project.morestore.fragments
 
-import android.content.Context
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFilterBinding
+import com.project.morestore.models.Filter
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
-import com.project.morestore.util.showDropdown
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -31,56 +22,35 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(null)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, null)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, null)
-        showGreenDots()
         setClickListeners()
-
         initToolBar()
+        loadFilter()
     }
 
-    override fun onStop() {
-        super.onStop()
-        //binding.typeAutoCompleteTextView.setAdapter(null)
-    }
 
     override fun onResume() {
         super.onResume()
         initAutoCompleteTextView()
     }
 
-    private fun showGreenDots() {
-        if (FilterState.filter.chosenForWho.isNotEmpty()) {
+    private fun configureFilterScreen(filter: Filter) {
+        if (filter.chosenForWho.isNotEmpty()) {
             binding.forWomenTextView.text =
-                if (FilterState.filter.chosenForWho[0]) "Женщинам"
-                else if (FilterState.filter.chosenForWho[1]) "Мужчинам"
+                if (filter.chosenForWho[0]) "Женщинам"
+                else if (filter.chosenForWho[1]) "Мужчинам"
                 else
                     "Детям"
         }
 
         binding.showProductsGreenDotImageView.isVisible =
-            if (FilterState.filter.chosenProductStatus.isEmpty()) true
-            else (FilterState.filter.chosenProductStatus.all { it } || FilterState.filter.chosenProductStatus.all { !it }).not()
-        val strings =   FilterState.filter.chosenProductStatus.mapIndexedNotNull { index, b ->
+            if (filter.chosenProductStatus.isEmpty()) true
+            else (filter.chosenProductStatus.all { it } || filter.chosenProductStatus.all { !it }).not()
+        val strings =   filter.chosenProductStatus.mapIndexedNotNull { index, b ->
             if (b) {
                 when (index) {
-                    0 -> "В наличии"
+                    0 -> "в наличии"
                     1 -> "забронированные"
                     2 -> "проданные"
                     else -> null
@@ -88,85 +58,106 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
             } else
                 null
         }
-        Log.d("Debug", strings.toString())
-        Log.d("Debug", FilterState.filter.chosenProductStatus.toString())
-        if (FilterState.filter.chosenProductStatus.all{it} || FilterState.filter.chosenProductStatus.all{!it} )
+        if (filter.chosenProductStatus.all{it} || filter.chosenProductStatus.all{!it} )
             binding.inStockTextView.text = "В наличии, забронированные, проданные"
         else
             binding.inStockTextView.text = strings.joinToString(", ")
 
-        binding.categoriesGreenDotImageView.isVisible = (FilterState.filter.categories.all {
+        binding.categoriesGreenDotImageView.isVisible = (filter.categories.all {
             it.isChecked ?: false
-        } || FilterState.filter.categories.all { !(it.isChecked ?: false) }).not()
-        if (FilterState.filter.categories.all{it.isChecked == true} || FilterState.filter.categories.all{it.isChecked == false || it.isChecked == null})
+        } || filter.categories.all { !(it.isChecked ?: false) }).not()
+        if (filter.categories.all{it.isChecked == true} || filter.categories.all{it.isChecked == false || it.isChecked == null})
             binding.allCategories.text = getString(R.string.all_categories)
         else
             binding.allCategories.text =
-                FilterState.filter.categories.filter { it.isChecked ?: false }
+                filter.categories.filter { it.isChecked ?: false }
                     .joinToString(", ") { it.name }
 
-        /* viewLifecycleOwner.lifecycleScope.launch{
-             val sharedPrefs = requireContext().getSharedPreferences("categories_shared_prefs", Context.MODE_PRIVATE)
-             val isAllCategories = sharedPrefs.getBoolean("all_categories", true)
-             Log.d("Debug", "isAllCategories = $isAllCategories")
-             binding.categoriesGreenDotImageView.isVisible = !isAllCategories
-             binding.allCategories.isVisible = isAllCategories
-         }*/
-        Log.d("Debug", "isAllBrands = ${FilterState.filter.isAllBrands}")
         binding.brandsGreenDotImageView.isVisible =
-            FilterState.filter.brands.any { it.isChecked == true } && FilterState.filter.brands.all { it.isChecked == true }
+            filter.brands.any { it.isChecked == true } && filter.brands.all { it.isChecked == true }
                 .not()
-        if (FilterState.filter.brands.all{it.isChecked == true} || FilterState.filter.brands.all{it.isChecked == false || it.isChecked == null})
+        if (filter.brands.all{it.isChecked == true} || filter.brands.all{it.isChecked == false || it.isChecked == null})
             binding.allBrands.text = getString(R.string.all_brands)
         else
-            binding.allBrands.text = FilterState.filter.brands.filter { it.isChecked ?: false }
+            binding.allBrands.text = filter.brands.filter { it.isChecked ?: false }
                 .joinToString(", ") { it.name }
         binding.regionsGreenDotImageView.isVisible =
-            FilterState.filter.regions.any { it.isChecked == true } && FilterState.filter.regions.all { it.isChecked == true }
-                .not()//(com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked == true } || FilterState.filter.regions.all { it.isChecked == false }).not()
-            if ( FilterState.filter.regions.all { it.isChecked == false || it.isChecked == null } || FilterState.filter.regions.all { it.isChecked == true })
-                binding.allRegions.text = getString(R.string.all_regions)
-          else
-              binding.allRegions.text =
-                    FilterState.filter.regions.filter { it.isChecked ?: false }
+            if(filter.regions.isNotEmpty())
+                filter.regions.any { it.isChecked == true } && filter.regions.all { it.isChecked == true }.not()
+            else
+                filter.currentLocation != null
+
+            if(filter.currentLocation == null && filter.regions.isEmpty())
+                   binding.allRegions.text = getString(R.string.all_regions)
+           else
+               if(filter.regions.isEmpty())
+                   binding.allRegions.text = filter.currentLocation!!.name
+              else
+                if (filter.regions.all { it.isChecked == false || it.isChecked == null } || filter.regions.all { it.isChecked == true })
+                    binding.allRegions.text = getString(R.string.all_regions)
+             else
+                 binding.allRegions.text =
+                    filter.regions.filter { it.isChecked ?: false }
                         .joinToString(", ") { it.name }
-                //com.project.morestore.singletones.FilterState.filter.regions.all { it.isChecked == true } || FilterState.filter.regions.all { it.isChecked == false }
-        //binding.showProductsGreenDotImageView.isVisible = com.project.morestore.singletones.FilterState.chosenProductStatus
-        //val allSelected = com.project.morestore.singletones.FilterState.chosenStyles.all { it } || com.project.morestore.singletones.FilterState.chosenStyles.all { !it }
+
         binding.stylesGreenDotImageView.isVisible =
-            (FilterState.filter.chosenStyles.all { it } || FilterState.filter.chosenStyles.all { !it }).not()
-        binding.allStyles.isVisible = FilterState.filter.chosenStyles.all { it } || FilterState.filter.chosenStyles.all { !it }
+            (filter.chosenStyles.all { it } || filter.chosenStyles.all { !it }).not()
+
+       binding.allStyles.text = if(filter.chosenStyles.all{it} || filter.chosenStyles.all{!it})
+             getString(R.string.all_styles)
+        else
+            filter.chosenStyles.filter{it}.mapIndexed{index, _ ->
+               when(index){
+               0 -> "вечерний"
+               1 -> "деловой"
+               2 -> "повседневный"
+               3 -> "спортивный"
+               else -> ""
+           }
+        }.joinToString(", ")
+
         binding.conditionsGreenDotImageView.isVisible =
-            (com.project.morestore.singletones.FilterState.filter.chosenConditions.all { it } || FilterState.filter.chosenConditions.all { !it }).not()
-        binding.allConditions.isVisible =
-            com.project.morestore.singletones.FilterState.filter.chosenConditions.all { it } || FilterState.filter.chosenConditions.all { !it }
+            (filter.chosenConditions.all { it } || filter.chosenConditions.all { !it }).not()
+       binding.allConditions.text = if(filter.chosenConditions.all{it} || filter.chosenConditions.all{!it})
+            getString(R.string.all_conditions)
+        else
+            filter.chosenConditions.filter{it}.mapIndexed{index, _ ->
+                when(index){
+                    0 -> "новое с биркой"
+                    1 -> "новое без бирок"
+                    2 -> "отличное"
+                    3 -> "хорошее"
+                    else -> ""
+                }
+            }.joinToString(", ")
+
         binding.sizesGreenDotImageView.isVisible =
-            (com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { !it.isSelected }).not() ||
-                    (com.project.morestore.singletones.FilterState.filter.chosenBottomSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenBottomSizes.all { !it.isSelected }).not() ||
-                    (com.project.morestore.singletones.FilterState.filter.chosenShoosSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenShoosSizes.all { !it.isSelected }).not()
+            (filter.chosenTopSizes.all { it.isSelected } || filter.chosenTopSizes.all { !it.isSelected }).not() ||
+                    (filter.chosenBottomSizes.all { it.isSelected } || filter.chosenBottomSizes.all { !it.isSelected }).not() ||
+                    (filter.chosenShoosSizes.all { it.isSelected } || filter.chosenShoosSizes.all { !it.isSelected }).not()
 
 
-        val sizes = FilterState.filter.chosenTopSizes + FilterState.filter.chosenBottomSizes + FilterState.filter.chosenShoosSizes
+        val sizes = filter.chosenTopSizes + filter.chosenBottomSizes + filter.chosenShoosSizes
         if(sizes.all{ it.isSelected } || sizes.all{!it.isSelected})
             binding.allSizes.text = getString(R.string.all_sizes)
         else
             binding.allSizes.text = sizes.filter{it.isSelected}.joinToString(", "){it.int}
 
-        //com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenTopSizes.all { !it.isSelected }
         binding.materialsGreenDotImageView.isVisible =
-            (com.project.morestore.singletones.FilterState.filter.chosenMaterials.all { it.isSelected } || com.project.morestore.singletones.FilterState.filter.chosenMaterials.all { !it.isSelected }).not()
-        if(FilterState.filter.chosenMaterials.all { !it.isSelected } || FilterState.filter.chosenMaterials.all { it.isSelected })
+            (filter.chosenMaterials.all { it.isSelected } || filter.chosenMaterials.all { !it.isSelected }).not()
+        if(filter.chosenMaterials.all { !it.isSelected } || filter.chosenMaterials.all { it.isSelected })
             binding.allMaterials.text = getString(R.string.all_materials)
         else
-          binding.allMaterials.text = FilterState.filter.chosenMaterials.filter{it.isSelected}.joinToString (", "){ it.name }
+          binding.allMaterials.text = filter.chosenMaterials.filter{it.isSelected}.joinToString (", "){ it.name }
         binding.colorsGreenDotImageView.isVisible =
-            (FilterState.filter.colors.all { it.isChecked } || FilterState.filter.colors.all { !it.isChecked }).not()
-        if(FilterState.filter.colors.all { !it.isChecked } || FilterState.filter.colors.all { it.isChecked })
+            (filter.colors.all { it.isChecked } || filter.colors.all { !it.isChecked }).not()
+        if(filter.colors.all { !it.isChecked } || filter.colors.all { it.isChecked })
             binding.allColors.text = getString(R.string.all_colors)
         else
-           binding.allColors.text = FilterState.filter.colors.filter{it.isChecked}.joinToString(", "){it.name}
-    }
+           binding.allColors.text = filter.colors.filter{it.isChecked}.joinToString(", "){it.name}
 
+
+    }
 
     private fun setClickListeners() {
         binding.categoryClickView.setOnClickListener {
@@ -227,12 +218,10 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
         }
 
         binding.sortingClickView.setOnClickListener {
-            Log.d("Debug", "${binding.typeAutoCompleteTextView.isPopupShowing}")
             binding.typeAutoCompleteTextView.showDropDown()
-
-
         }
     }
+
 
     private fun initAutoCompleteTextView() {
         val types = resources.getStringArray(R.array.type_array)
@@ -244,6 +233,13 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
 
     private fun initToolBar() {
         binding.toolbarFilter.imageView2.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbarFilter.actionTextView.setOnClickListener{
+            presenter.clearFilter()
+        }
+    }
+
+    private fun loadFilter(){
+        presenter.getFilter()
     }
 
     private fun saveFilter() {
@@ -251,7 +247,9 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
     }
 
     override fun success(result: Any) {
-        Toast.makeText(requireContext(), "Фильтр сохранен", Toast.LENGTH_LONG).show()
+        loadFilter()
+        val message = result as String
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     override fun error(message: String) {
@@ -263,7 +261,7 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
     }
 
     override fun loaded(result: Any) {
-        TODO("Not yet implemented")
+        configureFilterScreen(result as Filter)
     }
 
     override fun successNewCode() {

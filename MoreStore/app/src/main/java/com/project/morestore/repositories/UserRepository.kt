@@ -260,6 +260,10 @@ class UserRepository(val context: Context) {
         FilterState.filter = filter
     }
 
+    fun clearFilter(){
+        FilterState.filter = Filter()
+    }
+
      fun saveColors(colors: List<Color>){
         FilterState.filter.colors = colors
     }
