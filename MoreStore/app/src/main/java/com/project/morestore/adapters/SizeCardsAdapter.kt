@@ -81,6 +81,13 @@ class SizeCardsAdapter(val isLimit: Boolean) : RecyclerView.Adapter<SizeCardsAda
 
     }
 
+    fun cleanChosenSizes(){
+        for (size in list){
+            size.chosen = false
+        }
+        notifyDataSetChanged()
+    }
+
     fun getChosenSizes(): List<Size> {
         return chosenSizes
     }

@@ -1,5 +1,6 @@
 package com.project.morestore.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,8 @@ class SizeLineAdapter(val isShoos: Boolean) :
 
         //private val binding2: ItemShoesSizeLineBinding by viewBinding()
         fun bind(size: SizeLine, otherSize: Boolean) {
+            Log.d("bind", otherSize.toString())
+
             binding.INTTextView.text = size.int
             binding.ITRUFRTextView.text = size.itRuFr
             binding.WTextView.text = size.w
@@ -40,15 +43,14 @@ class SizeLineAdapter(val isShoos: Boolean) :
                 binding.view8.isVisible = true
             }
 
-            if (otherSize) {
-                binding.INTTextView.isVisible = false
-                binding.ITRUFRTextView.isVisible = false
-                binding.WTextView.isVisible = false
-                binding.USTextView.isVisible = false
-                binding.UKTextView.isVisible = false
-                binding.otherSizeTextView.isVisible = true
-                binding.sizeCheckBox.isChecked = size.isSelected
-            }
+            binding.INTTextView.isVisible = !otherSize
+            binding.ITRUFRTextView.isVisible = !otherSize
+            binding.WTextView.isVisible = !otherSize
+            binding.USTextView.isVisible = !otherSize
+            binding.UKTextView.isVisible = !otherSize
+            binding.otherSizeTextView.isVisible = otherSize
+            binding.sizeCheckBox.isChecked = size.isSelected
+
 
         }
 
@@ -60,6 +62,7 @@ class SizeLineAdapter(val isShoos: Boolean) :
         private val binding: ItemShoesSizeLineBinding by viewBinding()
 
         fun bind(size: SizeLine, otherSize: Boolean) {
+            Log.d("bind", otherSize.toString())
             binding.ITRUFRTextView.text = size.itRuFr
             binding.WTextView.text = size.int
             binding.USTextView.text = size.us
@@ -73,21 +76,21 @@ class SizeLineAdapter(val isShoos: Boolean) :
                 binding.view8.isVisible = true
             }
 
-            if (otherSize) {
-                binding.ITRUFRTextView.isVisible = false
-                binding.WTextView.isVisible = false
-                binding.USTextView.isVisible = false
-                binding.UKTextView.isVisible = false
-                binding.otherSizeTextView.isVisible = true
-                binding.sizeCheckBox.isChecked = size.isSelected
-            }
+
+            binding.ITRUFRTextView.isVisible = !otherSize
+            binding.WTextView.isVisible = !otherSize
+            binding.USTextView.isVisible = !otherSize
+            binding.UKTextView.isVisible = !otherSize
+            binding.otherSizeTextView.isVisible = otherSize
+            binding.sizeCheckBox.isChecked = size.isSelected
+
 
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if(viewType == 1) {
+        return if (viewType == 1) {
             SizeLineViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_size_line,
@@ -99,9 +102,11 @@ class SizeLineAdapter(val isShoos: Boolean) :
 
 
             }
-        }else{
-            ShoosSizeLineViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_shoes_size_line, parent, false)){
-                isChecked, position ->
+        } else {
+            ShoosSizeLineViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_shoes_size_line, parent, false)
+            ) { isChecked, position ->
                 list[position].isSelected = isChecked
             }
         }
@@ -109,9 +114,9 @@ class SizeLineAdapter(val isShoos: Boolean) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(holder is SizeLineViewHolder)
-        holder.bind(list[position], position == list.size - 1)
-        else (holder as ShoosSizeLineViewHolder).bind(list[position], position == list.size - 1)
+        if (holder is SizeLineViewHolder)
+            holder.bind(list[position], position == list.lastIndex)
+        else (holder as ShoosSizeLineViewHolder).bind(list[position], position == list.lastIndex)
 
     }
 
@@ -121,15 +126,22 @@ class SizeLineAdapter(val isShoos: Boolean) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(!isShoos){
+        return if (!isShoos) {
             1
-        }else{
+        } else {
             2
         }
     }
 
     fun updateList(newList: List<SizeLine>) {
         list = newList
+        notifyDataSetChanged()
+    }
+
+    fun cleanCheckBoxes() {
+        for (size in list) {
+            size.isSelected = false
+        }
         notifyDataSetChanged()
     }
 

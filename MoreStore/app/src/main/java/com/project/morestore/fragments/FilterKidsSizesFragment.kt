@@ -38,6 +38,11 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
     private fun initToolbar(){
         binding.toolbar.titleTextView.text = "Размер"
         binding.toolbar.actionTextView.text = "Сбросить"
+        binding.toolbar.actionTextView.setOnClickListener {
+            topSizeCardAdapter.cleanChosenSizes()
+            bottomSizeCardAdapter.cleanChosenSizes()
+            shoesSizeCardAdapter.cleanChosenSizes()
+        }
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
     }
 

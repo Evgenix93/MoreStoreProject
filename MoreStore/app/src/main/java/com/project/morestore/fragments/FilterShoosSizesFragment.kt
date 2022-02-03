@@ -159,6 +159,9 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
     private fun initToolbar(){
         binding.toolbar.titleTextView.text = "Размер"
         binding.toolbar.actionTextView.text = "Сбросить"
+        binding.toolbar.actionTextView.setOnClickListener {
+            sizeAdapter.cleanCheckBoxes()
+        }
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
     }
 

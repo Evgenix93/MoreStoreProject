@@ -7,6 +7,7 @@ import android.view.WindowManager
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.databinding.ActivityMainBinding
@@ -54,76 +55,154 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            val bottomNavBar = binding.bottomNavBar
+
+
+            when (destination.id) {
+                R.id.catalogFragment -> {
+                    bottomNavBar.selectedItemId = R.id.catalogFragment
+                    bottomNavBar.menu.findItem(R.id.mainFragment).icon =
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.ic_house2,
+                            null
+                        )
+                    bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.ic_tshirt2,
+                            null
+                        )
+                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.ic_plus,
+                            null
+                        )
+                    bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.ic_chat,
+                            null
+                        )
+                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.ic_user_circle,
+                            null
+                        )
+
+                }
+
+                R.id.mainFragment -> {
+                    bottomNavBar.selectedItemId = R.id.mainFragment
+                    bottomNavBar.menu.findItem(R.id.mainFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_house, null)
+                    bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
+                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
+                    bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
+                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
+
+                }
+
+                R.id.createFragment -> {
+                    bottomNavBar.selectedItemId = R.id.createFragment
+                    bottomNavBar.menu.findItem(R.id.mainFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
+                    bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
+                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus2, null)
+                    bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
+                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
+
+                }
+
+                R.id.messagesFragment -> {
+                    bottomNavBar.selectedItemId = R.id.messagesFragment
+                    bottomNavBar.menu.findItem(R.id.mainFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
+                    bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
+                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
+                    bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_chat2, null)
+                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
+
+                }
+
+                R.id.cabinetFragment -> {
+                    bottomNavBar.selectedItemId = R.id.cabinetFragment
+                    bottomNavBar.menu.findItem(R.id.mainFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
+                    bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
+                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
+                    bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
+                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle2, null)
+                }
+
+            }
         }
     }
 
     private fun initBottomNavBar() {
         val bottomNavBar = binding.bottomNavBar
-        bottomNavBar.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.mainFragment -> {
-                    it.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_house, null)
-                    bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
-                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
-                    bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
-                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
-                    findNavController(R.id.fragmentContainerView).navigate(R.id.mainFragment)
+        val navController = findNavController(R.id.fragmentContainerView)
+        bottomNavBar.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.createFragment -> if (navController.currentDestination?.id != R.id.createFragment) {
+                    navController.navigate(R.id.createFragment)
+                    true
+                } else {
+                    true
                 }
-                R.id.catalogFragment -> {
-                    bottomNavBar.menu.findItem(R.id.mainFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
-                    it.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt2, null)
-                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
-                    bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
-                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
-                    findNavController(R.id.fragmentContainerView).navigate(R.id.catalogFragment)
-                }
-                R.id.createFragment -> {
-                    bottomNavBar.menu.findItem(R.id.mainFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
-                    bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
-                    it.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_plus2, null)
-                    bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
-                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
-                    findNavController(R.id.fragmentContainerView).navigate(R.id.createFragment)
-                }
-                R.id.messagesFragment -> {
-                    bottomNavBar.menu.findItem(R.id.mainFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
-                    bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
-                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
-                    it.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_chat2, null)
-                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
-                    findNavController(R.id.fragmentContainerView).navigate(R.id.messagesFragment)
-                }
-                R.id.cabinetFragment ->{
-                    bottomNavBar.menu.findItem(R.id.mainFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
-                    bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
-                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
-                    bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
-                    it.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle2, null)
-                    findNavController(R.id.fragmentContainerView).navigate(R.id.cabinetFragment)
-                }
-            }
-            true
-        }
-    }
 
+                R.id.mainFragment -> if (navController.currentDestination?.id != R.id.mainFragment) {
+                    navController.navigate(R.id.mainFragment)
+                    true
+                } else {
+                    true
+                }
+
+                R.id.catalogFragment -> if (navController.currentDestination?.id != R.id.catalogFragment) {
+                    navController.navigate(R.id.catalogFragment)
+                    true
+                } else {
+                    true
+                }
+
+                R.id.messagesFragment -> if (navController.currentDestination?.id != R.id.messagesFragment) {
+                    navController.navigate(R.id.messagesFragment)
+                    true
+                } else {
+                    true
+                }
+
+                R.id.cabinetFragment -> if (navController.currentDestination?.id != R.id.cabinetFragment) {
+                    navController.navigate(R.id.cabinetFragment)
+                    true
+                } else {
+                    true
+                }
+                else -> true
+
+
+            }
+        }
+
+
+    }
 }
+
