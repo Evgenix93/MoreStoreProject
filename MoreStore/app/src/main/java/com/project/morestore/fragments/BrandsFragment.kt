@@ -169,6 +169,10 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
         presenter.getBrandWishList()
     }
 
+    private fun checkToken(){
+        presenter.checkToken()
+    }
+
     override fun success(result: Any) {
         brandsAdapter.updateWishedInfo(result as List<Long>, false)
         val brand = brandsAdapter.getCurrentList().find { it.id == result.first() }
@@ -190,6 +194,14 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
     }
 
     override fun loaded(result: Any) {
+        if(result is Boolean){
+            val isTokenEmpty = result
+            if(!isTokenEmpty){
+                getBrandWishList()
+            }
+            return
+
+        }
         val list = result as List<*>
         if(list.isNotEmpty()){
             if(list[0] is Category){
@@ -211,7 +223,7 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
                 }else{
                     brandsAdapter.updateList(list as List<ProductBrand>)
                 }
-                getBrandWishList()
+                checkToken()
             }
 
             if(list[0] is Long){
