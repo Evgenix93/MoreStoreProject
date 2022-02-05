@@ -2,10 +2,7 @@ package com.project.morestore.apis
 
 import com.project.morestore.models.*
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface UserApi {
 
@@ -72,6 +69,13 @@ interface UserApi {
 
     @GET("wishlist/brand")
     suspend fun getBrandWishListGetError(): Response<String>
+
+    @GET("user/{id}")
+    suspend fun getUserInfoById(@Path("id") id: Int): Response<User>
+
+    @GET("user/{id}")
+    suspend fun getUserInfoByIdGetError(@Path("id") id: Int): Response<String>
+
 
 
 

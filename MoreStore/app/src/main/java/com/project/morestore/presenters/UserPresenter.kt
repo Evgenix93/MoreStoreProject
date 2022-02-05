@@ -140,6 +140,48 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun getUserInfo(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = repository.getCurrentUserInfo()
+            when(response?.code()){
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+
+
+        }
+    }
+
+    fun getUserProducts(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getCurrentUserProducts()
+            when(response?.code()){
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+        }
+    }
+
     fun getNewCode(phone: String? = null, email: String? = null) {
         presenterScope.launch {
             Log.d("mylog", "getNewCode")

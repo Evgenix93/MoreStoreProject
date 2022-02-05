@@ -1,24 +1,361 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray3"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/toolbar_main"
-        android:id="@+id/toolbarMain"/>
+    <include
+        android:id="@+id/toolbarMain"
+        layout="@layout/toolbar" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/logoutBtn"
-        android:layout_width="0dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView17"
+        android:layout_width="match_parent"
+        android:layout_height="91dp"
+        android:layout_marginTop="174dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarMain">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/activeProductsBtn"
+                    android:layout_width="114dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="@color/gray3"
+                    app:cardCornerRadius="99dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="12dp"
+                        android:text="Активные"
+                        android:textAppearance="@font/manrope_medium"
+                        android:textColor="@color/green"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/activeCountTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="86dp"
+                        android:background="@drawable/circle_background"
+                        android:gravity="center"
+                        android:text="0" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/onModerationBtn"
+                    android:layout_width="145dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="99dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="12dp"
+                        android:text="На модерации"
+                        android:textAppearance="@font/manrope_medium"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/onModerationCountTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="117dp"
+                        android:background="@drawable/circle_background"
+                        android:backgroundTint="@color/gray3"
+                        android:gravity="center"
+                        android:text="0" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/archivedProductsBtn"
+                    android:layout_width="89dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="99dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="12dp"
+                        android:text="Архив"
+                        android:textAppearance="@font/manrope_medium"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/archivedCountTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="61dp"
+                        android:background="@drawable/circle_background"
+                        android:backgroundTint="@color/gray3"
+                        android:gravity="center"
+                        android:text="0" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/buttonStyle"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="16dp"
+        android:background="@drawable/profile_info_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarMain">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/avatarImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:scaleType="centerCrop"
+            android:padding="3dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/avatar"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:strokeColor="@color/gray12"
+            app:strokeWidth="3dp" />
+
+        <TextView
+            android:id="@+id/userNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="82dp"
+            android:layout_marginTop="30dp"
+            android:text="Ирина Иванова"
+            android:textAppearance="@style/bold_16"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/userPhoneTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black4"
+            android:editable="false"
+            android:layout_marginStart="82dp"
+            android:layout_marginTop="58dp"
+            android:fontFamily="@font/manrope_regular"
+            android:text="+7 (919) 157-80-60"
+            android:textColor="@color/gray13"
+            android:textSize="12sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/userRatingCard"
+            android:layout_width="65dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="@color/gray11"
+            app:cardCornerRadius="32dp">
+
+            <ImageView
+                android:id="@+id/starImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_star" />
+
+            <TextView
+                android:id="@+id/ratingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="28dp"
+                android:text="5.0"
+                android:textAppearance="@style/bold_16"
+                android:textColor="@color/white" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/timeFromRegistrationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="98dp"
+            android:fontFamily="@font/manrope_regular"
+            android:text="зарегистрирован(а) 2 месяца назад"
+            android:textColor="@color/gray2"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/shareImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="95dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_sharenetwork" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/profileBtn"
+            android:layout_width="162dp"
+            android:layout_height="46dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/black4"
+            app:cardCornerRadius="7dp"
+            app:strokeColor="@color/gray10"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/ic_edit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="61dp"
+                android:text="Профиль"
+                android:textAppearance="@style/bold_16"
+                android:textColor="@color/white" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="162dp"
+            android:layout_height="46dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/black4"
+            app:cardElevation="0dp">
+
+
+            <ImageView
+                android:id="@+id/addressImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="35dp"
+                android:src="@drawable/ic_map" />
+
+            <TextView
+                android:id="@+id/addressesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="67dp"
+                android:text="Адреса"
+                android:textAppearance="@style/bold_16"
+                android:textColor="@color/white" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="выход"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView17" />
+
+    <ImageView
+        android:id="@+id/glassesImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:src="@drawable/glasses_women"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView17" />
+
+    <TextView
+        android:id="@+id/noProductsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Здесь пока что ничего нет"
+        android:textAppearance="@style/bold_16"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/glassesImageView" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/createNewProductBtn"
+        style="@style/buttonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="10dp"
+        android:text="Разместить объявление"
+        app:backgroundTint="?attr/colorSecondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/noProductsTextView" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/createNewProductBtn2"
+        style="@style/buttonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp"
+        android:text="Разместить объявление"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

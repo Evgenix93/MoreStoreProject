@@ -7,6 +7,7 @@ import com.project.morestore.models.*
 import com.project.morestore.singletones.FilterState
 
 import com.project.morestore.singletones.Network
+import com.project.morestore.singletones.Token
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -60,24 +61,24 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    suspend fun getProducts(query: String? = null, filter: Filter): Response<List<Product>>?{
+    suspend fun getProducts(query: String? = null, filter: Filter? = null, userId: Long? = null): Response<List<Product>>?{
         return try {
             var categoryStr = listOf<String>()
             var brandsStr = listOf<String>()
             var citiesStr = listOf<String>()
             var queryStr = listOf<String>()
 
-            if(filter.categories.isNotEmpty()){
+            if(filter?.categories?.isNotEmpty() == true){
                  categoryStr = filter.categories.filter { it.isChecked == true }.map { "id_category=${it.id}" }
             }
-            if(filter.brands.isNotEmpty()){
+            if(filter?.brands?.isNotEmpty() == true){
                  brandsStr = filter.brands.filter { it.isChecked == true }.map { "id_brand=${it.id}" }
             }
-            if(filter.regions.isNotEmpty()){
+            if(filter?.regions?.isNotEmpty() == true){
                 citiesStr = filter.regions.filter { it.isChecked == true }.map { "id_city=${it.id}" }
             }
 
-            if(!filter.isCurrentLocationFirstLoaded && filter.currentLocation != null){
+            if(filter?.isCurrentLocationFirstLoaded == false && filter.currentLocation != null){
                 Log.d("mylog", "load current location")
                 citiesStr = citiesStr + listOf("id_city=${filter.currentLocation?.id}")
                 Log.d("mylog", "citystr = $citiesStr")
@@ -89,7 +90,8 @@ class ProductRepository(private val context: Context) {
 
             productApi.getProducts(
                     PRODUCT_OPTIONS,
-                    (categoryStr + brandsStr + citiesStr + queryStr).joinToString(";")
+                    (categoryStr + brandsStr + citiesStr + queryStr).joinToString(";"),
+                userId
                 )
 
         } catch (e: Exception) {
@@ -98,7 +100,7 @@ class ProductRepository(private val context: Context) {
             } else {
                 Log.d("mylog", e.message.toString())
                 try {
-                    val response = productApi.getProductsGetError(PRODUCT_OPTIONS, listOf<String>().joinToString(";"))
+                    val response = productApi.getProductsGetError(PRODUCT_OPTIONS, listOf<String>().joinToString(";"), userId)
                     if(response.code() == 500){
                         Response.error(500, "".toResponseBody(null))
                     }else {
@@ -109,6 +111,10 @@ class ProductRepository(private val context: Context) {
                 }
             }
         }
+    }
+
+    suspend fun getCurrentUserProducts(): Response<List<Product>>?{
+        return getProducts(userId = Token.userId.toLong())
     }
 
     suspend fun getYouMayLikeProducts(limit: Int, userId: Int): Response<List<Product>>?{
