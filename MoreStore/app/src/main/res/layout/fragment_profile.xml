@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray3"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+
+           <com.google.android.material.card.MaterialCardView
+               android:layout_width="match_parent"
+               android:layout_height="216dp"
+               app:cardBackgroundColor="@color/white"
+               app:cardCornerRadius="12dp"
+               android:layout_marginTop="16dp">
+
+           <com.google.android.material.imageview.ShapeableImageView
+               android:id="@+id/avatarImageView"
+               android:layout_width="58dp"
+               android:layout_height="58dp"
+               android:src="@drawable/frame"
+               android:layout_marginTop="10dp"
+               android:layout_marginStart="10dp"
+               android:padding="3dp"
+               app:strokeColor="@color/black"
+               app:strokeWidth="3dp"
+               app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"/>
+
+               <TextView
+                   android:id="@+id/nameTextView"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   tools:text="Ирина Иванова"
+                   android:layout_marginStart="82dp"
+                   android:layout_marginTop="16dp"
+                   android:textAppearance="@style/bold_16"/>
+
+               <EditText
+                   android:id="@+id/phoneEditText"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   tools:text="+7 (919) 157-80-60"
+                   android:layout_marginStart="82dp"
+                   android:layout_marginTop="44dp"
+                   android:textSize="12sp"
+                   android:fontFamily="@font/manrope_regular"
+                   android:textColor="@color/gray2"
+                   android:backgroundTint="@color/white"
+                   android:paddingVertical="0dp"/>
+
+              <View
+                  android:layout_width="65dp"
+                  android:layout_height="32dp"
+                  android:background="@drawable/oval"
+                  android:layout_gravity="end"
+                  android:layout_marginTop="10dp"
+                  android:layout_marginEnd="10dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_star"
+                   android:layout_gravity="end"
+                   android:layout_marginTop="18dp"
+                   android:layout_marginEnd="51dp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   tools:text="5.0"
+                   android:layout_gravity="end"
+                   android:layout_marginTop="14dp"
+                   android:layout_marginEnd="22dp"
+                   android:textAppearance="@style/bold_16"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_envelope"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="82dp"
+                   tools:ignore="ContentDescription" />
+
+               <TextView
+                   android:id="@+id/emailTextView"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   tools:text="ivan-ivan@gmail.com"
+                   android:textAppearance="@style/regular_14"
+                   android:layout_marginStart="46dp"
+                   android:layout_marginTop="83dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_mappinline"
+                   android:layout_marginTop="122dp"
+                   android:layout_marginStart="10dp"/>
+
+               <TextView
+                   android:id="@+id/currentRegionTextView"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   tools:text="Москва, Центральный р-н"
+                   android:layout_marginStart="46dp"
+                   android:layout_marginTop="123dp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/change"
+                   android:layout_marginStart="10dp"
+                   android:layout_gravity="bottom"
+                   android:layout_marginBottom="24dp"
+                   android:textAppearance="@style/regular_16"
+                   android:textColor="@color/green"/>
+
+           </com.google.android.material.card.MaterialCardView>
+
+           <com.google.android.material.card.MaterialCardView
+               android:layout_width="match_parent"
+               android:layout_height="210dp"
+               app:cardBackgroundColor="@color/white"
+               android:layout_marginTop="16dp"
+               app:cardCornerRadius="12dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/personalization"
+                   android:textAppearance="@style/regular_16"
+                   android:textColor="@color/gray2"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="11dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_xl"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="54dp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/my_sizes"
+                   android:textAppearance="@style/regular_14"
+                   android:textColor="@color/black"
+                   android:layout_marginStart="46dp"
+                   android:layout_marginTop="51dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_tag"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="90dp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/my_brands"
+                   android:textAppearance="@style/regular_14"
+                   android:textColor="@color/black"
+                   android:layout_marginStart="46dp"
+                   android:layout_marginTop="91dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_like3"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="130dp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/favorite"
+                   android:textAppearance="@style/regular_14"
+                   android:textColor="@color/black"
+                   android:layout_marginStart="46dp"
+                   android:layout_marginTop="131dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_tshirt"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="170dp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/for_who_searching"
+                   android:layout_marginStart="46dp"
+                   android:layout_marginTop="171dp"/>
+
+           </com.google.android.material.card.MaterialCardView>
+
+           <com.google.android.material.card.MaterialCardView
+               android:layout_width="match_parent"
+               android:layout_height="136dp"
+               app:cardBackgroundColor="@color/white"
+               android:layout_marginTop="16dp"
+               app:cardCornerRadius="12dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/bank_cards"
+                   android:textAppearance="@style/regular_16"
+                   android:textColor="@color/gray2"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="11dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_radiobutton"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="50dp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="•••• 4014"
+                   android:textAppearance="@style/regular_16"
+                   android:layout_marginStart="42dp"
+                   android:layout_marginTop="51dp"
+                   android:textColor="@color/black"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/add_card"
+                   android:textAppearance="@style/regular_16"
+                   android:textColor="@color/green"
+                   android:layout_gravity="bottom"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginBottom="24dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_trash"
+                   android:layout_gravity="end"
+                   android:layout_marginEnd="10dp"
+                   android:layout_marginTop="50dp"/>
+
+           </com.google.android.material.card.MaterialCardView>
+
+           <com.google.android.material.card.MaterialCardView
+               android:layout_width="match_parent"
+               android:layout_height="130dp"
+               app:cardBackgroundColor="@color/white"
+               android:layout_marginTop="16dp"
+               app:cardCornerRadius="12dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/users"
+                   android:textAppearance="@style/regular_16"
+                   android:textColor="@color/gray2"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="11dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_user_circle_gear"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="50dp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/wait_rating"
+                   android:textAppearance="@style/regular_14"
+                   android:textColor="@color/black"
+                   android:layout_marginStart="46dp"
+                   android:layout_marginTop="51dp"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_prohibit2"
+                   android:layout_marginStart="10dp"
+                   android:layout_marginTop="90dp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/blocked"
+                   android:textAppearance="@style/regular_14"
+                   android:textColor="@color/black"
+                   android:layout_marginStart="46dp"
+                   android:layout_marginTop="91dp"/>
+
+
+           </com.google.android.material.card.MaterialCardView>
+
+       </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

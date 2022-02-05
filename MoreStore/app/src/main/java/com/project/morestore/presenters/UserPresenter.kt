@@ -588,4 +588,11 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun getUser(){
+        presenterScope.launch{
+            val currentRegion = repository.getFilter().currentLocation
+            if (currentRegion != null)
+                viewState.loaded(currentRegion)
+        }
+    }
 }
