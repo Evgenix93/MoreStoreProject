@@ -223,6 +223,18 @@
     <string name="product_name_brand_name">Название товара или бренда</string>
     <string name="no">Нет</string>
     <string name="yes2">Да</string>
+    <string name="change">Изменить</string>
+    <string name="personalization">Персонализация</string>
+    <string name="my_sizes">Мои размеры</string>
+    <string name="my_brands">Мои бренды</string>
+    <string name="for_who_searching">Кому ищите товары</string>
+    <string name="bank_cards">Банковские карты</string>
+    <string name="add_card">Добавить карту</string>
+    <string name="users">Пользователи</string>
+    <string name="wait_rating">Ждут оценки</string>
+    <string name="blocked">Заблокированные</string>
+    <string name="need_login">Для работы с профилем\nнеобходимо авторизоваться</string>
+    <string name="login_register">Войти или зарегистрироваться</string>
     <string-array name="type_array">
         <item>Новое</item>
         <item>Дешевле</item>
