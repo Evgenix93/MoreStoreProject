@@ -244,11 +244,14 @@
         android:name="com.project.morestore.fragments.CabinetFragment"
         android:label="CabinetFragment" >
         <action
-            android:id="@+id/action_cabinetFragment_to_loginDialog"
-            app:destination="@id/loginDialog" />
-        <action
             android:id="@+id/action_cabinetFragment_to_firstLaunchFragment3"
             app:destination="@id/firstLaunchFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_cabinetGuestFragment"
+            app:destination="@id/cabinetGuestFragment" />
     </fragment>
     <dialog
         android:id="@+id/resumeRegisterDialog"
@@ -399,5 +402,21 @@
         android:id="@+id/filterKidsSizesFragment"
         android:name="com.project.morestore.fragments.FilterKidsSizesFragment"
         android:label="FilterKidsSizesFragment" />
+    <fragment
+        android:id="@+id/cabinetGuestFragment"
+        android:name="com.project.morestore.fragments.CabinetGuestFragment"
+        android:label="CabinetGuestFragment" >
+        <action
+            android:id="@+id/action_cabinetGuestFragment_to_loginDialog"
+            app:destination="@id/loginDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.project.morestore.fragments.ProfileFragment"
+        android:label="ProfileFragment" >
+        <argument
+            android:name="user"
+            app:argType="com.project.morestore.models.User" />
+    </fragment>
 
 </navigation>

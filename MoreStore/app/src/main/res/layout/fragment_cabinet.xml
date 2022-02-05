@@ -44,6 +44,7 @@
                     app:cardElevation="0dp">
 
                     <TextView
+                        android:id="@+id/activeProductsTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -57,6 +58,9 @@
                         android:id="@+id/activeCountTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_semibold"
+                        android:textColor="@color/green"
+                        android:textSize="10sp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="86dp"
                         android:background="@drawable/circle_background"
@@ -75,6 +79,7 @@
                     app:cardElevation="0dp">
 
                     <TextView
+                        android:id="@+id/onModerationTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -88,6 +93,9 @@
                         android:id="@+id/onModerationCountTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_semibold"
+                        android:textColor="@color/gray2"
+                        android:textSize="10sp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="117dp"
                         android:background="@drawable/circle_background"
@@ -107,6 +115,7 @@
                     app:cardElevation="0dp">
 
                     <TextView
+                        android:id="@+id/archiveTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -120,6 +129,9 @@
                         android:id="@+id/archivedCountTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_semibold"
+                        android:textColor="@color/gray2"
+                        android:textSize="10sp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="61dp"
                         android:background="@drawable/circle_background"
@@ -164,7 +176,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="82dp"
             android:layout_marginTop="30dp"
-            android:text="Ирина Иванова"
+            tools:text="Ирина Иванова"
             android:textAppearance="@style/bold_16"
             android:textColor="@color/white" />
 
@@ -177,7 +189,7 @@
             android:layout_marginStart="82dp"
             android:layout_marginTop="58dp"
             android:fontFamily="@font/manrope_regular"
-            android:text="+7 (919) 157-80-60"
+            tools:text="+7 (919) 157-80-60"
             android:textColor="@color/gray13"
             android:textSize="12sp" />
 
@@ -218,7 +230,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="98dp"
             android:fontFamily="@font/manrope_regular"
-            android:text="зарегистрирован(а) 2 месяца назад"
+            tools:text="зарегистрирован(а) 2 месяца назад"
             android:textColor="@color/gray2"
             android:textSize="12sp" />
 
@@ -355,6 +367,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminateTint="@color/green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 
 

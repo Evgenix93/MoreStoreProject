@@ -172,6 +172,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)
                 }
+                404 -> viewState.loaded(emptyList<Product>())
                 500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -46,6 +47,7 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         initProductsButtons()
         initList()
         getActiveProducts()
+        getFilter()
     }
 
     private fun checkToken(){
@@ -56,6 +58,12 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         //binding.logoutBtn.setOnClickListener{
           //  presenter.clearToken()
        // }
+
+        binding.toolbarMain.actionIcon.setOnClickListener {
+            presenter.clearToken()
+        }
+
+
     }
 
     private fun showBottomNav(){
@@ -97,27 +105,47 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
     private fun initProductsButtons(){
         binding.activeProductsBtn.setOnClickListener {
             getActiveProducts()
-            setUpActiveButton(binding.activeProductsBtn, binding.activeCountTextView)
+            setUpActiveButton(binding.activeProductsBtn, binding.activeCountTextView, binding.activeProductsTextView)
             binding.glassesImageView.setImageResource(emptyActiveListImageRes)
 
         }
         binding.onModerationBtn.setOnClickListener {
             getActiveProducts()
-            setUpActiveButton(binding.onModerationBtn, binding.onModerationCountTextView)
+            setUpActiveButton(binding.onModerationBtn, binding.onModerationCountTextView, binding.onModerationTextView)
             binding.glassesImageView.setImageResource(emptyOnModerationImageRes)
         }
         binding.archivedProductsBtn.setOnClickListener {
             getActiveProducts()
-            setUpActiveButton(binding.archivedProductsBtn, binding.archivedCountTextView)
+            setUpActiveButton(binding.archivedProductsBtn, binding.archivedCountTextView, binding.archiveTextView)
         }
     }
 
-    private fun setUpActiveButton(btn: MaterialCardView, textView: TextView){
+    private fun setUpActiveButton(btn: MaterialCardView, countTextView: TextView, listNameTextView: TextView){
         binding.activeProductsBtn.setCardBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, null))
+        binding.activeCountTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
+        binding.activeProductsTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
+        binding.activeCountTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
+
+
         binding.onModerationBtn.setCardBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, null))
+        binding.onModerationCountTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
+        binding.onModerationTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
+        binding.onModerationCountTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
+
+
         binding.archivedProductsBtn.setCardBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, null))
+        binding.archivedCountTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
+        binding.archiveTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
+        binding.archivedCountTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
+
+
         btn.setCardBackgroundColor(ResourcesCompat.getColor(resources, R.color.gray3, null))
-        textView.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
+        countTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
+        countTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.green, null))
+        listNameTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.green, null))
+
+
+
 
 
 
@@ -138,10 +166,12 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
             filter.chosenForWho[0] -> {
                 emptyActiveListImageRes = R.drawable.glasses_women
                 emptyOnModerationImageRes = R.drawable.shoe_women
+                binding.glassesImageView.setImageResource(R.drawable.glasses_women)
             }
             filter.chosenForWho[1] -> {
                 emptyActiveListImageRes = R.drawable.glasses_men
                 emptyOnModerationImageRes = R.drawable.shoe_men
+                binding.glassesImageView.setImageResource(R.drawable.glasses_men)
 
             }
         }
@@ -159,34 +189,48 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         }
     }
 
+    private fun showLoading(loading: Boolean){
+        binding.loader.isVisible = loading
+    }
+
     override fun success(result: Any) {
+        showLoading(false)
         findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToFirstLaunchFragment3())
     }
 
     override fun error(message: String) {
+        showLoading(false)
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
     override fun loading() {
+        showLoading(true)
+
 
     }
 
     override fun loaded(result: Any) {
+
         if(result is User){
+            showLoading(false)
             showUserInfo(result)
+            binding.profileBtn.setOnClickListener {
+                findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToProfileFragment(result))
+            }
             return
         }
         if(result is Boolean) {
             val tokenIsEmpty = result as Boolean
             if (tokenIsEmpty) {
-                // binding.logoutBtn.isVisible = false
-                // findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToLoginDialog())
+                findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToCabinetGuestFragment())
             } else {
                 getUserInfo()
             }
         }
 
         if(result is List<*>){
+            showLoading(false)
             binding.noProductsTextView.isVisible = result.isEmpty()
             binding.glassesImageView.isVisible = result.isEmpty()
             binding.createNewProductBtn.isVisible = result.isEmpty()
