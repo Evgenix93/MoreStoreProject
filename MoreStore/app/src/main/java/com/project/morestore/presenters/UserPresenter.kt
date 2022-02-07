@@ -555,8 +555,8 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
     fun saveMaterials(materials: List<MaterialLine>) {
-        val filter = repository.getFilter().apply { chosenMaterials = materials }
-        repository.updateFilter(filter)
+        val filter = userRepository.getFilter().apply { chosenMaterials = materials }
+        userRepository.updateFilter(filter)
     }
 
     fun loadMaterials(){
@@ -584,13 +584,13 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
 
     fun saveTopSizes(sizes: List<SizeLine>) {
-        val filter = repository.getFilter().apply {
+        val filter = userRepository.getFilter().apply {
             chosenTopSizes =
                 if (sizes.size == chosenTopSizes.size) sizes else sizes + if (chosenTopSizes.isNotEmpty()) listOf(
                     chosenTopSizes.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false))
         }
-        repository.updateFilter(filter)
+        userRepository.updateFilter(filter)
 
     }
 
@@ -602,7 +602,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
     fun saveBottomSizes(sizes: List<SizeLine>) {
-        val filter = repository.getFilter().apply {
+        val filter = userRepository.getFilter().apply {
             chosenBottomSizes =
                 if (sizes.size == chosenBottomSizes.size) sizes else sizes + if (chosenBottomSizes.isNotEmpty()) listOf(
                     chosenBottomSizes.last()
@@ -610,7 +610,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                     SizeLine(0, "", "", "", "", "", false)
                 )
         }
-        repository.updateFilter(filter)
+        userRepository.updateFilter(filter)
     }
 
     fun loadBottomSizes(){
@@ -621,13 +621,13 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
     fun saveShoosSizes(sizes: List<SizeLine>) {
-        val filter = repository.getFilter().apply {
+        val filter = userRepository.getFilter().apply {
             chosenShoosSizes =
                 if (sizes.size == chosenShoosSizes.size) sizes else sizes + if (chosenShoosSizes.isNotEmpty()) listOf(
                     chosenShoosSizes.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false))
         }
-        repository.updateFilter(filter)
+        userRepository.updateFilter(filter)
     }
 
     fun loadShoosSizes(){
