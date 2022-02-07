@@ -63,7 +63,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             ProductAdapter(6) {
                 findNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToProductDetailsFragment(
-                        it
+                        it,
+                        null
                     )
                 )
             }
@@ -79,7 +80,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             isNestedScrollingEnabled = false
         }
 
-        presenter.getProducts(null, false)
+        presenter.getProducts( queryStr = null,  isFiltered = false)
 
 
     }

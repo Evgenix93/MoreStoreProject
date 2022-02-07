@@ -15,6 +15,7 @@ import com.project.morestore.models.SizeLine
 class SizeLineAdapter(val isShoos: Boolean) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var list = listOf<SizeLine>()
+    private var bottomSizeList: List<SizeLine>? = null
     private val chosenSizes = mutableListOf<SizeLine>()
 
 
@@ -39,9 +40,9 @@ class SizeLineAdapter(val isShoos: Boolean) :
             binding.sizeCheckBox.setOnClickListener {
                 onCheckBoxClicked(binding.sizeCheckBox.isChecked, adapterPosition)
             }
-            if (adapterPosition == 0) {
-                binding.view8.isVisible = true
-            }
+
+                binding.view8.isVisible = adapterPosition == 0
+
 
             binding.INTTextView.isVisible = !otherSize
             binding.ITRUFRTextView.isVisible = !otherSize
@@ -72,9 +73,9 @@ class SizeLineAdapter(val isShoos: Boolean) :
             binding.sizeCheckBox.setOnClickListener {
                 onCheckBoxClicked(binding.sizeCheckBox.isChecked, adapterPosition)
             }
-            if (adapterPosition == 0) {
-                binding.view8.isVisible = true
-            }
+
+                binding.view8.isVisible = adapterPosition == 0
+
 
 
             binding.ITRUFRTextView.isVisible = !otherSize
@@ -99,6 +100,7 @@ class SizeLineAdapter(val isShoos: Boolean) :
                 )
             ) { isChecked, position ->
                 list[position].isSelected = isChecked
+
 
 
             }
@@ -133,8 +135,9 @@ class SizeLineAdapter(val isShoos: Boolean) :
         }
     }
 
-    fun updateList(newList: List<SizeLine>) {
+    fun updateList(newList: List<SizeLine>, newBottomSizeList: List<SizeLine>?) {
         list = newList
+        newBottomSizeList?.let { bottomSizeList = it }
         notifyDataSetChanged()
     }
 
@@ -147,5 +150,12 @@ class SizeLineAdapter(val isShoos: Boolean) :
 
     fun getChosenSizes(): List<SizeLine> {
         return list
+    }
+
+    fun getChosenBottomSizes(): List<SizeLine>{
+        return bottomSizeList?.apply { forEachIndexed{index, sizeLine ->
+            sizeLine.isSelected = list[index].isSelected
+        }
+        }.orEmpty()
     }
 }

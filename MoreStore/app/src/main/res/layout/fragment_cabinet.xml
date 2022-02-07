@@ -26,21 +26,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="16dp">
+            >
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:orientation="horizontal">
 
-                <com.google.android.material.card.MaterialCardView
+                <FrameLayout
                     android:id="@+id/activeProductsBtn"
                     android:layout_width="114dp"
-                    android:layout_height="35dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@drawable/product_status_btn_shape"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="8dp"
-                    app:cardBackgroundColor="@color/gray3"
-                    app:cardCornerRadius="99dp"
                     app:cardElevation="0dp">
 
                     <TextView
@@ -67,16 +69,18 @@
                         android:gravity="center"
                         android:text="0" />
 
-                </com.google.android.material.card.MaterialCardView>
+                </FrameLayout>
 
-                <com.google.android.material.card.MaterialCardView
+                <FrameLayout
                     android:id="@+id/onModerationBtn"
                     android:layout_width="145dp"
-                    android:layout_height="35dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:layout_marginEnd="8dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="99dp"
-                    app:cardElevation="0dp">
+                    android:background="@drawable/product_status_btn_shape"
+                    android:backgroundTint="@color/white"
+                    >
 
                     <TextView
                         android:id="@+id/onModerationTextView"
@@ -103,16 +107,18 @@
                         android:gravity="center"
                         android:text="0" />
 
-                </com.google.android.material.card.MaterialCardView>
+                </FrameLayout>
 
-                <com.google.android.material.card.MaterialCardView
+                <FrameLayout
                     android:id="@+id/archivedProductsBtn"
                     android:layout_width="89dp"
-                    android:layout_height="35dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:layout_marginEnd="10dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="99dp"
-                    app:cardElevation="0dp">
+                    android:background="@drawable/product_status_btn_shape"
+                    android:backgroundTint="@color/white"
+                    >
 
                     <TextView
                         android:id="@+id/archiveTextView"
@@ -139,7 +145,7 @@
                         android:gravity="center"
                         android:text="0" />
 
-                </com.google.android.material.card.MaterialCardView>
+                </FrameLayout>
 
 
             </LinearLayout>
@@ -165,7 +171,7 @@
             android:padding="3dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="24dp"
-            android:src="@drawable/avatar"
+            tools:src="@drawable/avatar"
             app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:strokeColor="@color/gray12"
             app:strokeWidth="3dp" />
@@ -193,35 +199,33 @@
             android:textColor="@color/gray13"
             android:textSize="12sp" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/userRatingCard"
+        <View
             android:layout_width="65dp"
             android:layout_height="32dp"
+            android:background="@drawable/oval"
+            android:backgroundTint="@color/gray11"
             android:layout_gravity="end"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="10dp"
-            app:cardBackgroundColor="@color/gray11"
-            app:cardCornerRadius="32dp">
+            android:layout_marginEnd="10dp"/>
 
-            <ImageView
-                android:id="@+id/starImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-                android:src="@drawable/ic_star" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_star"
+            android:layout_gravity="end"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="51dp"/>
 
-            <TextView
-                android:id="@+id/ratingTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="28dp"
-                android:text="5.0"
-                android:textAppearance="@style/bold_16"
-                android:textColor="@color/white" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5.0"
+            android:layout_gravity="end"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="22dp"
+            android:textAppearance="@style/bold_16"
+            android:textColor="@color/white"/>
 
-        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/timeFromRegistrationTextView"
@@ -318,41 +322,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView17" />
 
-    <ImageView
-        android:id="@+id/glassesImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        android:src="@drawable/glasses_women"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView17" />
-
-    <TextView
-        android:id="@+id/noProductsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Здесь пока что ничего нет"
-        android:textAppearance="@style/bold_16"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/glassesImageView" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/createNewProductBtn"
-        style="@style/buttonStyle"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="10dp"
-        android:text="Разместить объявление"
-        app:backgroundTint="?attr/colorSecondary"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noProductsTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView17">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/glassesImageView"
+                android:layout_width="172dp"
+                android:layout_height="90dp"
+                android:layout_marginTop="68dp"
+                android:src="@drawable/glasses_women"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/noProductsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Здесь пока что ничего нет"
+                android:textAppearance="@style/bold_16"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/glassesImageView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNewProductBtn"
+                style="@style/buttonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="10dp"
+                android:text="Разместить объявление"
+                app:backgroundTint="?attr/colorSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/noProductsTextView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/createNewProductBtn2"

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
@@ -120,26 +121,26 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         }
     }
 
-    private fun setUpActiveButton(btn: MaterialCardView, countTextView: TextView, listNameTextView: TextView){
-        binding.activeProductsBtn.setCardBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, null))
+    private fun setUpActiveButton(btn: FrameLayout, countTextView: TextView, listNameTextView: TextView){
+        binding.activeProductsBtn.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
         binding.activeCountTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
         binding.activeProductsTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
         binding.activeCountTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
 
 
-        binding.onModerationBtn.setCardBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, null))
+        binding.onModerationBtn.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
         binding.onModerationCountTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
         binding.onModerationTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
         binding.onModerationCountTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
 
 
-        binding.archivedProductsBtn.setCardBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, null))
+        binding.archivedProductsBtn.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
         binding.archivedCountTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
         binding.archiveTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
         binding.archivedCountTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
 
 
-        btn.setCardBackgroundColor(ResourcesCompat.getColor(resources, R.color.gray3, null))
+        btn.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
         countTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
         countTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.green, null))
         listNameTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.green, null))

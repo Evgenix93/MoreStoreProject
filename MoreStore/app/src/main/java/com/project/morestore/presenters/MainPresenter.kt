@@ -41,14 +41,14 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getProducts(queryStr: String? = null, isFiltered: Boolean){
+    fun getProducts(queryStr: String? = null, productId: Long? = null, isFiltered: Boolean){
         Log.d("mylog", "getProducts")
         presenterScope.launch {
             viewState.loading()
-            val response = productRepository.getProducts(queryStr, if(isFiltered) userRepository.getFilter() else Filter())
+            val response = productRepository.getProducts(query = queryStr, filter =  if(isFiltered) userRepository.getFilter() else null, productId = productId)
 
             when(response?.code()){
-                200 -> viewState.loaded(response.body()!!)
+                200 -> if(productId == null) viewState.loaded(response.body()!!) else viewState.loaded(response.body()?.first()!!)
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> { viewState.loaded(emptyList<Product>())
                     viewState.error(getStringFromResponse(response.errorBody()!!))
@@ -115,6 +115,10 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
 
 
+    }
+
+    fun shareProduct(id: Long){
+        viewState.loaded(productRepository.getShareProductIntent(id))
     }
 
     fun getFilter(){

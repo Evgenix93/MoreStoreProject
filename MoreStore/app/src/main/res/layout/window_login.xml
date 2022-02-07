@@ -24,10 +24,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_google"
-        app:layout_constraintEnd_toStartOf="@+id/okImageView"
+        app:layout_constraintEnd_toStartOf="@+id/fbImageView"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/vkImageView"
         app:layout_constraintTop_toTopOf="@+id/vkImageView" />
+
+    <ImageView
+        android:id="@+id/fbImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_facebook"
+        app:layout_constraintEnd_toStartOf="@+id/okImageView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/googleImageView"
+        app:layout_constraintTop_toTopOf="@+id/googleImageView" />
 
     <ImageView
         android:id="@+id/okImageView"
@@ -37,7 +47,7 @@
         android:src="@drawable/ic_ok"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/googleImageView"
+        app:layout_constraintStart_toEndOf="@+id/fbImageView"
         app:layout_constraintTop_toTopOf="@+id/googleImageView" />
 
     <com.google.android.material.button.MaterialButton

@@ -1,5 +1,6 @@
 package com.project.morestore
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,12 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.databinding.ActivityMainBinding
+import com.project.morestore.fragments.SplashScreenFragmentDirections
 
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by viewBinding()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,14 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         initNavController()
         initBottomNavBar()
+        handleIntent(intent)
+
+    }
+
+    private fun handleIntent(intent: Intent){
+        intent.data?.let {
+            findNavController(R.id.fragmentContainerView).navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToProductDetailsFragment(null, it.lastPathSegment.orEmpty()))
+        }
     }
 
     private fun changeStatusBarColor(colorRes: Int) {

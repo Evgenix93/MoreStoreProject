@@ -12,6 +12,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.SizeLineAdapter
 import com.project.morestore.databinding.FragmentFilterSizesColthesBinding
+import com.project.morestore.models.Filter
 import com.project.morestore.models.Size
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
@@ -24,8 +25,8 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
     UserMvpView {
     private val binding: FragmentFilterSizesColthesBinding by viewBinding()
     private val sizeAdapter = SizeLineAdapter(false)
-    private var topSizeList = listOf<SizeLine>()
-    private var bottomSizeList = listOf<SizeLine>()
+    //private var topSizeList = listOf<SizeLine>()
+    //private var bottomSizeList = listOf<SizeLine>()
 
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
 
@@ -33,7 +34,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         super.onViewCreated(view, savedInstanceState)
         initList()
         initToolBar()
-        //loadFilterSizes()
+
     }
 
 
@@ -46,7 +47,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
         presenter.getAllSizes()
 
-        val list = listOf(
+        /*val list = listOf(
             SizeLine(
                 0,
                 "XXS",
@@ -158,7 +159,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
                  }
              }
              FilterState.chosenSizes
-         } else emptyList())*/
+         } else emptyList())*/*/
     }
 
     private fun initToolBar() {
@@ -250,22 +251,40 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         binding.loader.isVisible = loading
     }
 
-    private fun loadFilterSizes(){
-        presenter.loadTopSizes()
+   // private fun loadFilterSizes(){
+       // presenter.loadTopSizes()
+   // }
+
+    private fun loadFilter(){
+        presenter.getFilter()
     }
+
+    private fun bindFilter(filter: Filter){
+        if(sizeAdapter.getChosenSizes().size == filter.chosenTopSizes.size){
+            sizeAdapter.updateList(filter.chosenTopSizes, null)
+        }
+    }
+
+    private fun saveSizes(){
+        val chosenTopSizes = sizeAdapter.getChosenSizes()
+        val chosenBottomSizes = sizeAdapter.getChosenBottomSizes()
+        //val chosenBottomSizes = bottomSizeList.apply {
+        // forEachIndexed { index, sizeLine ->
+        // sizeLine.isSelected = chosenTopSizes[index].isSelected
+        //}
+
+        //}
+
+        presenter.saveTopSizes(chosenTopSizes)
+        presenter.saveBottomSizes(chosenBottomSizes)
+
+    }
+
+
 
     override fun onStop() {
         super.onStop()
-        //FilterState.chosenSizes = sizeAdapter.getChosenSizes()
-        val chosenTopSizes = sizeAdapter.getChosenSizes()
-        val chosenBottomSizes = bottomSizeList.apply {
-            forEachIndexed { index, sizeLine ->
-            sizeLine.isSelected = chosenTopSizes[index].isSelected
-        }
-        }
-
-        presenter.saveTopSizes(chosenTopSizes)
-        presenter.saveBottomSizes(chosenBottomSizes + listOf(chosenTopSizes.last()))
+        saveSizes()
 
     }
 
@@ -286,30 +305,34 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
     override fun loaded(result: Any) {
         showLoading(false)
-        if((result as List<*>)[0] is Size) {
+        if(result is List<*> ) {
             val listTopSizes =
                 (result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() }
                     .map { convertSizeToSizeLine(it) }
-            sizeAdapter.updateList(listTopSizes + listOf(SizeLine(0, "", "", "", "", "", false)))
             val listBottomSizes = result.filter { it.id_category == 2 }.sortedBy { it.toInt() }
                 .map { convertSizeToSizeLine(it) }
-            bottomSizeList = listBottomSizes
-            topSizeList = listTopSizes
-            Log.d("mylog2", topSizeList.size.toString())
-            loadFilterSizes()
+            sizeAdapter.updateList(listTopSizes + listOf(SizeLine(0, "", "", "", "", "", false)), listBottomSizes + listOf(SizeLine(0, "", "", "", "", "", false)))
 
-        }else{
-            Log.d("mylog2", "filterSizes")
+            //bottomSizeList = listBottomSizes
+            //topSizeList = listTopSizes
+            //Log.d("mylog2", topSizeList.size.toString())
+            loadFilter()
 
-            val sizes = result as List<SizeLine>
-            Log.d("mylog2", "${topSizeList.size} topSizes")
-            Log.d("mylog2", sizes.size.toString())
+        }
+
+        if(result is Filter){
+            //Log.d("mylog2", "filterSizes")
+            //val sizes = result as List<SizeLine>
+            //Log.d("mylog2", "${topSizeList.size} topSizes")
+           // Log.d("mylog2", sizes.size.toString())
 
 
-            if(topSizeList.size + 1 == sizes.size){
-                Log.d("mylog2", "filterSizes")
-                sizeAdapter.updateList(sizes)
-            }
+           // if(topSizeList.size + 1 == sizes.size){
+               // Log.d("mylog2", "filterSizes")
+               // sizeAdapter.updateList(sizes)
+            //}
+
+            bindFilter(result)
         }
 
 

@@ -68,7 +68,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         }
 
         binding.searchBtn.setOnClickListener {
-            presenter.getProducts(binding.toolbarMain.searchEditText.text.toString(), true)
+            presenter.getProducts(queryStr = binding.toolbarMain.searchEditText.text.toString(), isFiltered = true)
         }
     }
 
@@ -76,7 +76,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     private fun initList() {
         productAdapter = ProductAdapter(10) {
             findNavController().navigate(
-                CatalogFragmentDirections.actionCatalogFragmentToProductDetailsFragment(it)
+                CatalogFragmentDirections.actionCatalogFragmentToProductDetailsFragment(it, null)
             )
         }
         with(binding.productList) {
@@ -223,7 +223,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     }
 
     private fun loadProducts(queryStr: String?) {
-        presenter.getProducts(queryStr, true)
+        presenter.getProducts(queryStr = queryStr, isFiltered = true)
 
     }
 

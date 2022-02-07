@@ -2,14 +2,15 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.MaterialAdapter
 import com.project.morestore.databinding.FragmentFilterMaterialsBinding
+import com.project.morestore.models.Filter
 import com.project.morestore.models.MaterialLine
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
@@ -22,13 +23,13 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
     private val binding: FragmentFilterMaterialsBinding by viewBinding()
     private var materialAdapter: MaterialAdapter by autoCleared()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
-    private val defaultMaterials = generateList()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
         initToolBar()
-        loadFilterMaterials()
+        loadFilter()
     }
 
 
@@ -39,22 +40,14 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
-        materialAdapter.updateList(defaultMaterials)
+
 
 
 
     }
 
     private fun generateList(): List<MaterialLine>{
-        return if(FilterState.filter.chosenMaterials.isNotEmpty()){
-            val allNotSelected = FilterState.filter.chosenMaterials.all { !it.isSelected }
-           /* if(allNotSelected){
-                for(material in FilterState.filter.chosenMaterials){
-                    material.isSelected = true
-                }
-            }*/
-            FilterState.filter.chosenMaterials
-        } else listOf(
+        return listOf(
             MaterialLine(
             "Все материалы",
                 false),
@@ -87,15 +80,27 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun loadFilterMaterials(){
-        presenter.loadMaterials()
+    private fun loadFilter(){
+        presenter.getFilter()
+    }
+
+    private fun saveMaterials(){
+        presenter.saveMaterials(materialAdapter.getCurrentMaterials())
+    }
+
+    private fun bindFilter(filter: Filter){
+        if(filter.chosenMaterials.isNotEmpty()){
+            materialAdapter.updateList(filter.chosenMaterials)
+        }else{
+            materialAdapter.updateList(generateList())
+        }
     }
 
 
 
     override fun onStop() {
         super.onStop()
-        presenter.saveMaterials(materialAdapter.getCurrentMaterials())
+        saveMaterials()
 
     }
 
@@ -104,6 +109,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
     }
 
     override fun error(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
@@ -112,7 +118,9 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
     }
 
     override fun loaded(result: Any) {
-        materialAdapter.updateList(result as List<MaterialLine>)
+        when (result){
+            is Filter -> bindFilter(result)
+        }
 
     }
 

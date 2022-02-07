@@ -11,6 +11,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.SizeCardsAdapter
 import com.project.morestore.databinding.FragmentFilterSizesKidsBinding
+import com.project.morestore.models.Filter
 import com.project.morestore.models.Size
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
@@ -239,13 +240,38 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
 
     }
 
+    private fun loadFilter(){
+        presenter.getFilter()
+    }
+
+    private fun bindFilter(filter: Filter){
+        if(topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizes.size){
+            topSizeCardAdapter.updateList(filter.chosenTopSizes.toMutableList().apply { removeLast() }.toList().map { Size(it.id, it.int, 1, it.isSelected) })
+        }
+        if(bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizes.size){
+            bottomSizeCardAdapter.updateList(filter.chosenBottomSizes.toMutableList().apply { removeLast() }.toList().map { Size(it.id, it.int, 2, it.isSelected) })
+        }
+        if(shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizes.size){
+            shoesSizeCardAdapter.updateList(filter.chosenShoosSizes.toMutableList().apply { removeLast() }.toList().map { Size(it.id, it.int, 3, it.isSelected) })
+        }
+    }
+
+    private fun saveSizes(){
+        presenter.saveTopSizes(topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
+        presenter.saveBottomSizes(bottomSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
+        presenter.saveShoosSizes(shoesSizeCardAdapter.getSizes().map { convertShoeSizeToSizeLine(it) })
+
+
+    }
+
     override fun onStop() {
         super.onStop()
-        FilterState.filter.chosenTopSizes = topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) } + if(FilterState.filter.chosenTopSizes.isNotEmpty()) listOf(FilterState.filter.chosenTopSizes.last()) else listOf(
-            SizeLine(0, "Другое", "", "", "", "", false)
-        )
-        FilterState.filter.chosenBottomSizes = bottomSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) } + if(FilterState.filter.chosenBottomSizes.isNotEmpty()) listOf(FilterState.filter.chosenBottomSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
-        FilterState.filter.chosenShoosSizes = shoesSizeCardAdapter.getSizes().map { convertShoeSizeToSizeLine(it) } + if(FilterState.filter.chosenShoosSizes.isNotEmpty()) listOf(FilterState.filter.chosenShoosSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
+        saveSizes()
+        //FilterState.filter.chosenTopSizes = topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) } + if(FilterState.filter.chosenTopSizes.isNotEmpty()) listOf(FilterState.filter.chosenTopSizes.last()) else listOf(
+         //   SizeLine(0, "Другое", "", "", "", "", false)
+       // )
+       // FilterState.filter.chosenBottomSizes = bottomSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) } + if(FilterState.filter.chosenBottomSizes.isNotEmpty()) listOf(FilterState.filter.chosenBottomSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
+       // FilterState.filter.chosenShoosSizes = shoesSizeCardAdapter.getSizes().map { convertShoeSizeToSizeLine(it) } + if(FilterState.filter.chosenShoosSizes.isNotEmpty()) listOf(FilterState.filter.chosenShoosSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
 
     }
 
@@ -265,30 +291,60 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
 
     override fun loaded(result: Any) {
         showLoading(false)
-        val topSizes = (result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() }
-        val bottomSizes = (result).filter { it.id_category == 2 }.sortedBy { it.toInt() }
-        val shoosSizes = (result).filter { it.id_category == 3 }.sortedBy { it.toInt() }
-        if(topSizes.size + 1 == FilterState.filter.chosenTopSizes.size){
-            topSizeCardAdapter.updateList(FilterState.filter.chosenTopSizes.map { Size(it.id, it.int, 1, it.isSelected) }.toMutableList().apply { removeLast() })
-        }else{
-            topSizeCardAdapter.updateList(topSizes)
+        if(result is List<*>) {
+            val topSizes =
+                (result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() }
+            val bottomSizes = (result).filter { it.id_category == 2 }.sortedBy { it.toInt() }
+            val shoosSizes = (result).filter { it.id_category == 3 }.sortedBy { it.toInt() }
+           // if (topSizes.size + 1 == FilterState.filter.chosenTopSizes.size) {
+             //   topSizeCardAdapter.updateList(FilterState.filter.chosenTopSizes.map {
+               //     Size(
+                 //       it.id,
+                   //     it.int,
+                     //   1,
+                       // it.isSelected
+                   // )
+               // }.toMutableList().apply { removeLast() })
+            //} else {
+                topSizeCardAdapter.updateList(topSizes)
+            //}
+            //if (bottomSizes.size + 1 == FilterState.filter.chosenBottomSizes.size) {
+              //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
+                //val list = FilterState.filter.chosenBottomSizes.map {
+                  //  Size(
+                    //    it.id,
+                      //  it.int,
+                       // 2,
+                       // it.isSelected
+                   // )
+                //}
+               // bottomSizeCardAdapter.updateList(list.toMutableList().apply { removeLast() })
+               // Log.d("mylog3", FilterState.filter.chosenBottomSizes.toString())
+
+            //} else {
+              //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
+
+                bottomSizeCardAdapter.updateList(bottomSizes)
+            //}
+
+          //  if (shoosSizes.size + 1 == FilterState.filter.chosenShoosSizes.size) {
+            //    shoesSizeCardAdapter.updateList(FilterState.filter.chosenShoosSizes.map {
+              //      Size(
+                //        it.id,
+                  //      it.int,
+                    //    3,
+                      //  it.isSelected
+                   // )
+               // }.toMutableList().apply { removeLast() })
+           // } else {
+                shoesSizeCardAdapter.updateList(shoosSizes)
+            //}
+            loadFilter()
         }
-        if(bottomSizes.size + 1 == FilterState.filter.chosenBottomSizes.size){
-            Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
-            val list = FilterState.filter.chosenBottomSizes.map { Size(it.id, it.int, 2, it.isSelected) }
-            bottomSizeCardAdapter.updateList(list.toMutableList().apply { removeLast() })
-            Log.d("mylog3", FilterState.filter.chosenBottomSizes.toString())
 
-        }else{
-            Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
+        if(result is Filter){
+            bindFilter(result)
 
-            bottomSizeCardAdapter.updateList(bottomSizes)
-        }
-
-        if(shoosSizes.size + 1 == FilterState.filter.chosenShoosSizes.size){
-            shoesSizeCardAdapter.updateList(FilterState.filter.chosenShoosSizes.map { Size(it.id, it.int, 3, it.isSelected) }.toMutableList().apply { removeLast() })
-        }else{
-            shoesSizeCardAdapter.updateList(shoosSizes)
         }
 
     }

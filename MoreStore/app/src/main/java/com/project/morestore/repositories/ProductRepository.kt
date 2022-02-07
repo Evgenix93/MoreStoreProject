@@ -1,6 +1,8 @@
 package com.project.morestore.repositories
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.*
 
@@ -61,12 +63,13 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    suspend fun getProducts(query: String? = null, filter: Filter? = null, userId: Long? = null): Response<List<Product>>?{
+    suspend fun getProducts(query: String? = null, filter: Filter? = null, userId: Long? = null, productId: Long? = null): Response<List<Product>>?{
         return try {
             var categoryStr = listOf<String>()
             var brandsStr = listOf<String>()
             var citiesStr = listOf<String>()
             var queryStr = listOf<String>()
+            var productIdStr = listOf<String>()
 
             if(filter?.categories?.isNotEmpty() == true){
                  categoryStr = filter.categories.filter { it.isChecked == true }.map { "id_category=${it.id}" }
@@ -88,9 +91,13 @@ class ProductRepository(private val context: Context) {
                 queryStr = listOf("text=${query.orEmpty()}")
             }
 
+            productId?.let {
+                productIdStr = listOf("id=$it")
+            }
+
             productApi.getProducts(
                     PRODUCT_OPTIONS,
-                    (categoryStr + brandsStr + citiesStr + queryStr).joinToString(";"),
+                    (categoryStr + brandsStr + citiesStr + queryStr + productIdStr).joinToString(";"),
                 userId
                 )
 
@@ -415,6 +422,17 @@ class ProductRepository(private val context: Context) {
                 Response.error(400, "".toResponseBody())
         }
     }
+
+    fun getShareProductIntent(id: Long): Intent{
+        val uri = Uri.withAppendedPath(Uri.parse("https://morestore.ru/products/"), id.toString())
+        return Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, uri.toString())
+            type = "text/plain"
+        }
+    }
+
+
 
     fun loadForWho(): List<Boolean>{
         return  FilterState.filter.chosenForWho

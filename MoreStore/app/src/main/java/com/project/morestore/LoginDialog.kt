@@ -35,6 +35,9 @@ class LoginDialog: DialogFragment() {
         view.findViewById<ImageView>(R.id.googleImageView).setOnClickListener {
             findNavController().navigate(LoginDialogDirections.actionLoginDialogToLoginSocialFragment("gl"))
         }
+        view.findViewById<ImageView>(R.id.fbImageView).setOnClickListener {
+            findNavController().navigate(LoginDialogDirections.actionLoginDialogToLoginSocialFragment("fb"))
+        }
 
         return Dialog(requireContext()).apply {
             setContentView(view)

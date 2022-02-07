@@ -1,10 +1,12 @@
 package com.project.morestore.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.core.text.toSpannable
 import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
@@ -19,6 +21,7 @@ import com.project.morestore.adapters.PhotoViewPagerAdapter
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.databinding.FragmentProductBinding
 import com.project.morestore.models.Product
+import com.project.morestore.models.ProductPhoto
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
@@ -34,14 +37,32 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewPager()
         initList()
         initToolBar()
         loadYouMayLikeProducts()
         bind(args.product)
+        getProduct(args.productId?.toLong())
+
     }
 
-    private fun bind(product: Product){
+    private fun getProduct(id: Long?){
+        id ?: return
+        presenter.getProducts(productId = id, isFiltered = false)
+    }
+
+    private fun initShare(id: Long){
+        binding.shareIcon.setOnClickListener {
+            presenter.shareProduct(id)
+        }
+    }
+
+    private fun bind(product: Product?){
+        product ?: return
+        initShare(product.id)
+        initViewPager(product.photo)
+
+
+
         binding.productPriceTextView.text = "${product.price - ((product.price/100) * product.sale) } ₽"
         val crossedStr = "${product.price} ₽".toSpannable().apply { setSpan(
                 StrikethroughSpan(), 0, length ,0) }
@@ -65,9 +86,9 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
 
     }
 
-    private fun initViewPager(){
+    private fun initViewPager(photoList: List<ProductPhoto>){
         val photoAdapter = PhotoViewPagerAdapter(this)
-        photoAdapter.updateList(args.product.photo)
+        photoAdapter.updateList(photoList)
         binding.productPhotoViewPager.adapter = photoAdapter
         binding.viewPagerDots.setViewPager2(binding.productPhotoViewPager)
 
@@ -98,6 +119,13 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         presenter.getYouMayLikeProducts()
     }
 
+    private fun startIntent(intent: Intent){
+        if (intent.resolveActivity(requireContext().packageManager) != null) {
+            startActivity(intent)
+        }
+
+    }
+
     private fun initViews(){
         val crossedStr = binding.productOldPriceTextView.text.toSpannable().apply { setSpan(
             StrikethroughSpan(), 0, binding.productOldPriceTextView.text.length ,0) }
@@ -105,7 +133,11 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
     }
 
     override fun loaded(result: Any) {
-        productAdapter.updateList(result as List<Product>)
+        when(result) {
+         is List<*> -> productAdapter.updateList(result as List<Product>)
+            is Intent -> startIntent(result)
+            is Product -> bind(result)
+        }
 
     }
 

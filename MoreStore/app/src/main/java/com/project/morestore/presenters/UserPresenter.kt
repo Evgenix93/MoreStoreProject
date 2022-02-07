@@ -140,11 +140,11 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getUserInfo(){
+    fun getUserInfo() {
         presenterScope.launch {
             viewState.loading()
             val response = repository.getCurrentUserInfo()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -157,16 +157,14 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             }
 
 
-
-
         }
     }
 
-    fun getUserProducts(){
+    fun getUserProducts() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getCurrentUserProducts()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -230,7 +228,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getAllSizes()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -245,32 +243,31 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getAllCities(){
+    fun getAllCities() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getCities()
-            when(response?.code()){
-            200 -> viewState.loaded(response.body()!!)
-            400 -> {
-                val bodyString = getStringFromResponse(response.errorBody()!!)
-                viewState.error(bodyString)
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
             }
-            500 -> viewState.error("500 Internal Server Error")
-            null -> viewState.error("нет интернета")
-            else -> viewState.error("ошибка")
-
-        }
-
 
 
         }
     }
 
-    fun getAllCategorySegments(){
+    fun getAllCategorySegments() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getCategories()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -283,16 +280,14 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             }
 
 
-
-
         }
     }
 
-    fun getAllBrands(){
+    fun getAllBrands() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getBrands()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -307,11 +302,11 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getCityByCoordinates(coordinates: String){
+    fun getCityByCoordinates(coordinates: String) {
         presenterScope.launch {
             viewState.loading()
             val response = repository.getCityByCoordinates(coordinates)
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -326,7 +321,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun changeUserCity(city: String? = null, region: Region? = null){
+    fun changeUserCity(city: String? = null, region: Region? = null) {
         presenterScope.launch {
             viewState.loading()
             val filter = repository.getFilter()
@@ -358,12 +353,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     }
 
-    fun addBrandsToWishList(brandsIds: List<Long>){
+    fun addBrandsToWishList(brandsIds: List<Long>) {
         presenterScope.launch {
             viewState.loading()
             val wishList = BrandWishList(brandsIds)
             val response = repository.addBrandsToWishList(wishList)
-            when (response?.code()){
+            when (response?.code()) {
                 200 -> viewState.success(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -377,26 +372,26 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getBrandWishList(){
+    fun getBrandWishList() {
         presenterScope.launch {
             viewState.loading()
             val response = repository.getBrandWishList()
-            when (response?.code()){
-            200 -> viewState.loaded(response.body()!!.map { it.id })
-            400 -> {
-                val bodyString = getStringFromResponse(response.errorBody()!!)
-                viewState.error(bodyString)
-            }
-            500 -> viewState.error("500 Internal Server Error")
-            null -> viewState.error("нет интернета")
-            else -> viewState.error("ошибка")
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!.map { it.id })
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
 
-        }
+            }
 
         }
     }
 
-    fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>){
+    fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>) {
         searchJob = flow
             .debounce(3000)
             .mapLatest { query ->
@@ -412,7 +407,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     }
 
-    fun collectBrandsSearchFlow(flow: Flow<String>, brands: List<ProductBrand>){
+    fun collectBrandsSearchFlow(flow: Flow<String>, brands: List<ProductBrand>) {
         searchJob2 = flow
             .debounce(3000)
             .mapLatest { query ->
@@ -428,7 +423,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     }
 
-    fun cancelJob(){
+    fun cancelJob() {
         searchJob?.cancel()
         searchJob2?.cancel()
     }
@@ -463,7 +458,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun clearFilter(){
+    fun clearFilter() {
         repository.clearFilter()
         viewState.success("Фильтр очищен")
     }
@@ -478,7 +473,9 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                             val response = productRepository.getProductCategoriesKids()
                             when (response?.code()) {
                                 null -> viewState.error("Нет интернета")
-                                200 -> {viewState.loaded(filterProductCategoriesKids(response.body()!!))}
+                                200 -> {
+                                    viewState.loaded(filterProductCategoriesKids(response.body()!!))
+                                }
                                 400 -> viewState.error("Ошибка")
                             }
                         }
@@ -487,7 +484,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                             when (response?.code()) {
                                 null -> viewState.error("Нет интернета")
                                 200 -> {
-                                    viewState.loaded(filterProductCategoriesAdults(response.body()!!, false))
+                                    viewState.loaded(
+                                        filterProductCategoriesAdults(
+                                            response.body()!!,
+                                            false
+                                        )
+                                    )
                                 }
                                 400 -> viewState.error("Ошибка")
                             }
@@ -497,7 +499,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                             when (response?.code()) {
                                 null -> viewState.error("Нет интернета")
                                 200 -> {
-                                    viewState.loaded(filterProductCategoriesAdults(response.body()!!, true))
+                                    viewState.loaded(
+                                        filterProductCategoriesAdults(
+                                            response.body()!!,
+                                            true
+                                        )
+                                    )
                                 }
                                 400 -> viewState.error("Ошибка")
                             }
@@ -507,7 +514,10 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    private fun filterProductCategoriesAdults(productCategoriesAdults: List<ProductCategoryAdults>, isMan: Boolean): List<ProductCategory> {
+    private fun filterProductCategoriesAdults(
+        productCategoriesAdults: List<ProductCategoryAdults>,
+        isMan: Boolean
+    ): List<ProductCategory> {
         val productCategories = mutableListOf<ProductCategory>()
         productCategoriesAdults.forEach {
             when (it.name) {
@@ -524,115 +534,137 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     private fun filterProductCategoriesKids(productCategoriesKids: List<ProductCategoryKids1>): List<ProductCategory> {
         val productCategories = mutableListOf<ProductCategory>()
         productCategoriesKids.forEach {
-            if(it.name == "Детская одежда и обувь")
+            if (it.name == "Детская одежда и обувь")
                 productCategories.addAll(it.sub)
         }
         return productCategories
     }
 
-    fun getFilter(){
+    fun getFilter() {
         viewState.loaded(repository.getFilter())
     }
 
-     fun saveColors(colors: List<Color>){
+    fun saveColors(colors: List<Color>) {
         repository.saveColors(colors)
     }
 
-    fun loadColors(){
+    fun loadColors() {
         val colors = repository.loadColors()
-        if(colors.isNotEmpty())
-         viewState.loaded(colors)
+        if (colors.isNotEmpty())
+            viewState.loaded(colors)
     }
 
-    fun saveMaterials(materials: List<MaterialLine>){
-        repository.saveMaterials(materials)
+    fun saveMaterials(materials: List<MaterialLine>) {
+        val filter = repository.getFilter().apply { chosenMaterials = materials }
+        repository.updateFilter(filter)
     }
 
-    fun loadMaterials(){
+    fun loadMaterials() {
         val materials = repository.loadMaterials()
-        if(materials.isNotEmpty())
+        if (materials.isNotEmpty())
             viewState.loaded(materials)
     }
 
-    fun saveConditions(conditions: List<Boolean>){
+    fun saveConditions(conditions: List<Boolean>) {
         repository.saveConditions(conditions)
     }
 
-    fun loadConditions(){
+    fun loadConditions() {
         val conditions = repository.loadConditions()
-        if(conditions.isNotEmpty()){
+        if (conditions.isNotEmpty()) {
             viewState.loaded(conditions)
         }
     }
 
-    fun saveForWho(forWho: List<Boolean>){
+    fun saveForWho(forWho: List<Boolean>) {
         repository.saveForWho(forWho)
     }
 
-    fun loadForWho(){
+    fun loadForWho() {
         val forWho = repository.loadForWho()
-        if(forWho.isNotEmpty()){
+        if (forWho.isNotEmpty()) {
             viewState.loaded(forWho)
         }
     }
 
-    fun saveTopSizes(sizes: List<SizeLine>){
-        repository.saveTopSizes(sizes)
+    fun saveTopSizes(sizes: List<SizeLine>) {
+        val filter = repository.getFilter().apply {
+            chosenTopSizes =
+                if (sizes.size == chosenTopSizes.size) sizes else sizes + if (chosenTopSizes.isNotEmpty()) listOf(
+                    chosenTopSizes.last()
+                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+        }
+        repository.updateFilter(filter)
+
     }
 
-    fun loadTopSizes(){
+    fun loadTopSizes() {
         val sizes = repository.loadTopSizes()
-        if(sizes.isNotEmpty()){
+        if (sizes.isNotEmpty()) {
             viewState.loaded(sizes)
         }
     }
 
-    fun saveBottomSizes(sizes: List<SizeLine>){
-        repository.saveBottomSizes(sizes)
+    fun saveBottomSizes(sizes: List<SizeLine>) {
+        val filter = repository.getFilter().apply {
+            chosenBottomSizes =
+                if (sizes.size == chosenBottomSizes.size) sizes else sizes + if (chosenBottomSizes.isNotEmpty()) listOf(
+                    chosenBottomSizes.last()
+                ) else listOf(
+                    SizeLine(0, "", "", "", "", "", false)
+                )
+        }
+        repository.updateFilter(filter)
     }
 
-    fun loadBottomSizes(){
+    fun loadBottomSizes() {
         val sizes = repository.loadBottomSizes()
-        if(sizes.isNotEmpty()){
+        if (sizes.isNotEmpty()) {
             viewState.loaded(sizes)
         }
     }
 
-    fun saveShoosSizes(sizes: List<SizeLine>){
-        repository.saveShoosSizes(sizes)
+    fun saveShoosSizes(sizes: List<SizeLine>) {
+        val filter = repository.getFilter().apply {
+            chosenShoosSizes =
+                if (sizes.size == chosenShoosSizes.size) sizes else sizes + if (chosenShoosSizes.isNotEmpty()) listOf(
+                    chosenShoosSizes.last()
+                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+        }
+        repository.updateFilter(filter)
     }
 
-    fun loadShoosSizes(){
+    fun loadShoosSizes() {
         val sizes = repository.loadShoosSizes()
-        if(sizes.isNotEmpty()){
+        if (sizes.isNotEmpty()) {
             viewState.loaded(sizes)
         }
     }
 
-    fun saveProductStatuses(statuses: List<Boolean>){
+    fun saveProductStatuses(statuses: List<Boolean>) {
         repository.saveProductStatuses(statuses)
     }
 
-    fun loadProductStatuses(){
+    fun loadProductStatuses() {
         val statuses = repository.loadProductStatuses()
-        if(statuses.isNotEmpty()){
+        if (statuses.isNotEmpty()) {
             viewState.loaded(statuses)
         }
     }
 
-    fun saveStyles(styles: List<Boolean>){
+    fun saveStyles(styles: List<Boolean>) {
         repository.saveStyles(styles)
     }
 
-    fun loadStyles(){
+    fun loadStyles() {
         val styles = repository.loadStyles()
-        if(styles.isNotEmpty()){
+        if (styles.isNotEmpty()) {
             viewState.loaded(styles)
         }
     }
 
-    fun getUser(){
-        presenterScope.launch{
+    fun getUser() {
+        presenterScope.launch {
             val currentRegion = repository.getFilter().currentLocation
             if (currentRegion != null)
                 viewState.loaded(currentRegion)

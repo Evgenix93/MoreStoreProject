@@ -10,6 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.SizeLineAdapter
 import com.project.morestore.databinding.FragmentFilterSizesShoesBinding
+import com.project.morestore.models.Filter
 import com.project.morestore.models.Size
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
@@ -23,7 +24,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
     private val binding: FragmentFilterSizesShoesBinding by viewBinding()
     private var sizeAdapter: SizeLineAdapter by autoCleared()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
-    private var shoosSizes = listOf<SizeLine>()
+    //private var shoosSizes = listOf<SizeLine>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +42,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
 
         presenter.getAllSizes()
 
-        val list = listOf(
+       /* val list = listOf(
             SizeLine(
                 0,
                 "XXS",
@@ -143,7 +144,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
             )
 
 
-        )
+        )*/
 
         /* sizeAdapter.updateList(if(FilterState.chosenSizes.isNotEmpty()){
              val allNotSelected = FilterState.chosenSizes.all { !it.isSelected }
@@ -252,13 +253,25 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
         binding.loader.isVisible = loading
     }
 
-    private fun loadFilterSizes(){
-        presenter.loadTopSizes()
+    private fun loadFilter(){
+        presenter.getFilter()
+    }
+
+    private fun bindFilter(filter: Filter){
+        if(sizeAdapter.getChosenSizes().size == filter.chosenShoosSizes.size){
+            sizeAdapter.updateList(filter.chosenShoosSizes, null)
+        }
+
+    }
+
+    private fun saveShoosSizes(){
+        presenter.saveShoosSizes(sizeAdapter.getChosenSizes())
     }
 
     override fun onStop() {
         super.onStop()
-        FilterState.filter.chosenShoosSizes = sizeAdapter.getChosenSizes()
+        //FilterState.filter.chosenShoosSizes = sizeAdapter.getChosenSizes()
+        saveShoosSizes()
     }
 
     override fun success(result: Any) {
@@ -277,22 +290,28 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
 
     override fun loaded(result: Any){
         showLoading(false)
-        if((result as List<*>)[0] is Size) {
+        if(result is List<*>) {
             val listShoosSizes =
                 (result as List<Size>).filter { it.id_category == 3 }.sortedBy { it.toInt() }
                     .map { convertSizeToSizeLine(it) }
-            if(FilterState.filter.chosenShoosSizes.size == listShoosSizes.size + 1){
-                sizeAdapter.updateList(FilterState.filter.chosenShoosSizes)//+ listOf(SizeLine(0, "", "", "", "", "", false)))
-            }else {
-                sizeAdapter.updateList(listShoosSizes + listOf(SizeLine(0, "", "", "", "", "", false)))
-            }
-            shoosSizes = listShoosSizes
+            //if(FilterState.filter.chosenShoosSizes.size == listShoosSizes.size + 1){
+              //  sizeAdapter.updateList(FilterState.filter.chosenShoosSizes, null)//+ listOf(SizeLine(0, "", "", "", "", "", false)))
+            //}else {
+                sizeAdapter.updateList(listShoosSizes + listOf(SizeLine(0, "", "", "", "", "", false)), null)
+            //}
+            //shoosSizes = listShoosSizes
+            loadFilter()
 
-        }else{
-            val sizes = result as List<SizeLine>
-            if(shoosSizes.size == sizes.size){
-                sizeAdapter.updateList(sizes)
-            }
+        }//else{
+           // val sizes = result as List<SizeLine>
+           // if(shoosSizes.size == sizes.size){
+             //   sizeAdapter.updateList(sizes, null)
+            //}
+        //}
+
+        if(result is Filter){
+            bindFilter(result)
+
         }
 
 
