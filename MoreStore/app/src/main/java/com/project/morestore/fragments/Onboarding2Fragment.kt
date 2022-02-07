@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +13,7 @@ import com.project.morestore.adapters.SizeCardsAdapter
 import com.project.morestore.databinding.FragmentOnboarding2Binding
 import com.project.morestore.models.Size
 import com.project.morestore.mvpviews.OnBoardingMvpView
-import com.project.morestore.presenters.ProductPresenter
+import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -22,7 +21,7 @@ import moxy.ktx.moxyPresenter
 class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2), OnBoardingMvpView {
     private val binding: FragmentOnboarding2Binding by viewBinding()
     private val args: Onboarding2FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { ProductPresenter(requireContext()) }
+    private val presenter by moxyPresenter { OnboardingPresenter(requireContext()) }
     private var topSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var bottomSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var shoesSizeCardAdapter: SizeCardsAdapter by autoCleared()
@@ -32,8 +31,7 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
         super.onViewCreated(view, savedInstanceState)
         initLists()
         setClickListeners()
-        presenter.getAllSizes()
-
+        getAllSizes()
     }
 
 
@@ -86,7 +84,9 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
         binding.loader.isVisible = loading
     }
 
-
+    private fun getAllSizes(){
+        presenter.getAllSizes()
+    }
 
     override fun loading() {
         showLoading(true)

@@ -2,7 +2,6 @@ package com.project.morestore.presenters
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.viewModelScope
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
 import com.project.morestore.models.Region
@@ -163,7 +162,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
 
   fun loadFilter(){
       presenterScope.launch{
-          productRepository.loadFilter()
+          userRepository.loadFilter()
       }
   }
 

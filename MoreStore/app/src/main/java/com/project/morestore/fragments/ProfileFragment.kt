@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentProfileBinding
 import com.project.morestore.models.Region
-import com.project.morestore.models.User
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.redmadrobot.inputmask.MaskedTextChangedListener
@@ -34,7 +33,7 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
     }
 
     private fun getUser(){
-        presenter.getUser()
+        presenter.getCurrentRegion()
         val listener =
             MaskedTextChangedListener("+7([000])-[000]-[00]-[00]", binding.phoneEditText)
         binding.phoneEditText.addTextChangedListener(listener)

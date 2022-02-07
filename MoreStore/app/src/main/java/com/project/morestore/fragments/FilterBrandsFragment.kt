@@ -8,16 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.project.morestore.FilterState
 import com.project.morestore.R
 import com.project.morestore.adapters.BrandsAdapter
 import com.project.morestore.adapters.CategoryAdapter
 import com.project.morestore.databinding.FragmentBrandsBinding
 import com.project.morestore.models.Category
+import com.project.morestore.models.Filter
 import com.project.morestore.models.ProductBrand
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
@@ -28,7 +27,7 @@ import kotlinx.coroutines.flow.Flow
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpView {
+class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpView {
     private val binding: FragmentBrandsBinding by viewBinding()
     private var segmentsAdapter: CategoryAdapter by autoCleared()
     private var brandsAdapter: BrandsAdapter by autoCleared()
@@ -43,7 +42,6 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
         initToolbar()
         initSegmentsRecyclerView()
         initBrandsRecyclerView()
-        //initABrandsRecyclerView()
         loadFilter()
         getCategorySegments()
         initSearch()
@@ -53,8 +51,7 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
 
     override fun onStop() {
         super.onStop()
-        safeFilter()
-
+        saveFilter()
     }
 
     private fun initSegmentsRecyclerView() {
@@ -121,7 +118,7 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
        // }
     //}
 
-    private fun safeFilter() {
+    private fun saveFilter() {
         com.project.morestore.singletones.FilterState.filter.brands = brandsAdapter.getCurrentList()
         com.project.morestore.singletones.FilterState.filter.segments = segmentsAdapter.loadSegments2Checked()
         //FilterState.segments = segmentsAdapter.loadSegmentsChecked()
@@ -194,46 +191,49 @@ class BrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpVi
     }
 
     override fun loaded(result: Any) {
-        if(result is Boolean){
-            val isTokenEmpty = result
-            if(!isTokenEmpty){
-                getBrandWishList()
+        when(result){
+            is Boolean -> {
+                if (!result) {
+                    getBrandWishList()
+                }
             }
-            return
+            is List<*> -> {
+                if (result.isNotEmpty()) {
+                  /*  if (result[0] is Category) {
+                        if (com.project.morestore.singletones.FilterState.filter.segments.isEmpty()) {
+                            Log.d("mylog", "segments empty")
+                            //segmentsAdapter.updateList(list as List<Category>)
+                        } else {
+                            Log.d(
+                                "mylog",
+                                com.project.morestore.singletones.FilterState.filter.segments.toString()
+                            )
+                            segmentsAdapter.updateSegmentsChecked(com.project.morestore.singletones.FilterState.filter.segments.toMutableList())
+                        }
+                    }*/
+                    if (result[0] is ProductBrand) {
+                      //  if (brands.isEmpty()) {
+                        //    brands = result as List<ProductBrand>
+                            presenter.collectBrandsSearchFlow(searchFlow,  result as List<ProductBrand>)
+                        //}
+                        brandsAdapter.updateList(result as List<ProductBrand>)
+                        checkToken()
+                        presenter.getFilter()
+                    }
 
+                    if (result[0] is Long) {
+                        //getBrandWishList()
+                        brandsAdapter.updateWishedInfo(result as List<Long>, true)
+                    }
+                }
+            }
+            is Filter -> {
+                if (result.segments.isNotEmpty())
+                    segmentsAdapter.updateSegmentsChecked(result.segments.toMutableList())
+                if(result.brands.size == brandsAdapter.getCurrentList().size)
+                    brandsAdapter.updateList(result.brands)
+            }
         }
-        val list = result as List<*>
-        if(list.isNotEmpty()){
-            if(list[0] is Category){
-                if(com.project.morestore.singletones.FilterState.filter.segments.isEmpty()) {
-                    Log.d("mylog", "segments empty")
-                    //segmentsAdapter.updateList(list as List<Category>)
-                }else{
-                    Log.d("mylog", com.project.morestore.singletones.FilterState.filter.segments.toString())
-                    segmentsAdapter.updateSegmentsChecked(com.project.morestore.singletones.FilterState.filter.segments.toMutableList())
-                }
-            }
-            if(list[0] is ProductBrand){
-                if(brands.isEmpty()){
-                    brands = list as List<ProductBrand>
-                    presenter.collectBrandsSearchFlow(searchFlow, brands)
-                }
-                if(com.project.morestore.singletones.FilterState.filter.brands.size == list.size) {
-                    brandsAdapter.updateList(com.project.morestore.singletones.FilterState.filter.brands)
-                }else{
-                    brandsAdapter.updateList(list as List<ProductBrand>)
-                }
-                checkToken()
-            }
-
-            if(list[0] is Long){
-                //getBrandWishList()
-                brandsAdapter.updateWishedInfo(list as List<Long>, true)
-            }
-
-
-        }
-
     }
 
     override fun successNewCode() {

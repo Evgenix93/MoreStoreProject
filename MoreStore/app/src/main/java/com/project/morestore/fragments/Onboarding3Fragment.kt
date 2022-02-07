@@ -14,7 +14,7 @@ import com.project.morestore.databinding.FragmentOnboarding3Binding
 import com.project.morestore.models.Category
 import com.project.morestore.mvpviews.OnBoardingMvpView
 
-import com.project.morestore.presenters.ProductPresenter
+import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -23,7 +23,7 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
     private val binding: FragmentOnboarding3Binding by viewBinding()
     private val args: Onboarding3FragmentArgs by navArgs()
     private var categoryAdapter: CategoryAdapter by autoCleared()
-    private val presenter by moxyPresenter { ProductPresenter(requireContext()) }
+    private val presenter by moxyPresenter { OnboardingPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

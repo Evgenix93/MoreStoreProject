@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.Flow
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class RegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), UserMvpView {
+class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), UserMvpView {
    private val binding: FragmentRegionsBinding by viewBinding()
    private var regionsAdapter: RegionsAdapter by autoCleared()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
