@@ -335,15 +335,15 @@
         android:label="FilterProductStatusFragment" />
     <fragment
         android:id="@+id/brandsFragment"
-        android:name="com.project.morestore.fragments.BrandsFragment"
+        android:name="com.project.morestore.fragments.FilterBrandsFragment"
         android:label="BrandsFragment" />
     <fragment
         android:id="@+id/regionsFragment"
-        android:name="com.project.morestore.fragments.RegionsFragment"
+        android:name="com.project.morestore.fragments.FilterRegionsFragment"
         android:label="RegionsFragment" />
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.project.morestore.fragments.CategoriesFragment"
+        android:name="com.project.morestore.fragments.FilterCategoriesFragment"
         android:label="CategoriesFragment" />
     <fragment
         android:id="@+id/filterFragment"
@@ -388,7 +388,7 @@
     </fragment>
     <fragment
         android:id="@+id/colorsFragment"
-        android:name="com.project.morestore.fragments.ColorsFragment"
+        android:name="com.project.morestore.fragments.FilterColorsFragment"
         android:label="ColorsFragment" />
     <fragment
         android:id="@+id/autoLocationFragment"

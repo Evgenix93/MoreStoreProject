@@ -22,7 +22,7 @@ import moxy.presenterScope
 import okhttp3.ResponseBody
 
 class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
-    private val repository = UserRepository(context)
+    private val userRepository = UserRepository(context)
     private val authRepository = AuthRepository(context)
     private val productRepository = ProductRepository(context)
 
@@ -59,7 +59,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 viewState.error("укажите фамилию")
                 return@launch
             }
-            val response = repository.changeUserData(
+            val response = userRepository.changeUserData(
                 phone = unmaskedPhone?.trim(),
                 email = email?.trim(),
                 name = name,
@@ -117,7 +117,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 viewState.error("телефон указан неверно")
                 return@launch
             }
-            val response = repository.changeUserData2(
+            val response = userRepository.changeUserData2(
                 phone = unmaskedPhone?.trim(),
                 email = email?.trim(),
                 step = step,
@@ -143,7 +143,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun getUserInfo(){
         presenterScope.launch {
             viewState.loading()
-            val response = repository.getCurrentUserInfo()
+            val response = userRepository.getCurrentUserInfo()
             when(response?.code()){
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
@@ -210,7 +210,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     private fun uploadPhoto(uri: Uri) {
         presenterScope.launch {
-            val response = repository.uploadPhoto(uri)
+            val response = userRepository.uploadPhoto(uri)
             when (response?.code()) {
                 200 -> {
                     viewState.success(Unit)
@@ -310,7 +310,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun getCityByCoordinates(coordinates: String){
         presenterScope.launch {
             viewState.loading()
-            val response = repository.getCityByCoordinates(coordinates)
+            val response = userRepository.getCityByCoordinates(coordinates)
             when(response?.code()){
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
@@ -329,12 +329,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun changeUserCity(city: String? = null, region: Region? = null){
         presenterScope.launch {
             viewState.loading()
-            val filter = repository.getFilter()
+            val filter = userRepository.getFilter()
             region?.let {
                 filter.currentLocation = region
                 filter.isCurrentLocationFirstLoaded = false
                 filter.isCurrentLocationChosen = true
-                repository.updateFilter(filter)
+                userRepository.updateFilter(filter)
                 viewState.success(Unit)
                 return@launch
             }
@@ -351,7 +351,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             filter.currentLocation = foundCity
             filter.isCurrentLocationFirstLoaded = false
             filter.isCurrentLocationChosen = true
-            repository.updateFilter(filter)
+            userRepository.updateFilter(filter)
             viewState.success(Unit)
         }
 
@@ -362,7 +362,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         presenterScope.launch {
             viewState.loading()
             val wishList = BrandWishList(brandsIds)
-            val response = repository.addBrandsToWishList(wishList)
+            val response = userRepository.addBrandsToWishList(wishList)
             when (response?.code()){
                 200 -> viewState.success(response.body()!!)
                 400 -> {
@@ -380,7 +380,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun getBrandWishList(){
         presenterScope.launch {
             viewState.loading()
-            val response = repository.getBrandWishList()
+            val response = userRepository.getBrandWishList()
             when (response?.code()){
             200 -> viewState.loaded(response.body()!!.map { it.id })
             400 -> {
@@ -456,7 +456,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     fun saveFilter() {
         presenterScope.launch {
-            if (repository.saveFilter())
+            if (userRepository.saveFilter())
                 viewState.success("Фильтр сохранен")
             else
                 viewState.error("Ошибка сохранения")
@@ -464,13 +464,13 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
     fun clearFilter(){
-        repository.clearFilter()
+        userRepository.clearFilter()
         viewState.success("Фильтр очищен")
     }
 
     fun getProductCategories() {
         presenterScope.launch {
-            val chosenForWho = productRepository.loadForWho()
+            val chosenForWho = userRepository.getFilter().chosenForWho
             chosenForWho.forEachIndexed { index, isChecked ->
                 if (isChecked)
                     when (index) {
@@ -531,111 +531,124 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
     fun getFilter(){
-        viewState.loaded(repository.getFilter())
+        viewState.loaded(userRepository.getFilter())
     }
 
      fun saveColors(colors: List<Color>){
-        repository.saveColors(colors)
+        userRepository.saveColors(colors)
     }
 
     fun loadColors(){
-        val colors = repository.loadColors()
+        val colors = userRepository.loadColors()
         if(colors.isNotEmpty())
          viewState.loaded(colors)
     }
 
     fun saveMaterials(materials: List<MaterialLine>){
-        repository.saveMaterials(materials)
+        userRepository.saveMaterials(materials)
     }
 
     fun loadMaterials(){
-        val materials = repository.loadMaterials()
+        val materials = userRepository.loadMaterials()
         if(materials.isNotEmpty())
             viewState.loaded(materials)
     }
 
     fun saveConditions(conditions: List<Boolean>){
-        repository.saveConditions(conditions)
+        userRepository.saveConditions(conditions)
     }
 
     fun loadConditions(){
-        val conditions = repository.loadConditions()
+        val conditions = userRepository.loadConditions()
         if(conditions.isNotEmpty()){
             viewState.loaded(conditions)
         }
     }
 
     fun saveForWho(forWho: List<Boolean>){
-        repository.saveForWho(forWho)
+        val filter = userRepository.getFilter()
+        filter.chosenForWho = forWho
+        userRepository.updateFilter(filter)
     }
 
-    fun loadForWho(){
-        val forWho = repository.loadForWho()
-        if(forWho.isNotEmpty()){
-            viewState.loaded(forWho)
-        }
-    }
 
     fun saveTopSizes(sizes: List<SizeLine>){
-        repository.saveTopSizes(sizes)
+        userRepository.saveTopSizes(sizes)
     }
 
     fun loadTopSizes(){
-        val sizes = repository.loadTopSizes()
+        val sizes = userRepository.loadTopSizes()
         if(sizes.isNotEmpty()){
             viewState.loaded(sizes)
         }
     }
 
     fun saveBottomSizes(sizes: List<SizeLine>){
-        repository.saveBottomSizes(sizes)
+        userRepository.saveBottomSizes(sizes)
     }
 
     fun loadBottomSizes(){
-        val sizes = repository.loadBottomSizes()
+        val sizes = userRepository.loadBottomSizes()
         if(sizes.isNotEmpty()){
             viewState.loaded(sizes)
         }
     }
 
     fun saveShoosSizes(sizes: List<SizeLine>){
-        repository.saveShoosSizes(sizes)
+        userRepository.saveShoosSizes(sizes)
     }
 
     fun loadShoosSizes(){
-        val sizes = repository.loadShoosSizes()
+        val sizes = userRepository.loadShoosSizes()
         if(sizes.isNotEmpty()){
             viewState.loaded(sizes)
         }
     }
 
-    fun saveProductStatuses(statuses: List<Boolean>){
-        repository.saveProductStatuses(statuses)
+    fun saveStatuses(statuses: List<Boolean>){
+        val filter = userRepository.getFilter()
+        filter.chosenProductStatus = statuses
+        userRepository.updateFilter(filter)
     }
 
     fun loadProductStatuses(){
-        val statuses = repository.loadProductStatuses()
+        val statuses = userRepository.loadProductStatuses()
         if(statuses.isNotEmpty()){
             viewState.loaded(statuses)
         }
     }
 
     fun saveStyles(styles: List<Boolean>){
-        repository.saveStyles(styles)
+        val filter = userRepository.getFilter()
+        filter.chosenStyles = styles
+        userRepository.updateFilter(filter)
     }
 
     fun loadStyles(){
-        val styles = repository.loadStyles()
+        val styles = userRepository.loadStyles()
         if(styles.isNotEmpty()){
             viewState.loaded(styles)
         }
     }
 
-    fun getUser(){
+    fun getCurrentRegion(){
         presenterScope.launch{
-            val currentRegion = repository.getFilter().currentLocation
+            val currentRegion = userRepository.getFilter().currentLocation
             if (currentRegion != null)
                 viewState.loaded(currentRegion)
         }
+    }
+
+    fun saveCategories(productCategories: List<ProductCategory>){
+        val filter = userRepository.getFilter()
+        filter.categories = productCategories
+        userRepository.updateFilter(filter)
+    }
+
+    fun savePrices(fromPrice: Int?, untilPrice: Int?){
+        val filter = userRepository.getFilter()
+        filter.fromPrice = fromPrice
+        filter.untilPrice = untilPrice
+        userRepository.updateFilter(filter)
     }
 }

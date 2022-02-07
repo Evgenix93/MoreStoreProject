@@ -3,15 +3,14 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFilterForWhoBinding
+import com.project.morestore.models.Filter
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
-import com.project.morestore.singletones.FilterState
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -23,7 +22,7 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
         super.onViewCreated(view, savedInstanceState)
         initRadioButtons()
         initToolBar()
-        loadFilterForWho()
+        getFilter()
     }
 
     private fun initRadioButtons() {
@@ -55,18 +54,21 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun loadFilterForWho(){
-        presenter.loadForWho()
-
+    private fun getFilter(){
+        presenter.getFilter()
     }
 
-    override fun onStop() {
-        super.onStop()
+    private fun saveForWho(){
         presenter.saveForWho(listOf(
             binding.forWomenCheckBox.isChecked,
             binding.forMenCheckBox.isChecked,
             binding.forKidsCheckBox.isChecked
         ))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        saveForWho()
     }
 
     override fun success(result: Any) {
@@ -82,10 +84,10 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
     }
 
     override fun loaded(result: Any) {
-        val forWho = result as List<Boolean>
-        binding.forWomenCheckBox.isChecked = forWho[0]
-        binding.forMenCheckBox.isChecked = forWho[1]
-        binding.forKidsCheckBox.isChecked = forWho[2]
+        val filter = result as Filter
+        binding.forWomenCheckBox.isChecked = filter.chosenForWho[0]
+        binding.forMenCheckBox.isChecked = filter.chosenForWho[1]
+        binding.forKidsCheckBox.isChecked = filter.chosenForWho[2]
 
 
     }

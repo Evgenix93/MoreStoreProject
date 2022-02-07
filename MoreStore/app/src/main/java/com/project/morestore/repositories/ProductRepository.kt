@@ -207,7 +207,7 @@ class ProductRepository(private val context: Context) {
 
 
 
-    suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>){
+     fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>){
        // return try {
     //suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>){
        /* return try {
@@ -313,42 +313,12 @@ class ProductRepository(private val context: Context) {
 
 
          fun safeCategories(segmentsChecked: List<Boolean>) {
-        /*return try {
-            withContext(Dispatchers.IO) {
-                val sharedPrefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
-                val categoryIdStringSet = categoryIdList.map { it.toString() }.toMutableSet()
-                sharedPrefs.edit().apply {
-                    clear()
-                    putStringSet(CATEGORIES, categoryIdStringSet)
-                }.commit()
-            }
-        } catch (e: Throwable) {
-            false
-        }*/
        FilterState.filter.segments = segmentsChecked
        FilterState.filter.isAllBrands = segmentsChecked.all{!it}
     }
 
-   suspend fun safeFilter(): Boolean {
-       return try {
-           withContext(Dispatchers.IO) {
-               val filterJsonString = Moshi.Builder().build().adapter(Filter::class.java).toJson(FilterState.filter)
-               val sharedPrefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
-               sharedPrefs.edit().putString(FILTER_KEY, filterJsonString).commit()
-           }
-       } catch (e: Throwable) {
-           false
-       }
-   }
 
-    suspend fun loadFilter(){
-        withContext(Dispatchers.IO){
-            val sharedPrefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
-            val filterJsonString = sharedPrefs.getString(FILTER_KEY, null)
-            if (filterJsonString != null)
-                FilterState.filter = Moshi.Builder().build().adapter(Filter::class.java).fromJson(filterJsonString)!!
-        }
-    }
+
 
     suspend fun loadSizes(): List<MutableSet<String>?>{
         return withContext(Dispatchers.IO){
@@ -414,10 +384,6 @@ class ProductRepository(private val context: Context) {
             else
                 Response.error(400, "".toResponseBody())
         }
-    }
-
-    fun loadForWho(): List<Boolean>{
-        return  FilterState.filter.chosenForWho
     }
 
     companion object {

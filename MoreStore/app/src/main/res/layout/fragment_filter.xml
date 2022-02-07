@@ -401,7 +401,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider6View" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/priceFromEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -421,14 +421,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/from"
-        app:layout_constraintTop_toTopOf="@+id/editText2"
-        app:layout_constraintBottom_toBottomOf="@+id/editText2"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
+        app:layout_constraintTop_toTopOf="@+id/priceFromEditText"
+        app:layout_constraintBottom_toBottomOf="@+id/priceFromEditText"
+        app:layout_constraintStart_toStartOf="@+id/priceFromEditText"
         android:layout_marginStart="8dp"
         android:textAppearance="@style/regular_16"/>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/priceUntilEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -447,9 +447,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/until"
-        app:layout_constraintTop_toTopOf="@+id/editText"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
-        app:layout_constraintStart_toStartOf="@+id/editText"
+        app:layout_constraintTop_toTopOf="@+id/priceUntilEditText"
+        app:layout_constraintBottom_toBottomOf="@+id/priceUntilEditText"
+        app:layout_constraintStart_toStartOf="@+id/priceUntilEditText"
         android:layout_marginStart="8dp"
         android:textAppearance="@style/regular_16"/>
 
@@ -469,7 +469,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="12dp"
         android:background="@color/gray1"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/priceFromEditText" />
 
     <TextView
         android:id="@+id/conditionTextView"

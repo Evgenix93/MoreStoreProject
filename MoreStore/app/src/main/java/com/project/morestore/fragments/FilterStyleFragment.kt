@@ -44,14 +44,18 @@ class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style)
         presenter.loadStyles()
     }
 
-    override fun onStop() {
-        super.onStop()
+    private fun saveFilterStyles(){
         presenter.saveStyles(listOf(
             binding.newWithTagCheckBox.isChecked,
             binding.newWithotuTagCheckBox.isChecked,
             binding.ExcellentCheckBox.isChecked,
             binding.goodCheckBox.isChecked
         ))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        saveFilterStyles()
     }
 
     override fun success(result: Any) {

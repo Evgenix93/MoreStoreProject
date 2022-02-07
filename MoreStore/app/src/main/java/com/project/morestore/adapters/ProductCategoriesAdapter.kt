@@ -65,7 +65,7 @@ class ProductCategoriesAdapter: RecyclerView.Adapter<ProductCategoriesAdapter.Pr
     }
 
     fun updateList(newList: List<ProductCategory>) {
-        productCategories =  newList
+        productCategories =   newList
         notifyDataSetChanged()
     }
 }

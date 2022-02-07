@@ -3,23 +3,23 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFilterProductStatusBinding
+import com.project.morestore.models.Filter
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
-import com.project.morestore.singletones.FilterState
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+
 
 class FilterProductStatusFragment: MvpAppCompatFragment(R.layout.fragment_filter_product_status), UserMvpView {
     private val binding: FragmentFilterProductStatusBinding by viewBinding()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadFilterStatuses()
+        getFilter()
         initToolBar()
     }
 
@@ -35,15 +35,18 @@ class FilterProductStatusFragment: MvpAppCompatFragment(R.layout.fragment_filter
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun loadFilterStatuses(){
-        presenter.loadProductStatuses()
+    private fun getFilter(){
+        presenter.getFilter()
+    }
 
+    private fun saveStatuses(){
+        presenter.saveStatuses(listOf(binding.newWithTagCheckBox.isChecked, binding.newWithotuTagCheckBox.isChecked,
+            binding.ExcellentCheckBox.isChecked))
     }
 
     override fun onStop() {
         super.onStop()
-        presenter.saveProductStatuses(listOf(binding.newWithTagCheckBox.isChecked, binding.newWithotuTagCheckBox.isChecked,
-        binding.ExcellentCheckBox.isChecked))
+        saveStatuses()
     }
 
     override fun success(result: Any) {
@@ -59,7 +62,8 @@ class FilterProductStatusFragment: MvpAppCompatFragment(R.layout.fragment_filter
     }
 
     override fun loaded(result: Any) {
-        bind(result as List<Boolean>)
+        val filter = result as Filter
+        bind(filter.chosenProductStatus)
 
     }
 

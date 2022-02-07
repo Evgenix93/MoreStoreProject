@@ -1,7 +1,6 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -33,6 +32,11 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
     override fun onResume() {
         super.onResume()
         initAutoCompleteTextView()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        savePriceFilter()
     }
 
     private fun configureFilterScreen(filter: Filter) {
@@ -156,7 +160,8 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
         else
            binding.allColors.text = filter.colors.filter{it.isChecked}.joinToString(", "){it.name}
 
-
+        binding.priceFromEditText.setText(filter.fromPrice?.toString())
+        binding.priceUntilEditText.setText(filter.untilPrice?.toString())
     }
 
     private fun setClickListeners() {
@@ -244,6 +249,13 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
 
     private fun saveFilter() {
         presenter.saveFilter()
+    }
+
+    private fun savePriceFilter(){
+        presenter.savePrices(
+            binding.priceFromEditText.text.toString().toIntOrNull(),
+            binding.priceUntilEditText.text.toString().toIntOrNull()
+        )
     }
 
     override fun success(result: Any) {

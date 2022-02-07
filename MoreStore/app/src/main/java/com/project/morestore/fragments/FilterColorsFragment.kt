@@ -17,7 +17,7 @@ import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class ColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), UserMvpView {
+class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), UserMvpView {
     private val binding:FragmentColorsBinding by viewBinding()
     private var colorsAdapter: ColorsAdapter by autoCleared()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }

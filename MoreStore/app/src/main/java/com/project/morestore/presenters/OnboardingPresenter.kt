@@ -10,6 +10,7 @@ import com.project.morestore.repositories.AuthRepository
 
 
 import com.project.morestore.repositories.ProductRepository
+import com.project.morestore.repositories.UserRepository
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.singletones.Network
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +24,11 @@ import retrofit2.Response
 import java.io.IOException
 
 
-class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
+class OnboardingPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
     private val repository = ProductRepository(context)
     private val authRepository = AuthRepository(context)
+    private val userRepository = UserRepository(context)
+
     private val categoryIdList = mutableListOf<Int>()
 
     fun getAllSizes(){
@@ -112,7 +115,7 @@ class ProductPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
 
    fun safeFilter(){
        presenterScope.launch{
-           if (repository.safeFilter())
+           if (userRepository.saveFilter())
                viewState.success()
            else
                viewState.error("Ошибка")
