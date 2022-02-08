@@ -30,6 +30,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     private var photoUri: Uri? = null
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
+    private var searchJob3: Job? = null
 
     fun changeUserData(
         phone: String? = null,
@@ -302,6 +303,74 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    private fun getProperties(propertyId: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getProperties()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+
+    }
+
+    fun getMaterials(){
+        getProperties(13)
+    }
+
+    fun getTopSizesWomen(){
+        getProperties(4)
+    }
+
+    fun getBottomSizesWomen(){
+        getProperties(5)
+    }
+
+    fun getShoosSizesWomen(){
+        getProperties(6)
+    }
+
+
+
+
+
+    fun getTopSizesMen(){
+        getProperties(1)
+    }
+
+    fun getBottomSizesMen(){
+        getProperties(2)
+    }
+
+    fun getShoosSizesMen(){
+        getProperties(3)
+    }
+
+    fun getTopSizesKids(){
+        getProperties(7)
+    }
+
+    fun getBottomSizesKids(){
+        getProperties(8)
+    }
+
+    fun getShoosSizesKids(){
+        getProperties(9)
+    }
+
+
+
+
+
     fun getCityByCoordinates(coordinates: String) {
         presenterScope.launch {
             viewState.loading()
@@ -413,6 +482,22 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             .mapLatest { query ->
                 withContext(Dispatchers.IO) {
                     brands.filter { it.name.contains(query, true) }
+                }
+
+            }
+            .onEach { result ->
+                viewState.loaded(result)
+
+            }.launchIn(presenterScope)
+
+    }
+
+    fun collectMaterialSearchFlow(flow: Flow<String>, materials: List<Property>){
+        searchJob3 = flow
+            .debounce(3000)
+            .mapLatest { query ->
+                withContext(Dispatchers.IO) {
+                    materials.filter { it.name.contains(query, true) }
                 }
 
             }
@@ -586,7 +671,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun saveTopSizes(sizes: List<SizeLine>) {
         val filter = userRepository.getFilter().apply {
             chosenTopSizes =
-                if (sizes.size == chosenTopSizes.size) sizes else sizes + if (chosenTopSizes.isNotEmpty()) listOf(
+                if (sizes.size >= chosenTopSizes.size) sizes else sizes + if (chosenTopSizes.isNotEmpty()) listOf(
                     chosenTopSizes.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false))
         }
@@ -601,10 +686,21 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun saveTopSizesMen(sizes: List<SizeLine>){
+        val filter = userRepository.getFilter().apply {
+            chosenTopSizesMen =
+                if (sizes.size >= chosenTopSizesMen.size) sizes else sizes + if (chosenTopSizesMen.isNotEmpty()) listOf(
+                    chosenTopSizesMen.last()
+                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+        }
+        userRepository.updateFilter(filter)
+
+    }
+
     fun saveBottomSizes(sizes: List<SizeLine>) {
         val filter = userRepository.getFilter().apply {
             chosenBottomSizes =
-                if (sizes.size == chosenBottomSizes.size) sizes else sizes + if (chosenBottomSizes.isNotEmpty()) listOf(
+                if (sizes.size >= chosenBottomSizes.size) sizes else sizes + if (chosenBottomSizes.isNotEmpty()) listOf(
                     chosenBottomSizes.last()
                 ) else listOf(
                     SizeLine(0, "", "", "", "", "", false)
@@ -620,15 +716,53 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun saveBottomSizesMen(sizes: List<SizeLine>){
+        val filter = userRepository.getFilter().apply {
+            chosenBottomSizesMen =
+                if (sizes.size >= chosenBottomSizesMen.size) sizes else sizes + if (chosenBottomSizesMen.isNotEmpty()) listOf(
+                    chosenBottomSizesMen.last()
+                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+        }
+        userRepository.updateFilter(filter)
+
+    }
+
     fun saveShoosSizes(sizes: List<SizeLine>) {
         val filter = userRepository.getFilter().apply {
             chosenShoosSizes =
-                if (sizes.size == chosenShoosSizes.size) sizes else sizes + if (chosenShoosSizes.isNotEmpty()) listOf(
+                if (sizes.size >= chosenShoosSizes.size) sizes else sizes + if (chosenShoosSizes.isNotEmpty()) listOf(
                     chosenShoosSizes.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false))
         }
         userRepository.updateFilter(filter)
     }
+
+    fun saveShoosSizesMen(sizes: List<SizeLine>){
+        val filter = userRepository.getFilter().apply {
+            chosenShoosSizesMen =
+                if (sizes.size >= chosenShoosSizesMen.size) sizes else sizes + if (chosenShoosSizesMen.isNotEmpty()) listOf(
+                    chosenShoosSizesMen.last()
+                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+        }
+        userRepository.updateFilter(filter)
+    }
+
+    fun saveTopSizesKids(sizes: List<SizeLine>){
+        val filter = userRepository.getFilter().apply { chosenTopSizesKids = sizes }
+        userRepository.updateFilter(filter)
+    }
+
+    fun saveBottomSizesKids(sizes: List<SizeLine>){
+        val filter = userRepository.getFilter().apply { chosenBottomSizesKids = sizes }
+        userRepository.updateFilter(filter)
+    }
+
+    fun saveShoosSizesKids(sizes: List<SizeLine>){
+        val filter = userRepository.getFilter().apply { chosenShoosSizesKids = sizes }
+        userRepository.updateFilter(filter)
+    }
+
+
 
     fun loadShoosSizes(){
         val sizes = userRepository.loadShoosSizes()

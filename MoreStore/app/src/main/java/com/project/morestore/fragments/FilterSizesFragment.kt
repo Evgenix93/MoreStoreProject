@@ -13,6 +13,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.SizeLineAdapter
 import com.project.morestore.databinding.FragmentFilterSizesColthesBinding
 import com.project.morestore.models.Filter
+import com.project.morestore.models.Property
 import com.project.morestore.models.Size
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
@@ -25,8 +26,11 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
     UserMvpView {
     private val binding: FragmentFilterSizesColthesBinding by viewBinding()
     private val sizeAdapter = SizeLineAdapter(false)
-    //private var topSizeList = listOf<SizeLine>()
-    //private var bottomSizeList = listOf<SizeLine>()
+    private var topSizeList = listOf<SizeLine>()
+    private var bottomSizeList = listOf<SizeLine>()
+    private var isForWomen = true
+    private var isSizesLoaded = false
+    //private var filter = Filter()
 
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
 
@@ -34,6 +38,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         super.onViewCreated(view, savedInstanceState)
         initList()
         initToolBar()
+        loadFilter()
 
     }
 
@@ -45,7 +50,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
             setHasFixedSize(true)
         }
 
-        presenter.getAllSizes()
+       // presenter.getAllSizes()
 
         /*val list = listOf(
             SizeLine(
@@ -255,13 +260,41 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
        // presenter.loadTopSizes()
    // }
 
+    private fun getSizes(){
+        if (isForWomen) {
+            presenter.getTopSizesWomen()
+            presenter.getBottomSizesWomen()
+        }
+        else {
+            presenter.getTopSizesMen()
+            presenter.getBottomSizesMen()
+        }
+    }
+
     private fun loadFilter(){
         presenter.getFilter()
     }
 
     private fun bindFilter(filter: Filter){
-        if(sizeAdapter.getChosenSizes().size == filter.chosenTopSizes.size){
-            sizeAdapter.updateList(filter.chosenTopSizes, null)
+        isForWomen = filter.chosenForWho[0]
+
+        if(!isSizesLoaded)
+        getSizes()
+
+        Log.d("mytest", filter.chosenTopSizes.size.toString())
+
+
+
+        when {
+         filter.chosenForWho[0] ->   if (sizeAdapter.getChosenSizes().size == filter.chosenTopSizes.size) {
+                sizeAdapter.updateList(filter.chosenTopSizes, null)
+            }
+
+            filter.chosenForWho[1] ->  if (sizeAdapter.getChosenSizes().size == filter.chosenTopSizesMen.size) {
+                sizeAdapter.updateList(filter.chosenTopSizesMen, null)
+            }
+
+
         }
     }
 
@@ -275,8 +308,13 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
         //}
 
-        presenter.saveTopSizes(chosenTopSizes)
-        presenter.saveBottomSizes(chosenBottomSizes)
+        if(isForWomen) {
+            presenter.saveTopSizes(chosenTopSizes)
+            presenter.saveBottomSizes(chosenBottomSizes)
+        }else{
+            presenter.saveTopSizesMen(chosenTopSizes)
+            presenter.saveBottomSizesMen(chosenBottomSizes)
+        }
 
     }
 
@@ -306,17 +344,29 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
     override fun loaded(result: Any) {
         showLoading(false)
         if(result is List<*> ) {
-            val listTopSizes =
-                (result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() }
-                    .map { convertSizeToSizeLine(it) }
-            val listBottomSizes = result.filter { it.id_category == 2 }.sortedBy { it.toInt() }
-                .map { convertSizeToSizeLine(it) }
-            sizeAdapter.updateList(listTopSizes + listOf(SizeLine(0, "", "", "", "", "", false)), listBottomSizes + listOf(SizeLine(0, "", "", "", "", "", false)))
+            val sizes =
+                (result as List<Property>)
+                    .map {
+                        val list = it.ico?.split(';').orEmpty()
+                        SizeLine(it.id.toInt(), it.name, list[0].removePrefix("W").removeSurrounding("'"), list[1].removePrefix("IT/RU/FR").removeSurrounding("'"), list[2].removePrefix("US").removeSurrounding("'"), list[3].removePrefix("UK").removeSurrounding("'"), false)
+                    }
+            //val listBottomSizes = result.sortedBy { it.toInt() }
+              //  .map { convertSizeToSizeLine(it) }
+            if(result[0].idCategory.toInt() == 1 || result[0].idCategory.toInt() == 4){
+                sizeAdapter.updateList(sizes + listOf(SizeLine(0, "", "", "", "", "", false)), null)
+            }else{
+                sizeAdapter.updateList( sizeAdapter.getChosenSizes(), sizes + listOf(SizeLine(0, "", "", "", "", "", false)) )
+            }
+
+           // sizeAdapter.updateList(listTopSizes + listOf(SizeLine(0, "", "", "", "", "", false)), listBottomSizes + listOf(SizeLine(0, "", "", "", "", "", false)))
 
             //bottomSizeList = listBottomSizes
             //topSizeList = listTopSizes
             //Log.d("mylog2", topSizeList.size.toString())
+            isSizesLoaded = true
             loadFilter()
+
+
 
         }
 
@@ -333,6 +383,8 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
             //}
 
             bindFilter(result)
+
+
         }
 
 

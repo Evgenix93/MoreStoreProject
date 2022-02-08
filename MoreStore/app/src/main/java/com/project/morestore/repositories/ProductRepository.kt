@@ -21,25 +21,29 @@ class ProductRepository(private val context: Context) {
     private val onBoardingApi = Network.onBoardingApi
     private val productApi = Network.productApi
 
-    suspend fun getAllSizes(): Response<List<Size>>?{
+    suspend fun getAllSizes(): Response<List<Size>>? {
         return try {
             onBoardingApi.getAllSizes()
-        }catch (e: Throwable){
-            if(e is IOException){
+        } catch (e: Throwable) {
+            if (e is IOException) {
                 null
-            }else{
+            } else {
                 try {
                     val response = onBoardingApi.getAllSizesGetError()
-                    if(response.code() == 500){
+                    if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))
-                    }else {
-                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
                     }
-                }catch (e: Throwable){
+                } catch (e: Throwable) {
                     Response.error(400, "ошибка".toResponseBody(null))
                 }
-            }}}
-
+            }
+        }
+    }
 
 
     suspend fun getCategories(): Response<List<Category>>? {
@@ -51,43 +55,57 @@ class ProductRepository(private val context: Context) {
             } else {
                 try {
                     val response = onBoardingApi.getCategoriesGetError()
-                    if(response.code() == 500){
+                    if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))
-                    }else {
-                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
                     }
-                }catch (e: Throwable){
+                } catch (e: Throwable) {
                     Response.error(400, "ошибка".toResponseBody(null))
                 }
             }
         }
     }
 
-    suspend fun getProducts(query: String? = null, filter: Filter? = null, userId: Long? = null, productId: Long? = null): Response<List<Product>>?{
+    suspend fun getProducts(
+        query: String? = null,
+        filter: Filter? = null,
+        userId: Long? = null,
+        productId: Long? = null
+    ): Response<List<Product>>? {
         return try {
             var categoryStr = listOf<String>()
             var brandsStr = listOf<String>()
             var citiesStr = listOf<String>()
             var queryStr = listOf<String>()
             var productIdStr = listOf<String>()
+            var productPropertyStr = listOf<String>()
 
-            if(filter?.categories?.isNotEmpty() == true){
-                 categoryStr = filter.categories.filter { it.isChecked == true }.map { "id_category=${it.id}" }
+            if (filter?.categories?.isNotEmpty() == true) {
+                categoryStr =
+                    filter.categories.filter { it.isChecked == true }.map { "id_category=${it.id}" }
             }
-            if(filter?.brands?.isNotEmpty() == true){
-                 brandsStr = filter.brands.filter { it.isChecked == true }.map { "id_brand=${it.id}" }
+            if (filter?.brands?.isNotEmpty() == true) {
+                brandsStr =
+                    filter.brands.filter { it.isChecked == true }.map { "id_brand=${it.id}" }
             }
-            if(filter?.regions?.isNotEmpty() == true){
-                citiesStr = filter.regions.filter { it.isChecked == true }.map { "id_city=${it.id}" }
+            if (filter?.regions?.isNotEmpty() == true) {
+                citiesStr =
+                    filter.regions.filter { it.isChecked == true }.map { "id_city=${it.id}" }
             }
 
-            if(filter?.isCurrentLocationFirstLoaded == false && filter.currentLocation != null){
+
+
+            if (filter?.isCurrentLocationFirstLoaded == false && filter.currentLocation != null) {
                 Log.d("mylog", "load current location")
                 citiesStr = citiesStr + listOf("id_city=${filter.currentLocation?.id}")
                 Log.d("mylog", "citystr = $citiesStr")
             }
 
-            if(!query.isNullOrEmpty()) {
+            if (!query.isNullOrEmpty()) {
                 queryStr = listOf("text=${query.orEmpty()}")
             }
 
@@ -95,11 +113,24 @@ class ProductRepository(private val context: Context) {
                 productIdStr = listOf("id=$it")
             }
 
+            productPropertyStr = filter?.chosenTopSizes?.map { "id_property=${it.id}" }
+                .orEmpty() + filter?.chosenBottomSizes?.map { "id_property=${it.id}" }
+                .orEmpty() + filter?.chosenShoosSizes?.map { "id_property=${it.id}" }
+                .orEmpty() + filter?.chosenTopSizesMen?.map { "id_property=${it.id}" }
+                .orEmpty() + filter?.chosenBottomSizesMen?.map { "id_property=${it.id}" }
+                .orEmpty() + filter?.chosenShoosSizesMen?.map { "id_property=${it.id}" }
+                .orEmpty() + filter?.chosenTopSizesKids?.map { "id_property=${it.id}" }
+                .orEmpty() + filter?.chosenBottomSizesKids?.map { "id_property=${it.id}" }
+                .orEmpty() + filter?.chosenShoosSizesKids?.map { "id_property=${it.id}" }
+                .orEmpty() + filter?.chosenMaterials?.map { "id_property=${it.id}" }.orEmpty()
+
             productApi.getProducts(
-                    PRODUCT_OPTIONS,
-                    (categoryStr + brandsStr + citiesStr + queryStr + productIdStr).joinToString(";"),
+                PRODUCT_OPTIONS,
+                (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr).joinToString(
+                    ";"
+                ),
                 userId
-                )
+            )
 
         } catch (e: Exception) {
             if (e is IOException) {
@@ -107,24 +138,28 @@ class ProductRepository(private val context: Context) {
             } else {
                 Log.d("mylog", e.message.toString())
                 try {
-                    val response = productApi.getProductsGetError(PRODUCT_OPTIONS, listOf<String>().joinToString(";"), userId)
-                    if(response.code() == 500){
+                    val response = productApi.getProductsGetError(
+                        PRODUCT_OPTIONS,
+                        listOf<String>().joinToString(";"),
+                        userId
+                    )
+                    if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))
-                    }else {
-                        Response.error(404,   "не найдено".toResponseBody(null))
+                    } else {
+                        Response.error(404, "не найдено".toResponseBody(null))
                     }
-                }catch (e: Throwable){
+                } catch (e: Throwable) {
                     Response.error(400, "ошибка".toResponseBody(null))
                 }
             }
         }
     }
 
-    suspend fun getCurrentUserProducts(): Response<List<Product>>?{
+    suspend fun getCurrentUserProducts(): Response<List<Product>>? {
         return getProducts(userId = Token.userId.toLong())
     }
 
-    suspend fun getYouMayLikeProducts(limit: Int, userId: Int): Response<List<Product>>?{
+    suspend fun getYouMayLikeProducts(limit: Int, userId: Int): Response<List<Product>>? {
         return try {
             productApi.getYouMayLikeProducts(limit, userId)
         } catch (e: Exception) {
@@ -134,19 +169,22 @@ class ProductRepository(private val context: Context) {
                 Log.d("mylog", e.message.toString())
                 try {
                     val response = productApi.getYouMayLikeProductsGetError(limit, userId)
-                    if(response.code() == 500){
+                    if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))
-                    }else {
-                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
                     }
-                }catch (e: Throwable){
+                } catch (e: Throwable) {
                     Response.error(400, "ошибка".toResponseBody(null))
                 }
             }
         }
     }
 
-    suspend fun getSearchSuggestions(query: String): Response<List<String>>?{
+    suspend fun getSearchSuggestions(query: String): Response<List<String>>? {
         return try {
             productApi.getSearchSuggestions(query)
         } catch (e: Exception) {
@@ -156,19 +194,22 @@ class ProductRepository(private val context: Context) {
                 Log.d("mylog", e.message.toString())
                 try {
                     val response = productApi.getSearchSuggestionsGetError(query)
-                    if(response.code() == 500){
+                    if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))
-                    }else {
-                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
                     }
-                }catch (e: Throwable){
+                } catch (e: Throwable) {
                     Response.error(400, "ошибка".toResponseBody(null))
                 }
             }
         }
     }
 
-    suspend fun getCities(): Response<List<Region>>?{
+    suspend fun getCities(): Response<List<Region>>? {
         return try {
             productApi.getCities()
         } catch (e: Exception) {
@@ -178,19 +219,22 @@ class ProductRepository(private val context: Context) {
                 Log.d("mylog", e.message.toString())
                 try {
                     val response = productApi.getCitiesGetError()
-                    if(response.code() == 500){
+                    if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))
-                    }else {
-                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
                     }
-                }catch (e: Throwable){
+                } catch (e: Throwable) {
                     Response.error(400, "ошибка".toResponseBody(null))
                 }
             }
         }
     }
 
-    suspend fun getBrands(): Response<List<ProductBrand>>?{
+    suspend fun getBrands(): Response<List<ProductBrand>>? {
         return try {
             productApi.getAllBrands()
         } catch (e: Exception) {
@@ -200,12 +244,40 @@ class ProductRepository(private val context: Context) {
                 Log.d("mylog", e.message.toString())
                 try {
                     val response = productApi.getAllBrandsGetError()
-                    if(response.code() == 500){
+                    if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))
-                    }else {
-                        Response.error(400, response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
                     }
-                }catch (e: Throwable){
+                } catch (e: Throwable) {
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getProperties(): Response<List<Property>>? {
+        return try {
+            productApi.getProperties()
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.getPropertiesGetError()
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
                     Response.error(400, "ошибка".toResponseBody(null))
                 }
             }
@@ -213,37 +285,40 @@ class ProductRepository(private val context: Context) {
     }
 
 
+    fun saveSizes(
+        topSizesList: List<Size>,
+        bottomSizesList: List<Size>,
+        shoesSizesList: List<Size>
+    ) {
+        // return try {
+        //suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>){
+        /* return try {
+             withContext(Dispatchers.IO){
+                 //error("error")
+                 val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
+                 val stringSet = mutableSetOf<String>()
+                 val stringSet2 = mutableSetOf<String>()
+                 val stringSet3 = mutableSetOf<String>()
 
-     fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>){
-       // return try {
-    //suspend fun saveSizes(topSizesList: List<Size>, bottomSizesList: List<Size>, shoesSizesList: List<Size>){
-       /* return try {
-            withContext(Dispatchers.IO){
-                //error("error")
-                val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
-                val stringSet = mutableSetOf<String>()
-                val stringSet2 = mutableSetOf<String>()
-                val stringSet3 = mutableSetOf<String>()
+                 for(size in topSizesList){
+                     stringSet.add(size.id.toString())
+                 }
+                 for(size in bottomSizesList){
+                     stringSet2.add(size.id.toString())
+                 }
+                 for(size in shoesSizesList){
+                     stringSet3.add(size.id.toString())
+                 }
+                 prefs.edit().apply {
+                     putStringSet(TOP_SIZES_KEY, stringSet )
+                     putStringSet(BOTTOM_SIZES_KEY, stringSet2)
+                     putStringSet(SHOES_SIZES_KEY, stringSet3)
+                 }.commit()
 
-                for(size in topSizesList){
-                    stringSet.add(size.id.toString())
-                }
-                for(size in bottomSizesList){
-                    stringSet2.add(size.id.toString())
-                }
-                for(size in shoesSizesList){
-                    stringSet3.add(size.id.toString())
-                }
-                prefs.edit().apply {
-                    putStringSet(TOP_SIZES_KEY, stringSet )
-                    putStringSet(BOTTOM_SIZES_KEY, stringSet2)
-                    putStringSet(SHOES_SIZES_KEY, stringSet3)
-                }.commit()
-
-            }
-        }catch (e: Throwable){
-            false
-        }*/
+             }
+         }catch (e: Throwable){
+             false
+         }*/
         val sizeList = listOf(
             SizeLine(
                 0,
@@ -309,91 +384,88 @@ class ProductRepository(private val context: Context) {
                 false
             )
         )
-        topSizesList.forEachIndexed{index, size ->
-           if(sizeList[index].int == size.name)
-               sizeList[index].isSelected = size.chosen ?: false
-               sizeList[index].id = size.id
+        topSizesList.forEachIndexed { index, size ->
+            if (sizeList[index].int == size.name)
+                sizeList[index].isSelected = size.chosen ?: false
+            sizeList[index].id = size.id
         }
         FilterState.filter.chosenTopSizes = sizeList
     }
 
 
-
-         fun safeCategories(segmentsChecked: List<Boolean>) {
-       FilterState.filter.segments = segmentsChecked
-       FilterState.filter.isAllBrands = segmentsChecked.all{!it}
+    fun safeCategories(segmentsChecked: List<Boolean>) {
+        FilterState.filter.segments = segmentsChecked
+        FilterState.filter.isAllBrands = segmentsChecked.all { !it }
     }
 
 
-
-
-    suspend fun loadSizes(): List<MutableSet<String>?>{
-        return withContext(Dispatchers.IO){
+    suspend fun loadSizes(): List<MutableSet<String>?> {
+        return withContext(Dispatchers.IO) {
             val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
             val set = prefs.getStringSet(TOP_SIZES_KEY, null)
             val set2 = prefs.getStringSet(BOTTOM_SIZES_KEY, null)
             val set3 = prefs.getStringSet(SHOES_SIZES_KEY, null)
-            listOf(set,set2,set3)
+            listOf(set, set2, set3)
         }
     }
 
-    suspend fun loadCategories(): MutableSet<String>?{
-        return withContext(Dispatchers.IO){
+    suspend fun loadCategories(): MutableSet<String>? {
+        return withContext(Dispatchers.IO) {
             val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
             prefs.getStringSet(CATEGORIES, null)
         }
     }
 
-    suspend fun saveOnBoardingViewed(): Boolean{
+    suspend fun saveOnBoardingViewed(): Boolean {
         return try {
             withContext(Dispatchers.IO) {
                 val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
                 prefs.edit().putBoolean(ONBOARDINGVIEWED, true).commit()
 
             }
-        }catch (e: Throwable){
+        } catch (e: Throwable) {
             false
         }
     }
 
-    suspend fun loadOnBoardingViewed(): Boolean{
+    suspend fun loadOnBoardingViewed(): Boolean {
         return try {
             withContext(Dispatchers.IO) {
                 val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
                 prefs.getBoolean(ONBOARDINGVIEWED, false)
 
             }
-        }catch (e: Throwable){
+        } catch (e: Throwable) {
             false
         }
 
     }
 
-    suspend fun getProductCategoriesAdults(): Response<List<ProductCategoryAdults>>?{
+    suspend fun getProductCategoriesAdults(): Response<List<ProductCategoryAdults>>? {
         return try {
             Network.productApi.getProductCategoriesAdults()
-        }catch (e: Throwable){
+        } catch (e: Throwable) {
             Log.e("Debug", e.message.orEmpty(), e)
-            if(e is IOException)
+            if (e is IOException)
                 null
             else
                 Response.error(400, "".toResponseBody())
         }
     }
 
-    suspend fun getProductCategoriesKids(): Response<List<ProductCategoryKids1>>?{
+    suspend fun getProductCategoriesKids(): Response<List<ProductCategoryKids1>>? {
         return try {
             Network.productApi.getProductCategoriesKids()
-        }catch (e: Throwable){
+        } catch (e: Throwable) {
             Log.e("Debug", e.message.orEmpty(), e)
-            if(e is IOException)
+            if (e is IOException)
                 null
             else
                 Response.error(400, "".toResponseBody())
         }
     }
 
-    fun getShareProductIntent(id: Long): Intent{
+    fun getShareProductIntent(id: Long): Intent {
         val uri = Uri.withAppendedPath(Uri.parse("https://morestore.ru/products/"), id.toString())
         return Intent().apply {
             action = Intent.ACTION_SEND
@@ -403,9 +475,8 @@ class ProductRepository(private val context: Context) {
     }
 
 
-
-    fun loadForWho(): List<Boolean>{
-        return  FilterState.filter.chosenForWho
+    fun loadForWho(): List<Boolean> {
+        return FilterState.filter.chosenForWho
     }
 
     companion object {
@@ -415,7 +486,8 @@ class ProductRepository(private val context: Context) {
         const val SHOES_SIZES_KEY = "shoes_sizes_key"
         const val CATEGORIES = "categoryIdList"
         const val ONBOARDINGVIEWED = "viewedOnBoarding"
-        const val PRODUCT_OPTIONS = "service,user,category,property,statistics,brand,category,property_open_category"
+        const val PRODUCT_OPTIONS =
+            "service,user,category,property,statistics,brand,category,property_open_category"
         const val FILTER_KEY = "filter"
     }
 }

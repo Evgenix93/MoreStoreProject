@@ -12,6 +12,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.SizeCardsAdapter
 import com.project.morestore.databinding.FragmentFilterSizesKidsBinding
 import com.project.morestore.models.Filter
+import com.project.morestore.models.Property
 import com.project.morestore.models.Size
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
@@ -27,11 +28,16 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
     private var bottomSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var shoesSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    private var isForKids = false
+    private var isForWomen = true
+    private var isForMen = false
+    private var isSizesLoaded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initLists()
+        loadFilter()
     }
 
 
@@ -72,7 +78,7 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
             setHasFixedSize(true)
 
         }
-        presenter.getAllSizes()
+        //presenter.getAllSizes()
 
 
     }
@@ -245,21 +251,127 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
     }
 
     private fun bindFilter(filter: Filter){
-        if(topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizes.size){
-            topSizeCardAdapter.updateList(filter.chosenTopSizes.toMutableList().apply { removeLast() }.toList().map { Size(it.id, it.int, 1, it.isSelected) })
+        isForKids = filter.chosenForWho[2]
+        isForWomen = filter.chosenForWho[0]
+        isForMen = filter.chosenForWho[1]
+
+        if(!isSizesLoaded)
+            getSizes()
+
+        Log.d("mytest", filter.chosenTopSizes.size.toString())
+
+        when {
+            isForWomen -> {
+                if (topSizeCardAdapter.getSizes().size == filter.chosenTopSizes.size || topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizes.size) {
+                    topSizeCardAdapter.updateList(
+                        filter.chosenTopSizes.toMutableList().apply { if(filter.chosenTopSizes.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {}  }.toList()
+                            .map { Size(it.id, it.int, 1, it.isSelected) })
+                }
+                if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizes.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizes.size) {
+                    bottomSizeCardAdapter.updateList(
+                        filter.chosenBottomSizes.toMutableList().apply { if(filter.chosenBottomSizes.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                            .map { Size(it.id, it.int, 2, it.isSelected) })
+                }
+                if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizes.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizes.size) {
+
+                    shoesSizeCardAdapter.updateList(
+                        filter.chosenShoosSizes.toMutableList().apply { if(filter.chosenShoosSizes.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                            .map { Size(it.id, it.int, 3, it.isSelected) })
+                }
+            }
+            isForMen -> {
+                if (topSizeCardAdapter.getSizes().size == filter.chosenTopSizesMen.size || topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizesMen.size) {
+
+                    topSizeCardAdapter.updateList(
+                        filter.chosenTopSizesMen.toMutableList().apply { if(filter.chosenTopSizesMen.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                            .map { Size(it.id, it.int, 1, it.isSelected) })
+                }
+
+                if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesMen.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesMen.size) {
+                    bottomSizeCardAdapter.updateList(
+                        filter.chosenBottomSizesMen.toMutableList().apply { if(filter.chosenBottomSizesMen.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                            .map { Size(it.id, it.int, 2, it.isSelected) })
+                }
+                if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizesMen.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizesMen.size) {
+
+                    shoesSizeCardAdapter.updateList(
+                        filter.chosenShoosSizesMen.toMutableList().apply { if(filter.chosenShoosSizesMen.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                            .map { Size(it.id, it.int, 3, it.isSelected) })
+                }
+            }
+
+            isForKids -> {
+                if (topSizeCardAdapter.getSizes().size == filter.chosenTopSizesKids.size || topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizesKids.size) {
+
+                    topSizeCardAdapter.updateList(
+                        filter.chosenTopSizesKids.toMutableList().apply { if(filter.chosenTopSizesKids.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                            .map { Size(it.id, it.int, 1, it.isSelected) })
+                }
+                if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesKids.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesKids.size) {
+
+                    bottomSizeCardAdapter.updateList(
+                        filter.chosenBottomSizesKids.toMutableList().apply { if(filter.chosenBottomSizesKids.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                            .map { Size(it.id, it.int, 2, it.isSelected) })
+                }
+                if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizesKids.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizesKids.size) {
+
+                    shoesSizeCardAdapter.updateList(
+                        filter.chosenShoosSizesKids.toMutableList().apply { if(filter.chosenShoosSizesKids.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                            .map { Size(it.id, it.int, 3, it.isSelected) })
+                }
+            }
         }
-        if(bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizes.size){
-            bottomSizeCardAdapter.updateList(filter.chosenBottomSizes.toMutableList().apply { removeLast() }.toList().map { Size(it.id, it.int, 2, it.isSelected) })
-        }
-        if(shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizes.size){
-            shoesSizeCardAdapter.updateList(filter.chosenShoosSizes.toMutableList().apply { removeLast() }.toList().map { Size(it.id, it.int, 3, it.isSelected) })
+    }
+
+    private fun getSizes(){
+        when{
+            isForWomen -> {
+                presenter.getTopSizesWomen()
+                presenter.getBottomSizesWomen()
+                presenter.getShoosSizesWomen()
+            }
+            isForMen -> {
+                presenter.getTopSizesMen()
+                presenter.getBottomSizesMen()
+                presenter.getShoosSizesMen()
+            }
+            isForKids -> {
+                presenter.getTopSizesKids()
+                presenter.getBottomSizesKids()
+                presenter.getShoosSizesKids()
+            }
         }
     }
 
     private fun saveSizes(){
-        presenter.saveTopSizes(topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
-        presenter.saveBottomSizes(bottomSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
-        presenter.saveShoosSizes(shoesSizeCardAdapter.getSizes().map { convertShoeSizeToSizeLine(it) })
+        when {
+            isForWomen -> {
+               presenter.saveTopSizes(
+                   topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
+               presenter.saveBottomSizes(bottomSizeCardAdapter.getSizes()
+                   .map { convertSizeToSizeLine(it) })
+               presenter.saveShoosSizes(shoesSizeCardAdapter.getSizes()
+                   .map { convertShoeSizeToSizeLine(it) })
+           }
+
+           isForMen -> {
+                presenter.saveTopSizesMen(
+                    topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
+                presenter.saveBottomSizesMen(bottomSizeCardAdapter.getSizes()
+                    .map { convertSizeToSizeLine(it) })
+                presenter.saveShoosSizesMen(shoesSizeCardAdapter.getSizes()
+                    .map { convertShoeSizeToSizeLine(it) })
+            }
+
+            isForKids -> {
+                presenter.saveTopSizesKids(
+                    topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
+                presenter.saveBottomSizesKids(bottomSizeCardAdapter.getSizes()
+                    .map { convertSizeToSizeLine(it) })
+                presenter.saveShoosSizesKids(shoesSizeCardAdapter.getSizes()
+                    .map { convertShoeSizeToSizeLine(it) })
+            }
+        }
 
 
     }
@@ -292,10 +404,10 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
     override fun loaded(result: Any) {
         showLoading(false)
         if(result is List<*>) {
-            val topSizes =
-                (result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() }
-            val bottomSizes = (result).filter { it.id_category == 2 }.sortedBy { it.toInt() }
-            val shoosSizes = (result).filter { it.id_category == 3 }.sortedBy { it.toInt() }
+            val sizes =
+                ((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory.toInt(), false) })
+            //val bottomSizes = (result).filter { it.id_category == 2 }.sortedBy { it.toInt() }
+            //val shoosSizes = (result).filter { it.id_category == 3 }.sortedBy { it.toInt() }
            // if (topSizes.size + 1 == FilterState.filter.chosenTopSizes.size) {
              //   topSizeCardAdapter.updateList(FilterState.filter.chosenTopSizes.map {
                //     Size(
@@ -306,7 +418,8 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
                    // )
                // }.toMutableList().apply { removeLast() })
             //} else {
-                topSizeCardAdapter.updateList(topSizes)
+            if(sizes[0].id_category == 1 || sizes[0].id_category == 4 || sizes[0].id_category == 7)
+                topSizeCardAdapter.updateList(sizes)
             //}
             //if (bottomSizes.size + 1 == FilterState.filter.chosenBottomSizes.size) {
               //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
@@ -323,8 +436,8 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
 
             //} else {
               //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
-
-                bottomSizeCardAdapter.updateList(bottomSizes)
+            if(sizes[0].id_category == 2 || sizes[0].id_category == 5 || sizes[0].id_category == 8)
+                bottomSizeCardAdapter.updateList(sizes)
             //}
 
           //  if (shoosSizes.size + 1 == FilterState.filter.chosenShoosSizes.size) {
@@ -337,8 +450,10 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
                    // )
                // }.toMutableList().apply { removeLast() })
            // } else {
-                shoesSizeCardAdapter.updateList(shoosSizes)
+            if(sizes[0].id_category == 3 || sizes[0].id_category == 6 || sizes[0].id_category == 9)
+                shoesSizeCardAdapter.updateList(sizes)
             //}
+            isSizesLoaded = true
             loadFilter()
         }
 

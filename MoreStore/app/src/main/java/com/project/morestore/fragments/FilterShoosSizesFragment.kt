@@ -11,6 +11,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.SizeLineAdapter
 import com.project.morestore.databinding.FragmentFilterSizesShoesBinding
 import com.project.morestore.models.Filter
+import com.project.morestore.models.Property
 import com.project.morestore.models.Size
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
@@ -25,11 +26,14 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
     private var sizeAdapter: SizeLineAdapter by autoCleared()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     //private var shoosSizes = listOf<SizeLine>()
+    private var isForWomen = true
+    private var isSizesLoaded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
         initToolbar()
+        loadFilter()
     }
 
     private fun initList(){
@@ -40,7 +44,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
             setHasFixedSize(true)
         }
 
-        presenter.getAllSizes()
+        //presenter.getAllSizes()
 
        /* val list = listOf(
             SizeLine(
@@ -157,6 +161,15 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
          } else emptyList())*/
     }
 
+    private fun getSizes(){
+        if(isForWomen){
+            presenter.getShoosSizesWomen()
+        }else{
+            presenter.getShoosSizesMen()
+        }
+
+    }
+
     private fun initToolbar(){
         binding.toolbar.titleTextView.text = "Размер"
         binding.toolbar.actionTextView.text = "Сбросить"
@@ -258,14 +271,28 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
     }
 
     private fun bindFilter(filter: Filter){
-        if(sizeAdapter.getChosenSizes().size == filter.chosenShoosSizes.size){
-            sizeAdapter.updateList(filter.chosenShoosSizes, null)
+        isForWomen = filter.chosenForWho[0]
+
+        if(!isSizesLoaded){
+            getSizes()
+        }
+
+        if(isForWomen) {
+            if (sizeAdapter.getChosenSizes().size == filter.chosenShoosSizes.size) {
+                sizeAdapter.updateList(filter.chosenShoosSizes, null)
+            }
+        }else{
+            if (sizeAdapter.getChosenSizes().size == filter.chosenShoosSizesMen.size) {
+                sizeAdapter.updateList(filter.chosenShoosSizesMen, null)
+            }
         }
 
     }
 
     private fun saveShoosSizes(){
+        if(isForWomen)
         presenter.saveShoosSizes(sizeAdapter.getChosenSizes())
+        else presenter.saveShoosSizesMen(sizeAdapter.getChosenSizes())
     }
 
     override fun onStop() {
@@ -292,14 +319,20 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
         showLoading(false)
         if(result is List<*>) {
             val listShoosSizes =
-                (result as List<Size>).filter { it.id_category == 3 }.sortedBy { it.toInt() }
-                    .map { convertSizeToSizeLine(it) }
+                (result as List<Property>)
+                    .map {
+                        val list = it.ico?.split(';').orEmpty()
+                        SizeLine(it.id.toInt(), it.name, "", list[0].removePrefix("FR").removeSurrounding("'"), list[1].removePrefix("US").removeSurrounding("'"), list[2].removePrefix("UK").removeSurrounding("'"), false)
+                    }
+                //(result as List<Size>).filter { it.id_category == 3 }.sortedBy { it.toInt() }
+                  //  .ma
             //if(FilterState.filter.chosenShoosSizes.size == listShoosSizes.size + 1){
               //  sizeAdapter.updateList(FilterState.filter.chosenShoosSizes, null)//+ listOf(SizeLine(0, "", "", "", "", "", false)))
             //}else {
                 sizeAdapter.updateList(listShoosSizes + listOf(SizeLine(0, "", "", "", "", "", false)), null)
             //}
             //shoosSizes = listShoosSizes
+            isSizesLoaded = true
             loadFilter()
 
         }//else{

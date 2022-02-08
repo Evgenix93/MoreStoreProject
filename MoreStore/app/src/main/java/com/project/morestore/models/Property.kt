@@ -1,10 +1,13 @@
 package com.project.morestore.models
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class MaterialLine(
+data class Property(
     val id: Long,
     val name: String,
-    var isSelected: Boolean
+    val ico: String?,
+    @Json(name = "id_category")
+    val idCategory: Long
 )
