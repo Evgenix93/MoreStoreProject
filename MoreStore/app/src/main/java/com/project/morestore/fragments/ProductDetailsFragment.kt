@@ -122,7 +122,9 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
             .load(product.user.avatar?.photo)
             .into(binding.avatarImageView)
 
-
+        binding.userClickableView.setOnClickListener{
+            findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToSellerProfileFragment(product.user))
+        }
     }
 
     private fun initViewPager(photoList: List<ProductPhoto>){
@@ -171,6 +173,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         binding.productOldPriceTextView.text = crossedStr
     }
 
+
     override fun loaded(result: Any) {
         when(result) {
          is List<*> -> {
@@ -210,5 +213,9 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
 
     override fun loadedSuggestions(list: List<String>) {
 
+    }
+
+    override fun success() {
+        TODO("Not yet implemented")
     }
 }

@@ -239,7 +239,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     }
 
     private fun loadProducts(queryStr: String?) {
-        presenter.getProducts(queryStr = queryStr, isFiltered = true, productCategories = args?.productCategories?.toList())
+        presenter.getProducts(queryStr = queryStr, isFiltered = true, productCategories = null)
 
     }
 
@@ -286,5 +286,9 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
             )
         )
         binding.toolbarMain.searchEditText.showDropDown()
+    }
+
+    override fun success() {
+        TODO("Not yet implemented")
     }
 }

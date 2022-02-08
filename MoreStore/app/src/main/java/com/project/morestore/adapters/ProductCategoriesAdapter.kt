@@ -10,7 +10,7 @@ import com.project.morestore.databinding.ItemProductCategoryBinding
 import com.project.morestore.models.ProductCategory
 
 class ProductCategoriesAdapter: RecyclerView.Adapter<ProductCategoriesAdapter.ProductCategoryViewHolder>() {
-    private var productCategories = emptyList<ProductCategory>()
+    private var productCategories = mutableListOf<ProductCategory>()
 
     class ProductCategoryViewHolder(view: View, val onAllCategories: (isChecked: Boolean) -> Unit, val onChecked: (isChecked: Boolean, position: Int) -> Unit) :
         RecyclerView.ViewHolder(view) {
@@ -65,7 +65,17 @@ class ProductCategoriesAdapter: RecyclerView.Adapter<ProductCategoriesAdapter.Pr
     }
 
     fun updateList(newList: List<ProductCategory>) {
-        productCategories =   newList
+        productCategories =   newList.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun updateList2(newList: List<ProductCategory>){
+        productCategories.forEachIndexed{index, productCategory ->
+            newList.forEach{
+                if(productCategory.name == it.name)
+                    productCategories[index] = it
+                   notifyItemChanged(index)
+            }
+        }
     }
 }

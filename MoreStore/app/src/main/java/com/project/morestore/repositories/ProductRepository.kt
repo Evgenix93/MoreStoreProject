@@ -213,6 +213,10 @@ class ProductRepository(private val context: Context) {
         return getProducts(userId = Token.userId.toLong())
     }
 
+    suspend fun getSellerProducts(userId: Int): Response<List<Product>>?{
+        return getProducts(userId = userId.toLong())
+    }
+
     suspend fun getYouMayLikeProducts(limit: Int, userId: Int): Response<List<Product>>? {
         return try {
             productApi.getYouMayLikeProducts(limit, userId)

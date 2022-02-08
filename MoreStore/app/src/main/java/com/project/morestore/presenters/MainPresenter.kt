@@ -231,7 +231,12 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
 
     }
 
-
+  fun updateProductCategories(productCategories: List<ProductCategory>){
+     val filter = userRepository.getFilter()
+     filter.categories = listOf(ProductCategory(0, "Stub", false)) + productCategories
+     userRepository.updateFilter(filter)
+     viewState.success()
+  }
 
   fun loadFilter(){
       presenterScope.launch{

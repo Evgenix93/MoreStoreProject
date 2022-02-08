@@ -20,4 +20,7 @@ interface MainMvpView: MvpView {
     @OneExecution
     fun loadedSuggestions(list: List<String>)
 
+    @OneExecution
+    fun success()
+
 }

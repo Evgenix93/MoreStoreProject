@@ -97,6 +97,9 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
             is Filter -> {
                 if(result.categories.size == productCategoriesAdapter.getProductCategories().size)
                     productCategoriesAdapter.updateList(result.categories)
+                else
+                    productCategoriesAdapter.updateList2(result.categories)
+
             }
         }
     }
