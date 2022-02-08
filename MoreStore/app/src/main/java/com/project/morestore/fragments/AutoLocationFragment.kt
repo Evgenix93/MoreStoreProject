@@ -137,11 +137,11 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
     override fun loaded(result: Any) {
         showLoading(false)
         if(result is Address) {
-            binding.autoLocationResultTextView.text = "Ваш город ${result.fullCity.name}?"
+           // binding.autoLocationResultTextView.text = "Ваш город ${result.fullCity.name}?"
             binding.yesBtn.isVisible = true
             binding.noBtn.isVisible = true
             binding.yesBtn.setOnClickListener {
-                presenter.changeUserCity(result.fullCity.name)
+               // presenter.changeUserCity(result.fullCity.name)
             }
             binding.noBtn.setOnClickListener {
                 findNavController().popBackStack(R.id.catalogFragment, false)

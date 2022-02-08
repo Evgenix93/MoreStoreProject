@@ -1,10 +1,6 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.Product
-import com.project.morestore.models.ProductBrand
-import com.project.morestore.models.Region
-import com.project.morestore.models.ProductCategoryKids1
-import com.project.morestore.models.ProductCategoryAdults
+import com.project.morestore.models.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -41,23 +37,6 @@ interface ProductApi {
     @GET("brand")
     suspend fun getAllBrandsGetError(): Response<String>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     suspend fun getProducts(@Query("optionally") options: String): Response<Unit>
 
     @GET("category/subs?id_category=2")
@@ -65,4 +44,10 @@ interface ProductApi {
 
     @GET("category/subs?id_category=1")
     suspend fun getProductCategoriesKids(): Response<List<ProductCategoryKids1>>?
+
+    @GET("property")
+    suspend fun getProperties(): Response<List<Property>>
+
+    @GET("category")
+    suspend fun getProductCategories(): Response<List<ProductCategory>>
 }

@@ -102,6 +102,7 @@ class ProductRepository(private val context: Context) {
                 )
 
         } catch (e: Exception) {
+            Log.e("Debug", e.message.orEmpty())
             if (e is IOException) {
                 null
             } else {
@@ -111,6 +112,7 @@ class ProductRepository(private val context: Context) {
                     if(response.code() == 500){
                         Response.error(500, "".toResponseBody(null))
                     }else {
+                        Log.d("Debug", "testing not found")
                         Response.error(404,   "не найдено".toResponseBody(null))
                     }
                 }catch (e: Throwable){
@@ -406,6 +408,28 @@ class ProductRepository(private val context: Context) {
 
     fun loadForWho(): List<Boolean>{
         return  FilterState.filter.chosenForWho
+    }
+
+    suspend fun getColors(): Response<List<Property>>? {
+        return try{
+            Network.productApi.getProperties()
+        }catch (e: Throwable){
+            if(e is IOException)
+                null
+            else
+                Response.error(400, "".toResponseBody())
+        }
+    }
+
+    suspend fun getProductCategories(): Response<List<ProductCategory>>? {
+        return try{
+            Network.productApi.getProductCategories()
+        }catch (e: Throwable){
+            if(e is IOException)
+                null
+            else
+                Response.error(400, "".toResponseBody(null))
+        }
     }
 
     companion object {

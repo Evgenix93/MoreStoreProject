@@ -29,6 +29,7 @@ import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentMainBinding
 import com.project.morestore.models.Product
+import com.project.morestore.models.ProductCategory
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.mvpviews.MainMvpView
@@ -80,7 +81,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             isNestedScrollingEnabled = false
         }
 
-        presenter.getProducts( queryStr = null,  isFiltered = false)
+        presenter.getProducts( queryStr = null,  isFiltered = false, productCategories = null)
 
 
     }
@@ -155,6 +156,64 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         binding.searchBtn.setOnClickListener {
             val query = binding.toolbarMain.searchEditText.text.toString()
             findNavController().navigate(R.id.catalogFragment, Bundle().apply { putString("query", query) })
+        }
+        binding.allProductsCardView.setOnClickListener{
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(null, null))
+        }
+        binding.bagsCardView.setOnClickListener{
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(null, arrayOf(
+                ProductCategory(20, "Сумки и Аксессуары", true)
+            )))
+        }
+       binding.shoesCardView.setOnClickListener{
+           findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
+               null,
+               arrayOf(ProductCategory(5, "Обувь", true))
+           ))
+       }
+       binding.clothesCardView.setOnClickListener {
+           findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
+               null,
+               arrayOf(
+                   ProductCategory(3, "Бельё", true),
+                   ProductCategory(4, "Брюки", true),
+                   ProductCategory(6, "Платья и Сарафаны", true),
+                   ProductCategory(7, "Юбки", true),
+                   ProductCategory(9, "Джинсы", true),
+                   ProductCategory(11, "Шорты", true),
+                   ProductCategory(12, "Топы и майки", true),
+                   ProductCategory(14, "Домашняя одежда", true),
+                   ProductCategory(15, "Джемперы и Свитеры", true),
+                   ProductCategory(17, "Пиджаки и костюмы", true)
+               )
+           ))
+       }
+        binding.outerwearCardView.setOnClickListener {
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
+                null,
+                arrayOf(ProductCategory(2, "Верхняя одежда", true))
+            ))
+        }
+        binding.accessoriesCardView.setOnClickListener {
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
+                null,
+                arrayOf(ProductCategory(20, "Сумки и Аксессуары", true))
+            ))
+        }
+        binding.sportTourismCardView.setOnClickListener {
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
+                null,
+                arrayOf(ProductCategory(16, "Спортивная одежда", true))
+            ))
+        }
+        binding.kidsCardView.setOnClickListener {
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
+                null,
+                arrayOf(
+                    ProductCategory(21, "Школьная форма", true),
+                    ProductCategory(22, "Праздничные костюмы", true)
+                )
+            ))
         }
     }
 

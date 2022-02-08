@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.catalogFragment -> if (navController.currentDestination?.id != R.id.catalogFragment) {
-                    navController.navigate(R.id.catalogFragment)
+                    navController.navigate(R.id.catalogFragment, null)
                     true
                 } else {
                     true

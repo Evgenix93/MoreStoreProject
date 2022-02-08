@@ -57,7 +57,7 @@
                 app:selectedDotColor="@color/black" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardView"
+                android:id="@+id/allProductsCardView"
                 android:layout_width="166dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="10dp"
@@ -65,7 +65,7 @@
                 android:layout_marginEnd="8dp"
                 app:cardBackgroundColor="@color/blue"
                 app:cardCornerRadius="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/materialCardView4"
+                app:layout_constraintEnd_toStartOf="@+id/bagsCardView"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +87,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView4"
+                android:id="@+id/bagsCardView"
                 android:layout_width="166dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="40dp"
@@ -96,7 +96,7 @@
                 app:cardCornerRadius="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/cardView"
+                app:layout_constraintStart_toEndOf="@+id/allProductsCardView"
                 app:layout_constraintTop_toBottomOf="@+id/viewPager2">
 
                 <TextView
@@ -116,7 +116,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView5"
+                android:id="@+id/shoesCardView"
                 android:layout_width="166dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="10dp"
@@ -124,11 +124,11 @@
                 android:layout_marginEnd="8dp"
                 app:cardBackgroundColor="@color/pink"
                 app:cardCornerRadius="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/materialCardView6"
+                app:layout_constraintEnd_toStartOf="@+id/clothesCardView"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView">
+                app:layout_constraintTop_toBottomOf="@+id/allProductsCardView">
 
                 <TextView
                     style="@style/semibold_14"
@@ -146,7 +146,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView6"
+                android:id="@+id/clothesCardView"
                 android:layout_width="166dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="8dp"
@@ -155,8 +155,8 @@
                 app:cardCornerRadius="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/materialCardView5"
-                app:layout_constraintTop_toBottomOf="@+id/materialCardView4">
+                app:layout_constraintStart_toEndOf="@+id/shoesCardView"
+                app:layout_constraintTop_toBottomOf="@+id/bagsCardView">
 
                 <TextView
                     style="@style/semibold_14"
@@ -175,7 +175,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView7"
+                android:id="@+id/outerwearCardView"
                 android:layout_width="166dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="10dp"
@@ -183,11 +183,11 @@
                 android:layout_marginEnd="8dp"
                 app:cardBackgroundColor="@color/blue2"
                 app:cardCornerRadius="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/materialCardView8"
+                app:layout_constraintEnd_toStartOf="@+id/accessoriesCardView"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/materialCardView5">
+                app:layout_constraintTop_toBottomOf="@+id/shoesCardView">
 
                 <TextView
                     style="@style/semibold_14"
@@ -206,7 +206,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView8"
+                android:id="@+id/accessoriesCardView"
                 android:layout_width="166dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="8dp"
@@ -215,8 +215,8 @@
                 app:cardCornerRadius="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/materialCardView7"
-                app:layout_constraintTop_toBottomOf="@+id/materialCardView6">
+                app:layout_constraintStart_toEndOf="@+id/outerwearCardView"
+                app:layout_constraintTop_toBottomOf="@+id/clothesCardView">
 
                 <TextView
                     style="@style/semibold_14"
@@ -235,7 +235,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView9"
+                android:id="@+id/sportTourismCardView"
                 android:layout_width="166dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="10dp"
@@ -243,11 +243,11 @@
                 android:layout_marginEnd="8dp"
                 app:cardBackgroundColor="@color/green8"
                 app:cardCornerRadius="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/materialCardView16"
+                app:layout_constraintEnd_toStartOf="@+id/kidsCardView"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/materialCardView7">
+                app:layout_constraintTop_toBottomOf="@+id/outerwearCardView">
 
                 <TextView
                     style="@style/semibold_14"
@@ -266,7 +266,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView16"
+                android:id="@+id/kidsCardView"
                 android:layout_width="166dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="8dp"
@@ -275,8 +275,8 @@
                 app:cardCornerRadius="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/materialCardView9"
-                app:layout_constraintTop_toBottomOf="@+id/materialCardView8">
+                app:layout_constraintStart_toEndOf="@+id/sportTourismCardView"
+                app:layout_constraintTop_toBottomOf="@+id/accessoriesCardView">
 
                 <TextView
                     style="@style/semibold_14"
@@ -303,7 +303,7 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/brands"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/materialCardView9" />
+                app:layout_constraintTop_toBottomOf="@+id/sportTourismCardView" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView10"

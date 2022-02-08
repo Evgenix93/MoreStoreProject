@@ -154,11 +154,11 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
         else
           binding.allMaterials.text = filter.chosenMaterials.filter{it.isSelected}.joinToString (", "){ it.name }
         binding.colorsGreenDotImageView.isVisible =
-            (filter.colors.all { it.isChecked } || filter.colors.all { !it.isChecked }).not()
-        if(filter.colors.all { !it.isChecked } || filter.colors.all { it.isChecked })
+            (filter.colors.all { it.isChecked == true } || filter.colors.all { it.isChecked == false }).not()
+        if(filter.colors.all { it.isChecked == false} || filter.colors.all { it.isChecked == true })
             binding.allColors.text = getString(R.string.all_colors)
         else
-           binding.allColors.text = filter.colors.filter{it.isChecked}.joinToString(", "){it.name}
+           binding.allColors.text = filter.colors.filter{it.isChecked == true}.joinToString(", "){it.name}
 
         binding.priceFromEditText.setText(filter.fromPrice?.toString())
         binding.priceUntilEditText.setText(filter.untilPrice?.toString())

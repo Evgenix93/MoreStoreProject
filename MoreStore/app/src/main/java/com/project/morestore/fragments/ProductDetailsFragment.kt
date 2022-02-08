@@ -47,7 +47,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
 
     private fun getProduct(id: Long?){
         id ?: return
-        presenter.getProducts(productId = id, isFiltered = false)
+        presenter.getProducts(productId = id, isFiltered = false, productCategories = null)
     }
 
     private fun initShare(id: Long){
@@ -76,7 +76,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         binding.sellerPhoneTextView.text = product.phoneShow
         binding.productDescriptionTextView.text = product.about
         binding.productNumberTextView.text = product.id.toString()
-        binding.productCityTextView.text = product.address.fullCity.name
+       // binding.productCityTextView.text = product.address.fullCity.name
         val calendar = Calendar.getInstance().apply { timeInMillis =  System.currentTimeMillis() - product.date * 1000 }
         binding.productUpLoadDateTextView.text = "${(System.currentTimeMillis()/1000 - product.date)/86400} дня назад"
         Glide.with(this)

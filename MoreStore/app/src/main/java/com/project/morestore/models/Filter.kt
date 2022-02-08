@@ -1,6 +1,8 @@
 package com.project.morestore.models
 
+import android.os.Parcelable
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
 data class Filter(
@@ -18,7 +20,7 @@ data class Filter(
     var segments: List<Boolean> = emptyList(),
     var brands: List<ProductBrand> = emptyList(),
     var regions: List<Region> = emptyList(),
-    var colors: List<Color> = emptyList(),
+    var colors: List<Property> = emptyList(),
     var currentLocation: Region? = null,
     var isCurrentLocationFirstLoaded: Boolean = false,
     var isCurrentLocationChosen: Boolean = false,
