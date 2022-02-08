@@ -322,6 +322,9 @@
             android:name="productId"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/changeRegionFragment"
@@ -428,6 +431,14 @@
         android:id="@+id/profileFragment"
         android:name="com.project.morestore.fragments.ProfileFragment"
         android:label="ProfileFragment" >
+        <argument
+            android:name="user"
+            app:argType="com.project.morestore.models.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/sellerProfileFragment"
+        android:name="com.project.morestore.fragments.SellerProfileFragment"
+        android:label="SellerProfileFragment" >
         <argument
             android:name="user"
             app:argType="com.project.morestore.models.User" />

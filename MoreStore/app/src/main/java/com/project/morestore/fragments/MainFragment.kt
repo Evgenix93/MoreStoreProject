@@ -158,23 +158,17 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             findNavController().navigate(R.id.catalogFragment, Bundle().apply { putString("query", query) })
         }
         binding.allProductsCardView.setOnClickListener{
-            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(null, null))
+            presenter.updateProductCategories(listOf())
         }
         binding.bagsCardView.setOnClickListener{
-            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(null, arrayOf(
-                ProductCategory(20, "Сумки и Аксессуары", true)
-            )))
+            presenter.updateProductCategories(listOf(ProductCategory(20, "Сумки и Аксессуары", true)))
         }
        binding.shoesCardView.setOnClickListener{
-           findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
-               null,
-               arrayOf(ProductCategory(5, "Обувь", true))
-           ))
+           presenter.updateProductCategories(listOf(ProductCategory(5, "Обувь", true)))
        }
        binding.clothesCardView.setOnClickListener {
-           findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
-               null,
-               arrayOf(
+           presenter.updateProductCategories(
+               listOf(
                    ProductCategory(3, "Бельё", true),
                    ProductCategory(4, "Брюки", true),
                    ProductCategory(6, "Платья и Сарафаны", true),
@@ -184,36 +178,36 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                    ProductCategory(12, "Топы и майки", true),
                    ProductCategory(14, "Домашняя одежда", true),
                    ProductCategory(15, "Джемперы и Свитеры", true),
-                   ProductCategory(17, "Пиджаки и костюмы", true)
+                   ProductCategory(17, "Пиджаки и костюмы", true),
+                   ProductCategory(18, "Блузки", true),
+                   ProductCategory(10, "Одежда для беременных", true),
+                   ProductCategory(13, "Одежда больших размеров", true)
                )
-           ))
+           )
        }
+
         binding.outerwearCardView.setOnClickListener {
-            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
-                null,
-                arrayOf(ProductCategory(2, "Верхняя одежда", true))
-            ))
+            presenter.updateProductCategories(listOf(ProductCategory(2, "Верхняя одежда", true)))
         }
         binding.accessoriesCardView.setOnClickListener {
-            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
-                null,
-                arrayOf(ProductCategory(20, "Сумки и Аксессуары", true))
-            ))
+            presenter.updateProductCategories(listOf(ProductCategory(20, "Сумки и Аксессуары", true)))
         }
         binding.sportTourismCardView.setOnClickListener {
-            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
-                null,
-                arrayOf(ProductCategory(16, "Спортивная одежда", true))
-            ))
+            presenter.updateProductCategories(listOf(ProductCategory(16, "Спортивная одежда", true)))
+
         }
         binding.kidsCardView.setOnClickListener {
-            findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
+            presenter.updateProductCategories(
+                listOf(ProductCategory(21, "Школьная форма", true),
+                ProductCategory(22, "Праздничные костюмы", true))
+            )
+          /*  findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
                 null,
                 arrayOf(
                     ProductCategory(21, "Школьная форма", true),
                     ProductCategory(22, "Праздничные костюмы", true)
                 )
-            ))
+            ))*/
         }
     }
 
@@ -299,5 +293,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
     }
 
+    override fun success() {
+        findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment())
+    }
 
 }

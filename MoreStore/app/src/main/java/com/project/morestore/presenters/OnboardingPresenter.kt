@@ -145,8 +145,14 @@ class OnboardingPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
         authRepository.clearToken()
     }
 
-   fun safeFilter(){
+   fun saveFilter(isMale: Boolean){
        presenterScope.launch{
+           val filter = userRepository.getFilter()
+           if(isMale)
+           filter.chosenForWho = listOf(false, true, false)
+           else
+             filter.chosenForWho = listOf(true, false, false)
+           userRepository.updateFilter(filter)
            if (userRepository.saveFilter())
                viewState.success()
            else

@@ -265,7 +265,32 @@ class UserRepository(val context: Context) {
 
     }
 
+    suspend fun getSellerInfo(userId: Int): Response<User>?{
+        return try {
+            userApi.getUserInfoById(userId)
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.getUserInfoByIdGetError(Token.userId)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
 
+            }
+        }
+    }
 
     suspend fun saveFilter(): Boolean {
         return try {

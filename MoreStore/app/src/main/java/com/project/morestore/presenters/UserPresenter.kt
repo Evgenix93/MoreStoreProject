@@ -161,10 +161,51 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+      fun getSellerInfo(userId: Int){
+          presenterScope.launch {
+              viewState.loading()
+              val response = userRepository.getSellerInfo(userId)
+              when(response?.code()){
+                  200 -> viewState.loaded(response.body()!!)
+                  400 -> {
+                      val bodyString = getStringFromResponse(response.errorBody()!!)
+                      viewState.error(bodyString)
+                  }
+                  500 -> viewState.error("500 Internal Server Error")
+                  null -> viewState.error("нет интернета")
+                  else -> viewState.error("ошибка")
+
+              }
+
+
+          }
+      }
+
     fun getUserProducts() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getCurrentUserProducts()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                404 -> viewState.loaded(emptyList<Product>())
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+        }
+    }
+
+    fun getSellerProducts(userId: Int){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getSellerProducts(userId)
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
@@ -572,7 +613,6 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                                     it.id == 1 ||
                                             it.id == 3 ||
                                             it.id ==  4 ||
-                                            it.id == 5 ||
                                             it.id == 6 ||
                                             it.id == 7 ||
                                             it.id == 10 ||

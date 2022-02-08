@@ -25,7 +25,7 @@ class Onboarding5Fragment: MvpAppCompatFragment(R.layout.fragment_onboarding5), 
 
     private fun setClickListeners(){
         binding.continueBtn.setOnClickListener{
-            presenter.safeFilter()
+            presenter.saveFilter(args.isMale)
         }
 
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
