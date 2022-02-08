@@ -550,7 +550,48 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     fun getProductCategories() {
         presenterScope.launch {
-            val chosenForWho = userRepository.getFilter().chosenForWho
+            val response = productRepository.getProductCategories()
+            when(response?.code()){
+                200 -> {
+                    val filter = userRepository.getFilter()
+                    filter.chosenForWho.forEachIndexed{index, isChecked ->
+                        if (isChecked)
+                            when(index){
+                                0 -> {viewState.loaded(response.body()!!.filter{
+                                    it.id == 1 ||
+                                    it.id == 3 ||
+                                    it.id ==  4 ||
+                                    it.id == 5 ||
+                                    it.id == 6 ||
+                                    it.id == 7 ||
+                                    it.id == 10 ||
+                                    it.id == 18 ||
+                                    it.id ==  20
+                                })}
+                                1 -> {viewState.loaded(response.body()!!.filterNot{
+                                    it.id == 1 ||
+                                            it.id == 3 ||
+                                            it.id ==  4 ||
+                                            it.id == 5 ||
+                                            it.id == 6 ||
+                                            it.id == 7 ||
+                                            it.id == 10 ||
+                                            it.id == 18 ||
+                                            it.id ==  20 ||
+                                            it.id == 21 ||
+                                            it.id == 22
+                                })}
+                                2 -> {viewState.loaded(response.body()!!.filter{
+                                    it.id == 21 ||
+                                            it.id == 22
+                                })}
+                            }
+                    }
+                }
+                400 -> viewState.error("Ошибка")
+                null -> viewState.error("Нет интернета")
+            }
+           /* val chosenForWho = userRepository.getFilter().chosenForWho
             chosenForWho.forEachIndexed { index, isChecked ->
                 if (isChecked)
                     when (index) {
@@ -595,7 +636,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                             }
                         }
                     }
-            }
+            }*/
         }
     }
 
@@ -629,14 +670,16 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         viewState.loaded(userRepository.getFilter())
     }
 
-     fun saveColors(colors: List<Color>){
-        userRepository.saveColors(colors)
+     fun saveColors(colors: List<Property>){
+        val filter = userRepository.getFilter()
+        filter.colors = colors
+        userRepository.updateFilter(filter)
     }
 
     fun loadColors(){
-        val colors = userRepository.loadColors()
-        if(colors.isNotEmpty())
-         viewState.loaded(colors)
+   //     val colors = userRepository.loadColors()
+     //   if(colors.isNotEmpty())
+       //  viewState.loaded(colors)
     }
 
     fun saveMaterials(materials: List<MaterialLine>) {
@@ -817,4 +860,18 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         filter.untilPrice = untilPrice
         userRepository.updateFilter(filter)
     }
+
+    fun getColors(){
+        presenterScope.launch {
+        val response = productRepository.getColors()
+          when(response?.code()){
+              200 -> {
+                  viewState.loaded(response.body()!!.filter{it.idCategory == 12})
+              }
+              400 -> viewState.error("Ошибка")
+              null -> viewState.error("Нет интернета")
+          }
+        }
+    }
+
 }

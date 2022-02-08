@@ -302,14 +302,6 @@ class UserRepository(val context: Context) {
         FilterState.filter = Filter()
     }
 
-     fun saveColors(colors: List<Color>){
-        FilterState.filter.colors = colors
-    }
-
-    fun loadColors(): List<Color>{
-        return FilterState.filter.colors
-    }
-
     fun saveMaterials(materials: List<MaterialLine>){
         FilterState.filter.chosenMaterials = materials
     }
@@ -375,7 +367,5 @@ class UserRepository(val context: Context) {
     fun loadStyles(): List<Boolean>{
         return FilterState.filter.chosenStyles
     }
-
-
 
 }

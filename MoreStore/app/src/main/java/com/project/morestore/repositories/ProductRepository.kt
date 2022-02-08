@@ -479,6 +479,28 @@ class ProductRepository(private val context: Context) {
         return FilterState.filter.chosenForWho
     }
 
+    suspend fun getColors(): Response<List<Property>>? {
+        return try{
+            Network.productApi.getProperties()
+        }catch (e: Throwable){
+            if(e is IOException)
+                null
+            else
+                Response.error(400, "".toResponseBody())
+        }
+    }
+
+    suspend fun getProductCategories(): Response<List<ProductCategory>>? {
+        return try{
+            Network.productApi.getProductCategories()
+        }catch (e: Throwable){
+            if(e is IOException)
+                null
+            else
+                Response.error(400, "".toResponseBody(null))
+        }
+    }
+
     companion object {
         const val USER_PREFS = "user_prefs"
         const val TOP_SIZES_KEY = "top_sizes_key"

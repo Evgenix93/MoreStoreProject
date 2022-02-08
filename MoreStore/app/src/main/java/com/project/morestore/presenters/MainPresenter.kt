@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
+import com.project.morestore.models.ProductCategory
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
@@ -40,11 +41,19 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getProducts(queryStr: String? = null, productId: Long? = null, isFiltered: Boolean){
+    fun getProducts(queryStr: String? = null, productId: Long? = null, isFiltered: Boolean, productCategories: List<ProductCategory>?){
         Log.d("mylog", "getProducts")
         presenterScope.launch {
             viewState.loading()
-            val response = productRepository.getProducts(query = queryStr, filter =  if(isFiltered) userRepository.getFilter() else null, productId = productId)
+            val response = if(productCategories != null) {
+                val filter = Filter(chosenForWho = listOf(),   categories = productCategories, chosenProductStatus = listOf())
+                productRepository.getProducts(
+                    query = queryStr,
+                    filter = filter,
+                    productId = productId
+                )
+            }else
+                 productRepository.getProducts(query = queryStr, filter =  if(isFiltered) userRepository.getFilter() else null, productId = productId)
 
             when(response?.code()){
                 200 -> if(productId == null) viewState.loaded(response.body()!!) else viewState.loaded(response.body()?.first()!!)
@@ -165,5 +174,6 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
           userRepository.loadFilter()
       }
   }
+
 
 }

@@ -11,6 +11,8 @@ import com.project.morestore.R
 import com.project.morestore.adapters.ColorsAdapter
 import com.project.morestore.databinding.FragmentColorsBinding
 import com.project.morestore.models.Color
+import com.project.morestore.models.Filter
+import com.project.morestore.models.Property
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
@@ -26,7 +28,8 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), User
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initColorsRecyclerView()
-        loadColors()
+        getColors()
+        //loadColors()
     }
 
     override fun onStop() {
@@ -49,11 +52,15 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), User
     }
 
     private fun saveColors(){
-        presenter.saveColors(colorsAdapter.getColors())
+       presenter.saveColors(colorsAdapter.getColors())
     }
 
-    private fun loadColors(){
-      presenter.loadColors()
+    private fun getFilter(){
+      presenter.getFilter()
+    }
+
+    private fun getColors(){
+      presenter.getColors()
     }
 
     override fun success(result: Any) {
@@ -69,7 +76,19 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), User
     }
 
     override fun loaded(result: Any) {
-        colorsAdapter.updateColors(result as List<Color>)
+        when(result){
+            is List<*> -> {
+                val properties = result as List<Property>
+                colorsAdapter.updateColors(listOf(Property(0, "Все цвета", null, 0, false)) + properties)
+                getFilter()
+            }
+
+            is Filter ->{
+                if(result.colors.size == colorsAdapter.getColors().size)
+                    colorsAdapter.updateColors(result.colors)
+            }
+        }
+        //colorsAdapter.updateColors(result as List<Color>)
     }
 
     override fun successNewCode() {

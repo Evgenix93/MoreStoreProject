@@ -68,4 +68,9 @@ interface ProductApi {
 
     @GET("category/subs?id_category=1")
     suspend fun getProductCategoriesKids(): Response<List<ProductCategoryKids1>>?
+
+
+
+    @GET("category")
+    suspend fun getProductCategories(): Response<List<ProductCategory>>
 }

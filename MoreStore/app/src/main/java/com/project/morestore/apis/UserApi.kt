@@ -77,12 +77,4 @@ interface UserApi {
     suspend fun getUserInfoByIdGetError(@Path("id") id: Int): Response<String>
 
 
-
-
-
-
-
-
-
-
 }

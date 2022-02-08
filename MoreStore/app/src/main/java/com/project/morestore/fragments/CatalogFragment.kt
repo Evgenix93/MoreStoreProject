@@ -39,7 +39,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     private val binding: FragmentCatalogBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
-    //private val args: CatalogFragmentArgs? by navArgs()
+    private val args: CatalogFragmentArgs? by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,7 +68,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         }
 
         binding.searchBtn.setOnClickListener {
-            presenter.getProducts(queryStr = binding.toolbarMain.searchEditText.text.toString(), isFiltered = true)
+            presenter.getProducts(queryStr = binding.toolbarMain.searchEditText.text.toString(), isFiltered = true, productCategories = null)
         }
     }
 
@@ -223,7 +223,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     }
 
     private fun loadProducts(queryStr: String?) {
-        presenter.getProducts(queryStr = queryStr, isFiltered = true)
+        presenter.getProducts(queryStr = queryStr, isFiltered = true, productCategories = args?.productCategories?.toList())
 
     }
 

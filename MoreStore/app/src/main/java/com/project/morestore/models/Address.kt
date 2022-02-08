@@ -11,7 +11,7 @@ data class Address(
     @Json(name = "full_address")
     val fullAddress: String,
     val city: Int,
-    @Json(name = "full_city")
-    val fullCity: ProductCity
+   // @Json(name = "full_city")
+    //val fullCity: ProductCity
 
 ): Parcelable
