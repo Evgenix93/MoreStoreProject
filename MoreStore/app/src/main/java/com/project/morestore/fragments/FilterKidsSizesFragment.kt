@@ -557,8 +557,20 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
 
             //} else {
             //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
-            //if(sizes[0].id_category == 2 || sizes[0].id_category == 5 || sizes[0].id_category == 8)
-            //bottomSizeCardAdapter.updateList(sizes)
+            if(sizes[0].idCategory.toInt() == 2 || sizes[0].idCategory.toInt() == 5 || sizes[0].idCategory.toInt() == 8)
+            bottomSizeCardAdapter.updateList(sizes.map {
+                val list = it.ico?.split(';').orEmpty()
+                Size(
+                    it.id.toInt(),
+                    it.name,
+                    it.idCategory.toInt(),
+                    false,
+                    w = list[0].removePrefix("W").removeSurrounding("'"),
+                    fr = list[1].removePrefix("IT/RU/FR").removeSurrounding("'"),
+                    us = list[2].removePrefix("US").removeSurrounding("'"),
+                    uk = list[3].removePrefix("UK").removeSurrounding("'")
+                )
+            })
             //}
 
             //  if (shoosSizes.size + 1 == FilterState.filter.chosenShoosSizes.size) {
