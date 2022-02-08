@@ -49,6 +49,22 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         setClickListeners()
         showBottomNav()
         loadProducts( arguments?.getString("query"))
+        loadForWho()
+    }
+
+    private fun loadForWho(){
+
+        args?.forWho?.let {
+        var list = listOf(false, false, false)
+        if(it == "women")
+            list = listOf(true, false, false)
+
+            if(it == "men")
+                list = listOf(false, true, false)
+
+            if(it == "kids")
+                list = listOf(false, false, true)
+            presenter.getProducts(isFiltered = true, forWho = list) }
     }
 
     private fun setClickListeners() {
@@ -74,7 +90,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
 
     private fun initList() {
-        productAdapter = ProductAdapter(10) {
+        productAdapter = ProductAdapter(null) {
             findNavController().navigate(
                 CatalogFragmentDirections.actionCatalogFragmentToProductDetailsFragment(it, null)
             )

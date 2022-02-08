@@ -10,5 +10,6 @@ data class RegistrationResponse(
     val token: String?,
     val email: ChangePhoneEmailInfo?,
     val phone: ChangePhoneEmailInfo?,
-    val RES: TokenData?
+    val RES: TokenData?,
+    val expires: Long?
 )

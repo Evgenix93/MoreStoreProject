@@ -21,6 +21,13 @@ class FilterProductStatusFragment: MvpAppCompatFragment(R.layout.fragment_filter
         super.onViewCreated(view, savedInstanceState)
         getFilter()
         initToolBar()
+        setClickListeners()
+    }
+
+    private fun setClickListeners(){
+        binding.showProductsBtn.setOnClickListener {
+            findNavController().navigate(R.id.catalogFragment)
+        }
     }
 
     private fun bind(list: List<Boolean>){

@@ -237,6 +237,62 @@ class UserRepository(val context: Context) {
 
     }
 
+    suspend fun addProductToWishList(wishList: BrandWishList): Response<List<Long>>?{
+        return try {
+            userApi.addProductToWishList(wishList)
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.addProductToWishListGetError(wishList)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
+    suspend fun getProductWishList(): Response<List<Product>>? {
+        return try {
+            userApi.getProductWishList()
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.getProductWishListGetError()
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
     suspend fun getCurrentUserInfo(): Response<User>?{
         return try {
             userApi.getUserInfoById(Token.userId)

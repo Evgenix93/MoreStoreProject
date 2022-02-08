@@ -65,6 +65,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                 200 -> {
                     if(step == 2) {
                         repository.setupToken(response.body()!!.token!!)
+                        repository.saveToken(response.body()!!.token!!, response.body()!!.expires!!)
                         getUserData()
                     }
                     if(step == 1){
@@ -144,6 +145,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                 200 -> {
                     if (step == 2) {
                         repository.setupToken(response.body()?.token!!)
+                        repository.saveToken(response.body()?.token!!, response.body()!!.expires!!)
                         getUserData()
                     }else {
                         viewState.success(response.body()!!)

@@ -572,7 +572,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                                     it.id == 1 ||
                                             it.id == 3 ||
                                             it.id ==  4 ||
-                                            it.id == 5 ||
+
                                             it.id == 6 ||
                                             it.id == 7 ||
                                             it.id == 10 ||

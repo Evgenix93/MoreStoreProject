@@ -35,6 +35,13 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
         initList()
         initToolbar()
         loadFilter()
+        setClickListenrs()
+    }
+
+    private fun setClickListenrs(){
+        binding.showProductsBtn.setOnClickListener {
+            findNavController().navigate(R.id.catalogFragment)
+        }
     }
 
     private fun initList(){

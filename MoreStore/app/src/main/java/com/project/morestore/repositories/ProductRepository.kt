@@ -156,7 +156,23 @@ class ProductRepository(private val context: Context) {
 
             }
 
-            productPropertyStr = productPropertyStr + conditionList
+            var forWhoList = listOf<String>()
+            if (filter?.chosenForWho?.isNotEmpty() == true) {
+                if (filter!!.chosenForWho[0]) {
+                    forWhoList = forWhoList + listOf<String>("id_property=140")
+                }
+                if (filter.chosenForWho[1]) {
+                    forWhoList = forWhoList + listOf<String>("id_property=141")
+                }
+
+                if (filter.chosenForWho[2]) {
+                    forWhoList = forWhoList + listOf<String>("id_property=142")
+                }
+
+
+            }
+
+            productPropertyStr = productPropertyStr + conditionList + forWhoList
 
 
 

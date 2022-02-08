@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
@@ -11,7 +12,7 @@ import com.project.morestore.databinding.ItemRegionBinding
 import com.project.morestore.models.MaterialLine
 import com.project.morestore.models.Region
 
-class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
+class RegionsAdapter(val isForChangeRegion: Boolean, val onClick: (String) -> Unit) : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
     /*private var regions = listOf(
         Region("Все города", true),
         Region("Москва, Московская область", true),
@@ -34,13 +35,23 @@ class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
 
     private var regions = listOf<Region>()
 
-    class RegionViewHolder(view: View, val onAllMaterial: (isChecked: Boolean) -> Unit, val onChecked: (isChecked: Boolean, position: Int) -> Unit) :
+    class RegionViewHolder(view: View, val onAllMaterial: (isChecked: Boolean) -> Unit, val onChecked: (isChecked: Boolean, position: Int) -> Unit, val isChangeRegion: Boolean,
+    onClick: (Int) -> Unit) :
         RecyclerView.ViewHolder(view) {
         private val binding: ItemRegionBinding by viewBinding()
 
+        init {
+            itemView.setOnClickListener {
+                onClick(adapterPosition)
+            }
+        }
+
         fun bind(region: Region) {
             binding.regionTextView.text = region.name
+            binding.regionTextView.textSize = if(!isChangeRegion) 14f else 16f
             binding.regionCheckBox.isChecked = region.isChecked ?: false
+            binding.regionCheckBox.isVisible = !isChangeRegion
+            binding.view36.isVisible = adapterPosition == 0 && isChangeRegion
             binding.regionCheckBox.setOnClickListener {
                 if(region.name == "Все города"){
                     onAllMaterial(binding.regionCheckBox.isChecked)
@@ -77,6 +88,9 @@ class RegionsAdapter : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
                         notifyItemChanged(0)
                     }
                 }
+            }, isForChangeRegion, { position ->
+                onClick(regions[position].name)
+
             })
 
     }

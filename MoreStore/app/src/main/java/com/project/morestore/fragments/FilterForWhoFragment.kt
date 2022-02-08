@@ -23,6 +23,14 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
         initRadioButtons()
         initToolBar()
         getFilter()
+        setClickListeners()
+    }
+
+    private fun setClickListeners(){
+        binding.showProductsBtn.setOnClickListener {
+            findNavController().navigate(R.id.catalogFragment)
+        }
+
     }
 
     private fun initRadioButtons() {

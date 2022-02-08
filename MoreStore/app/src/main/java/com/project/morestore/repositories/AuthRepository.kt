@@ -149,6 +149,61 @@ class AuthRepository(private val context: Context) {
         Token.token = "Bearer $token"
     }
 
+    suspend fun saveToken(token: String, expires: Long){
+        try {
+            withContext(Dispatchers.IO) {
+                val prefs = context.getSharedPreferences(TOKEN_PREF, Context.MODE_PRIVATE)
+                prefs.edit().apply(){
+                    putString(TOKEN_KEY, token)
+                    putString(TOKEN_GET_TIME_SAVE, System.currentTimeMillis().toString())
+                    putString(TOKEN_EXPIRES, expires.toString())
+                }.commit()
+
+
+            }
+        }catch (e: Throwable){
+            Log.d("error", e.message.toString())
+        }
+    }
+
+    suspend fun loadToken(): String? {
+        return try {
+            withContext(Dispatchers.IO) {
+                val prefs = context.getSharedPreferences(TOKEN_PREF, Context.MODE_PRIVATE)
+                prefs.getString(TOKEN_KEY, null)
+            }
+        }catch (e: Throwable){
+            Log.d("error", e.message.toString())
+            null
+        }
+    }
+
+    suspend fun loadTokenSaveTime(): Long?{
+        return try {
+            withContext(Dispatchers.IO) {
+                val prefs = context.getSharedPreferences(TOKEN_PREF, Context.MODE_PRIVATE)
+                prefs.getString(TOKEN_GET_TIME_SAVE, null)?.toLong()
+            }
+        }catch (e: Throwable){
+            Log.d("error", e.message.toString())
+            null
+        }
+    }
+
+    suspend fun loadTokenExpires(): Long?{
+        return try {
+            withContext(Dispatchers.IO) {
+                val prefs = context.getSharedPreferences(TOKEN_PREF, Context.MODE_PRIVATE)
+                prefs.getString(TOKEN_EXPIRES, null)?.toLong()
+            }
+        }catch (e: Throwable){
+            Log.d("error", e.message.toString())
+            null
+        }
+    }
+
+
+
     fun setupUserId(userId: Int){
         Token.userId = userId
     }
@@ -168,6 +223,13 @@ class AuthRepository(private val context: Context) {
 
     fun clearToken(){
         Token.token = ""
+    }
+
+    companion object{
+        const val TOKEN_PREF = "token_pref"
+        const val TOKEN_KEY = "token_key"
+        const val TOKEN_GET_TIME_SAVE = "token_save_time_key"
+        const val TOKEN_EXPIRES = "token_expires"
     }
 
 }

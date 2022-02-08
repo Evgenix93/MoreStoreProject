@@ -150,10 +150,10 @@
     <string name="more_brands">Еще бренды</string>
     <string name="for_women">Для женщин</string>
     <string name="_20_new_offers">+20 новых предложений за сегодня</string>
-    <string name="_356_offers">еще 356 предложений</string>
+    <string name="_356_offers">еще предложения</string>
     <string name="for_kids">Для детей</string>
     <string name="_135_offers">+135 новых предложений за сегодня</string>
-    <string name="_546_offers">еще 546 предложений</string>
+    <string name="_546_offers">еще предложения</string>
     <string name="filter">Фильтр</string>
     <string name="clear">Очистить</string>
     <string name="sorting">Сортировка</string>
@@ -180,7 +180,7 @@
     <string name="search_region">Регион поиска</string>
     <string name="all_regions">Все регионы</string>
     <string name="safe_filter">Сохранить фильтр</string>
-    <string name="show_offers">Показать 1565 предложений</string>
+    <string name="show_offers">Показать предложения</string>
     <string name="another">Другое</string>
     <string name="dresses">Платья</string>
     <string name="home_clothes">Домашняя одежда</string>
@@ -191,7 +191,7 @@
     <string name="blouses_shirts">Блузки и рубашки</string>
     <string name="underwear">Белье</string>
     <string name="black">черный</string>
-    <string name="show_offers2">Показать 976 предложений</string>
+    <string name="show_offers2">Показать предложения</string>
     <string name="colorful">разноцветный</string>
     <string name="purple">пурпурный</string>
     <string name="violet">фиолетовый</string>

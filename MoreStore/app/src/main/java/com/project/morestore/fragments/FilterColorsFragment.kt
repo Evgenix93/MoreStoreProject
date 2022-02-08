@@ -30,6 +30,13 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), User
         initColorsRecyclerView()
         getColors()
         //loadColors()
+        setClickListeners()
+    }
+
+    private fun setClickListeners(){
+        binding.showOffersBtn.setOnClickListener {
+            findNavController().navigate(R.id.catalogFragment)
+        }
     }
 
     override fun onStop() {

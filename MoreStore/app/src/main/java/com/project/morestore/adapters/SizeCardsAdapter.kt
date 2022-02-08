@@ -26,10 +26,10 @@ class SizeCardsAdapter(val isLimit: Boolean) : RecyclerView.Adapter<SizeCardsAda
             }
         }
 
-        fun bind() {
+        fun bind(size: Size) {
             binding.sizeNameTextView.text = list[adapterPosition].name
             binding.root.apply {
-                strokeColor = if (list[adapterPosition].chosen == true) {
+                strokeColor = if (size.chosen == true) {
                     this.setBackgroundColor(resources.getColor(R.color.gray3))
                     resources.getColor(R.color.green)
                 } else {
@@ -56,18 +56,19 @@ class SizeCardsAdapter(val isLimit: Boolean) : RecyclerView.Adapter<SizeCardsAda
                     Log.d("Debug", "size.chosen = ${list[position].chosen}")
                     notifyItemChanged(position)
                     chosenSizes.add(list[position])
-                }else{ if(!isLimit) {
+                }
+                if(!isLimit) {
                     list[position].chosen = true
                     notifyItemChanged(position)
                 }
-                }
+
             }
         }
 
     }
 
     override fun onBindViewHolder(holder: SizeCardViewHolder, position: Int) {
-        holder.bind()
+        holder.bind(list[position])
 
     }
 

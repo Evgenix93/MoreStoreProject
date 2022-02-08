@@ -39,6 +39,13 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
         initToolbar()
         initLists()
         loadFilter()
+        setClickListeners()
+    }
+
+    private fun setClickListeners(){
+        binding.showResultsBtn.setOnClickListener {
+            findNavController().navigate(R.id.catalogFragment)
+        }
     }
 
 
@@ -533,10 +540,10 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                         it.name,
                         it.idCategory.toInt(),
                         false,
-                        w = list[0].removePrefix("W").removeSurrounding("'"),
-                        fr = list[1].removePrefix("IT/RU/FR").removeSurrounding("'"),
-                        us = list[2].removePrefix("US").removeSurrounding("'"),
-                        uk = list[3].removePrefix("UK").removeSurrounding("'")
+                        w = if(list.isNotEmpty()) list[0].removePrefix("W").removeSurrounding("'") else "",
+                        fr = if(list.isNotEmpty()) list[1].removePrefix("IT/RU/FR").removeSurrounding("'") else "",
+                        us = if(list.isNotEmpty()) list[2].removePrefix("US").removeSurrounding("'")else "",
+                        uk = if(list.isNotEmpty()) list[3].removePrefix("UK").removeSurrounding("'") else ""
                     )
 
                 })
@@ -565,10 +572,10 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                     it.name,
                     it.idCategory.toInt(),
                     false,
-                    w = list[0].removePrefix("W").removeSurrounding("'"),
-                    fr = list[1].removePrefix("IT/RU/FR").removeSurrounding("'"),
-                    us = list[2].removePrefix("US").removeSurrounding("'"),
-                    uk = list[3].removePrefix("UK").removeSurrounding("'")
+                    w = if(list.isNotEmpty()) list[0].removePrefix("W").removeSurrounding("'") else "",
+                    fr = if(list.isNotEmpty()) list[1].removePrefix("IT/RU/FR").removeSurrounding("'") else "",
+                    us = if(list.isNotEmpty()) list[2].removePrefix("US").removeSurrounding("'")else "",
+                    uk = if(list.isNotEmpty()) list[3].removePrefix("UK").removeSurrounding("'")else ""
                 )
             })
             //}
@@ -591,9 +598,9 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                         it.name,
                         it.idCategory.toInt(),
                         false,
-                        fr = list[0].removePrefix("FR").removeSurrounding("'"),
-                        us = list[1].removePrefix("US").removeSurrounding("'"),
-                        uk = list[2].removePrefix("UK").removeSurrounding("'")
+                        fr = if(list.isNotEmpty()) list[0].removePrefix("FR").removeSurrounding("'") else "",
+                        us = if(list.isNotEmpty()) list[1].removePrefix("US").removeSurrounding("'") else "" ,
+                        uk = if(list.isNotEmpty()) list[2].removePrefix("UK").removeSurrounding("'") else ""
                     )
 
                 })

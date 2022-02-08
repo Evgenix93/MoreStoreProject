@@ -32,7 +32,14 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
         initToolbar()
         initList()
         getProductCategories()
+        setClickListeners()
 
+    }
+
+    private fun setClickListeners(){
+        binding.showOffersBtn.setOnClickListener {
+            findNavController().navigate(R.id.catalogFragment)
+        }
     }
 
     private fun initList(){

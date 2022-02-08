@@ -14,7 +14,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductBinding
 import com.project.morestore.models.Product
 
-class ProductAdapter(val count: Int, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     private var list = listOf<Product>()
 
     class ProductViewHolder(view: View, onClick: (position: Int) -> Unit) : RecyclerView.ViewHolder(view) {
@@ -50,12 +50,12 @@ class ProductAdapter(val count: Int, val onClick: (product: Product) -> Unit) : 
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        holder.bind(list[position])
+       if(position < list.size) holder.bind(list[position])
 
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return count ?: list.size
 
     }
 

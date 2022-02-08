@@ -2,10 +2,7 @@ package com.project.morestore.presenters
 
 import android.content.Context
 import android.util.Log
-import com.project.morestore.models.Filter
-import com.project.morestore.models.Product
-import com.project.morestore.models.ProductCategory
-import com.project.morestore.models.Region
+import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
@@ -26,6 +23,73 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
     private var searchJob: Job? = null
 
 
+    fun addProductToWishList(id: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val response = userRepository.addProductToWishList(BrandWishList(listOf(id)))
+            when(response?.code()){
+                200 ->  viewState.loaded(response.body()!!)
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                404 -> { viewState.loaded(emptyList<Product>())
+                    viewState.error(getStringFromResponse(response.errorBody()!!))
+
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+
+            }
+
+
+        }
+    }
+
+    fun getProductWishList(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = userRepository.getProductWishList()
+            when(response?.code()){
+                200 ->  viewState.loaded(response.body()!!)
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                404 -> { viewState.loaded(emptyList<Product>())
+                    viewState.error(getStringFromResponse(response.errorBody()!!))
+
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+
+            }
+
+        }
+    }
+
+    fun checkToken(){
+        presenterScope.launch {
+            val token = authRepository.loadToken()
+            val tokenSaveTime = authRepository.loadTokenSaveTime()
+            val tokenExpiresTime = authRepository.loadTokenExpires()
+
+            if(token == null || tokenSaveTime == null || tokenExpiresTime == null){
+                Log.d("error", token.orEmpty())
+                Log.d("error", tokenSaveTime.toString())
+                Log.d("error", tokenExpiresTime.toString())
+
+
+                viewState.loaded(false)
+                return@launch
+            }
+
+            val diffTime = System.currentTimeMillis() - tokenSaveTime
+            val isExpired = (diffTime/1000)/60 > tokenExpiresTime
+            if(isExpired){
+                viewState.loaded(false)
+            }else {
+                authRepository.setupToken(token)
+                viewState.loaded(true)
+            }
+        }
+    }
+
+
     fun loadOnBoardingViewed() {
         presenterScope.launch {
             viewState.loading()
@@ -41,12 +105,12 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getProducts(queryStr: String? = null, productId: Long? = null, isFiltered: Boolean, productCategories: List<ProductCategory>?){
+    fun getProducts(queryStr: String? = null, productId: Long? = null, isFiltered: Boolean, productCategories: List<ProductCategory>? = null, forWho: List<Boolean>? = null){
         Log.d("mylog", "getProducts")
         presenterScope.launch {
             viewState.loading()
-            val response = if(productCategories != null) {
-                val filter = Filter(chosenForWho = listOf(),   categories = productCategories, chosenProductStatus = listOf())
+            val response = if(productCategories != null || forWho != null) {
+                val filter = Filter(chosenForWho = forWho.orEmpty(),   categories = productCategories.orEmpty(), chosenProductStatus = listOf())
                 productRepository.getProducts(
                     query = queryStr,
                     filter = filter,
@@ -172,6 +236,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
   fun loadFilter(){
       presenterScope.launch{
           userRepository.loadFilter()
+          viewState.loaded(userRepository.getFilter())
       }
   }
 

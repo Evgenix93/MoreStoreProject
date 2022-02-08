@@ -19,7 +19,7 @@ class SplashScreenFragment: Fragment(R.layout.fragment_splash_screen) {
         hideBottomNavBar()
         job = lifecycleScope.launch {
             delay(2000)
-            findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToFirstLaunchFragment())
+            findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToMainFragment())
 
         }
     }

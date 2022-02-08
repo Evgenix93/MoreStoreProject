@@ -34,6 +34,9 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
     private var productAdapter: ProductAdapter by autoCleared()
     private val args: ProductDetailsFragmentArgs by navArgs()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    private var suggestedProductsLoaded = false
+    private var wishListLoaded = false
+    private var isLiked = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,8 +45,43 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         loadYouMayLikeProducts()
         bind(args.product)
         getProduct(args.productId?.toLong())
+        setClickListeners()
+        getProductWishList()
+
 
     }
+
+    private fun showLikeInfo(products: List<Product>){
+        val id = args.product?.id ?: args.productId
+
+        isLiked = products.any{ it.id == id }
+
+        binding.heartIcon.setImageResource( if (isLiked) R.drawable.ic_wished else R.drawable.ic_heart)
+
+    }
+
+    private fun messageLike(ids: List<Long>){
+        if(ids.contains(args.product?.id ?: args.productId)){
+            isLiked = !isLiked
+        }
+        binding.heartIcon.setImageResource( if (isLiked) R.drawable.ic_wished else R.drawable.ic_heart)
+        val messageStr = if(isLiked) "Добавлено в избранное" else "Удалено из избранного"
+        Toast.makeText(requireContext(), messageStr, Toast.LENGTH_SHORT).show()
+    }
+
+
+
+    private fun setClickListeners(){
+        binding.heartIcon.setOnClickListener {
+            presenter.addProductToWishList((args.product?.id ?: args.productId?.toLong()) ?: 0.toLong())
+        }
+    }
+
+    private fun getProductWishList(){
+        presenter.getProductWishList()
+    }
+
+
 
     private fun getProduct(id: Long?){
         id ?: return
@@ -60,6 +98,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         product ?: return
         initShare(product.id)
         initViewPager(product.photo)
+        binding.toolbar.titleTextView.text = product.name
 
 
 
@@ -70,7 +109,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
 
         binding.productNameTextView.text = product.name
         binding.likesCountTextView.text = product.statistic.wishlist.total.toString()
-        binding.shareCountTextView.text = product.statistic.share.total.toString()
+        //binding.shareCountTextView.text = product.statistic.share.total.toString()
         binding.discountTextView.text = "-${product.sale}%"
         binding.sellerNameTextView.text = product.user.name
         binding.sellerPhoneTextView.text = product.phoneShow
@@ -100,7 +139,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
     }
 
     private fun initToolBar(){
-        binding.toolbar.titleTextView.text = "Вечернее платье"
+        binding.toolbar.titleTextView.text = args.product?.name
         binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
@@ -134,9 +173,24 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
 
     override fun loaded(result: Any) {
         when(result) {
-         is List<*> -> productAdapter.updateList(result as List<Product>)
+         is List<*> -> {
+             if(result.isNotEmpty() && result[0] is Long){
+                 messageLike(result as List<Long>)
+                 return
+             }
+             if(!suggestedProductsLoaded) {
+                 productAdapter.updateList(result as List<Product>)
+                 suggestedProductsLoaded = true
+             }
+             if(!wishListLoaded) {
+                 getProductWishList()
+                 wishListLoaded = true
+             }
+             showLikeInfo(result as List<Product>)
+         }
             is Intent -> startIntent(result)
             is Product -> bind(result)
+
         }
 
     }

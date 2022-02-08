@@ -36,6 +36,13 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
         initList()
         initToolBar()
         loadMaterials()
+        setClickListeners()
+    }
+
+    private fun setClickListeners(){
+        binding.showProductsBtn.setOnClickListener {
+            findNavController().navigate(R.id.catalogFragment)
+        }
     }
 
 

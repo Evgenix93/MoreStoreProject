@@ -38,7 +38,14 @@ class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), Us
         initRegionsRecyclerView()
         initEditText()
         initViews()
+        setClickListeners()
 
+    }
+
+    private fun setClickListeners(){
+        binding.showOffersBtn.setOnClickListener {
+            findNavController().navigate(R.id.catalogFragment)
+        }
     }
 
     override fun onStop() {
@@ -53,7 +60,7 @@ class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), Us
     }
 
     private fun initRegionsRecyclerView(){
-        regionsAdapter = RegionsAdapter()
+        regionsAdapter = RegionsAdapter(false) {}
         binding.regionsRecyclerView.adapter = regionsAdapter
         binding.regionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         presenter.getAllCities()
@@ -148,7 +155,7 @@ class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), Us
             regions = result as List<Region>
             presenter.collectRegionSearchFlow(searchFlow, regions)
         }
-        val list = (result as List<Region>).filter { it.idCountry == 1.toLong() }
+        val list = (result as List<Region>)
         if(list.size + 1 == com.project.morestore.singletones.FilterState.filter.regions.size){
             if(com.project.morestore.singletones.FilterState.filter.currentLocation != null && !com.project.morestore.singletones.FilterState.filter.isCurrentLocationFirstLoaded){
                 com.project.morestore.singletones.FilterState.filter.regions.first { it.id == com.project.morestore.singletones.FilterState.filter.currentLocation?.id }.apply { isChecked = true }
