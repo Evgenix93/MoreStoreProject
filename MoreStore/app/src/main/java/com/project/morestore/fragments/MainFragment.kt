@@ -28,10 +28,8 @@ import com.project.morestore.adapters.MainFragmenViewPagerAdapter
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentMainBinding
+import com.project.morestore.models.*
 import com.project.morestore.models.Filter
-import com.project.morestore.models.Product
-import com.project.morestore.models.ProductCategory
-import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.AuthPresenter
@@ -187,6 +185,16 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     private fun setClickListeners() {
+        binding.materialCardView10.setOnClickListener { presenter.updateBrand(ProductBrand(214, "ZARA", 3, true, false)) }
+        binding.materialCardView11.setOnClickListener { presenter.updateBrand(ProductBrand(216, "STRADIVARIUS", 3, true, false)) }
+        binding.materialCardView12.setOnClickListener { presenter.updateBrand(ProductBrand(215, "H&M", 3, true, false)) }
+        binding.materialCardView13.setOnClickListener { presenter.updateBrand(ProductBrand(218, "MANGO", 3, true, false)) }
+        binding.materialCardView14.setOnClickListener { presenter.updateBrand(ProductBrand(217, "LEVI'S", 2, true, false)) }
+        binding.materialCardView15.setOnClickListener { presenter.updateBrand(ProductBrand(219, "LACOSTE", 2, true, false)) }
+
+
+
+
         binding.moreBrandsTextView.setOnClickListener { findNavController().navigate(R.id.brandsFragment) }
         binding.offersTextView.setOnClickListener {
             findNavController().navigate(
