@@ -121,4 +121,13 @@ class CategoryAdapter(
         else
             segments2.size
     }
+
+    fun clearCheckboxes(){
+        val list = mutableListOf<Boolean>()
+        for (segment in segments2Checked){
+            list.add(false)
+        }
+        updateSegmentsChecked(list)
+
+    }
 }

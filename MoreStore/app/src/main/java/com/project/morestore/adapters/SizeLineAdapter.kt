@@ -63,6 +63,7 @@ class SizeLineAdapter(val isShoos: Boolean) :
         private val binding: ItemShoesSizeLineBinding by viewBinding()
 
         fun bind(size: SizeLine, otherSize: Boolean) {
+            Log.d("mytest", size.toString())
             Log.d("bind", otherSize.toString())
             binding.ITRUFRTextView.text = size.itRuFr
             binding.WTextView.text = size.int

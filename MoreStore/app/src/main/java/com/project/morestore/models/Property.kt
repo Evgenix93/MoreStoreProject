@@ -9,5 +9,6 @@ data class Property(
     val name: String,
     val ico: String?,
     @Json(name = "id_category")
-    val idCategory: Long
+    val idCategory: Long,
+    var isChecked: Boolean?
 )

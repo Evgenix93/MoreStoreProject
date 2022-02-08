@@ -11,6 +11,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.SizeCardsAdapter
 import com.project.morestore.databinding.FragmentOnboarding2Binding
+import com.project.morestore.models.Property
 import com.project.morestore.models.Size
 import com.project.morestore.mvpviews.OnBoardingMvpView
 import com.project.morestore.presenters.OnboardingPresenter
@@ -64,11 +65,11 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     private fun setClickListeners(){
         binding.continueBtn.setOnClickListener {
-           /* presenter.saveSizes(
-                topSizeCardAdapter.getChosenSizes(),
-                bottomSizeCardAdapter.getChosenSizes(),
-                shoesSizeCardAdapter.getChosenSizes()
-            )*/
+           // presenter.saveSizes(
+             //   topSizeCardAdapter.getChosenSizes(),
+               // bottomSizeCardAdapter.getChosenSizes(),
+               // shoesSizeCardAdapter.getChosenSizes()
+           // )
 
          presenter.saveSizes(
              topSizeCardAdapter.getSizes(),
@@ -85,7 +86,10 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
     }
 
     private fun getAllSizes(){
-        presenter.getAllSizes()
+        //presenter.getAllSizes()
+        presenter.getTopSizes()
+        presenter.getBottomSizes()
+        presenter.getShoosSizes()
     }
 
     override fun loading() {
@@ -95,10 +99,16 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     override fun loaded(result: List<Any>) {
         showLoading(false)
-        topSizeCardAdapter.updateList((result as List<Size>).filter { it.id_category == 1 }.sortedBy { it.toInt() })
-        bottomSizeCardAdapter.updateList((result).filter { it.id_category == 2 }.sortedBy { it.toInt() })
-        shoesSizeCardAdapter.updateList((result).filter { it.id_category == 3 }
-            .sortedBy { it.name.toFloat() })
+        if((result[0] as Property).idCategory.toInt() == 4)
+        topSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory.toInt(), false) })
+
+        if((result[0] as Property).idCategory.toInt() == 5)
+            bottomSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory.toInt(), false) })
+
+        if((result[0] as Property).idCategory.toInt() == 6)
+            shoesSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory.toInt(), false) })
+
+
 
 
 

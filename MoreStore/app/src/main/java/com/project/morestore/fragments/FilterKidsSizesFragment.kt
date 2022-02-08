@@ -22,7 +22,8 @@ import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_sizes_kids), UserMvpView {
+class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_kids),
+    UserMvpView {
     private val binding: FragmentFilterSizesKidsBinding by viewBinding()
     private var topSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var bottomSizeCardAdapter: SizeCardsAdapter by autoCleared()
@@ -41,8 +42,7 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
     }
 
 
-
-    private fun initToolbar(){
+    private fun initToolbar() {
         binding.toolbar.titleTextView.text = "Размер"
         binding.toolbar.actionTextView.text = "Сбросить"
         binding.toolbar.actionTextView.setOnClickListener {
@@ -53,7 +53,7 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun initLists(){
+    private fun initLists() {
         topSizeCardAdapter = SizeCardsAdapter(false)
         bottomSizeCardAdapter = SizeCardsAdapter(false)
         shoesSizeCardAdapter = SizeCardsAdapter(false)
@@ -83,11 +83,11 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
 
     }
 
-    private fun showLoading(loading: Boolean){
+    private fun showLoading(loading: Boolean) {
         binding.loader.isVisible = loading
     }
 
-    private fun convertSizeToSizeLine(size: Size): SizeLine{
+    private fun convertSizeToSizeLine(size: Size): SizeLine {
         val int = size.name
         var w = ""
         var itRuFr = ""
@@ -163,99 +163,174 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
 
     }
 
-    private fun convertShoeSizeToSizeLine(size: Size): SizeLine{
-        val int = size.name
-        var w = ""
-        var itRuFr = ""
-        var us = ""
-        var uk = ""
-        when (size.name) {
-            "38" -> {
-                w = ""
-                itRuFr = "39"
-                us = "8"
-                uk = "5"
-            }
-            "38.5" -> {
-                w = ""
-                itRuFr = "39.5"
-                us = "8.5"
-                uk = "5.5"
-            }
-            "39" -> {
-                w = ""
-                itRuFr = "40"
-                us = "9"
-                uk = "6"
-            }
-            "39.5" -> {
-                w = ""
-                itRuFr = "40.5"
-                us = "9.5"
-                uk = "6.5"
-            }
-            "40" -> {
-                w = ""
-                itRuFr = "41"
-                us = "10"
-                uk = "7"
-            }
-            "40.5" -> {
-                w = ""
-                itRuFr = "41.5"
-                us = "10.5"
-                uk = "7.5"
-            }
-            "41" -> {
-                w = ""
-                itRuFr = "42"
-                us = "11"
-                uk = "8"
-            }
-            "41.5" -> {
-                w = ""
-                itRuFr = "42.5"
-                us = "11.5"
-                uk = "8.5"
-            }
-            "42" -> {
-                w = ""
-                itRuFr = "43"
-                us = "12"
-                uk = "9"
-            }
-            "42.5" -> {
-                w = ""
-                itRuFr = "43.5"
-                us = "12.5"
-                uk = "9.5"
-            }
+    private fun convertShoeSizeToSizeLine(size: Size): SizeLine {
+        return SizeLine(
+            size.id,
+            size.name,
+            size.w.orEmpty(),
+            size.fr.orEmpty(),
+            size.us.orEmpty(),
+            size.uk.orEmpty(),
+            size.chosen ?: false
+        )
+    }
+    /*
+    val int = size.name
+    var w = ""
+    var itRuFr = ""
+    var us = ""
+    var uk = ""
+    when (size.name) {
+        "35" -> {
 
-            "43" ->  {
-                w = ""
-                itRuFr = "44"
-                us = "13"
-                uk = "10"
-            }
-            else -> {
-            }
+        w = "",
+                itRuFr = "36",
+        us = "5",
+        uk = "2"
+    }
+        ,
+
+            "71" -> {
+            w = "35.5",
+
+            w = ""
+            itRuFr = "36.5"
+            us = "5.5"
+            uk = "2.5"
         }
 
-        return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false)
+        ,
 
 
-    }
 
-    private fun loadFilter(){
+            "36" -> {
+            w = ""
+            itRuFr = "37"
+            us = "6"
+            uk = "3"
+
+
+        },
+        {
+
+
+            "36.6" ->
+                w =  73,
+                itRuFr =  "36.5",
+            us = 6.5,
+            uk = 3.5
+
+
+            }
+        },
+
+    "id": 75,
+    "name": "37.5",
+    "ico": "FR'38.5';US'7.5';UK'4.5'",
+    "id_category": 6
+
+    "37.5" ->
+    w = ""
+    itRuFr = "38.5"
+    us = "7.5"
+    uk = "4.5"
+
+
+
+
+           "37" ->
+            w
+            itRuFr = "38"
+            us = "4"
+            uk = "4"
+
+
+        "38" -> {
+            w = ""
+            itRuFr = "38.5"
+            us = "7.5"
+            uk = "4.5"
+        }
+        "38.5" -> {
+            w = ""
+            itRuFr = "39.5"
+            us = "8.5"
+            uk = "5.5"
+        }
+        "39" -> {
+            w = ""
+            itRuFr = "40"
+            us = "9"
+            uk = "6"
+        }
+        "39.5" -> {
+            w = ""
+            itRuFr = "40.5"
+            us = "9.5"
+            uk = "6.5"
+        }
+        "40" -> {
+            w = ""
+            itRuFr = "41"
+            us = "10"
+            uk = "7"
+        }
+        "40.5" -> {
+            w = ""
+            itRuFr = "41.5"
+            us = "10.5"
+            uk = "7.5"
+        }
+        "41" -> {
+            w = ""
+            itRuFr = "42"
+            us = "11"
+            uk = "8"
+        }
+        "41.5" -> {
+            w = ""
+            itRuFr = "42.5"
+            us = "11.5"
+            uk = "8.5"
+        }
+        "42" -> {
+            w = ""
+            itRuFr = "43"
+            us = "12"
+            uk = "9"
+        }
+        "42.5" -> {
+            w = ""
+            itRuFr = "43.5"
+            us = "12.5"
+            uk = "9.5"
+        }
+
+        "43" ->  {
+            w = ""
+            itRuFr = "44"
+            us = "13"
+            uk = "10"
+        }
+        else -> {
+        }
+
+
+    return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false)
+
+
+}*/
+
+    private fun loadFilter() {
         presenter.getFilter()
     }
 
-    private fun bindFilter(filter: Filter){
+    private fun bindFilter(filter: Filter) {
         isForKids = filter.chosenForWho[2]
         isForWomen = filter.chosenForWho[0]
         isForMen = filter.chosenForWho[1]
 
-        if(!isSizesLoaded)
+        if (!isSizesLoaded)
             getSizes()
 
         Log.d("mytest", filter.chosenTopSizes.size.toString())
@@ -264,18 +339,27 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
             isForWomen -> {
                 if (topSizeCardAdapter.getSizes().size == filter.chosenTopSizes.size || topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizes.size) {
                     topSizeCardAdapter.updateList(
-                        filter.chosenTopSizes.toMutableList().apply { if(filter.chosenTopSizes.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {}  }.toList()
-                            .map { Size(it.id, it.int, 1, it.isSelected) })
+                        filter.chosenTopSizes.toMutableList().apply {
+                            if (filter.chosenTopSizes.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                            }
+                        }.toList()
+                            .map { Size(it.id, it.int, 1, it.isSelected, it.itRuFr, it.us, it.uk) })
                 }
                 if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizes.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizes.size) {
                     bottomSizeCardAdapter.updateList(
-                        filter.chosenBottomSizes.toMutableList().apply { if(filter.chosenBottomSizes.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                        filter.chosenBottomSizes.toMutableList().apply {
+                            if (filter.chosenBottomSizes.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                            }
+                        }.toList()
                             .map { Size(it.id, it.int, 2, it.isSelected) })
                 }
                 if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizes.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizes.size) {
 
                     shoesSizeCardAdapter.updateList(
-                        filter.chosenShoosSizes.toMutableList().apply { if(filter.chosenShoosSizes.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                        filter.chosenShoosSizes.toMutableList().apply {
+                            if (filter.chosenShoosSizes.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                            }
+                        }.toList()
                             .map { Size(it.id, it.int, 3, it.isSelected) })
                 }
             }
@@ -283,19 +367,28 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
                 if (topSizeCardAdapter.getSizes().size == filter.chosenTopSizesMen.size || topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizesMen.size) {
 
                     topSizeCardAdapter.updateList(
-                        filter.chosenTopSizesMen.toMutableList().apply { if(filter.chosenTopSizesMen.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                        filter.chosenTopSizesMen.toMutableList().apply {
+                            if (filter.chosenTopSizesMen.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                            }
+                        }.toList()
                             .map { Size(it.id, it.int, 1, it.isSelected) })
                 }
 
                 if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesMen.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesMen.size) {
                     bottomSizeCardAdapter.updateList(
-                        filter.chosenBottomSizesMen.toMutableList().apply { if(filter.chosenBottomSizesMen.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                        filter.chosenBottomSizesMen.toMutableList().apply {
+                            if (filter.chosenBottomSizesMen.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                            }
+                        }.toList()
                             .map { Size(it.id, it.int, 2, it.isSelected) })
                 }
                 if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizesMen.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizesMen.size) {
 
                     shoesSizeCardAdapter.updateList(
-                        filter.chosenShoosSizesMen.toMutableList().apply { if(filter.chosenShoosSizesMen.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                        filter.chosenShoosSizesMen.toMutableList().apply {
+                            if (filter.chosenShoosSizesMen.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                            }
+                        }.toList()
                             .map { Size(it.id, it.int, 3, it.isSelected) })
                 }
             }
@@ -304,27 +397,36 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
                 if (topSizeCardAdapter.getSizes().size == filter.chosenTopSizesKids.size || topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizesKids.size) {
 
                     topSizeCardAdapter.updateList(
-                        filter.chosenTopSizesKids.toMutableList().apply { if(filter.chosenTopSizesKids.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                        filter.chosenTopSizesKids.toMutableList().apply {
+                            if (filter.chosenTopSizesKids.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                            }
+                        }.toList()
                             .map { Size(it.id, it.int, 1, it.isSelected) })
                 }
                 if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesKids.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesKids.size) {
 
                     bottomSizeCardAdapter.updateList(
-                        filter.chosenBottomSizesKids.toMutableList().apply { if(filter.chosenBottomSizesKids.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                        filter.chosenBottomSizesKids.toMutableList().apply {
+                            if (filter.chosenBottomSizesKids.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                            }
+                        }.toList()
                             .map { Size(it.id, it.int, 2, it.isSelected) })
                 }
                 if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizesKids.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizesKids.size) {
 
                     shoesSizeCardAdapter.updateList(
-                        filter.chosenShoosSizesKids.toMutableList().apply { if(filter.chosenShoosSizesKids.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {} }.toList()
+                        filter.chosenShoosSizesKids.toMutableList().apply {
+                            if (filter.chosenShoosSizesKids.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                            }
+                        }.toList()
                             .map { Size(it.id, it.int, 3, it.isSelected) })
                 }
             }
         }
     }
 
-    private fun getSizes(){
-        when{
+    private fun getSizes() {
+        when {
             isForWomen -> {
                 presenter.getTopSizesWomen()
                 presenter.getBottomSizesWomen()
@@ -343,18 +445,18 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
         }
     }
 
-    private fun saveSizes(){
+    private fun saveSizes() {
         when {
             isForWomen -> {
-               presenter.saveTopSizes(
-                   topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
-               presenter.saveBottomSizes(bottomSizeCardAdapter.getSizes()
-                   .map { convertSizeToSizeLine(it) })
-               presenter.saveShoosSizes(shoesSizeCardAdapter.getSizes()
-                   .map { convertShoeSizeToSizeLine(it) })
-           }
+                presenter.saveTopSizes(
+                    topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
+                presenter.saveBottomSizes(bottomSizeCardAdapter.getSizes()
+                    .map { convertSizeToSizeLine(it) })
+                presenter.saveShoosSizes(shoesSizeCardAdapter.getSizes()
+                    .map { convertShoeSizeToSizeLine(it) })
+            }
 
-           isForMen -> {
+            isForMen -> {
                 presenter.saveTopSizesMen(
                     topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
                 presenter.saveBottomSizesMen(bottomSizeCardAdapter.getSizes()
@@ -380,10 +482,10 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
         super.onStop()
         saveSizes()
         //FilterState.filter.chosenTopSizes = topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) } + if(FilterState.filter.chosenTopSizes.isNotEmpty()) listOf(FilterState.filter.chosenTopSizes.last()) else listOf(
-         //   SizeLine(0, "Другое", "", "", "", "", false)
-       // )
-       // FilterState.filter.chosenBottomSizes = bottomSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) } + if(FilterState.filter.chosenBottomSizes.isNotEmpty()) listOf(FilterState.filter.chosenBottomSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
-       // FilterState.filter.chosenShoosSizes = shoesSizeCardAdapter.getSizes().map { convertShoeSizeToSizeLine(it) } + if(FilterState.filter.chosenShoosSizes.isNotEmpty()) listOf(FilterState.filter.chosenShoosSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
+        //   SizeLine(0, "Другое", "", "", "", "", false)
+        // )
+        // FilterState.filter.chosenBottomSizes = bottomSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) } + if(FilterState.filter.chosenBottomSizes.isNotEmpty()) listOf(FilterState.filter.chosenBottomSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
+        // FilterState.filter.chosenShoosSizes = shoesSizeCardAdapter.getSizes().map { convertShoeSizeToSizeLine(it) } + if(FilterState.filter.chosenShoosSizes.isNotEmpty()) listOf(FilterState.filter.chosenShoosSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
 
     }
 
@@ -403,61 +505,92 @@ class FilterKidsSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_siz
 
     override fun loaded(result: Any) {
         showLoading(false)
-        if(result is List<*>) {
+        if (result is List<*>) {
             val sizes =
-                ((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory.toInt(), false) })
+                ((result as List<Property>).map {
+                    val list = it.ico?.split(';').orEmpty()
+                    it
+                })
+            //Size(it.id.toInt(), it.name, list[0].removePrefix("W").removeSurrounding("'"), list[1].removePrefix("IT/RU/FR").removeSurrounding("'"), list[2].removePrefix("US").removeSurrounding("'"), list[3].removePrefix("UK").removeSurrounding("'"), false)
+            //Size(it.id.toInt(), it.name, it.idCategory.toInt(), false, list[0].removePrefix("FR").removeSurrounding("'"), list[1].removePrefix("US").removeSurrounding("'"), list[2].removePrefix("UK").removeSurrounding("'")) })
             //val bottomSizes = (result).filter { it.id_category == 2 }.sortedBy { it.toInt() }
             //val shoosSizes = (result).filter { it.id_category == 3 }.sortedBy { it.toInt() }
-           // if (topSizes.size + 1 == FilterState.filter.chosenTopSizes.size) {
-             //   topSizeCardAdapter.updateList(FilterState.filter.chosenTopSizes.map {
-               //     Size(
-                 //       it.id,
-                   //     it.int,
-                     //   1,
-                       // it.isSelected
-                   // )
-               // }.toMutableList().apply { removeLast() })
+            // if (topSizes.size + 1 == FilterState.filter.chosenTopSizes.size) {
+            //   topSizeCardAdapter.updateList(FilterState.filter.chosenTopSizes.map {
+            //     Size(
+            //       it.id,
+            //     it.int,
+            //   1,
+            // it.isSelected
+            // )
+            // }.toMutableList().apply { removeLast() })
             //} else {
-            if(sizes[0].id_category == 1 || sizes[0].id_category == 4 || sizes[0].id_category == 7)
-                topSizeCardAdapter.updateList(sizes)
+            if (sizes[0].idCategory.toInt() == 1 || sizes[0].idCategory.toInt() == 4 || sizes[0].idCategory.toInt() == 7)
+                topSizeCardAdapter.updateList(sizes.map {
+                    val list = it.ico?.split(';').orEmpty()
+                    Size(
+                        it.id.toInt(),
+                        it.name,
+                        it.idCategory.toInt(),
+                        false,
+                        w = list[0].removePrefix("W").removeSurrounding("'"),
+                        fr = list[1].removePrefix("IT/RU/FR").removeSurrounding("'"),
+                        us = list[2].removePrefix("US").removeSurrounding("'"),
+                        uk = list[3].removePrefix("UK").removeSurrounding("'")
+                    )
+
+                })
+            // })
             //}
             //if (bottomSizes.size + 1 == FilterState.filter.chosenBottomSizes.size) {
-              //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
-                //val list = FilterState.filter.chosenBottomSizes.map {
-                  //  Size(
-                    //    it.id,
-                      //  it.int,
-                       // 2,
-                       // it.isSelected
-                   // )
-                //}
-               // bottomSizeCardAdapter.updateList(list.toMutableList().apply { removeLast() })
-               // Log.d("mylog3", FilterState.filter.chosenBottomSizes.toString())
+            //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
+            //val list = FilterState.filter.chosenBottomSizes.map {
+            //  Size(
+            //    it.id,
+            //  it.int,
+            // 2,
+            // it.isSelected
+            // )
+            //}
+            // bottomSizeCardAdapter.updateList(list.toMutableList().apply { removeLast() })
+            // Log.d("mylog3", FilterState.filter.chosenBottomSizes.toString())
 
             //} else {
-              //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
-            if(sizes[0].id_category == 2 || sizes[0].id_category == 5 || sizes[0].id_category == 8)
-                bottomSizeCardAdapter.updateList(sizes)
+            //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
+            //if(sizes[0].id_category == 2 || sizes[0].id_category == 5 || sizes[0].id_category == 8)
+            //bottomSizeCardAdapter.updateList(sizes)
             //}
 
-          //  if (shoosSizes.size + 1 == FilterState.filter.chosenShoosSizes.size) {
+            //  if (shoosSizes.size + 1 == FilterState.filter.chosenShoosSizes.size) {
             //    shoesSizeCardAdapter.updateList(FilterState.filter.chosenShoosSizes.map {
-              //      Size(
-                //        it.id,
-                  //      it.int,
-                    //    3,
-                      //  it.isSelected
-                   // )
-               // }.toMutableList().apply { removeLast() })
-           // } else {
-            if(sizes[0].id_category == 3 || sizes[0].id_category == 6 || sizes[0].id_category == 9)
-                shoesSizeCardAdapter.updateList(sizes)
+            //      Size(
+            //        it.id,
+            //      it.int,
+            //    3,
+            //  it.isSelected
+            // )
+            // }.toMutableList().apply { removeLast() })
+            // } else {
+            if (sizes[0].idCategory.toInt() == 3 || sizes[0].idCategory.toInt() == 6 || sizes[0].idCategory.toInt() == 9)
+                shoesSizeCardAdapter.updateList(sizes.map {
+                    val list = it.ico?.split(';').orEmpty()
+                    Size(
+                        it.id.toInt(),
+                        it.name,
+                        it.idCategory.toInt(),
+                        false,
+                        fr = list[0].removePrefix("FR").removeSurrounding("'"),
+                        us = list[1].removePrefix("US").removeSurrounding("'"),
+                        uk = list[2].removePrefix("UK").removeSurrounding("'")
+                    )
+
+                })
             //}
             isSizesLoaded = true
             loadFilter()
         }
 
-        if(result is Filter){
+        if (result is Filter) {
             bindFilter(result)
 
         }

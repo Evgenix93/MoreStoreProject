@@ -51,6 +51,38 @@ class OnboardingPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
 
     }
 
+    fun getProperties(propertyId: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val response = repository.getProperties()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+
+    }
+
+    fun getTopSizes(){
+        getProperties(4)
+    }
+
+    fun getBottomSizes(){
+        getProperties(5)
+    }
+
+    fun getShoosSizes(){
+        getProperties(6)
+    }
+
     fun saveSizes(topSizes: List<Size>, bottomSizes: List<Size>, shoesSizes: List<Size>){
         presenterScope.launch {
             viewState.loading()

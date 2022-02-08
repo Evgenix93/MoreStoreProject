@@ -113,16 +113,54 @@ class ProductRepository(private val context: Context) {
                 productIdStr = listOf("id=$it")
             }
 
-            productPropertyStr = filter?.chosenTopSizes?.map { "id_property=${it.id}" }
-                .orEmpty() + filter?.chosenBottomSizes?.map { "id_property=${it.id}" }
-                .orEmpty() + filter?.chosenShoosSizes?.map { "id_property=${it.id}" }
-                .orEmpty() + filter?.chosenTopSizesMen?.map { "id_property=${it.id}" }
-                .orEmpty() + filter?.chosenBottomSizesMen?.map { "id_property=${it.id}" }
-                .orEmpty() + filter?.chosenShoosSizesMen?.map { "id_property=${it.id}" }
-                .orEmpty() + filter?.chosenTopSizesKids?.map { "id_property=${it.id}" }
-                .orEmpty() + filter?.chosenBottomSizesKids?.map { "id_property=${it.id}" }
-                .orEmpty() + filter?.chosenShoosSizesKids?.map { "id_property=${it.id}" }
-                .orEmpty() + filter?.chosenMaterials?.map { "id_property=${it.id}" }.orEmpty()
+            productPropertyStr =
+                filter?.chosenTopSizes?.filter { it.isSelected }?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.chosenBottomSizes?.filter { it.isSelected }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.chosenShoosSizes?.filter { it.isSelected }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.chosenTopSizesMen?.filter { it.isSelected }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.chosenBottomSizesMen?.filter { it.isSelected }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.chosenShoosSizesMen?.filter { it.isSelected }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.chosenTopSizesKids?.filter { it.isSelected }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.chosenBottomSizesKids?.filter { it.isSelected }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.chosenShoosSizesKids?.filter { it.isSelected }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.chosenMaterials?.filter { it.isSelected }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty() + filter?.colors?.filter { it.isChecked == true }
+                    ?.map { "id_property=${it.id}" }.orEmpty() + filter?.categories?.filter { it.isChecked == true }
+                    ?.map { "id_property=${it.id}" }
+                    .orEmpty()
+
+
+
+            var conditionList = listOf<String>()
+            if (filter?.chosenConditions?.isNotEmpty() == true) {
+                if (filter!!.chosenConditions[0]) {
+                    conditionList = conditionList + listOf<String>("id_property=111")
+                }
+                if (filter.chosenConditions[1]) {
+                    conditionList = conditionList + listOf<String>("id_property=112")
+                }
+
+                if (filter.chosenConditions[2]) {
+                    conditionList = conditionList + listOf<String>("id_property=113")
+                }
+
+
+            }
+
+            productPropertyStr = productPropertyStr + conditionList
+
+
+
+
 
             productApi.getProducts(
                 PRODUCT_OPTIONS,
@@ -374,6 +412,78 @@ class ProductRepository(private val context: Context) {
                 "42",
                 false
             ),
+            SizeLine(
+                0,
+                "XL",
+                "36-37",
+                "52",
+                "42",
+                "42",
+                false
+            ),
+            SizeLine(
+                0,
+                "XL",
+                "36-37",
+                "52",
+                "42",
+                "42",
+                false
+            ),
+            SizeLine(
+                0,
+                "XL",
+                "36-37",
+                "52",
+                "42",
+                "42",
+                false
+            ),
+            SizeLine(
+                0,
+                "XL",
+                "36-37",
+                "52",
+                "42",
+                "42",
+                false
+            ),
+            SizeLine(
+                0,
+                "XL",
+                "36-37",
+                "52",
+                "42",
+                "42",
+                false
+            ),
+            SizeLine(
+                0,
+                "XL",
+                "36-37",
+                "52",
+                "42",
+                "42",
+                false
+            ),
+            SizeLine(
+                0,
+                "XL",
+                "36-37",
+                "52",
+                "42",
+                "42",
+                false
+            ),
+            SizeLine(
+                0,
+                "XL",
+                "36-37",
+                "52",
+                "42",
+                "42",
+                false
+            ),
             com.project.morestore.models.SizeLine(
                 0,
                 "",
@@ -480,10 +590,10 @@ class ProductRepository(private val context: Context) {
     }
 
     suspend fun getColors(): Response<List<Property>>? {
-        return try{
+        return try {
             Network.productApi.getProperties()
-        }catch (e: Throwable){
-            if(e is IOException)
+        } catch (e: Throwable) {
+            if (e is IOException)
                 null
             else
                 Response.error(400, "".toResponseBody())
@@ -491,10 +601,10 @@ class ProductRepository(private val context: Context) {
     }
 
     suspend fun getProductCategories(): Response<List<ProductCategory>>? {
-        return try{
+        return try {
             Network.productApi.getProductCategories()
-        }catch (e: Throwable){
-            if(e is IOException)
+        } catch (e: Throwable) {
+            if (e is IOException)
                 null
             else
                 Response.error(400, "".toResponseBody(null))

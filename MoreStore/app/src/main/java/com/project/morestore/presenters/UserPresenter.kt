@@ -866,7 +866,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         val response = productRepository.getColors()
           when(response?.code()){
               200 -> {
-                  viewState.loaded(response.body()!!.filter{it.idCategory == 12})
+                  viewState.loaded(response.body()!!.filter{it.idCategory.toInt() == 12})
               }
               400 -> viewState.error("Ошибка")
               null -> viewState.error("Нет интернета")

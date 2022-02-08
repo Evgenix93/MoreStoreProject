@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -278,7 +279,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
         }
 
         if(isForWomen) {
-            if (sizeAdapter.getChosenSizes().size == filter.chosenShoosSizes.size) {
+            if (sizeAdapter.getChosenSizes().size == filter.chosenShoosSizes.size || sizeAdapter.getChosenSizes().size == filter.chosenShoosSizes.size + 1) {
                 sizeAdapter.updateList(filter.chosenShoosSizes, null)
             }
         }else{
@@ -323,6 +324,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
                     .map {
                         val list = it.ico?.split(';').orEmpty()
                         SizeLine(it.id.toInt(), it.name, "", list[0].removePrefix("FR").removeSurrounding("'"), list[1].removePrefix("US").removeSurrounding("'"), list[2].removePrefix("UK").removeSurrounding("'"), false)
+
                     }
                 //(result as List<Size>).filter { it.id_category == 3 }.sortedBy { it.toInt() }
                   //  .ma

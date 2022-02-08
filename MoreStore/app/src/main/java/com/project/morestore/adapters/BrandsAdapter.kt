@@ -143,6 +143,13 @@ class BrandsAdapter(private val onWishClick: (id: Long) -> Unit) :
         notifyDataSetChanged()
     }
 
+    fun clearCheckboxes(){
+        for (brand in list){
+            brand.isChecked = false
+            notifyDataSetChanged()
+        }
+    }
+
     fun updateWishedInfo(ids: List<Long>, isAllWished: Boolean) {
         for (id in ids) {
             val brand = list.find { it.id == id }?.apply {

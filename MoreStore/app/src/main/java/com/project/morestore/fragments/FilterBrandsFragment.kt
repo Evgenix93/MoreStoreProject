@@ -148,6 +148,10 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
     private fun initToolbar() {
         binding.toolbarFilter.titleTextView.text = "Бренд или сегмент"
         binding.toolbarFilter.actionTextView.text = "Сбросить"
+        binding.toolbarFilter.actionTextView.setOnClickListener {
+            brandsAdapter.clearCheckboxes()
+            segmentsAdapter.clearCheckboxes()
+        }
         binding.toolbarFilter.imageView2.setOnClickListener {
             findNavController().popBackStack()
         }

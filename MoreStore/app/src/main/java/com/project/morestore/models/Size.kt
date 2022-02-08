@@ -7,7 +7,11 @@ data class Size(
     val id: Int,
     val name: String,
     val id_category: Int,
-    var chosen: Boolean?
+    var chosen: Boolean?,
+    var fr: String? = null,
+    var us: String? = null,
+    var uk: String? = null,
+    var w: String? = null
 ){
 
     fun toInt(): Int{

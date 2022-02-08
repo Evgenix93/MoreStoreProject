@@ -56,9 +56,10 @@ class SizeCardsAdapter(val isLimit: Boolean) : RecyclerView.Adapter<SizeCardsAda
                     Log.d("Debug", "size.chosen = ${list[position].chosen}")
                     notifyItemChanged(position)
                     chosenSizes.add(list[position])
-                }else{
+                }else{ if(!isLimit) {
                     list[position].chosen = true
                     notifyItemChanged(position)
+                }
                 }
             }
         }
