@@ -145,7 +145,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.getCurrentUserInfo()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -161,11 +161,11 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getUserData(){
+    fun getUserData() {
         presenterScope.launch {
             viewState.loading()
             val response = authRepository.getUserData()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> {
                     authRepository.setupUserId(response.body()!!.id)
                     getUserInfo()
@@ -184,25 +184,25 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-      fun getSellerInfo(userId: Int){
-          presenterScope.launch {
-              viewState.loading()
-              val response = userRepository.getSellerInfo(userId)
-              when(response?.code()){
-                  200 -> viewState.loaded(response.body()!!)
-                  400 -> {
-                      val bodyString = getStringFromResponse(response.errorBody()!!)
-                      viewState.error(bodyString)
-                  }
-                  500 -> viewState.error("500 Internal Server Error")
-                  null -> viewState.error("нет интернета")
-                  else -> viewState.error("ошибка")
+    fun getSellerInfo(userId: Int) {
+        presenterScope.launch {
+            viewState.loading()
+            val response = userRepository.getSellerInfo(userId)
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
 
-              }
+            }
 
 
-          }
-      }
+        }
+    }
 
     fun getUserProducts() {
         presenterScope.launch {
@@ -225,7 +225,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getSellerProducts(userId: Int){
+    fun getSellerProducts(userId: Int) {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getSellerProducts(userId)
@@ -367,7 +367,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    private fun getProperties(propertyId: Long){
+    private fun getProperties(propertyId: Long) {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getProperties()
@@ -387,59 +387,53 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     }
 
-    fun getMaterials(){
+    fun getMaterials() {
         getProperties(13)
     }
 
-    fun getTopSizesWomen(){
+    fun getTopSizesWomen() {
         getProperties(4)
     }
 
-    fun getBottomSizesWomen(){
+    fun getBottomSizesWomen() {
         getProperties(5)
     }
 
-    fun getShoosSizesWomen(){
+    fun getShoosSizesWomen() {
         getProperties(6)
     }
 
 
-
-
-
-    fun getTopSizesMen(){
+    fun getTopSizesMen() {
         getProperties(1)
     }
 
-    fun getBottomSizesMen(){
+    fun getBottomSizesMen() {
         getProperties(2)
     }
 
-    fun getShoosSizesMen(){
+    fun getShoosSizesMen() {
         getProperties(3)
     }
 
-    fun getTopSizesKids(){
+    fun getTopSizesKids() {
         getProperties(7)
     }
 
-    fun getBottomSizesKids(){
+    fun getBottomSizesKids() {
         getProperties(8)
     }
 
-    fun getShoosSizesKids(){
+    fun getShoosSizesKids() {
         getProperties(9)
     }
-
-
-
 
 
     fun getCityByCoordinates(coordinates: String) {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.getCityByCoordinates(coordinates)
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -491,7 +485,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             viewState.loading()
             val wishList = BrandWishList(brandsIds)
             val response = userRepository.addBrandsToWishList(wishList)
-            when (response?.code()){
+            when (response?.code()) {
                 200 -> viewState.success(response.body()!!)
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -509,15 +503,15 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.getBrandWishList()
-            when (response?.code()){
-            200 -> viewState.loaded(response.body()!!.map { it.id })
-            400 -> {
-                val bodyString = getStringFromResponse(response.errorBody()!!)
-                viewState.error(bodyString)
-            }
-            500 -> viewState.error("500 Internal Server Error")
-            null -> viewState.error("нет интернета")
-            else -> viewState.error("ошибка")
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!.map { it.id })
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
 
             }
 
@@ -556,7 +550,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     }
 
-    fun collectMaterialSearchFlow(flow: Flow<String>, materials: List<Property>){
+    fun collectMaterialSearchFlow(flow: Flow<String>, materials: List<Property>) {
         searchJob3 = flow
             .debounce(3000)
             .mapLatest { query ->
@@ -607,7 +601,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun clearFilter(){
+    fun clearFilter() {
         userRepository.clearFilter()
         viewState.success("Фильтр очищен")
     }
@@ -615,92 +609,109 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun getProductCategories() {
         presenterScope.launch {
             val response = productRepository.getProductCategories()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> {
                     val filter = userRepository.getFilter()
-                    filter.chosenForWho.forEachIndexed{index, isChecked ->
+                    filter.chosenForWho.forEachIndexed { index, isChecked ->
                         if (isChecked)
-                            when(index){
-                                0 -> {viewState.loaded(response.body()!!.filter{
-                                    it.id == 1 ||
-                                    it.id == 3 ||
-                                    it.id ==  4 ||
-                                    it.id == 5 ||
-                                    it.id == 6 ||
-                                    it.id == 7 ||
-                                    it.id == 10 ||
-                                    it.id == 18 ||
-                                    it.id ==  20
-                                })}
-                                1 -> {viewState.loaded(response.body()!!.filterNot{
-                                    it.id == 1 ||
-                                            it.id == 3 ||
-                                            it.id ==  4 ||
-
-                                            it.id == 6 ||
-                                            it.id == 7 ||
-                                            it.id == 10 ||
-                                            it.id == 18 ||
-                                            it.id ==  20 ||
-                                            it.id == 21 ||
-                                            it.id == 22
-                                })}
-                                2 -> {viewState.loaded(response.body()!!.filter{
-                                    it.id == 21 ||
-                                            it.id == 22
-                                })}
+                            when (index) {
+                                0 -> {
+                                    viewState.loaded(response.body()!!.filterNot {
+                                       /* it.id == 1 ||
+                                                it.id == 2 ||
+                                                it.id == 3 ||
+                                                it.id == 4 ||
+                                                it.id == 5 ||
+                                                it.id == 6 ||
+                                                it.id == 7 ||
+                                                it.id == 9 ||
+                                                it.id == 10 ||
+                                                it.id == 11 ||
+                                                it.id == 12 ||
+                                                it.id == 13 ||
+                                                it.id == 14 ||
+                                                it.id == 15 ||
+                                                it.id == 16 ||
+                                                it.id == 17 ||
+                                                it.id == 18 ||
+                                                it.id == 19 ||
+                                                it.id == 20*/
+                                        it.id == 8 || it.id == 21 || it.id == 22
+                                    })
+                                }
+                                1 -> {
+                                    viewState.loaded(response.body()!!.filterNot {
+                                               /* it.id == 3 ||
+                                                it.id == 4 ||
+                                                it.id == 6 ||
+                                                it.id == 7 ||
+                                                it.id == 10 ||
+                                                it.id == 18 ||
+                                                it.id == 20 ||
+                                                it.id == 21 ||
+                                                it.id == 22*/
+                                          it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
+                                                  it.id == 18 || it.id == 21 || it.id == 22
+                                    })
+                                }
+                                2 -> {
+                                    viewState.loaded(response.body()!!.filter {
+                                        it.id == 21 ||
+                                                it.id == 22
+                                    })
+                                }
                             }
                     }
                 }
                 400 -> viewState.error("Ошибка")
                 null -> viewState.error("Нет интернета")
             }
-           /* val chosenForWho = userRepository.getFilter().chosenForWho
-            chosenForWho.forEachIndexed { index, isChecked ->
-                if (isChecked)
-                    when (index) {
-                        2 -> {
-                            val response = productRepository.getProductCategoriesKids()
-                            when (response?.code()) {
-                                null -> viewState.error("Нет интернета")
-                                200 -> {
-                                    viewState.loaded(filterProductCategoriesKids(response.body()!!))
-                                }
-                                400 -> viewState.error("Ошибка")
-                            }
-                        }
-                        0 -> {
-                            val response = productRepository.getProductCategoriesAdults()
-                            when (response?.code()) {
-                                null -> viewState.error("Нет интернета")
-                                200 -> {
-                                    viewState.loaded(
-                                        filterProductCategoriesAdults(
-                                            response.body()!!,
-                                            false
-                                        )
-                                    )
-                                }
-                                400 -> viewState.error("Ошибка")
-                            }
-                        }
-                        1 -> {
-                            val response = productRepository.getProductCategoriesAdults()
-                            when (response?.code()) {
-                                null -> viewState.error("Нет интернета")
-                                200 -> {
-                                    viewState.loaded(
-                                        filterProductCategoriesAdults(
-                                            response.body()!!,
-                                            true
-                                        )
-                                    )
-                                }
-                                400 -> viewState.error("Ошибка")
-                            }
-                        }
-                    }
-            }*/
+            /* val chosenForWho = userRepository.getFilter().chosenForWho
+             chosenForWho.forEachIndexed { index, isChecked ->
+                 if (isChecked)
+                     when (index) {
+                         2 -> {
+                             val response = productRepository.getProductCategoriesKids()
+                             when (response?.code()) {
+                                 null -> viewState.error("Нет интернета")
+                                 200 -> {
+                                     viewState.loaded(filterProductCategoriesKids(response.body()!!))
+                                 }
+                                 400 -> viewState.error("Ошибка")
+                             }
+                         }
+                         0 -> {
+                             val response = productRepository.getProductCategoriesAdults()
+                             when (response?.code()) {
+                                 null -> viewState.error("Нет интернета")
+                                 200 -> {
+                                     viewState.loaded(
+                                         filterProductCategoriesAdults(
+                                             response.body()!!,
+                                             false
+                                         )
+                                     )
+                                 }
+                                 400 -> viewState.error("Ошибка")
+                             }
+                         }
+                         1 -> {
+                             val response = productRepository.getProductCategoriesAdults()
+                             when (response?.code()) {
+                                 null -> viewState.error("Нет интернета")
+                                 200 -> {
+                                     viewState.loaded(
+                                         filterProductCategoriesAdults(
+                                             response.body()!!,
+                                             true
+                                         )
+                                     )
+                                 }
+                                 400 -> viewState.error("Ошибка")
+                             }
+                         }
+                     }
+             }*/
         }
     }
 
@@ -730,20 +741,20 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         return productCategories
     }
 
-    fun getFilter(){
+    fun getFilter() {
         viewState.loaded(userRepository.getFilter())
     }
 
-     fun saveColors(colors: List<Property>){
+    fun saveColors(colors: List<Property>) {
         val filter = userRepository.getFilter()
         filter.colors = colors
         userRepository.updateFilter(filter)
     }
 
-    fun loadColors(){
-   //     val colors = userRepository.loadColors()
-     //   if(colors.isNotEmpty())
-       //  viewState.loaded(colors)
+    fun loadColors() {
+        //     val colors = userRepository.loadColors()
+        //   if(colors.isNotEmpty())
+        //  viewState.loaded(colors)
     }
 
     fun saveMaterials(materials: List<MaterialLine>) {
@@ -751,24 +762,24 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         userRepository.updateFilter(filter)
     }
 
-    fun loadMaterials(){
+    fun loadMaterials() {
         val materials = userRepository.loadMaterials()
-        if(materials.isNotEmpty())
+        if (materials.isNotEmpty())
             viewState.loaded(materials)
     }
 
-    fun saveConditions(conditions: List<Boolean>){
+    fun saveConditions(conditions: List<Boolean>) {
         userRepository.saveConditions(conditions)
     }
 
-    fun loadConditions(){
+    fun loadConditions() {
         val conditions = userRepository.loadConditions()
-        if(conditions.isNotEmpty()){
+        if (conditions.isNotEmpty()) {
             viewState.loaded(conditions)
         }
     }
 
-    fun saveForWho(forWho: List<Boolean>){
+    fun saveForWho(forWho: List<Boolean>) {
         val filter = userRepository.getFilter()
         filter.chosenForWho = forWho
         userRepository.updateFilter(filter)
@@ -786,14 +797,14 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     }
 
-    fun loadTopSizes(){
+    fun loadTopSizes() {
         val sizes = userRepository.loadTopSizes()
-        if(sizes.isNotEmpty()){
+        if (sizes.isNotEmpty()) {
             viewState.loaded(sizes)
         }
     }
 
-    fun saveTopSizesMen(sizes: List<SizeLine>){
+    fun saveTopSizesMen(sizes: List<SizeLine>) {
         val filter = userRepository.getFilter().apply {
             chosenTopSizesMen =
                 if (sizes.size >= chosenTopSizesMen.size) sizes else sizes + if (chosenTopSizesMen.isNotEmpty()) listOf(
@@ -816,14 +827,14 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         userRepository.updateFilter(filter)
     }
 
-    fun loadBottomSizes(){
+    fun loadBottomSizes() {
         val sizes = userRepository.loadBottomSizes()
-        if(sizes.isNotEmpty()){
+        if (sizes.isNotEmpty()) {
             viewState.loaded(sizes)
         }
     }
 
-    fun saveBottomSizesMen(sizes: List<SizeLine>){
+    fun saveBottomSizesMen(sizes: List<SizeLine>) {
         val filter = userRepository.getFilter().apply {
             chosenBottomSizesMen =
                 if (sizes.size >= chosenBottomSizesMen.size) sizes else sizes + if (chosenBottomSizesMen.isNotEmpty()) listOf(
@@ -844,7 +855,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         userRepository.updateFilter(filter)
     }
 
-    fun saveShoosSizesMen(sizes: List<SizeLine>){
+    fun saveShoosSizesMen(sizes: List<SizeLine>) {
         val filter = userRepository.getFilter().apply {
             chosenShoosSizesMen =
                 if (sizes.size >= chosenShoosSizesMen.size) sizes else sizes + if (chosenShoosSizesMen.isNotEmpty()) listOf(
@@ -854,87 +865,86 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         userRepository.updateFilter(filter)
     }
 
-    fun saveTopSizesKids(sizes: List<SizeLine>){
+    fun saveTopSizesKids(sizes: List<SizeLine>) {
         val filter = userRepository.getFilter().apply { chosenTopSizesKids = sizes }
         userRepository.updateFilter(filter)
     }
 
-    fun saveBottomSizesKids(sizes: List<SizeLine>){
+    fun saveBottomSizesKids(sizes: List<SizeLine>) {
         val filter = userRepository.getFilter().apply { chosenBottomSizesKids = sizes }
         userRepository.updateFilter(filter)
     }
 
-    fun saveShoosSizesKids(sizes: List<SizeLine>){
+    fun saveShoosSizesKids(sizes: List<SizeLine>) {
         val filter = userRepository.getFilter().apply { chosenShoosSizesKids = sizes }
         userRepository.updateFilter(filter)
     }
 
 
-
-    fun loadShoosSizes(){
+    fun loadShoosSizes() {
         val sizes = userRepository.loadShoosSizes()
-        if(sizes.isNotEmpty()){
+        if (sizes.isNotEmpty()) {
             viewState.loaded(sizes)
         }
     }
 
-    fun saveStatuses(statuses: List<Boolean>){
+    fun saveStatuses(statuses: List<Boolean>) {
         val filter = userRepository.getFilter()
         filter.chosenProductStatus = statuses
         userRepository.updateFilter(filter)
     }
 
-    fun loadProductStatuses(){
+    fun loadProductStatuses() {
         val statuses = userRepository.loadProductStatuses()
-        if(statuses.isNotEmpty()){
+        if (statuses.isNotEmpty()) {
             viewState.loaded(statuses)
         }
     }
 
-    fun saveStyles(styles: List<Boolean>){
+    fun saveStyles(styles: List<Boolean>) {
         val filter = userRepository.getFilter()
         filter.chosenStyles = styles
         userRepository.updateFilter(filter)
     }
 
-    fun loadStyles(){
+    fun loadStyles() {
         val styles = userRepository.loadStyles()
-        if(styles.isNotEmpty()){
+        if (styles.isNotEmpty()) {
             viewState.loaded(styles)
         }
     }
 
-    fun getCurrentRegion(){
-        presenterScope.launch{
+    fun getCurrentRegion() {
+        presenterScope.launch {
             val currentRegion = userRepository.getFilter().currentLocation
             if (currentRegion != null)
                 viewState.loaded(currentRegion)
         }
     }
 
-    fun saveCategories(productCategories: List<ProductCategory>){
+    fun saveCategories(productCategories: List<ProductCategory>) {
         val filter = userRepository.getFilter()
         filter.categories = productCategories
         userRepository.updateFilter(filter)
     }
 
-    fun savePrices(fromPrice: Int?, untilPrice: Int?){
+    fun savePrices(fromPrice: Int?, untilPrice: Int?) {
         val filter = userRepository.getFilter()
         filter.fromPrice = fromPrice
         filter.untilPrice = untilPrice
         userRepository.updateFilter(filter)
     }
 
-    fun getColors(){
+    fun getColors() {
         presenterScope.launch {
-        val response = productRepository.getColors()
-          when(response?.code()){
-              200 -> {
-                  viewState.loaded(response.body()!!.filter{it.idCategory?.toInt() == 12})
-              }
-              400 -> viewState.error("Ошибка")
-              null -> viewState.error("Нет интернета")
-          }
+            val response = productRepository.getColors()
+            when (response?.code()) {
+                200 -> {
+                    viewState.loaded(response.body()!!.filter { it.idCategory?.toInt() == 12 })
+                }
+                400 -> viewState.error("Ошибка")
+                null -> viewState.error("Нет интернета")
+            }
         }
     }
 
