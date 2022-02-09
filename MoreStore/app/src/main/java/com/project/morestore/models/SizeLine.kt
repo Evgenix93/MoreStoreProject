@@ -10,5 +10,6 @@ data class SizeLine(
     val itRuFr: String,
     val us: String,
     val uk: String,
-    var isSelected: Boolean
+    var isSelected: Boolean,
+    var idCategory: Int
 )

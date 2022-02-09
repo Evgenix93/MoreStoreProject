@@ -265,7 +265,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
             }
         }
 
-        return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false)
+        return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false, -1)
 
 
     }
@@ -330,7 +330,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
                 (result as List<Property>)
                     .map {
                         val list = it.ico?.split(';').orEmpty()
-                        SizeLine(it.id.toInt(), it.name, "", list[0].removePrefix("FR").removeSurrounding("'"), list[1].removePrefix("US").removeSurrounding("'"), list[2].removePrefix("UK").removeSurrounding("'"), false)
+                        SizeLine(it.id.toInt(), it.name, "", list[0].removePrefix("FR").removeSurrounding("'"), list[1].removePrefix("US").removeSurrounding("'"), list[2].removePrefix("UK").removeSurrounding("'"), false, idCategory = it.idCategory?.toInt()!!)
 
                     }
                 //(result as List<Size>).filter { it.id_category == 3 }.sortedBy { it.toInt() }
@@ -338,7 +338,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
             //if(FilterState.filter.chosenShoosSizes.size == listShoosSizes.size + 1){
               //  sizeAdapter.updateList(FilterState.filter.chosenShoosSizes, null)//+ listOf(SizeLine(0, "", "", "", "", "", false)))
             //}else {
-                sizeAdapter.updateList(listShoosSizes + listOf(SizeLine(0, "", "", "", "", "", false)), null)
+                sizeAdapter.updateList(listShoosSizes + listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1)), null)
             //}
             //shoosSizes = listShoosSizes
             isSizesLoaded = true

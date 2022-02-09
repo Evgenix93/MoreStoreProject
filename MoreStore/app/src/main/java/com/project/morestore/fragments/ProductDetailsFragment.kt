@@ -8,6 +8,7 @@ import android.util.Log
 import android.util.Range
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
 import androidx.core.text.toSpannable
@@ -20,11 +21,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
+import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.PhotoViewPagerAdapter
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.databinding.FragmentProductBinding
 import com.project.morestore.models.Product
+import com.project.morestore.models.ProductBrand
 import com.project.morestore.models.ProductPhoto
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -51,8 +54,18 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         getProduct(args.productId?.toLong())
         setClickListeners()
         getProductWishList()
+        hideBottomNav()
 
 
+    }
+
+    private fun brandClick(brand: ProductBrand){
+        binding.chosenBrandTextView.setOnClickListener { presenter.updateBrand(brand) }
+
+    }
+
+    private fun hideBottomNav(){
+        (activity as MainActivity).showBottomNavBar(false)
     }
 
     private fun showLikeInfo(products: List<Product>){
@@ -105,12 +118,19 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         binding.toolbar.titleTextView.text = product.name
         binding.chosenBrandTextView.text = product.brand.name
         binding.productConditionTextView.text = product.property.find { it.name == "Состояние" }?.value
-        binding.sizeTextView.text = product.property.find{ it.ico?.contains("US") == true}?.value
+        binding.sizeTextView.text = product.property.find{Range.create(1, 9).contains(it.id.toInt())}?.value.orEmpty()
+        Log.d("product", product.property.toString())
         binding.productColorTextView.text = product.property.find { it.name == "Цвет" }?.value
-        binding.colorCircle.background.setTint(Color.parseColor(product.property.find { it.name == "Цвет" }?.ico ?: ""))
+        val colorValue = product.property.find { it.name == "Цвет" }?.ico
+
+        if(colorValue == null)
+            binding.colorCircle.background = ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
+        else
+          binding.colorCircle.background.setTint(Color.parseColor(colorValue))
+
         binding.productCityTextView.text = product.address.fullAddress
         binding.productBrandTextView.text = product.brand.name
-        binding.productSizeTextView.text = product.property.find { it.ico?.contains("US") == true }?.value
+        binding.productSizeTextView.text = product.property.find { Range.create(1,9).contains(it.id.toInt()) }?.value
         binding.sizeChar.isVisible = false
 
 
@@ -138,6 +158,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         binding.userClickableView.setOnClickListener{
             findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToSellerProfileFragment(product.user))
         }
+        binding.chosenBrandTextView.setOnClickListener { brandClick(product.brand.apply { isChecked = true }) }
     }
 
     private fun initViewPager(photoList: List<ProductPhoto>){
@@ -229,6 +250,6 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
     }
 
     override fun success() {
-        TODO("Not yet implemented")
+        findNavController().navigate(R.id.catalogFragment)
     }
 }

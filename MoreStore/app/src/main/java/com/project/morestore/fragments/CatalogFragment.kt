@@ -239,6 +239,8 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     }
 
     private fun loadProducts(queryStr: String?) {
+        if(args?.forWho != null)
+            return
         presenter.getProducts(queryStr = queryStr, isFiltered = true, productCategories = null)
 
     }

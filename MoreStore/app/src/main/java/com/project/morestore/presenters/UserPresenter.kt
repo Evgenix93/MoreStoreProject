@@ -791,7 +791,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             chosenTopSizes =
                 if (sizes.size >= chosenTopSizes.size) sizes else sizes + if (chosenTopSizes.isNotEmpty()) listOf(
                     chosenTopSizes.last()
-                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+                ) else listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1))
         }
         userRepository.updateFilter(filter)
 
@@ -809,7 +809,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             chosenTopSizesMen =
                 if (sizes.size >= chosenTopSizesMen.size) sizes else sizes + if (chosenTopSizesMen.isNotEmpty()) listOf(
                     chosenTopSizesMen.last()
-                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+                ) else listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1))
         }
         userRepository.updateFilter(filter)
 
@@ -821,7 +821,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 if (sizes.size >= chosenBottomSizes.size) sizes else sizes + if (chosenBottomSizes.isNotEmpty()) listOf(
                     chosenBottomSizes.last()
                 ) else listOf(
-                    SizeLine(0, "", "", "", "", "", false)
+                    SizeLine(0, "", "", "", "", "", false, idCategory = -1)
                 )
         }
         userRepository.updateFilter(filter)
@@ -839,7 +839,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             chosenBottomSizesMen =
                 if (sizes.size >= chosenBottomSizesMen.size) sizes else sizes + if (chosenBottomSizesMen.isNotEmpty()) listOf(
                     chosenBottomSizesMen.last()
-                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+                ) else listOf(SizeLine(0, "", "", "", "", "", false, -1))
         }
         userRepository.updateFilter(filter)
 
@@ -850,7 +850,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             chosenShoosSizes =
                 if (sizes.size >= chosenShoosSizes.size) sizes else sizes + if (chosenShoosSizes.isNotEmpty()) listOf(
                     chosenShoosSizes.last()
-                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+                ) else listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1))
         }
         userRepository.updateFilter(filter)
     }
@@ -860,7 +860,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             chosenShoosSizesMen =
                 if (sizes.size >= chosenShoosSizesMen.size) sizes else sizes + if (chosenShoosSizesMen.isNotEmpty()) listOf(
                     chosenShoosSizesMen.last()
-                ) else listOf(SizeLine(0, "", "", "", "", "", false))
+                ) else listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1))
         }
         userRepository.updateFilter(filter)
     }

@@ -254,7 +254,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
             }
         }
 
-        return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false)
+        return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false, -1)
 
 
     }
@@ -355,14 +355,14 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
                 (result as List<Property>)
                     .map {
                         val list = it.ico?.split(';').orEmpty()
-                        SizeLine(it.id.toInt(), it.name, list[0].removePrefix("W").removeSurrounding("'"), list[1].removePrefix("IT/RU/FR").removeSurrounding("'"), list[2].removePrefix("US").removeSurrounding("'"), list[3].removePrefix("UK").removeSurrounding("'"), false)
+                        SizeLine(it.id.toInt(), it.name, list[0].removePrefix("W").removeSurrounding("'"), list[1].removePrefix("IT/RU/FR").removeSurrounding("'"), list[2].removePrefix("US").removeSurrounding("'"), list[3].removePrefix("UK").removeSurrounding("'"), false, idCategory = it.idCategory?.toInt()!!)
                     }
             //val listBottomSizes = result.sortedBy { it.toInt() }
               //  .map { convertSizeToSizeLine(it) }
             if(result[0].idCategory?.toInt() == 1 || result[0].idCategory?.toInt() == 4){
-                sizeAdapter.updateList(sizes + listOf(SizeLine(0, "", "", "", "", "", false)), null)
+                sizeAdapter.updateList(sizes + listOf(SizeLine(0, "", "", "", "", "", false, -1)), null)
             }else{
-                sizeAdapter.updateList( sizeAdapter.getChosenSizes(), sizes + listOf(SizeLine(0, "", "", "", "", "", false)) )
+                sizeAdapter.updateList( sizeAdapter.getChosenSizes(), sizes + listOf(SizeLine(0, "", "", "", "", "", false, -1)) )
             }
 
            // sizeAdapter.updateList(listTopSizes + listOf(SizeLine(0, "", "", "", "", "", false)), listBottomSizes + listOf(SizeLine(0, "", "", "", "", "", false)))

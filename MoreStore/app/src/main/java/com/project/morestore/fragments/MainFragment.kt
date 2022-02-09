@@ -50,6 +50,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isMainLoaded = false
         showBottomNavBar()
         presenter.loadOnBoardingViewed()
         initToolbar()
@@ -185,12 +186,12 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     private fun setClickListeners() {
-        binding.materialCardView10.setOnClickListener { presenter.updateBrand(ProductBrand(214, "ZARA", 3, true, false)) }
-        binding.materialCardView11.setOnClickListener { presenter.updateBrand(ProductBrand(216, "STRADIVARIUS", 3, true, false)) }
-        binding.materialCardView12.setOnClickListener { presenter.updateBrand(ProductBrand(215, "H&M", 3, true, false)) }
-        binding.materialCardView13.setOnClickListener { presenter.updateBrand(ProductBrand(218, "MANGO", 3, true, false)) }
-        binding.materialCardView14.setOnClickListener { presenter.updateBrand(ProductBrand(217, "LEVI'S", 2, true, false)) }
-        binding.materialCardView15.setOnClickListener { presenter.updateBrand(ProductBrand(219, "LACOSTE", 2, true, false)) }
+        binding.materialCardView10.setOnClickListener { presenter.updateBrand(ProductBrand(1232, "ZARA", 3, true, false)) }
+        binding.materialCardView11.setOnClickListener { presenter.updateBrand(ProductBrand(1045, "STRADIVARIUS", 3, true, false)) }
+        binding.materialCardView12.setOnClickListener { presenter.updateBrand(ProductBrand(468, "H&M", 3, true, false)) }
+        binding.materialCardView13.setOnClickListener { presenter.updateBrand(ProductBrand(685, "MANGO", 3, true, false)) }
+        binding.materialCardView14.setOnClickListener { presenter.updateBrand(ProductBrand(625, "LEVI'S", 2, true, false)) }
+        binding.materialCardView15.setOnClickListener { presenter.updateBrand(ProductBrand(588, "LACOSTE", 2, true, false)) }
 
 
 
@@ -204,7 +205,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             )
         }
 
-        binding.textView.setOnClickListener { findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(forWho = "kids")) }
+        binding.moreForKidsTextView.setOnClickListener { findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(forWho = "kids")) }
         binding.searchBtn.setOnClickListener {
             val query = binding.toolbarMain.searchEditText.text.toString()
             findNavController().navigate(

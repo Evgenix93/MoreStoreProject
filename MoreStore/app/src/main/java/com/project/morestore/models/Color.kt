@@ -6,5 +6,6 @@ import com.squareup.moshi.JsonClass
 data class Color(
     val name: String,
     val color: Int,
-    var isChecked: Boolean
+    var isChecked: Boolean,
+    val idCategory: Int
 )

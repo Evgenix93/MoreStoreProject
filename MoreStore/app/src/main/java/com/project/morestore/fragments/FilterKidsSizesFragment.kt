@@ -165,7 +165,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
             }
         }
 
-        return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false)
+        return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false, idCategory = -1)
 
 
     }
@@ -178,7 +178,8 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
             size.fr.orEmpty(),
             size.us.orEmpty(),
             size.uk.orEmpty(),
-            size.chosen ?: false
+            size.chosen ?: false,
+            idCategory = size.id_category ?: -1
         )
     }
     /*

@@ -5,7 +5,7 @@ import moxy.viewstate.strategy.alias.AddToEnd
 import moxy.viewstate.strategy.alias.OneExecution
 
 interface MainMvpView: MvpView {
-    @AddToEnd
+    @OneExecution
     fun loaded(result: Any)
 
     @OneExecution

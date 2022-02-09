@@ -809,7 +809,7 @@
                 android:layout_height="16dp"
                 android:layout_marginTop="19dp"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/black"
+
                 app:layout_constraintStart_toStartOf="@+id/productCondition2TextView"
                 app:layout_constraintTop_toBottomOf="@+id/productCondition2TextView" />
 

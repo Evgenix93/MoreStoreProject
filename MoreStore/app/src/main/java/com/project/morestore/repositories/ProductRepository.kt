@@ -94,6 +94,9 @@ class ProductRepository(private val context: Context) {
             }
             if (filter?.regions?.isNotEmpty() == true) {
                 citiesStr =
+                    if(filter.regions.all { it.isChecked == true })
+                        listOf()
+                else
                     filter.regions.filter { it.isChecked == true }.map { "id_city=${it.id}" }
             }
 
@@ -114,43 +117,45 @@ class ProductRepository(private val context: Context) {
             }
 
             productPropertyStr =
-                filter?.chosenTopSizes?.filter { it.isSelected }?.map { "id_property=${it.id}" }
+                filter?.chosenTopSizes?.filter { it.isSelected }?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenBottomSizes?.filter { it.isSelected }
-                    ?.map { "id_property=${it.id}" }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenShoosSizes?.filter { it.isSelected }
-                    ?.map { "id_property=${it.id}" }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenTopSizesMen?.filter { it.isSelected }
-                    ?.map { "id_property=${it.id}" }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenBottomSizesMen?.filter { it.isSelected }
-                    ?.map { "id_property=${it.id}" }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenShoosSizesMen?.filter { it.isSelected }
-                    ?.map { "id_property=${it.id}" }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenTopSizesKids?.filter { it.isSelected }
-                    ?.map { "id_property=${it.id}" }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenBottomSizesKids?.filter { it.isSelected }
-                    ?.map { "id_property=${it.id}" }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenShoosSizesKids?.filter { it.isSelected }
-                    ?.map { "id_property=${it.id}" }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenMaterials?.filter { it.isSelected }
-                    ?.map { "id_property=${it.id}" }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.colors?.filter { it.isChecked == true }
-                    ?.map { "id_property=${it.id}" }.orEmpty() + filter?.categories?.filter { it.isChecked == true }
-                    ?.map { "id_property=${it.id}" }
-                    .orEmpty()
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }.orEmpty()
 
 
 
             var conditionList = listOf<String>()
             if (filter?.chosenConditions?.isNotEmpty() == true) {
                 if (filter!!.chosenConditions[0]) {
-                    conditionList = conditionList + listOf<String>("id_property=111")
+                    conditionList = conditionList + listOf<String>("property[11][111]=on")
                 }
                 if (filter.chosenConditions[1]) {
-                    conditionList = conditionList + listOf<String>("id_property=112")
+                    conditionList = conditionList + listOf<String>("property[11][112]=on")
                 }
 
                 if (filter.chosenConditions[2]) {
-                    conditionList = conditionList + listOf<String>("id_property=113")
+                    conditionList = conditionList + listOf<String>("property[11][113]=on")
+                }
+
+                if (filter.chosenConditions[3]) {
+                    conditionList = conditionList + listOf<String>("property[11][114]=on")
                 }
 
 
@@ -159,20 +164,36 @@ class ProductRepository(private val context: Context) {
             var forWhoList = listOf<String>()
             if (filter?.chosenForWho?.isNotEmpty() == true) {
                 if (filter!!.chosenForWho[0]) {
-                    forWhoList = forWhoList + listOf<String>("id_property=140")
+                    forWhoList = forWhoList + listOf<String>("property[14][140]=on")
                 }
                 if (filter.chosenForWho[1]) {
-                    forWhoList = forWhoList + listOf<String>("id_property=141")
+                    forWhoList = forWhoList + listOf<String>("property[14][141]=on")
                 }
 
                 if (filter.chosenForWho[2]) {
-                    forWhoList = forWhoList + listOf<String>("id_property=142")
+                    forWhoList = forWhoList + listOf<String>("property[14][142]=on")
                 }
 
 
             }
 
-            productPropertyStr = productPropertyStr + conditionList + forWhoList
+            var stylesList = listOf<String>()
+            if(filter?.chosenStyles?.isNotEmpty() == true){
+                if (filter!!.chosenStyles[1]) {
+                    stylesList = stylesList + listOf<String>("property[10][108]=on")
+                }
+                if (filter.chosenStyles[2]) {
+                    stylesList = stylesList + listOf<String>("property[10][109]=on")
+                }
+
+                if (filter.chosenStyles[3]) {
+                    stylesList = stylesList + listOf<String>("property[10][110]=on")
+                }
+
+
+            }
+
+            productPropertyStr = productPropertyStr + conditionList + forWhoList + stylesList
 
 
 
@@ -385,7 +406,8 @@ class ProductRepository(private val context: Context) {
                 "42",
                 "32",
                 "32",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -394,7 +416,8 @@ class ProductRepository(private val context: Context) {
                 "44",
                 "34",
                 "34",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -403,7 +426,8 @@ class ProductRepository(private val context: Context) {
                 "46",
                 "36",
                 "36",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -412,7 +436,8 @@ class ProductRepository(private val context: Context) {
                 "48",
                 "38",
                 "38",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -421,7 +446,8 @@ class ProductRepository(private val context: Context) {
                 "50",
                 "40",
                 "40",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -430,7 +456,8 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -439,7 +466,8 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -448,7 +476,8 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -457,7 +486,8 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -466,7 +496,8 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -475,7 +506,8 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -484,7 +516,8 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -493,7 +526,8 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                false
+                false,
+                -1
             ),
             SizeLine(
                 0,
@@ -502,7 +536,8 @@ class ProductRepository(private val context: Context) {
                 "52",
                 "42",
                 "42",
-                false
+                false,
+                -1
             ),
             com.project.morestore.models.SizeLine(
                 0,
@@ -511,13 +546,15 @@ class ProductRepository(private val context: Context) {
                 "",
                 "",
                 "",
-                false
+                false,
+                -1
             )
         )
         topSizesList.forEachIndexed { index, size ->
             if (sizeList[index].int == size.name)
                 sizeList[index].isSelected = size.chosen ?: false
             sizeList[index].id = size.id
+            sizeList[index].idCategory = size.id_category ?: -1
         }
         FilterState.filter.chosenTopSizes = sizeList
     }

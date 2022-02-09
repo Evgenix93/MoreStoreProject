@@ -177,7 +177,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
         when (result){
             is Filter -> bindFilter(result)
             is List<*> -> {
-                materialAdapter.updateList((if(!searchInitiated) listOf(MaterialLine(0,"Все материалы", false)) else listOf<MaterialLine>()) + (result as List<Property>).map { MaterialLine(it.id, it.name, false) } )
+                materialAdapter.updateList((if(!searchInitiated) listOf(MaterialLine(0,"Все материалы", false, idCategory = -1)) else listOf<MaterialLine>()) + (result as List<Property>).map { MaterialLine(it.id, it.name, false, idCategory = it.idCategory?.toInt()!!) } )
                 loadFilter()
                 if(!searchInitiated){
                     initSearch(result as List<Property>)

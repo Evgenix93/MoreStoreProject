@@ -6,5 +6,6 @@ import com.squareup.moshi.JsonClass
 data class MaterialLine(
     val id: Long,
     val name: String,
-    var isSelected: Boolean
+    var isSelected: Boolean,
+    val idCategory: Int
 )

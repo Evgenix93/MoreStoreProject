@@ -25,12 +25,13 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             }
         }
         fun bind(product: Product){
+            Log.d("product", product.toString())
             Log.d("mylog", "bind")
             val crossedStr = "${product.price} ₽".toSpannable().apply { setSpan(StrikethroughSpan(), 0, length ,0) }
             binding.productOldPriceTextView.text = crossedStr
             binding.likesCountTextView.text = product.statistic.wishlist.total.toString()
             binding.productNameTextView.text = product.name
-            binding.productPriceTextView.text = "${product.sale} ₽"
+            binding.productPriceTextView.text = "${product.price - ((product.price/100) * product.sale) } ₽"
             binding.productBrandTextView.text = product.brand.name
             binding.productConditionTextView.text = product.property.find { it.name == "Состояние" }?.value
 
