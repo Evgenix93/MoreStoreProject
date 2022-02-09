@@ -47,7 +47,7 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         initToolbar()
         initProductsButtons()
         initList()
-        getActiveProducts()
+       // getActiveProducts()
         getFilter()
     }
 
@@ -80,7 +80,7 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
     }
 
     private fun getUserInfo(){
-        presenter.getUserInfo()
+        presenter.getUserData()
     }
 
     private fun showUserInfo(user: User){
@@ -219,6 +219,7 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
             binding.profileBtn.setOnClickListener {
                 findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToProfileFragment(result))
             }
+            getActiveProducts()
             return
         }
         if(result is Boolean) {

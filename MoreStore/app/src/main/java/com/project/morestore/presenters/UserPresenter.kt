@@ -161,6 +161,29 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun getUserData(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = authRepository.getUserData()
+            when(response?.code()){
+                200 -> {
+                    authRepository.setupUserId(response.body()!!.id)
+                    getUserInfo()
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+        }
+    }
+
       fun getSellerInfo(userId: Int){
           presenterScope.launch {
               viewState.loading()
