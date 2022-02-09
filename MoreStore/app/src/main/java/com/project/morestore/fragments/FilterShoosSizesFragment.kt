@@ -290,7 +290,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
                 sizeAdapter.updateList(filter.chosenShoosSizes, null)
             }
         }else{
-            if (sizeAdapter.getChosenSizes().size == filter.chosenShoosSizesMen.size) {
+            if (sizeAdapter.getChosenSizes().size == filter.chosenShoosSizesMen.size || sizeAdapter.getChosenSizes().size == filter.chosenShoosSizesMen.size + 1) {
                 sizeAdapter.updateList(filter.chosenShoosSizesMen, null)
             }
         }
