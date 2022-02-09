@@ -30,7 +30,7 @@ class SellerProductsFragment: Fragment(R.layout.page_products) {
     }
 
     private fun initRecyclerView(){
-        productsAdapter = ProductAdapter(10){}
+        productsAdapter = ProductAdapter(null){}
         binding.productsRecyclerView.adapter = productsAdapter
         binding.productsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         val products = arguments?.getParcelableArray(SellerProfileAdapter.PRODUCTS)
