@@ -13,7 +13,7 @@ import com.project.morestore.models.ProductBrand
 
 class BrandsAdapter(private val onWishClick: (id: Long) -> Unit) :
     RecyclerView.Adapter<BrandsAdapter.BrandViewHolder>() {
-    private var list = listOf<ProductBrand>()
+    private var list = listOf<ProductBrand>().toMutableList()
     private val brands9 = listOf(
         "İodes (12)",
         "1001 Dress (54)",
@@ -139,8 +139,18 @@ class BrandsAdapter(private val onWishClick: (id: Long) -> Unit) :
     }*/
 
     fun updateList(newList: List<ProductBrand>) {
-        list = newList
+        list = newList.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun updateList2(newList: List<ProductBrand>){
+        list.forEachIndexed{index, productBrand ->
+            newList.forEach{
+                if(productBrand.name == it.name)
+                    list[index] = it
+                notifyItemChanged(index)
+            }
+        }
     }
 
     fun clearCheckboxes(){

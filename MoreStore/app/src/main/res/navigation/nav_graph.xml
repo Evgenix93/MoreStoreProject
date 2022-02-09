@@ -249,7 +249,7 @@
             android:name="forWho"
             app:argType="string"
             app:nullable="true"
-            android:defaultValue="str" />
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/createFragment"
