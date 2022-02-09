@@ -655,9 +655,9 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                                     })
                                 }
                                 2 -> {
-                                    viewState.loaded(response.body()!!.filter {
-                                        it.id == 21 ||
-                                                it.id == 22
+                                    viewState.loaded(response.body()!!.filterNot {
+                                        it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
+                                                it.id == 18
                                     })
                                 }
                             }
