@@ -246,7 +246,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
   }
 
     fun updateBrand(brand: ProductBrand){
-        val filter = userRepository.getFilter().apply { brands = listOf(brand) }
+        val filter = userRepository.getFilter().apply { brands = listOf(ProductBrand(0, "Stub", 0, null, null), brand) }
         userRepository.updateFilter(filter)
         viewState.success()
     }

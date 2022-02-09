@@ -236,6 +236,8 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
                     segmentsAdapter.updateSegmentsChecked(result.segments.toMutableList())
                 if(result.brands.size == brandsAdapter.getCurrentList().size)
                     brandsAdapter.updateList(result.brands)
+                else
+                    brandsAdapter.updateList2(result.brands)
             }
         }
     }
