@@ -27,7 +27,7 @@ class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch),
         super.onViewCreated(view, savedInstanceState)
         hideBottomNavBar()
         setClickListeners()
-        checkToken()
+        //checkToken()
     }
 
     private fun checkToken(){
@@ -54,10 +54,10 @@ class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch),
 
     override fun loaded(result: Any) {
 
-        if(result is Boolean){
-            if(result)
-                findNavController().navigate(FirstLaunchFragmentDirections.actionFirstLaunchFragmentToMainFragment())
-        }
+        //if(result is Boolean){
+          //  if(result)
+           //     findNavController().navigate(FirstLaunchFragmentDirections.actionFirstLaunchFragmentToMainFragment())
+      //  }
 
     }
 
