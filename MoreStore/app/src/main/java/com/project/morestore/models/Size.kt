@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 data class Size(
     val id: Int,
     val name: String,
-    val id_category: Int,
+    val id_category: Int?,
     var chosen: Boolean?,
     var fr: String? = null,
     var us: String? = null,

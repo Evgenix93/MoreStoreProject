@@ -12,16 +12,27 @@ import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFirstLaunchBinding
 import com.project.morestore.models.PropertyType
+import com.project.morestore.mvpviews.MainMvpView
+import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.Network
 import kotlinx.coroutines.launch
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class FirstLaunchFragment: Fragment(R.layout.fragment_first_launch) {
+class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch), MainMvpView {
     private val binding: FragmentFirstLaunchBinding by viewBinding()
+    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hideBottomNavBar()
         setClickListeners()
+        checkToken()
+    }
+
+    private fun checkToken(){
+        presenter.checkToken()
+
     }
 
 
@@ -40,5 +51,34 @@ class FirstLaunchFragment: Fragment(R.layout.fragment_first_launch) {
        val mainActivity = activity as MainActivity
        mainActivity.showBottomNavBar(false)
    }
+
+    override fun loaded(result: Any) {
+
+        if(result is Boolean){
+            if(result)
+                findNavController().navigate(FirstLaunchFragmentDirections.actionFirstLaunchFragmentToMainFragment())
+        }
+
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun error(message: String) {
+
+    }
+
+    override fun showOnBoarding() {
+
+    }
+
+    override fun loadedSuggestions(list: List<String>) {
+
+    }
+
+    override fun success() {
+
+    }
 
 }

@@ -99,14 +99,14 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     override fun loaded(result: List<Any>) {
         showLoading(false)
-        if((result[0] as Property).idCategory.toInt() == 4)
-        topSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory.toInt(), false) })
+        if((result[0] as Property).idCategory?.toInt() == 4)
+        topSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
 
-        if((result[0] as Property).idCategory.toInt() == 5)
-            bottomSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory.toInt(), false) })
+        if((result[0] as Property).idCategory?.toInt() == 5)
+            bottomSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
 
-        if((result[0] as Property).idCategory.toInt() == 6)
-            shoesSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory.toInt(), false) })
+        if((result[0] as Property).idCategory?.toInt() == 6)
+            shoesSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
 
 
 

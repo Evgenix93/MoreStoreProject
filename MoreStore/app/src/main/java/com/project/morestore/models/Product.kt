@@ -22,6 +22,8 @@ data class Product(
     val photo: List<ProductPhoto>,
     val user: User,
     //val category: Category,
-    val statistic: ProductStatistic
+    val statistic: ProductStatistic,
+    val brand: ProductBrand,
+    val property: List<Property>
 
 ): Parcelable

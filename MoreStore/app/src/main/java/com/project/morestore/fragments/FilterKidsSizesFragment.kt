@@ -532,13 +532,13 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
             // )
             // }.toMutableList().apply { removeLast() })
             //} else {
-            if (sizes[0].idCategory.toInt() == 1 || sizes[0].idCategory.toInt() == 4 || sizes[0].idCategory.toInt() == 7)
+            if (sizes[0].idCategory?.toInt() == 1 || sizes[0].idCategory?.toInt() == 4 || sizes[0].idCategory?.toInt() == 7)
                 topSizeCardAdapter.updateList(sizes.map {
                     val list = it.ico?.split(';').orEmpty()
                     Size(
                         it.id.toInt(),
                         it.name,
-                        it.idCategory.toInt(),
+                        it.idCategory?.toInt(),
                         false,
                         w = if(list.isNotEmpty()) list[0].removePrefix("W").removeSurrounding("'") else "",
                         fr = if(list.isNotEmpty()) list[1].removePrefix("IT/RU/FR").removeSurrounding("'") else "",
@@ -564,13 +564,13 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
 
             //} else {
             //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
-            if(sizes[0].idCategory.toInt() == 2 || sizes[0].idCategory.toInt() == 5 || sizes[0].idCategory.toInt() == 8)
+            if(sizes[0].idCategory?.toInt() == 2 || sizes[0].idCategory?.toInt() == 5 || sizes[0].idCategory?.toInt() == 8)
             bottomSizeCardAdapter.updateList(sizes.map {
                 val list = it.ico?.split(';').orEmpty()
                 Size(
                     it.id.toInt(),
                     it.name,
-                    it.idCategory.toInt(),
+                    it.idCategory?.toInt(),
                     false,
                     w = if(list.isNotEmpty()) list[0].removePrefix("W").removeSurrounding("'") else "",
                     fr = if(list.isNotEmpty()) list[1].removePrefix("IT/RU/FR").removeSurrounding("'") else "",
@@ -590,13 +590,13 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
             // )
             // }.toMutableList().apply { removeLast() })
             // } else {
-            if (sizes[0].idCategory.toInt() == 3 || sizes[0].idCategory.toInt() == 6 || sizes[0].idCategory.toInt() == 9)
+            if (sizes[0].idCategory?.toInt() == 3 || sizes[0].idCategory?.toInt() == 6 || sizes[0].idCategory?.toInt() == 9)
                 shoesSizeCardAdapter.updateList(sizes.map {
                     val list = it.ico?.split(';').orEmpty()
                     Size(
                         it.id.toInt(),
                         it.name,
-                        it.idCategory.toInt(),
+                        it.idCategory?.toInt(),
                         false,
                         fr = if(list.isNotEmpty()) list[0].removePrefix("FR").removeSurrounding("'") else "",
                         us = if(list.isNotEmpty()) list[1].removePrefix("US").removeSurrounding("'") else "" ,

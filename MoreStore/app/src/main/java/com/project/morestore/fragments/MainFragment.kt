@@ -57,7 +57,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initViewPager()
         setClickListeners()
         loadFilter()
-        checkToken()
+        //checkToken()
     }
 
     private fun bindFilter(filter: Filter) {
@@ -332,11 +332,11 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             kidsProductAdapter.updateList(result as List<Product>)
         }
 
-        if (result is Boolean)
-            if (!result) {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToFirstLaunchFragment())
+        //if (result is Boolean)
+           // if (!result) {
+            //    findNavController().navigate(MainFragmentDirections.actionMainFragmentToFirstLaunchFragment())
 
-            }
+           // }
 
         if (result is Filter) {
             bindFilter(result)

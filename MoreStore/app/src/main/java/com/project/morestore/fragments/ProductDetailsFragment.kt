@@ -1,13 +1,17 @@
 package com.project.morestore.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.style.StrikethroughSpan
 import android.util.Log
+import android.util.Range
 import android.view.View
 import android.widget.Toast
+import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
 import androidx.core.text.toSpannable
+import androidx.core.view.isVisible
 import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -99,6 +103,15 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         initShare(product.id)
         initViewPager(product.photo)
         binding.toolbar.titleTextView.text = product.name
+        binding.chosenBrandTextView.text = product.brand.name
+        binding.productConditionTextView.text = product.property.find { it.name == "Состояние" }?.value
+        binding.sizeTextView.text = product.property.find{ it.ico?.contains("US") == true}?.value
+        binding.productColorTextView.text = product.property.find { it.name == "Цвет" }?.value
+        binding.colorCircle.background.setTint(Color.parseColor(product.property.find { it.name == "Цвет" }?.ico ?: ""))
+        binding.productCityTextView.text = product.address.fullAddress
+        binding.productBrandTextView.text = product.brand.name
+        binding.productSizeTextView.text = product.property.find { it.ico?.contains("US") == true }?.value
+        binding.sizeChar.isVisible = false
 
 
 
