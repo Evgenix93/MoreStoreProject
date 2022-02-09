@@ -160,7 +160,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
     }
 
     private fun initList(){
-        productAdapter = ProductAdapter(4){}
+        productAdapter = ProductAdapter(null){}
         with(binding.productList){
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
