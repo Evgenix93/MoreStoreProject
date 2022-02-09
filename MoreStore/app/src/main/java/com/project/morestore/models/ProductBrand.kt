@@ -1,9 +1,12 @@
 package com.project.morestore.models
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class ProductBrand(
     val id: Long,
     val name: String,
@@ -12,4 +15,4 @@ data class ProductBrand(
     var isChecked: Boolean?,
     var isWished: Boolean?
 
-)
+): Parcelable

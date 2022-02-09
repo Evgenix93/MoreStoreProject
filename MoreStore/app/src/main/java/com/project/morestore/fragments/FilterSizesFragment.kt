@@ -359,7 +359,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
                     }
             //val listBottomSizes = result.sortedBy { it.toInt() }
               //  .map { convertSizeToSizeLine(it) }
-            if(result[0].idCategory.toInt() == 1 || result[0].idCategory.toInt() == 4){
+            if(result[0].idCategory?.toInt() == 1 || result[0].idCategory?.toInt() == 4){
                 sizeAdapter.updateList(sizes + listOf(SizeLine(0, "", "", "", "", "", false)), null)
             }else{
                 sizeAdapter.updateList( sizeAdapter.getChosenSizes(), sizes + listOf(SizeLine(0, "", "", "", "", "", false)) )

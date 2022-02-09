@@ -74,7 +74,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
                 Log.d("error", tokenExpiresTime.toString())
 
 
-                viewState.loaded(false)
+               // viewState.loaded(false)
                 return@launch
             }
 
