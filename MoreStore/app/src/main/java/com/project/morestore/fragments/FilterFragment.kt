@@ -110,14 +110,16 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
        binding.allStyles.text = if(filter.chosenStyles.all{it} || filter.chosenStyles.all{!it})
              getString(R.string.all_styles)
         else
-            filter.chosenStyles.filter{it}.mapIndexed{index, _ ->
+            filter.chosenStyles.mapIndexedNotNull{index, isChecked ->
+                if(isChecked)
                when(index){
                0 -> "вечерний"
                1 -> "деловой"
                2 -> "повседневный"
                3 -> "спортивный"
-               else -> ""
-           }
+               else -> null
+           }else
+               null
         }.joinToString(", ")
 
         binding.conditionsGreenDotImageView.isVisible =
@@ -125,14 +127,16 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
        binding.allConditions.text = if(filter.chosenConditions.all{it} || filter.chosenConditions.all{!it})
             getString(R.string.all_conditions)
         else
-            filter.chosenConditions.filter{it}.mapIndexed{index, _ ->
+            filter.chosenConditions.mapIndexedNotNull{index, isChecked ->
+                if (isChecked)
                 when(index){
                     0 -> "новое с биркой"
                     1 -> "новое без бирок"
                     2 -> "отличное"
                     3 -> "хорошее"
-                    else -> ""
-                }
+                    else -> null
+                }else
+                    null
             }.joinToString(", ")
 
         binding.sizesGreenDotImageView.isVisible =
