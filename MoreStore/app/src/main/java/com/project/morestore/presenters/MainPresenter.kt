@@ -390,6 +390,65 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         getProperties(3)
     }
 
+    fun getColors() {
+        getProperties(12)
+    }
+
+    fun getMaterials(){
+        getProperties(13)
+    }
+
+    fun collectMaterialSearchFlow(flow: Flow<String>, materials: List<Property>) {
+        searchJob2 = flow
+            .debounce(3000)
+            .mapLatest { query ->
+                withContext(Dispatchers.IO) {
+                    materials.filter { it.name.contains(query, true) }
+                }
+
+            }
+            .onEach { result ->
+                viewState.loaded(result)
+
+            }.launchIn(presenterScope)
+
+    }
+
+
+    fun getAllCities() {
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getCities()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+        }
+    }
+
+    fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>) {
+        searchJob = flow
+            .debounce(3000)
+            .mapLatest { query ->
+                withContext(Dispatchers.IO) {
+                    regions.filter { it.name.contains(query, true) }
+                }
+
+            }
+            .onEach { result ->
+                viewState.loaded(result)
+
+            }.launchIn(presenterScope)
+
+    }
+
 
 
 

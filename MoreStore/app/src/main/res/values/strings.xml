@@ -237,6 +237,27 @@
     <string name="login_register">Войти или зарегистрироваться</string>
     <string name="for_who_your_product">Для кого ваше\nпредложение</string>
     <string name="choose_category">Выберите категорию</string>
+    <string name="add_photo_description">Добавьте фото и описание</string>
+    <string name="allow_buyers_bid">Разрешать покупателям предлагать\nсвою цену</string>
+    <string name="pickup_only">Доступен только самовывоз</string>
+    <string name="warning_info">Добавьте номер карты, чтобы покупатели могли\nиспользовать курьерские службы доставки.\nСейчас вам доступна только продажа товара\nсамовывозом.</string>
+    <string name="edit_cards_info">Чтобы редактировать добавленные карты,\nперейдите на страницу своего профиля.</string>
+    <string name="_4colors">Вы можете указать до 4 цветов</string>
+    <string name="place_product">Разместить объявление</string>
+    <string name="save">Сохранить</string>
+    <string name="material">Материал</string>
+    <string name="_4materials">Вы можете указать до 4 материалов</string>
+    <string name="description">Описание</string>
+    <string name="write_description">Расскажите о вашей вещи покупателям.\nИм будет интересно, почему вы её продаёте,\nопишите важные нюансы.</string>
+    <string name="set_price">Укажите привлекательную цену для покупателей\nвашей вещи</string>
+    <string name="originalPrice">Товар куплен за цену</string>
+    <string name="salePrice">Продать за цену</string>
+    <string name="show_discount">Мы автоматически рассчитаем и покажем\nпокупателю скидку, которую вы сделали</string>
+    <string name="you_created_product">Поздравляем!\nВы создали товар на MoreStore</string>
+    <string name="you_created_product_info">В течении 24 часов наши специалисты\nпроверят ваше объявление. Если оно\nсоответсвует требованиям нашего\nмагазина, мы опубликуем его.</string>
+    <string name="you_created_product_info2"><![CDATA[Проверить статус объявления можно тут: Личный кабинет > Мои объявления > На модерации]]></string>
+    <string name="delete">Удалить</string>
+    <string name="archive">Архивировать</string>
     <string-array name="type_array">
         <item>Новое</item>
         <item>Дешевле</item>

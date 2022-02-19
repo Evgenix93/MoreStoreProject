@@ -81,7 +81,7 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
     }
 
     private fun initList(){
-        cityAdapter = RegionsAdapter(true) { city ->
+        cityAdapter = RegionsAdapter(true, true) { city ->
             binding.searchEditText.setText(city)
 
 

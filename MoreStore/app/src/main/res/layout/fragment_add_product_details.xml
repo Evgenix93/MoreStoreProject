@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/addPhotoInfoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/add_photo_description"
+                android:textAppearance="@style/bold_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/forWhoChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="24dp"
+                android:text="Для неё"
+                android:textAppearance="@style/mobile"
+                app:chipBackgroundColor="@color/gray3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoInfoTextView" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/categoryChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:text="Одежда"
+                android:textAppearance="@style/mobile"
+                app:chipBackgroundColor="@color/gray3"
+                app:layout_constraintStart_toEndOf="@+id/forWhoChip"
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoInfoTextView" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/subCategoryChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:text="Жакеты и пиджаки"
+                android:textAppearance="@style/mobile"
+                app:chipBackgroundColor="@color/gray3"
+                app:layout_constraintStart_toEndOf="@+id/categoryChip"
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoInfoTextView" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:text="«SUBTILLE»"
+                android:textAppearance="@style/mobile"
+                app:chipBackgroundColor="@color/gray3"
+                app:layout_constraintStart_toEndOf="@+id/subCategoryChip"
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoInfoTextView" />
+
+            <ImageView
+                android:id="@+id/lightBulbImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_lightbulb_filament"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/forWhoChip" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="18dp"
+                android:text="Как происходит продажа"
+                android:textAppearance="@style/semibold_14"
+                android:textColor="@color/green"
+                app:layout_constraintStart_toEndOf="@+id/lightBulbImageView"
+                app:layout_constraintTop_toBottomOf="@+id/forWhoChip" />
+
+            <View
+                android:id="@+id/dividerView"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/gray1"
+                app:layout_constraintTop_toBottomOf="@id/lightBulbImageView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/dividerView" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/allowBuyersBidCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="38dp"
+                android:button="@drawable/checkbox"
+                android:checked="true"
+                android:minWidth="30dp"
+                android:minHeight="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/listRecyclerView"
+                app:useMaterialThemeColors="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="28dp"
+                android:text="@string/allow_buyers_bid"
+                android:textAppearance="@style/regular_14"
+                app:layout_constraintStart_toEndOf="@id/allowBuyersBidCheckBox"
+                app:layout_constraintTop_toBottomOf="@id/listRecyclerView" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/gray3"
+                app:layout_constraintBottom_toTopOf="@+id/archiveButton"
+                app:layout_constraintTop_toBottomOf="@id/allowBuyersBidCheckBox" />
+
+            <ImageView
+                android:id="@+id/warningImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="60dp"
+                android:src="@drawable/ic_warning"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/allowBuyersBidCheckBox" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="60dp"
+                android:text="@string/pickup_only"
+                android:textAppearance="@style/bold_16"
+                app:layout_constraintStart_toEndOf="@id/warningImageView"
+                app:layout_constraintTop_toBottomOf="@id/allowBuyersBidCheckBox" />
+
+            <TextView
+                android:id="@+id/warningInfoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/warning_info"
+                android:textAppearance="@style/regular_14"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/warningImageView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addCardButton"
+                style="@style/buttonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/add_card"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/warningInfoTextView" />
+
+            <ImageView
+                android:id="@+id/creditCardImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_credit_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/warningInfoTextView" />
+
+            <TextView
+                android:id="@+id/starsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="****"
+                android:textAppearance="@style/regular_16"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@id/creditCardImageView"
+                app:layout_constraintTop_toBottomOf="@id/warningInfoTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="4014"
+                android:textAppearance="@style/regular_16"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@id/starsTextView"
+                app:layout_constraintTop_toBottomOf="@id/warningInfoTextView" />
+
+            <TextView
+                android:id="@+id/editCardsInfoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/edit_cards_info"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/gray2"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addCardButton" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteButton"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:padding="0dp"
+                android:text="@string/delete"
+                android:textAppearance="@style/buttonText"
+                android:textColor="@color/black"
+                android:background="@drawable/outlined_button"
+                app:layout_constraintEnd_toStartOf="@+id/archiveButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editCardsInfoTextView"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="10dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/archiveButton"
+                style="@style/buttonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/archive"
+                app:backgroundTint="@color/black"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/deleteButton"
+                android:layout_marginTop="28dp"
+                app:layout_constraintTop_toBottomOf="@id/editCardsInfoTextView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/placeProductButton"
+                style="@style/buttonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/place_product"
+                android:visibility="visible"
+                app:backgroundTint="@color/gray1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/archiveButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

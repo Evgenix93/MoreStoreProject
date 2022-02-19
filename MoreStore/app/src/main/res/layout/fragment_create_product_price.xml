@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <TextView
+        android:id="@+id/priceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Стоимость"
+        android:textAppearance="@style/bold_24"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/setPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/set_price"
+        app:layout_constraintTop_toBottomOf="@id/priceTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textAppearance="@style/regular_14"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/originalPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/originalPrice"
+        app:layout_constraintTop_toBottomOf="@id/setPriceTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="28dp"
+        android:textAppearance="@style/bold_16"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/originalPriceInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/setPriceTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/originalPriceTextView"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        app:boxStrokeColor="@color/gray1"
+        app:startIconDrawable="@drawable/ic_rub">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:textAppearance="@style/regular_16"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/salePriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/salePrice"
+        app:layout_constraintTop_toBottomOf="@id/originalPriceTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:textAppearance="@style/bold_16"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/originalPriceInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/originalPriceTextView"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        app:boxStrokeColor="@color/gray1"
+        app:startIconDrawable="@drawable/ic_rub">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:textAppearance="@style/regular_16"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/show_discount"
+        app:layout_constraintTop_toBottomOf="@id/salePriceTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="28dp"
+        android:layout_marginStart="10dp"
+        android:textAppearance="@style/regular_14"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/placeProductButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/buttonStyle"
+        android:text="@string/save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="28dp"
+        android:layout_marginHorizontal="10dp"
+        app:backgroundTint="@color/gray1"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
