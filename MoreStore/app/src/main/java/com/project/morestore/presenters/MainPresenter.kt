@@ -21,6 +21,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
     private val productRepository = ProductRepository(context)
     private val userRepository = UserRepository(context)
     private var searchJob: Job? = null
+    private var searchJob2: Job? = null
 
 
     fun addProductToWishList(id: Long){
@@ -251,5 +252,79 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         viewState.success()
     }
 
+    fun getColors() {
+        getProperties(12)
+    }
 
+    private fun getProperties(propertyId: Long) {
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getProperties()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+        }
+    }
+
+    fun getMaterials(){
+        getProperties(13)
+    }
+
+    fun collectMaterialSearchFlow(flow: Flow<String>, materials: List<Property>) {
+        searchJob2 = flow
+            .debounce(3000)
+            .mapLatest { query ->
+                withContext(Dispatchers.IO) {
+                    materials.filter { it.name.contains(query, true) }
+                }
+
+            }
+            .onEach { result ->
+                viewState.loaded(result)
+
+            }.launchIn(presenterScope)
+
+    }
+
+    fun getAllCities() {
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getCities()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+        }
+    }
+
+    fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>) {
+        searchJob = flow
+            .debounce(3000)
+            .mapLatest { query ->
+                withContext(Dispatchers.IO) {
+                    regions.filter { it.name.contains(query, true) }
+                }
+
+            }
+            .onEach { result ->
+                viewState.loaded(result)
+
+            }.launchIn(presenterScope)
+
+    }
 }

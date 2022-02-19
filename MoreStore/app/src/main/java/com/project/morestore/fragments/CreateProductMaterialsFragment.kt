@@ -6,56 +6,48 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.MaterialAdapter
+import com.project.morestore.databinding.FragmentCreateProductMaterialsBinding
 import com.project.morestore.databinding.FragmentFilterMaterialsBinding
 import com.project.morestore.models.Filter
 import com.project.morestore.models.MaterialLine
 import com.project.morestore.models.Property
-import com.project.morestore.mvpviews.UserMvpView
+import com.project.morestore.mvpviews.MainMvpView
+import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.presenters.UserPresenter
-import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.autoCleared
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_materials), UserMvpView {
-    private val binding: FragmentFilterMaterialsBinding by viewBinding()
+class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_create_product_materials), MainMvpView {
+    private val binding: FragmentCreateProductMaterialsBinding by viewBinding()
     private var materialAdapter: MaterialAdapter by autoCleared()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var searchInitiated = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
-        initToolBar()
         loadMaterials()
-        setClickListeners()
     }
 
-    private fun setClickListeners(){
-        binding.showProductsBtn.setOnClickListener {
-            findNavController().navigate(R.id.catalogFragment)
-        }
-    }
 
 
     private fun initList(){
-        materialAdapter = MaterialAdapter(requireContext(),true)
-        with(binding.materialsList){
+        materialAdapter = MaterialAdapter(requireContext(),false)
+        with(binding.materialsRecyclerView){
             adapter = materialAdapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
-
-
-
 
     }
 
@@ -99,51 +91,13 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
         presenter.getMaterials()
     }
 
-   /* private fun generateList(): List<MaterialLine>{
-        return listOf(
-            MaterialLine(
-                0,
-            "Все материалы",
-                false),
-            MaterialLine(
-                0,
-                "Акрил",
-                false),
-            MaterialLine("Альпака",
-                false),
-            MaterialLine("Ангора",
-                false),
-            MaterialLine("Атлас",
-                false),
-            MaterialLine("Ацетат",
-                false),
-            MaterialLine("Бархат",
-                false),
-            MaterialLine("Бисер",
-                false),
-            MaterialLine("Вельвет",
-                false),
-            MaterialLine("Велюр",
-                false),
-            MaterialLine("Вискоза",
-                false)
-        )
-    }*/
-
-
-
-    private fun initToolBar(){
-        binding.toolbar.titleTextView.text = "Материалы"
-        binding.toolbar.actionTextView.isVisible = false
-        binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
-    }
 
     private fun loadFilter(){
         presenter.getFilter()
     }
 
     private fun saveMaterials(){
-        presenter.saveMaterials(materialAdapter.getCurrentMaterials())
+      //  presenter.saveMaterials(materialAdapter.getCurrentMaterials())
     }
 
     private fun bindFilter(filter: Filter){
@@ -153,20 +107,21 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
     }
 
 
-
-    override fun onStop() {
-        super.onStop()
-        saveMaterials()
-
-    }
-
-    override fun success(result: Any) {
-
-    }
-
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
+    }
+
+    override fun showOnBoarding() {
+        TODO("Not yet implemented")
+    }
+
+    override fun loadedSuggestions(list: List<String>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun success() {
+        TODO("Not yet implemented")
     }
 
     override fun loading() {
@@ -177,7 +132,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
         when (result){
             is Filter -> bindFilter(result)
             is List<*> -> {
-                materialAdapter.updateList((if(!searchInitiated) listOf(MaterialLine(0,"Все материалы", false, idCategory = -1)) else listOf<MaterialLine>()) + (result as List<Property>).map { MaterialLine(it.id, it.name, false, idCategory = it.idCategory?.toInt()!!) } )
+                materialAdapter.updateList((result as List<Property>).map { MaterialLine(it.id, it.name, false, idCategory = it.idCategory?.toInt()!!) } )
                 loadFilter()
                 if(!searchInitiated){
                     initSearch(result as List<Property>)
@@ -187,10 +142,5 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
         }
 
     }
-
-    override fun successNewCode() {
-
-    }
-
 
 }

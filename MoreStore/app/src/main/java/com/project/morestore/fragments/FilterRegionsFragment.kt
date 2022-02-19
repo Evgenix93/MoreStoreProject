@@ -60,7 +60,7 @@ class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), Us
     }
 
     private fun initRegionsRecyclerView(){
-        regionsAdapter = RegionsAdapter(false) {}
+        regionsAdapter = RegionsAdapter(false, true) {}
         binding.regionsRecyclerView.adapter = regionsAdapter
         binding.regionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         presenter.getAllCities()

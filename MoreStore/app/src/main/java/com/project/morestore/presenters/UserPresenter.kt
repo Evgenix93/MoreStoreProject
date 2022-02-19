@@ -666,52 +666,6 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 400 -> viewState.error("Ошибка")
                 null -> viewState.error("Нет интернета")
             }
-            /* val chosenForWho = userRepository.getFilter().chosenForWho
-             chosenForWho.forEachIndexed { index, isChecked ->
-                 if (isChecked)
-                     when (index) {
-                         2 -> {
-                             val response = productRepository.getProductCategoriesKids()
-                             when (response?.code()) {
-                                 null -> viewState.error("Нет интернета")
-                                 200 -> {
-                                     viewState.loaded(filterProductCategoriesKids(response.body()!!))
-                                 }
-                                 400 -> viewState.error("Ошибка")
-                             }
-                         }
-                         0 -> {
-                             val response = productRepository.getProductCategoriesAdults()
-                             when (response?.code()) {
-                                 null -> viewState.error("Нет интернета")
-                                 200 -> {
-                                     viewState.loaded(
-                                         filterProductCategoriesAdults(
-                                             response.body()!!,
-                                             false
-                                         )
-                                     )
-                                 }
-                                 400 -> viewState.error("Ошибка")
-                             }
-                         }
-                         1 -> {
-                             val response = productRepository.getProductCategoriesAdults()
-                             when (response?.code()) {
-                                 null -> viewState.error("Нет интернета")
-                                 200 -> {
-                                     viewState.loaded(
-                                         filterProductCategoriesAdults(
-                                             response.body()!!,
-                                             true
-                                         )
-                                     )
-                                 }
-                                 400 -> viewState.error("Ошибка")
-                             }
-                         }
-                     }
-             }*/
         }
     }
 
@@ -936,7 +890,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
     fun getColors() {
-        presenterScope.launch {
+       /* presenterScope.launch {
             val response = productRepository.getColors()
             when (response?.code()) {
                 200 -> {
@@ -945,7 +899,8 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 400 -> viewState.error("Ошибка")
                 null -> viewState.error("Нет интернета")
             }
-        }
+        }*/
+        getProperties(12)
     }
 
 }

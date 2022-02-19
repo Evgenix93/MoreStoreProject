@@ -12,7 +12,7 @@ import com.project.morestore.databinding.ItemRegionBinding
 import com.project.morestore.models.MaterialLine
 import com.project.morestore.models.Region
 
-class RegionsAdapter(val isForChangeRegion: Boolean, val onClick: (String) -> Unit) : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
+class RegionsAdapter(private val isForChangeRegion: Boolean, private val isFilter: Boolean, val onClick: (String) -> Unit) : RecyclerView.Adapter<RegionsAdapter.RegionViewHolder>() {
     /*private var regions = listOf(
         Region("Все города", true),
         Region("Москва, Московская область", true),
@@ -46,12 +46,14 @@ class RegionsAdapter(val isForChangeRegion: Boolean, val onClick: (String) -> Un
             }
         }
 
-        fun bind(region: Region) {
+        fun bind(region: Region, isFilter: Boolean) {
             binding.regionTextView.text = region.name
             binding.regionTextView.textSize = if(!isChangeRegion) 14f else 16f
             binding.regionCheckBox.isChecked = region.isChecked ?: false
             binding.regionCheckBox.isVisible = !isChangeRegion
             binding.view36.isVisible = adapterPosition == 0 && isChangeRegion
+            if(!isFilter)
+                binding.regionCheckBox.isVisible = false
             binding.regionCheckBox.setOnClickListener {
                 if(region.name == "Все города"){
                     onAllMaterial(binding.regionCheckBox.isChecked)
@@ -96,7 +98,7 @@ class RegionsAdapter(val isForChangeRegion: Boolean, val onClick: (String) -> Un
     }
 
     override fun onBindViewHolder(holder: RegionViewHolder, position: Int) {
-        holder.bind(regions[position])
+        holder.bind(regions[position], isFilter)
     }
 
     override fun getItemCount(): Int {
