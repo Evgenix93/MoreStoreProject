@@ -9,14 +9,14 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemCreateProductElementBinding
 
-class ShoosTypeCreateProductAdapter: RecyclerView.Adapter<ShoosTypeCreateProductAdapter.ShoosTypeViewHolder>() {
+class ShoosTypeCreateProductAdapter(val onClick: () -> Unit): RecyclerView.Adapter<ShoosTypeCreateProductAdapter.ShoosTypeViewHolder>() {
 
-    class ShoosTypeViewHolder(view: View, onClick: (Int) -> Unit): RecyclerView.ViewHolder(view){
+    class ShoosTypeViewHolder(view: View, onClick: () -> Unit): RecyclerView.ViewHolder(view){
         private val binding: ItemCreateProductElementBinding by viewBinding()
 
         init {
             itemView.setOnClickListener {
-                onClick(adapterPosition)
+                onClick()
             }
         }
 
@@ -45,6 +45,7 @@ class ShoosTypeCreateProductAdapter: RecyclerView.Adapter<ShoosTypeCreateProduct
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoosTypeViewHolder {
         return ShoosTypeViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_create_product_element, parent, false)){
+            onClick()
 
         }
 

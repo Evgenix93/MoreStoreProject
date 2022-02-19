@@ -12,20 +12,26 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemOptionBinding
 import com.project.morestore.models.Option
 
-class OptionsAdapter(private val context: Context): RecyclerView.Adapter<OptionsAdapter.OptionViewHolder>() {
+class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit): RecyclerView.Adapter<OptionsAdapter.OptionViewHolder>() {
     private val options = listOf(
-        Option("Фотографии *", false),
-        Option("Состояние *", false),
-        Option("Стоимость *", false),
-        Option("Размер *", false),
-        Option("Описание *", false),
+        Option("Фотографии", false),
+        Option("Состояние", false),
+        Option("Стоимость", false),
+        Option("Размер", false),
+        Option("Описание", false),
         Option("Цвет", false),
         Option("Материал", false),
         Option("Местоположение", true)
     )
 
-    class OptionViewHolder(view: View): RecyclerView.ViewHolder(view){
+    class OptionViewHolder(view: View, onClick: (Int) -> Unit): RecyclerView.ViewHolder(view){
         private val binding: ItemOptionBinding by viewBinding()
+
+        init {
+            itemView.setOnClickListener {
+                onClick(adapterPosition)
+            }
+        }
 
         fun bind(option: Option, context: Context){
             binding.nameTextView.text = option.name
@@ -35,11 +41,18 @@ class OptionsAdapter(private val context: Context): RecyclerView.Adapter<Options
                 binding.checkImageView.imageTintList = ColorStateList.valueOf(context.resources.getColor(R.color.green))
             else
                 binding.checkImageView.imageTintList = ColorStateList.valueOf(context.resources.getColor(R.color.gray1))
+
+
+                binding.regionTextView.isVisible = option.name == "Местоположение"
+
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OptionViewHolder {
-      return OptionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_option, parent, false))
+      return OptionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_option, parent, false)){ position ->
+          onClick(position)
+
+      }
     }
 
     override fun onBindViewHolder(holder: OptionViewHolder, position: Int) {

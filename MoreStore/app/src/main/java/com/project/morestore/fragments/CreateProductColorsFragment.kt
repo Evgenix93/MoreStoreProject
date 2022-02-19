@@ -27,6 +27,7 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
         super.onViewCreated(view, savedInstanceState)
         initColorsRecyclerView()
         getColors()
+        initToolbar()
     }
 
 
@@ -38,6 +39,14 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
 
     private fun getColors(){
         presenter.getColors()
+    }
+
+    private fun initToolbar(){
+        binding.toolbar.backIcon.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+
     }
 
 

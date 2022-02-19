@@ -76,7 +76,8 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/conditionNameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/conditionNameTextView" />
+        app:layout_constraintTop_toTopOf="@+id/conditionNameTextView"
+        android:src="@drawable/ic_check"/>
 
     <TextView
         android:id="@+id/condition2NameTextView"
@@ -110,7 +111,8 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/condition2NameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/condition2NameTextView" />
+        app:layout_constraintTop_toTopOf="@+id/condition2NameTextView"
+        android:src="@drawable/ic_check"/>
 
     <View
         android:id="@+id/line4"
@@ -156,7 +158,8 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/condition3NameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/condition3NameTextView" />
+        app:layout_constraintTop_toTopOf="@+id/condition3NameTextView"
+        android:src="@drawable/ic_check"/>
 
     <TextView
         android:id="@+id/condition3NameTextView"
@@ -201,7 +204,8 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/condition4NameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/condition4NameTextView" />
+        app:layout_constraintTop_toTopOf="@+id/condition4NameTextView"
+        android:src="@drawable/ic_check"/>
 
     <TextView
         android:id="@+id/condition4NameTextView"
@@ -214,6 +218,53 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line6" />
+
+    <View
+        android:id="@+id/newWithTagsClickView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/line2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+    <View
+        android:id="@+id/newWithoutTagsClickView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/line4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line2" />
+
+    <View
+        android:id="@+id/exellentClickView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/line6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line4" />
+
+    <View
+        android:id="@+id/goodClickView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/line8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line6" />
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

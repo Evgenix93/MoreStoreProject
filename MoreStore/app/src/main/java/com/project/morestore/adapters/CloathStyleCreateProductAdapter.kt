@@ -9,7 +9,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemCreateProductElementBinding
 
-class CloathStyleCreateProductAdapter: RecyclerView.Adapter<CloathStyleCreateProductAdapter.StyleViewHolder>() {
+class CloathStyleCreateProductAdapter(val onClick: () -> Unit): RecyclerView.Adapter<CloathStyleCreateProductAdapter.StyleViewHolder>() {
 
 
 
@@ -38,6 +38,7 @@ class CloathStyleCreateProductAdapter: RecyclerView.Adapter<CloathStyleCreatePro
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StyleViewHolder {
             return StyleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_create_product_element, parent, false)){
+                onClick()
 
             }
 

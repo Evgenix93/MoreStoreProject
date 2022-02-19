@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentMakePhotoBinding
@@ -15,6 +16,7 @@ class MakePhotoFragment: Fragment(R.layout.fragment_make_photo) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initToolbar()
 
         lifecycleScope.launch {
             binding.loader.progress = 0
@@ -22,6 +24,12 @@ class MakePhotoFragment: Fragment(R.layout.fragment_make_photo) {
                 binding.loader.incrementProgressBy(1)
                 delay(1000)
             }
+        }
+    }
+
+    private fun initToolbar(){
+        binding.backIconImageView.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 }

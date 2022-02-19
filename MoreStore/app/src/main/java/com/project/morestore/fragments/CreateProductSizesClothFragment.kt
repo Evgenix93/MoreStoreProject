@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
@@ -26,6 +27,13 @@ class CreateProductSizesClothFragment :
         super.onViewCreated(view, savedInstanceState)
         initList()
         getSizes()
+        initToolbar()
+    }
+
+
+    private fun initToolbar(){
+        binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
     }
 
 
@@ -36,7 +44,7 @@ class CreateProductSizesClothFragment :
 
 
     private fun initList() {
-        sizeAdapter = SizeLineAdapter(false, true)
+        sizeAdapter = SizeLineAdapter(false, true, context = requireContext())
         with(binding.sizesList) {
             adapter = sizeAdapter
             layoutManager = LinearLayoutManager(requireContext())

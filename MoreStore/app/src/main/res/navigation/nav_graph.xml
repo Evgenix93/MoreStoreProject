@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/addCardFragment">
+    app:startDestination="@id/createProductStep1Fragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -492,6 +492,12 @@
         <action
             android:id="@+id/action_createProductStep3Fragment_to_createProductHowToSellFragment"
             app:destination="@id/createProductHowToSellFragment" />
+        <action
+            android:id="@+id/action_createProductStep3Fragment_to_createProductStep5Fragment"
+            app:destination="@id/createProductStep5Fragment" />
+        <argument
+            android:name="category"
+            app:argType="com.project.morestore.models.ProductCategory" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep4Fragment"
@@ -500,6 +506,12 @@
         <action
             android:id="@+id/action_createProductStep4Fragment_to_createProductHowToSellFragment"
             app:destination="@id/createProductHowToSellFragment" />
+        <action
+            android:id="@+id/action_createProductStep4Fragment_to_createProductStep5Fragment"
+            app:destination="@id/createProductStep5Fragment" />
+        <argument
+            android:name="category"
+            app:argType="com.project.morestore.models.ProductCategory" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep5Fragment"
@@ -508,6 +520,15 @@
         <action
             android:id="@+id/action_createProductStep5Fragment_to_createProductHowToSellFragment"
             app:destination="@id/createProductHowToSellFragment" />
+        <action
+            android:id="@+id/action_createProductStep5Fragment_to_createProductFragment"
+            app:destination="@id/createProductFragment" />
+        <action
+            android:id="@+id/action_createProductStep5Fragment_to_createProductAddBrandFragment"
+            app:destination="@id/createProductAddBrandFragment" />
+        <argument
+            android:name="category"
+            app:argType="com.project.morestore.models.ProductCategory" />
     </fragment>
     <fragment
         android:id="@+id/createProductSizesClothFragment"
@@ -536,6 +557,87 @@
         <action
             android:id="@+id/action_createProductAddPhotoFragment_to_makePhotoFragment"
             app:destination="@id/makePhotoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProductAddBrandFragment"
+        android:name="com.project.morestore.fragments.CreateProductAddBrandFragment"
+        android:label="CreateProductAddBrandFragment" />
+    <fragment
+        android:id="@+id/createProductColorsFragment"
+        android:name="com.project.morestore.fragments.CreateProductColorsFragment"
+        android:label="CreateProductColorsFragment" />
+    <fragment
+        android:id="@+id/createProductConditionFragment"
+        android:name="com.project.morestore.fragments.CreateProductConditionFragment"
+        android:label="CreateProductConditionFragment" />
+    <fragment
+        android:id="@+id/createProductDescriptionFragment"
+        android:name="com.project.morestore.fragments.CreateProductDescriptionFragment"
+        android:label="CreateProductDescriptionFragment" />
+    <fragment
+        android:id="@+id/createProductMaterialsFragment"
+        android:name="com.project.morestore.fragments.CreateProductMaterialsFragment"
+        android:label="CreateProductMaterialsFragment" />
+    <fragment
+        android:id="@+id/createProductPriceFragment"
+        android:name="com.project.morestore.fragments.CreateProductPriceFragment"
+        android:label="CreateProductPriceFragment" />
+    <fragment
+        android:id="@+id/createProductRegionsFragment"
+        android:name="com.project.morestore.fragments.CreateProductRegionsFragment"
+        android:label="CreateProductRegionsFragment" />
+    <dialog
+        android:id="@+id/deleteProductDialog"
+        android:name="com.project.morestore.dialogs.DeleteProductDialog"
+        android:label="DeleteProductDialog" />
+    <dialog
+        android:id="@+id/saveProductDialog"
+        android:name="com.project.morestore.dialogs.SaveProductDialog"
+        android:label="SaveProductDialog" />
+    <dialog
+        android:id="@+id/skipStepDialog"
+        android:name="com.project.morestore.dialogs.SkipStepDialog"
+        android:label="SkipStepDialog" />
+    <fragment
+        android:id="@+id/createProductFragment"
+        android:name="com.project.morestore.fragments.CreateProductFragment"
+        android:label="CreateProductFragment" >
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductSizesClothFragment"
+            app:destination="@id/createProductSizesClothFragment" />
+        <action
+            android:id="@+id/action_createProductFragment_to_addCardFragment"
+            app:destination="@id/addCardFragment" />
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductAddPhotoFragment"
+            app:destination="@id/createProductAddPhotoFragment" />
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductSizesShoosFragment"
+            app:destination="@id/createProductSizesShoosFragment" />
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductColorsFragment"
+            app:destination="@id/createProductColorsFragment" />
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductConditionFragment"
+            app:destination="@id/createProductConditionFragment" />
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductDescriptionFragment"
+            app:destination="@id/createProductDescriptionFragment" />
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductMaterialsFragment"
+            app:destination="@id/createProductMaterialsFragment" />
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductRegionsFragment"
+            app:destination="@id/createProductRegionsFragment" />
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductPriceFragment"
+            app:destination="@id/createProductPriceFragment" />
+        <argument
+            android:name="category"
+            app:argType="com.project.morestore.models.ProductCategory" />
+        <action
+            android:id="@+id/action_createProductFragment_to_createProductHowToSellFragment"
+            app:destination="@id/createProductHowToSellFragment" />
     </fragment>
 
 </navigation>

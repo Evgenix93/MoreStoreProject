@@ -6,7 +6,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <include layout="@layout/toolbar_filter"
-        android:id="@+id/toolbarFilter"/>
+        android:id="@+id/toolbarFilter"
+        />
+
+    <include
+        android:id="@+id/toolbarCreateProduct"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/anchor"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editText3"
@@ -21,7 +36,7 @@
         android:paddingEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarFilter"
+        app:layout_constraintTop_toBottomOf="@+id/anchor"
         android:textAppearance="@style/regular_14"
         android:singleLine="true"/>
 

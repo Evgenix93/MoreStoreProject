@@ -12,15 +12,15 @@ import com.project.morestore.databinding.ItemCreateProductElementBinding
 import com.project.morestore.models.ProductBrand
 import com.project.morestore.models.ProductCategory
 
-class BrandCreateProductAdapter: RecyclerView.Adapter<BrandCreateProductAdapter.BrandViewHolder>() {
+class BrandCreateProductAdapter(val onClick: () -> Unit): RecyclerView.Adapter<BrandCreateProductAdapter.BrandViewHolder>() {
     var list = listOf<ProductBrand>()
 
-    class BrandViewHolder(view: View): RecyclerView.ViewHolder(view){
+    class BrandViewHolder(view: View, onClick: (Int) -> Unit): RecyclerView.ViewHolder(view){
     private val binding: ItemBrandCreateProductBinding by viewBinding()
 
     init {
         itemView.setOnClickListener {
-            //onClick(adapterPosition)
+            onClick(adapterPosition)
         }
     }
 
@@ -37,7 +37,9 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrandViewHold
     return BrandViewHolder(
         LayoutInflater.from(parent.context)
             .inflate(R.layout.item_brand_create_product, parent, false)
-    )
+    ){
+        onClick()
+    }
 
 }
 

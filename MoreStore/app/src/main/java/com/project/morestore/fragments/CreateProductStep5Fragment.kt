@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
@@ -27,6 +28,7 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private lateinit var searchFlow: Flow<String>
     private var brands = listOf<ProductBrand>()
+    private val args: CreateProductStep5FragmentArgs by navArgs()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,7 +45,9 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
 
 
     private fun initList(){
-        brandAdapter = BrandCreateProductAdapter()
+        brandAdapter = BrandCreateProductAdapter{
+            findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductFragment(args.category))
+        }
         with(binding.brandList){
             adapter = brandAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -99,6 +103,12 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
         binding.howToSellTextView.setOnClickListener {
             findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductHowToSellFragment())
         }
+
+        binding.addBrandTextView.setOnClickListener {
+            findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductAddBrandFragment())
+        }
+
+        binding.skipBtn.setOnClickListener { findNavController().navigate(R.id.skipStepDialog) }
     }
 
     private fun initToolbar(){
@@ -106,6 +116,8 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
             findNavController().popBackStack()
         }
         binding.toolbar.titleTextView.text = "Шаг 5 из 6"
+        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+
     }
 
 

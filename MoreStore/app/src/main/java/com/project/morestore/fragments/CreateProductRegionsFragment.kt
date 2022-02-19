@@ -48,6 +48,7 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
         }
         binding.imageView25.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.black))
         binding.textView42.setTextColor(resources.getColor(R.color.black))
+        binding.showOffersBtn.isVisible = false
     }
 
     private fun initRegionsRecyclerView(){
@@ -77,11 +78,13 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
     }
 
     private fun initToolbar() {
-        binding.toolbarFilter.titleTextView.text = "Регион поиска"
-        binding.toolbarFilter.actionTextView.isVisible = false
-        binding.toolbarFilter.imageView2.setOnClickListener {
+        binding.toolbarCreateProduct.titleTextView.text = "Поиск города"
+        binding.toolbarCreateProduct.actionIcon.isVisible = false
+        binding.toolbarCreateProduct.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
+        binding.toolbarFilter.root.isVisible = false
+
     }
 
 

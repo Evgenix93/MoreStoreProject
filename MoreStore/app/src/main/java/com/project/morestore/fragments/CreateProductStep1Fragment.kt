@@ -35,6 +35,8 @@ class CreateProductStep1Fragment: Fragment(R.layout.fragment_create_product_step
             findNavController().popBackStack()
         }
         binding.toolbar.titleTextView.text = "Шаг 1 из 6"
+
+        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
     }
 
 

@@ -11,7 +11,7 @@ import com.project.morestore.databinding.ItemCreateProductElementBinding
 import com.project.morestore.models.Category
 import com.project.morestore.models.ProductCategory
 
-class CategoryCreateProductAdapter(val onClick: (String) -> Unit): RecyclerView.Adapter<CategoryCreateProductAdapter.CategoryViewHolder>() {
+class CategoryCreateProductAdapter(val onClick: (ProductCategory) -> Unit): RecyclerView.Adapter<CategoryCreateProductAdapter.CategoryViewHolder>() {
     private var list = listOf<ProductCategory>()
 
     class CategoryViewHolder(view: View, onClick: (Int) -> Unit): RecyclerView.ViewHolder(view){
@@ -32,7 +32,7 @@ class CategoryCreateProductAdapter(val onClick: (String) -> Unit): RecyclerView.
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         return CategoryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_create_product_element, parent, false)){ position ->
-            onClick(list[position].name)
+            onClick(list[position])
 
         }
 

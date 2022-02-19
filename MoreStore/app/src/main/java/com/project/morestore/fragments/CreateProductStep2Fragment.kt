@@ -43,20 +43,22 @@ class CreateProductStep2Fragment: MvpAppCompatFragment(R.layout.fragment_create_
             findNavController().popBackStack()
         }
         binding.toolbar.titleTextView.text = "Шаг 2 из 6"
+        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+
     }
 
     private fun initList(){
         categoryAdapter = CategoryCreateProductAdapter { category ->
-            if(category == "Джинсы"){
-                findNavController().navigate(CreateProductStep2FragmentDirections.actionCreateProductStep2FragmentToCreateProductStep4Fragment())
+            if(category.name == "Джинсы"){
+                findNavController().navigate(CreateProductStep2FragmentDirections.actionCreateProductStep2FragmentToCreateProductStep4Fragment(category))
                 return@CategoryCreateProductAdapter
             }
-            if(category == "Обувь"){
-                findNavController().navigate(CreateProductStep2FragmentDirections.actionCreateProductStep2FragmentToCreateProductStep3Fragment())
+            if(category.name == "Обувь"){
+                findNavController().navigate(CreateProductStep2FragmentDirections.actionCreateProductStep2FragmentToCreateProductStep3Fragment(category))
                 return@CategoryCreateProductAdapter
             }
 
-            findNavController().navigate(CreateProductStep2FragmentDirections.actionCreateProductStep2FragmentToCreateProductStep5Fragment())
+            findNavController().navigate(CreateProductStep2FragmentDirections.actionCreateProductStep2FragmentToCreateProductStep5Fragment(category))
 
         }
         with(binding.itemsList){

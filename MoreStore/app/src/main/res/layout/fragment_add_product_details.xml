@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
+        layout="@layout/toolbar_create_product" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -86,6 +86,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/forWhoChip" />
 
             <TextView
+                android:id="@+id/howToSellTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -232,15 +233,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/addCardButton" />
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/deleteButton"
                 android:layout_width="0dp"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:padding="0dp"
                 android:text="@string/delete"
                 android:textAppearance="@style/buttonText"
                 android:textColor="@color/black"
-                android:background="@drawable/outlined_button"
+                android:background="@drawable/outlined_button2"
                 app:layout_constraintEnd_toStartOf="@+id/archiveButton"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -255,6 +257,7 @@
                 style="@style/buttonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="@string/archive"
                 app:backgroundTint="@color/black"
                 android:layout_marginEnd="10dp"

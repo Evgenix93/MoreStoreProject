@@ -40,5 +40,7 @@ class CreateProductAddPhotoFragment: Fragment(R.layout.fragment_create_product_a
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
+        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+
     }
 }

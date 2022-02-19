@@ -30,11 +30,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_lightbulb"
+        android:src="@drawable/ic_lightbulb_filament"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView41" />
 
     <TextView
+        android:id="@+id/howToSellTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

@@ -37,6 +37,7 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
         super.onViewCreated(view, savedInstanceState)
         initList()
         loadMaterials()
+        initToolbar()
     }
 
 
@@ -92,19 +93,17 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
     }
 
 
-    private fun loadFilter(){
-        presenter.getFilter()
-    }
 
-    private fun saveMaterials(){
-      //  presenter.saveMaterials(materialAdapter.getCurrentMaterials())
-    }
 
-    private fun bindFilter(filter: Filter){
-        if(filter.chosenMaterials.size == materialAdapter.getCurrentMaterials().size){
-            materialAdapter.updateList(filter.chosenMaterials)
+    private fun initToolbar(){
+        binding.toolbar.backIcon.setOnClickListener {
+            findNavController().popBackStack()
         }
+        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+
     }
+
+
 
 
     override fun error(message: String) {
@@ -130,10 +129,10 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
 
     override fun loaded(result: Any) {
         when (result){
-            is Filter -> bindFilter(result)
+
             is List<*> -> {
                 materialAdapter.updateList((result as List<Property>).map { MaterialLine(it.id, it.name, false, idCategory = it.idCategory?.toInt()!!) } )
-                loadFilter()
+
                 if(!searchInitiated){
                     initSearch(result as List<Property>)
                     searchInitiated = true
