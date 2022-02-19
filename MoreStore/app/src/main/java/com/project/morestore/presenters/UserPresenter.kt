@@ -225,7 +225,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getSellerProducts(userId: Int) {
+    fun getSellerProducts(userId: Long) {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getSellerProducts(userId)

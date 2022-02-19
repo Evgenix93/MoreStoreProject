@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/addCardFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -453,6 +453,89 @@
         <argument
             android:name="user"
             app:argType="com.project.morestore.models.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProductStep1Fragment"
+        android:name="com.project.morestore.fragments.CreateProductStep1Fragment"
+        android:label="CreateProductStep1Fragment" >
+        <action
+            android:id="@+id/action_createProductStep1Fragment_to_createProductStep2Fragment"
+            app:destination="@id/createProductStep2Fragment" />
+        <action
+            android:id="@+id/action_createProductStep1Fragment_to_createProductHowToSellFragment"
+            app:destination="@id/createProductHowToSellFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProductStep2Fragment"
+        android:name="com.project.morestore.fragments.CreateProductStep2Fragment"
+        android:label="CreateProductStep2Fragment" >
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_createProductStep2Fragment_to_createProductStep3Fragment"
+            app:destination="@id/createProductStep3Fragment" />
+        <action
+            android:id="@+id/action_createProductStep2Fragment_to_createProductStep4Fragment"
+            app:destination="@id/createProductStep4Fragment" />
+        <action
+            android:id="@+id/action_createProductStep2Fragment_to_createProductStep5Fragment"
+            app:destination="@id/createProductStep5Fragment" />
+        <action
+            android:id="@+id/action_createProductStep2Fragment_to_createProductHowToSellFragment"
+            app:destination="@id/createProductHowToSellFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProductStep3Fragment"
+        android:name="com.project.morestore.fragments.CreateProductStep3Fragment"
+        android:label="CreateProductStep3Fragment" >
+        <action
+            android:id="@+id/action_createProductStep3Fragment_to_createProductHowToSellFragment"
+            app:destination="@id/createProductHowToSellFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProductStep4Fragment"
+        android:name="com.project.morestore.fragments.CreateProductStep4Fragment"
+        android:label="CreateProductStep4Fragment" >
+        <action
+            android:id="@+id/action_createProductStep4Fragment_to_createProductHowToSellFragment"
+            app:destination="@id/createProductHowToSellFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProductStep5Fragment"
+        android:name="com.project.morestore.fragments.CreateProductStep5Fragment"
+        android:label="CreateProductStep5Fragment" >
+        <action
+            android:id="@+id/action_createProductStep5Fragment_to_createProductHowToSellFragment"
+            app:destination="@id/createProductHowToSellFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProductSizesClothFragment"
+        android:name="com.project.morestore.fragments.CreateProductSizesClothFragment"
+        android:label="CreateProductSizesClothFragment" />
+    <fragment
+        android:id="@+id/createProductSizesShoosFragment"
+        android:name="com.project.morestore.fragments.CreateProductSizesShoosFragment"
+        android:label="CreateProductSizesShoosFragment" />
+    <fragment
+        android:id="@+id/makePhotoFragment"
+        android:name="com.project.morestore.fragments.MakePhotoFragment"
+        android:label="MakePhotoFragment" />
+    <fragment
+        android:id="@+id/addCardFragment"
+        android:name="com.project.morestore.fragments.AddCardFragment"
+        android:label="AddCardFragment" />
+    <fragment
+        android:id="@+id/createProductHowToSellFragment"
+        android:name="com.project.morestore.fragments.CreateProductHowToSellFragment"
+        android:label="CreateProductHowToSellFragment" />
+    <fragment
+        android:id="@+id/createProductAddPhotoFragment"
+        android:name="com.project.morestore.fragments.CreateProductAddPhotoFragment"
+        android:label="CreateProductAddPhotoFragment" >
+        <action
+            android:id="@+id/action_createProductAddPhotoFragment_to_makePhotoFragment"
+            app:destination="@id/makePhotoFragment" />
     </fragment>
 
 </navigation>

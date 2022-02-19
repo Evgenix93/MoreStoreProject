@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleIntent(intent: Intent){
+        Log.d("error", "handleIntent")
         intent.data?.let {
             findNavController(R.id.fragmentContainerView).navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToProductDetailsFragment(null, it.lastPathSegment.orEmpty()))
         }
@@ -174,7 +175,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.createFragment -> if (navController.currentDestination?.id != R.id.createFragment) {
-                    navController.navigate(R.id.createFragment)
+                    navController.navigate(R.id.createProductStep1Fragment)
                     true
                 } else {
                     true

@@ -32,6 +32,7 @@ import com.project.morestore.models.ProductPhoto
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.util.*
@@ -145,7 +146,6 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         //binding.shareCountTextView.text = product.statistic.share.total.toString()
         binding.discountTextView.text = "-${product.sale}%"
         binding.sellerNameTextView.text = product.user.name
-        binding.sellerPhoneTextView.text = product.phoneShow
         binding.productDescriptionTextView.text = product.about
         binding.productNumberTextView.text = product.id.toString()
        // binding.productCityTextView.text = product.address.fullCity.name
@@ -159,6 +159,11 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
             findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToSellerProfileFragment(product.user))
         }
         binding.chosenBrandTextView.setOnClickListener { brandClick(product.brand.apply { isChecked = true }) }
+        val listener = MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)
+        binding.sellerPhoneTextView.addTextChangedListener(listener)
+        binding.sellerPhoneTextView.setText(product.phoneShow)
+
+
     }
 
     private fun initViewPager(photoList: List<ProductPhoto>){
@@ -237,7 +242,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
     }
 
     override fun error(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 

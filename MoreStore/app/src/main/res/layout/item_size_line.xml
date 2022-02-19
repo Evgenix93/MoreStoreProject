@@ -92,6 +92,19 @@
         app:layout_constraintTop_toBottomOf="@+id/view8"
         app:useMaterialThemeColors="false" />
 
+
+    <ImageView
+        android:id="@+id/checkImageView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        android:button="@drawable/checkbox"
+        app:layout_constraintBottom_toTopOf="@+id/view10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view8"
+        app:useMaterialThemeColors="false" />
+
+
     <View
         android:id="@+id/view10"
         android:layout_width="0dp"

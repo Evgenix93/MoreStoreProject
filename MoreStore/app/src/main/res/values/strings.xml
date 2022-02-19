@@ -235,6 +235,8 @@
     <string name="blocked">Заблокированные</string>
     <string name="need_login">Для работы с профилем\nнеобходимо авторизоваться</string>
     <string name="login_register">Войти или зарегистрироваться</string>
+    <string name="for_who_your_product">Для кого ваше\nпредложение</string>
+    <string name="choose_category">Выберите категорию</string>
     <string-array name="type_array">
         <item>Новое</item>
         <item>Дешевле</item>

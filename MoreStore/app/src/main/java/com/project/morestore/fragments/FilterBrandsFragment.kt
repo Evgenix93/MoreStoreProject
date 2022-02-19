@@ -46,7 +46,14 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
         getCategorySegments()
         initSearch()
         getBrands()
+        setClickListeners()
 
+    }
+
+    private fun setClickListeners(){
+        binding.crossIcon.setOnClickListener {
+            binding.editText3.setText("")
+        }
     }
 
     override fun onStop() {
@@ -216,10 +223,10 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
                         }
                     }*/
                     if (result[0] is ProductBrand) {
-                      //  if (brands.isEmpty()) {
-                        //    brands = result as List<ProductBrand>
+                        if (brands.isEmpty()) {
+                            brands = result as List<ProductBrand>
                             presenter.collectBrandsSearchFlow(searchFlow,  result as List<ProductBrand>)
-                        //}
+                        }
                         brandsAdapter.updateList(result as List<ProductBrand>)
                         checkToken()
                         presenter.getFilter()

@@ -14,10 +14,10 @@ interface ProductApi {
     suspend fun getProductsGetError(@Query("optionally") options: String, @Query("filter") filter: String, @Query("user") userId: Long?): Response<Unit>
 
     @GET("product/youmaylike")
-    suspend fun getYouMayLikeProducts(@Query("limit") limit: Int, @Query("id_user") userId: Int): Response<List<Product>>
+    suspend fun getYouMayLikeProducts(@Query("limit") limit: Int, @Query("id_user") userId: Long): Response<List<Product>>
 
     @GET("product/youmaylike")
-    suspend fun getYouMayLikeProductsGetError(@Query("limit") limit: Int, @Query("id_user") userId: Int): Response<String>
+    suspend fun getYouMayLikeProductsGetError(@Query("limit") limit: Int, @Query("id_user") userId: Long): Response<String>
 
     @GET("search/suggestions")
     suspend fun getSearchSuggestions(@Query("text") text: String): Response<List<String>>

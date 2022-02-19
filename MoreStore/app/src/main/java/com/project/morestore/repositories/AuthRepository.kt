@@ -204,11 +204,11 @@ class AuthRepository(private val context: Context) {
 
 
 
-    fun setupUserId(userId: Int){
+    fun setupUserId(userId: Long){
         Token.userId = userId
     }
 
-    fun getUserId(): Int{
+    fun getUserId(): Long{
         return Token.userId
     }
 

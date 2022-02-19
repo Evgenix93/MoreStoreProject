@@ -158,7 +158,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
                     RegistrationLogin2FragmentDirections.actionRegistration2FragmentToRegistration3Fragment(
                         args.phoneOrEmail,
                         code = binding.codeEditText.text.toString().toInt(),
-                        userId = user.id
+                        userId = user.id.toInt()
                     )
                 )
         }

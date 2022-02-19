@@ -89,8 +89,10 @@ class ProductRepository(private val context: Context) {
                     filter.categories.filter { it.isChecked == true }.map { "id_category=${it.id}" }
             }
             if (filter?.brands?.isNotEmpty() == true) {
-                brandsStr =
-                    filter.brands.filter { it.isChecked == true }.map { "id_brand=${it.id}" }
+                val brandsIds =
+                    filter.brands.filter { it.isChecked == true }.map { it.id }
+                brandsStr = listOf("id_brand=${brandsIds.joinToString(",")}")
+
             }
             if (filter?.regions?.isNotEmpty() == true) {
                 citiesStr =
@@ -234,11 +236,11 @@ class ProductRepository(private val context: Context) {
         return getProducts(userId = Token.userId.toLong())
     }
 
-    suspend fun getSellerProducts(userId: Int): Response<List<Product>>?{
-        return getProducts(userId = userId.toLong())
+    suspend fun getSellerProducts(userId: Long): Response<List<Product>>?{
+        return getProducts(userId = userId)
     }
 
-    suspend fun getYouMayLikeProducts(limit: Int, userId: Int): Response<List<Product>>? {
+    suspend fun getYouMayLikeProducts(limit: Int, userId: Long): Response<List<Product>>? {
         return try {
             productApi.getYouMayLikeProducts(limit, userId)
         } catch (e: Exception) {

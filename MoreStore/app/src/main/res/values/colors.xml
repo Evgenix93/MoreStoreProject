@@ -9,6 +9,11 @@
     <color name="black2">#353535</color>
     <color name="black3">#4D4D4D</color>
     <color name="black4">#3E4243</color>
+
+    <color name="black5">#99000000</color>
+    <color name="black6">#383838</color>
+    <color name="black7">#5F000000</color>
+
     <color name="white">#FFFFFFFF</color>
 
     <color name="gray1">#D9D9D9</color>

@@ -26,8 +26,6 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
     private val repository = AuthRepository(context)
 
 
-
-
     fun register(
         phone: String? = null,
         email: String? = null,
@@ -63,25 +61,25 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             )
             when (response?.code()) {
                 200 -> {
-                    if(step == 2) {
+                    if (step == 2) {
                         repository.setupToken(response.body()!!.token!!)
                         repository.saveToken(response.body()!!.token!!, response.body()!!.expires!!)
                         getUserData()
                     }
-                    if(step == 1){
+                    if (step == 1) {
                         viewState.success(response.body()!!)
                     }
                     //if(step == 3) {
-                       // if (photoUri != null) {
-                         //   Log.d("Debug", "photoUri = $photoUri")
-                        //    uploadPhoto(photoUri!!)
-                      //  }else{
-                        //    viewState.success(response.body()!!)
-                      //  }
+                    // if (photoUri != null) {
+                    //   Log.d("Debug", "photoUri = $photoUri")
+                    //    uploadPhoto(photoUri!!)
+                    //  }else{
+                    //    viewState.success(response.body()!!)
+                    //  }
                     //}//else {
-                       // Log.d("Debug", "photoUri = null")
-                      //  viewState.success(response.body()!!)
-                   // }
+                    // Log.d("Debug", "photoUri = null")
+                    //  viewState.success(response.body()!!)
+                    // }
 
 
                 }
@@ -91,12 +89,20 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                         if (bodyString.contains("Этот номер зарегистрирован") || bodyString
                                 .contains("Эта почта зарегистрирована")
                         ) {
-                            getNewCode(phone, email)
+                            //getNewCode(phone, email)
                             //viewState.error("401")
+                            login(
+                                phone = phone,
+                                email = email,
+                                step = step,
+                                type = type,
+                                user = user,
+                                code = code
+                            )
                         } else {
                             viewState.error(bodyString)
                         }
-                    }else{
+                    } else {
                         viewState.error(bodyString)
                     }
                 }
@@ -147,7 +153,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                         repository.setupToken(response.body()?.token!!)
                         repository.saveToken(response.body()?.token!!, response.body()!!.expires!!)
                         getUserData()
-                    }else {
+                    } else {
                         viewState.success(response.body()!!)
                     }
                 }
@@ -164,22 +170,24 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
 
     }
 
-    fun getUserData(){
+    fun getUserData() {
         presenterScope.launch {
             viewState.loading()
             val response = repository.getUserData()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> {
                     val user = response.body()!!
                     repository.setupUserId(user.id)
-                    if(checkUserData(user)){
+                    if (checkUserData(user)) {
                         viewState.registrationComplete(true, user)
-                    }else{
+                    } else {
                         viewState.registrationComplete(false, user)
                     }
 
                 }
-                400 -> {viewState.error("Ошибка")}
+                400 -> {
+                    viewState.error("Ошибка")
+                }
                 null -> viewState.error("Нет интернета")
             }
         }
@@ -206,11 +214,11 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         }
     }
 
-    fun getSocialLoginUrl(type: String){
+    fun getSocialLoginUrl(type: String) {
         viewState.loading()
         presenterScope.launch {
             val response = repository.getSocialLoginUrl(SocialType(type))
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> viewState.success(response.body()!!)
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 500 -> viewState.error("500 Internal Server Error")
@@ -219,11 +227,11 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         }
     }
 
-    fun loginSocial(url: String){
+    fun loginSocial(url: String) {
         viewState.loading()
         presenterScope.launch {
             val response = repository.loginSocial(url)
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> {
                     repository.setupToken(response.body()?.token!!)
                     viewState.success(response.body()!!)
@@ -236,11 +244,6 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
     }
 
 
-
-
-
-
-
     private suspend fun getStringFromResponse(body: ResponseBody): String {
         return withContext(Dispatchers.IO) {
             val str = body.string()
@@ -251,7 +254,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
 
     }
 
-    private fun checkUserData(user: User): Boolean{
+    private fun checkUserData(user: User): Boolean {
         return user.name != null && user.surname != null && user.phone != null
 
     }

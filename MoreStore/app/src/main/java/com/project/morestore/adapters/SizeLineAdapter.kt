@@ -12,7 +12,7 @@ import com.project.morestore.databinding.ItemShoesSizeLineBinding
 import com.project.morestore.databinding.ItemSizeLineBinding
 import com.project.morestore.models.SizeLine
 
-class SizeLineAdapter(val isShoos: Boolean) :
+class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var list = listOf<SizeLine>()
     private var bottomSizeList: List<SizeLine>? = null
@@ -21,6 +21,7 @@ class SizeLineAdapter(val isShoos: Boolean) :
 
     class SizeLineViewHolder(
         view: View,
+        val isCreateProduct: Boolean = false,
         val onCheckBoxClicked: (isChecked: Boolean, position: Int) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
@@ -53,12 +54,19 @@ class SizeLineAdapter(val isShoos: Boolean) :
             binding.sizeCheckBox.isChecked = size.isSelected
 
 
+            binding.sizeCheckBox.isVisible = !isCreateProduct
+            binding.checkImageView.isVisible = isCreateProduct
+            binding.checkImageView.setOnClickListener {
+                //binding.checkImageView.drawable.setTint()
+            }
+
+
         }
 
     }
 
     class ShoosSizeLineViewHolder(
-        view: View, val onCheckBoxClicked: (isChecked: Boolean, position: Int) -> Unit
+        view: View, val isCreateProduct: Boolean = false, val onCheckBoxClicked: (isChecked: Boolean, position: Int) -> Unit
     ) : RecyclerView.ViewHolder(view) {
         private val binding: ItemShoesSizeLineBinding by viewBinding()
 
@@ -86,6 +94,12 @@ class SizeLineAdapter(val isShoos: Boolean) :
             binding.otherSizeTextView.isVisible = otherSize
             binding.sizeCheckBox.isChecked = size.isSelected
 
+            binding.sizeCheckBox.isVisible = !isCreateProduct
+            binding.checkImageView.isVisible = isCreateProduct
+
+
+
+
 
         }
 
@@ -98,7 +112,8 @@ class SizeLineAdapter(val isShoos: Boolean) :
                     R.layout.item_size_line,
                     parent,
                     false
-                )
+                ),
+                isCreateProduct = isCreateProduct
             ) { isChecked, position ->
                 list[position].isSelected = isChecked
 
@@ -108,7 +123,8 @@ class SizeLineAdapter(val isShoos: Boolean) :
         } else {
             ShoosSizeLineViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_shoes_size_line, parent, false)
+                    .inflate(R.layout.item_shoes_size_line, parent, false),
+                isCreateProduct = isCreateProduct
             ) { isChecked, position ->
                 list[position].isSelected = isChecked
             }

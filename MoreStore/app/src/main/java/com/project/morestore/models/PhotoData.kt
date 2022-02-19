@@ -7,6 +7,6 @@ import com.squareup.moshi.JsonClass
 data class PhotoData(
     val type: String,
     @Json(name = "id_type")
-    val idType: Int,
+    val idType: Long,
     val photo: List<Photo>
 )

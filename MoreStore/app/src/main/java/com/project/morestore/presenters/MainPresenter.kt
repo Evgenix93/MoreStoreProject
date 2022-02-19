@@ -21,6 +21,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
     private val productRepository = ProductRepository(context)
     private val userRepository = UserRepository(context)
     private var searchJob: Job? = null
+    private var searchJob2: Job? = null
 
 
     fun addProductToWishList(id: Long){
@@ -135,7 +136,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
 
     fun getYouMayLikeProducts(){
         presenterScope.launch {
-            if(authRepository.getUserId() == 0){
+            if(authRepository.getUserId() == 0.toLong()){
                 return@launch
             }
             viewState.loading()
@@ -250,6 +251,147 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         userRepository.updateFilter(filter)
         viewState.success()
     }
+
+    fun getCategories(forWho: Int){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getProductCategories()
+            when(response?.code()){
+                200 -> {
+                    when (forWho) {
+                        0 -> {
+                            viewState.loaded(response.body()!!.filterNot {
+                                /* it.id == 1 ||
+                                         it.id == 2 ||
+                                         it.id == 3 ||
+                                         it.id == 4 ||
+                                         it.id == 5 ||
+                                         it.id == 6 ||
+                                         it.id == 7 ||
+                                         it.id == 9 ||
+                                         it.id == 10 ||
+                                         it.id == 11 ||
+                                         it.id == 12 ||
+                                         it.id == 13 ||
+                                         it.id == 14 ||
+                                         it.id == 15 ||
+                                         it.id == 16 ||
+                                         it.id == 17 ||
+                                         it.id == 18 ||
+                                         it.id == 19 ||
+                                         it.id == 20*/
+                                it.id == 8 || it.id == 21 || it.id == 22
+                            })
+                        }
+                        1 -> {
+                            viewState.loaded(response.body()!!.filterNot {
+                                /* it.id == 3 ||
+                                 it.id == 4 ||
+                                 it.id == 6 ||
+                                 it.id == 7 ||
+                                 it.id == 10 ||
+                                 it.id == 18 ||
+                                 it.id == 20 ||
+                                 it.id == 21 ||
+                                 it.id == 22*/
+                                it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
+                                        it.id == 18 || it.id == 21 || it.id == 22
+                            })
+                        }
+                        2 -> {
+                            viewState.loaded(response.body()!!.filterNot {
+                                it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
+                                        it.id == 18
+                            })
+                        }
+
+                    }
+
+                }
+
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+
+            }
+        }
+    }
+
+    fun getBrands(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getBrands()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+    }
+
+    fun collectBrandSearchFlow(flow: Flow<String>, brands: List<ProductBrand>){
+        searchJob2 = flow
+            .debounce(3000)
+            .mapLatest { query ->
+                withContext(Dispatchers.IO) {
+                    brands.filter { it.name.contains(query, true) }
+                }
+
+            }
+            .onEach { result ->
+                viewState.loaded(result)
+
+            }.launchIn(presenterScope)
+
+    }
+
+
+    fun getProperties(propertyId: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getProperties()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+
+    }
+
+
+    fun getTopSizesWomen(){
+        getProperties(4)
+    }
+
+    fun getTopSizesMen(){
+        getProperties(1)
+    }
+
+    fun getTopSizesKids(){
+        getProperties(7)
+    }
+
+    fun getShoosMen(){
+        getProperties(3)
+    }
+
+
+
 
 
 }

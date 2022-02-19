@@ -129,7 +129,7 @@ class UserRepository(val context: Context) {
             )
             val photoData = PhotoData(
                 "EditUser",
-                7,
+                Token.userId,
                 listOf(photo)
             )
             try {
@@ -323,7 +323,7 @@ class UserRepository(val context: Context) {
 
     suspend fun getSellerInfo(userId: Int): Response<User>?{
         return try {
-            userApi.getUserInfoById(userId)
+            userApi.getUserInfoById(userId.toLong())
         } catch (e: Throwable) {
             Log.d("mylog", e.message.toString())
             if (e is IOException) {

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="340dp"
+    android:layout_height="260dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/regular_16"
+        android:textColor="@color/black"
+        android:text="Покупателям будет сложнее найти\nваш товар"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="68dp"
+        android:textAppearance="@style/bold_16"
+        android:textColor="@color/black"
+        android:text="Уверены, что хотите пропустить\nэтот шаг?"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="140dp"
+        android:layout_gravity="center_horizontal"
+        style="@style/buttonStyle"
+        app:backgroundTint="@color/black"
+        android:text="Да"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/buttonStyle"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="196dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/outlined_button2"
+        android:text="Нет" />
+
+
+</com.google.android.material.card.MaterialCardView>

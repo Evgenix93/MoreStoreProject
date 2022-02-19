@@ -71,10 +71,10 @@ interface UserApi {
     suspend fun getBrandWishListGetError(): Response<String>
 
     @GET("user/{id}")
-    suspend fun getUserInfoById(@Path("id") id: Int): Response<User>
+    suspend fun getUserInfoById(@Path("id") id: Long): Response<User>
 
     @GET("user/{id}")
-    suspend fun getUserInfoByIdGetError(@Path("id") id: Int): Response<String>
+    suspend fun getUserInfoByIdGetError(@Path("id") id: Long): Response<String>
 
     @POST("wishlist")
     suspend fun addProductToWishList(@Body wishList: BrandWishList): Response<List<Long>>

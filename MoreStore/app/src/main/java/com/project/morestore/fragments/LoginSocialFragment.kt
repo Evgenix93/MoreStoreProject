@@ -78,7 +78,7 @@ class LoginSocialFragment : MvpAppCompatFragment(R.layout.fragment_social_login)
                     LoginSocialFragmentDirections.actionLoginSocialFragmentToRegistration3Fragment(
                         code = 0,
                         phoneOrEmail = user.email ?: user.phone.orEmpty(),
-                        userId = user.id
+                        userId = user.id.toInt()
                     )
                 )
         }
