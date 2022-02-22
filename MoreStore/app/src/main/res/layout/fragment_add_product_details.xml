@@ -141,7 +141,7 @@
                 android:layout_marginTop="34dp"
                 android:layout_marginBottom="4dp"
                 android:background="@color/gray3"
-                app:layout_constraintBottom_toTopOf="@+id/archiveButton"
+                app:layout_constraintBottom_toTopOf="@+id/placeProductButton"
                 app:layout_constraintTop_toBottomOf="@id/allowBuyersBidCheckBox" />
 
             <ImageView

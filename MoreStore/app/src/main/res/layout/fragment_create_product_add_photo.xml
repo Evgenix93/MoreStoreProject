@@ -6,45 +6,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar_create_product"
-        android:id="@+id/toolbar"/>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_create_product"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView44"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/gray3"
-        android:fontFamily="@font/manrope_regular"
-        android:paddingHorizontal="10dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="16dp"
-        android:text="Фотографии — это самая важная часть нашего сообщества.\nПоэтому, чтобы как можно быстрее продать свой товар\nсоветуем прежде ознакомиться\nc"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="309dp" />
+            <TextView
+                android:id="@+id/textView44"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray3"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingHorizontal="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:text="Фотографии — это самая важная часть нашего сообщества.\nПоэтому, чтобы как можно быстрее продать свой товар\nсоветуем прежде ознакомиться\nc"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="309dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="19dp"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="@font/manrope_semibold"
-        android:text="Требованиями к фотографиям."
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView44"
-        app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/manrope_semibold"
+                android:text="Требованиями к фотографиям."
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView44"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/mainPhotoTextView"
@@ -255,17 +262,16 @@
                 android:id="@+id/productMaterialInfoTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/manrope_regular"
                 android:text="Это позволит покупателю узнать больше о вашем товаре"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bottomPhotoTextView" />
-
 
 
             <com.google.android.material.card.MaterialCardView

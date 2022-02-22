@@ -28,7 +28,7 @@ class CreateProductStep4Fragment: Fragment(R.layout.fragment_create_product_step
 
     private fun setClickListeners(){
         binding.howToSellTextView.setOnClickListener {
-            findNavController().navigate(CreateProductStep2FragmentDirections.actionCreateProductStep2FragmentToCreateProductHowToSellFragment())
+            findNavController().navigate(CreateProductStep4FragmentDirections.actionCreateProductStep4FragmentToCreateProductHowToSellFragment())
         }
 
         binding.skipBtn.setOnClickListener { findNavController().navigate(R.id.skipStepDialog) }

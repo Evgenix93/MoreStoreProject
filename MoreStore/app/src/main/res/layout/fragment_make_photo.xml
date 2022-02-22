@@ -55,6 +55,7 @@
         android:id="@+id/videoInfoFrame"
         android:layout_width="match_parent"
         android:layout_height="104dp"
+        android:visibility="gone"
         android:background="@color/black7"
         app:layout_constraintBottom_toTopOf="@+id/footer"
         app:layout_constraintEnd_toEndOf="parent"

@@ -27,7 +27,7 @@ class CreateProductStep3Fragment: Fragment(R.layout.fragment_create_product_step
 
     private fun setClickListeners(){
         binding.howToSellTextView.setOnClickListener {
-            findNavController().navigate(CreateProductStep2FragmentDirections.actionCreateProductStep2FragmentToCreateProductHowToSellFragment())
+            findNavController().navigate(CreateProductStep3FragmentDirections.actionCreateProductStep3FragmentToCreateProductHowToSellFragment())
         }
     }
 
