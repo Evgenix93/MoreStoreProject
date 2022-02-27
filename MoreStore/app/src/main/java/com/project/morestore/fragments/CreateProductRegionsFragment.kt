@@ -15,6 +15,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.RegionsAdapter
 import com.project.morestore.databinding.FragmentRegionsBinding
 import com.project.morestore.models.Region
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.presenters.UserPresenter
@@ -137,7 +138,7 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
         TODO("Not yet implemented")
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
         TODO("Not yet implemented")
     }
 

@@ -202,12 +202,54 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         searchJob = flow
             .debounce(3000)
             .mapLatest { query ->
-                productRepository.getSearchSuggestions(query)
+                val queryStr = query.replace(" и ", " ", true)
+                productRepository.getSearchSuggestions(queryStr)
             }
             .onEach { result ->
                 result?.let {
-                    if(result.code() == 200)
-                    viewState.loadedSuggestions(result.body()!!)
+                    if(result.code() == 200) {
+                        //viewState.loadedSuggestions(result.body()!!)
+                        Log.d("mylog", result.body()?.get(0)?.brand.toString())
+                        val categoryList = result.body()?.filter { it.category.toString() != "false" }.orEmpty().toSet()
+                        val brandList = result.body()?.filter { it.brand.toString() != "false" }.orEmpty().toSet()
+                        val productList = result.body()?.filter { it.product }.orEmpty().toSet()
+
+                        val suggestionsList = mutableListOf<String>()
+                        val suggestionObjects = mutableListOf<SuggestionModels>()
+
+                        if(categoryList.isNotEmpty())
+                        for (category in categoryList){
+                            if(brandList.isNotEmpty())
+                            for(brand in brandList){
+                                if(productList.isNotEmpty())
+                                for(product in productList){
+                                    suggestionsList.add("${category.text} ${brand.text} ${product.text}")
+                                    suggestionObjects.add(SuggestionModels(listOf(category, brand, product)))
+                                }else {suggestionsList.add("${category.text} ${brand.text}")
+                                suggestionObjects.add(SuggestionModels(listOf(category, brand)))}
+                            }else if(productList.isNotEmpty())
+                                for(product in productList){
+                                suggestionsList.add("${category.text} ${product.text}")
+                                    suggestionObjects.add(SuggestionModels(listOf(category, product)))
+                            }else {suggestionsList.add("${category.text}")
+                            suggestionObjects.add(SuggestionModels(listOf(category)))}
+                        }else   if(brandList.isNotEmpty())
+                            for(brand in brandList){
+                                if(productList.isNotEmpty())
+                                for(product in productList){
+                                    suggestionsList.add("${brand.text} ${product.text}")
+                                    suggestionObjects.add(SuggestionModels(listOf(brand, product)))
+                                } else {suggestionsList.add("${brand.text}")
+                                suggestionObjects.add(SuggestionModels(listOf(brand)))}
+                            }else   for(product in productList){
+                            suggestionsList.add("${product.text}")
+                            suggestionObjects.add(SuggestionModels(listOf(product)))
+                        }
+
+                        viewState.loadedSuggestions(suggestionsList, suggestionObjects)
+                        Log.d("mylog", suggestionsList.toString())
+                    }
+
                 }
                 result ?: viewState.error("нет интернета")
 
@@ -239,6 +281,14 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
      viewState.success()
   }
 
+    fun addProductCategory(productCategoryId: Long){
+        val filter = userRepository.getFilter()
+        if(filter.categories.all { it.isChecked == false || it.isChecked == null }.not())
+            filter.categories.find { it.id == productCategoryId.toInt() }?.apply { isChecked = true }
+        userRepository.updateFilter(filter)
+
+    }
+
   fun loadFilter(){
       presenterScope.launch{
           userRepository.loadFilter()
@@ -250,6 +300,14 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         val filter = userRepository.getFilter().apply { brands = listOf(ProductBrand(0, "Stub", 0, null, null), brand) }
         userRepository.updateFilter(filter)
         viewState.success()
+    }
+
+    fun addBrand(brandId: Long){
+        val filter = userRepository.getFilter()
+        if(filter.brands.all { it.isChecked == false || it.isChecked == null }.not())
+            filter.brands.find { it.id == brandId }?.apply { isChecked = true }
+        userRepository.updateFilter(filter)
+
     }
 
     fun getCategories(forWho: Int){
@@ -447,6 +505,26 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
 
             }.launchIn(presenterScope)
 
+    }
+
+    fun addNewBrand(name: String){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.addNewBrand(NewProductBrand(null, name))
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+        }
     }
 
 

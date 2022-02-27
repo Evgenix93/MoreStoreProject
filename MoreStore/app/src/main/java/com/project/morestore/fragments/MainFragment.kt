@@ -354,13 +354,15 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         findNavController().navigate(MainFragmentDirections.actionMainFragmentToOnboarding1Fragment())
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
         binding.toolbarMain.searchEditText.setAdapter(
             SuggestionArrayAdapter(
                 requireContext(),
                 R.layout.item_suggestion_textview,
                 list
-            )
+            ){_, _ ->
+
+            }
         )
 
         binding.toolbarMain.searchEditText.showDropDown()

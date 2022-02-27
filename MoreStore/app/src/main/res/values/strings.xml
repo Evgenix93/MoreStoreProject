@@ -258,6 +258,7 @@
     <string name="you_created_product_info2"><![CDATA[Проверить статус объявления можно тут: Личный кабинет > Мои объявления > На модерации]]></string>
     <string name="delete">Удалить</string>
     <string name="archive">Архивировать</string>
+    <string name="take_video_info">Видео длительностью не более 30 секунд\nДля записи удерживайте кнопку</string>
     <string-array name="type_array">
         <item>Новое</item>
         <item>Дешевле</item>

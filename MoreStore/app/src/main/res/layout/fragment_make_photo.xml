@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/photo_example"/>
+        />
 
 
     <FrameLayout
@@ -43,6 +43,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
+            android:id="@+id/imageIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -69,7 +70,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/manrope_medium"
             android:gravity="center"
-            android:text="Видео длительностью не более 30 секунд\nДля записи удерживайте кнопку"
+            android:text="@string/take_video_info"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -77,22 +78,25 @@
 
     <ProgressBar
         android:id="@+id/loader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:visibility="gone"
-        android:indeterminateTint="@color/green"
         android:max="30"
         android:indeterminate="false"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        style="?attr/circularProgressIndicatorStyle"
+        android:progressDrawable="@drawable/progress_drawable"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+        app:layout_constraintBottom_toBottomOf="@id/takePhotoBtn"
+        app:layout_constraintEnd_toEndOf="@id/takePhotoBtn"
+        app:layout_constraintStart_toStartOf="@id/takePhotoBtn"
+        app:layout_constraintTop_toTopOf="@id/takePhotoBtn" />
 
     <ImageView
+        android:id="@+id/takePhotoBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_marginBottom="40dp"
         android:src="@drawable/ic_photo_btn"
         app:layout_constraintBottom_toBottomOf="parent"

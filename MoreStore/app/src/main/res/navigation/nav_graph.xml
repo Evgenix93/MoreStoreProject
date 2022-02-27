@@ -541,7 +541,11 @@
     <fragment
         android:id="@+id/makePhotoFragment"
         android:name="com.project.morestore.fragments.MakePhotoFragment"
-        android:label="MakePhotoFragment" />
+        android:label="MakePhotoFragment" >
+        <action
+            android:id="@+id/action_makePhotoFragment_to_photoFinishFragment"
+            app:destination="@id/photoFinishFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addCardFragment"
         android:name="com.project.morestore.fragments.AddCardFragment"
@@ -557,6 +561,9 @@
         <action
             android:id="@+id/action_createProductAddPhotoFragment_to_makePhotoFragment"
             app:destination="@id/makePhotoFragment" />
+        <action
+            android:id="@+id/action_createProductAddPhotoFragment_to_makeVideoFragment"
+            app:destination="@id/makeVideoFragment" />
     </fragment>
     <fragment
         android:id="@+id/createProductAddBrandFragment"
@@ -638,6 +645,28 @@
         <action
             android:id="@+id/action_createProductFragment_to_createProductHowToSellFragment"
             app:destination="@id/createProductHowToSellFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoFinishFragment"
+        android:name="com.project.morestore.fragments.PhotoFinishFragment"
+        android:label="PhotoFinishFragment" >
+        <argument
+            android:name="photoFile"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_photoFinishFragment_to_createProductAddPhotoFragment"
+            app:destination="@id/createProductAddPhotoFragment" />
+        <argument
+            android:name="isVideo"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/makeVideoFragment"
+        android:name="com.project.morestore.fragments.MakeVideoFragment"
+        android:label="MakeVideoFragment" >
+        <action
+            android:id="@+id/action_makeVideoFragment_to_photoFinishFragment"
+            app:destination="@id/photoFinishFragment" />
     </fragment>
 
 </navigation>

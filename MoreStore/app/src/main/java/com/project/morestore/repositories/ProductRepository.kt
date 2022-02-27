@@ -265,7 +265,7 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    suspend fun getSearchSuggestions(query: String): Response<List<String>>? {
+    suspend fun getSearchSuggestions(query: String): Response<List<Suggestion>>? {
         return try {
             productApi.getSearchSuggestions(query)
         } catch (e: Exception) {
@@ -669,6 +669,33 @@ class ProductRepository(private val context: Context) {
                 Response.error(400, "".toResponseBody(null))
         }
     }
+
+    suspend fun addNewBrand(brand: NewProductBrand): Response<NewProductBrand>?{
+        return try {
+            productApi.addBrand(brand)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.addBrandGetError(brand)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+
 
     companion object {
         const val USER_PREFS = "user_prefs"

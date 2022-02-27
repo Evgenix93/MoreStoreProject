@@ -30,7 +30,11 @@ class CreateProductAddPhotoFragment: Fragment(R.layout.fragment_create_product_a
             findNavController().navigate(CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakePhotoFragment())
         }
         binding.addPhotoCardView4.setOnClickListener {
-            findNavController().navigate(CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakePhotoFragment())
+            findNavController().navigate(CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakeVideoFragment())
+        }
+
+        binding.addPhotoCardView5.setOnClickListener {
+            findNavController().navigate(CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakeVideoFragment())
         }
 
 

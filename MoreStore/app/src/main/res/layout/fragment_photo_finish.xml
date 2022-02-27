@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/backIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -40,6 +41,8 @@
         android:id="@+id/imageView27"
         android:layout_width="210dp"
         android:layout_height="360dp"
+        android:scaleType="centerCrop"
+
         android:src="@drawable/photo_example"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,6 +50,7 @@
 
 
     <ImageView
+        android:id="@+id/playImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -57,6 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/finishBtn"
         style="@style/buttonStyle"
         android:layout_width="166dp"
         android:layout_height="wrap_content"
@@ -69,6 +74,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/secondOptionBtn"
         style="@style/buttonStyle"
         android:layout_width="166dp"
         android:layout_height="wrap_content"

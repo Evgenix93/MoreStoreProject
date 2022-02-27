@@ -29,6 +29,7 @@ import com.project.morestore.databinding.FragmentProductBinding
 import com.project.morestore.models.Product
 import com.project.morestore.models.ProductBrand
 import com.project.morestore.models.ProductPhoto
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
@@ -250,7 +251,7 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
 
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
 
     }
 

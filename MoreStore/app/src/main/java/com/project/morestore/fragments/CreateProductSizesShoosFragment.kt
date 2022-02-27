@@ -10,6 +10,7 @@ import com.project.morestore.adapters.SizeLineAdapter
 import com.project.morestore.databinding.FragmentCreateProductSizesShoosBinding
 import com.project.morestore.models.Property
 import com.project.morestore.models.SizeLine
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
@@ -85,7 +86,7 @@ class CreateProductSizesShoosFragment: MvpAppCompatFragment(R.layout.fragment_cr
 
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
 
     }
 

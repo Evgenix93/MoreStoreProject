@@ -12,6 +12,7 @@ import com.project.morestore.databinding.FragmentColorsBinding
 import com.project.morestore.databinding.FragmentCreateProductColorsBinding
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Property
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
@@ -58,7 +59,7 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
         TODO("Not yet implemented")
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
         TODO("Not yet implemented")
     }
 

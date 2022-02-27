@@ -2,7 +2,9 @@ package com.project.morestore.apis
 
 import com.project.morestore.models.*
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ProductApi {
@@ -20,7 +22,7 @@ interface ProductApi {
     suspend fun getYouMayLikeProductsGetError(@Query("limit") limit: Int, @Query("id_user") userId: Long): Response<String>
 
     @GET("search/suggestions")
-    suspend fun getSearchSuggestions(@Query("text") text: String): Response<List<String>>
+    suspend fun getSearchSuggestions(@Query("text") text: String): Response<List<Suggestion>>
 
     @GET("search/suggestions")
     suspend fun getSearchSuggestionsGetError(@Query("text") text: String): Response<String>
@@ -42,6 +44,14 @@ interface ProductApi {
 
     @GET("property")
     suspend fun getPropertiesGetError(): Response<String>
+
+
+    @POST("brand")
+    suspend fun addBrand(@Body brand: NewProductBrand): Response<NewProductBrand>
+
+    @POST("brand")
+    suspend fun addBrandGetError(@Body brand: NewProductBrand): Response<String>
+
 
 
 

@@ -12,6 +12,7 @@ import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFirstLaunchBinding
 import com.project.morestore.models.PropertyType
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.Network
@@ -73,7 +74,7 @@ class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch),
 
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
 
     }
 

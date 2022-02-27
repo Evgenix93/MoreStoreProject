@@ -17,6 +17,7 @@ import com.project.morestore.databinding.FragmentFilterMaterialsBinding
 import com.project.morestore.models.Filter
 import com.project.morestore.models.MaterialLine
 import com.project.morestore.models.Property
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.presenters.UserPresenter
@@ -115,7 +116,7 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
         TODO("Not yet implemented")
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
         TODO("Not yet implemented")
     }
 

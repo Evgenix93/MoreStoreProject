@@ -6,6 +6,7 @@ import android.database.MatrixCursor
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentCatalogBinding
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
@@ -40,6 +42,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     private var productAdapter: ProductAdapter by autoCleared()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private val args: CatalogFragmentArgs? by navArgs()
+    private var currentSuggestionModels: SuggestionModels? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,7 +87,25 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         }
 
         binding.searchBtn.setOnClickListener {
-            presenter.getProducts(queryStr = binding.toolbarMain.searchEditText.text.toString(), isFiltered = true, productCategories = null)
+            var queryStr  = binding.toolbarMain.searchEditText.text.toString()
+            currentSuggestionModels?.let {  suggestionModels ->
+                val category = suggestionModels.list.find { it.category.toString() != "false"  }
+                val brand = suggestionModels.list.find { it.brand.toString() != "false" }
+                val product = suggestionModels.list.find { it.product }
+
+                category?.let {
+                    presenter.addProductCategory(it.category.toString().toFloat().toLong())
+                }
+                brand?.let {
+                    presenter.addBrand(it.brand.toString().toFloat().toLong())
+                }
+
+                queryStr = product?.text ?: ""
+
+            }
+            Log.d("mylog", "query: $queryStr")
+            presenter.getProducts(queryStr = queryStr, isFiltered = true, productCategories = null)
+
         }
     }
 
@@ -133,7 +154,9 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
                 requireContext(),
                 R.layout.item_suggestion_textview,
                 listOf("Плащ мужской", "Плащ женский", "Плащ-палатка", "Плащ дождевик")
-            )
+            ){_, _ ->
+
+            }
         )
 
         binding.toolbarMain.searchEditText.dropDownAnchor = R.id.anchor
@@ -165,6 +188,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
                         p3: Int
                     ) {
                         sendBlocking(newText.toString())
+                        currentSuggestionModels = null
 
                     }
 
@@ -278,14 +302,20 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
         binding.loader.isVisible = false
         binding.toolbarMain.searchEditText.setAdapter(
             SuggestionArrayAdapter(
                 requireContext(),
                 R.layout.item_suggestion_textview,
                 list
-            )
+            ){ position, string ->
+                Log.d("mylog", "click position $position")
+                binding.toolbarMain.searchEditText.dismissDropDown()
+                binding.toolbarMain.searchEditText.setText(string)
+                currentSuggestionModels = objectList[position]
+
+            }
         )
         binding.toolbarMain.searchEditText.showDropDown()
     }
