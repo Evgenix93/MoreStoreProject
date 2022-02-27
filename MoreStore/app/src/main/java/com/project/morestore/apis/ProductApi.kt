@@ -2,7 +2,9 @@ package com.project.morestore.apis
 
 import com.project.morestore.models.*
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ProductApi {
@@ -42,6 +44,9 @@ interface ProductApi {
 
     @GET("property")
     suspend fun getPropertiesGetError(): Response<String>
+
+    @POST("product")
+    suspend fun createProduct(@Body createProductData: CreateProductData): Response<Unit>
 
 
 

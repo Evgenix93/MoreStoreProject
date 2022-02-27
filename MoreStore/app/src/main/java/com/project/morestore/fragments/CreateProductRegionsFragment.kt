@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -17,7 +16,7 @@ import com.project.morestore.databinding.FragmentRegionsBinding
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
-import com.project.morestore.presenters.UserPresenter
+import com.project.morestore.singletones.CreateProductData
 import com.project.morestore.util.autoCleared
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
@@ -52,30 +51,12 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
     }
 
     private fun initRegionsRecyclerView(){
-        regionsAdapter = RegionsAdapter(false, false) {}
+        regionsAdapter = RegionsAdapter(false, false) {saveRegion(it)}
         binding.regionsRecyclerView.adapter = regionsAdapter
         binding.regionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         presenter.getAllCities()
     }
 
-
-    private fun safeFilter(){
-        Log.d("Debug", "safeFilter")
-        //Log.d("Debug", "${regionsAdapter.regionsChecked}")
-        val regions = regionsAdapter.getCurrentRegions()
-        //if (regions.all{ it.isChecked != true })
-        //regions.forEachIndexed{index,_->
-        // regions[index].isChecked = true
-        // }
-        com.project.morestore.singletones.FilterState.filter.regions = regions
-    }
-    private fun loadFilter(){
-        // if(FilterState.regions.isNotEmpty()) {
-        // Log.d("Debug", "loadFilter")
-        // regionsAdapter.updateList(FilterState.regions)
-
-        //}
-    }
 
     private fun initToolbar() {
         binding.toolbarCreateProduct.titleTextView.text = "Поиск города"
@@ -85,6 +66,11 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
         }
         binding.toolbarFilter.root.isVisible = false
 
+    }
+
+    private fun saveRegion(region: String){
+        presenter.updateCreateProductData(address = region)
+        findNavController().popBackStack()
     }
 
 

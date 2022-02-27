@@ -3,12 +3,14 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.SizeLineAdapter
 import com.project.morestore.databinding.FragmentCreateProductSizesShoosBinding
 import com.project.morestore.models.Property
+import com.project.morestore.models.Property2
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -20,12 +22,14 @@ class CreateProductSizesShoosFragment: MvpAppCompatFragment(R.layout.fragment_cr
     private val binding: FragmentCreateProductSizesShoosBinding by viewBinding()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var sizeAdapter: SizeLineAdapter by autoCleared()
+    private val args: CreateProductSizesShoosFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
         getSizes()
         initToolBar()
+        initSaveButton()
     }
 
     private fun initToolBar(){
@@ -43,7 +47,21 @@ class CreateProductSizesShoosFragment: MvpAppCompatFragment(R.layout.fragment_cr
     }
 
     private fun getSizes(){
-        presenter.getShoosMen()
+        presenter.getSizesShoos(args.forWho)
+    }
+
+    private fun initSaveButton(){
+        binding.showProductsBtn.setOnClickListener{
+            saveSize()
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun saveSize(){
+        val size = sizeAdapter.getChosenSizes().first { it.isSelected }
+        val property = Property2(size.id.toLong(), size.idCategory.toLong())
+        presenter.removeProperty(size.idCategory.toLong())
+        presenter.updateCreateProductData(extProperty = property)
     }
 
     private fun convertPropertyListToSizeLineList(properties: List<Property>): List<SizeLine>{

@@ -51,7 +51,7 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), User
     }
 
     private fun initColorsRecyclerView(){
-      colorsAdapter = ColorsAdapter(requireContext())
+      colorsAdapter = ColorsAdapter(requireContext(), true)
       binding.colorsRecyclerView.adapter = colorsAdapter
       binding.colorsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }

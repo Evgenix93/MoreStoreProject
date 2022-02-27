@@ -10,15 +10,24 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductConditionBinding
+import com.project.morestore.models.Property2
+import com.project.morestore.mvpviews.MainMvpView
+import com.project.morestore.presenters.MainPresenter
+import com.project.morestore.singletones.CreateProductData
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class CreateProductConditionFragment: Fragment(R.layout.fragment_create_product_condition) {
+class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_create_product_condition), MainMvpView {
     private val binding: FragmentCreateProductConditionBinding by viewBinding()
+    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initChecking()
+        initSaveButton()
     }
+
 
     private fun initToolbar(){
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
@@ -42,6 +51,13 @@ class CreateProductConditionFragment: Fragment(R.layout.fragment_create_product_
 
     }
 
+    private fun initSaveButton(){
+        binding.saveButton.setOnClickListener{
+            saveCondition()
+            findNavController().popBackStack()
+        }
+    }
+
     private fun setCheckActive(image: ImageView){
         binding.newWithTagsCheckImageView.imageTintList = null  //drawable.setTint(ResourcesCompat.getColor(resources, R.color.gray1, null))
         binding.newWithoutTagsCheckImageView.imageTintList = null //drawable.setTint(ResourcesCompat.getColor(resources, R.color.gray1, null))
@@ -49,12 +65,41 @@ class CreateProductConditionFragment: Fragment(R.layout.fragment_create_product_
         binding.goodCheckImageView.imageTintList = null //drawable.setTint(ResourcesCompat.getColor(resources, R.color.gray1, null))
 
         image.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.green, null)) //drawable.setTint(ResourcesCompat.getColor(resources, R.color.green, null))
+    }
 
+   private fun saveCondition(){
+     val property =  when {
+           binding.newWithTagsCheckImageView.imageTintList != null -> Property2(111, 11)
+           binding.newWithoutTagsCheckImageView.imageTintList != null -> Property2(112, 11)
+           binding.excellentCheckImageView.imageTintList != null -> Property2(113, 11)
+           binding.goodCheckImageView.imageTintList != null -> Property2(114, 11)
+           else -> Property2(111, 11)
+       }
+       presenter.removeProperty(11)
+       presenter.updateCreateProductData(extProperty = property)
+   }
 
-
-
+    override fun loaded(result: Any) {
 
     }
 
+    override fun loading() {
 
+    }
+
+    override fun error(message: String) {
+
+    }
+
+    override fun showOnBoarding() {
+
+    }
+
+    override fun loadedSuggestions(list: List<String>) {
+
+    }
+
+    override fun success() {
+
+    }
 }

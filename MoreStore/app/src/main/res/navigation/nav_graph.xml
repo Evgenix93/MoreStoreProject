@@ -498,6 +498,9 @@
         <argument
             android:name="category"
             app:argType="com.project.morestore.models.ProductCategory" />
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep4Fragment"
@@ -512,6 +515,9 @@
         <argument
             android:name="category"
             app:argType="com.project.morestore.models.ProductCategory" />
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep5Fragment"
@@ -522,22 +528,36 @@
             app:destination="@id/createProductHowToSellFragment" />
         <action
             android:id="@+id/action_createProductStep5Fragment_to_createProductFragment"
-            app:destination="@id/createProductFragment" />
+            app:destination="@id/createProductStep6Fragment" />
         <action
             android:id="@+id/action_createProductStep5Fragment_to_createProductAddBrandFragment"
             app:destination="@id/createProductAddBrandFragment" />
         <argument
             android:name="category"
             app:argType="com.project.morestore.models.ProductCategory" />
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/createProductSizesClothFragment"
         android:name="com.project.morestore.fragments.CreateProductSizesClothFragment"
-        android:label="CreateProductSizesClothFragment" />
+        android:label="CreateProductSizesClothFragment" >
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
+        <argument
+            android:name="idCategory"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/createProductSizesShoosFragment"
         android:name="com.project.morestore.fragments.CreateProductSizesShoosFragment"
-        android:label="CreateProductSizesShoosFragment" />
+        android:label="CreateProductSizesShoosFragment" >
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/makePhotoFragment"
         android:name="com.project.morestore.fragments.MakePhotoFragment"
@@ -599,9 +619,9 @@
         android:name="com.project.morestore.dialogs.SkipStepDialog"
         android:label="SkipStepDialog" />
     <fragment
-        android:id="@+id/createProductFragment"
-        android:name="com.project.morestore.fragments.CreateProductFragment"
-        android:label="CreateProductFragment" >
+        android:id="@+id/createProductStep6Fragment"
+        android:name="com.project.morestore.fragments.CreateProductStep6Fragment"
+        android:label="CreateProductStep6Fragment">
         <action
             android:id="@+id/action_createProductFragment_to_createProductSizesClothFragment"
             app:destination="@id/createProductSizesClothFragment" />
@@ -638,6 +658,12 @@
         <action
             android:id="@+id/action_createProductFragment_to_createProductHowToSellFragment"
             app:destination="@id/createProductHowToSellFragment" />
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
+        <argument
+            android:name="brand"
+            app:argType="com.project.morestore.models.ProductBrand" />
     </fragment>
 
 </navigation>

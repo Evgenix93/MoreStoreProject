@@ -43,7 +43,7 @@ class CreateProductStep3Fragment: Fragment(R.layout.fragment_create_product_step
 
     private fun initList(){
         shoosTypeAdapter = ShoosTypeCreateProductAdapter {
-            findNavController().navigate(CreateProductStep3FragmentDirections.actionCreateProductStep3FragmentToCreateProductStep5Fragment(args.category))
+            findNavController().navigate(CreateProductStep3FragmentDirections.actionCreateProductStep3FragmentToCreateProductStep5Fragment(args.category, args.forWho))
         }
         with(binding.itemsList){
             adapter = shoosTypeAdapter

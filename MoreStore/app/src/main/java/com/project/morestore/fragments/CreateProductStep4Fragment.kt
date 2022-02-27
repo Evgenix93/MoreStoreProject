@@ -46,7 +46,7 @@ class CreateProductStep4Fragment: Fragment(R.layout.fragment_create_product_step
 
     private fun initList(){
         styleAdapter = CloathStyleCreateProductAdapter{
-            findNavController().navigate(CreateProductStep4FragmentDirections.actionCreateProductStep4FragmentToCreateProductStep5Fragment(args.category))
+            findNavController().navigate(CreateProductStep4FragmentDirections.actionCreateProductStep4FragmentToCreateProductStep5Fragment(args.category, args.forWho))
         }
         with(binding.itemsList){
             adapter = styleAdapter

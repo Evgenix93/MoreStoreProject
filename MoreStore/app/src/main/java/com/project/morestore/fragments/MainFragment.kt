@@ -58,7 +58,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initViewPager()
         setClickListeners()
         loadFilter()
-        //checkToken()
+
     }
 
     private fun bindFilter(filter: Filter) {

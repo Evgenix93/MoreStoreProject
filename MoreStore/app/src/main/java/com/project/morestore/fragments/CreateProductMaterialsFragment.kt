@@ -3,23 +3,21 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.MaterialAdapter
 import com.project.morestore.databinding.FragmentCreateProductMaterialsBinding
-import com.project.morestore.databinding.FragmentFilterMaterialsBinding
-import com.project.morestore.models.Filter
 import com.project.morestore.models.MaterialLine
 import com.project.morestore.models.Property
+import com.project.morestore.models.Property2
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
-import com.project.morestore.presenters.UserPresenter
+import com.project.morestore.singletones.CreateProductData
 import com.project.morestore.util.autoCleared
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
@@ -38,6 +36,7 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
         initList()
         loadMaterials()
         initToolbar()
+        initSaveButton()
     }
 
 
@@ -50,6 +49,20 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
             setHasFixedSize(true)
         }
 
+    }
+
+    private fun initSaveButton(){
+        binding.saveButton.setOnClickListener{
+            saveMaterials()
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun saveMaterials(){
+        val properties = materialAdapter.getCurrentMaterials().filter{it.isSelected}.map{Property2(it.id, it.idCategory.toLong())}
+        Log.d("Debug", "material properties = $properties")
+        presenter.removeProperty(13)
+        presenter.updateCreateProductData(extProperties = properties)
     }
 
     private fun initSearch(materials: List<Property>){

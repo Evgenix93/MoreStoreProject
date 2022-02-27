@@ -5,12 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.*
+import com.project.morestore.singletones.CreateProductData
 
 import com.project.morestore.singletones.FilterState
 
 import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -96,10 +96,10 @@ class ProductRepository(private val context: Context) {
             }
             if (filter?.regions?.isNotEmpty() == true) {
                 citiesStr =
-                    if(filter.regions.all { it.isChecked == true })
+                    if (filter.regions.all { it.isChecked == true })
                         listOf()
-                else
-                    filter.regions.filter { it.isChecked == true }.map { "id_city=${it.id}" }
+                    else
+                        filter.regions.filter { it.isChecked == true }.map { "id_city=${it.id}" }
             }
 
 
@@ -119,7 +119,8 @@ class ProductRepository(private val context: Context) {
             }
 
             productPropertyStr =
-                filter?.chosenTopSizes?.filter { it.isSelected }?.map { "property[${it.idCategory}][${it.id}]=on" }
+                filter?.chosenTopSizes?.filter { it.isSelected }
+                    ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenBottomSizes?.filter { it.isSelected }
                     ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenShoosSizes?.filter { it.isSelected }
@@ -140,7 +141,6 @@ class ProductRepository(private val context: Context) {
                     ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.colors?.filter { it.isChecked == true }
                     ?.map { "property[${it.idCategory}][${it.id}]=on" }.orEmpty()
-
 
 
             var conditionList = listOf<String>()
@@ -180,7 +180,7 @@ class ProductRepository(private val context: Context) {
             }
 
             var stylesList = listOf<String>()
-            if(filter?.chosenStyles?.isNotEmpty() == true){
+            if (filter?.chosenStyles?.isNotEmpty() == true) {
                 if (filter!!.chosenStyles[1]) {
                     stylesList = stylesList + listOf<String>("property[10][108]=on")
                 }
@@ -236,7 +236,7 @@ class ProductRepository(private val context: Context) {
         return getProducts(userId = Token.userId.toLong())
     }
 
-    suspend fun getSellerProducts(userId: Long): Response<List<Product>>?{
+    suspend fun getSellerProducts(userId: Long): Response<List<Product>>? {
         return getProducts(userId = userId)
     }
 
@@ -668,6 +668,89 @@ class ProductRepository(private val context: Context) {
             else
                 Response.error(400, "".toResponseBody(null))
         }
+    }
+
+    fun updateCreateProductData(
+        forWho: Int? = null,
+        idCategory: Int? = null,
+        idBrand: Long? = null,
+        phone: String? = null,
+        price: String? = null,
+        sale: Int? = null,
+        about: String? = null,
+        address: String? = null,
+        extProperty: Property2? = null,
+        extProperties: List<Property2>? = null
+    ) {
+
+        val property = when (forWho) {
+            0 -> Property2(140, 14)
+            1 -> Property2(141, 14)
+            2 -> Property2(142, 14)
+            else -> null
+        }
+        if(idCategory != null)
+        CreateProductData.createProductData.idCategory = idCategory
+        if(idBrand != null)
+        CreateProductData.createProductData.idBrand = idBrand
+        CreateProductData.createProductData.date = System.currentTimeMillis() / 1000
+        CreateProductData.createProductData.dateEnd = (System.currentTimeMillis() + 3000000) / 1000
+        CreateProductData.createProductData.status = 1
+        if(phone != null)
+        CreateProductData.createProductData.phone = phone
+        if(price != null)
+        CreateProductData.createProductData.price = price
+        if(sale != null)
+        CreateProductData.createProductData.sale = sale
+        if(about != null)
+        CreateProductData.createProductData.about = about
+        if(address != null)
+        CreateProductData.createProductData.address = address
+        if(property != null)
+            if(CreateProductData.createProductData.property == null)
+              CreateProductData.createProductData.property = mutableListOf(property)
+            else
+                CreateProductData.createProductData.property!!.add(property)
+        if(extProperty != null)
+            if(CreateProductData.createProductData.property == null)
+                CreateProductData.createProductData.property = mutableListOf(extProperty)
+            else
+                CreateProductData.createProductData.property!!.add(extProperty)
+
+        if(extProperties != null)
+            if(CreateProductData.createProductData.property == null)
+                CreateProductData.createProductData.property = extProperties.toMutableList()
+            else
+                CreateProductData.createProductData.property!!.addAll(extProperties)
+
+        Log.d("Debug", "createProductData = ${CreateProductData.createProductData}")
+    }
+
+    fun removeProperty(propertyCategory: Long) {
+        CreateProductData.createProductData.property?.removeAll {
+            it.propertyCategory == propertyCategory
+        }
+    }
+
+    suspend fun createProduct(): Response<Unit>? {
+        Log.d("Debug", "productData = ${CreateProductData.createProductData}")
+
+        return try {
+            Network.productApi.createProduct(CreateProductData.createProductData)
+        } catch (e: Throwable) {
+            if (e is IOException)
+                null
+            else
+                Response.error(400, "".toResponseBody(null))
+        }
+    }
+
+    fun loadCreateProductData(): com.project.morestore.models.CreateProductData{
+        return CreateProductData.createProductData
+    }
+
+    fun clearCreateProductData(){
+        CreateProductData.createProductData = CreateProductData()
     }
 
     companion object {
