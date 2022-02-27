@@ -7,6 +7,7 @@ import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
+import com.project.morestore.singletones.CreateProductData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -16,22 +17,24 @@ import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
 
-class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
+class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val authRepository = AuthRepository(context)
     private val productRepository = ProductRepository(context)
     private val userRepository = UserRepository(context)
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
+    private lateinit var user: User
 
 
-    fun addProductToWishList(id: Long){
+    fun addProductToWishList(id: Long) {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.addProductToWishList(BrandWishList(listOf(id)))
-            when(response?.code()){
-                200 ->  viewState.loaded(response.body()!!)
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
-                404 -> { viewState.loaded(emptyList<Product>())
+                404 -> {
+                    viewState.loaded(emptyList<Product>())
                     viewState.error(getStringFromResponse(response.errorBody()!!))
 
                 }
@@ -44,14 +47,15 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getProductWishList(){
+    fun getProductWishList() {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.getProductWishList()
-            when(response?.code()){
-                200 ->  viewState.loaded(response.body()!!)
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
-                404 -> { viewState.loaded(emptyList<Product>())
+                404 -> {
+                    viewState.loaded(emptyList<Product>())
                     viewState.error(getStringFromResponse(response.errorBody()!!))
 
                 }
@@ -63,13 +67,13 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun checkToken(){
+    fun checkToken() {
         presenterScope.launch {
             val token = authRepository.loadToken()
             val tokenSaveTime = authRepository.loadTokenSaveTime()
             val tokenExpiresTime = authRepository.loadTokenExpires()
 
-            if(token == null || tokenSaveTime == null || tokenExpiresTime == null){
+            if (token == null || tokenSaveTime == null || tokenExpiresTime == null) {
                 Log.d("error", token.orEmpty())
                 Log.d("error", tokenSaveTime.toString())
                 Log.d("error", tokenExpiresTime.toString())
@@ -80,10 +84,10 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
             }
 
             val diffTime = System.currentTimeMillis() - tokenSaveTime
-            val isExpired = (diffTime/1000)/60 > tokenExpiresTime
-            if(isExpired){
+            val isExpired = (diffTime / 1000) / 60 > tokenExpiresTime
+            if (isExpired) {
                 viewState.loaded(false)
-            }else {
+            } else {
                 authRepository.setupToken(token)
                 viewState.loaded(true)
             }
@@ -94,36 +98,53 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
     fun loadOnBoardingViewed() {
         presenterScope.launch {
             viewState.loading()
-            if(productRepository.loadOnBoardingViewed()){
+            if (productRepository.loadOnBoardingViewed()) {
                 viewState.loaded(Unit)
-            }else{
-                if(!authRepository.isTokenEmpty()) {
+            } else {
+                if (!authRepository.isTokenEmpty()) {
                     viewState.showOnBoarding()
-                }else{
+                } else {
                     viewState.loaded(Unit)
                 }
             }
         }
     }
 
-    fun getProducts(queryStr: String? = null, productId: Long? = null, isFiltered: Boolean, productCategories: List<ProductCategory>? = null, forWho: List<Boolean>? = null){
+    fun getProducts(
+        queryStr: String? = null,
+        productId: Long? = null,
+        isFiltered: Boolean,
+        productCategories: List<ProductCategory>? = null,
+        forWho: List<Boolean>? = null
+    ) {
         Log.d("mylog", "getProducts")
         presenterScope.launch {
             viewState.loading()
-            val response = if(productCategories != null || forWho != null) {
-                val filter = Filter(chosenForWho = forWho.orEmpty(),   categories = productCategories.orEmpty(), chosenProductStatus = listOf())
+            val response = if (productCategories != null || forWho != null) {
+                val filter = Filter(
+                    chosenForWho = forWho.orEmpty(),
+                    categories = productCategories.orEmpty(),
+                    chosenProductStatus = listOf()
+                )
                 productRepository.getProducts(
                     query = queryStr,
                     filter = filter,
                     productId = productId
                 )
-            }else
-                 productRepository.getProducts(query = queryStr, filter =  if(isFiltered) userRepository.getFilter() else null, productId = productId)
+            } else
+                productRepository.getProducts(
+                    query = queryStr,
+                    filter = if (isFiltered) userRepository.getFilter() else null,
+                    productId = productId
+                )
 
-            when(response?.code()){
-                200 -> if(productId == null) viewState.loaded(response.body()!!) else viewState.loaded(response.body()?.first()!!)
+            when (response?.code()) {
+                200 -> if (productId == null) viewState.loaded(response.body()!!) else viewState.loaded(
+                    response.body()?.first()!!
+                )
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
-                404 -> { viewState.loaded(emptyList<Product>())
+                404 -> {
+                    viewState.loaded(emptyList<Product>())
                     viewState.error(getStringFromResponse(response.errorBody()!!))
 
                 }
@@ -134,14 +155,14 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getYouMayLikeProducts(){
+    fun getYouMayLikeProducts() {
         presenterScope.launch {
-            if(authRepository.getUserId() == 0.toLong()){
+            if (authRepository.getUserId() == 0.toLong()) {
                 return@launch
             }
             viewState.loading()
-            val response = productRepository.getYouMayLikeProducts(4, authRepository.getUserId() )
-            when(response?.code()){
+            val response = productRepository.getYouMayLikeProducts(4, authRepository.getUserId())
+            when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 500 -> viewState.error("500 Internal Server Error")
@@ -150,7 +171,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun changeUserCity(city: String? = null, region: Region? = null){
+    fun changeUserCity(city: String? = null, region: Region? = null) {
         presenterScope.launch {
             viewState.loading()
             val filter = userRepository.getFilter()
@@ -190,15 +211,15 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
 
     }
 
-    fun shareProduct(id: Long){
+    fun shareProduct(id: Long) {
         viewState.loaded(productRepository.getShareProductIntent(id))
     }
 
-    fun getFilter(){
+    fun getFilter() {
         viewState.loaded(userRepository.getFilter())
     }
 
-    fun collectSearchFlow(flow: Flow<String>){
+    fun collectSearchFlow(flow: Flow<String>) {
         searchJob = flow
             .debounce(3000)
             .mapLatest { query ->
@@ -258,10 +279,9 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
 
     }
 
-    fun cancelSearchJob(){
+    fun cancelSearchJob() {
         searchJob?.cancel()
     }
-
 
 
     private suspend fun getStringFromResponse(body: ResponseBody): String {
@@ -274,12 +294,12 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
 
     }
 
-  fun updateProductCategories(productCategories: List<ProductCategory>){
-     val filter = userRepository.getFilter()
-     filter.categories = listOf(ProductCategory(0, "Stub", false)) + productCategories
-     userRepository.updateFilter(filter)
-     viewState.success()
-  }
+    fun updateProductCategories(productCategories: List<ProductCategory>) {
+        val filter = userRepository.getFilter()
+        filter.categories = listOf(ProductCategory(0, "Stub", false)) + productCategories
+        userRepository.updateFilter(filter)
+        viewState.success()
+    }
 
     fun addProductCategory(productCategoryId: Long){
         val filter = userRepository.getFilter()
@@ -296,8 +316,9 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
       }
   }
 
-    fun updateBrand(brand: ProductBrand){
-        val filter = userRepository.getFilter().apply { brands = listOf(ProductBrand(0, "Stub", 0, null, null), brand) }
+    fun updateBrand(brand: ProductBrand) {
+        val filter = userRepository.getFilter()
+            .apply { brands = listOf(ProductBrand(0, "Stub", 0, null, null), brand) }
         userRepository.updateFilter(filter)
         viewState.success()
     }
@@ -314,44 +335,16 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getProductCategories()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> {
                     when (forWho) {
                         0 -> {
                             viewState.loaded(response.body()!!.filterNot {
-                                /* it.id == 1 ||
-                                         it.id == 2 ||
-                                         it.id == 3 ||
-                                         it.id == 4 ||
-                                         it.id == 5 ||
-                                         it.id == 6 ||
-                                         it.id == 7 ||
-                                         it.id == 9 ||
-                                         it.id == 10 ||
-                                         it.id == 11 ||
-                                         it.id == 12 ||
-                                         it.id == 13 ||
-                                         it.id == 14 ||
-                                         it.id == 15 ||
-                                         it.id == 16 ||
-                                         it.id == 17 ||
-                                         it.id == 18 ||
-                                         it.id == 19 ||
-                                         it.id == 20*/
                                 it.id == 8 || it.id == 21 || it.id == 22
                             })
                         }
                         1 -> {
                             viewState.loaded(response.body()!!.filterNot {
-                                /* it.id == 3 ||
-                                 it.id == 4 ||
-                                 it.id == 6 ||
-                                 it.id == 7 ||
-                                 it.id == 10 ||
-                                 it.id == 18 ||
-                                 it.id == 20 ||
-                                 it.id == 21 ||
-                                 it.id == 22*/
                                 it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
                                         it.id == 18 || it.id == 21 || it.id == 22
                             })
@@ -375,7 +368,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getBrands(){
+    fun getBrands() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getBrands()
@@ -394,7 +387,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun collectBrandSearchFlow(flow: Flow<String>, brands: List<ProductBrand>){
+    fun collectBrandSearchFlow(flow: Flow<String>, brands: List<ProductBrand>) {
         searchJob2 = flow
             .debounce(3000)
             .mapLatest { query ->
@@ -411,7 +404,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
     }
 
 
-    fun getProperties(propertyId: Long){
+   private fun getProperties(propertyId: Long) {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getProperties()
@@ -431,20 +424,94 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
 
     }
 
+    fun getSizes(forWho: Int, idCategory: Int){
+        when(forWho){
+            0 -> {
+                val isBottomSizes =  when(idCategory){
+                    4 -> true
+                    7 -> true
+                    9 -> true
+                    11 -> true
+                    else -> false
+                }
+                if(isBottomSizes) {
+                    removeProperty(5)
+                    getProperties(5)
+                }
+                else {
+                    removeProperty(4)
+                    getProperties(4)
+                }
+            }
+            1 -> {
+                val isBottomSizes =  when(idCategory){
+                    8 -> true
+                    9 -> true
+                    11 -> true
+                    else -> false
+                }
+                if(isBottomSizes) {
+                    removeProperty(2)
+                    getProperties(2)
+                }
+                else {
+                    removeProperty(1)
+                    getProperties(1)
+                }
+            }
+            2 -> {
+                val isBottomSizes =  when(idCategory){
+                    8 -> true
+                    9 -> true
+                    11 -> true
+                    else -> false
+                }
+                if(isBottomSizes) {
+                    removeProperty(8)
+                    getProperties(8)
+                }
+                else {
+                    removeProperty(7)
+                    getProperties(7)
+                }
+            }
+        }
+    }
 
-    fun getTopSizesWomen(){
+    fun getSizesShoos(forWho: Int){
+        when(forWho) {
+            0 -> {
+                removeProperty(6)
+                getProperties(6)
+            }
+            1 -> {
+                removeProperty(3)
+                getProperties(3)
+            }
+            2 -> {
+                removeProperty(9)
+                getProperties(9)
+            }
+        }
+    }
+
+    fun getTopSizesWomen() {
         getProperties(4)
     }
 
-    fun getTopSizesMen(){
+    fun getTopSizesMen() {
         getProperties(1)
     }
 
-    fun getTopSizesKids(){
+    fun getTopSizesKids() {
         getProperties(7)
     }
 
-    fun getShoosMen(){
+    fun getBottomSizesWomen(){
+
+    }
+
+    fun getShoosMen() {
         getProperties(3)
     }
 
@@ -452,7 +519,7 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         getProperties(12)
     }
 
-    fun getMaterials(){
+    fun getMaterials() {
         getProperties(13)
     }
 
@@ -527,8 +594,83 @@ class MainPresenter(context: Context): MvpPresenter<MainMvpView>() {
         }
     }
 
+    fun getUserData() {
+        presenterScope.launch {
+            viewState.loading()
+            val response = authRepository.getUserData()
+            when (response?.code()) {
+                200 -> {
 
+                    viewState.loaded(response.body()!!)
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
 
+            }
+        }
+    }
 
+    fun createProduct() {
+        presenterScope.launch {
+            val response = productRepository.createProduct()
+            when (response?.code()) {
+                200 -> {
+                   // viewState.loaded(response.body()!!)
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> {
+                    //viewState.error("нет интернета")
+                }
+                else -> viewState.error("ошибка")
+            }
+        }
+    }
+
+    fun updateCreateProductData(
+        forWho: Int? = null,
+        idCategory: Int? = null,
+        idBrand: Long? = null,
+        phone: String? = null,
+        price: String? = null,
+        sale: Int? = null,
+        about: String? = null,
+        address: String? = null,
+        extProperty: Property2? = null,
+        extProperties: List<Property2>? = null
+    ) {
+        productRepository.updateCreateProductData(
+            forWho,
+            idCategory,
+            idBrand,
+            phone,
+            price,
+            sale,
+            about,
+            address,
+            extProperty,
+            extProperties
+        )
+    }
+
+    fun removeProperty(propertyCategory: Long){
+        productRepository.removeProperty(propertyCategory)
+    }
+
+    fun loadCreateProductData(){
+        viewState.loaded(productRepository.loadCreateProductData())
+    }
+
+    fun clearCreateProductData(){
+        productRepository.clearCreateProductData()
+    }
 
 }

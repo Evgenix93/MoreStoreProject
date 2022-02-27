@@ -2,19 +2,18 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.ColorsAdapter
-import com.project.morestore.databinding.FragmentColorsBinding
 import com.project.morestore.databinding.FragmentCreateProductColorsBinding
-import com.project.morestore.models.Filter
 import com.project.morestore.models.Property
+import com.project.morestore.models.Property2
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import com.project.morestore.singletones.CreateProductData
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -29,11 +28,12 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
         initColorsRecyclerView()
         getColors()
         initToolbar()
+        initSaveButton()
     }
 
 
     private fun initColorsRecyclerView(){
-        colorsAdapter = ColorsAdapter(requireContext())
+        colorsAdapter = ColorsAdapter(requireContext(), false)
         binding.colorsRecyclerView.adapter = colorsAdapter
         binding.colorsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
@@ -50,6 +50,21 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
 
     }
 
+    private fun initSaveButton(){
+        binding.saveButton.setOnClickListener{
+            saveColors()
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun saveColors(){
+        val colors = colorsAdapter.getColors().filter{it.isChecked == true}
+        val properties = colors.map{
+            Property2(it.id, it.idCategory!!)
+        }
+        presenter.removeProperty(12)
+        presenter.updateCreateProductData(extProperties = properties)
+    }
 
     override fun error(message: String) {
 

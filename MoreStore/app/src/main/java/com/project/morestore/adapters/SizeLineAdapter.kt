@@ -59,29 +59,20 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
             binding.UKTextView.isVisible = !otherSize
             binding.otherSizeTextView.isVisible = otherSize
             binding.sizeCheckBox.isChecked = size.isSelected
-
-
             binding.sizeCheckBox.isVisible = !isCreateProduct
             binding.checkImageView.isVisible = isCreateProduct
-
+            binding.checkImageView.imageTintList = if(size.isSelected) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
 
            // binding.checkImageView.drawable.setTint(if(size.isSelected) context?.resources?.getColor(R.color.green) ?: 0 else context?.resources?.getColor(R.color.gray1) ?: 0 )
             itemView.setOnClickListener {
                 //onCheckBoxClicked(size.isSelected.not(), adapterPosition)
-                val checked = size.isSelected.not()
+               // val checked = size.isSelected.not()
                 //binding.checkImageView.drawable.setTint(if(checked) context?.resources?.getColor(R.color.green) ?: 0 else context?.resources?.getColor(R.color.gray1) ?: 0 )
-                binding.checkImageView.imageTintList = if(checked) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
-                size.isSelected = checked
-
-
-
-
+               // binding.checkImageView.imageTintList = if(checked) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
+                size.isSelected = size.isSelected.not()
+                onCheckBoxClicked(size.isSelected, adapterPosition)
             }
-
-
-
         }
-
     }
 
     class ShoosSizeLineViewHolder(
@@ -115,25 +106,18 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
 
             binding.sizeCheckBox.isVisible = !isCreateProduct
             binding.checkImageView.isVisible = isCreateProduct
+            binding.checkImageView.imageTintList = if(size.isSelected) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
 
             //binding.checkImageView.drawable.setTint(if(size.isSelected) context?.resources?.getColor(R.color.green) ?: 0 else context?.resources?.getColor(R.color.gray1) ?: 0 )
             itemView.setOnClickListener {
                // onCheckBoxClicked(size.isSelected.not(), adapterPosition)
-                val checked = size.isSelected.not()
-                binding.checkImageView.imageTintList = if(checked) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
-                size.isSelected = checked
-
-
-
+               // val checked = size.isSelected.not()
+                //binding.checkImageView.imageTintList = if(checked) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
+                //size.isSelected = checked
+                size.isSelected = size.isSelected.not()
+                onCheckBoxClicked(size.isSelected, adapterPosition)
             }
-
-
-
-
-
-
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

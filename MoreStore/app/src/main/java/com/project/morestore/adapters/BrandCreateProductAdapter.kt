@@ -12,23 +12,25 @@ import com.project.morestore.databinding.ItemCreateProductElementBinding
 import com.project.morestore.models.ProductBrand
 import com.project.morestore.models.ProductCategory
 
-class BrandCreateProductAdapter(val onClick: () -> Unit): RecyclerView.Adapter<BrandCreateProductAdapter.BrandViewHolder>() {
+class BrandCreateProductAdapter(val onClick: (ProductBrand) -> Unit): RecyclerView.Adapter<BrandCreateProductAdapter.BrandViewHolder>() {
     var list = listOf<ProductBrand>()
 
-    class BrandViewHolder(view: View, onClick: (Int) -> Unit): RecyclerView.ViewHolder(view){
+    class BrandViewHolder(view: View, private val onClick: (ProductBrand) -> Unit): RecyclerView.ViewHolder(view){
     private val binding: ItemBrandCreateProductBinding by viewBinding()
 
     init {
-        itemView.setOnClickListener {
+      /*  itemView.setOnClickListener {
             onClick(adapterPosition)
-        }
+        }*/
     }
 
     fun bind(brand: ProductBrand, isNewLetter: Boolean){
         binding.brandTextView.text = brand.name
         binding.firstLetterTextView.text = brand.name[0].toString()
         binding.firstLetterTextView.isVisible = isNewLetter
-
+        itemView.setOnClickListener {
+            onClick(brand)
+        }
     }
 
 }
@@ -38,7 +40,7 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrandViewHold
         LayoutInflater.from(parent.context)
             .inflate(R.layout.item_brand_create_product, parent, false)
     ){
-        onClick()
+        onClick(it)
     }
 
 }
@@ -63,4 +65,5 @@ fun updateList(newList: List<ProductBrand>){
     list = newList
     notifyDataSetChanged()
 }
+
 }

@@ -2,6 +2,7 @@ package com.project.morestore.adapters
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ import com.project.morestore.databinding.ItemColorBinding
 import com.project.morestore.models.Color
 import com.project.morestore.models.Property
 
-class ColorsAdapter(private val context: Context): RecyclerView.Adapter<ColorsAdapter.ColorViewHolder>() {
+class ColorsAdapter(private val context: Context, private val isFilter: Boolean): RecyclerView.Adapter<ColorsAdapter.ColorViewHolder>() {
    /* private var colors = listOf(
         Color("Все цвета", R.color.black, false),
         Color("черный", R.color.black, false),
@@ -34,6 +35,7 @@ class ColorsAdapter(private val context: Context): RecyclerView.Adapter<ColorsAd
     )*/
 
     private var properties = listOf<Property>()
+    private var checkedCount = 0
 
     fun updateColors(newList: List<Property>){
         properties = newList
@@ -47,7 +49,7 @@ class ColorsAdapter(private val context: Context): RecyclerView.Adapter<ColorsAd
     class ColorViewHolder(view: View, private val onAllColors: (Boolean) -> Unit, private val onChecked:(Boolean, Int) -> Unit): RecyclerView.ViewHolder(view){
         private val binding: ItemColorBinding by viewBinding()
 
-        fun bind(property: Property, position:Int, context: Context){
+        fun bind(property: Property, position: Int, context: Context, isFilter: Boolean, checkedCount: Int){
             binding.colorTextView.text = property.name
             when (property.name) {
                 "Все цвета" -> {
@@ -73,6 +75,8 @@ class ColorsAdapter(private val context: Context): RecyclerView.Adapter<ColorsAd
                     binding.colorImageView.imageTintList = ColorStateList.valueOf(android.graphics.Color.parseColor(property.ico))
                 }
             }
+
+
             if(property.isChecked == true)
                 if(property.name == "Все цвета")
                     binding.allColorsCheckBox.isChecked = true
@@ -89,12 +93,23 @@ class ColorsAdapter(private val context: Context): RecyclerView.Adapter<ColorsAd
             }
 
             itemView.setOnClickListener{
-                property.isChecked = property.isChecked?.not() ?: true
-                if(property.name == "Все цвета"){
-                    onAllColors(property.isChecked ?: false)
-                }
-                else{
-                    onChecked(property.isChecked ?: false, position)
+                if(isFilter) {
+                    property.isChecked = property.isChecked?.not() ?: true
+                    if (property.name == "Все цвета") {
+                        onAllColors(property.isChecked ?: false)
+                    } else {
+                        onChecked(property.isChecked ?: false, position)
+                    }
+                }else{
+                    Log.d("Debug", "notFilter click")
+                    if(checkedCount < 4){
+                        Log.d("Debug", "bind checkedCount = $checkedCount")
+                        property.isChecked = property.isChecked?.not() ?: true
+                        onChecked(property.isChecked ?: false, position)
+                    }else{
+                        property.isChecked = false
+                        onChecked(property.isChecked ?: false, position)
+                    }
                 }
             }
         }
@@ -110,22 +125,34 @@ class ColorsAdapter(private val context: Context): RecyclerView.Adapter<ColorsAd
                 notifyDataSetChanged()
             },{isChecked, position ->
                 properties[position].isChecked = isChecked
+                if(!isFilter)
+                    checkedCount = properties.filter{it.isChecked == true}.size
+                //Log.d("Debug", "checkedCount = $checkedCount")
                 if(!isChecked){
-                    properties[0].isChecked = false
-                    notifyDataSetChanged()
+                    if(isFilter) {
+                        properties[0].isChecked = false
+                        notifyDataSetChanged()
+                    }else
+                        notifyDataSetChanged()
                 }else{
+                    if(isFilter)
                     if(properties.all { it.isChecked == true || it.name == "Все цвета" }){
                         properties[0].isChecked = true
                         notifyDataSetChanged()
                     }else{
                        notifyItemChanged(position)
                     }
+                    else{
+
+                       notifyDataSetChanged()
+                    }
                 }
             })
     }
 
     override fun onBindViewHolder(holder: ColorViewHolder, position: Int) {
-        holder.bind(properties[position], position,  context)
+        Log.d("Debug", "onBindViewHolder checkedCount = $checkedCount")
+        holder.bind(properties[position], position,  context, isFilter, checkedCount)
     }
 
     override fun getItemCount(): Int {
