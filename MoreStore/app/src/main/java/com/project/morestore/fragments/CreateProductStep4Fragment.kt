@@ -40,7 +40,7 @@ class CreateProductStep4Fragment: MvpAppCompatFragment(R.layout.fragment_create_
             findNavController().navigate(CreateProductStep4FragmentDirections.actionCreateProductStep4FragmentToCreateProductHowToSellFragment())
         }
 
-        binding.skipBtn.setOnClickListener { findNavController().navigate(R.id.skipStepDialog) }
+        binding.skipBtn.setOnClickListener { findNavController().navigate(CreateProductStep4FragmentDirections.actionCreateProductStep4FragmentToSkipStepDialog(args.category, args.forWho, false)) }
     }
 
     private fun initToolbar(){

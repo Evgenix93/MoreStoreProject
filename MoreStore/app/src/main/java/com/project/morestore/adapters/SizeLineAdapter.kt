@@ -14,12 +14,12 @@ import com.project.morestore.databinding.ItemShoesSizeLineBinding
 import com.project.morestore.databinding.ItemSizeLineBinding
 import com.project.morestore.models.SizeLine
 
-class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false, val context: Context? = null) :
+class SizeLineAdapter(private val isShoos: Boolean, private val isCreateProduct: Boolean = false, val context: Context? = null, private val onClick:(Boolean) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var list = listOf<SizeLine>()
     private var bottomSizeList: List<SizeLine>? = null
     private val chosenSizes = mutableListOf<SizeLine>()
-
+    private var isAnyChecked = false
 
     class SizeLineViewHolder(
         view: View,
@@ -30,12 +30,8 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
 
         private val binding: ItemSizeLineBinding by viewBinding()
 
-
-
-
-
         //private val binding2: ItemShoesSizeLineBinding by viewBinding()
-        fun bind(size: SizeLine, otherSize: Boolean) {
+        fun bind(size: SizeLine, otherSize: Boolean, isAnyChecked: Boolean) {
             Log.d("bind", otherSize.toString())
 
             binding.INTTextView.text = size.int
@@ -63,14 +59,20 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
             binding.checkImageView.isVisible = isCreateProduct
             binding.checkImageView.imageTintList = if(size.isSelected) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
 
-           // binding.checkImageView.drawable.setTint(if(size.isSelected) context?.resources?.getColor(R.color.green) ?: 0 else context?.resources?.getColor(R.color.gray1) ?: 0 )
+            // binding.checkImageView.drawable.setTint(if(size.isSelected) context?.resources?.getColor(R.color.green) ?: 0 else context?.resources?.getColor(R.color.gray1) ?: 0 )
             itemView.setOnClickListener {
                 //onCheckBoxClicked(size.isSelected.not(), adapterPosition)
                // val checked = size.isSelected.not()
                 //binding.checkImageView.drawable.setTint(if(checked) context?.resources?.getColor(R.color.green) ?: 0 else context?.resources?.getColor(R.color.gray1) ?: 0 )
                // binding.checkImageView.imageTintList = if(checked) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
-                size.isSelected = size.isSelected.not()
-                onCheckBoxClicked(size.isSelected, adapterPosition)
+                if(size.isSelected) {
+                    size.isSelected = false
+                    onCheckBoxClicked(size.isSelected, adapterPosition)
+                }
+                else if (!isAnyChecked) {
+                    size.isSelected = true
+                    onCheckBoxClicked(size.isSelected, adapterPosition)
+                }
             }
         }
     }
@@ -80,9 +82,8 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
     ) : RecyclerView.ViewHolder(view) {
         private val binding: ItemShoesSizeLineBinding by viewBinding()
 
-        fun bind(size: SizeLine, otherSize: Boolean) {
-            Log.d("mytest", size.toString())
-            Log.d("bind", otherSize.toString())
+        fun bind(size: SizeLine, otherSize: Boolean, isAnyChecked: Boolean) {
+
             binding.ITRUFRTextView.text = size.itRuFr
             binding.WTextView.text = size.int
             binding.USTextView.text = size.us
@@ -93,10 +94,7 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
                 onCheckBoxClicked(binding.sizeCheckBox.isChecked, adapterPosition)
             }
 
-                binding.view8.isVisible = adapterPosition == 0
-
-
-
+            binding.view8.isVisible = adapterPosition == 0
             binding.ITRUFRTextView.isVisible = !otherSize
             binding.WTextView.isVisible = !otherSize
             binding.USTextView.isVisible = !otherSize
@@ -109,13 +107,20 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
             binding.checkImageView.imageTintList = if(size.isSelected) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
 
             //binding.checkImageView.drawable.setTint(if(size.isSelected) context?.resources?.getColor(R.color.green) ?: 0 else context?.resources?.getColor(R.color.gray1) ?: 0 )
+
             itemView.setOnClickListener {
                // onCheckBoxClicked(size.isSelected.not(), adapterPosition)
                // val checked = size.isSelected.not()
                 //binding.checkImageView.imageTintList = if(checked) ColorStateList.valueOf(context?.resources?.getColor(R.color.green) ?: 0) else null
                 //size.isSelected = checked
-                size.isSelected = size.isSelected.not()
-                onCheckBoxClicked(size.isSelected, adapterPosition)
+                if(size.isSelected) {
+                    size.isSelected = false
+                    onCheckBoxClicked(size.isSelected, adapterPosition)
+                }
+                else if (!isAnyChecked) {
+                    size.isSelected = true
+                    onCheckBoxClicked(size.isSelected, adapterPosition)
+                }
             }
         }
     }
@@ -132,10 +137,9 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
                 context = context
             ) { isChecked, position ->
                 list[position].isSelected = isChecked
-                notifyItemChanged(position)
-
-
-
+                isAnyChecked = list.any{it.isSelected}
+                notifyDataSetChanged()
+                onClick(list.any{it.isSelected})
             }
         } else {
             ShoosSizeLineViewHolder(
@@ -145,7 +149,9 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
                 context = context
             ) { isChecked, position ->
                 list[position].isSelected = isChecked
-                notifyItemChanged(position)
+                isAnyChecked = list.any{it.isSelected}
+                notifyDataSetChanged()
+                onClick(list.any{it.isSelected})
             }
         }
 
@@ -153,8 +159,8 @@ class SizeLineAdapter(val isShoos: Boolean, val isCreateProduct: Boolean = false
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is SizeLineViewHolder)
-            holder.bind(list[position], position == list.lastIndex)
-        else (holder as ShoosSizeLineViewHolder).bind(list[position], position == list.lastIndex)
+            holder.bind(list[position], position == list.lastIndex, isAnyChecked)
+        else (holder as ShoosSizeLineViewHolder).bind(list[position], position == list.lastIndex, isAnyChecked)
 
     }
 

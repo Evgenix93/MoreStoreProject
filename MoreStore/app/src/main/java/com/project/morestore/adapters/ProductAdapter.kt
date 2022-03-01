@@ -25,6 +25,7 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
         private val binding: ItemProductBinding by viewBinding()
         init {
             itemView.setOnClickListener {
+                Log.d("MyDebug", "onClick adapter")
                 onClick(adapterPosition)
             }
         }

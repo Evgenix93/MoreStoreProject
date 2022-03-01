@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -15,8 +14,12 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.OptionsAdapter
 import com.project.morestore.databinding.FragmentAddProductDetailsBinding
+import com.project.morestore.dialogs.ArchiveProductDialog
+import com.project.morestore.dialogs.DeleteProductDialog
 import com.project.morestore.models.CreateProductData
 import com.project.morestore.models.CreatedProductId
+import com.project.morestore.models.SuggestionModels
+import com.project.morestore.models.Property2
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.MainMvpView
@@ -32,14 +35,16 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     private var optionsAdapter: OptionsAdapter by autoCleared()
     private val args: CreateProductStep6FragmentArgs by navArgs()
     private val presenter: MainPresenter by moxyPresenter { MainPresenter(requireContext()) }
+    private var firstLaunch = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d("MyDebug", "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         initOptionsRecyclerView()
         setClickListeners()
         initToolbar()
         initChips()
-        initCreateProductButton()
+        initDeleteArchiveButtons()
         loadCreateProductData()
     }
 
@@ -47,6 +52,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         super.onDestroy()
         clearCreateProductData()
     }
+
+
 
     private fun initOptionsRecyclerView() {
         optionsAdapter = OptionsAdapter(requireContext()) { position ->
@@ -56,7 +63,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                 1 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductConditionFragment())
                 2 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductPriceFragment())
                 3 -> {
-                    findNavController().navigate(if (args.category.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(args.forWho) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(args.forWho, args.category.id))
+                    findNavController().navigate(if (args.category!!.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(args.forWho) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(args.forWho, args.category!!.id))
                 }
                 4 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductDescriptionFragment())
                 5 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
@@ -77,8 +84,12 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductHowToSellFragment())
         }
         binding.placeProductButton.setOnClickListener {
+            if(args.product == null)
             getUserData()
+            else
+                createProduct()
         }
+
     }
 
     private fun getUserData() {
@@ -92,8 +103,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     private fun updateCreateProductData(phone: String) {
         presenter.updateCreateProductData(
             forWho = args.forWho,
-            idCategory = args.category.id,
-            idBrand = args.brand.id,
+            idCategory = args.category?.id,
+            idBrand = args.brand?.id,
             phone = phone
         )
     }
@@ -108,6 +119,27 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     }
 
     private fun loadCreateProductData(){
+        if(firstLaunch)
+        if(args.product == null) {
+            presenter.loadCreateProductData()
+            firstLaunch = false
+        }
+        else {
+           // val property = args.product!!.property.map{ Property2(it.idProperty!!, it.id) }.toMutableList()
+            presenter.updateCreateProductData(
+                idCategory = args.product!!.category.id,
+                idBrand = args.product!!.brand?.id,
+                address = args.product!!.address.fullAddress,
+                price = args.product!!.price.toString(),
+                sale = args.product!!.sale.toInt(),
+                about = args.product!!.about,
+                phone = args.product!!.phone,
+                // property = property
+            )
+           presenter.loadCreateProductData()
+            firstLaunch = false
+        }else
+            presenter.loadCreateProductData()
         presenter.loadCreateProductData()
         presenter.loadCreateProductPhotosVideos()
     }
@@ -119,8 +151,14 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             2 -> "Детям"
             else -> ""
         }
-        binding.categoryChip.text = args.category.name
-        binding.brandChip.text = args.brand.name
+        if(args.category == null)
+            binding.categoryChip.text = args.product!!.category.name
+        else
+           binding.categoryChip.text = args.category!!.name
+        if(args.brand == null)
+            binding.brandChip.isVisible = false
+        else
+            binding.brandChip.text = args.brand!!.name
     }
 
     private fun clearCreateProductData(){
@@ -128,7 +166,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     }
 
     private fun initCreateProductButton(){
-        val options = optionsAdapter.getList()
+        val options = optionsAdapter.getList().toMutableList()
+        options.removeFirst()
         if (options.all {it.isChecked}) {
             binding.addPhotoInfoTextView.text = "Отлично! Всё заполнено"
             binding.placeProductButton.isEnabled = true
@@ -147,6 +186,25 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
 
 
+    private fun initDeleteArchiveButtons(){
+        if(args.product != null){
+            binding.deleteButton.isVisible = true
+            binding.archiveButton.isVisible = true
+        }
+        binding.deleteButton.setOnClickListener{
+            DeleteProductDialog().show(childFragmentManager, null)
+            // findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToDeleteProductDialog())
+        }
+        binding.archiveButton.setOnClickListener{
+            ArchiveProductDialog().show(childFragmentManager, null)
+        }
+    }
+
+     fun changeProductStatus(status: Int){
+      presenter.changeProductStatus(args.product!!.id, status)
+    }
+
+
     override fun loaded(result: Any) {
         showLoading(false)
         if(result is User) {
@@ -163,6 +221,13 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             initCreateProductButton()
         }
 
+        }else if(result is String){
+            Toast.makeText(requireContext(), result, Toast.LENGTH_SHORT).show()
+            findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCabinetFragment())
+        } else{
+            optionsAdapter.updateList(result as CreateProductData)
+            initCreateProductButton()
+        }
     }
 
 

@@ -120,6 +120,8 @@ class ProductRepository(private val context: Context) {
                 productIdStr = listOf("id=$it")
             }
 
+            val statusStr = "status= 1"
+
             productPropertyStr =
                 filter?.chosenTopSizes?.filter { it.isSelected }
                     ?.map { "property[${it.idCategory}][${it.id}]=on" }
@@ -198,14 +200,9 @@ class ProductRepository(private val context: Context) {
             }
 
             productPropertyStr = productPropertyStr + conditionList + forWhoList + stylesList
-
-
-
-
-
             productApi.getProducts(
                 PRODUCT_OPTIONS,
-                (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr).joinToString(
+                (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr + statusStr).joinToString(
                     ";"
                 ),
                 userId
@@ -885,6 +882,14 @@ class ProductRepository(private val context: Context) {
 
 
 
+    }
+
+    suspend fun changeProductStatus(productId: Long, status: Int): Response<Unit>?{
+       return try{
+           Network.productApi.changeProductStatus(ChangeStatus(productId, status))
+       }catch (e: Throwable){
+           return null
+       }
     }
 
     companion object {

@@ -6,6 +6,7 @@
     app:cardCornerRadius="8dp">
 
     <TextView
+        android:id="@+id/questionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -17,6 +18,7 @@
         android:text="Уверены, что хотите удалить\nобъявление?"/>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/yesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -28,6 +30,7 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/noButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/buttonStyle"

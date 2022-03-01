@@ -47,7 +47,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
 
 
     private fun initList(){
-        materialAdapter = MaterialAdapter(requireContext(),true)
+        materialAdapter = MaterialAdapter(requireContext(),true){}
         with(binding.materialsList){
             adapter = materialAdapter
             layoutManager = LinearLayoutManager(requireContext())

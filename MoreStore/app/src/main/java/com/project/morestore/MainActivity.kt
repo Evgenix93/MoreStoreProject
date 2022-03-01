@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     private fun handleIntent(intent: Intent){
         Log.d("error", "handleIntent")
         intent.data?.let {
-            findNavController(R.id.fragmentContainerView).navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToProductDetailsFragment(null, it.lastPathSegment.orEmpty()))
+            findNavController(R.id.fragmentContainerView).navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToProductDetailsFragment(null, it.lastPathSegment.orEmpty(), false))
         }
     }
 

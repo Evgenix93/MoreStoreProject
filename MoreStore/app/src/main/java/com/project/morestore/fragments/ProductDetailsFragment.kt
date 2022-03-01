@@ -215,7 +215,14 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     private fun initToolBar() {
         binding.toolbar.titleTextView.text = args.product?.name
-        binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
+        if(args.isSeller) {
+           binding.toolbar.actionIcon.setOnClickListener {
+               findNavController().navigate(
+                   ProductDetailsFragmentDirections.actionProductDetailsFragmentToCreateProductStep6Fragment(product = args.product)
+               )
+           }
+        }
+            binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 
@@ -277,7 +284,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             }
             is Intent -> startIntent(result)
             is Product -> bind(result)
-
         }
 
     }

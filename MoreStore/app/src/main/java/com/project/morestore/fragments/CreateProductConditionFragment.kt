@@ -39,6 +39,7 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
     private fun initChecking(){
         binding.newWithTagsClickView.setOnClickListener {
             setCheckActive(binding.newWithTagsCheckImageView)
+
         }
         binding.newWithoutTagsClickView.setOnClickListener {
             setCheckActive(binding.newWithoutTagsCheckImageView)
@@ -66,6 +67,8 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
         binding.goodCheckImageView.imageTintList = null //drawable.setTint(ResourcesCompat.getColor(resources, R.color.gray1, null))
 
         image.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.green, null)) //drawable.setTint(ResourcesCompat.getColor(resources, R.color.green, null))
+        binding.saveButton.isEnabled = true
+        binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
     }
 
    private fun saveCondition(){

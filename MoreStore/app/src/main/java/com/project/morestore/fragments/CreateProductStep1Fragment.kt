@@ -39,10 +39,6 @@ class CreateProductStep1Fragment: Fragment(R.layout.fragment_create_product_step
         binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
     }
 
-
-
-
-
     private fun initList(){
         forWhoAdapter = ForWhoCreateProductAdapter{ position ->
             findNavController().navigate(CreateProductStep1FragmentDirections.actionCreateProductStep1FragmentToCreateProductStep2Fragment(position))
@@ -56,4 +52,8 @@ class CreateProductStep1Fragment: Fragment(R.layout.fragment_create_product_step
         forWhoAdapter.notifyDataSetChanged()
 
     }
+
+   fun saveProduct(productId: Long){
+
+   }
 }

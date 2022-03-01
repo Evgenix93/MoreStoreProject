@@ -1,7 +1,10 @@
 package com.project.morestore.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -31,6 +34,18 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
     }
 
     private fun initSaveButton(){
+
+        binding.descriptionEditText.addTextChangedListener (onTextChanged = {string, _, _, _ ->
+            if(string.isNullOrEmpty()) {
+                binding.saveButton.isEnabled = false
+                binding.saveButton.backgroundTintList =
+                    ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
+            }else{
+                binding.saveButton.isEnabled = true
+                binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
+            }
+        })
+
         binding.saveButton.setOnClickListener{
             saveDescription()
             findNavController().popBackStack()

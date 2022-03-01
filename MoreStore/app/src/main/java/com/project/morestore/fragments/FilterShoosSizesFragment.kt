@@ -45,7 +45,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
     }
 
     private fun initList(){
-        sizeAdapter = SizeLineAdapter(true)
+        sizeAdapter = SizeLineAdapter(true){}
         with(binding.sizesList) {
             adapter = sizeAdapter
             layoutManager = LinearLayoutManager(requireContext())

@@ -1,7 +1,9 @@
 package com.project.morestore.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,7 +32,6 @@ class CreateProductSizesShoosFragment: MvpAppCompatFragment(R.layout.fragment_cr
         initList()
         getSizes()
         initToolBar()
-        initSaveButton()
     }
 
     private fun initToolBar(){
@@ -39,7 +40,7 @@ class CreateProductSizesShoosFragment: MvpAppCompatFragment(R.layout.fragment_cr
     }
 
     private fun initList(){
-        sizeAdapter = SizeLineAdapter(true, true, context = requireContext())
+        sizeAdapter = SizeLineAdapter(true, true, context = requireContext()){initSaveButton(it)}
         with(binding.sizesList){
             adapter = sizeAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -51,7 +52,16 @@ class CreateProductSizesShoosFragment: MvpAppCompatFragment(R.layout.fragment_cr
         presenter.getSizesShoos(args.forWho)
     }
 
-    private fun initSaveButton(){
+    private fun initSaveButton(isChecked: Boolean){
+        if(isChecked) {
+            binding.showProductsBtn.isEnabled = true
+            binding.showProductsBtn.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
+        }
+        else{
+            binding.showProductsBtn.isEnabled = false
+            binding.showProductsBtn.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
+        }
+
         binding.showProductsBtn.setOnClickListener{
             saveSize()
             findNavController().popBackStack()

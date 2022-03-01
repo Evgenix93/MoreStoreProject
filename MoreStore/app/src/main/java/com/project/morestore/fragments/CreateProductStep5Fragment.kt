@@ -39,7 +39,6 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
         initToolbar()
         setClickListeners()
         getBrands()
-
     }
 
 
@@ -47,7 +46,7 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     private fun initList(){
         brandAdapter = BrandCreateProductAdapter{
-            findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductFragment(args.category, args.forWho, it))
+            findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductFragment(category = args.category, forWho = args.forWho, brand = it))
         }
         with(binding.brandList){
             adapter = brandAdapter
@@ -109,7 +108,7 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
             findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductAddBrandFragment(args.category, args.forWho))
         }
 
-        binding.skipBtn.setOnClickListener { findNavController().navigate(R.id.skipStepDialog) }
+        binding.skipBtn.setOnClickListener { findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToSkipStepDialog(args.category, args.forWho, true)) }
     }
 
     private fun initToolbar(){

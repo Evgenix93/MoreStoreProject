@@ -1,8 +1,12 @@
 package com.project.morestore.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -34,11 +38,58 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
     }
 
     private fun initSaveButton(){
+        binding.originalPriceEditText.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(p0.isNullOrEmpty()){
+                    binding.saveButton.isEnabled = false
+                    binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
+                }else{
+                    if(binding.salePriceEditText.text.toString().isNotEmpty()){
+                        binding.saveButton.isEnabled = true
+                        binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
+                    }
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+
+        binding.salePriceEditText.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(p0.isNullOrEmpty()){
+                    binding.saveButton.isEnabled = false
+                    binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
+                }else{
+                    if(binding.originalPriceEditText.text.toString().isNotEmpty()){
+                        binding.saveButton.isEnabled = true
+                        binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
+                    }
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+
         binding.saveButton.setOnClickListener{
             savePrice()
             findNavController().popBackStack()
         }
     }
+
 
     private fun savePrice(){
       val originalPrice = binding.originalPriceEditText.text.toString().toInt()
@@ -65,7 +116,10 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
 
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
+        TODO("Not yet implemented")
     }
+
 
     override fun success() {
 

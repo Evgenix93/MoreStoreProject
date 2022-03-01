@@ -13,7 +13,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemMaterialLineBinding
 import com.project.morestore.models.MaterialLine
 
-class MaterialAdapter(private val context: Context, private val isFilter: Boolean) : RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder>() {
+class MaterialAdapter(private val context: Context, private val isFilter: Boolean, private val onClick: (Boolean) -> Unit) : RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder>() {
 
     private var list = listOf<MaterialLine>()
     private var checkedCount = 0
@@ -76,6 +76,7 @@ class MaterialAdapter(private val context: Context, private val isFilter: Boolea
 
         },{isChecked, position ->
                 list[position].isSelected = isChecked
+                onClick(list.any{it.isSelected})
                 checkedCount = list.filter{ it.isSelected }.size
                 if(!isChecked){
                     if(isFilter) {
