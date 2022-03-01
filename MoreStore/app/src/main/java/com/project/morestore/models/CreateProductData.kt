@@ -19,5 +19,6 @@ data class CreateProductData(
     var name: String? = null,
     var about: String? = null,
     var phone: String? = null,
-    var property: MutableList<Property2>? = null
+    var property: MutableList<Property2>? = null,
+    var id: Long? = null
 )

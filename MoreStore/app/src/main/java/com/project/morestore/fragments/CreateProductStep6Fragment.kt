@@ -36,6 +36,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     private val args: CreateProductStep6FragmentArgs by navArgs()
     private val presenter: MainPresenter by moxyPresenter { MainPresenter(requireContext()) }
     private var firstLaunch = true
+    private var isChangingProduct = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d("MyDebug", "onViewCreated")
@@ -46,6 +47,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         initChips()
         initDeleteArchiveButtons()
         loadCreateProductData()
+        if(args.product != null)
+            binding.placeProductButton.text = "Сохранить изменения"
     }
 
     override fun onDestroy() {
@@ -87,7 +90,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             if(args.product == null)
             getUserData()
             else
-                createProduct()
+                changeProduct()
         }
 
     }
@@ -137,7 +140,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                 sale = args.product!!.sale.toInt(),
                 about = args.product!!.about,
                 phone = args.product!!.phone,
-                extProperties = property
+                extProperties = property,
+                id = args.product!!.id
             )
            presenter.loadCreateProductData()
             val map = mutableMapOf<Int, File>()
@@ -209,6 +213,10 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
       presenter.changeProductStatus(args.product!!.id, status)
     }
 
+    private fun changeProduct(){
+        presenter.changeProduct()
+    }
+
 
     override fun loaded(result: Any) {
         showLoading(false)
@@ -222,7 +230,9 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         else if(result is CreatedProductId)
             findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(null, result.id.toString(), true))
         else if(result is MutableMap<*,*>) {
-            optionsAdapter.updatePhotoInfo(result as MutableMap<Int, File>)
+            val map = mutableMapOf<Int, File>()
+            map[0] = File("")
+            optionsAdapter.updatePhotoInfo(if(args.product != null) map else result as MutableMap<Int, File>)
             initCreateProductButton()
         }
         else if(result is String){

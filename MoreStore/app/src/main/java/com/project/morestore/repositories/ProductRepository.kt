@@ -706,7 +706,8 @@ class ProductRepository(private val context: Context) {
         about: String? = null,
         address: String? = null,
         extProperty: Property2? = null,
-        extProperties: List<Property2>? = null
+        extProperties: List<Property2>? = null,
+        id: Long? = null
     ) {
 
         val property = when (forWho) {
@@ -748,6 +749,9 @@ class ProductRepository(private val context: Context) {
                 CreateProductData.createProductData.property = extProperties.toMutableList()
             else
                 CreateProductData.createProductData.property!!.addAll(extProperties)
+
+        if(id != null)
+            CreateProductData.createProductData.id = id
 
         Log.d("Debug", "createProductData = ${CreateProductData.createProductData}")
     }
@@ -890,6 +894,31 @@ class ProductRepository(private val context: Context) {
        }catch (e: Throwable){
            return null
        }
+    }
+
+    suspend fun changeProductData(): Response<List<CreatedProductId>>?{
+        return try {
+            productApi.changeProduct(CreateProductData.createProductData)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.changeProductGetError(CreateProductData.createProductData)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
     }
 
     companion object {

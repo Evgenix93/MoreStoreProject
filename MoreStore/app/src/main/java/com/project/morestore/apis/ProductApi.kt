@@ -68,28 +68,6 @@ interface ProductApi {
     suspend fun uploadProductVideosGetError(@Body videos: VideoData): Response<String>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    suspend fun getProducts(@Query("optionally") options: String): Response<Unit>
-
     @GET("category/subs?id_category=2")
     suspend fun getProductCategoriesAdults(): Response<List<ProductCategoryAdults>>?
 
@@ -101,4 +79,12 @@ interface ProductApi {
 
     @POST("product/put_product")
     suspend fun changeProductStatus(@Body deleteData: ChangeStatus): Response<Unit>
+
+    @POST("product/put_product")
+    suspend fun changeProduct(@Body productData: CreateProductData): Response<List<CreatedProductId>>
+
+    @POST("product/put_product")
+    suspend fun changeProductGetError(@Body productData: CreateProductData): Response<String>
+
+
 }

@@ -650,7 +650,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         about: String? = null,
         address: String? = null,
         extProperty: Property2? = null,
-        extProperties: List<Property2>? = null
+        extProperties: List<Property2>? = null,
+        id: Long? = null
     ) {
         productRepository.updateCreateProductData(
             forWho,
@@ -662,7 +663,9 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             about,
             address,
             extProperty,
-            extProperties
+            extProperties,
+            id
+
         )
     }
 
@@ -786,6 +789,26 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                null -> {}
            }
        }
+    }
+
+    fun changeProduct(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.changeProductData()
+            when (response?.code()) {
+                200 -> { viewState.loaded(response.body()!!.first())}
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+        }
     }
 
 }
