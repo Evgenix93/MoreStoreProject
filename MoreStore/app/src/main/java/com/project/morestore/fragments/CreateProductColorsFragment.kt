@@ -1,7 +1,9 @@
 package com.project.morestore.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -28,12 +30,11 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
         initColorsRecyclerView()
         getColors()
         initToolbar()
-        initSaveButton()
     }
 
 
     private fun initColorsRecyclerView(){
-        colorsAdapter = ColorsAdapter(requireContext(), false)
+        colorsAdapter = ColorsAdapter(requireContext(), false){initSaveButton(it)}
         binding.colorsRecyclerView.adapter = colorsAdapter
         binding.colorsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
@@ -50,10 +51,17 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
 
     }
 
-    private fun initSaveButton(){
+    private fun initSaveButton(isChecked: Boolean){
         binding.saveButton.setOnClickListener{
             saveColors()
             findNavController().popBackStack()
+        }
+        if(isChecked){
+            binding.saveButton.isEnabled = true
+            binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
+        }else{
+            binding.saveButton.isEnabled = false
+            binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
         }
     }
 

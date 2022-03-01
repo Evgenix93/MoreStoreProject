@@ -19,13 +19,14 @@ import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
+import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_colthes),
     UserMvpView {
     private val binding: FragmentFilterSizesColthesBinding by viewBinding()
-    private val sizeAdapter = SizeLineAdapter(false)
+    private var sizeAdapter: SizeLineAdapter by autoCleared()
     private var topSizeList = listOf<SizeLine>()
     private var bottomSizeList = listOf<SizeLine>()
     private var isForWomen = true
@@ -51,6 +52,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
 
     private fun initList() {
+        sizeAdapter = SizeLineAdapter(false){}
         with(binding.sizesList) {
             adapter = sizeAdapter
             layoutManager = LinearLayoutManager(requireContext())

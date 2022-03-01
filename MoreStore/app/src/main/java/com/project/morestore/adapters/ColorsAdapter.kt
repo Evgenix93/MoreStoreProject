@@ -14,7 +14,7 @@ import com.project.morestore.databinding.ItemColorBinding
 import com.project.morestore.models.Color
 import com.project.morestore.models.Property
 
-class ColorsAdapter(private val context: Context, private val isFilter: Boolean): RecyclerView.Adapter<ColorsAdapter.ColorViewHolder>() {
+class ColorsAdapter(private val context: Context, private val isFilter: Boolean, private val  onClick:(Boolean) -> Unit): RecyclerView.Adapter<ColorsAdapter.ColorViewHolder>() {
    /* private var colors = listOf(
         Color("Все цвета", R.color.black, false),
         Color("черный", R.color.black, false),
@@ -125,6 +125,7 @@ class ColorsAdapter(private val context: Context, private val isFilter: Boolean)
                 notifyDataSetChanged()
             },{isChecked, position ->
                 properties[position].isChecked = isChecked
+                onClick(properties.any{it.isChecked == true})
                 if(!isFilter)
                     checkedCount = properties.filter{it.isChecked == true}.size
                 //Log.d("Debug", "checkedCount = $checkedCount")

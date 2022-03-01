@@ -86,7 +86,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 findNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToProductDetailsFragment(
                         it,
-                        null
+                        null,
+                        false
                     )
                 )
             }
@@ -96,7 +97,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 findNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToProductDetailsFragment(
                         it,
-                        null
+                        null,
+                        false
                     )
                 )
             }

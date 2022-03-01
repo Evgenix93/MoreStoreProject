@@ -272,6 +272,9 @@
         <action
             android:id="@+id/action_cabinetFragment_to_cabinetGuestFragment"
             app:destination="@id/cabinetGuestFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <dialog
         android:id="@+id/resumeRegisterDialog"
@@ -336,6 +339,12 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <argument
+            android:name="isSeller"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_createProductStep6Fragment"
+            app:destination="@id/createProductStep6Fragment" />
     </fragment>
     <fragment
         android:id="@+id/changeRegionFragment"
@@ -518,6 +527,9 @@
         <argument
             android:name="forWho"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_createProductStep4Fragment_to_skipStepDialog"
+            app:destination="@id/skipStepDialog" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep5Fragment"
@@ -538,6 +550,9 @@
         <argument
             android:name="forWho"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_createProductStep5Fragment_to_skipStepDialog"
+            app:destination="@id/skipStepDialog" />
     </fragment>
     <fragment
         android:id="@+id/createProductSizesClothFragment"
@@ -616,7 +631,11 @@
     <dialog
         android:id="@+id/deleteProductDialog"
         android:name="com.project.morestore.dialogs.DeleteProductDialog"
-        android:label="DeleteProductDialog" />
+        android:label="DeleteProductDialog" >
+        <argument
+            android:name="isDelete"
+            app:argType="boolean" />
+    </dialog>
     <dialog
         android:id="@+id/saveProductDialog"
         android:name="com.project.morestore.dialogs.SaveProductDialog"
@@ -624,7 +643,23 @@
     <dialog
         android:id="@+id/skipStepDialog"
         android:name="com.project.morestore.dialogs.SkipStepDialog"
-        android:label="SkipStepDialog" />
+        android:label="SkipStepDialog" >
+        <action
+            android:id="@+id/action_skipStepDialog_to_createProductStep6Fragment"
+            app:destination="@id/createProductStep6Fragment" />
+        <argument
+            android:name="category"
+            app:argType="com.project.morestore.models.ProductCategory" />
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
+        <argument
+            android:name="isBrand"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_skipStepDialog_to_createProductStep5Fragment"
+            app:destination="@id/createProductStep5Fragment" />
+    </dialog>
     <fragment
         android:id="@+id/createProductStep6Fragment"
         android:name="com.project.morestore.fragments.CreateProductStep6Fragment"
@@ -661,16 +696,32 @@
             app:destination="@id/createProductPriceFragment" />
         <argument
             android:name="category"
-            app:argType="com.project.morestore.models.ProductCategory" />
+            app:argType="com.project.morestore.models.ProductCategory"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <action
             android:id="@+id/action_createProductFragment_to_createProductHowToSellFragment"
             app:destination="@id/createProductHowToSellFragment" />
         <argument
-            android:name="forWho"
-            app:argType="integer" />
-        <argument
             android:name="brand"
-            app:argType="com.project.morestore.models.ProductBrand" />
+            app:argType="com.project.morestore.models.ProductBrand"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="forWho"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="product"
+            app:argType="com.project.morestore.models.Product"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_createProductStep6Fragment_to_deleteProductDialog"
+            app:destination="@id/deleteProductDialog" />
+        <action
+            android:id="@+id/action_createProductStep6Fragment_to_cabinetFragment"
+            app:destination="@id/cabinetFragment" />
     </fragment>
     <fragment
         android:id="@+id/photoFinishFragment"

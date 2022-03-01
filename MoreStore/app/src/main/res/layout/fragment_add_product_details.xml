@@ -19,11 +19,12 @@
 
             <TextView
                 android:id="@+id/addPhotoInfoTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/add_photo_description"
                 android:textAppearance="@style/bold_24"
+                android:layout_marginHorizontal="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

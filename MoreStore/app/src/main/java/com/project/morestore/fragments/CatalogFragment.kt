@@ -113,7 +113,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     private fun initList() {
         productAdapter = ProductAdapter(null) {
             findNavController().navigate(
-                CatalogFragmentDirections.actionCatalogFragmentToProductDetailsFragment(it, null)
+                CatalogFragmentDirections.actionCatalogFragmentToProductDetailsFragment(it, null, false)
             )
         }
         with(binding.productList) {

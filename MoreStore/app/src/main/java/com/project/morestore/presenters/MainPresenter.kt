@@ -7,7 +7,6 @@ import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
-import com.project.morestore.singletones.CreateProductData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -671,6 +670,16 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     fun clearCreateProductData(){
         productRepository.clearCreateProductData()
+    }
+
+    fun changeProductStatus(productId: Long, status: Int){
+       presenterScope.launch{
+           val response = productRepository.changeProductStatus(productId, status)
+           when(response?.code()){
+               200 -> viewState.loaded("Success")
+               null -> {}
+           }
+       }
     }
 
 }

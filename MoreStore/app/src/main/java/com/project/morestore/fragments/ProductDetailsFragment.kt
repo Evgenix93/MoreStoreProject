@@ -57,8 +57,6 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         setClickListeners()
         getProductWishList()
         hideBottomNav()
-
-
     }
 
     private fun brandClick(brand: ProductBrand){
@@ -118,21 +116,21 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         initShare(product.id)
         initViewPager(product.photo)
         binding.toolbar.titleTextView.text = product.name
-        binding.chosenBrandTextView.text = product.brand.name
-        binding.productConditionTextView.text = product.property.find { it.name == "Состояние" }?.value
-        binding.sizeTextView.text = product.property.find{Range.create(1, 9).contains(it.id.toInt())}?.value.orEmpty()
-        Log.d("product", product.property.toString())
-        binding.productColorTextView.text = product.property.find { it.name == "Цвет" }?.value
-        val colorValue = product.property.find { it.name == "Цвет" }?.ico
+       // binding.chosenBrandTextView.text = product.brand?.name
+       // binding.productConditionTextView.text = product.property.find { it.name == "Состояние" }?.value
+      //  binding.sizeTextView.text = product.property.find{Range.create(1, 9).contains(it.id.toInt())}?.value.orEmpty()
+      //  Log.d("product", product.property.toString())
+      //  binding.productColorTextView.text = product.property.find { it.name == "Цвет" }?.value
+      //  val colorValue = product.property.find { it.name == "Цвет" }?.ico
 
-        if(colorValue == null)
-            binding.colorCircle.background = ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
-        else
-          binding.colorCircle.background.setTint(Color.parseColor(colorValue))
+      //  if(colorValue == null)
+        //    binding.colorCircle.background = ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
+       // else
+         // binding.colorCircle.background.setTint(Color.parseColor(colorValue))
 
         binding.productCityTextView.text = product.address.fullAddress
-        binding.productBrandTextView.text = product.brand.name
-        binding.productSizeTextView.text = product.property.find { Range.create(1,9).contains(it.id.toInt()) }?.value
+//        binding.productBrandTextView.text = product.brand?.name
+      //  binding.productSizeTextView.text = product.property.find { Range.create(1,9).contains(it.id.toInt()) }?.value
         binding.sizeChar.isVisible = false
 
 
@@ -159,7 +157,9 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         binding.userClickableView.setOnClickListener{
             findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToSellerProfileFragment(product.user))
         }
-        binding.chosenBrandTextView.setOnClickListener { brandClick(product.brand.apply { isChecked = true }) }
+        binding.chosenBrandTextView.setOnClickListener {
+            //brandClick(product.brand?.apply { isChecked = true })
+        }
         val listener = MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)
         binding.sellerPhoneTextView.addTextChangedListener(listener)
         binding.sellerPhoneTextView.setText(product.phoneShow)
@@ -182,7 +182,14 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
 
     private fun initToolBar(){
         binding.toolbar.titleTextView.text = args.product?.name
-        binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
+        if(args.isSeller) {
+           binding.toolbar.actionIcon.setOnClickListener {
+               findNavController().navigate(
+                   ProductDetailsFragmentDirections.actionProductDetailsFragmentToCreateProductStep6Fragment(product = args.product)
+               )
+           }
+        }
+            binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 
@@ -233,7 +240,6 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
          }
             is Intent -> startIntent(result)
             is Product -> bind(result)
-
         }
 
     }

@@ -31,5 +31,6 @@ data class Filter(
     var isCurrentLocationFirstLoaded: Boolean = false,
     var isCurrentLocationChosen: Boolean = false,
     var fromPrice: Int? = null,
-    var untilPrice: Int? = null
+    var untilPrice: Int? = null,
+    var status: Int = 1
 )

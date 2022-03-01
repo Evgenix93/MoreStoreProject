@@ -47,7 +47,7 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         initToolbar()
         initProductsButtons()
         initList()
-       // getActiveProducts()
+        getActiveProducts()
         getFilter()
     }
 
@@ -144,18 +144,11 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         countTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
         countTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.green, null))
         listNameTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.green, null))
-
-
-
-
-
-
-
     }
 
     private fun getActiveProducts(){
+        Log.d("MyDebug", "getActiveProducts")
         presenter.getUserProducts()
-
     }
 
     private fun getFilter(){
@@ -180,13 +173,15 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
     }
 
     private fun initList(){
-        productAdapter = ProductAdapter(0) {}
+        productAdapter = ProductAdapter(null) {
+            Log.d("MyDebug", "onProduct Click")
+            findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToProductDetailsFragment(it, null, true))
+        }
 
         with(binding.productList){
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
             setHasFixedSize(true)
-
         }
     }
 
@@ -202,7 +197,6 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
     override fun error(message: String) {
         showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     }
 
     override fun loading() {
@@ -232,11 +226,13 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         }
 
         if(result is List<*>){
+            Log.d("MyDebug", "list is loaded ${result as List<Product>}")
             showLoading(false)
             binding.noProductsTextView.isVisible = result.isEmpty()
             binding.glassesImageView.isVisible = result.isEmpty()
             binding.createNewProductBtn.isVisible = result.isEmpty()
             binding.createNewProductBtn2.isVisible = result.isNotEmpty()
+            binding.emptyScrollView.isVisible = false
             binding.productList.isVisible = result.isNotEmpty()
             productAdapter.updateList(result as List<Product>)
 

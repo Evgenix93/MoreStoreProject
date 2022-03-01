@@ -55,35 +55,15 @@ interface ProductApi {
     @POST("brand")
     suspend fun addBrandGetError(@Body brand: NewProductBrand): Response<String>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    suspend fun getProducts(@Query("optionally") options: String): Response<Unit>
-
     @GET("category/subs?id_category=2")
     suspend fun getProductCategoriesAdults(): Response<List<ProductCategoryAdults>>?
 
     @GET("category/subs?id_category=1")
     suspend fun getProductCategoriesKids(): Response<List<ProductCategoryKids1>>?
 
-
-
     @GET("category")
     suspend fun getProductCategories(): Response<List<ProductCategory>>
+
+    @POST("product/put_product")
+    suspend fun changeProductStatus(@Body deleteData: ChangeStatus): Response<Unit>
 }

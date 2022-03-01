@@ -1,11 +1,13 @@
 package com.project.morestore.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -37,13 +39,12 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
         initList()
         loadMaterials()
         initToolbar()
-        initSaveButton()
     }
 
 
 
     private fun initList(){
-        materialAdapter = MaterialAdapter(requireContext(),false)
+        materialAdapter = MaterialAdapter(requireContext(),false){initSaveButton(it)}
         with(binding.materialsRecyclerView){
             adapter = materialAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -52,7 +53,16 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
 
     }
 
-    private fun initSaveButton(){
+    private fun initSaveButton(isChecked: Boolean){
+
+        if(isChecked){
+            binding.saveButton.isEnabled = true
+            binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
+        }else{
+            binding.saveButton.isEnabled = false
+            binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
+        }
+
         binding.saveButton.setOnClickListener{
             saveMaterials()
             findNavController().popBackStack()

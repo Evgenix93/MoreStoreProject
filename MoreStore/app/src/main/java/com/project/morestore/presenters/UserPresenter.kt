@@ -220,8 +220,6 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 else -> viewState.error("ошибка")
 
             }
-
-
         }
     }
 

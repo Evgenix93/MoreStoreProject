@@ -31,7 +31,7 @@ class CreateProductStep4Fragment: Fragment(R.layout.fragment_create_product_step
             findNavController().navigate(CreateProductStep4FragmentDirections.actionCreateProductStep4FragmentToCreateProductHowToSellFragment())
         }
 
-        binding.skipBtn.setOnClickListener { findNavController().navigate(R.id.skipStepDialog) }
+        binding.skipBtn.setOnClickListener { findNavController().navigate(CreateProductStep4FragmentDirections.actionCreateProductStep4FragmentToSkipStepDialog(args.category, args.forWho, false)) }
     }
 
     private fun initToolbar(){

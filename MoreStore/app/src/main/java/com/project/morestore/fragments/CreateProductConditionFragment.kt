@@ -11,6 +11,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductConditionBinding
 import com.project.morestore.models.Property2
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.CreateProductData
@@ -38,6 +39,7 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
     private fun initChecking(){
         binding.newWithTagsClickView.setOnClickListener {
             setCheckActive(binding.newWithTagsCheckImageView)
+
         }
         binding.newWithoutTagsClickView.setOnClickListener {
             setCheckActive(binding.newWithoutTagsCheckImageView)
@@ -65,6 +67,8 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
         binding.goodCheckImageView.imageTintList = null //drawable.setTint(ResourcesCompat.getColor(resources, R.color.gray1, null))
 
         image.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.green, null)) //drawable.setTint(ResourcesCompat.getColor(resources, R.color.green, null))
+        binding.saveButton.isEnabled = true
+        binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
     }
 
    private fun saveCondition(){
@@ -95,8 +99,8 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
 
     }
 
-    override fun loadedSuggestions(list: List<String>) {
-
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
+        TODO("Not yet implemented")
     }
 
     override fun success() {
