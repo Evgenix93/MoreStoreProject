@@ -4,6 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Display
+import android.view.InputDevice
+import android.view.Window
 import android.view.WindowManager
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -85,10 +88,10 @@ class MainActivity : AppCompatActivity() {
                             R.drawable.ic_tshirt2,
                             null
                         )
-                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
+                    bottomNavBar.menu.findItem(R.id.createProductStep1Fragment).icon =
                         ResourcesCompat.getDrawable(
                             resources,
-                            R.drawable.ic_plus,
+                            R.drawable.ic_create_product,
                             null
                         )
                     bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
@@ -104,6 +107,8 @@ class MainActivity : AppCompatActivity() {
                             null
                         )
 
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
                 }
 
                 R.id.mainFragment -> {
@@ -112,27 +117,31 @@ class MainActivity : AppCompatActivity() {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_house, null)
                     bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
-                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
+                    bottomNavBar.menu.findItem(R.id.createProductStep1Fragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_create_product, null)
                     bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
 
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
                 }
 
-                R.id.createFragment -> {
+                R.id.createProductStep1Fragment -> {
                     bottomNavBar.selectedItemId = R.id.createFragment
                     bottomNavBar.menu.findItem(R.id.mainFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
                     bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
-                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
+                    bottomNavBar.menu.findItem(R.id.createProductStep1Fragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_plus2, null)
                     bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
+
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
                 }
 
@@ -142,12 +151,14 @@ class MainActivity : AppCompatActivity() {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
                     bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
-                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
+                    bottomNavBar.menu.findItem(R.id.createProductStep1Fragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_create_product, null)
                     bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat2, null)
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
+
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
                 }
 
@@ -157,12 +168,14 @@ class MainActivity : AppCompatActivity() {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
                     bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
-                    bottomNavBar.menu.findItem(R.id.createFragment).icon =
-                        ResourcesCompat.getDrawable(resources, R.drawable.ic_plus, null)
+                    bottomNavBar.menu.findItem(R.id.createProductStep1Fragment).icon =
+                        ResourcesCompat.getDrawable(resources, R.drawable.ic_create_product, null)
                     bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle2, null)
+
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                 }
 
             }
@@ -174,7 +187,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.fragmentContainerView)
         bottomNavBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.createFragment -> if (navController.currentDestination?.id != R.id.createFragment) {
+                R.id.createProductStep1Fragment -> if (navController.currentDestination?.id != R.id.createFragment) {
                     navController.navigate(R.id.createProductStep1Fragment)
                     true
                 } else {

@@ -13,6 +13,10 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductBinding
 import com.project.morestore.models.Product
+import com.project.morestore.models.ProductBrand
+import com.project.morestore.models.ProductBrandJsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     private var list = listOf<Product>()
@@ -25,6 +29,7 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             }
         }
         fun bind(product: Product){
+            Log.d("productbrand", product.brand.toString())
             Log.d("product", product.toString())
             Log.d("mylog", "bind")
             val crossedStr = "${product.price} ₽".toSpannable().apply { setSpan(StrikethroughSpan(), 0, length ,0) }
@@ -32,7 +37,7 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             binding.likesCountTextView.text = product.statistic.wishlist.total.toString()
             binding.productNameTextView.text = product.name
             binding.productPriceTextView.text = "${product.price - ((product.price/100) * product.sale) } ₽"
-            binding.productBrandTextView.text = product.brand.name
+            binding.productBrandTextView.text = if(product.brand.toString() == "false") "Другое" else product.brand.toString().split(" ")[1].removePrefix("name=").removeSuffix(",")
             binding.productConditionTextView.text = product.property.find { it.name == "Состояние" }?.value
 
             Glide.with(itemView)

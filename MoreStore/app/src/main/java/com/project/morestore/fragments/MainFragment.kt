@@ -47,6 +47,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     private var productAdapter: ProductAdapter by autoCleared()
     private var kidsProductAdapter: ProductAdapter by autoCleared()
     private var isMainLoaded = false
+    private var currentSuggestionModels: SuggestionModels? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -207,10 +208,26 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
         binding.moreForKidsTextView.setOnClickListener { findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(forWho = "kids")) }
         binding.searchBtn.setOnClickListener {
-            val query = binding.toolbarMain.searchEditText.text.toString()
+            var queryStr  = binding.toolbarMain.searchEditText.text.toString()
+            currentSuggestionModels?.let {  suggestionModels ->
+                val category = suggestionModels.list.find { it.category.toString() != "false"  }
+                val brand = suggestionModels.list.find { it.brand.toString() != "false" }
+                val product = suggestionModels.list.find { it.product }
+
+                category?.let {
+                    presenter.addProductCategory(it.category.toString().toFloat().toLong())
+                }
+                brand?.let {
+                    presenter.addBrand(it.brand.toString().toFloat().toLong())
+                }
+
+                queryStr = product?.text ?: ""
+
+            }
+            Log.d("mylog", "query: $queryStr")
             findNavController().navigate(
                 R.id.catalogFragment,
-                Bundle().apply { putString("query", query) })
+                Bundle().apply { putString("query", queryStr) })
         }
         binding.allProductsCardView.setOnClickListener{
             presenter.updateProductCategories(listOf())
@@ -360,13 +377,15 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 requireContext(),
                 R.layout.item_suggestion_textview,
                 list
-            ){_, _ ->
+            ){ position, string ->
+                Log.d("mylog", "click position $position")
+                binding.toolbarMain.searchEditText.dismissDropDown()
+                binding.toolbarMain.searchEditText.setText(string)
+                currentSuggestionModels = objectList[position]
 
             }
         )
-
         binding.toolbarMain.searchEditText.showDropDown()
-
     }
 
     override fun success() {

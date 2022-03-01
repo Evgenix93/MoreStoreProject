@@ -336,6 +336,9 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_productIsCreatedDialog"
+            app:destination="@id/productIsCreatedDialog" />
     </fragment>
     <fragment
         android:id="@+id/changeRegionFragment"
@@ -565,6 +568,9 @@
         <action
             android:id="@+id/action_makePhotoFragment_to_photoFinishFragment"
             app:destination="@id/photoFinishFragment" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/addCardFragment"
@@ -584,11 +590,24 @@
         <action
             android:id="@+id/action_createProductAddPhotoFragment_to_makeVideoFragment"
             app:destination="@id/makeVideoFragment" />
+        <argument
+            android:name="isShoos"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/createProductAddBrandFragment"
         android:name="com.project.morestore.fragments.CreateProductAddBrandFragment"
-        android:label="CreateProductAddBrandFragment" />
+        android:label="CreateProductAddBrandFragment" >
+        <action
+            android:id="@+id/action_createProductAddBrandFragment_to_createProductStep6Fragment"
+            app:destination="@id/createProductStep6Fragment" />
+        <argument
+            android:name="category"
+            app:argType="com.project.morestore.models.ProductCategory" />
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/createProductColorsFragment"
         android:name="com.project.morestore.fragments.CreateProductColorsFragment"
@@ -671,6 +690,9 @@
         <argument
             android:name="brand"
             app:argType="com.project.morestore.models.ProductBrand" />
+        <action
+            android:id="@+id/action_createProductStep6Fragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/photoFinishFragment"
@@ -685,6 +707,9 @@
         <argument
             android:name="isVideo"
             app:argType="boolean" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/makeVideoFragment"
@@ -693,6 +718,13 @@
         <action
             android:id="@+id/action_makeVideoFragment_to_photoFinishFragment"
             app:destination="@id/photoFinishFragment" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
     </fragment>
+    <dialog
+        android:id="@+id/productIsCreatedDialog"
+        android:name="com.project.morestore.dialogs.ProductIsCreatedDialog"
+        android:label="ProductIsCreatedDialog" />
 
 </navigation>

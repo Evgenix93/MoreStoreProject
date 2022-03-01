@@ -38,7 +38,7 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.util.*
 
-class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), MainMvpView {
+class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), MainMvpView {
     private val binding: FragmentProductBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
     private val args: ProductDetailsFragmentArgs by navArgs()
@@ -57,90 +57,104 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         setClickListeners()
         getProductWishList()
         hideBottomNav()
+        showDialog()
 
 
     }
 
-    private fun brandClick(brand: ProductBrand){
+    private fun brandClick(brand: ProductBrand) {
         binding.chosenBrandTextView.setOnClickListener { presenter.updateBrand(brand) }
 
     }
 
-    private fun hideBottomNav(){
+    private fun hideBottomNav() {
         (activity as MainActivity).showBottomNavBar(false)
     }
 
-    private fun showLikeInfo(products: List<Product>){
+    private fun showLikeInfo(products: List<Product>) {
         val id = args.product?.id ?: args.productId
 
-        isLiked = products.any{ it.id == id }
+        isLiked = products.any { it.id == id }
 
-        binding.heartIcon.setImageResource( if (isLiked) R.drawable.ic_wished else R.drawable.ic_heart)
+        binding.heartIcon.setImageResource(if (isLiked) R.drawable.ic_wished else R.drawable.ic_heart)
 
     }
 
-    private fun messageLike(ids: List<Long>){
-        if(ids.contains(args.product?.id ?: args.productId)){
+    private fun messageLike(ids: List<Long>) {
+        if (ids.contains(args.product?.id ?: args.productId)) {
             isLiked = !isLiked
         }
-        binding.heartIcon.setImageResource( if (isLiked) R.drawable.ic_wished else R.drawable.ic_heart)
-        val messageStr = if(isLiked) "Добавлено в избранное" else "Удалено из избранного"
+        binding.heartIcon.setImageResource(if (isLiked) R.drawable.ic_wished else R.drawable.ic_heart)
+        val messageStr = if (isLiked) "Добавлено в избранное" else "Удалено из избранного"
         Toast.makeText(requireContext(), messageStr, Toast.LENGTH_SHORT).show()
     }
 
 
-
-    private fun setClickListeners(){
+    private fun setClickListeners() {
         binding.heartIcon.setOnClickListener {
-            presenter.addProductToWishList((args.product?.id ?: args.productId?.toLong()) ?: 0.toLong())
+            presenter.addProductToWishList(
+                (args.product?.id ?: args.productId?.toLong()) ?: 0.toLong()
+            )
         }
     }
 
-    private fun getProductWishList(){
+    private fun getProductWishList() {
         presenter.getProductWishList()
     }
 
 
-
-    private fun getProduct(id: Long?){
+    private fun getProduct(id: Long?) {
         id ?: return
         presenter.getProducts(productId = id, isFiltered = false, productCategories = null)
     }
 
-    private fun initShare(id: Long){
+    private fun initShare(id: Long) {
         binding.shareIcon.setOnClickListener {
             presenter.shareProduct(id)
         }
     }
 
-    private fun bind(product: Product?){
+    private fun bind(product: Product?) {
         product ?: return
         initShare(product.id)
         initViewPager(product.photo)
         binding.toolbar.titleTextView.text = product.name
-        binding.chosenBrandTextView.text = product.brand.name
-        binding.productConditionTextView.text = product.property.find { it.name == "Состояние" }?.value
-        binding.sizeTextView.text = product.property.find{Range.create(1, 9).contains(it.id.toInt())}?.value.orEmpty()
+        binding.chosenBrandTextView.text =
+            if (product.brand.toString() == "false") "Другое" else product.brand.toString()
+                .split(" ")[1].removePrefix("name=").removeSuffix(",")
+
+        binding.productConditionTextView.text =
+            product.property.find { it.name == "Состояние" }?.value
+        binding.sizeTextView.text =
+            product.property.find { Range.create(1, 9).contains(it.id.toInt()) }?.value.orEmpty()
         Log.d("product", product.property.toString())
         binding.productColorTextView.text = product.property.find { it.name == "Цвет" }?.value
         val colorValue = product.property.find { it.name == "Цвет" }?.ico
 
-        if(colorValue == null)
-            binding.colorCircle.background = ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
+        if (colorValue == null)
+            binding.colorCircle.background =
+                ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
         else
-          binding.colorCircle.background.setTint(Color.parseColor(colorValue))
+            binding.colorCircle.background.setTint(Color.parseColor(colorValue))
 
         binding.productCityTextView.text = product.address.fullAddress
-        binding.productBrandTextView.text = product.brand.name
-        binding.productSizeTextView.text = product.property.find { Range.create(1,9).contains(it.id.toInt()) }?.value
+        binding.productBrandTextView.text =
+            if (product.brand.toString() == "false") "Другое" else product.brand.toString()
+                .split(" ")[1].removePrefix("name=").removeSuffix(",")
+        binding.productSizeTextView.text =
+            product.property.find { Range.create(1, 9).contains(it.id.toInt()) }?.value
         binding.sizeChar.isVisible = false
 
 
 
-        binding.productPriceTextView.text = "${product.price - ((product.price/100) * product.sale) } ₽"
-        val crossedStr = "${product.price} ₽".toSpannable().apply { setSpan(
-                StrikethroughSpan(), 0, length ,0) }
-            binding.productOldPriceTextView.text = crossedStr
+        binding.productPriceTextView.text =
+            "${product.price - ((product.price / 100) * product.sale)} ₽"
+        val crossedStr = "${product.price} ₽".toSpannable().apply {
+            setSpan(
+                StrikethroughSpan(), 0, length, 0
+            )
+        }
+        binding.productOldPriceTextView.text = crossedStr
 
         binding.productNameTextView.text = product.name
         binding.likesCountTextView.text = product.statistic.wishlist.total.toString()
@@ -149,46 +163,65 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
         binding.sellerNameTextView.text = product.user.name
         binding.productDescriptionTextView.text = product.about
         binding.productNumberTextView.text = product.id.toString()
-       // binding.productCityTextView.text = product.address.fullCity.name
-        val calendar = Calendar.getInstance().apply { timeInMillis =  System.currentTimeMillis() - product.date * 1000 }
-        binding.productUpLoadDateTextView.text = "${(System.currentTimeMillis()/1000 - product.date)/86400} дня назад"
+        // binding.productCityTextView.text = product.address.fullCity.name
+        val calendar = Calendar.getInstance()
+            .apply { timeInMillis = System.currentTimeMillis() - product.date * 1000 }
+        binding.productUpLoadDateTextView.text =
+            "${(System.currentTimeMillis() / 1000 - product.date) / 86400} дня назад"
         Glide.with(this)
             .load(product.user.avatar?.photo)
             .into(binding.avatarImageView)
 
-        binding.userClickableView.setOnClickListener{
-            findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToSellerProfileFragment(product.user))
+        binding.userClickableView.setOnClickListener {
+            findNavController().navigate(
+                ProductDetailsFragmentDirections.actionProductDetailsFragmentToSellerProfileFragment(
+                    product.user
+                )
+            )
         }
-        binding.chosenBrandTextView.setOnClickListener { brandClick(product.brand.apply { isChecked = true }) }
-        val listener = MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)
+        binding.chosenBrandTextView.setOnClickListener {
+            if (product.brand.toString() == "false")
+                return@setOnClickListener
+            else brandClick(
+                ProductBrand(
+                    product.brand.toString().split(" ")[0].removePrefix("id=").toLong(),
+                    "",
+                    null,
+                    true,
+                    null
+                )
+            )
+        }
+        val listener =
+            MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)
         binding.sellerPhoneTextView.addTextChangedListener(listener)
         binding.sellerPhoneTextView.setText(product.phoneShow)
 
 
     }
 
-    private fun initViewPager(photoList: List<ProductPhoto>){
+    private fun initViewPager(photoList: List<ProductPhoto>) {
         val photoAdapter = PhotoViewPagerAdapter(this)
         photoAdapter.updateList(photoList)
         binding.productPhotoViewPager.adapter = photoAdapter
         binding.viewPagerDots.setViewPager2(binding.productPhotoViewPager)
 
         //TabLayoutMediator(binding.viewPagerDots, binding.productPhotoViewPager) { tab, position ->
-            ////Some implementation
+        ////Some implementation
         //}.attach()
 
 
     }
 
-    private fun initToolBar(){
+    private fun initToolBar() {
         binding.toolbar.titleTextView.text = args.product?.name
         binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun initList(){
-        productAdapter = ProductAdapter(null){}
-        with(binding.productList){
+    private fun initList() {
+        productAdapter = ProductAdapter(null) {}
+        with(binding.productList) {
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
             setHasFixedSize(true)
@@ -196,41 +229,52 @@ class ProductDetailsFragment: MvpAppCompatFragment(R.layout.fragment_product), M
 
     }
 
-    private fun loadYouMayLikeProducts(){
+    private fun loadYouMayLikeProducts() {
         presenter.getYouMayLikeProducts()
     }
 
-    private fun startIntent(intent: Intent){
+    private fun startIntent(intent: Intent) {
         if (intent.resolveActivity(requireContext().packageManager) != null) {
             startActivity(intent)
         }
 
     }
 
-    private fun initViews(){
-        val crossedStr = binding.productOldPriceTextView.text.toSpannable().apply { setSpan(
-            StrikethroughSpan(), 0, binding.productOldPriceTextView.text.length ,0) }
+    private fun initViews() {
+        val crossedStr = binding.productOldPriceTextView.text.toSpannable().apply {
+            setSpan(
+                StrikethroughSpan(), 0, binding.productOldPriceTextView.text.length, 0
+            )
+        }
         binding.productOldPriceTextView.text = crossedStr
     }
 
 
+    private fun showDialog() {
+        val isNew =
+            findNavController().previousBackStackEntry?.destination?.id == R.id.createProductStep6Fragment
+        if (isNew)
+            findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToProductIsCreatedDialog())
+    }
+
+
     override fun loaded(result: Any) {
-        when(result) {
-         is List<*> -> {
-             if(result.isNotEmpty() && result[0] is Long){
-                 messageLike(result as List<Long>)
-                 return
-             }
-             if(!suggestedProductsLoaded) {
-                 productAdapter.updateList(result as List<Product>)
-                 suggestedProductsLoaded = true
-             }
-             if(!wishListLoaded) {
-                 getProductWishList()
-                 wishListLoaded = true
-             }
-             showLikeInfo(result as List<Product>)
-         }
+        when (result) {
+            is List<*> -> {
+                if (result.isNotEmpty() && result[0] is Long) {
+                    messageLike(result as List<Long>)
+                    return
+                }
+                if (!suggestedProductsLoaded) {
+                    productAdapter.updateList(result as List<Product>)
+                    suggestedProductsLoaded = true
+                }
+                if (!wishListLoaded) {
+                    getProductWishList()
+                    wishListLoaded = true
+                }
+                showLikeInfo(result as List<Product>)
+            }
             is Intent -> startIntent(result)
             is Product -> bind(result)
 

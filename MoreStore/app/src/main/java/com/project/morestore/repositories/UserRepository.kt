@@ -123,7 +123,7 @@ class UserRepository(val context: Context) {
                 }
 
             }
-            val photo = Photo(
+            val photo = PhotoVideo(
                 file.name.substringAfter('.'),
                 Base64.encodeToString(file.readBytes(), Base64.DEFAULT)
             )

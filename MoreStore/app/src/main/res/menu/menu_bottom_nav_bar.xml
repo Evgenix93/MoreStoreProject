@@ -14,8 +14,8 @@
         android:title="@string/catalog" />
 
     <item
-        android:id="@+id/createFragment"
-        android:icon="@drawable/ic_plus"
+        android:id="@+id/createProductStep1Fragment"
+        android:icon="@drawable/ic_create_product"
         android:title="@string/place" />
 
     <item

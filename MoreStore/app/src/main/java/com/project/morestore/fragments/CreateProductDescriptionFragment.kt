@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductDescriptionBinding
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.CreateProductData
@@ -56,7 +57,7 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
         TODO("Not yet implemented")
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
         TODO("Not yet implemented")
     }
 

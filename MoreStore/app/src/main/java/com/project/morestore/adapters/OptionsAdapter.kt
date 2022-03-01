@@ -12,6 +12,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemOptionBinding
 import com.project.morestore.models.CreateProductData
 import com.project.morestore.models.Option
+import java.io.File
 
 class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit): RecyclerView.Adapter<OptionsAdapter.OptionViewHolder>() {
     private val options = listOf(
@@ -70,6 +71,11 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit): 
         options[7].isChecked = region != null
         options[7].address = region
         notifyDataSetChanged()
+    }
+
+    fun updatePhotoInfo(photos: MutableMap<Int, File>){
+        options[0].isChecked = photos.isNotEmpty()
+        notifyItemChanged(0)
     }
 
     fun getList(): List<Option>{

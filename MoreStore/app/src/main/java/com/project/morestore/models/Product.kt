@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 @JsonClass(generateAdapter = true)
 @Parcelize
@@ -23,7 +24,8 @@ data class Product(
     val user: User,
     //val category: Category,
     val statistic: ProductStatistic,
-    val brand: ProductBrand,
+
+    val brand: @RawValue Any,
     val property: List<Property>
 
 ): Parcelable

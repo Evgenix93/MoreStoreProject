@@ -3,6 +3,7 @@ package com.project.morestore.repositories
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Base64
 import android.util.Log
 import com.project.morestore.models.*
 import com.project.morestore.singletones.CreateProductData
@@ -15,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
 class ProductRepository(private val context: Context) {
@@ -753,13 +755,44 @@ class ProductRepository(private val context: Context) {
         Log.d("Debug", "createProductData = ${CreateProductData.createProductData}")
     }
 
+
+    fun updateCreateProductPhotoVideo(photoVideo: File, position: Int){
+        CreateProductData.productPhotosPaths[position] = photoVideo
+    }
+
+    suspend fun updateCreateProductPhotoVideo(photoVideoUri: Uri, position: Int): Boolean{
+        return withContext(Dispatchers.IO) {
+            val file = File(
+                context.cacheDir,
+                "${System.currentTimeMillis()/1000}.${context.contentResolver.getType(photoVideoUri)?.substringAfter('/') ?: "jpg"}"
+            )
+            try {
+                context.contentResolver.openInputStream(photoVideoUri).use { input ->
+                    file.outputStream().use { output ->
+                        input?.copyTo(output)
+                    }
+                }
+                CreateProductData.productPhotosPaths[position] = file
+                Log.d("mylog", CreateProductData.productPhotosPaths[position]?.name.toString())
+                true
+            }catch (e: Throwable){
+                false
+            }
+
+
+
+
+        }
+
+    }
+
     fun removeProperty(propertyCategory: Long) {
         CreateProductData.createProductData.property?.removeAll {
             it.propertyCategory == propertyCategory
         }
     }
 
-    suspend fun createProduct(): Response<Unit>? {
+    suspend fun createProduct(): Response<CreatedProductId>? {
         Log.d("Debug", "productData = ${CreateProductData.createProductData}")
 
         return try {
@@ -778,6 +811,80 @@ class ProductRepository(private val context: Context) {
 
     fun clearCreateProductData(){
         CreateProductData.createProductData = CreateProductData()
+    }
+
+    fun loadCreateProductPhotosVideos(): MutableMap<Int, File>{
+        return CreateProductData.productPhotosPaths
+    }
+
+    suspend fun uploadProductPhotos(files: List<File>, productId: Long): Response<List<ProductPhoto>>?{
+        val photos = files.map { PhotoVideo(
+            it.name.substringAfter('.'),
+            Base64.encodeToString(it.readBytes(), Base64.DEFAULT)
+        ) }
+        val photoData = PhotoData("ProductPhoto", productId, photos)
+
+        return try {
+                productApi.uploadProductPhotos(photoData)
+            } catch (e: Exception) {
+                if (e is IOException) {
+                    null
+                } else {
+                    Log.d("mylog", e.message.toString())
+                    try {
+                        val response = productApi.uploadProductPhotosGetError(photoData)
+                        if (response.code() == 500) {
+                            Response.error(500, "".toResponseBody(null))
+                        } else {
+                            Response.error(
+                                400,
+                                response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                            )
+                        }
+                    } catch (e: Throwable) {
+                        Response.error(400, "ошибка".toResponseBody(null))
+                    }
+                }
+            }
+
+
+
+
+    }
+
+    suspend fun uploadProductVideos(files: List<File>, productId: Long): Response<List<ProductVideo>>?{
+        val videos = files.map { PhotoVideo(
+            it.name.substringAfter('.'),
+            Base64.encodeToString(it.readBytes(), Base64.DEFAULT)
+        ) }
+        val videoData = VideoData("Product", productId, videos)
+
+        return try {
+            productApi.uploadProductVideos(videoData)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.uploadProductVideosGetError(videoData)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+
+
+
+
     }
 
     companion object {

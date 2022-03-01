@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,12 +16,15 @@ import com.project.morestore.R
 import com.project.morestore.adapters.OptionsAdapter
 import com.project.morestore.databinding.FragmentAddProductDetailsBinding
 import com.project.morestore.models.CreateProductData
+import com.project.morestore.models.CreatedProductId
+import com.project.morestore.models.SuggestionModels
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import java.io.File
 
 class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_product_details),
     MainMvpView {
@@ -48,7 +52,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         optionsAdapter = OptionsAdapter(requireContext()) { position ->
 
             when (position) {
-                0 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductAddPhotoFragment())
+                0 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductAddPhotoFragment(args.category.name == "Обувь"))
                 1 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductConditionFragment())
                 2 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductPriceFragment())
                 3 -> {
@@ -105,6 +109,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     private fun loadCreateProductData(){
         presenter.loadCreateProductData()
+        presenter.loadCreateProductPhotosVideos()
     }
 
     private fun initChips(){
@@ -135,19 +140,42 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         }
     }
 
+    private fun showLoading(loading: Boolean){
+        binding.loader.isVisible = loading
+    }
+
+
+
+
     override fun loaded(result: Any) {
+        showLoading(false)
         if(result is User) {
             updateCreateProductData(result.phone!!)
             createProduct()
-        }else
-          optionsAdapter.updateList(result as CreateProductData)
+        }else if(result is CreateProductData) {
+            optionsAdapter.updateList(result)
+            initCreateProductButton()
+        }
+        else if(result is CreatedProductId)
+            findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(null, result.id.toString()))
+        else if(result is MutableMap<*,*>) {
+            optionsAdapter.updatePhotoInfo(result as MutableMap<Int, File>)
+            initCreateProductButton()
+        }
+
     }
 
+
+
+
+
     override fun loading() {
+        showLoading(true)
 
     }
 
     override fun error(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
@@ -155,12 +183,12 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         TODO("Not yet implemented")
     }
 
-    override fun loadedSuggestions(list: List<String>) {
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
         TODO("Not yet implemented")
     }
 
     override fun success() {
-        TODO("Not yet implemented")
+
     }
 
 }

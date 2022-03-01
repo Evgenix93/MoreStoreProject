@@ -42,6 +42,7 @@
                 tools:layout_editor_absoluteY="309dp" />
 
             <TextView
+                android:id="@+id/photoRequirementsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="19dp"
@@ -75,6 +76,7 @@
                 android:fontFamily="@font/manrope_regular"
                 android:text="Сделайте качественную фотографию, которая будет\nотображаться первой в карточке товара. Используйте\nхорошее освещение и по возможности однородный фон.\nC помощью ИИ мы удалим задний фон на фотографии.\nВещь должна полностью помещаться в кадр. "
                 android:textSize="12sp"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mainPhotoTextView" />
@@ -108,6 +110,12 @@
                     android:text="Добавить фото"
                     android:textSize="12sp" />
 
+                <ImageView
+                    android:id="@+id/photo1ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -122,6 +130,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/mainPhotoInfoTextView">
 
                 <ImageView
+                    android:id="@+id/example1ImageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/shoos_example1" />
@@ -168,6 +177,7 @@
                 android:fontFamily="@font/manrope_regular"
                 android:text="Снимите этикетку или логотип бренда крупным планом.\nЭто позволит покупателю убедиться\nв подлинности товара"
                 android:textSize="12sp"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/differentAngleInfoTextView" />
@@ -201,6 +211,13 @@
                     android:text="Добавить фото"
                     android:textSize="12sp" />
 
+                <ImageView
+                    android:id="@+id/photo2ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -214,6 +231,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/differentAngelMoreInfoTextView">
 
                 <ImageView
+                    android:id="@+id/example2ImageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/image_shoos_example2" />
@@ -268,6 +286,7 @@
                 android:fontFamily="@font/manrope_regular"
                 android:text="Это позволит покупателю узнать больше о вашем товаре"
                 android:textSize="12sp"
+                android:textColor="@color/black"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -302,6 +321,13 @@
                     android:text="Добавить фото"
                     android:textSize="12sp" />
 
+                <ImageView
+                    android:id="@+id/photo3ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -315,6 +341,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/productMaterialInfoTextView">
 
                 <ImageView
+                    android:id="@+id/example3ImageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/image_shoos_example3" />
@@ -369,6 +396,7 @@
                 android:fontFamily="@font/manrope_regular"
                 android:text="Вы можете добавить до 7 дополнительных фотографий.\nОтразите на них нюансы или просто покажите вещь\nв другом ракурсе. Это повысит шансы продать товар."
                 android:textSize="12sp"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/morePhotosTextView" />
@@ -399,8 +427,15 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="89dp"
                     android:fontFamily="@font/manrope_semibold"
-                    android:text="Добавить фото"
+                    android:text="Добавить фото/видео"
                     android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/photo4ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
 
 
             </com.google.android.material.card.MaterialCardView>
@@ -431,12 +466,217 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="89dp"
                     android:fontFamily="@font/manrope_semibold"
-                    android:text="Добавить фото"
+                    android:text="Добавить фото/видео"
                     android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/photo5ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/addPhotoCardView6"
+                android:layout_width="166dp"
+                android:layout_height="160dp"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintStart_toStartOf="@id/addPhotoCardView4"
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoCardView4"
+                app:strokeColor="@color/gray1"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="53dp"
+                    android:src="@drawable/ic_camera" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="89dp"
+                    android:fontFamily="@font/manrope_semibold"
+                    android:text="Добавить фото/видео"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/photo6ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/addPhotoCardView7"
+                android:layout_width="166dp"
+                android:layout_height="160dp"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintStart_toStartOf="@id/addPhotoCardView5"
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoCardView5"
+                app:strokeColor="@color/gray1"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="53dp"
+                    android:src="@drawable/ic_camera" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="89dp"
+                    android:fontFamily="@font/manrope_semibold"
+                    android:text="Добавить фото/видео"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/photo7ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/addPhotoCardView8"
+                android:layout_width="166dp"
+                android:layout_height="160dp"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintStart_toStartOf="@id/addPhotoCardView6"
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoCardView6"
+                app:strokeColor="@color/gray1"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="53dp"
+                    android:src="@drawable/ic_camera" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="89dp"
+                    android:fontFamily="@font/manrope_semibold"
+                    android:text="Добавить фото/видео"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/photo8ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/addPhotoCardView9"
+                android:layout_width="166dp"
+                android:layout_height="160dp"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintStart_toStartOf="@id/addPhotoCardView7"
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoCardView7"
+                app:strokeColor="@color/gray1"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="53dp"
+                    android:src="@drawable/ic_camera" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="89dp"
+                    android:fontFamily="@font/manrope_semibold"
+                    android:text="Добавить фото/видео"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/photo9ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/addPhotoCardView10"
+                android:layout_width="166dp"
+                android:layout_height="160dp"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintStart_toStartOf="@id/addPhotoCardView8"
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoCardView8"
+                app:strokeColor="@color/gray1"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="53dp"
+                    android:src="@drawable/ic_camera" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="89dp"
+                    android:fontFamily="@font/manrope_semibold"
+                    android:text="Добавить фото/видео"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/photo10ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+
+
+
+
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveBtn"
                 style="@style/buttonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -449,7 +689,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addPhotoCardView4" />
+                app:layout_constraintTop_toBottomOf="@+id/addPhotoCardView10" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

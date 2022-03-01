@@ -19,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentMakePhotoBinding
@@ -34,6 +35,7 @@ import java.io.File
 class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), PhotoVideoMvpView {
     private val binding: FragmentMakePhotoBinding by viewBinding()
     private val presenter by moxyPresenter { PhotoVideoPresenter(requireContext()) }
+    private val args: MakeVideoFragmentArgs by navArgs()
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
     private var imageCapture: ImageCapture? = null
@@ -139,7 +141,8 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                 findNavController().navigate(
                     MakeVideoFragmentDirections.actionMakeVideoFragmentToPhotoFinishFragment(
                         uri.toString(),
-                        true
+                        true,
+                        args.position
                     )
                 )
 
@@ -185,7 +188,7 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
 
     override fun onPhotoCaptured(file: File) {
         Toast.makeText(requireContext(), "фото сделано", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(MakeVideoFragmentDirections.actionMakeVideoFragmentToPhotoFinishFragment(file.path, false))
+        findNavController().navigate(MakeVideoFragmentDirections.actionMakeVideoFragmentToPhotoFinishFragment(file.path, false, args.position))
 
     }
 
@@ -204,7 +207,8 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
         findNavController().navigate(
             MakeVideoFragmentDirections.actionMakeVideoFragmentToPhotoFinishFragment(
                 file.path,
-                true
+                true,
+                args.position
             )
         )
 

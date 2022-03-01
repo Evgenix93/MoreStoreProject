@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentMakePhotoBinding
@@ -31,6 +32,7 @@ import java.text.SimpleDateFormat
 class MakePhotoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), PhotoVideoMvpView {
     private val binding: FragmentMakePhotoBinding by viewBinding()
     private val presenter by moxyPresenter { PhotoVideoPresenter(requireContext()) }
+    private val args: MakePhotoFragmentArgs by navArgs()
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var filePickerLauncher: ActivityResultLauncher<Array<String>>
     private var imageCapture: ImageCapture? = null
@@ -69,7 +71,8 @@ class MakePhotoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                 findNavController().navigate(
                     MakePhotoFragmentDirections.actionMakePhotoFragmentToPhotoFinishFragment(
                         uri.toString(),
-                        false
+                        false,
+                        args.position
                     )
                 )
 
@@ -134,7 +137,8 @@ class MakePhotoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
         findNavController().navigate(
             MakePhotoFragmentDirections.actionMakePhotoFragmentToPhotoFinishFragment(
                 file.path,
-                false
+                false,
+                args.position
             )
         )
 

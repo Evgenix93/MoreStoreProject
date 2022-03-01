@@ -1,6 +1,7 @@
 package com.project.morestore.presenters
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
+import java.io.File
 
 class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val authRepository = AuthRepository(context)
@@ -574,12 +576,12 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     }
 
-    fun addNewBrand(name: String){
+    fun addNewBrand(brandName: String){
         presenterScope.launch {
             viewState.loading()
-            val response = productRepository.addNewBrand(NewProductBrand(null, name))
+            val response = productRepository.addNewBrand(NewProductBrand(null, brandName))
             when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
+                200 -> { viewState.loaded(response.body()!!.apply { name = brandName })}
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)
@@ -617,10 +619,14 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     fun createProduct() {
         presenterScope.launch {
+            viewState.loading()
             val response = productRepository.createProduct()
             when (response?.code()) {
                 200 -> {
-                   // viewState.loaded(response.body()!!)
+                    val photosUploaded = uploadProductPhotos(response.body()?.id!!)
+                    val videosUploaded = uploadProductVideos(response.body()?.id!!)
+                    if(photosUploaded && videosUploaded)
+                        viewState.loaded(response.body()!!)
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -628,7 +634,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 }
                 500 -> viewState.error("500 Internal Server Error")
                 null -> {
-                    //viewState.error("нет интернета")
+                    viewState.error("нет интернета")
                 }
                 else -> viewState.error("ошибка")
             }
@@ -661,6 +667,21 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         )
     }
 
+    fun updateCreateProductDataPhotosVideos(photoVideo: File, position: Int){
+        productRepository.updateCreateProductPhotoVideo(photoVideo, position)
+        viewState.success()
+    }
+
+    fun updateCreateProductDataPhotosVideos(photoVideoUri: Uri, position: Int){
+        presenterScope.launch {
+            val success = productRepository.updateCreateProductPhotoVideo(photoVideoUri, position)
+            if(success)
+                viewState.success()
+            else viewState.error("ошибка")
+
+        }
+    }
+
     fun removeProperty(propertyCategory: Long){
         productRepository.removeProperty(propertyCategory)
     }
@@ -671,6 +692,91 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     fun clearCreateProductData(){
         productRepository.clearCreateProductData()
+    }
+
+    fun loadCreateProductPhotosVideos(){
+        viewState.loaded(productRepository.loadCreateProductPhotosVideos())
+    }
+
+
+    private suspend fun uploadProductPhotos(productId: Long): Boolean{
+        val photosVideosMap = productRepository.loadCreateProductPhotosVideos()
+        val photos = photosVideosMap.filter { it.value.extension == "jpg" || it.value.extension == "png" }
+            .map { it.value }
+
+        if (photos.isEmpty()){
+            return true
+        }
+
+        val response = productRepository.uploadProductPhotos(photos, productId )
+        when (response?.code()) {
+            200 -> { return true }
+            400 -> {
+                val bodyString = getStringFromResponse(response.errorBody()!!)
+                viewState.error(bodyString)
+                return false
+            }
+            500 -> {
+                viewState.error("500 Internal Server Error")
+                return false
+            }
+            null -> {
+                viewState.error("нет интернета")
+                return false
+            }
+            else -> {
+                viewState.error("ошибка")
+                return false
+            }
+
+        }
+
+    }
+
+    private suspend fun uploadProductVideos(productId: Long): Boolean{
+        val photosVideosMap = productRepository.loadCreateProductPhotosVideos()
+        val videos = photosVideosMap.filter { it.value.extension == "mp4" }
+            .map { it.value }
+
+        if (videos.isEmpty()){
+            return true
+        }
+
+        val response = productRepository.uploadProductVideos(videos, productId )
+        when (response?.code()) {
+            200 -> { return true }
+            400 -> {
+                val bodyString = getStringFromResponse(response.errorBody()!!)
+                viewState.error(bodyString)
+                return false
+            }
+            500 -> {
+                viewState.error("500 Internal Server Error")
+                return false
+            }
+            null -> {
+                viewState.error("нет интернета")
+                return false
+            }
+            else -> {
+                viewState.error("ошибка")
+                return false
+            }
+
+        }
+
+    }
+
+    fun getShoosTypes(){
+        getProperties(15)
+    }
+
+    fun getJeansStyles(){
+        getProperties(17)
+    }
+
+    fun getTopClotStyles(){
+        getProperties(18)
     }
 
 }

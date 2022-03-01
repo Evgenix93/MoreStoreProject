@@ -10,18 +10,27 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.ShoosTypeCreateProductAdapter
 import com.project.morestore.databinding.FragmentCreateProductStep3Binding
+import com.project.morestore.models.Property
+import com.project.morestore.models.Property2
+import com.project.morestore.models.SuggestionModels
+import com.project.morestore.mvpviews.MainMvpView
+import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import moxy.MvpAppCompatFragment
+import moxy.ktx.moxyPresenter
 
-class CreateProductStep3Fragment: Fragment(R.layout.fragment_create_product_step3) {
+class CreateProductStep3Fragment: MvpAppCompatFragment(R.layout.fragment_create_product_step3), MainMvpView {
     private val binding: FragmentCreateProductStep3Binding by viewBinding()
     private var shoosTypeAdapter: ShoosTypeCreateProductAdapter by autoCleared()
     private val args: CreateProductStep3FragmentArgs by navArgs()
+    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
         setClickListeners()
         initToolbar()
+        getShoosTypes()
     }
 
 
@@ -42,7 +51,8 @@ class CreateProductStep3Fragment: Fragment(R.layout.fragment_create_product_step
 
 
     private fun initList(){
-        shoosTypeAdapter = ShoosTypeCreateProductAdapter {
+        shoosTypeAdapter = ShoosTypeCreateProductAdapter { property ->
+            presenter.updateCreateProductData(extProperty = Property2(property.id, property.idCategory ?: 0))
             findNavController().navigate(CreateProductStep3FragmentDirections.actionCreateProductStep3FragmentToCreateProductStep5Fragment(args.category, args.forWho))
         }
         with(binding.itemsList){
@@ -50,7 +60,43 @@ class CreateProductStep3Fragment: Fragment(R.layout.fragment_create_product_step
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
-        shoosTypeAdapter.notifyDataSetChanged()
+
+
+    }
+
+    private fun getShoosTypes(){
+        presenter.getShoosTypes()
+
+
+    }
+
+
+
+
+
+
+    override fun loaded(result: Any) {
+        shoosTypeAdapter.updateList(result as List<Property>)
+
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun error(message: String) {
+
+    }
+
+    override fun showOnBoarding() {
+
+    }
+
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
+
+    }
+
+    override fun success() {
 
     }
 }

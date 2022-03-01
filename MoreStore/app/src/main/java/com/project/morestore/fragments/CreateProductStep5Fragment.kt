@@ -106,7 +106,7 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
         }
 
         binding.addBrandTextView.setOnClickListener {
-            findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductAddBrandFragment())
+            findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductAddBrandFragment(args.category, args.forWho))
         }
 
         binding.skipBtn.setOnClickListener { findNavController().navigate(R.id.skipStepDialog) }

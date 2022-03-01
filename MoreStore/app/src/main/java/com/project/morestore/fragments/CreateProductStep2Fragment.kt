@@ -50,7 +50,7 @@ class CreateProductStep2Fragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     private fun initList(){
         categoryAdapter = CategoryCreateProductAdapter { category ->
-            if(category.name == "Джинсы"){
+            if(category.name == "Джинсы" || category.name == "Верхняя одежда"){
                 findNavController().navigate(CreateProductStep2FragmentDirections.actionCreateProductStep2FragmentToCreateProductStep4Fragment(category, args.forWho))
                 return@CategoryCreateProductAdapter
             }

@@ -1,6 +1,7 @@
 package com.project.morestore.singletones
 
 import com.project.morestore.models.CreateProductData
+import java.io.File
 
 object CreateProductData {
    /* var idCategory: Int? = null
@@ -16,4 +17,5 @@ object CreateProductData {
     var phone: String? = null
     var property: MutableList<Property2>? = null*/
    var createProductData = CreateProductData()
+   val productPhotosPaths = mutableMapOf<Int, File>()
 }

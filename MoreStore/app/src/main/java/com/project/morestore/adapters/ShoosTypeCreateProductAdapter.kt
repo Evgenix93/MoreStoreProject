@@ -8,56 +8,47 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemCreateProductElementBinding
+import com.project.morestore.models.Property
 
-class ShoosTypeCreateProductAdapter(val onClick: () -> Unit): RecyclerView.Adapter<ShoosTypeCreateProductAdapter.ShoosTypeViewHolder>() {
+class ShoosTypeCreateProductAdapter(val onClick: (Property) -> Unit): RecyclerView.Adapter<ShoosTypeCreateProductAdapter.ShoosTypeViewHolder>() {
+    private var list = listOf<Property>()
 
-    class ShoosTypeViewHolder(view: View, onClick: () -> Unit): RecyclerView.ViewHolder(view){
+    class ShoosTypeViewHolder(view: View, onClick: (Int) -> Unit): RecyclerView.ViewHolder(view){
         private val binding: ItemCreateProductElementBinding by viewBinding()
 
         init {
             itemView.setOnClickListener {
-                onClick()
+                onClick(adapterPosition)
             }
         }
 
-        fun bind(){
+        fun bind(property: Property){
             binding.view36.isVisible = adapterPosition == 0
-            when(adapterPosition){
-                0 -> binding.elementNameTextView.text = "Ботинки"
-                1 -> binding.elementNameTextView.text = "Кроссовки и кеды"
-                2 -> binding.elementNameTextView.text = "Классика"
-                3 -> binding.elementNameTextView.text = "Пляжная и домашняя обувь"
-                4 -> binding.elementNameTextView.text = "Сандали"
-                5 -> binding.elementNameTextView.text = "Слипоны"
-                6 -> binding.elementNameTextView.text = "Эспадрильи и мокасины"
-                7 -> binding.elementNameTextView.text = "Другое"
-
-
-
-
-
-
-            }
+            binding.elementNameTextView.text = property.name
 
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoosTypeViewHolder {
-        return ShoosTypeViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_create_product_element, parent, false)){
-            onClick()
+        return ShoosTypeViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_create_product_element, parent, false)){ position ->
+            onClick(list[position])
 
         }
 
     }
 
     override fun onBindViewHolder(holder: ShoosTypeViewHolder, position: Int) {
-        holder.bind()
+        holder.bind(list[position])
 
     }
 
     override fun getItemCount(): Int {
-        return 8
+        return list.size
 
+    }
+
+    fun updateList(newList: List<Property>){
+        list = newList
+        notifyDataSetChanged()
     }
 }

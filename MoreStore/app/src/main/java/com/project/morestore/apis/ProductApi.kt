@@ -46,7 +46,7 @@ interface ProductApi {
     suspend fun getPropertiesGetError(): Response<String>
 
     @POST("product")
-    suspend fun createProduct(@Body createProductData: CreateProductData): Response<Unit>
+    suspend fun createProduct(@Body createProductData: CreateProductData): Response<CreatedProductId>
 
 
     @POST("brand")
@@ -54,6 +54,20 @@ interface ProductApi {
 
     @POST("brand")
     suspend fun addBrandGetError(@Body brand: NewProductBrand): Response<String>
+
+    @POST("upload/photo")
+    suspend fun uploadProductPhotos(@Body photos: PhotoData): Response<List<ProductPhoto>>
+
+    @POST("upload/photo")
+    suspend fun uploadProductPhotosGetError(@Body photos: PhotoData): Response<String>
+
+    @POST("upload/video")
+    suspend fun uploadProductVideos(@Body videos: VideoData): Response<List<ProductVideo>>
+
+    @POST("upload/video")
+    suspend fun uploadProductVideosGetError(@Body videos: VideoData): Response<String>
+
+
 
 
 
