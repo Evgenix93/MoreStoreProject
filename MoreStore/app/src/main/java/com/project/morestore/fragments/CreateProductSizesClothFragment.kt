@@ -90,10 +90,10 @@ class CreateProductSizesClothFragment :
                     SizeLine(
                         it.id.toInt(),
                         it.name,
-                        list[0].removePrefix("W").removeSurrounding("'"),
-                        list[1].removePrefix("IT/RU/FR").removeSurrounding("'"),
-                        list[2].removePrefix("US").removeSurrounding("'"),
-                        list[3].removePrefix("UK").removeSurrounding("'"),
+                       if(args.forWho != 2) list[0].removePrefix("W").removeSurrounding("'") else "",
+                        if(args.forWho != 2) list[1].removePrefix("IT/RU/FR").removeSurrounding("'") else "",
+                        if(args.forWho != 2) list[2].removePrefix("US").removeSurrounding("'") else "",
+                        if(args.forWho != 2) list[3].removePrefix("UK").removeSurrounding("'") else "",
                         false,
                         idCategory = it.idCategory?.toInt()!!
                     )

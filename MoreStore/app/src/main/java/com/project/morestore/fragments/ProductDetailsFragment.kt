@@ -46,6 +46,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private var suggestedProductsLoaded = false
     private var wishListLoaded = false
     private var isLiked = false
+    private var product: Product? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -184,7 +185,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 return@setOnClickListener
             else brandClick(
                 ProductBrand(
-                    product.brand.toString().split(" ")[0].removePrefix("id=").toLong(),
+                    product.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
                     "",
                     null,
                     true,
@@ -218,7 +219,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         if(args.isSeller) {
            binding.toolbar.actionIcon.setOnClickListener {
                findNavController().navigate(
-                   ProductDetailsFragmentDirections.actionProductDetailsFragmentToCreateProductStep6Fragment(product = args.product)
+                   ProductDetailsFragmentDirections.actionProductDetailsFragmentToCreateProductStep6Fragment(product = args.product ?: product)
                )
            }
         }
@@ -283,7 +284,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 showLikeInfo(result as List<Product>)
             }
             is Intent -> startIntent(result)
-            is Product -> bind(result)
+            is Product -> {
+                bind(result)
+                product = result
+            }
         }
 
     }

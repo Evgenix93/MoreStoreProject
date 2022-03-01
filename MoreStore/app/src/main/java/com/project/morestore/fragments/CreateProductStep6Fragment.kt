@@ -126,18 +126,23 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             firstLaunch = false
         }
         else {
-           // val property = args.product!!.property.map{ Property2(it.idProperty!!, it.id) }.toMutableList()
+            binding.placeProductButton.text = "Сохранить изменения"
+
+           val property = args.product!!.property.map{ Property2(it.idProperty!!, it.id) }.toMutableList()
             presenter.updateCreateProductData(
                 idCategory = args.product!!.category.id,
-                idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("id=").removeSuffix(",").toLong(),
+                idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
                 address = args.product!!.address.fullAddress,
                 price = args.product!!.price.toString(),
                 sale = args.product!!.sale.toInt(),
                 about = args.product!!.about,
                 phone = args.product!!.phone,
-                // property = property
+                extProperties = property
             )
            presenter.loadCreateProductData()
+            val map = mutableMapOf<Int, File>()
+            map[1] = File("")
+            optionsAdapter.updatePhotoInfo(map)
             firstLaunch = false
         }else {
             presenter.loadCreateProductData()
@@ -168,7 +173,6 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     private fun initCreateProductButton(){
         val options = optionsAdapter.getList().toMutableList()
-        options.removeFirst()
         if (options.all {it.isChecked}) {
             binding.addPhotoInfoTextView.text = "Отлично! Всё заполнено"
             binding.placeProductButton.isEnabled = true

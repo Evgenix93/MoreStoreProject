@@ -622,10 +622,10 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = productRepository.createProduct()
             when (response?.code()) {
                 200 -> {
-                    val photosUploaded = uploadProductPhotos(response.body()?.id!!)
-                    val videosUploaded = uploadProductVideos(response.body()?.id!!)
+                    val photosUploaded = uploadProductPhotos(response.body()?.first()?.id!!)
+                    val videosUploaded = uploadProductVideos(response.body()?.first()?.id!!)
                     if(photosUploaded && videosUploaded)
-                        viewState.loaded(response.body()!!)
+                        viewState.loaded(response.body()!!.first())
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
