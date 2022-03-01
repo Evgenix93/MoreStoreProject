@@ -222,7 +222,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                )
            }
         }
-            binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
+            binding.toolbar.actionIcon.setImageResource(if(args.isSeller) R.drawable.ic_edit else R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 

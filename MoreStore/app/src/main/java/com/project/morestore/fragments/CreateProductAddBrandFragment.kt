@@ -67,9 +67,9 @@ class CreateProductAddBrandFragment : MvpAppCompatFragment(R.layout.fragment_bra
         val newBrand = result as NewProductBrand
         findNavController().navigate(
             CreateProductAddBrandFragmentDirections.actionCreateProductAddBrandFragmentToCreateProductStep6Fragment(
-                args.category,
-                args.forWho,
-                ProductBrand(newBrand.id!!, newBrand.name.toString(), null, null, null)
+                category = args.category,
+                forWho = args.forWho,
+                brand = ProductBrand(newBrand.id!!, newBrand.name.toString(), null, null, null)
             )
         )
 

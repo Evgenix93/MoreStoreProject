@@ -730,12 +730,10 @@
             android:name="forWho"
             app:argType="integer"
             android:defaultValue="0" />
-        <argument
-            android:name="brand"
-            app:argType="com.project.morestore.models.ProductBrand" />
         <action
             android:id="@+id/action_createProductStep6Fragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <argument
             android:name="product"
             app:argType="com.project.morestore.models.Product"
             app:nullable="true"

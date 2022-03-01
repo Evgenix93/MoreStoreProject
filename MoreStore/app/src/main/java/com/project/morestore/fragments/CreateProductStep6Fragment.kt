@@ -20,7 +20,7 @@ import com.project.morestore.models.CreateProductData
 import com.project.morestore.models.CreatedProductId
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.models.Property2
-import com.project.morestore.models.SuggestionModels
+
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -59,7 +59,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         optionsAdapter = OptionsAdapter(requireContext()) { position ->
 
             when (position) {
-                0 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductAddPhotoFragment(args.category.name == "Обувь"))
+                0 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductAddPhotoFragment(args.category?.name == "Обувь"))
                 1 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductConditionFragment())
                 2 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductPriceFragment())
                 3 -> {
@@ -122,13 +122,14 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         if(firstLaunch)
         if(args.product == null) {
             presenter.loadCreateProductData()
+            presenter.loadCreateProductPhotosVideos()
             firstLaunch = false
         }
         else {
            // val property = args.product!!.property.map{ Property2(it.idProperty!!, it.id) }.toMutableList()
             presenter.updateCreateProductData(
                 idCategory = args.product!!.category.id,
-                idBrand = args.product!!.brand?.id,
+                idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("id=").removeSuffix(",").toLong(),
                 address = args.product!!.address.fullAddress,
                 price = args.product!!.price.toString(),
                 sale = args.product!!.sale.toInt(),
@@ -138,10 +139,10 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             )
            presenter.loadCreateProductData()
             firstLaunch = false
-        }else
+        }else {
             presenter.loadCreateProductData()
-        presenter.loadCreateProductData()
-        presenter.loadCreateProductPhotosVideos()
+            presenter.loadCreateProductPhotosVideos()
+        }
     }
 
     private fun initChips(){
@@ -215,18 +216,14 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             initCreateProductButton()
         }
         else if(result is CreatedProductId)
-            findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(null, result.id.toString()))
+            findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(null, result.id.toString(), true))
         else if(result is MutableMap<*,*>) {
             optionsAdapter.updatePhotoInfo(result as MutableMap<Int, File>)
             initCreateProductButton()
         }
-
-        }else if(result is String){
+        else if(result is String){
             Toast.makeText(requireContext(), result, Toast.LENGTH_SHORT).show()
             findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCabinetFragment())
-        } else{
-            optionsAdapter.updateList(result as CreateProductData)
-            initCreateProductButton()
         }
     }
 

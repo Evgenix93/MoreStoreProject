@@ -22,7 +22,7 @@ data class Product(
     val address: Address,
     val photo: List<ProductPhoto>,
     val user: User,
-    //val category: Category,
+    val category: Category,
     val statistic: ProductStatistic,
 
     val brand: @RawValue Any,

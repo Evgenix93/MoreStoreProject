@@ -116,9 +116,9 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
 
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-        TODO("Not yet implemented")
     }
+
+
 
 
     override fun success() {
