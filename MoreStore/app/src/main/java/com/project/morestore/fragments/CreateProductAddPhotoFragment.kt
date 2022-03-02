@@ -2,6 +2,7 @@ package com.project.morestore.fragments
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -118,6 +119,7 @@ class CreateProductAddPhotoFragment: MvpAppCompatFragment(R.layout.fragment_crea
 
     override fun loaded(result: Any) {
         val fileMap = result as MutableMap<Int, File>
+        Log.d("mylog", fileMap[1]?.absolutePath.toString())
 
         binding.addPhotoCardView6.isVisible = fileMap[4] != null && fileMap[5] != null
         binding.addPhotoCardView7.isVisible = fileMap[6] != null
