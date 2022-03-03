@@ -1,21 +1,16 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.google.android.material.card.MaterialCardView
 import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
@@ -29,8 +24,6 @@ import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import java.util.*
-import kotlin.math.abs
 
 class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpView {
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
@@ -49,6 +42,9 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         initList()
         getActiveProducts()
         getFilter()
+        binding.createNewProductBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_cabinetFragment_to_feedbackProductFragment)
+        }
     }
 
     private fun checkToken(){

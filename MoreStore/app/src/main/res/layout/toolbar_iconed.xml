@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:navigationIcon="@drawable/arrow_back"
+    app:contentInsetStartWithNavigation="0dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        >
+
+        <TextView android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/black"
+            tools:text="Adidas men's blue denim"
+            />
+
+        <TextView android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_alignParentStart="true"
+            android:textSize="10sp"
+            android:textColor="@color/gray2"
+            android:fontFamily="@font/manrope_regular"
+            tools:text="2 000 ₽"
+            tools:ignore="SmallSp"
+            />
+
+        <ImageView android:id="@id/icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:scaleType="fitCenter"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray7"
+            tools:src="@drawable/avatar8"
+            />
+    </RelativeLayout>
+</androidx.appcompat.widget.Toolbar>

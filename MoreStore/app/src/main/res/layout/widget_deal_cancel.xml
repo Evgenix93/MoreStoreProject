@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <TextView android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rectangle_border_green_round4"
+        android:paddingHorizontal="44dp"
+        android:fontFamily="@font/manrope_regular"
+        app:drawableStartCompat="@drawable/ic_cross"
+        android:textSize="16sp"
+        app:drawableTint="@color/green"
+        android:text="@string/chat_deal_cancel"
+        android:paddingVertical="14dp"
+        android:textColor="@color/green"
+        android:drawablePadding="13.25dp"
+        />
+
+</LinearLayout>

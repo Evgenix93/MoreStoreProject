@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/arrow_back"
+        app:contentInsetStartWithNavigation="0dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:fontFamily="@font/manrope_bold"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="20sp"
+            android:text="@string/feedback_photos_title"
+            />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray1"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/photos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        android:paddingTop="20dp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_photo_add"
+        />
+
+    <TextView android:id="@+id/send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/feedback_photos_sendWithoutPhotos"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_rectangle_bordered_round8"
+        android:backgroundTint="@color/green"
+        android:padding="12dp"
+        android:gravity="center"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@font/manrope_bold"
+        android:textSize="16sp"
+        />
+
+</LinearLayout>

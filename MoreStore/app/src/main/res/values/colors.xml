@@ -16,29 +16,19 @@
 
     <color name="white">#FFFFFFFF</color>
 
-    <color name="gray1">#D9D9D9</color>
-    <color name="gray2">#9A9A9A</color>
-    <color name="gray3">#F4F4F4</color>
     <color name="green">#19C120</color>
     <color name="green2">#FAFEF0</color>
     <color name="green3">#E8F8C0</color>
     <color name="green4">#DBF6C6</color>
     <color name="green5">#15A51B</color>
-
-
-
-
-
-
-
     <color name="green6">#15A51B</color>
-
     <color name="green7">#DBF6C6</color>
 
-
-
+    <color name="gray1">#D9D9D9</color>
+    <color name="gray2">#9A9A9A</color>
+    <color name="gray3">#F4F4F4</color>
+    <color name="gray4">#C4CCCF</color>
     <color name="gray5">#E5E5E5</color>
-
     <color name="gray6">#D5CFD1</color>
     <color name="gray7">#EAEAEA</color>
     <color name="gray8">#E3E3E3</color>
@@ -46,8 +36,8 @@
     <color name="gray11">#535859</color>
     <color name="gray12">#787878</color>
     <color name="gray13">#CECECE</color>
+    <color name="transparentGray">#6000</color>
 
-    <color name="gray4">#C4CCCF</color>
     <color name="yellow">#FBFF2D</color>
     <color name="orange">#FFA53D</color>
     <color name="orange2">#FF8413</color>
@@ -62,6 +52,7 @@
     <color name="green8">#C6F6E5</color>
     <color name="green9">#DBF6C6</color>
     <color name="blue3">#007FBE</color>
+    <color name="blue4">#34A7E8</color>
     <color name="gray9">#929292</color>
     <color name="green10">#2A9C4A</color>
     <color name="brown2">#6A3511</color>

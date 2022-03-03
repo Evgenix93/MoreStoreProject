@@ -209,6 +209,11 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
     }
 
 
+    private fun showLoading(loading: Boolean){
+        binding.loader.isVisible = loading
+    }
+
+
 
 
 
@@ -218,6 +223,7 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
 
 
     override fun loaded(result: Any) {
+        showLoading(false)
         binding.secondOptionBtn.text = "Вернуть фон"
         isBackgroundDeleted = true
         val photo = result as ProductPhoto
@@ -270,6 +276,7 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
     }
 
     override fun loading() {
+        showLoading(true)
 
     }
 
@@ -286,6 +293,7 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
     }
 
     override fun success() {
+        showLoading(false)
         findNavController().popBackStack(R.id.createProductAddPhotoFragment, false)
 
     }

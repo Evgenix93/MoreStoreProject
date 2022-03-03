@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:fontFamily="@font/manrope_regular"
+        android:textColor="@color/gray2"
+        android:textSize="10sp"
+        tools:ignore="SmallSp"
+        android:layout_gravity="bottom"
+        tools:text="13:18"
+        />
+
+    <ImageView
+        android:id="@+id/status"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_gravity="bottom"
+        app:tint="@color/green" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_rectangle_border_green_round8"
+        android:layout_marginStart="8dp"
+        android:padding="13dp">
+
+        <TextView android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_medium"
+            app:drawableStartCompat="@drawable/ic_coins"
+            android:textColor="@color/green"
+            android:gravity="center_vertical"
+            android:drawablePadding="8dp"
+            tools:text="3 000 ₽"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/manrope_regular"
+            android:text="@string/chat_price_request"
+            />
+
+        <TextView android:id="@+id/requestStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textSize="10sp"
+            app:drawableStartCompat="@drawable/ic_check_round_fill"
+            tools:ignore="SmallSp"
+            android:text="@string/accessed"
+            android:gravity="center_vertical"
+            android:drawablePadding="6.25dp"
+            android:textColor="@color/green"
+            android:drawableTint="@color/green"
+            android:fontFamily="@font/manrope_semibold"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="16dp"
+    >
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_avatar"
+        android:scaleType="center"
+        android:layout_marginEnd="12dp"
+        tools:srcCompat="@drawable/image1" />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="4dp"
+        android:layout_toEndOf="@+id/avatar"
+        tools:src="@drawable/ic_bag_filled" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@+id/price"
+        android:layout_toEndOf="@+id/icon"
+        android:drawablePadding="6dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/manrope_bold"
+        android:lines="1"
+
+        android:scaleType="fitXY"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        tools:text="123123123123123" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/inter_bold"
+        android:textColor="@color/black"
+
+        tools:text="5 690 ₽" />
+
+    <ImageView
+        android:id="@+id/online"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_below="@+id/name"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toEndOf="@+id/avatar"
+        android:src="@drawable/bg_circle_green" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/name"
+        android:layout_marginTop="3.5dp"
+        android:layout_toStartOf="@+id/unread"
+        android:layout_toEndOf="@+id/online"
+        android:ellipsize="end"
+        android:fontFamily="@font/manrope_regular"
+        android:lines="1"
+        android:textColor="@color/gray2"
+        tools:text="Description" />
+
+    <TextView
+        android:id="@+id/unread"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/price"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3.5dp"
+        android:background="@drawable/bg_circle_green"
+        android:fontFamily="@font/manrope_regular"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        tools:ignore="SmallSp"
+        tools:text="2" />
+
+</RelativeLayout>
