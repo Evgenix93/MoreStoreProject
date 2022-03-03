@@ -66,8 +66,23 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                 1 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductConditionFragment())
                 2 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductPriceFragment())
                 3 -> {
-                    findNavController().navigate(if (args.category!!.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(args.forWho) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(args.forWho, args.category!!.id))
-                }
+                    if(args.product == null)
+                        findNavController().navigate(if (args.category!!.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(args.forWho) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(args.forWho, args.category!!.id))
+                    else {
+                        val forWho = when(args.product!!.property.first{it.id == 14L}.value){
+                            "Женщинам" -> 0
+                            "Мужчинам" -> 1
+                            "Детям" -> 2
+                            else -> null
+                        }
+                        findNavController().navigate(
+                            if (args.product!!.category.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(forWho!!) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(
+                                forWho!!,
+                                args.product!!.category.id
+                            )
+                        )
+                    }
+                    }
                 4 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductDescriptionFragment())
                 5 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
                 6 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
