@@ -811,4 +811,27 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
+    fun deletePhotoBackground(file: File? = null, uri: Uri? = null){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.deletePhotoBackground(file, uri)
+            when (response?.code()) {
+                200 -> {
+                viewState.loaded(response.body()!!.first())
+                    //viewState.loaded(productRepository.downLoadProductImage(response.body()!!.first().photo) ?: "")
+                     }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+        }
+    }
+
 }

@@ -1,11 +1,9 @@
 package com.project.morestore.apis
 
 import com.project.morestore.models.*
+import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ProductApi {
 
@@ -85,6 +83,16 @@ interface ProductApi {
 
     @POST("product/put_product")
     suspend fun changeProductGetError(@Body productData: CreateProductData): Response<String>
+
+    @POST("upload/photo/background")
+    suspend fun deletePhotoBackground(@Body photoData: PhotoData): Response<List<ProductPhoto>>
+
+    @POST("upload/photo/background")
+    suspend fun deletePhotoBackgroundGetError(@Body photoData: PhotoData): Response<String>
+
+    @GET()
+    suspend fun downloadImage(@Url url: String): ResponseBody
+
 
 
 }

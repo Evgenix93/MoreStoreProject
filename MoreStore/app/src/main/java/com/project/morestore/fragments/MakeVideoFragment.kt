@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
+import androidx.camera.core.UseCase
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.*
 import androidx.core.content.ContextCompat
@@ -42,6 +43,7 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
     private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var filePickerLauncher: ActivityResultLauncher<Array<String>>
     private var counterJob: Job? = null
+    private var currentCameraProvider: ProcessCameraProvider? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,6 +67,10 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+            //currentCameraProvider = cameraProvider
+
+
+
 
             // Preview
             val preview = Preview.Builder()
@@ -73,8 +79,11 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                     it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                 }
 
+
+
             val recorder = Recorder.Builder()
-                .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
+                .setQualitySelector(QualitySelector.from(Quality.HIGHEST,
+                    FallbackStrategy.higherQualityOrLowerThan(Quality.SD)))
                 .build()
             videoCapture = VideoCapture.withOutput(recorder)
             imageCapture = ImageCapture.Builder().build()
@@ -86,9 +95,10 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                 // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
 
+
                 // Bind use cases to camera
                 cameraProvider
-                    .bindToLifecycle(this, cameraSelector, preview, videoCapture, imageCapture)
+                    .bindToLifecycle(this, cameraSelector, preview, imageCapture, videoCapture)
             } catch (exc: Exception) {
                 Log.e("mylog", "Use case binding failed", exc)
             }
@@ -103,6 +113,10 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                 MotionEvent.ACTION_DOWN -> {
                     val videoCapture = videoCapture ?: return@setOnTouchListener true
                     Log.d("mylog", "key down")
+                    //currentCameraProvider?.unbind(imageCapture)
+                    //bindUseCase(videoCapture)
+
+
                     presenter.photoVideoBtnPressed(videoCapture)
                     true
                 }
@@ -112,6 +126,7 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                     Log.d("mylog", "key up")
                     recording?.stop()
                     recording = null
+                    //bindUseCase(imageCapture)
                     presenter.photoVideoBtnReleased(imageCapture)
                     true
                 }
@@ -171,6 +186,29 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
             recording = null
 
         }
+    }
+
+    private fun bindUseCase(case: UseCase){
+        try {
+            // Unbind use cases before rebinding
+            currentCameraProvider?.unbindAll()
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+                }
+
+
+
+
+            // Bind use cases to camera
+            currentCameraProvider
+                ?.bindToLifecycle(this, cameraSelector, preview, case)
+        } catch (exc: Exception) {
+            Log.e("mylog", "Use case binding failed", exc)
+        }
+
     }
 
 

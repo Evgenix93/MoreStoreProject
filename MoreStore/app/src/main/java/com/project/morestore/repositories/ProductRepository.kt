@@ -921,6 +921,71 @@ class ProductRepository(private val context: Context) {
         }
     }
 
+    suspend fun deletePhotoBackground(file: File? = null, uri: Uri? = null): Response<List<ProductPhoto>>?{
+        val photoFile = if(file != null){
+            file
+        }else{
+            withContext(Dispatchers.IO){
+                val fileToUpload = File(
+                    context.cacheDir,
+                    "${System.currentTimeMillis()/1000}.${context.contentResolver.getType(uri!!)?.substringAfter('/') ?: "jpg"}"
+                )
+                    context.contentResolver.openInputStream(uri).use { input ->
+                        fileToUpload.outputStream().use { output ->
+                            input?.copyTo(output)
+                        }
+                    }
+
+                fileToUpload
+            }
+        }
+        val photoData = PhotoData(
+            "EditUser",
+            -1,
+            listOf(PhotoVideo("png", Base64.encodeToString(photoFile.readBytes(), Base64.DEFAULT)))
+        )
+
+        return try {
+            productApi.deletePhotoBackground(photoData)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.deletePhotoBackgroundGetError(photoData)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun downLoadProductImage(url: String): File?{
+        return try {
+            val file = File(context.cacheDir, "${System.currentTimeMillis()}.jpeg")
+            productApi.downloadImage(url).byteStream().use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+
+            }
+            file
+        }catch (e: Throwable){
+            null
+
+        }
+    }
+
+
     companion object {
         const val USER_PREFS = "user_prefs"
         const val TOP_SIZES_KEY = "top_sizes_key"
