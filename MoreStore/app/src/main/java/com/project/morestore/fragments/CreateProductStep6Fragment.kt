@@ -69,16 +69,16 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                     if(args.product == null)
                         findNavController().navigate(if (args.category!!.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(args.forWho) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(args.forWho, args.category!!.id))
                     else {
-                        val forWho = when(args.product!!.property.first{it.id == 14L}.value){
+                        val forWho = when(args.product!!.property?.first{it.id == 14L}?.value){
                             "Женщинам" -> 0
                             "Мужчинам" -> 1
                             "Детям" -> 2
                             else -> null
                         }
                         findNavController().navigate(
-                            if (args.product!!.category.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(forWho!!) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(
+                            if (args.product!!.category?.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(forWho!!) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(
                                 forWho!!,
-                                args.product!!.category.id
+                                args.product!!.category?.id ?: 0
                             )
                         )
                     }
@@ -146,9 +146,9 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         else {
             binding.placeProductButton.text = "Сохранить изменения"
 
-           val property = args.product!!.property.map{ Property2(it.idProperty!!, it.id) }.toMutableList()
+           val property = args.product!!.property?.map{ Property2(it.idProperty!!, it.id) }?.toMutableList()
             presenter.updateCreateProductData(
-                idCategory = args.product!!.category.id,
+                idCategory = args.product!!.category?.id,
                 idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
                 address = args.product!!.address.fullAddress,
                 price = args.product!!.price.toString(),
@@ -177,7 +177,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             else -> ""
         }
         if(args.category == null)
-            binding.categoryChip.text = args.product!!.category.name
+            binding.categoryChip.text = args.product!!.category?.name
         else
            binding.categoryChip.text = args.category!!.name
         if(args.brand == null)

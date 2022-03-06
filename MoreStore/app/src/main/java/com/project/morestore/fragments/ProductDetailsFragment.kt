@@ -135,12 +135,12 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 .split(" ")[1].removePrefix("name=").removeSuffix(",")
 
         binding.productConditionTextView.text =
-            product.property.find { it.name == "Состояние" }?.value
+            product.property?.find { it.name == "Состояние" }?.value
         binding.sizeTextView.text =
-            product.property.find { Range.create(1, 9).contains(it.id.toInt()) }?.value.orEmpty()
+            product.property?.find { Range.create(1, 9).contains(it.id.toInt()) }?.value.orEmpty()
         Log.d("product", product.property.toString())
-        binding.productColorTextView.text = product.property.find { it.name == "Цвет" }?.value
-        val colorValue = product.property.find { it.name == "Цвет" }?.ico
+        binding.productColorTextView.text = product.property?.find { it.name == "Цвет" }?.value
+        val colorValue = product.property?.find { it.name == "Цвет" }?.ico
 
         if (colorValue == null)
             binding.colorCircle.background =
@@ -153,7 +153,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             if (product.brand.toString() == "false") "Другое" else product.brand.toString()
                 .split(" ")[1].removePrefix("name=").removeSuffix(",")
         binding.productSizeTextView.text =
-            product.property.find { Range.create(1, 9).contains(it.id.toInt()) }?.value
+            product.property?.find { Range.create(1, 9).contains(it.id.toInt()) }?.value
         binding.sizeChar.isVisible = false
 
 
@@ -168,10 +168,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.productOldPriceTextView.text = crossedStr
 
         binding.productNameTextView.text = product.name
-        binding.likesCountTextView.text = product.statistic.wishlist.total.toString()
+        binding.likesCountTextView.text = product.statistic?.wishlist?.total.toString()
         //binding.shareCountTextView.text = product.statistic.share.total.toString()
         binding.discountTextView.text = "-${product.sale}%"
-        binding.sellerNameTextView.text = product.user.name
+        binding.sellerNameTextView.text = product.user?.name
         binding.productDescriptionTextView.text = product.about
         binding.productNumberTextView.text = product.id.toString()
         // binding.productCityTextView.text = product.address.fullCity.name
@@ -180,13 +180,13 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.productUpLoadDateTextView.text =
             "${(System.currentTimeMillis() / 1000 - product.date) / 86400} дня назад"
         Glide.with(this)
-            .load(product.user.avatar?.photo)
+            .load(product.user?.avatar?.photo)
             .into(binding.avatarImageView)
 
         binding.userClickableView.setOnClickListener {
             findNavController().navigate(
                 ProductDetailsFragmentDirections.actionProductDetailsFragmentToSellerProfileFragment(
-                    product.user
+                    product.user!!
                 )
             )
         }

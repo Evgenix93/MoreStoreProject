@@ -35,11 +35,11 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             Log.d("mylog", "bind")
             val crossedStr = "${product.price} ₽".toSpannable().apply { setSpan(StrikethroughSpan(), 0, length ,0) }
             binding.productOldPriceTextView.text = crossedStr
-            binding.likesCountTextView.text = product.statistic.wishlist.total.toString()
+            binding.likesCountTextView.text = product.statistic?.wishlist?.total.toString()
             binding.productNameTextView.text = product.name
             binding.productPriceTextView.text = "${product.price - ((product.price/100) * product.sale) } ₽"
             binding.productBrandTextView.text = if(product.brand.toString() == "false") "Другое" else product.brand.toString().split(" ")[1].removePrefix("name=").removeSuffix(",")
-            binding.productConditionTextView.text = product.property.find { it.name == "Состояние" }?.value
+            binding.productConditionTextView.text = product.property?.find { it.name == "Состояние" }?.value
 
             Glide.with(itemView)
                 .load(product.photo[0].photo)
