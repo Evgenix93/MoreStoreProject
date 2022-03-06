@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.core.view.marginLeft
@@ -26,10 +27,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.PhotoViewPagerAdapter
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.databinding.FragmentProductBinding
-import com.project.morestore.models.Product
-import com.project.morestore.models.ProductBrand
-import com.project.morestore.models.ProductPhoto
-import com.project.morestore.models.SuggestionModels
+import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
@@ -97,6 +95,17 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 (args.product?.id ?: args.productId?.toLong()) ?: 0.toLong()
             )
         }
+
+        binding.chatBtn.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_productDetailsFragment_to_chatFragment,
+                bundleOf(
+                    ChatFragment.USER_ID_KEY to product?.user?.id,
+                    ChatFragment.PRODUCT_ID_KEY to product?.id,
+                    Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
+                )
+            )
+        }
     }
 
     private fun getProductWishList() {
@@ -117,6 +126,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     private fun bind(product: Product?) {
         product ?: return
+        this.product = product
         initShare(product.id)
         initViewPager(product.photo)
         binding.toolbar.titleTextView.text = product.name
@@ -185,7 +195,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 return@setOnClickListener
             else brandClick(
                 ProductBrand(
-                    product.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
+                    product.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",")
+                        .toFloat().toLong(),
                     "",
                     null,
                     true,
@@ -216,14 +227,16 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     private fun initToolBar() {
         binding.toolbar.titleTextView.text = args.product?.name
-        if(args.isSeller) {
-           binding.toolbar.actionIcon.setOnClickListener {
-               findNavController().navigate(
-                   ProductDetailsFragmentDirections.actionProductDetailsFragmentToCreateProductStep6Fragment(product = args.product ?: product)
-               )
-           }
+        if (args.isSeller) {
+            binding.toolbar.actionIcon.setOnClickListener {
+                findNavController().navigate(
+                    ProductDetailsFragmentDirections.actionProductDetailsFragmentToCreateProductStep6Fragment(
+                        product = args.product ?: product
+                    )
+                )
+            }
         }
-            binding.toolbar.actionIcon.setImageResource(if(args.isSeller) R.drawable.ic_edit else R.drawable.ic_cart)
+        binding.toolbar.actionIcon.setImageResource(if (args.isSeller) R.drawable.ic_edit else R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 

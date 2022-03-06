@@ -358,6 +358,9 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_createProductStep6Fragment"
             app:destination="@id/createProductStep6Fragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/changeRegionFragment"

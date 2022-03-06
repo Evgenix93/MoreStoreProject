@@ -21,11 +21,11 @@ data class Product(
     val date: Long,
     val address: Address,
     val photo: List<ProductPhoto>,
-    val user: User,
-    val category: Category,
-    val statistic: ProductStatistic,
+    val user: User?,
+    val category: Category?,
+    val statistic: ProductStatistic?,
 
-    val brand: @RawValue Any,
-    val property: List<Property>
+    val brand: @RawValue Any?,
+    val property: List<Property>?
 
 ): Parcelable

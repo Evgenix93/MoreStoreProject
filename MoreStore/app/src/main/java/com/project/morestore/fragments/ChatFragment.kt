@@ -16,17 +16,17 @@ import com.project.morestore.databinding.WidgetDealCancelBinding
 import com.project.morestore.databinding.WidgetSellBarBinding
 import com.project.morestore.dialogs.PriceDialog
 import com.project.morestore.dialogs.MenuBottomDialogFragment
-import com.project.morestore.fragments.base.FullscreenFragment
-import com.project.morestore.models.Chat
-import com.project.morestore.models.Media
-import com.project.morestore.models.Message
-import com.project.morestore.models.Msg
+import com.project.morestore.fragments.base.FullscreenMvpFragment
+import com.project.morestore.models.*
+import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import dev.jorik.stub.defToast
+import moxy.ktx.moxyPresenter
 
-class ChatFragment :FullscreenFragment(), MenuBottomDialogFragment.Callback, PriceDialog.Callback {
+class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback, PriceDialog.Callback {
     private lateinit var views :FragmentChatBinding
+    private val presenter by moxyPresenter { ChatPresenter() }
     private val adapter = MessagesAdapter(
         {
             stubAcceptDealRunnable.run()
@@ -53,7 +53,7 @@ class ChatFragment :FullscreenFragment(), MenuBottomDialogFragment.Callback, Pri
         when(val chatType = requireArguments().getString(Chat::class.java.simpleName)){
             Chat.Support::class.java.simpleName -> showSupport()
             Chat.Personal::class.java.simpleName -> showSell()
-            Chat.Deal::class.java.simpleName -> showDeal()
+            Chat.Deal::class.java.simpleName -> {}//showDeal()
             else -> throw IllegalArgumentException("Undefined chat type: $chatType")
         }
     }
@@ -111,7 +111,7 @@ class ChatFragment :FullscreenFragment(), MenuBottomDialogFragment.Callback, Pri
         adapter.setItems(support)
     }
 
-    private fun showDeal(){
+    /*private fun showDeal(){
         adapter.avatarId = R.drawable.user3
         with(views){
             toolbar.title.text = "Елена Б."
@@ -142,6 +142,46 @@ class ChatFragment :FullscreenFragment(), MenuBottomDialogFragment.Callback, Pri
             }
         }
         adapter.setItems(seller)
+    }*/
+
+    private fun showDeal(dialog: DialogWrapper){
+        //adapter.avatarId = dialog.dialog.user.avatar.photo
+        with(views){
+            toolbar.title.text = "Елена Б."
+            toolbar.subtitle.text = "В сети 2 ч. назад"
+            toolbar.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_dropdown, 0)
+            toolbar.title.setOnClickListener {
+                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE)
+                    .show(childFragmentManager, null)
+            }
+            name.text = "Сапоги salamander 35"
+            toolbar.icon.visibility = GONE
+            Glide.with(photo)
+                .load(R.drawable.avatar1)
+                .circleCrop()
+                .into(photo)
+            bottomBar.visibility = VISIBLE
+            WidgetBuyBarBinding.inflate(layoutInflater)
+                .also {
+                    bottomBar.addView(it.root)
+                    it.myPrice.setOnClickListener {
+                        PriceDialog(3890, PriceDialog.Type.PRICE).show(childFragmentManager, null)
+                    }
+                    it.buy.setOnClickListener { buy() }
+                }
+            addMedia.setOnClickListener {
+                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.GEO)
+                    .show(childFragmentManager, null)
+            }
+        }
+        adapter.setItems(seller)
+    }
+
+
+
+    private fun createDealChat(userId: Long, productId: Long){
+        presenter.createDialog(userId, productId)
+
     }
 
     //todo remove stubs
@@ -228,5 +268,10 @@ class ChatFragment :FullscreenFragment(), MenuBottomDialogFragment.Callback, Pri
 
     override fun applyNewPrice(newPrice: String){
         adapter.setItems(requestPrice(newPrice))
+    }
+
+    companion object{
+        const val USER_ID_KEY = "user_id"
+        const val PRODUCT_ID_KEY = "product_id"
     }
 }

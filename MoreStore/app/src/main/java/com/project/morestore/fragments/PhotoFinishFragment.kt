@@ -48,7 +48,6 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
     private val binding: FragmentPhotoFinishBinding by viewBinding()
     private val args: PhotoFinishFragmentArgs by navArgs()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
-    private var launcher: ActivityResultLauncher<Array<String>>? = null
     private var isBackgroundDeleted = false
 
 
@@ -57,17 +56,6 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
         showPhoto()
         initViews()
         setClickListeners()
-        initLauncher()
-        binding.imageView27.background.setTint(ResourcesCompat.getColor(resources, R.color.black6, null))
-        binding.root.background.setTint(ResourcesCompat.getColor(resources, R.color.black6, null))
-
-
-
-
-
-
-
-
     }
 
     private fun showPhoto(){
@@ -81,8 +69,7 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
                 .load(file)
                 .into(binding.imageView27)
         }
-        //binding.imageView27.maxWidth = binding.imageView27.drawable.bounds.width()
-        //binding.imageView27.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
+
 
 
     }
@@ -98,6 +85,11 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
                 binding.netImageView.isVisible = true
             }
         })
+
+        binding.imageView27.background.setTint(ResourcesCompat.getColor(resources, R.color.black6, null))
+        binding.root.background.setTint(ResourcesCompat.getColor(resources, R.color.black6, null))
+
+
     }
 
     private fun setClickListeners() {
@@ -119,14 +111,7 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
         }
 
         binding.finishBtn.setOnClickListener {
-            if (args.photoFile.contains("content")) {
-                savePhoto()
-                //presenter.updateCreateProductDataPhotosVideos(args.photoFile.toUri(), args.position)
-            } else {
-                //requestPermission()
-                savePhoto()
-                //presenter.updateCreateProductDataPhotosVideos(File(args.photoFile), args.position)
-            }
+            savePhoto()
         }
 
 
@@ -136,68 +121,13 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
     private fun savePhoto(){
         binding.imageView27.background.setTintList(ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.white, null)))
         val bitmap = binding.imageView27.drawToBitmap()
-        val file = File(requireContext().cacheDir, "${System.currentTimeMillis()/1000}_image.jpg")
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, file.outputStream())
-        CreateProductData.productPhotosPaths[args.position] = file
-        findNavController().popBackStack(R.id.createProductAddPhotoFragment, false)
-        //var file: File
-        /*QuickShot.of(binding.imageView27).setResultListener(object : QuickShot.QuickShotListener{
-            override fun onQuickShotSuccess(path: String?) {
-                Log.d("mylog", "shot success")
-               // file = File(path)
-                Log.d("mylog", file.path)
-                //Log.d("mylog", requireContext().filesDir.path)
-                val file2 = File(requireContext().cacheDir, "photo.jpg")
-                //file.mkdirs()
-                //file2.mkdirs()
-                //file.inputStream().use { input ->
-                   // file2.outputStream().use { output ->
-                    //input.copyTo(output)
-
-                    //}
-
-                //}
-
-                //Glide.with(this@PhotoFinishFragment)
-                    //.load(file2)
-                    //.into(binding.backIcon)
-                CreateProductData.productPhotosPaths[1] = file
-
-                findNavController().popBackStack(R.id.createProductAddPhotoFragment, false)
-
-
-            }
-
-            override fun onQuickShotFailed(path: String?, errorMsg: String?) {
-
-            }
-        })
-            //.enableLogging()
-            //.setFilename(System.currentTimeMillis().toString())
-            //.setPath(requireContext().cacheDir.path)
-            //.save();
-        //CreateProductData.productPhotosPaths[1] = file */
-
-
-
+        presenter.updateCreateProductDataPhotosVideos(bitmap, args.position)
 
     }
 
-    private fun requestPermission(){
-        launcher?.launch(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE))
-
-    }
-
-    private fun initLauncher(){
-        launcher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ map ->
-            if(map.all { it.value }){
-                savePhoto()
-            }
 
 
-        }
 
-    }
 
 
     private fun deletePhotoBackground(){
@@ -229,49 +159,9 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
         val photo = result as ProductPhoto
          Glide.with(this)
             .load(photo.photo)
-            /*.addListener(object : RequestListener<Drawable>{
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return true
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    Log.d("mylog", "resource ready")
-                    val bitmap = resource?.toBitmap()
-                    bitmap?.setHasAlpha(false)
-                    binding.imageView27.setImageBitmap(bitmap)
-                    return true
-
-                }
-            })*/
-            .into(binding.imageView27)
+             .into(binding.imageView27)
 
         binding.imageView27.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
-
-
-
-
-
-
-        //val file = File(requireContext().cacheDir, "${System.currentTimeMillis()}.jpg")
-        //lifecycleScope.launch {
-          //  withContext(Dispatchers.IO){
-
-            //}
-        //}
-
-        //binding.imageView27.maxWidth = binding.imageView27.drawable.bounds.width()
-        //binding.imageView27.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
 
     }
 

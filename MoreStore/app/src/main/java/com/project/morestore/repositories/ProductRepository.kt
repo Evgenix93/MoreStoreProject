@@ -2,6 +2,7 @@ package com.project.morestore.repositories
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
@@ -783,6 +784,20 @@ class ProductRepository(private val context: Context) {
 
 
 
+        }
+
+    }
+
+    suspend fun updateCreateProductPhotoVideo(bitmap: Bitmap, position: Int): Boolean{
+        return withContext(Dispatchers.IO) {
+            try {
+                val file = File(context.cacheDir, "${System.currentTimeMillis() / 1000}.jpg")
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, file.outputStream())
+                CreateProductData.productPhotosPaths[position] = file
+                true
+            }catch (e: Throwable){
+                false
+            }
         }
 
     }

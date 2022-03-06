@@ -38,5 +38,8 @@ object Network {
     val filterApi: FilterApi
     get() = retrofit.create()
 
+    val chatApi: MessageApi
+    get() = retrofit.create()
+
 
 }

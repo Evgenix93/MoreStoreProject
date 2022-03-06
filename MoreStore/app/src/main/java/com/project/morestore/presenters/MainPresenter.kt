@@ -1,6 +1,7 @@
 package com.project.morestore.presenters
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.*
@@ -681,6 +682,15 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 viewState.success()
             else viewState.error("ошибка")
 
+        }
+    }
+
+    fun updateCreateProductDataPhotosVideos(bitmap: Bitmap, position: Int){
+        presenterScope.launch {
+            val success = productRepository.updateCreateProductPhotoVideo(bitmap, position)
+            if(success)
+                viewState.success()
+            else viewState.error("ошибка")
         }
     }
 
