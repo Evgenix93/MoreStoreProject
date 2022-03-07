@@ -362,15 +362,12 @@ class UserRepository(val context: Context) {
         }
     }
 
-    suspend fun loadFilter(): Boolean{
+    suspend fun loadFilter(){
       return  withContext(Dispatchers.IO){
             val sharedPrefs = context.getSharedPreferences(ProductRepository.USER_PREFS, Context.MODE_PRIVATE)
             val filterJsonString = sharedPrefs.getString(ProductRepository.FILTER_KEY, null)
             if (filterJsonString != null){
                 FilterState.filter = Moshi.Builder().build().adapter(Filter::class.java).fromJson(filterJsonString)!!
-                true
-            }else{
-                false
             }
         }
     }

@@ -429,8 +429,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
   fun loadFilter(){
       presenterScope.launch{
-        val isLoaded =  userRepository.loadFilter()
-          if(isLoaded)
+          userRepository.loadFilter()
           viewState.loaded(userRepository.getFilter())
       }
   }
