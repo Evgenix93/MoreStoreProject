@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                             null
                         )
 
-                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+                   // window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
                 }
 
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
 
-                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+                  //  window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
                 }
 
@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity() {
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
 
-                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+                 //   window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
                 }
 
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
 
-                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+                //    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
                 }
 
@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity() {
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle2, null)
 
-                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+                 //   window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                 }
 
             }

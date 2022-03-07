@@ -5,10 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar_create_product" />
-
     <TextView
         android:id="@+id/textView47"
         android:layout_width="wrap_content"
@@ -147,5 +143,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_create_product" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

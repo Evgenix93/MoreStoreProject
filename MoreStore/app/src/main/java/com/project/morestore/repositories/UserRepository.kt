@@ -362,12 +362,16 @@ class UserRepository(val context: Context) {
         }
     }
 
-    suspend fun loadFilter(){
-        withContext(Dispatchers.IO){
+    suspend fun loadFilter(): Boolean{
+      return  withContext(Dispatchers.IO){
             val sharedPrefs = context.getSharedPreferences(ProductRepository.USER_PREFS, Context.MODE_PRIVATE)
             val filterJsonString = sharedPrefs.getString(ProductRepository.FILTER_KEY, null)
-            if (filterJsonString != null)
+            if (filterJsonString != null){
                 FilterState.filter = Moshi.Builder().build().adapter(Filter::class.java).fromJson(filterJsonString)!!
+                true
+            }else{
+                false
+            }
         }
     }
 
@@ -441,12 +445,29 @@ class UserRepository(val context: Context) {
         return FilterState.filter.chosenProductStatus
     }
 
-    fun saveStyles(styles: List<Boolean>){
-        FilterState.filter.chosenStyles = styles
-    }
 
-    fun loadStyles(): List<Boolean>{
+    fun loadStyles(): List<Property>{
         return FilterState.filter.chosenStyles
     }
 
+   suspend fun saveBrandsProperties(brandsPropertiesData: BrandsPropertiesData): Response<Boolean>?{
+      return  try {
+            Network.userApi.saveBrandsProperties(brandsPropertiesData)
+        }catch(e: Throwable){
+            Log.e("MyDebug", "error = ${e.message}")
+            null
+        }
+    }
+
+    suspend fun loadBrandsProperties(): Response<Boolean>?{
+    return try {
+        Network.userApi.loadBrandsProperties("https://morestore.app-rest.ru/api/v1")
+    }catch (e: Throwable){
+        null
+    }
+    }
+
+   fun getCurrentUserId(): Long{
+       return Token.userId
+   }
 }

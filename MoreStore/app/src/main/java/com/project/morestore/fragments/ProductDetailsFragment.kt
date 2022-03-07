@@ -45,6 +45,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private var wishListLoaded = false
     private var isLiked = false
     private var product: Product? = null
+    private var currentUserId = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,13 +53,11 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         initToolBar()
         loadYouMayLikeProducts()
         bind(args.product)
-        getProduct(args.productId?.toLong())
         setClickListeners()
         getProductWishList()
         hideBottomNav()
         showDialog()
-
-
+        getCurrentUser()
     }
 
     private fun brandClick(brand: ProductBrand) {
@@ -227,18 +226,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     private fun initToolBar() {
         binding.toolbar.titleTextView.text = args.product?.name
-        if (args.isSeller) {
-            binding.toolbar.actionIcon.setOnClickListener {
-                findNavController().navigate(
-                    ProductDetailsFragmentDirections.actionProductDetailsFragmentToCreateProductStep6Fragment(
-                        product = args.product ?: product
-                    )
-                )
-            }
-        }
-        binding.toolbar.actionIcon.setImageResource(if (args.isSeller) R.drawable.ic_edit else R.drawable.ic_cart)
+        binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
+
 
     private fun initList() {
         productAdapter = ProductAdapter(null) {}
@@ -261,6 +252,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     }
 
+    private fun getCurrentUser() {
+        presenter.getUserData()
+    }
+
     private fun initViews() {
         val crossedStr = binding.productOldPriceTextView.text.toSpannable().apply {
             setSpan(
@@ -268,6 +263,18 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             )
         }
         binding.productOldPriceTextView.text = crossedStr
+    }
+
+    private fun setSellerProduct() {
+        binding.chatBtn.isVisible = false
+        binding.toolbar.actionIcon.setOnClickListener {
+            findNavController().navigate(
+                ProductDetailsFragmentDirections.actionProductDetailsFragmentToCreateProductStep6Fragment(
+                    product = args.product ?: product
+                )
+            )
+        }
+        binding.toolbar.actionIcon.setImageResource(R.drawable.ic_edit)
     }
 
 
@@ -298,8 +305,18 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             }
             is Intent -> startIntent(result)
             is Product -> {
+                if (result.user?.id == currentUserId)
+                    setSellerProduct()
                 bind(result)
                 product = result
+            }
+            is User -> {
+                Log.d("MyDebug", "id = $result")
+                currentUserId = result.id
+                if (args.product?.user?.id == result.id)
+                    setSellerProduct()
+                bind(args.product)
+                getProduct(args.productId?.toLong())
             }
         }
 

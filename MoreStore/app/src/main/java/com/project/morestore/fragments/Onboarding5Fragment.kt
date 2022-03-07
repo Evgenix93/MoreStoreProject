@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,7 +26,7 @@ class Onboarding5Fragment: MvpAppCompatFragment(R.layout.fragment_onboarding5), 
 
     private fun setClickListeners(){
         binding.continueBtn.setOnClickListener{
-            presenter.saveFilter(args.isMale)
+            presenter.saveOnboardingData(args.isMale)
         }
 
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
@@ -40,7 +41,7 @@ class Onboarding5Fragment: MvpAppCompatFragment(R.layout.fragment_onboarding5), 
     }
 
     override fun error(message: String) {
-        TODO("Not yet implemented")
+        Log.e("MyDebug", "message = $message")
     }
 
     override fun success() {

@@ -3,6 +3,10 @@ package com.project.morestore.presenters
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.camera.core.ImageCapture
@@ -55,9 +59,6 @@ class PhotoVideoPresenter(val context: Context): MvpPresenter<PhotoVideoMvpView>
     }
 
 
-
-
-
     fun takeVideo(videoCapture: VideoCapture<Recorder>){
 
         val file = repository.createFileForVideo()
@@ -106,14 +107,21 @@ class PhotoVideoPresenter(val context: Context): MvpPresenter<PhotoVideoMvpView>
 
     }
 
-    fun photoVideoBtnReleased(photoCapture: ImageCapture){
+    fun photoVideoBtnReleased(bitmap: Bitmap){
         val timeDiff = System.currentTimeMillis() - pressedTime
         if(timeDiff/1000 < 1){
             prepareVideoJob?.cancel()
-            takePhoto(photoCapture)
+           // takePhoto(photoCapture)
+            presenterScope.launch{
+               val file = repository.createFileForPhoto(bitmap)
+               if(file != null)
+              viewState.onPhotoCaptured(file)
+            }
         }
     }
 
+    fun playVideo(videoUri: Uri){
 
+    }
 
 }

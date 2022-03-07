@@ -592,10 +592,38 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     fun saveFilter() {
         presenterScope.launch {
-            if (userRepository.saveFilter())
-                viewState.success("Фильтр сохранен")
-            else
-                viewState.error("Ошибка сохранения")
+            val filter = userRepository.getFilter()
+            val brandsId = filter.brands.map{it.id}
+            val forWhoId =  filter.chosenForWho.mapIndexedNotNull{index, checked ->
+                if(checked){
+                    when(index){
+                        0 -> 140L
+                        1 -> 141L
+                        2 -> 142L
+                        else -> null
+                    }
+                }
+                else
+                    null
+            }
+            val stylesId = filter.chosenStyles.map{it.id}
+            val sizesId = filter.chosenTopSizes.map{it.id.toLong()} + filter.chosenBottomSizes.map{it.id.toLong()} +
+                    filter.chosenShoosSizes.map{it.id.toLong()} + filter.chosenTopSizesMen.map{it.id.toLong()} +
+                    filter.chosenBottomSizesMen.map{it.id.toLong()} + filter.chosenShoosSizesMen.map{it.id.toLong()} +
+                    filter.chosenTopSizesKids.map{it.id.toLong()} + filter.chosenBottomSizesKids.map{it.id.toLong()} +
+                    filter.chosenShoosSizesKids.map{it.id.toLong()}
+            val colorsId = filter.colors.map{it.id}
+            val materials = filter.chosenMaterials.map{it.id}
+            val propertiesId = forWhoId + stylesId + sizesId + colorsId + materials
+            val response = userRepository.saveBrandsProperties(
+                BrandsPropertiesData("https://morestore.app-rest.ru/api/v1", brandsId, propertiesId)
+            )
+            when(response?.code()){
+                200 -> {if (userRepository.saveFilter())
+                    viewState.success("Фильтр сохранен")
+                else
+                    viewState.error("Ошибка сохранения")}
+            }
         }
     }
 
@@ -855,12 +883,24 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     fun saveStyles(styles: List<Boolean>) {
         val filter = userRepository.getFilter()
-        filter.chosenStyles = styles
+        val propertyStyles = styles.mapIndexedNotNull{index, isChecked ->
+            if(isChecked){
+                when(index){
+                    0 -> Property(143, "Вечерний", null, null, true)
+                    1 -> Property(108, "Деловой", null, null, true)
+                    2 -> Property(109, "Повседневный", null, null, true)
+                    3 -> Property(110, "Спортивный", null, null, true)
+                    else -> null
+                }
+            }else
+                null
+        }
+        filter.chosenStyles = propertyStyles
         userRepository.updateFilter(filter)
     }
 
     fun loadStyles() {
-        val styles = userRepository.loadStyles()
+        val styles = userRepository.getFilter().chosenStyles
         if (styles.isNotEmpty()) {
             viewState.loaded(styles)
         }

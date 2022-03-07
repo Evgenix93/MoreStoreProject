@@ -2,6 +2,7 @@ package com.project.morestore.presenters
 
 import android.content.Context
 import android.util.Log
+import com.project.morestore.models.BrandsPropertiesData
 
 
 import com.project.morestore.models.Size
@@ -11,17 +12,12 @@ import com.project.morestore.repositories.AuthRepository
 
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
-import com.project.morestore.singletones.FilterState
-import com.project.morestore.singletones.Network
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
-import okhttp3.ResponseBody.Companion.toResponseBody
-import retrofit2.Response
-import java.io.IOException
 
 
 class OnboardingPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
@@ -153,13 +149,40 @@ class OnboardingPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
            else
              filter.chosenForWho = listOf(true, false, false)
            userRepository.updateFilter(filter)
-           if (userRepository.saveFilter())
+
+          if (userRepository.saveFilter())
                viewState.success()
            else
                viewState.error("Ошибка")
        }
    }
 
+     fun saveOnboardingData(isMale: Boolean){
+      presenterScope.launch {
+          val filter = userRepository.getFilter()
+          val forWho = if(isMale)
+               listOf(false, true, false)
+          else
+               listOf(true, false, false)
+          val propertiesId = filter.chosenTopSizes.map{it.id.toLong()} + forWho.mapIndexedNotNull{index, checked ->
+              if(checked){
+                  when(index){
+                      0 -> 140L
+                      1 -> 141L
+                      2 -> 142L
+                      else -> null
+                  }
+              }
+              else
+                  null
+          }
+          val response = userRepository.saveBrandsProperties(BrandsPropertiesData("https://morestore.app-rest.ru/api/v1",null, propertiesId))
+          when(response?.code()){
+              200 -> viewState.success()
+              null -> viewState.error("Ошибка")
+          }
+      }
+    }
 
     private suspend fun getStringFromResponse(body: ResponseBody): String {
         return withContext(Dispatchers.IO) {

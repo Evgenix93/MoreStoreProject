@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -52,8 +53,6 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
         initPermissionsLauncher()
         initFilePickerLauncher()
         requestPermissions()
-
-
     }
 
     private fun initViews() {
@@ -68,18 +67,12 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             //currentCameraProvider = cameraProvider
-
-
-
-
             // Preview
             val preview = Preview.Builder()
                 .build()
                 .also {
                     it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                 }
-
-
 
             val recorder = Recorder.Builder()
                 .setQualitySelector(QualitySelector.from(Quality.HIGHEST,
@@ -94,11 +87,9 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
             try {
                 // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
-
-
                 // Bind use cases to camera
                 cameraProvider
-                    .bindToLifecycle(this, cameraSelector, preview, imageCapture, videoCapture)
+                    .bindToLifecycle(this, cameraSelector, preview, videoCapture)
             } catch (exc: Exception) {
                 Log.e("mylog", "Use case binding failed", exc)
             }
@@ -106,9 +97,10 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-
+    @SuppressLint("ClickableViewAccessibility")
     private fun setClickListeners() {
         binding.takePhotoBtn.setOnTouchListener {  _, motionEvent ->
+
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
                     val videoCapture = videoCapture ?: return@setOnTouchListener true
@@ -127,7 +119,8 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                     recording?.stop()
                     recording = null
                     //bindUseCase(imageCapture)
-                    presenter.photoVideoBtnReleased(imageCapture)
+                    if(binding.viewFinder.bitmap != null)
+                    presenter.photoVideoBtnReleased(binding.viewFinder.bitmap!!)
                     true
                 }
                 else -> {true}

@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFilterStyleBinding
+import com.project.morestore.models.Property
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
@@ -31,13 +32,13 @@ class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style)
         }
     }
 
-    private fun bind(list: List<Boolean>) {
+    private fun bind(list: List<Property>) {
 
            // val allNotSelected = FilterState.filter.chosenStyles.all { !it }
-            binding.newWithTagCheckBox.isChecked = list[0]
-            binding.newWithotuTagCheckBox.isChecked = list[1]
-            binding.ExcellentCheckBox.isChecked = list[2]
-            binding.goodCheckBox.isChecked = list[3]
+            binding.newWithTagCheckBox.isChecked = list[0].isChecked == true
+            binding.newWithotuTagCheckBox.isChecked = list[1].isChecked == true
+            binding.ExcellentCheckBox.isChecked = list[2].isChecked == true
+            binding.goodCheckBox.isChecked = list[3].isChecked == true
 
     }
 
@@ -78,7 +79,7 @@ class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style)
     }
 
     override fun loaded(result: Any) {
-        bind(result as List<Boolean>)
+        bind(result as List<Property>)
 
     }
 

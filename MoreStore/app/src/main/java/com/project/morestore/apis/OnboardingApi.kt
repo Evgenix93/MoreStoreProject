@@ -18,4 +18,6 @@ interface OnboardingApi {
 
     @GET("property")
     suspend fun getAllSizesGetError(): Response<String>
+
+
 }
