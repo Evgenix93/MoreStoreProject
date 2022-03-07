@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -59,6 +60,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initViewPager()
         setClickListeners()
         loadFilter()
+        getUserData()
+
 
     }
 
@@ -170,6 +173,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
                 override fun onTextChanged(newText: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     sendBlocking(newText.toString())
+                    currentSuggestionModels = null
 
                 }
 
@@ -189,12 +193,72 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     private fun setClickListeners() {
-        binding.materialCardView10.setOnClickListener { presenter.updateBrand(ProductBrand(1232, "ZARA", 3, true, false)) }
-        binding.materialCardView11.setOnClickListener { presenter.updateBrand(ProductBrand(1045, "STRADIVARIUS", 3, true, false)) }
-        binding.materialCardView12.setOnClickListener { presenter.updateBrand(ProductBrand(468, "H&M", 3, true, false)) }
-        binding.materialCardView13.setOnClickListener { presenter.updateBrand(ProductBrand(685, "MANGO", 3, true, false)) }
-        binding.materialCardView14.setOnClickListener { presenter.updateBrand(ProductBrand(625, "LEVI'S", 2, true, false)) }
-        binding.materialCardView15.setOnClickListener { presenter.updateBrand(ProductBrand(588, "LACOSTE", 2, true, false)) }
+        binding.materialCardView10.setOnClickListener {
+            presenter.updateBrand(
+                ProductBrand(
+                    1232,
+                    "ZARA",
+                    3,
+                    true,
+                    false
+                )
+            )
+        }
+        binding.materialCardView11.setOnClickListener {
+            presenter.updateBrand(
+                ProductBrand(
+                    1045,
+                    "STRADIVARIUS",
+                    3,
+                    true,
+                    false
+                )
+            )
+        }
+        binding.materialCardView12.setOnClickListener {
+            presenter.updateBrand(
+                ProductBrand(
+                    468,
+                    "H&M",
+                    3,
+                    true,
+                    false
+                )
+            )
+        }
+        binding.materialCardView13.setOnClickListener {
+            presenter.updateBrand(
+                ProductBrand(
+                    685,
+                    "MANGO",
+                    3,
+                    true,
+                    false
+                )
+            )
+        }
+        binding.materialCardView14.setOnClickListener {
+            presenter.updateBrand(
+                ProductBrand(
+                    625,
+                    "LEVI'S",
+                    2,
+                    true,
+                    false
+                )
+            )
+        }
+        binding.materialCardView15.setOnClickListener {
+            presenter.updateBrand(
+                ProductBrand(
+                    588,
+                    "LACOSTE",
+                    2,
+                    true,
+                    false
+                )
+            )
+        }
 
 
 
@@ -208,80 +272,98 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             )
         }
 
-        binding.moreForKidsTextView.setOnClickListener { findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(forWho = "kids")) }
-        binding.searchBtn.setOnClickListener {
-            var queryStr  = binding.toolbarMain.searchEditText.text.toString()
-            currentSuggestionModels?.let {  suggestionModels ->
-                val category = suggestionModels.list.find { it.category.toString() != "false"  }
-                val brand = suggestionModels.list.find { it.brand.toString() != "false" }
-                val product = suggestionModels.list.find { it.product }
-
-                category?.let {
-                    presenter.addProductCategory(it.category.toString().toFloat().toLong())
-                }
-                brand?.let {
-                    presenter.addBrand(it.brand.toString().toFloat().toLong())
-                }
-
-                queryStr = product?.text ?: ""
-
-            }
-            Log.d("mylog", "query: $queryStr")
+        binding.moreForKidsTextView.setOnClickListener {
             findNavController().navigate(
-                R.id.catalogFragment,
-                Bundle().apply { putString("query", queryStr) })
+                MainFragmentDirections.actionMainFragmentToCatalogFragment(forWho = "kids")
+            )
         }
-        binding.allProductsCardView.setOnClickListener{
+        binding.searchBtn.setOnClickListener {
+            val queryStr = binding.toolbarMain.searchEditText.text.toString()
+            Log.d("mylog", "query: $queryStr")
+            if (currentSuggestionModels != null)
+                presenter.getSuggestionProducts(currentSuggestionModels!!)
+            else
+                findNavController().navigate(
+                    R.id.catalogFragment,
+                    Bundle().apply { putString("query", queryStr) })
+        }
+        binding.allProductsCardView.setOnClickListener {
             presenter.updateProductCategories(listOf())
         }
-        binding.bagsCardView.setOnClickListener{
-            presenter.updateProductCategories(listOf(ProductCategory(20, "Сумки и Аксессуары", true)))
+        binding.bagsCardView.setOnClickListener {
+            presenter.updateProductCategories(
+                listOf(
+                    ProductCategory(
+                        20,
+                        "Сумки и Аксессуары",
+                        true
+                    )
+                )
+            )
         }
-       binding.shoesCardView.setOnClickListener{
-           presenter.updateProductCategories(listOf(ProductCategory(5, "Обувь", true)))
-       }
-       binding.clothesCardView.setOnClickListener {
-           presenter.updateProductCategories(
-               listOf(
-                   ProductCategory(3, "Бельё", true),
-                   ProductCategory(4, "Брюки", true),
-                   ProductCategory(6, "Платья и Сарафаны", true),
-                   ProductCategory(7, "Юбки", true),
-                   ProductCategory(9, "Джинсы", true),
-                   ProductCategory(11, "Шорты", true),
-                   ProductCategory(12, "Топы и майки", true),
-                   ProductCategory(14, "Домашняя одежда", true),
-                   ProductCategory(15, "Джемперы и Свитеры", true),
-                   ProductCategory(17, "Пиджаки и костюмы", true),
-                   ProductCategory(18, "Блузки", true),
-                   ProductCategory(10, "Одежда для беременных", true),
-                   ProductCategory(13, "Одежда больших размеров", true)
-               )
-           )
-       }
+        binding.shoesCardView.setOnClickListener {
+            presenter.updateProductCategories(listOf(ProductCategory(5, "Обувь", true)))
+        }
+        binding.clothesCardView.setOnClickListener {
+            presenter.updateProductCategories(
+                listOf(
+                    ProductCategory(3, "Бельё", true),
+                    ProductCategory(4, "Брюки", true),
+                    ProductCategory(6, "Платья и Сарафаны", true),
+                    ProductCategory(7, "Юбки", true),
+                    ProductCategory(9, "Джинсы", true),
+                    ProductCategory(11, "Шорты", true),
+                    ProductCategory(12, "Топы и майки", true),
+                    ProductCategory(14, "Домашняя одежда", true),
+                    ProductCategory(15, "Джемперы и Свитеры", true),
+                    ProductCategory(17, "Пиджаки и костюмы", true),
+                    ProductCategory(18, "Блузки", true),
+                    ProductCategory(10, "Одежда для беременных", true),
+                    ProductCategory(13, "Одежда больших размеров", true)
+                )
+            )
+        }
 
         binding.outerwearCardView.setOnClickListener {
             presenter.updateProductCategories(listOf(ProductCategory(2, "Верхняя одежда", true)))
         }
         binding.accessoriesCardView.setOnClickListener {
-            presenter.updateProductCategories(listOf(ProductCategory(20, "Сумки и Аксессуары", true)))
+            presenter.updateProductCategories(
+                listOf(
+                    ProductCategory(
+                        20,
+                        "Сумки и Аксессуары",
+                        true
+                    )
+                )
+            )
         }
         binding.sportTourismCardView.setOnClickListener {
-            presenter.updateProductCategories(listOf(ProductCategory(16, "Спортивная одежда", true)))
+            presenter.updateProductCategories(
+                listOf(
+                    ProductCategory(
+                        16,
+                        "Спортивная одежда",
+                        true
+                    )
+                )
+            )
 
         }
         binding.kidsCardView.setOnClickListener {
             presenter.updateProductCategories(
-                listOf(ProductCategory(21, "Школьная форма", true),
-                ProductCategory(22, "Праздничные костюмы", true))
-            )
-          /*  findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
-                null,
-                arrayOf(
+                listOf(
                     ProductCategory(21, "Школьная форма", true),
                     ProductCategory(22, "Праздничные костюмы", true)
                 )
-            ))*/
+            )
+            /*  findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
+                  null,
+                  arrayOf(
+                      ProductCategory(21, "Школьная форма", true),
+                      ProductCategory(22, "Праздничные костюмы", true)
+                  )
+              ))*/
         }
     }
 
@@ -335,6 +417,15 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         presenter.loadFilter()
     }
 
+    private fun getUserData(){
+        presenter.getUserData()
+    }
+
+
+
+
+
+
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
@@ -349,14 +440,23 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 return
             }
 
+            if (currentSuggestionModels != null) {
+                findNavController().navigate(
+                    R.id.catalogFragment,
+                    bundleOf("query" to binding.toolbarMain.searchEditText.text.toString())
+                )
+                return
+
+            }
+
             kidsProductAdapter.updateList(result as List<Product>)
         }
 
         //if (result is Boolean)
-           // if (!result) {
-            //    findNavController().navigate(MainFragmentDirections.actionMainFragmentToFirstLaunchFragment())
+        // if (!result) {
+        //    findNavController().navigate(MainFragmentDirections.actionMainFragmentToFirstLaunchFragment())
 
-           // }
+        // }
 
         if (result is Filter) {
             bindFilter(result)
@@ -379,10 +479,13 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 requireContext(),
                 R.layout.item_suggestion_textview,
                 list
-            ){ position, string ->
+            ) { position, string ->
                 Log.d("mylog", "click position $position")
                 binding.toolbarMain.searchEditText.dismissDropDown()
+                presenter.cancelSearchJob()
+                binding.toolbarMain.searchEditText.setAdapter(null)
                 binding.toolbarMain.searchEditText.setText(string)
+                initToolbar()
                 currentSuggestionModels = objectList[position]
 
             }

@@ -25,7 +25,7 @@ data class Product(
     val category: Category?,
     val statistic: ProductStatistic?,
 
-    val brand: @RawValue Any?,
+    val brand: ProductBrand?,
     val property: List<Property>?
 
 ): Parcelable

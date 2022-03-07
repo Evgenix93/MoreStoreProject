@@ -229,5 +229,9 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    fun changeSoftInputMode(mode: Int){
+        window.setSoftInputMode(mode)
+    }
 }
 

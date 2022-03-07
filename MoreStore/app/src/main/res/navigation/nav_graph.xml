@@ -489,6 +489,9 @@
         <action
             android:id="@+id/action_createProductStep1Fragment_to_createProductHowToSellFragment"
             app:destination="@id/createProductHowToSellFragment" />
+        <action
+            android:id="@+id/action_createProductStep1Fragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep2Fragment"

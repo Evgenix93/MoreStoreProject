@@ -15,7 +15,7 @@ data class CreateProductData(
     var dateEnd: Long? = null,
     var status: Int? = null,
     var price: String? = null,
-    var sale: Int? = null,
+    var sale: Float? = null,
     var name: String? = null,
     var about: String? = null,
     var phone: String? = null,

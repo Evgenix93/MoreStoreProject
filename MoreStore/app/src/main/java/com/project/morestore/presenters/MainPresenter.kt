@@ -157,6 +157,83 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
+    fun getSuggestionProducts(suggestionModels: SuggestionModels) {
+        presenterScope.launch {
+            viewState.loading()
+            val filter = userRepository.getFilter()
+            val category = suggestionModels.list.find { it.category != null }
+            val brand = suggestionModels.list.find { it.brand != null }
+            val product = suggestionModels.list.find { it.product == true }
+
+            category?.let {
+                val forWho: Int =
+                    if (category.category == 6.toLong()
+                        || category.category == 7.toLong()
+                        || category.category == 4.toLong()
+                        || category.category == 10.toLong()
+                        || category.category == 18.toLong()
+                    )
+                        0
+                    else if (category.category == 8.toLong())
+                        1
+                    else if (category.category == 21.toLong()
+                        || category.category == 22.toLong()
+                    )
+                        2
+                    else filter.chosenForWho.indexOf(true)
+                filter.chosenForWho = listOf(forWho == 0, forWho == 1, forWho == 2)
+                filter.categories.forEach { it.isChecked = false }
+                val filterCategory =
+                    filter.categories.find { it.id == category.category?.toInt() }
+                        ?.apply { isChecked = true }
+
+                filterCategory ?: run {
+                    val response = productRepository.getProductCategories()
+                    if (response?.code() == 200) {
+                        if (filter.categories.isNotEmpty())
+                            filter.categories = filter.categories + listOf(
+                                response.body()?.find { it.id == category.category?.toInt() }!!
+                                    .apply { isChecked = true })
+                        else
+                            filter.categories = response.body()!!.apply {
+                                find { it.id == category.category?.toInt() }?.apply {
+                                    isChecked = true
+                                }
+                            }
+
+                    }
+                }
+            }
+            brand?.let {
+                filter.brands.forEach { it.isChecked = false }
+                val filterBrand =
+                    filter.brands.find { it.id == brand.brand }
+                        ?.apply { isChecked = true }
+
+                filterBrand ?: run {
+                    val response = productRepository.getBrands()
+                    if (response?.code() == 200) {
+                        if (filter.brands.isNotEmpty())
+                            filter.brands = filter.brands + listOf(
+                                response.body()?.find { it.id == brand.brand }!!
+                                    .apply { isChecked = true })
+                        else
+                            filter.brands = response.body()!!
+                                .apply { find { it.id == brand.brand }?.apply { isChecked = true } }
+
+                    }
+                }
+            }
+
+            val queryStr = product?.text ?: ""
+            userRepository.updateFilter(filter)
+
+            getProducts(queryStr, isFiltered = true)
+
+
+        }
+    }
+
     fun getYouMayLikeProducts() {
         presenterScope.launch {
             if (authRepository.getUserId() == 0.toLong()) {
@@ -230,41 +307,78 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             }
             .onEach { result ->
                 result?.let {
-                    if(result.code() == 200) {
+                    if (result.code() == 200) {
                         //viewState.loadedSuggestions(result.body()!!)
                         Log.d("mylog", result.body()?.get(0)?.brand.toString())
-                        val categoryList = result.body()?.filter { it.category.toString() != "false" }.orEmpty().toSet()
-                        val brandList = result.body()?.filter { it.brand.toString() != "false" }.orEmpty().toSet()
-                        val productList = result.body()?.filter { it.product }.orEmpty().toSet()
+                        val categoryList =
+                            result.body()?.filter { it.category != null }.orEmpty().toSet()
+                        val brandList = result.body()?.filter { it.brand != null }.orEmpty().toSet()
+                        val productList =
+                            result.body()?.filter { it.product == true }.orEmpty().toSet()
 
                         val suggestionsList = mutableListOf<String>()
                         val suggestionObjects = mutableListOf<SuggestionModels>()
 
-                        if(categoryList.isNotEmpty())
-                        for (category in categoryList){
-                            if(brandList.isNotEmpty())
-                            for(brand in brandList){
-                                if(productList.isNotEmpty())
-                                for(product in productList){
-                                    suggestionsList.add("${category.text} ${brand.text} ${product.text}")
-                                    suggestionObjects.add(SuggestionModels(listOf(category, brand, product)))
-                                }else {suggestionsList.add("${category.text} ${brand.text}")
-                                suggestionObjects.add(SuggestionModels(listOf(category, brand)))}
-                            }else if(productList.isNotEmpty())
-                                for(product in productList){
-                                suggestionsList.add("${category.text} ${product.text}")
-                                    suggestionObjects.add(SuggestionModels(listOf(category, product)))
-                            }else {suggestionsList.add("${category.text}")
-                            suggestionObjects.add(SuggestionModels(listOf(category)))}
-                        }else   if(brandList.isNotEmpty())
-                            for(brand in brandList){
-                                if(productList.isNotEmpty())
-                                for(product in productList){
-                                    suggestionsList.add("${brand.text} ${product.text}")
-                                    suggestionObjects.add(SuggestionModels(listOf(brand, product)))
-                                } else {suggestionsList.add("${brand.text}")
-                                suggestionObjects.add(SuggestionModels(listOf(brand)))}
-                            }else   for(product in productList){
+                        if (categoryList.isNotEmpty())
+                            for (category in categoryList) {
+                                if (brandList.isNotEmpty())
+                                    for (brand in brandList) {
+                                        if (productList.isNotEmpty())
+                                            for (product in productList) {
+                                                suggestionsList.add("${category.text} ${brand.text} ${product.text}")
+                                                suggestionObjects.add(
+                                                    SuggestionModels(
+                                                        listOf(
+                                                            category,
+                                                            brand,
+                                                            product
+                                                        )
+                                                    )
+                                                )
+                                            } else {
+                                            suggestionsList.add("${category.text} ${brand.text}")
+                                            suggestionObjects.add(
+                                                SuggestionModels(
+                                                    listOf(
+                                                        category,
+                                                        brand
+                                                    )
+                                                )
+                                            )
+                                        }
+                                    } else if (productList.isNotEmpty())
+                                    for (product in productList) {
+                                        suggestionsList.add("${category.text} ${product.text}")
+                                        suggestionObjects.add(
+                                            SuggestionModels(
+                                                listOf(
+                                                    category,
+                                                    product
+                                                )
+                                            )
+                                        )
+                                    } else {
+                                    suggestionsList.add("${category.text}")
+                                    suggestionObjects.add(SuggestionModels(listOf(category)))
+                                }
+                            } else if (brandList.isNotEmpty())
+                            for (brand in brandList) {
+                                if (productList.isNotEmpty())
+                                    for (product in productList) {
+                                        suggestionsList.add("${brand.text} ${product.text}")
+                                        suggestionObjects.add(
+                                            SuggestionModels(
+                                                listOf(
+                                                    brand,
+                                                    product
+                                                )
+                                            )
+                                        )
+                                    } else {
+                                    suggestionsList.add("${brand.text}")
+                                    suggestionObjects.add(SuggestionModels(listOf(brand)))
+                                }
+                            } else for (product in productList) {
                             suggestionsList.add("${product.text}")
                             suggestionObjects.add(SuggestionModels(listOf(product)))
                         }
@@ -303,20 +417,21 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         viewState.success()
     }
 
-    fun addProductCategory(productCategoryId: Long){
+    fun addProductCategory(productCategoryId: Long) {
         val filter = userRepository.getFilter()
-        if(filter.categories.all { it.isChecked == false || it.isChecked == null }.not())
-            filter.categories.find { it.id == productCategoryId.toInt() }?.apply { isChecked = true }
+        if (filter.categories.all { it.isChecked == false || it.isChecked == null }.not())
+            filter.categories.find { it.id == productCategoryId.toInt() }
+                ?.apply { isChecked = true }
         userRepository.updateFilter(filter)
 
     }
 
-  fun loadFilter(){
-      presenterScope.launch{
-          userRepository.loadFilter()
-          viewState.loaded(userRepository.getFilter())
-      }
-  }
+    fun loadFilter() {
+        presenterScope.launch {
+            userRepository.loadFilter()
+            viewState.loaded(userRepository.getFilter())
+        }
+    }
 
     fun updateBrand(brand: ProductBrand) {
         val filter = userRepository.getFilter()
@@ -325,15 +440,26 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         viewState.success()
     }
 
-    fun addBrand(brandId: Long){
+    fun addBrand(brandId: Long) {
+        // presenterScope.launch {
         val filter = userRepository.getFilter()
-        if(filter.brands.all { it.isChecked == false || it.isChecked == null }.not())
+        if (filter.brands.isNotEmpty())
             filter.brands.find { it.id == brandId }?.apply { isChecked = true }
+        else {
+            filter.brands = listOf(ProductBrand(brandId, "", null, true, null))
+            //val response = productRepository.getBrands()
+            // if(response?.code() == 200) {
+            // filter.brands = response.body()!!
+            //filter.brands.find { it.id == brandId }?.apply { isChecked = true }
+            // }
+        }
         userRepository.updateFilter(filter)
+
+        //}
 
     }
 
-    fun getCategories(forWho: Int){
+    fun getCategories(forWho: Int) {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getProductCategories()
@@ -406,7 +532,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     }
 
 
-   private fun getProperties(propertyId: Long) {
+    private fun getProperties(propertyId: Long) {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getProperties()
@@ -426,53 +552,50 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     }
 
-    fun getSizes(forWho: Int, idCategory: Int){
-        when(forWho){
+    fun getSizes(forWho: Int, idCategory: Int) {
+        when (forWho) {
             0 -> {
-                val isBottomSizes =  when(idCategory){
+                val isBottomSizes = when (idCategory) {
                     4 -> true
                     7 -> true
                     9 -> true
                     11 -> true
                     else -> false
                 }
-                if(isBottomSizes) {
+                if (isBottomSizes) {
                     removeProperty(5)
                     getProperties(5)
-                }
-                else {
+                } else {
                     removeProperty(4)
                     getProperties(4)
                 }
             }
             1 -> {
-                val isBottomSizes =  when(idCategory){
+                val isBottomSizes = when (idCategory) {
                     8 -> true
                     9 -> true
                     11 -> true
                     else -> false
                 }
-                if(isBottomSizes) {
+                if (isBottomSizes) {
                     removeProperty(2)
                     getProperties(2)
-                }
-                else {
+                } else {
                     removeProperty(1)
                     getProperties(1)
                 }
             }
             2 -> {
-                val isBottomSizes =  when(idCategory){
+                val isBottomSizes = when (idCategory) {
                     8 -> true
                     9 -> true
                     11 -> true
                     else -> false
                 }
-                if(isBottomSizes) {
+                if (isBottomSizes) {
                     removeProperty(8)
                     getProperties(8)
-                }
-                else {
+                } else {
                     removeProperty(7)
                     getProperties(7)
                 }
@@ -480,8 +603,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getSizesShoos(forWho: Int){
-        when(forWho) {
+    fun getSizesShoos(forWho: Int) {
+        when (forWho) {
             0 -> {
                 removeProperty(6)
                 getProperties(6)
@@ -509,7 +632,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         getProperties(7)
     }
 
-    fun getBottomSizesWomen(){
+    fun getBottomSizesWomen() {
 
     }
 
@@ -576,12 +699,14 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     }
 
-    fun addNewBrand(brandName: String){
+    fun addNewBrand(brandName: String) {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.addNewBrand(NewProductBrand(null, brandName))
             when (response?.code()) {
-                200 -> { viewState.loaded(response.body()!!.apply { name = brandName })}
+                200 -> {
+                    viewState.loaded(response.body()!!.apply { name = brandName })
+                }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)
@@ -604,6 +729,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 200 -> {
 
                     viewState.loaded(response.body()!!)
+                    authRepository.setupUserId(response.body()!!.id)
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -625,7 +751,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 200 -> {
                     val photosUploaded = uploadProductPhotos(response.body()?.first()?.id!!)
                     val videosUploaded = uploadProductVideos(response.body()?.first()?.id!!)
-                    if(photosUploaded && videosUploaded)
+                    if (photosUploaded && videosUploaded)
                         viewState.loaded(response.body()!!.first())
                 }
                 400 -> {
@@ -647,7 +773,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         idBrand: Long? = null,
         phone: String? = null,
         price: String? = null,
-        sale: Int? = null,
+        sale: Float? = null,
         about: String? = null,
         address: String? = null,
         extProperty: Property2? = null,
@@ -670,59 +796,62 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         )
     }
 
-    fun updateCreateProductDataPhotosVideos(photoVideo: File, position: Int){
+    fun updateCreateProductDataPhotosVideos(photoVideo: File, position: Int) {
         productRepository.updateCreateProductPhotoVideo(photoVideo, position)
         viewState.success()
     }
 
-    fun updateCreateProductDataPhotosVideos(photoVideoUri: Uri, position: Int){
+    fun updateCreateProductDataPhotosVideos(photoVideoUri: Uri, position: Int) {
         presenterScope.launch {
             val success = productRepository.updateCreateProductPhotoVideo(photoVideoUri, position)
-            if(success)
+            if (success)
                 viewState.success()
             else viewState.error("ошибка")
 
         }
     }
 
-    fun updateCreateProductDataPhotosVideos(bitmap: Bitmap, position: Int){
+    fun updateCreateProductDataPhotosVideos(bitmap: Bitmap, position: Int) {
         presenterScope.launch {
             val success = productRepository.updateCreateProductPhotoVideo(bitmap, position)
-            if(success)
+            if (success)
                 viewState.success()
             else viewState.error("ошибка")
         }
     }
 
-    fun removeProperty(propertyCategory: Long){
+    fun removeProperty(propertyCategory: Long) {
         productRepository.removeProperty(propertyCategory)
     }
 
-    fun loadCreateProductData(){
+    fun loadCreateProductData() {
         viewState.loaded(productRepository.loadCreateProductData())
     }
 
-    fun clearCreateProductData(){
+    fun clearCreateProductData() {
         productRepository.clearCreateProductData()
     }
 
-    fun loadCreateProductPhotosVideos(){
+    fun loadCreateProductPhotosVideos() {
         viewState.loaded(productRepository.loadCreateProductPhotosVideos())
     }
 
 
-    private suspend fun uploadProductPhotos(productId: Long): Boolean{
+    private suspend fun uploadProductPhotos(productId: Long): Boolean {
         val photosVideosMap = productRepository.loadCreateProductPhotosVideos()
-        val photos = photosVideosMap.filter { it.value.extension == "jpg" || it.value.extension == "png" }
-            .map { it.value }
+        val photos =
+            photosVideosMap.filter { it.value.extension == "jpg" || it.value.extension == "png" }
+                .map { it.value }
 
-        if (photos.isEmpty()){
+        if (photos.isEmpty()) {
             return true
         }
 
-        val response = productRepository.uploadProductPhotos(photos, productId )
+        val response = productRepository.uploadProductPhotos(photos, productId)
         when (response?.code()) {
-            200 -> { return true }
+            200 -> {
+                return true
+            }
             400 -> {
                 val bodyString = getStringFromResponse(response.errorBody()!!)
                 viewState.error(bodyString)
@@ -745,18 +874,20 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     }
 
-    private suspend fun uploadProductVideos(productId: Long): Boolean{
+    private suspend fun uploadProductVideos(productId: Long): Boolean {
         val photosVideosMap = productRepository.loadCreateProductPhotosVideos()
         val videos = photosVideosMap.filter { it.value.extension == "mp4" }
             .map { it.value }
 
-        if (videos.isEmpty()){
+        if (videos.isEmpty()) {
             return true
         }
 
-        val response = productRepository.uploadProductVideos(videos, productId )
+        val response = productRepository.uploadProductVideos(videos, productId)
         when (response?.code()) {
-            200 -> { return true }
+            200 -> {
+                return true
+            }
             400 -> {
                 val bodyString = getStringFromResponse(response.errorBody()!!)
                 viewState.error(bodyString)
@@ -779,34 +910,36 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     }
 
-    fun getShoosTypes(){
+    fun getShoosTypes() {
         getProperties(15)
     }
 
-    fun getJeansStyles(){
+    fun getJeansStyles() {
         getProperties(17)
     }
 
-    fun getTopClotStyles(){
+    fun getTopClotStyles() {
         getProperties(18)
     }
 
-    fun changeProductStatus(productId: Long, status: Int){
-       presenterScope.launch{
-           val response = productRepository.changeProductStatus(productId, status)
-           when(response?.code()){
-               200 -> viewState.loaded("Success")
-               null -> {}
-           }
-       }
+    fun changeProductStatus(productId: Long, status: Int) {
+        presenterScope.launch {
+            val response = productRepository.changeProductStatus(productId, status)
+            when (response?.code()) {
+                200 -> viewState.loaded("Success")
+                null -> {}
+            }
+        }
     }
 
-    fun changeProduct(){
+    fun changeProduct() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.changeProductData()
             when (response?.code()) {
-                200 -> { viewState.loaded(response.body()!!.first())}
+                200 -> {
+                    viewState.loaded(response.body()!!.first())
+                }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)
@@ -821,15 +954,15 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun deletePhotoBackground(file: File? = null, uri: Uri? = null){
+    fun deletePhotoBackground(file: File? = null, uri: Uri? = null) {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.deletePhotoBackground(file, uri)
             when (response?.code()) {
                 200 -> {
-                viewState.loaded(response.body()!!.first())
+                    viewState.loaded(response.body()!!.first())
                     //viewState.loaded(productRepository.downLoadProductImage(response.body()!!.first().photo) ?: "")
-                     }
+                }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)

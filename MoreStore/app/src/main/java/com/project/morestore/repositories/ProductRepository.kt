@@ -703,7 +703,7 @@ class ProductRepository(private val context: Context) {
         idBrand: Long? = null,
         phone: String? = null,
         price: String? = null,
-        sale: Int? = null,
+        sale: Float? = null,
         about: String? = null,
         address: String? = null,
         extProperty: Property2? = null,
@@ -759,7 +759,7 @@ class ProductRepository(private val context: Context) {
 
 
     fun updateCreateProductPhotoVideo(photoVideo: File, position: Int){
-        CreateProductData.productPhotosPaths[position] = photoVideo
+        CreateProductData.productPhotosMap[position] = photoVideo
     }
 
     suspend fun updateCreateProductPhotoVideo(photoVideoUri: Uri, position: Int): Boolean{
@@ -774,8 +774,8 @@ class ProductRepository(private val context: Context) {
                         input?.copyTo(output)
                     }
                 }
-                CreateProductData.productPhotosPaths[position] = file
-                Log.d("mylog", CreateProductData.productPhotosPaths[position]?.name.toString())
+                CreateProductData.productPhotosMap[position] = file
+                Log.d("mylog", CreateProductData.productPhotosMap[position]?.name.toString())
                 true
             }catch (e: Throwable){
                 false
@@ -793,7 +793,7 @@ class ProductRepository(private val context: Context) {
             try {
                 val file = File(context.cacheDir, "${System.currentTimeMillis() / 1000}.jpg")
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, file.outputStream())
-                CreateProductData.productPhotosPaths[position] = file
+                CreateProductData.productPhotosMap[position] = file
                 true
             }catch (e: Throwable){
                 false
@@ -827,10 +827,11 @@ class ProductRepository(private val context: Context) {
 
     fun clearCreateProductData(){
         CreateProductData.createProductData = CreateProductData()
+        CreateProductData.productPhotosMap.clear()
     }
 
     fun loadCreateProductPhotosVideos(): MutableMap<Int, File>{
-        return CreateProductData.productPhotosPaths
+        return CreateProductData.productPhotosMap
     }
 
     suspend fun uploadProductPhotos(files: List<File>, productId: Long): Response<List<ProductPhoto>>?{

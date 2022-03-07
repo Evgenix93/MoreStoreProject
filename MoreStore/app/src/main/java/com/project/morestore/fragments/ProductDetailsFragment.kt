@@ -139,14 +139,54 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.sizeTextView.text =
             product.property?.find { Range.create(1, 9).contains(it.id.toInt()) }?.value.orEmpty()
         Log.d("product", product.property.toString())
-        binding.productColorTextView.text = product.property?.find { it.name == "Цвет" }?.value
-        val colorValue = product.property?.find { it.name == "Цвет" }?.ico
+        val colors = product.property?.filter { it.name == "Цвет" }
 
-        if (colorValue == null)
-            binding.colorCircle.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
-        else
-            binding.colorCircle.background.setTint(Color.parseColor(colorValue))
+        colors?.forEachIndexed { index, property ->
+            val colorValue = property.ico
+            when(index) {
+               0 -> {
+                   binding.productColorTextView.text = property.value
+                       if (colorValue == null)
+                           binding.colorCircle.background =
+                               ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
+                       else
+                           binding.colorCircle.background.setTint(Color.parseColor(colorValue))
+               }
+
+                1 -> {
+                    binding.productColor2TextView.text = property.value
+                    binding.productColor2TextView.isVisible = true
+                    binding.colorCircle2.isVisible = true
+                    if (colorValue == null)
+                        binding.colorCircle2.background =
+                            ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
+                    else
+                        binding.colorCircle2.background.setTint(Color.parseColor(colorValue))
+                }
+
+                2 -> {
+                    binding.productColor3TextView.text = property.value
+                    binding.productColor3TextView.isVisible = true
+                    binding.colorCircle3.isVisible = true
+                    if (colorValue == null)
+                        binding.colorCircle3.background =
+                            ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
+                    else
+                        binding.colorCircle3.background.setTint(Color.parseColor(colorValue))
+                }
+
+                3 -> {
+                    binding.productColor4TextView.text = property.value
+                    binding.productColor4TextView.isVisible = true
+                    binding.colorCircle4.isVisible = true
+                    if (colorValue == null)
+                        binding.colorCircle4.background =
+                            ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
+                    else
+                        binding.colorCircle4.background.setTint(Color.parseColor(colorValue))
+                }
+            }
+        }
 
         binding.productCityTextView.text = product.address.fullAddress
         binding.productBrandTextView.text =

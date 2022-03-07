@@ -6,5 +6,5 @@ import com.squareup.moshi.JsonClass
 data class DialogWrapper(
     val product: Product,
     val dialog: Dialog,
-    val messages: List<MessageModel>
+    val messages: List<MessageModel>?
     )

@@ -16,7 +16,8 @@ import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class CreateProductStep1Fragment: MvpAppCompatFragment(R.layout.fragment_create_product_step1), MainMvpView {
+class CreateProductStep1Fragment : MvpAppCompatFragment(R.layout.fragment_create_product_step1),
+    MainMvpView {
     private val binding: FragmentCreateProductStep1Binding by viewBinding()
     private var forWhoAdapter: ForWhoCreateProductAdapter by autoCleared()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
@@ -31,27 +32,35 @@ class CreateProductStep1Fragment: MvpAppCompatFragment(R.layout.fragment_create_
     }
 
 
-    private fun setClickListeners(){
+    private fun setClickListeners() {
         binding.howToSellTextView.setOnClickListener {
             findNavController().navigate(CreateProductStep1FragmentDirections.actionCreateProductStep1FragmentToCreateProductHowToSellFragment())
         }
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
         binding.toolbar.titleTextView.text = "Шаг 1 из 6"
 
-        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+        binding.toolbar.actionIcon.setOnClickListener {
+            findNavController().navigate(
+                CreateProductStep1FragmentDirections.actionCreateProductStep1FragmentToMainFragment()
+            )
+        }
     }
 
-    private fun initList(){
-        forWhoAdapter = ForWhoCreateProductAdapter{ position ->
-            findNavController().navigate(CreateProductStep1FragmentDirections.actionCreateProductStep1FragmentToCreateProductStep2Fragment(position))
+    private fun initList() {
+        forWhoAdapter = ForWhoCreateProductAdapter { position ->
+            findNavController().navigate(
+                CreateProductStep1FragmentDirections.actionCreateProductStep1FragmentToCreateProductStep2Fragment(
+                    position
+                )
+            )
 
         }
-        with(binding.itemsList){
+        with(binding.itemsList) {
             adapter = forWhoAdapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
@@ -60,15 +69,13 @@ class CreateProductStep1Fragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     }
 
-   fun saveProduct(productId: Long){
+    fun saveProduct(productId: Long) {
 
-   }
-
-    private fun clearCreateProductData(){
-        presenter.clearCreateProductData()
     }
 
-
+    private fun clearCreateProductData() {
+        presenter.clearCreateProductData()
+    }
 
 
     override fun loaded(result: Any) {

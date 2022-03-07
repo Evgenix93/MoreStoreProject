@@ -3,11 +3,13 @@ package com.project.morestore.fragments
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductDescriptionBinding
 import com.project.morestore.models.SuggestionModels
@@ -25,6 +27,7 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initSaveButton()
+        changeSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
     private fun initToolbar(){
@@ -54,6 +57,16 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
 
     private fun saveDescription(){
         presenter.updateCreateProductData(about = binding.descriptionEditText.text.toString())
+    }
+
+    private fun changeSoftInputMode(mode: Int){
+        (activity as MainActivity).changeSoftInputMode(mode)
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        changeSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 
     override fun loaded(result: Any) {

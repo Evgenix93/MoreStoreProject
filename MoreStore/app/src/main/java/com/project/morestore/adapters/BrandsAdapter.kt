@@ -146,7 +146,7 @@ class BrandsAdapter(private val onWishClick: (id: Long) -> Unit) :
     fun updateList2(newList: List<ProductBrand>){
         list.forEachIndexed{index, productBrand ->
             newList.forEach{
-                if(productBrand.name == it.name)
+                if(productBrand.id == it.id)
                     list[index] = it
                 notifyItemChanged(index)
             }

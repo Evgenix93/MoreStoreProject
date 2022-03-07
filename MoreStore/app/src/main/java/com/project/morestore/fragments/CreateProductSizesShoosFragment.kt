@@ -21,7 +21,8 @@ import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class CreateProductSizesShoosFragment: MvpAppCompatFragment(R.layout.fragment_create_product_sizes_shoos), MainMvpView {
+class CreateProductSizesShoosFragment :
+    MvpAppCompatFragment(R.layout.fragment_create_product_sizes_shoos), MainMvpView {
     private val binding: FragmentCreateProductSizesShoosBinding by viewBinding()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var sizeAdapter: SizeLineAdapter by autoCleared()
@@ -34,53 +35,63 @@ class CreateProductSizesShoosFragment: MvpAppCompatFragment(R.layout.fragment_cr
         initToolBar()
     }
 
-    private fun initToolBar(){
+    private fun initToolBar() {
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
         binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
     }
 
-    private fun initList(){
-        sizeAdapter = SizeLineAdapter(true, true, context = requireContext()){initSaveButton(it)}
-        with(binding.sizesList){
+    private fun initList() {
+        sizeAdapter = SizeLineAdapter(true, true, context = requireContext()) { initSaveButton(it) }
+        with(binding.sizesList) {
             adapter = sizeAdapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
     }
 
-    private fun getSizes(){
+    private fun getSizes() {
         presenter.getSizesShoos(args.forWho)
     }
 
-    private fun initSaveButton(isChecked: Boolean){
-        if(isChecked) {
+    private fun initSaveButton(isChecked: Boolean) {
+        if (isChecked) {
             binding.showProductsBtn.isEnabled = true
-            binding.showProductsBtn.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
-        }
-        else{
+            binding.showProductsBtn.backgroundTintList =
+                ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
+        } else {
             binding.showProductsBtn.isEnabled = false
-            binding.showProductsBtn.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
+            binding.showProductsBtn.backgroundTintList =
+                ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
         }
 
-        binding.showProductsBtn.setOnClickListener{
+        binding.showProductsBtn.setOnClickListener {
             saveSize()
             findNavController().popBackStack()
         }
     }
 
-    private fun saveSize(){
+    private fun saveSize() {
         val size = sizeAdapter.getChosenSizes().first { it.isSelected }
         val property = Property2(size.id.toLong(), size.idCategory.toLong())
         presenter.removeProperty(size.idCategory.toLong())
         presenter.updateCreateProductData(extProperty = property)
     }
 
-    private fun convertPropertyListToSizeLineList(properties: List<Property>): List<SizeLine>{
+    private fun convertPropertyListToSizeLineList(properties: List<Property>): List<SizeLine> {
         val listShoosSizes =
             (properties)
                 .map {
                     val list = it.ico?.split(';').orEmpty()
-                    SizeLine(it.id.toInt(), it.name, "", list[0].removePrefix("FR").removeSurrounding("'"), list[1].removePrefix("US").removeSurrounding("'"), list[2].removePrefix("UK").removeSurrounding("'"), false, idCategory = it.idCategory?.toInt()!!)
+                    SizeLine(
+                        it.id.toInt(),
+                        it.name,
+                        "",
+                        if(args.forWho != 2) list[0].removePrefix("FR").removeSurrounding("'") else "",
+                        if(args.forWho != 2) list[1].removePrefix("US").removeSurrounding("'") else "",
+                        if(args.forWho != 2) list[2].removePrefix("UK").removeSurrounding("'") else "",
+                        false,
+                        idCategory = it.idCategory?.toInt()!!
+                    )
 
                 }
 
@@ -88,17 +99,13 @@ class CreateProductSizesShoosFragment: MvpAppCompatFragment(R.layout.fragment_cr
     }
 
 
-
-
-
-
-
-
-
-
     override fun loaded(result: Any) {
         val otherSize = SizeLine(-1, "", "", "", "", "", false, -1)
-        sizeAdapter.updateList(convertPropertyListToSizeLineList(result as List<Property>) + listOf(otherSize), null)
+        sizeAdapter.updateList(
+            convertPropertyListToSizeLineList(result as List<Property>) + listOf(
+                otherSize
+            ), null
+        )
 
     }
 

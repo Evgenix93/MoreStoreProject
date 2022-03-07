@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class Suggestion(
     val text: String,
-    val brand: Any,
-    val category: Any,
-    val product: Boolean
+    val brand: Long?,
+    val category: Long?,
+    val product: Boolean?
 )

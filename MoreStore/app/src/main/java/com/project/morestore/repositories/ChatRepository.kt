@@ -1,9 +1,7 @@
 package com.project.morestore.repositories
 
 import android.util.Log
-import com.project.morestore.models.CreatedDialogId
-import com.project.morestore.models.CreatingDialog
-import com.project.morestore.models.DialogWrapper
+import com.project.morestore.models.*
 import com.project.morestore.singletones.CreateProductData
 import com.project.morestore.singletones.Network
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -63,6 +61,58 @@ class ChatRepository {
             }
         }
     }
+
+    suspend fun addMessage(text: String, dialogId: Long): Response<MessageModel>? {
+        return try {
+            chatApi.addMessage(CreatingMessage(dialogId, text))
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = chatApi.addMessageGetError(CreatingMessage(dialogId, text))
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getDialogs(): Response<List<DialogWrapper>>? {
+        return try {
+            chatApi.getDialogs()
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = chatApi.getDialogsGetError()
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
+
 
 
 }

@@ -88,23 +88,11 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
         binding.searchBtn.setOnClickListener {
             var queryStr  = binding.toolbarMain.searchEditText.text.toString()
-            currentSuggestionModels?.let {  suggestionModels ->
-                val category = suggestionModels.list.find { it.category.toString() != "false"  }
-                val brand = suggestionModels.list.find { it.brand.toString() != "false" }
-                val product = suggestionModels.list.find { it.product }
-
-                category?.let {
-                    presenter.addProductCategory(it.category.toString().toFloat().toLong())
-                }
-                brand?.let {
-                    presenter.addBrand(it.brand.toString().toFloat().toLong())
-                }
-
-                queryStr = product?.text ?: ""
-
-            }
             Log.d("mylog", "query: $queryStr")
-            presenter.getProducts(queryStr = queryStr, isFiltered = true, productCategories = null)
+            if(currentSuggestionModels != null)
+                presenter.getSuggestionProducts(currentSuggestionModels!!)
+            else
+                presenter.getProducts(queryStr = queryStr, isFiltered = true)
 
         }
     }
@@ -312,7 +300,11 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
             ){ position, string ->
                 Log.d("mylog", "click position $position")
                 binding.toolbarMain.searchEditText.dismissDropDown()
+                presenter.cancelSearchJob()
+                binding.toolbarMain.searchEditText.setAdapter(null)
                 binding.toolbarMain.searchEditText.setText(string)
+                initToolbar()
+                binding.toolbarMain.filterBtn.isVisible = false
                 currentSuggestionModels = objectList[position]
 
             }

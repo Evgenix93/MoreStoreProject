@@ -17,5 +17,5 @@ object CreateProductData {
     var phone: String? = null
     var property: MutableList<Property2>? = null*/
    var createProductData = CreateProductData()
-   val productPhotosPaths = mutableMapOf<Int, File>()
+   val productPhotosMap = mutableMapOf<Int, File>()
 }

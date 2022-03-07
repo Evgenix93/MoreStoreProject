@@ -830,6 +830,85 @@
                 app:layout_constraintStart_toStartOf="@+id/productCondition2TextView"
                 app:layout_constraintTop_toBottomOf="@+id/productCondition2TextView" />
 
+            <View
+                android:id="@+id/colorCircle2"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:visibility="gone"
+                android:layout_marginTop="19dp"
+                android:background="@drawable/color_circle"
+
+                app:layout_constraintStart_toStartOf="@+id/productCondition2TextView"
+                app:layout_constraintTop_toBottomOf="@+id/colorCircle" />
+
+            <View
+                android:id="@+id/colorCircle3"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:visibility="gone"
+                android:layout_marginTop="19dp"
+                android:background="@drawable/color_circle"
+
+                app:layout_constraintStart_toStartOf="@+id/productCondition2TextView"
+                app:layout_constraintTop_toBottomOf="@+id/colorCircle2" />
+
+            <View
+                android:id="@+id/colorCircle4"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:visibility="gone"
+                android:layout_marginTop="19dp"
+                android:background="@drawable/color_circle"
+
+                app:layout_constraintStart_toStartOf="@+id/productCondition2TextView"
+                app:layout_constraintTop_toBottomOf="@+id/colorCircle3" />
+
+
+            <TextView
+                android:id="@+id/productColor2TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginStart="8dp"
+                android:text="Черный"
+                android:textAppearance="@style/regular_16"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/colorCircle"
+                app:layout_constraintTop_toTopOf="@+id/colorCircle2"
+                app:layout_constraintBottom_toBottomOf="@id/colorCircle2"/>
+
+            <TextView
+                android:id="@+id/productColor3TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginStart="8dp"
+                android:text="Черный"
+                android:textAppearance="@style/regular_16"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/colorCircle"
+                app:layout_constraintTop_toTopOf="@+id/colorCircle3"
+                app:layout_constraintBottom_toBottomOf="@id/colorCircle3"/>
+
+            <TextView
+                android:id="@+id/productColor4TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginStart="8dp"
+                android:text="Черный"
+                android:textAppearance="@style/regular_16"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/colorCircle"
+                app:layout_constraintTop_toTopOf="@+id/colorCircle4"
+                app:layout_constraintBottom_toBottomOf="@id/colorCircle4"/>
+
+
+
+
+
+
+
 
             <ImageView
                 android:id="@+id/errorImageView"
@@ -837,7 +916,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:src="@drawable/ic_chat_circle_text"
-                app:layout_constraintTop_toBottomOf="@id/textView14"
+                app:layout_constraintTop_toBottomOf="@id/colorCircle4"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"/>
@@ -850,7 +929,7 @@
                 android:text="Проверьте цвет товара. Он не чёрный"
                 android:textAppearance="@style/regular_16"
                 android:textColor="@color/red"
-                app:layout_constraintTop_toBottomOf="@id/textView14"
+                app:layout_constraintTop_toBottomOf="@id/colorCircle4"
                 app:layout_constraintStart_toEndOf="@id/errorImageView"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="8dp"/>

@@ -1,8 +1,6 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.CreatedDialogId
-import com.project.morestore.models.CreatingDialog
-import com.project.morestore.models.DialogWrapper
+import com.project.morestore.models.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -22,6 +20,20 @@ interface MessageApi {
 
     @GET("message/dialogs/{id}")
     suspend fun getDialogByIdGetError(@Path("id") id: Long): Response<String>
+
+    @POST("message")
+    suspend fun addMessage(@Body message: CreatingMessage): Response<MessageModel>
+
+    @POST("message")
+    suspend fun addMessageGetError(@Body message: CreatingMessage): Response<String>
+
+    @GET("message/dialogs")
+    suspend fun getDialogs(): Response<List<DialogWrapper>>
+
+    @GET("message/dialogs")
+    suspend fun getDialogsGetError(): Response<String>
+
+
 
 
 }

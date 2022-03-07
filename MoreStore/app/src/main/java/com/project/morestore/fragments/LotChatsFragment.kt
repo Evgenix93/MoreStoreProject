@@ -55,27 +55,27 @@ class LotChatsFragment :BottomNavigationFragment() {
 
     //todo delete stubs
     private val stubs = listOf(
-        Chat.Personal("Екатерина М.", "Здравствуйте! Еще продаете? ",
+        Chat.Personal(0,"Екатерина М.", "Здравствуйте! Еще продаете? ",
             R.drawable.user1,
             0f,
             1,
             true
         ),
-        Chat.Personal("Влада Т.", "Здравствуйте! Хотела спросить ...",
+        Chat.Personal(0,"Влада Т.", "Здравствуйте! Хотела спросить ...",
             R.drawable.user2,
             0f,
             2
         ),
-        Chat.Personal("Богдан В.", "Интересно, какую скидку вы ...",
+        Chat.Personal(0,"Богдан В.", "Интересно, какую скидку вы ...",
             R.drawable.user3,
             0f,
             online = true
         ),
-        Chat.Personal("Иван И.", "Здравствуйте! Еще продаете?",
+        Chat.Personal(0,"Иван И.", "Здравствуйте! Еще продаете?",
             R.drawable.user4,
             0f
         ),
-        Chat.Personal("Сергей С.", "Здравствуйте! Интересно ваше ...",
+        Chat.Personal(0,"Сергей С.", "Здравствуйте! Интересно ваше ...",
             R.drawable.user5,
             0f
         )

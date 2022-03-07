@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.project.morestore.R
@@ -18,15 +19,17 @@ import com.project.morestore.dialogs.PriceDialog
 import com.project.morestore.dialogs.MenuBottomDialogFragment
 import com.project.morestore.fragments.base.FullscreenMvpFragment
 import com.project.morestore.models.*
+import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import dev.jorik.stub.defToast
 import moxy.ktx.moxyPresenter
 
-class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback, PriceDialog.Callback {
+class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback, PriceDialog.Callback, ChatMvpView {
     private lateinit var views :FragmentChatBinding
-    private val presenter by moxyPresenter { ChatPresenter() }
+    private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
+    private var currentUserId: Long? = null
     private val adapter = MessagesAdapter(
         {
             stubAcceptDealRunnable.run()
@@ -45,6 +48,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setClickListeners()
         with(views){
             toolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
             list.setSpace(24.dp)
@@ -53,13 +57,20 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         when(val chatType = requireArguments().getString(Chat::class.java.simpleName)){
             Chat.Support::class.java.simpleName -> showSupport()
             Chat.Personal::class.java.simpleName -> showSell()
-            Chat.Deal::class.java.simpleName -> {}//showDeal()
+            Chat.Deal::class.java.simpleName -> {
+                val userId = requireArguments().getLong(USER_ID_KEY, 0)
+                val productId = requireArguments().getLong(PRODUCT_ID_KEY, 0)
+                val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
+                if(userId != 0L && productId != 0L)
+                    createDealChat(userId, productId)
+                else getDialog(dialogId)
+            }//showDeal()
             else -> throw IllegalArgumentException("Undefined chat type: $chatType")
         }
     }
 
     private fun showSell(){
-        adapter.avatarId = R.drawable.user2
+       // adapter.avatarUri = R.drawable.user2
         with(views){
             toolbar.title.text = "Влада Т."
             toolbar.subtitle.text = "В сети 2 ч. назад"
@@ -92,7 +103,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     private fun showSupport() {
-        adapter.avatarId = R.drawable.ic_headphones
+        //adapter.avatarUri = R.drawable.ic_headphones
         with(views) {
             toolbar.icon.setPadding(7.dp, 7.dp, 7.dp, 7.dp)
             toolbar.title.setText(R.string.chat_support_title)
@@ -145,19 +156,19 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }*/
 
     private fun showDeal(dialog: DialogWrapper){
-        //adapter.avatarId = dialog.dialog.user.avatar.photo
+        adapter.avatarUri = dialog.dialog.user.avatar?.photo.orEmpty()
         with(views){
-            toolbar.title.text = "Елена Б."
+            toolbar.title.text = dialog.dialog.user.name
             toolbar.subtitle.text = "В сети 2 ч. назад"
             toolbar.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_dropdown, 0)
             toolbar.title.setOnClickListener {
                 MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE)
                     .show(childFragmentManager, null)
             }
-            name.text = "Сапоги salamander 35"
+            name.text = dialog.product.name
             toolbar.icon.visibility = GONE
             Glide.with(photo)
-                .load(R.drawable.avatar1)
+                .load(dialog.product.photo.first().photo)
                 .circleCrop()
                 .into(photo)
             bottomBar.visibility = VISIBLE
@@ -174,7 +185,13 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                     .show(childFragmentManager, null)
             }
         }
-        adapter.setItems(seller)
+        val messages = dialog.messages?.map {
+            if(it.idSender == currentUserId)
+            Message.My("13:00", R.drawable.ic_check_double, it.text)
+            else
+                Message.Companion(listOf(Msg("13:10", it.text)))
+        }
+        adapter.setItems(messages.orEmpty())
     }
 
 
@@ -182,6 +199,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private fun createDealChat(userId: Long, productId: Long){
         presenter.createDialog(userId, productId)
 
+    }
+
+    private fun getDialog(id: Long){
+        presenter.getDialogById(id)
     }
 
     //todo remove stubs
@@ -256,6 +277,15 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         listenGeo = false
     }
 
+    private fun setClickListeners(){
+        views.send.setOnClickListener {
+            if(views.messageEditText.text.isNullOrBlank().not())
+            presenter.addMessage(views.messageEditText.text.toString())
+            adapter.addMessage(Message.My("13:00", R.drawable.ic_check_double, views.messageEditText.text.toString()))
+
+        }
+    }
+
     private fun requestPrice(newPrice: String) = listOf<Message>( *seller.toTypedArray(),
         Message.Special.PriceRequest("13:20", R.drawable.ic_check_double, newPrice),
         Message.Special.PriceAccepted("${getString(R.string.priceDownTo)} $newPrice")
@@ -273,5 +303,36 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     companion object{
         const val USER_ID_KEY = "user_id"
         const val PRODUCT_ID_KEY = "product_id"
+        const val DIALOG_ID_KEY = "dialog_id"
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun dialogsLoaded(dialogs: List<DialogWrapper>) {
+
+    }
+
+    override fun dialogLoaded(dialog: DialogWrapper) {
+        showDeal(dialog)
+
+    }
+
+    override fun dialogCreated(dialogId: CreatedDialogId) {
+
+    }
+
+    override fun error(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun currentUserIdLoaded(id: Long) {
+        currentUserId = id
+    }
+
+    override fun messageSent(message: MessageModel) {
+        Toast.makeText(requireContext(), "Сообщение отправлено", Toast.LENGTH_SHORT).show()
     }
 }

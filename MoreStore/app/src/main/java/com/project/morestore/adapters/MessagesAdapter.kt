@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.LinearLayout.*
-import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.*
 import com.project.morestore.models.Message
@@ -21,7 +21,7 @@ class MessagesAdapter(
     private val cancelDealCallback :() -> Unit,
     private val showMediaCallback :() -> Unit
 ) :RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    @DrawableRes var avatarId :Int = 0
+     var avatarUri :String = ""
     private var items = listOf<Message>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -84,6 +84,11 @@ class MessagesAdapter(
         notifyDataSetChanged()
     }
 
+    fun addMessage(message: Message){
+        items = items + listOf(message)
+        notifyDataSetChanged()
+    }
+
     enum class Type {
         DIVIDER,
         MY,
@@ -133,9 +138,12 @@ class MessagesAdapter(
                     .inflate(context.inflater, holder, true)
                     .apply {
                         if(it == message.msgs.last()){
-                            if(avatarId == R.drawable.ic_headphones) avatar.setPadding(5.dp, 5.dp, 5.dp, 5.dp)
+                           // if(avatarId == R.drawable.ic_headphones) avatar.setPadding(5.dp, 5.dp, 5.dp, 5.dp)
                             avatar.clipToOutline = true
-                            avatar.setImageResource(avatarId)
+                            //avatar.setImageResource(avatarId)
+                            Glide.with(itemView)
+                                .load(avatarUri)
+                                .into(avatar)
                         } else {
                             avatar.visibility = INVISIBLE
                         }
@@ -176,7 +184,7 @@ class MessagesAdapter(
         fun bind(buyRequest :Message.Special.DealRequest){
             with(views){
                 avatar.clipToOutline = true
-                avatar.setImageResource(avatarId)
+                //avatar.setImageResource(avatarUri)
                 time.text = buyRequest.time
             }
         }
@@ -188,7 +196,7 @@ class MessagesAdapter(
         fun bind(item :Message.Special.DealAccept){
             with(views){
                 avatar.clipToOutline = true
-                avatar.setImageResource(avatarId)
+                //avatar.setImageResource(avatarUri)
                 time.text = item.time
             }
         }

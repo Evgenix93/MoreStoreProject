@@ -51,10 +51,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             binding.placeProductButton.text = "Сохранить изменения"
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        clearCreateProductData()
-    }
+
 
 
 
@@ -152,7 +149,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                 idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
                 address = args.product!!.address.fullAddress,
                 price = args.product!!.price.toString(),
-                sale = args.product!!.sale.toInt(),
+                sale = args.product!!.sale,
                 about = args.product!!.about,
                 phone = args.product!!.phone,
                 extProperties = property,
@@ -242,8 +239,16 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             optionsAdapter.updateList(result)
             initCreateProductButton()
         }
-        else if(result is CreatedProductId)
-            findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(null, result.id.toString(), true))
+        else if(result is CreatedProductId) {
+            clearCreateProductData()
+            findNavController().navigate(
+                CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(
+                    null,
+                    result.id.toString(),
+                    true
+                )
+            )
+        }
         else if(result is MutableMap<*,*>) {
             val map = mutableMapOf<Int, File>()
             map[0] = File("")
