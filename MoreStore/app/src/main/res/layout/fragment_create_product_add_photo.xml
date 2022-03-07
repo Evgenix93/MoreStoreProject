@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -200,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -310,7 +310,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -419,7 +419,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -458,7 +458,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -496,7 +496,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -535,7 +535,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -573,7 +573,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -612,7 +612,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -650,7 +650,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="53dp"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera_gray" />
 
                 <TextView
                     android:layout_width="wrap_content"

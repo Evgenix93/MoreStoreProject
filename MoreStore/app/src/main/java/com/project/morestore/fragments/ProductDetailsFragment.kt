@@ -130,8 +130,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         initViewPager(product.photo)
         binding.toolbar.titleTextView.text = product.name
         binding.chosenBrandTextView.text =
-            if (product.brand.toString() == "false") "Другое" else product.brand.toString()
-                .split(" ")[1].removePrefix("name=").removeSuffix(",")
+            if (product.brand == null) "Другое" else product.brand.name
 
         binding.productConditionTextView.text =
             product.property?.find { it.name == "Состояние" }?.value
@@ -189,8 +188,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
         binding.productCityTextView.text = product.address.fullAddress
         binding.productBrandTextView.text =
-            if (product.brand.toString() == "false") "Другое" else product.brand.toString()
-                .split(" ")[1].removePrefix("name=").removeSuffix(",")
+            if (product.brand == null) "Другое" else product.brand.name
         binding.productSizeTextView.text =
             product.property?.find { Range.create(1, 9).contains(it.id.toInt()) }?.value
         binding.sizeChar.isVisible = false
@@ -230,18 +228,9 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             )
         }
         binding.chosenBrandTextView.setOnClickListener {
-            if (product.brand.toString() == "false")
+            if (product.brand == null)
                 return@setOnClickListener
-            else brandClick(
-                ProductBrand(
-                    product.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",")
-                        .toFloat().toLong(),
-                    "",
-                    null,
-                    true,
-                    null
-                )
-            )
+            else brandClick(product.brand)
         }
         val listener =
             MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)

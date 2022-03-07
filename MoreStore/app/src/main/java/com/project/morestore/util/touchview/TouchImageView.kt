@@ -1,4 +1,4 @@
-package com.ortiz.touchview
+package com.project.morestore.util.touchview
 
 import android.annotation.TargetApi
 import android.content.Context
@@ -22,6 +22,9 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.OverScroller
 import androidx.appcompat.widget.AppCompatImageView
+import com.ortiz.touchview.*
+import com.ortiz.touchview.ImageActionState
+import com.ortiz.touchview.ZoomVariables
 import com.project.morestore.R
 import kotlin.math.abs
 import kotlin.math.max
@@ -869,7 +872,9 @@ open class TouchImageView @JvmOverloads constructor(context: Context, attrs: Att
                         fixTrans()
                         last[curr.x] = curr.y
                     }
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> setState(ImageActionState.NONE)
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> setState(
+                        ImageActionState.NONE
+                    )
                 }
             }
 
