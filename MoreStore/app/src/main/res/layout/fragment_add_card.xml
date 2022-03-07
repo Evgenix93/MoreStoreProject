@@ -15,9 +15,11 @@
         android:text="Привязка банковской карты"
         android:textAppearance="@style/bold_24"
         android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintBottom_toTopOf="@+id/payButton"
+        app:layout_constraintVertical_bias="0.1"/>
 
     <TextView
         android:id="@+id/textView48"
@@ -133,6 +135,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editText4" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/payButton"
         style="@style/buttonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
