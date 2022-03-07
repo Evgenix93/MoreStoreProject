@@ -4,19 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/toolbar_create_product"
-        android:id="@+id/toolbar"/>
-
     <TextView
         android:id="@+id/priceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Стоимость"
         android:textAppearance="@style/bold_24"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13"
+        app:layout_constraintBottom_toTopOf="@+id/saveButton"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"/>
+        />
 
     <TextView
         android:id="@+id/setPriceTextView"
@@ -45,9 +44,9 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/setPriceTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/originalPriceTextView"
+        app:layout_constraintTop_toBottomOf="@+id/setPriceTextView"
         android:layout_marginTop="15dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
@@ -98,8 +97,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/show_discount"
-        app:layout_constraintTop_toBottomOf="@id/salePriceTextView"
+        app:layout_constraintTop_toBottomOf="@+id/salePriceTextView"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="420dp"
         android:layout_marginTop="28dp"
         android:layout_marginStart="10dp"
         android:textAppearance="@style/regular_14"/>
@@ -117,5 +117,8 @@
         app:backgroundTint="@color/gray1"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <include layout="@layout/toolbar_create_product"
+        android:id="@+id/toolbar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
+import com.project.morestore.singletones.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -426,12 +427,13 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     }
 
-    fun loadFilter() {
-        presenterScope.launch {
-            userRepository.loadFilter()
-            viewState.loaded(userRepository.getFilter())
-        }
-    }
+  fun loadFilter(){
+      presenterScope.launch{
+        val isLoaded =  userRepository.loadFilter()
+          if(isLoaded)
+          viewState.loaded(userRepository.getFilter())
+      }
+  }
 
     fun updateBrand(brand: ProductBrand) {
         val filter = userRepository.getFilter()
@@ -972,9 +974,36 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 else -> viewState.error("ошибка")
 
             }
-
-
         }
     }
 
+    fun loadOnboardingData(){
+        presenterScope.launch {
+        val response = userRepository.loadBrandsProperties()
+         when(response?.code()){
+             200 -> {
+                 Log.d("MyDebug", "saveProperties = true")
+                 loadFilter()}
+             else -> {
+                 Log.d("MyDebug", "showOnBoarding")
+                 Log.d("MyDebug", "response = ${response?.errorBody()}")
+                 viewState.showOnBoarding()
+             }
+         }
+        }
+    }
+
+    fun getCurrentUser(){
+        presenterScope.launch {
+            val response = userRepository.getCurrentUserInfo()
+            when(response?.code()){
+                200 -> {
+                    Log.d("MyDebug", "success getUser")
+                    viewState.loaded(response.body()!!)
+                }
+                else -> {Log.d("MyDebug", "error getUser response= ${response?.body()}")
+                }
+            }
+        }
+    }
 }

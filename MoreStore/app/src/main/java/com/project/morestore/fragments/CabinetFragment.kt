@@ -61,7 +61,13 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
             presenter.clearToken()
         }
 
+       binding.createNewProductBtn.setOnClickListener{
+           findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToCreateProductStep1Fragment())
+       }
 
+        binding.createNewProductBtn2.setOnClickListener{
+            findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToCreateProductStep1Fragment())
+        }
     }
 
     private fun showBottomNav(){

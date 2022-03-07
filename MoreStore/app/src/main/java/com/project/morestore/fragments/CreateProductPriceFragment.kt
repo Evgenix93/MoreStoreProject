@@ -45,11 +45,11 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if(p0.isNullOrEmpty()){
-                    binding.saveButton.isEnabled = false
+                   // binding.saveButton.isEnabled = false
                     binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
                 }else{
                     if(binding.salePriceEditText.text.toString().isNotEmpty()){
-                        binding.saveButton.isEnabled = true
+                     //   binding.saveButton.isEnabled = true
                         binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
                     }
                 }

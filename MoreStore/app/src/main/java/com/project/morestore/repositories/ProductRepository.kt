@@ -186,14 +186,14 @@ class ProductRepository(private val context: Context) {
 
             var stylesList = listOf<String>()
             if (filter?.chosenStyles?.isNotEmpty() == true) {
-                if (filter!!.chosenStyles[1]) {
+                if (filter.chosenStyles[1].isChecked == true) {
                     stylesList = stylesList + listOf<String>("property[10][108]=on")
                 }
-                if (filter.chosenStyles[2]) {
+                if (filter.chosenStyles[2].isChecked == true) {
                     stylesList = stylesList + listOf<String>("property[10][109]=on")
                 }
 
-                if (filter.chosenStyles[3]) {
+                if (filter.chosenStyles[3].isChecked == true) {
                     stylesList = stylesList + listOf<String>("property[10][110]=on")
                 }
 
@@ -799,7 +799,6 @@ class ProductRepository(private val context: Context) {
                 false
             }
         }
-
     }
 
     fun removeProperty(propertyCategory: Long) {

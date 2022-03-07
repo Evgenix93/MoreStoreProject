@@ -52,9 +52,9 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadOnboardingData()
         isMainLoaded = false
         showBottomNavBar()
-        presenter.loadOnBoardingViewed()
         initToolbar()
         initLists()
         initViewPager()
@@ -426,6 +426,10 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
 
 
+    private fun loadOnboardingData(){
+      presenter.loadOnboardingData()
+    }
+
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
@@ -460,7 +464,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
         if (result is Filter) {
             bindFilter(result)
-
         }
 
     }
@@ -470,6 +473,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     override fun showOnBoarding() {
+        Log.d("MyDebug", "showOnBoarding mainFragment")
         findNavController().navigate(MainFragmentDirections.actionMainFragmentToOnboarding1Fragment())
     }
 

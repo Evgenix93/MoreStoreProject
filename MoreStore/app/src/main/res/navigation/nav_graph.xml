@@ -285,6 +285,9 @@
         <action
             android:id="@+id/action_cabinetFragment_to_feedbackProductFragment"
             app:destination="@id/feedbackProductFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_createProductStep1Fragment"
+            app:destination="@id/createProductStep1Fragment" />
     </fragment>
     <dialog
         android:id="@+id/resumeRegisterDialog"

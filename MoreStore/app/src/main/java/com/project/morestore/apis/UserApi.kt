@@ -88,8 +88,10 @@ interface UserApi {
     @GET("wishlist")
     suspend fun getProductWishListGetError(): Response<String>
 
+    @POST("property/save")
+    suspend fun saveBrandsProperties(@Body brandsPropertiesData: BrandsPropertiesData): Response<Boolean>
 
-
-
+    @GET("property/check_save")
+    suspend fun loadBrandsProperties(@Query("ip") ip: String): Response<Boolean>
 
 }
