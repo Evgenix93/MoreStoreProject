@@ -313,8 +313,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.starIcon.isVisible = false
         binding.ratingTextView.isVisible = false
         binding.userClickableView.isVisible = false
-        binding.view3.isVisible = false
-        binding.view4.isVisible = false
         binding.textView17.isVisible = false
         binding.productList.isVisible = false
          if(dialogWrappers != null) {
