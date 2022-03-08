@@ -223,6 +223,7 @@ class AuthRepository(private val context: Context) {
 
     fun clearToken(){
         Token.token = ""
+        Token.userId = 0
     }
 
     companion object{

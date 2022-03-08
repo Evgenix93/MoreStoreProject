@@ -45,16 +45,13 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private var wishListLoaded = false
     private var isLiked = false
     private var product: Product? = null
-    private var currentUserId = 0L
+    private var userId: Long = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
         initToolBar()
-        loadYouMayLikeProducts()
-        bind(args.product)
         setClickListeners()
-        getProductWishList()
         hideBottomNav()
         showDialog()
         getCurrentUser()
@@ -123,7 +120,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         }
     }
 
-    private fun bind(product: Product?) {
+    private fun bind(product: Product?, userId: Long, dialogWrappers: List<DialogWrapper>) {
         product ?: return
         this.product = product
         initShare(product.id)
@@ -141,15 +138,15 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
         colors?.forEachIndexed { index, property ->
             val colorValue = property.ico
-            when(index) {
-               0 -> {
-                   binding.productColorTextView.text = property.value
-                       if (colorValue == null)
-                           binding.colorCircle.background =
-                               ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
-                       else
-                           binding.colorCircle.background.setTint(Color.parseColor(colorValue))
-               }
+            when (index) {
+                0 -> {
+                    binding.productColorTextView.text = property.value
+                    if (colorValue == null)
+                        binding.colorCircle.background =
+                            ResourcesCompat.getDrawable(resources, R.drawable.color2, null)
+                    else
+                        binding.colorCircle.background.setTint(Color.parseColor(colorValue))
+                }
 
                 1 -> {
                     binding.productColor2TextView.text = property.value
@@ -206,14 +203,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
         binding.productNameTextView.text = product.name
         binding.likesCountTextView.text = product.statistic?.wishlist?.total.toString()
-        //binding.shareCountTextView.text = product.statistic.share.total.toString()
         binding.discountTextView.text = "-${product.sale}%"
         binding.sellerNameTextView.text = product.user?.name
         binding.productDescriptionTextView.text = product.about
         binding.productNumberTextView.text = product.id.toString()
-        // binding.productCityTextView.text = product.address.fullCity.name
-        val calendar = Calendar.getInstance()
-            .apply { timeInMillis = System.currentTimeMillis() - product.date * 1000 }
         binding.productUpLoadDateTextView.text =
             "${(System.currentTimeMillis() / 1000 - product.date) / 86400} дня назад"
         Glide.with(this)
@@ -236,9 +229,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)
         binding.sellerPhoneTextView.addTextChangedListener(listener)
         binding.sellerPhoneTextView.setText(product.phoneShow)
-
-
+        if (args.product?.user?.id == userId)
+            setSellerProduct(dialogWrappers)
     }
+
 
     private fun initViewPager(photoList: List<ProductPhoto>) {
         val photoAdapter = PhotoViewPagerAdapter(this)
@@ -270,8 +264,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     }
 
-    private fun loadYouMayLikeProducts() {
-        presenter.getYouMayLikeProducts()
+    private fun loadYouMayLikeProducts(category: Category?) {
+        presenter.getYouMayLikeProducts(category)
     }
 
     private fun startIntent(intent: Intent) {
@@ -282,7 +276,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     private fun getCurrentUser() {
-        presenter.getUserData()
+        presenter.getUserId()
     }
 
     private fun initViews() {
@@ -294,7 +288,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.productOldPriceTextView.text = crossedStr
     }
 
-    private fun setSellerProduct() {
+    private fun setSellerProduct(dialogWrappers: List<DialogWrapper>) {
         binding.chatBtn.isVisible = false
         binding.toolbar.actionIcon.setOnClickListener {
             findNavController().navigate(
@@ -304,6 +298,26 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             )
         }
         binding.toolbar.actionIcon.setImageResource(R.drawable.ic_edit)
+        binding.firstPurchaseInfoCard.isVisible = false
+        binding.addToCartBtn.isVisible = false
+        binding.avatarImageView.isVisible = false
+        binding.sellerNameTextView.isVisible = false
+        binding.sellerPhoneTextView.isVisible = false
+        binding.starIcon.isVisible = false
+        binding.ratingTextView.isVisible = false
+        binding.userClickableView.isVisible = false
+        binding.view3.isVisible = false
+        binding.view4.isVisible = false
+        binding.textView17.isVisible = false
+        binding.productList.isVisible = false
+
+        if(dialogWrappers.none { it.product.id == args.product?.id })
+            binding.promoteInfoCard.isVisible = true
+        else {
+            binding.buyersCard.isVisible = true
+            binding.buyersCount.text =
+                dialogWrappers.filter { it.product.id == args.product?.id }.size.toString()
+        }
     }
 
 
@@ -314,15 +328,24 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToProductIsCreatedDialog())
     }
 
+    private fun getDialogs(){
+        presenter.getDialogs()
+    }
 
     override fun loaded(result: Any) {
         when (result) {
             is List<*> -> {
-                if (result.isNotEmpty() && result[0] is Long) {
-                    messageLike(result as List<Long>)
-                    return
+                //if (result.isNotEmpty() && result[0] is Long) {
+                   // messageLike(result as List<Long>)
+                if(result[0] is Product) {
+                    productAdapter.updateList(result as List<Product>)
                 }
-                if (!suggestedProductsLoaded) {
+                else{
+                    loadYouMayLikeProducts(args.product?.category)
+                   bind(args.product, userId, result as List<DialogWrapper>)
+                }
+                //}
+                /*if (!suggestedProductsLoaded) {
                     productAdapter.updateList(result as List<Product>)
                     suggestedProductsLoaded = true
                 }
@@ -330,25 +353,19 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                     getProductWishList()
                     wishListLoaded = true
                 }
-                showLikeInfo(result as List<Product>)
+                showLikeInfo(result as List<Product>)*/
             }
             is Intent -> startIntent(result)
-            is Product -> {
-                if (result.user?.id == currentUserId)
-                    setSellerProduct()
-                bind(result)
-                product = result
-            }
-            is User -> {
-                Log.d("MyDebug", "id = $result")
-                currentUserId = result.id
-                if (args.product?.user?.id == result.id)
-                    setSellerProduct()
-                bind(args.product)
-                getProduct(args.productId?.toLong())
+
+            is Long -> {
+                userId = result
+                Log.d("MyDebug", "userId = $result")
+                if(result == 0)
+                    loadYouMayLikeProducts(null)
+                else
+                    getDialogs()
             }
         }
-
     }
 
     override fun loading() {
@@ -356,7 +373,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     override fun error(message: String) {
-        //Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 

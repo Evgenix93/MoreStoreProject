@@ -60,8 +60,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initViewPager()
         setClickListeners()
         getUserData()
-
-
     }
 
     private fun bindFilter(filter: Filter) {
@@ -419,10 +417,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     private fun getUserData(){
         presenter.getUserData()
     }
-
-
-
-
 
 
     private fun loadOnboardingData(){

@@ -24,7 +24,6 @@ data class Product(
     val user: User?,
     val category: Category?,
     val statistic: ProductStatistic?,
-
     val brand: ProductBrand?,
     val property: List<Property>?
 

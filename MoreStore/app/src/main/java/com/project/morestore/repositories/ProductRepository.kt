@@ -77,7 +77,8 @@ class ProductRepository(private val context: Context) {
         query: String? = null,
         filter: Filter? = null,
         userId: Long? = null,
-        productId: Long? = null
+        productId: Long? = null,
+        limit: Int? = null
     ): Response<List<Product>>? {
         return try {
             var categoryStr = listOf<String>()
@@ -202,6 +203,7 @@ class ProductRepository(private val context: Context) {
 
             productPropertyStr = productPropertyStr + conditionList + forWhoList + stylesList
             productApi.getProducts(
+                limit,
                 PRODUCT_OPTIONS,
                 (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr + statusStr).joinToString(
                     ";"
@@ -807,7 +809,7 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    suspend fun createProduct(): Response<List<CreatedProductId>>? {
+    suspend fun createProduct(): Response<List<Product>>? {
         Log.d("Debug", "productData = ${CreateProductData.createProductData}")
 
         return try {

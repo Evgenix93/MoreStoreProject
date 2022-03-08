@@ -8,7 +8,7 @@ import retrofit2.http.*
 interface ProductApi {
 
     @GET("product")
-    suspend fun getProducts(@Query("optionally") options: String, @Query("filter") filter: String, @Query("user") userId: Long?): Response<List<Product>>
+    suspend fun getProducts(@Query("limit") limit: Int?, @Query("optionally") options: String, @Query("filter") filter: String, @Query("user") userId: Long?): Response<List<Product>>
 
     @GET("product")
     suspend fun getProductsGetError(@Query("optionally") options: String, @Query("filter") filter: String, @Query("user") userId: Long?): Response<Unit>
@@ -44,7 +44,7 @@ interface ProductApi {
     suspend fun getPropertiesGetError(): Response<String>
 
     @POST("product")
-    suspend fun createProduct(@Body createProductData: CreateProductData): Response<List<CreatedProductId>>
+    suspend fun createProduct(@Body createProductData: CreateProductData): Response<List<Product>>
 
 
     @POST("brand")

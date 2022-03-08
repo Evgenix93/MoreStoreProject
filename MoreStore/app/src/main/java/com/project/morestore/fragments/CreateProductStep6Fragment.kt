@@ -16,12 +16,8 @@ import com.project.morestore.adapters.OptionsAdapter
 import com.project.morestore.databinding.FragmentAddProductDetailsBinding
 import com.project.morestore.dialogs.ArchiveProductDialog
 import com.project.morestore.dialogs.DeleteProductDialog
-import com.project.morestore.models.CreateProductData
-import com.project.morestore.models.CreatedProductId
-import com.project.morestore.models.SuggestionModels
-import com.project.morestore.models.Property2
+import com.project.morestore.models.*
 
-import com.project.morestore.models.User
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
@@ -146,7 +142,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
            val property = args.product!!.property?.map{ Property2(it.idProperty!!, it.id) }?.toMutableList()
             presenter.updateCreateProductData(
                 idCategory = args.product!!.category?.id,
-                idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
+                //idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
+                idBrand = args.product!!.brand!!.id,
                 address = args.product!!.address.fullAddress,
                 price = args.product!!.price.toString(),
                 sale = args.product!!.sale,
@@ -239,12 +236,12 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             optionsAdapter.updateList(result)
             initCreateProductButton()
         }
-        else if(result is CreatedProductId) {
+        else if(result is Product) {
             clearCreateProductData()
             findNavController().navigate(
                 CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(
+                    result,
                     null,
-                    result.id.toString(),
                     true
                 )
             )
