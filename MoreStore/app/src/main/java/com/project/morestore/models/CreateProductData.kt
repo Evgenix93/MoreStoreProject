@@ -15,6 +15,8 @@ data class CreateProductData(
     var dateEnd: Long? = null,
     var status: Int? = null,
     var price: String? = null,
+    @Json(name = "price_new")
+    var priceNew: String? = null,
     var sale: Float? = null,
     var name: String? = null,
     var about: String? = null,

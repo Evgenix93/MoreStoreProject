@@ -20,7 +20,7 @@ class SkipStepDialog: DialogFragment() {
         val noButton = view.findViewById<Button>(R.id.noButton)
         yesButton.setOnClickListener{
             if(args.isBrand)
-            findNavController().navigate(SkipStepDialogDirections.actionSkipStepDialogToCreateProductStep6Fragment(category = args.category, forWho = args.forWho))
+            findNavController().navigate(SkipStepDialogDirections.actionSkipStepDialogToCreateProductNameFragment(category = args.category, forWho = args.forWho))
             else
                 findNavController().navigate(SkipStepDialogDirections.actionSkipStepDialogToCreateProductStep5Fragment(category = args.category, forWho = args.forWho))
         }

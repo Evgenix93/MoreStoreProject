@@ -127,7 +127,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         product ?: return
         this.product = product
         initShare(product.id)
-        initViewPager(product.photo)
+        val photoVideoFilesUris = product.photo.map { it.photo } + product.video?.map { it.video }.orEmpty()
+        initViewPager(photoVideoFilesUris)
         binding.toolbar.titleTextView.text = product.name
         binding.chosenBrandTextView.text =
             if (product.brand == null) "Другое" else product.brand.name
@@ -196,7 +197,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
 
         binding.productPriceTextView.text =
-            "${product.price - ((product.price / 100) * product.sale)} ₽"
+            "${product.priceNew} ₽"
         val crossedStr = "${product.price} ₽".toSpannable().apply {
             setSpan(
                 StrikethroughSpan(), 0, length, 0
@@ -240,9 +241,14 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     }
 
-    private fun initViewPager(photoList: List<ProductPhoto>) {
-        val photoAdapter = PhotoViewPagerAdapter(this)
-        photoAdapter.updateList(photoList)
+    private fun initViewPager(filesUriList: List<String>) {
+        val photoAdapter = PhotoViewPagerAdapter(this) { fileUri ->
+            Log.d("mylog", fileUri)
+            if(fileUri.contains("mp4"))
+                presenter.playVideo(fileUri = fileUri.toUri())
+
+        }
+        photoAdapter.updateList(filesUriList)
         binding.productPhotoViewPager.adapter = photoAdapter
         binding.viewPagerDots.setViewPager2(binding.productPhotoViewPager)
 

@@ -46,7 +46,7 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     private fun initList(){
         brandAdapter = BrandCreateProductAdapter{
-            findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductFragment(category = args.category, forWho = args.forWho, brand = it))
+            findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductNameFragment(category = args.category, forWho = args.forWho, brand = it))
         }
         with(binding.brandList){
             adapter = brandAdapter

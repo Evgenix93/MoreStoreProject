@@ -27,7 +27,7 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initSaveButton()
-        changeSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
     }
 
     private fun initToolbar(){
@@ -59,15 +59,10 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
         presenter.updateCreateProductData(about = binding.descriptionEditText.text.toString())
     }
 
-    private fun changeSoftInputMode(mode: Int){
-        (activity as MainActivity).changeSoftInputMode(mode)
-    }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        changeSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-    }
+
+
 
     override fun loaded(result: Any) {
         TODO("Not yet implemented")

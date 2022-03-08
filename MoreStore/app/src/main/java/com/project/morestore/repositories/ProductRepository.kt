@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import androidx.core.content.FileProvider
 import com.project.morestore.models.*
 import com.project.morestore.singletones.CreateProductData
 
@@ -708,7 +709,9 @@ class ProductRepository(private val context: Context) {
         address: String? = null,
         extProperty: Property2? = null,
         extProperties: List<Property2>? = null,
-        id: Long? = null
+        id: Long? = null,
+        newPrice: String? = null,
+        name: String? = null
     ) {
 
         val property = when (forWho) {
@@ -753,6 +756,12 @@ class ProductRepository(private val context: Context) {
 
         if(id != null)
             CreateProductData.createProductData.id = id
+
+        if(newPrice != null)
+            CreateProductData.createProductData.priceNew = newPrice
+
+        if(name != null)
+            CreateProductData.createProductData.name = name
 
         Log.d("Debug", "createProductData = ${CreateProductData.createProductData}")
     }
@@ -984,20 +993,60 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    suspend fun downLoadProductImage(url: String): File?{
-        return try {
-            val file = File(context.cacheDir, "${System.currentTimeMillis()}.jpeg")
-            productApi.downloadImage(url).byteStream().use { input ->
-                file.outputStream().use { output ->
-                    input.copyTo(output)
-                }
+    suspend fun getPlayVideoIntent(fileUri: Uri? = null, file: File? = null): Intent?{
+        var videoToPlay: File? = null
+        fileUri?.let {
+            if(context.contentResolver.getType(it)?.contains("mp4") != true &&
+                    it.toString().contains("mp4").not())
+                return null
+
+            if(it.toString().contains("content").not()){
+                val webFile = downLoadFile(it.toString())
+                webFile ?: return null
+                videoToPlay = webFile
 
             }
-            file
-        }catch (e: Throwable){
-            null
-
         }
+
+        file?.let {
+            if(it.extension != "mp4")
+                return null
+            else videoToPlay = it
+        }
+
+        return Intent().apply {
+            action = Intent.ACTION_VIEW
+            type = "video/mp4"
+            val uri = if(videoToPlay != null) FileProvider.getUriForFile(
+                context,
+                context.applicationContext.packageName +
+                        ".provider",
+                videoToPlay!!)
+            else fileUri
+            data = uri
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+
+    }
+
+    suspend fun downLoadFile(url: String): File?{
+        return withContext(Dispatchers.IO){
+            try{
+                val webFile = File(context.externalCacheDir, "${System.currentTimeMillis()/1000}.mp4")
+                val response = productApi.downloadImage(url)
+                response.byteStream().use { input ->
+                    webFile.outputStream().use { output ->
+                        input.copyTo(output)
+
+                    }
+                }
+                webFile
+
+            }catch (e: Throwable){
+                null
+            }
+        }
+
     }
 
 

@@ -51,7 +51,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.io.File
 import java.io.InputStream
 
-class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish), MainMvpView {
+class PhotoFinishFragment : MvpAppCompatFragment(R.layout.fragment_photo_finish), MainMvpView {
     private val binding: FragmentPhotoFinishBinding by viewBinding()
     private val args: PhotoFinishFragmentArgs by navArgs()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
@@ -64,12 +64,12 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
         setClickListeners()
     }
 
-    private fun showPhoto(){
-        if(args.photoFile.contains("content")){
+    private fun showPhoto() {
+        if (args.photoFile.contains("content")) {
             Glide.with(this)
                 .load(args.photoFile.toUri())
                 .into(binding.imageView27)
-        }else {
+        } else {
             val file = File(args.photoFile)
             Glide.with(this)
                 .load(file)
@@ -78,20 +78,29 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
 
     }
 
-    private fun initViews(){
-        if(args.isVideo){
+    private fun initViews() {
+        if (args.isVideo) {
             binding.playImageView.isVisible = true
             binding.secondOptionBtn.text = "Переснять"
         }
 
-        binding.imageView27.setOnTouchImageViewListener(object : OnTouchImageViewListener{
+        binding.imageView27.setOnTouchImageViewListener(object : OnTouchImageViewListener {
             override fun onMove() {
-                if(args.photoFile.contains("mp4").not() && requireContext().contentResolver.getType(args.photoFile.toUri())?.contains("mp4") != true)
+                if (args.photoFile.contains("mp4")
+                        .not() && requireContext().contentResolver.getType(args.photoFile.toUri())
+                        ?.contains("mp4") != true
+                )
                     binding.netImageView.isVisible = true
             }
         })
 
-        binding.imageView27.background.setTint(ResourcesCompat.getColor(resources, R.color.black6, null))
+        binding.imageView27.background.setTint(
+            ResourcesCompat.getColor(
+                resources,
+                R.color.black6,
+                null
+            )
+        )
         binding.root.background.setTint(ResourcesCompat.getColor(resources, R.color.black6, null))
 
     }
@@ -103,9 +112,9 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
         binding.secondOptionBtn.setOnClickListener {
             if (args.isVideo) {
                 findNavController().popBackStack()
-            }else {
-                if(isBackgroundDeleted.not())
-                deletePhotoBackground()
+            } else {
+                if (isBackgroundDeleted.not())
+                    deletePhotoBackground()
                 else {
                     isBackgroundDeleted = false
                     binding.secondOptionBtn.text = "Удалить фон"
@@ -115,54 +124,81 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
         }
 
         binding.finishBtn.setOnClickListener {
-            savePhoto()
+            if (args.isVideo)
+                if (args.photoFile.contains("content"))
+                    presenter.updateCreateProductDataPhotosVideos(
+                        args.photoFile.toUri(),
+                        args.position
+                    )
+                else presenter.updateCreateProductDataPhotosVideos(
+                    File(args.photoFile),
+                    args.position
+                )
+            else savePhoto()
+
+
         }
-        binding.imageView27.setOnClickListener{
+        binding.imageView27.setOnClickListener {
             Log.d("MyDebug", "photo onClick")
-            if(args.photoFile.contains("mp4") || requireContext().contentResolver.getType(args.photoFile.toUri())?.contains("mp4") == true)
+            if (args.isVideo)
                 playVideo()
         }
     }
 
-    private fun savePhoto(){
-        binding.imageView27.background.setTintList(ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.white, null)))
+    private fun savePhoto() {
+        binding.imageView27.background.setTintList(
+            ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.white,
+                    null
+                )
+            )
+        )
         val bitmap = binding.imageView27.drawToBitmap()
         presenter.updateCreateProductDataPhotosVideos(bitmap, args.position)
     }
 
-    private fun deletePhotoBackground(){
-        if(args.photoFile.contains("content")) {
+    private fun deletePhotoBackground() {
+        if (args.photoFile.contains("content")) {
             presenter.deletePhotoBackground(uri = args.photoFile.toUri())
-        }else{
+        } else {
             presenter.deletePhotoBackground(file = File(args.photoFile))
         }
     }
 
-    private fun showLoading(loading: Boolean){
+    private fun showLoading(loading: Boolean) {
         binding.loader.isVisible = loading
     }
 
-    private fun playVideo(){
-       val intent = Intent().apply {
-           action = Intent.ACTION_VIEW
-           type = "video/mp4"
-           val uri = FileProvider.getUriForFile(requireContext(), requireContext().applicationContext.packageName + ".provider", File(args.photoFile))
-           data = uri
-           flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-       }
-        startActivity(intent)
+    private fun playVideo() {
+        if (args.photoFile.contains("content"))
+            presenter.playVideo(fileUri = args.photoFile.toUri())
+        else
+            presenter.playVideo(file = File(args.photoFile))
     }
 
     override fun loaded(result: Any) {
         showLoading(false)
+        if (result is Intent) {
+            startActivity(result)
+            return
+        }
+
         binding.secondOptionBtn.text = "Вернуть фон"
         isBackgroundDeleted = true
         val photo = result as ProductPhoto
-         Glide.with(this)
+        Glide.with(this)
             .load(photo.photo)
-             .into(binding.imageView27)
+            .into(binding.imageView27)
 
-        binding.imageView27.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
+        binding.imageView27.background.setTint(
+            ResourcesCompat.getColor(
+                resources,
+                R.color.white,
+                null
+            )
+        )
 
     }
 

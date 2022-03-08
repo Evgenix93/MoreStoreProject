@@ -95,7 +95,7 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
       val originalPrice = binding.originalPriceEditText.text.toString().toInt()
       val salePrice = binding.salePriceEditText.text.toString().toInt()
         val discount = (((originalPrice.toFloat() - salePrice.toFloat()) / originalPrice.toFloat()) * 100)
-      presenter.updateCreateProductData(price = originalPrice.toString(), sale = discount)
+      presenter.updateCreateProductData(price = originalPrice.toString(), sale = discount, newPrice = salePrice.toString())
     }
 
     override fun loaded(result: Any) {

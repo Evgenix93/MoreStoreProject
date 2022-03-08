@@ -1,9 +1,11 @@
 package com.project.morestore.presenters
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import androidx.core.content.FileProvider
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
@@ -781,7 +783,9 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         address: String? = null,
         extProperty: Property2? = null,
         extProperties: List<Property2>? = null,
-        id: Long? = null
+        id: Long? = null,
+        newPrice: String? = null,
+        name: String? = null
     ) {
         productRepository.updateCreateProductData(
             forWho,
@@ -794,7 +798,9 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             address,
             extProperty,
             extProperties,
-            id
+            id,
+            newPrice,
+            name
 
         )
     }
@@ -1007,4 +1013,21 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             }
         }
     }
+
+    fun playVideo(fileUri: Uri? = null, file: File? = null){
+        presenterScope.launch {
+            viewState.loading()
+            val intent = productRepository.getPlayVideoIntent(fileUri, file)
+            if(intent == null){
+                viewState.error("ошибка")
+                return@launch
+            }
+            viewState.loaded(intent)
+        }
+
+    }
+
+
+
+
 }

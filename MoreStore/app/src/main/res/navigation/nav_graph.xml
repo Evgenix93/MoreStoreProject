@@ -561,9 +561,6 @@
             android:id="@+id/action_createProductStep5Fragment_to_createProductHowToSellFragment"
             app:destination="@id/createProductHowToSellFragment" />
         <action
-            android:id="@+id/action_createProductStep5Fragment_to_createProductFragment"
-            app:destination="@id/createProductStep6Fragment" />
-        <action
             android:id="@+id/action_createProductStep5Fragment_to_createProductAddBrandFragment"
             app:destination="@id/createProductAddBrandFragment" />
         <argument
@@ -575,6 +572,9 @@
         <action
             android:id="@+id/action_createProductStep5Fragment_to_skipStepDialog"
             app:destination="@id/skipStepDialog" />
+        <action
+            android:id="@+id/action_createProductStep5Fragment_to_createProductNameFragment"
+            app:destination="@id/createProductNameFragment" />
     </fragment>
     <fragment
         android:id="@+id/createProductSizesClothFragment"
@@ -682,9 +682,6 @@
         android:id="@+id/skipStepDialog"
         android:name="com.project.morestore.dialogs.SkipStepDialog"
         android:label="SkipStepDialog" >
-        <action
-            android:id="@+id/action_skipStepDialog_to_createProductStep6Fragment"
-            app:destination="@id/createProductStep6Fragment" />
         <argument
             android:name="category"
             app:argType="com.project.morestore.models.ProductCategory" />
@@ -697,6 +694,9 @@
         <action
             android:id="@+id/action_skipStepDialog_to_createProductStep5Fragment"
             app:destination="@id/createProductStep5Fragment" />
+        <action
+            android:id="@+id/action_skipStepDialog_to_createProductNameFragment"
+            app:destination="@id/createProductNameFragment" />
     </dialog>
     <fragment
         android:id="@+id/createProductStep6Fragment"
@@ -844,5 +844,24 @@
         android:id="@+id/feedbackPhotoFragment"
         android:name="com.project.morestore.fragments.FeedbackPhotoFragment"
         android:label="FeedbackPhotoFragment" />
+    <fragment
+        android:id="@+id/createProductNameFragment"
+        android:name="com.project.morestore.fragments.CreateProductNameFragment"
+        android:label="CreateProductNameFragment" >
+        <action
+            android:id="@+id/action_createProductNameFragment_to_createProductStep6Fragment"
+            app:destination="@id/createProductStep6Fragment" />
+        <argument
+            android:name="category"
+            app:argType="com.project.morestore.models.ProductCategory" />
+        <argument
+            android:name="brand"
+            app:argType="com.project.morestore.models.ProductBrand"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="forWho"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>
