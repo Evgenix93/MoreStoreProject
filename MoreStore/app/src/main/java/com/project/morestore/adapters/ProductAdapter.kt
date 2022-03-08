@@ -37,7 +37,7 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             binding.productOldPriceTextView.text = crossedStr
             binding.likesCountTextView.text = product.statistic?.wishlist?.total.toString()
             binding.productNameTextView.text = product.name
-            binding.productPriceTextView.text = "${product.price - ((product.price/100) * product.sale) } ₽"
+            binding.productPriceTextView.text = "${product.priceNew} ₽"
             binding.productBrandTextView.text = if(product.brand == null)
                 "Другое" + "• ${product.property?.find { it.name == "Состояние" }?.value}"
              else product.brand.name + "• ${product.property?.find { it.name == "Состояние" }?.value}"
