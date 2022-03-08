@@ -120,7 +120,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         }
     }
 
-    private fun bind(product: Product?, userId: Long, dialogWrappers: List<DialogWrapper>) {
+    private fun bind(product: Product?, userId: Long, dialogWrappers: List<DialogWrapper>?) {
         product ?: return
         this.product = product
         initShare(product.id)
@@ -271,6 +271,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     private fun loadYouMayLikeProducts(category: Category?) {
+        Log.d("MyDebug", "category = ${category?.name}")
         presenter.getYouMayLikeProducts(category)
     }
 
@@ -294,7 +295,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.productOldPriceTextView.text = crossedStr
     }
 
-    private fun setSellerProduct(dialogWrappers: List<DialogWrapper>) {
+    private fun setSellerProduct(dialogWrappers: List<DialogWrapper>?) {
         binding.chatBtn.isVisible = false
         binding.toolbar.actionIcon.setOnClickListener {
             findNavController().navigate(
@@ -316,14 +317,15 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.view4.isVisible = false
         binding.textView17.isVisible = false
         binding.productList.isVisible = false
-
-        if(dialogWrappers.none { it.product.id == args.product?.id })
-            binding.promoteInfoCard.isVisible = true
-        else {
-            binding.buyersCard.isVisible = true
-            binding.buyersCount.text =
-                dialogWrappers.filter { it.product.id == args.product?.id }.size.toString()
-        }
+         if(dialogWrappers != null) {
+             if (dialogWrappers.none { it.product.id == args.product?.id })
+                 binding.promoteInfoCard.isVisible = true
+             else {
+                 binding.buyersCard.isVisible = true
+                 binding.buyersCount.text =
+                     dialogWrappers.filter { it.product.id == args.product?.id }.size.toString()
+             }
+         }
     }
 
 
@@ -347,7 +349,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                     productAdapter.updateList(result as List<Product>)
                 }
                 else{
-                    loadYouMayLikeProducts(args.product?.category)
+                    loadYouMayLikeProducts(null)
                    bind(args.product, userId, result as List<DialogWrapper>)
                 }
                 //}
@@ -366,8 +368,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             is Long -> {
                 userId = result
                 Log.d("MyDebug", "userId = $result")
-                if(result == 0)
-                    loadYouMayLikeProducts(null)
+                if(result == 0) {
+                    loadYouMayLikeProducts(args.product?.category)
+                    bind(args.product, userId, null)
+                }
                 else
                     getDialogs()
             }
@@ -379,7 +383,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     override fun error(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+       // Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
