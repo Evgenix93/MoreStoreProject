@@ -273,7 +273,6 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         if(result is Filter)
             binding.changeRegionCard.isVisible = !result.isCurrentLocationChosen
 
-
     }
 
     override fun loading() {

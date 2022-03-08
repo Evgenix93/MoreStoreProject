@@ -37,9 +37,11 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             binding.productOldPriceTextView.text = crossedStr
             binding.likesCountTextView.text = product.statistic?.wishlist?.total.toString()
             binding.productNameTextView.text = product.name
-            binding.productPriceTextView.text = "${product.priceNew} ₽"
-            binding.productBrandTextView.text = if(product.brand == null) "Другое" else product.brand.name
-            binding.productConditionTextView.text = "• ${product.property?.find { it.name == "Состояние" }?.value}"
+            binding.productPriceTextView.text = "${product.price - ((product.price/100) * product.sale) } ₽"
+            binding.productBrandTextView.text = if(product.brand == null)
+                "Другое" + "• ${product.property?.find { it.name == "Состояние" }?.value}"
+             else product.brand.name + "• ${product.property?.find { it.name == "Состояние" }?.value}"
+           // binding.productConditionTextView.text = "• ${product.property?.find { it.name == "Состояние" }?.value}"
 
             Glide.with(itemView)
                 .load(product.photo[0].photo)

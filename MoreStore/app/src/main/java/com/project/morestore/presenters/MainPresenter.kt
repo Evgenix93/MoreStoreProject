@@ -9,6 +9,7 @@ import androidx.core.content.FileProvider
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
+import com.project.morestore.repositories.ChatRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.singletones.Token
@@ -26,6 +27,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val authRepository = AuthRepository(context)
     private val productRepository = ProductRepository(context)
     private val userRepository = UserRepository(context)
+    private val chatRepository = ChatRepository()
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
     private lateinit var user: User
@@ -68,7 +70,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 null -> viewState.error("нет интернета")
 
             }
-
         }
     }
 
@@ -237,18 +238,20 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getYouMayLikeProducts() {
+    fun getYouMayLikeProducts(category: Category?) {
+        Log.d("MyDebug", "getYouMayLikeProducts")
+        Log.d("MyDebug", "category name = ${category?.name}")
         presenterScope.launch {
-            if (authRepository.getUserId() == 0.toLong()) {
-                return@launch
-            }
             viewState.loading()
-            val response = productRepository.getYouMayLikeProducts(4, authRepository.getUserId())
+            val response = if(category == null) productRepository.getYouMayLikeProducts(4, authRepository.getUserId())
+               else productRepository.getProducts(limit = 4, filter = Filter(categories = listOf(ProductCategory(category.id, category.name, true)), chosenForWho = listOf()))
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
+                null -> {
+                    viewState.error("нет интернета")
+                }
             }
         }
     }
@@ -989,27 +992,23 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         val response = userRepository.loadBrandsProperties()
          when(response?.code()){
              200 -> {
-                 Log.d("MyDebug", "saveProperties = true")
                  loadFilter()}
              else -> {
-                 Log.d("MyDebug", "showOnBoarding")
-                 Log.d("MyDebug", "response = ${response?.errorBody()}")
                  viewState.showOnBoarding()
              }
          }
         }
     }
 
-    fun getCurrentUser(){
+    fun getUserId(){
+        viewState.loaded(authRepository.getUserId())
+    }
+
+    fun getDialogs(){
         presenterScope.launch {
-            val response = userRepository.getCurrentUserInfo()
+            val response = chatRepository.getDialogs()
             when(response?.code()){
-                200 -> {
-                    Log.d("MyDebug", "success getUser")
-                    viewState.loaded(response.body()!!)
-                }
-                else -> {Log.d("MyDebug", "error getUser response= ${response?.body()}")
-                }
+                200 -> viewState.loaded(response.body()!!)
             }
         }
     }
