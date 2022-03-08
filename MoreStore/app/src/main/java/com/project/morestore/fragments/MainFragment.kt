@@ -59,7 +59,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initLists()
         initViewPager()
         setClickListeners()
-        loadFilter()
         getUserData()
 
 

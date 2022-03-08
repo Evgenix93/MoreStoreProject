@@ -36,17 +36,6 @@
 
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/netImageView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:src="@drawable/ic_net"
-        android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imageView27"
-        app:layout_constraintBottom_toBottomOf="@id/imageView27"/>
 
     <com.project.morestore.util.touchview.TouchImageView
         android:id="@+id/imageView27"
@@ -74,6 +63,19 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView27"
         app:layout_constraintStart_toStartOf="@+id/imageView27"
         app:layout_constraintTop_toBottomOf="@+id/header" />
+
+    <ImageView
+        android:id="@+id/netImageView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_net"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imageView27"
+        app:layout_constraintBottom_toBottomOf="@id/imageView27"/>
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/finishBtn"

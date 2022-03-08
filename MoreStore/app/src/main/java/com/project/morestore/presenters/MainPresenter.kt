@@ -736,6 +736,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)
                 }
+
+                404 -> {}
                 500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")

@@ -86,7 +86,8 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
 
         binding.imageView27.setOnTouchImageViewListener(object : OnTouchImageViewListener{
             override fun onMove() {
-                binding.netImageView.isVisible = true
+                if(args.photoFile.contains("mp4").not() && requireContext().contentResolver.getType(args.photoFile.toUri())?.contains("mp4") != true)
+                    binding.netImageView.isVisible = true
             }
         })
 
@@ -118,7 +119,8 @@ class PhotoFinishFragment: MvpAppCompatFragment(R.layout.fragment_photo_finish),
         }
         binding.imageView27.setOnClickListener{
             Log.d("MyDebug", "photo onClick")
-            playVideo()
+            if(args.photoFile.contains("mp4") || requireContext().contentResolver.getType(args.photoFile.toUri())?.contains("mp4") == true)
+                playVideo()
         }
     }
 
