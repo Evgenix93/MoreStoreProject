@@ -438,9 +438,10 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             }
 
             if (currentSuggestionModels != null) {
+                val product = currentSuggestionModels?.list?.find { it.product == true }
                 findNavController().navigate(
                     R.id.catalogFragment,
-                    bundleOf("query" to binding.toolbarMain.searchEditText.text.toString())
+                    bundleOf("query" to product?.text.orEmpty())
                 )
                 return
 

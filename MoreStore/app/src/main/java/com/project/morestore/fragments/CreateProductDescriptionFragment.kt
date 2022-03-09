@@ -40,10 +40,12 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
 
         binding.descriptionEditText.addTextChangedListener (onTextChanged = {string, _, _, _ ->
             if(string.isNullOrEmpty()) {
+                binding.symbolsTextView.text = "0/3000"
                 binding.saveButton.isEnabled = false
                 binding.saveButton.backgroundTintList =
                     ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
             }else{
+                binding.symbolsTextView.text = "${string.length}/3000"
                 binding.saveButton.isEnabled = true
                 binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
             }

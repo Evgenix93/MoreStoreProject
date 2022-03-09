@@ -191,7 +191,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             else
                 Message.Companion(listOf(Msg("13:10", it.text)))
         }
-        adapter.setItems(messages.orEmpty())
+        adapter.setItems(messages.orEmpty().reversed())
+        views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
 
@@ -279,9 +280,12 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun setClickListeners(){
         views.send.setOnClickListener {
-            if(views.messageEditText.text.isNullOrBlank().not())
+            if(views.messageEditText.text.isNullOrBlank())
+                return@setOnClickListener
             presenter.addMessage(views.messageEditText.text.toString())
             adapter.addMessage(Message.My("13:00", R.drawable.ic_check_double, views.messageEditText.text.toString()))
+            views.list.scrollToPosition(adapter.itemCount - 1)
+            views.messageEditText.text.clear()
 
         }
     }

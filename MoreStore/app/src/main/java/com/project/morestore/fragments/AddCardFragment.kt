@@ -21,7 +21,7 @@ class AddCardFragment: Fragment(R.layout.fragment_add_card) {
 
 
     private fun initEditTexts(){
-        val cardNumberListener = MaskedTextChangedListener("[0000000000000000]", binding.editText)
+        val cardNumberListener = MaskedTextChangedListener("[0000]-[0000]-[0000]-[0000]", binding.editText)
         binding.editText.addTextChangedListener(cardNumberListener)
         val cardDateListener = MaskedTextChangedListener("[00]/[00]", binding.editText4)
         binding.editText4.addTextChangedListener(cardDateListener)

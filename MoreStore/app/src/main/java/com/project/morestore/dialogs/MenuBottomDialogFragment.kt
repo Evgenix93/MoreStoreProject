@@ -93,7 +93,7 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
 
     private val profile :List<MenuItem> by lazy { listOf(
         MenuItem(drb(R.drawable.ic_arrow_geo), R.string.chat_menu_profile),
-        MenuItem(drb(R.drawable.ic_phone), R.string.chat_menu_call),
+        //MenuItem(drb(R.drawable.ic_phone), R.string.chat_menu_call),
         MenuItem(drb(R.drawable.ic_star_bubble), R.string.chat_menu_feedback),
         MenuItem(drb(R.drawable.ic_circle_crossed), R.string.chat_menu_block),
         MenuItem(drb(R.drawable.ic_exclamation_round), R.string.chat_menu_report),
