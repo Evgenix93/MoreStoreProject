@@ -94,10 +94,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                         PriceDialog(1500, PriceDialog.Type.DISCOUNT).show(childFragmentManager, null)
                     }
                 }
-            addMedia.setOnClickListener {
+          /*  addMedia.setOnClickListener {
                 MenuBottomDialogFragment(MenuBottomDialogFragment.Type.GEO)
                     .show(childFragmentManager, null)
-            }
+            }*/
         }
         adapter.setItems(buyer)
     }

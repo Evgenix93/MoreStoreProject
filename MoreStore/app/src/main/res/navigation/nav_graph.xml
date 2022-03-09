@@ -141,11 +141,8 @@
             android:name="isMale"
             app:argType="boolean" />
         <action
-            android:id="@+id/action_onboarding5Fragment_to_onboarding6FemaleFragment"
-            app:destination="@id/onboarding6FemaleFragment" />
-        <action
-            android:id="@+id/action_onboarding5Fragment_to_onboarding6MaleFragment"
-            app:destination="@id/onboarding6MaleFragment" />
+            android:id="@+id/action_onboarding5Fragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/onboarding6FemaleFragment"

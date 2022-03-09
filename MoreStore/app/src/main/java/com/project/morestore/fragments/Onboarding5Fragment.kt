@@ -45,13 +45,8 @@ class Onboarding5Fragment: MvpAppCompatFragment(R.layout.fragment_onboarding5), 
     }
 
     override fun success() {
-        if (args.isMale)
             findNavController().navigate(
-                Onboarding5FragmentDirections.actionOnboarding5FragmentToOnboarding6MaleFragment()
-            )
-        else
-            findNavController().navigate(
-                Onboarding5FragmentDirections.actionOnboarding5FragmentToOnboarding6FemaleFragment()
+                Onboarding5FragmentDirections.actionOnboarding5FragmentToMainFragment()
             )
     }
 }

@@ -87,7 +87,7 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
     }
 
     private val geoMedia :List<MenuItem> by lazy { listOf(
-        MenuItem(drb(R.drawable.ic_arrow_geo), R.string.chat_menu_setGeoDeal),
+       // MenuItem(drb(R.drawable.ic_arrow_geo), R.string.chat_menu_setGeoDeal),
         MenuItem(drb(R.drawable.ic_camera), R.string.chat_menu_addMedia)
     )}
 
