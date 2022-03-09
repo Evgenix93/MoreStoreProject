@@ -46,6 +46,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private var isLiked = false
     private var product: Product? = null
     private var userId: Long = 0
+    private var dialogs: List<DialogWrapper>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,7 +55,14 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         setClickListeners()
         hideBottomNav()
         showDialog()
-        getCurrentUser()
+        //getCurrentUser()
+        bind(args.product, userId, null)
+        getProduct(args.productId?.toLong())
+        if(args.product != null)
+            getCurrentUser()
+
+
+
     }
 
     private fun brandClick(brand: ProductBrand) {
@@ -230,7 +238,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)
         binding.sellerPhoneTextView.addTextChangedListener(listener)
         binding.sellerPhoneTextView.setText(product.phoneShow)
-        if (args.product?.user?.id == userId)
+        if (product.user?.id == userId)
             setSellerProduct(dialogWrappers)
     }
 
@@ -348,7 +356,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 }
                 else{
                     loadYouMayLikeProducts(null)
-                   bind(args.product, userId, result as List<DialogWrapper>)
+                   bind(product, userId, result as List<DialogWrapper>)
+                    dialogs = result
                 }
                 //}
                 /*if (!suggestedProductsLoaded) {
@@ -361,6 +370,11 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 }
                 showLikeInfo(result as List<Product>)*/
             }
+            is Product -> {
+                bind(result, userId, dialogs)
+                getCurrentUser()
+            }
+
             is Intent -> startIntent(result)
 
             is Long -> {
@@ -368,7 +382,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 Log.d("MyDebug", "userId = $result")
                 if(result == 0) {
                     loadYouMayLikeProducts(args.product?.category)
-                    bind(args.product, userId, null)
+                    bind(product, userId, null)
                 }
                 else
                     getDialogs()

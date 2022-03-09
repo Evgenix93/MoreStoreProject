@@ -44,7 +44,7 @@ interface ProductApi {
     suspend fun getPropertiesGetError(): Response<String>
 
     @POST("product")
-    suspend fun createProduct(@Body createProductData: CreateProductData): Response<List<Product>>
+    suspend fun createProduct(@Body createProductData: CreateProductData): Response<List<CreatedProductId>>
 
 
     @POST("brand")

@@ -236,12 +236,12 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             optionsAdapter.updateList(result)
             initCreateProductButton()
         }
-        else if(result is Product) {
+        else if(result is CreatedProductId) {
             clearCreateProductData()
             findNavController().navigate(
                 CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(
-                    result,
                     null,
+                    result.id.toString(),
                     true
                 )
             )

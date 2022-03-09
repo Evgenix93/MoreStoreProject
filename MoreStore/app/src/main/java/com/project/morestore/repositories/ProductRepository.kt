@@ -818,7 +818,7 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    suspend fun createProduct(): Response<List<Product>>? {
+    suspend fun createProduct(): Response<List<CreatedProductId>>? {
         Log.d("Debug", "productData = ${CreateProductData.createProductData}")
 
         return try {
