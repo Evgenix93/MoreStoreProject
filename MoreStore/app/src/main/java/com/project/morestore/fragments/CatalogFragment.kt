@@ -43,6 +43,12 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private val args: CatalogFragmentArgs? by navArgs()
     private var currentSuggestionModels: SuggestionModels? = null
+    private var queryStr: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        queryStr = arguments?.getString("query")
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +57,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         initToolbar()
         setClickListeners()
         showBottomNav()
-        loadProducts( arguments?.getString("query"))
+        loadProducts( queryStr)
         loadForWho()
     }
 
@@ -198,6 +204,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.cancelSearchJob()
+        queryStr = null
     }
 
     private fun initSuggestions(): androidx.cursoradapter.widget.CursorAdapter {
@@ -265,7 +272,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         binding.loader.isVisible = false
         if(result is Unit){
             binding.changeRegionCard.isVisible = false
-            loadProducts(null)
+            loadProducts(args?.query)
         }
         if(result is List<*>)
         productAdapter.updateList(result as List<Product>)
