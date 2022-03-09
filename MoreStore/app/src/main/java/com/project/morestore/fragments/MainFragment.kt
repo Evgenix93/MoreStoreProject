@@ -52,8 +52,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadOnboardingData()
         isMainLoaded = false
+        loadOnboardingData()
         showBottomNavBar()
         initToolbar()
         initLists()
@@ -459,6 +459,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             bindFilter(result)
         }
 
+        if(result is Unit)
+            loadFilter()
     }
 
     override fun loading() {

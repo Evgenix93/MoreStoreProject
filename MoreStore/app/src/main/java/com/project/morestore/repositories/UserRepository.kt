@@ -467,7 +467,4 @@ class UserRepository(val context: Context) {
     }
     }
 
-   fun getCurrentUserId(): Long{
-       return Token.userId
-   }
 }

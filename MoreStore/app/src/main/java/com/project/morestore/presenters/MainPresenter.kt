@@ -992,7 +992,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         val response = userRepository.loadBrandsProperties()
          when(response?.code()){
              200 -> {
-                 loadFilter()}
+                 viewState.loaded(Unit)
+             }
              else -> {
                  viewState.showOnBoarding()
              }
