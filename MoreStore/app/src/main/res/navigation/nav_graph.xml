@@ -389,7 +389,11 @@
     <fragment
         android:id="@+id/brandsFragment"
         android:name="com.project.morestore.fragments.FilterBrandsFragment"
-        android:label="BrandsFragment" />
+        android:label="BrandsFragment" >
+        <action
+            android:id="@+id/action_brandsFragment_to_catalogFragment"
+            app:destination="@id/catalogFragment" />
+    </fragment>
     <fragment
         android:id="@+id/regionsFragment"
         android:name="com.project.morestore.fragments.FilterRegionsFragment"

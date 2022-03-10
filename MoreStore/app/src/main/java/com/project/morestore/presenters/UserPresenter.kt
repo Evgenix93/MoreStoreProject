@@ -884,16 +884,15 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun saveStyles(styles: List<Boolean>) {
         val filter = userRepository.getFilter()
         val propertyStyles = styles.mapIndexedNotNull{index, isChecked ->
-            if(isChecked){
+
                 when(index){
-                    0 -> Property(143, "Вечерний", null, null, true)
-                    1 -> Property(108, "Деловой", null, null, true)
-                    2 -> Property(109, "Повседневный", null, null, true)
-                    3 -> Property(110, "Спортивный", null, null, true)
+                    0 -> Property(143, "Вечерний", null, null, isChecked)
+                    1 -> Property(108, "Деловой", null, null, isChecked)
+                    2 -> Property(109, "Повседневный", null, null, isChecked)
+                    3 -> Property(110, "Спортивный", null, null, isChecked)
                     else -> null
                 }
-            }else
-                null
+
         }
         filter.chosenStyles = propertyStyles
         userRepository.updateFilter(filter)

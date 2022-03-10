@@ -145,11 +145,16 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
                     (filter.chosenShoosSizes.all { it.isSelected } || filter.chosenShoosSizes.all { !it.isSelected }).not()
 
 
-        val sizes = filter.chosenTopSizes + filter.chosenBottomSizes + filter.chosenShoosSizes
+        val sizes = when(filter.chosenForWho.indexOf(true)) {
+            0 -> filter.chosenTopSizes + filter.chosenBottomSizes + filter.chosenShoosSizes
+            1 -> filter.chosenTopSizesMen + filter.chosenBottomSizesMen + filter.chosenShoosSizesMen
+            2 -> filter.chosenTopSizesKids + filter.chosenBottomSizesKids + filter.chosenShoosSizesKids
+            else -> emptyList()
+        }
         if(sizes.all{ it.isSelected } || sizes.all{!it.isSelected})
             binding.allSizes.text = getString(R.string.all_sizes)
         else
-            binding.allSizes.text = sizes.filter{it.isSelected}.joinToString(", "){it.int}
+            binding.allSizes.text = sizes.filter{it.isSelected}.map { it.int }.toSet().joinToString(", ")
 
         binding.materialsGreenDotImageView.isVisible =
             (filter.chosenMaterials.all { it.isSelected } || filter.chosenMaterials.all { !it.isSelected }).not()
@@ -206,14 +211,14 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
             val isCloth =
                 !FilterState.filter.categories.any { it.name == "Обувь" && it.isChecked == true } && FilterState.filter.categories.any { it.isChecked == true }
 
-            if (isCloth) {
+            if (isCloth && FilterState.filter.chosenForWho[2].not()) {
                 findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterSizesFragment())
             }
-            if (isShoos) {
+            if (isShoos && FilterState.filter.chosenForWho[2].not()) {
                 findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterShoosSizesFragment())
 
             }
-            if (!isShoos && !isCloth) {
+            if ((!isShoos && !isCloth) || FilterState.filter.chosenForWho[2] ) {
                 findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterKidsSizesFragment())
             }
 
@@ -230,6 +235,10 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
 
         binding.sortingClickView.setOnClickListener {
             binding.typeAutoCompleteTextView.showDropDown()
+        }
+
+        binding.showOffersBtn.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 

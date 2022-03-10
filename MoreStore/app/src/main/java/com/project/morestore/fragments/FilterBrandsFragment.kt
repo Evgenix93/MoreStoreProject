@@ -54,6 +54,9 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
         binding.crossIcon.setOnClickListener {
             binding.editText3.setText("")
         }
+        binding.showOffersBtn.setOnClickListener {
+            findNavController().navigate(FilterBrandsFragmentDirections.actionBrandsFragmentToCatalogFragment())
+        }
     }
 
     override fun onStop() {
