@@ -994,6 +994,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
              200 -> {
                  viewState.loaded(Unit)
              }
+             null -> viewState.loaded(Unit)
              else -> {
                  viewState.showOnBoarding()
              }
