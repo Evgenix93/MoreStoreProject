@@ -178,7 +178,7 @@ class OnboardingPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
           }
           val response = userRepository.saveBrandsProperties(BrandsPropertiesData("https://morestore.app-rest.ru/api/v1",null, propertiesId))
           when(response?.code()){
-              200 -> viewState.success()
+              200 ->  saveFilter(isMale)
               null -> viewState.error("Ошибка")
           }
       }
