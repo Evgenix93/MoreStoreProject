@@ -3,7 +3,9 @@ package com.project.morestore.util
 import android.text.TextUtils
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.EditText
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 fun String.isEmailValid(): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
@@ -17,4 +19,8 @@ fun AutoCompleteTextView.showDropdown(adapter: ArrayAdapter<String>?) {
     if(!TextUtils.isEmpty(this.text.toString())){
         adapter?.filter?.filter(null)
     }
+}
+
+fun Calendar.diffInDays(after :Calendar) :Int{
+    return TimeUnit.MILLISECONDS.toDays(abs(timeInMillis - after.timeInMillis)).toInt()
 }

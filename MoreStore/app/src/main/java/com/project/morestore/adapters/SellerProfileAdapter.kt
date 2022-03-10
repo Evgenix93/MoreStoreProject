@@ -8,7 +8,10 @@ import com.project.morestore.fragments.SellerReviewsFragment
 import com.project.morestore.models.Product
 import com.project.morestore.models.User
 
-class SellerProfileAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
+class SellerProfileAdapter(
+    fragment: Fragment,
+    val userId :Long
+): FragmentStateAdapter(fragment) {
     lateinit var user: User
     var sellerProducts = listOf<Product>()
     override fun getItemCount(): Int {
@@ -19,7 +22,7 @@ class SellerProfileAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
       return  if(position == 0)
             SellerProductsFragment().apply { arguments = Bundle().apply { putParcelableArray(PRODUCTS, sellerProducts.toTypedArray())  }}
         else
-            SellerReviewsFragment()
+            SellerReviewsFragment(userId)
     }
 
     fun updateList(newList: List<Product>){

@@ -39,39 +39,10 @@
         android:gravity="center"
         >
 
-        <LinearLayout android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:showDividers="middle"
-            >
-
-            <ImageView android:id="@+id/star1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_star_empty"
-                />
-            <ImageView android:id="@+id/star2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_star_empty"
-                />
-            <ImageView android:id="@+id/star3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_star_empty"
-                />
-            <ImageView android:id="@+id/star4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_star_empty"
-                />
-            <ImageView android:id="@+id/star5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_star_empty"
-                />
-
-        </LinearLayout>
+        <dev.jorik.ratingbar.RatingBar android:id="@+id/rating"
+            android:layout_width="248dp"
+            android:layout_height="40dp"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -100,8 +71,4 @@
         android:fontFamily="@font/manrope_bold"
         android:textSize="16sp"
         />
-
-
-
-
 </LinearLayout>

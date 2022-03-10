@@ -1,5 +1,6 @@
 package com.project.morestore.adapters
 
+import android.net.Uri
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.databinding.ItemPhotoAddBinding
@@ -7,7 +8,6 @@ import com.project.morestore.databinding.ItemPhotoBinding
 import com.project.morestore.databinding.ItemPhotoDescriptionBinding
 import com.project.morestore.models.FeedbackItem
 import com.project.morestore.util.inflater
-import java.lang.IllegalArgumentException
 
 class FeedbackPhotosAdapter(
     private val callback :(FeedbackItem) -> Unit
@@ -72,14 +72,14 @@ class FeedbackPhotosAdapter(
     inner class PhotoViewHolder(
         private val views :ItemPhotoBinding
     ) :RecyclerView.ViewHolder(views.root){
-        private var photo :Int = 0
+        private lateinit var photo :Uri
         init {
             views.photo.clipToOutline = true
         }
 
         fun bind(photo :FeedbackItem.Photo){
             this.photo = photo.photo
-            views.photo.setImageResource(this.photo)
+            views.photo.setImageURI(this.photo)
         }
     }
 }

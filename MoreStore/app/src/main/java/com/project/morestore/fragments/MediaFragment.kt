@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -20,9 +21,17 @@ import com.project.morestore.util.createRect
 import com.project.morestore.util.dp
 
 
-class MediaFragment : Fragment() {
+class MediaFragment() :Fragment() {
     private lateinit var views :FragmentMediaBinding
     private var currentPage :Int = 0
+
+    companion object{
+        const val PHOTOS = "photos"
+    }
+
+    constructor(photos :Array<String>) :this(){
+        arguments = bundleOf(PHOTOS to photos)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,22 +42,23 @@ class MediaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBarsColor(Color.BLACK)
+        val photos = requireArguments().getStringArray(PHOTOS)?: arrayOf()
         with(views){
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-            textIndicator.text = "1 из 5"
+            textIndicator.text = "1 из ${photos.size}"
             indicator.dividerDrawable = createRect(4.dp, 0)
-            for(i in 0..4){
+            for(i in 1..photos.size){
                 indicator.addView(createIndicator()
                     .apply { changeBgColor(this, R.color.gray1) })
             }
             indicator.getChildAt(0).apply { changeBgColor(this, R.color.white) }
-            pager.adapter = MediaAdapter(this@MediaFragment)
+            pager.adapter = MediaAdapter(this@MediaFragment, photos)
             pager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     changeBgColor(indicator.getChildAt(currentPage), R.color.gray1)
                     currentPage = position
-                    textIndicator.text = "${currentPage + 1} из 5"
+                    textIndicator.text = "${currentPage + 1} из ${photos.size}"
                     changeBgColor(indicator.getChildAt(currentPage), R.color.white)
                 }
             })

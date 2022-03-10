@@ -43,9 +43,6 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         initList()
         getActiveProducts()
         getFilter()
-        binding.createNewProductBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_cabinetFragment_to_feedbackProductFragment)
-        }
     }
 
     private fun checkToken(){

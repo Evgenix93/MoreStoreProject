@@ -8,7 +8,8 @@ import com.project.morestore.databinding.DialogFeedbackCompleteBinding
 import com.project.morestore.util.inflater
 
 class FeedbackCompleteDialog(
-    context : Context,
+    context :Context,
+    val review :Boolean,
     private val callback :() -> Unit
 ) :AlertDialog(context, R.style.App_Dialog_AlertTransparent) {
     private val views = DialogFeedbackCompleteBinding.inflate(context.inflater)

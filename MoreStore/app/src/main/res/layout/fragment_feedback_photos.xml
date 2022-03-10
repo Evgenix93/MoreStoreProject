@@ -39,6 +39,7 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         android:paddingTop="20dp"
+        android:paddingHorizontal="6dp"
         android:clipToPadding="false"
         tools:listitem="@layout/item_photo_add"
         />

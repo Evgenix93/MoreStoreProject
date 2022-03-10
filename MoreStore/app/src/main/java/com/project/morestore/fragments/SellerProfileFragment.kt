@@ -38,7 +38,7 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
     }
 
     private fun initViewPager(list: List<Product>){
-        sellerProfileAdapter = SellerProfileAdapter(this)
+        sellerProfileAdapter = SellerProfileAdapter(this, args.user.id)
         sellerProfileAdapter.updateList(list)
      binding.sellerViewPager.adapter = sellerProfileAdapter
         TabLayoutMediator(binding.tabLayout, binding.sellerViewPager){tab,position ->

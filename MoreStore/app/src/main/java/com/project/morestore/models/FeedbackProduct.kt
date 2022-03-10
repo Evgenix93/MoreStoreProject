@@ -1,12 +1,21 @@
 package com.project.morestore.models
 
-import androidx.annotation.DrawableRes
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 class FeedbackProduct(
-    @DrawableRes val photo :Int,
+    val id: Long,
+    @Json(name = "photo")
+    val photos :Array<ProductPhoto>?,
+    @Json(name = "name")
     val title :String,
-    val brand :String,
-    val status :String,
-    val newPrice :Int,
-    val oldPrice :Int
-)
+    val brand :ProductBrand?,
+    val price :String,
+    val sale :Float,
+    val property: Array<Property>
+){
+    val newPrice get() = price.toFloat()
+    val oldPrice = newPrice / (sale/100)
+    val state :String? get() = property.find{ it.id == 11L }?.value
+}
