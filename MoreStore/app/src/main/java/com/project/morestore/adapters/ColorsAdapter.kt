@@ -39,6 +39,7 @@ class ColorsAdapter(private val context: Context, private val isFilter: Boolean,
 
     fun updateColors(newList: List<Property>){
         properties = newList
+        checkedCount = properties.filter{it.isChecked == true}.size
         notifyDataSetChanged()
     }
 

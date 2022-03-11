@@ -24,12 +24,13 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
     private val binding:FragmentCreateProductColorsBinding by viewBinding()
     private var colorsAdapter: ColorsAdapter by autoCleared()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    private var colorProperties: List<Property2>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initColorsRecyclerView()
-        getColors()
         initToolbar()
+        loadChosenColors()
     }
 
 
@@ -74,6 +75,10 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
         presenter.updateCreateProductData(extProperties = properties)
     }
 
+    private fun loadChosenColors(){
+        presenter.loadCreateProductData()
+    }
+
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
@@ -101,7 +106,23 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
             is List<*> -> {
 
                 val properties = result as List<Property>
+                 colorProperties?.let{
+                     it.forEach {colorProperty ->
+                         properties.find{property ->
+                             property.id == colorProperty.value
+                         }?.isChecked = true
+                     }
+                 }
                 colorsAdapter.updateColors(properties)
+                initSaveButton(properties.any{it.isChecked == true})
+            }
+            is com.project.morestore.models.CreateProductData -> {
+                colorProperties = result.property?.filter{ property ->
+                    listOf(12L).any {
+                        it == property.propertyCategory
+                    }
+                }
+                getColors()
             }
         }
     }

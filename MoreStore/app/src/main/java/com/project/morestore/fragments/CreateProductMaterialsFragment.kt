@@ -30,6 +30,7 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
     private var materialAdapter: MaterialAdapter by autoCleared()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var searchInitiated = false
+    private var materialProperties: List<Property2>? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,6 +38,7 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
         initList()
         loadMaterials()
         initToolbar()
+        loadChosenMaterials()
     }
 
 
@@ -114,7 +116,9 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
         presenter.getMaterials()
     }
 
-
+    private fun loadChosenMaterials(){
+        presenter.loadCreateProductData()
+    }
 
 
     private fun initToolbar(){
@@ -156,11 +160,28 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
             is List<*> -> {
 
                 materialAdapter.updateList((result as List<Property>).map { MaterialLine(it.id, it.name, false, idCategory = it.idCategory?.toInt()!!) } )
+                val properties = result as List<Property>
+                materialProperties?.let{
+                    it.forEach {materialProperty ->
+                        properties.find{property ->
+                            property.id == materialProperty.value
+                        }?.isChecked = true
+                    }
+                }
+                materialAdapter.updateList((properties).map { MaterialLine(it.id, it.name, it.isChecked == true, idCategory = it.idCategory?.toInt()!!) } )
 
                 if(!searchInitiated){
                     initSearch(result as List<Property>)
                     searchInitiated = true
                 }
+                initSaveButton(properties.any{it.isChecked == true})
+            }
+            is com.project.morestore.models.CreateProductData -> {
+                materialProperties = result.property?.filter{ property ->
+                        13L == property.propertyCategory
+                }
+                Log.d("MyDebug", "material properties = $materialProperties")
+                loadMaterials()
             }
         }
 

@@ -31,6 +31,7 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initSaveButton()
+        loadPrice()
     }
 
 
@@ -102,6 +103,10 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
       presenter.updateCreateProductData(price = originalPrice.toString(), sale = discount, newPrice = salePrice.toString())
     }
 
+    private fun loadPrice(){
+        presenter.loadCreateProductData()
+    }
+
     override fun loaded(result: Any) {
 
         if(result is CreatedProductId){
@@ -110,6 +115,9 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
         }
 
 
+      val createProductData = result as com.project.morestore.models.CreateProductData
+      binding.originalPriceEditText.setText(createProductData.price)
+      binding.salePriceEditText.setText(createProductData.priceNew)
     }
 
     override fun loading() {

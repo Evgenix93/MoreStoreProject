@@ -16,7 +16,6 @@ import com.project.morestore.dialogs.SaveProductDialog
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
-import com.project.morestore.singletones.CreateProductData
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -27,12 +26,13 @@ class CreateProductSizesClothFragment :
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var sizeAdapter: SizeLineAdapter by autoCleared()
     private val args: CreateProductSizesClothFragmentArgs by navArgs()
+    private var sizeProperty: Property2? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
-        getSizes()
         initToolbar()
+        loadChosenSize()
     }
 
 
@@ -102,6 +102,10 @@ class CreateProductSizesClothFragment :
 
     }
 
+    private fun loadChosenSize(){
+        presenter.loadCreateProductData()
+    }
+
 
     override fun loaded(result: Any) {
 
@@ -114,6 +118,30 @@ class CreateProductSizesClothFragment :
                 SizeLine(-1, "", "", "", "", "", false, -1)
             ), null
         )
+        if (result is List<*>) {
+            val sizeLineList = convertPropertyListToSizeLineList(result as List<Property>)
+            if(sizeProperty != null)
+            sizeLineList.forEach {size ->
+                if(size.id.toLong() == sizeProperty!!.value) {
+                    size.isSelected = true
+                    return@forEach
+                }
+            }
+            sizeAdapter.updateList(
+                sizeLineList + listOf(
+                    SizeLine(-1, "", "", "", "", "", false, -1)
+                ), null
+            )
+            initSaveButton(sizeLineList.any{it.isSelected})
+        }
+        if(result is com.project.morestore.models.CreateProductData){
+            sizeProperty = result.property?.find{ property ->
+                listOf(1L, 2L, 4L, 5L, 7L, 8L).any {
+                           it == property.propertyCategory
+                }
+            }
+            getSizes()
+        }
     }
 
     override fun loading() {

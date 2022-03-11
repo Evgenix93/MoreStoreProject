@@ -2,10 +2,7 @@ package com.project.morestore.dialogs
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -17,6 +14,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.morestore.R
 import com.project.morestore.databinding.BottomdialogMenuBinding
+import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.util.createRect
 import com.project.morestore.util.dp
 import com.project.morestore.util.setStartDrawable
@@ -26,6 +24,7 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
         arguments = bundleOf("type" to type.ordinal)
     }
     private lateinit var views :BottomdialogMenuBinding
+    private val bar = 1
     enum class Type{ MEDIA, GEO, PROFILE}
 
     override fun getTheme() = R.style.App_Dialog_Transparent

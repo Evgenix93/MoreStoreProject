@@ -26,12 +26,13 @@ class CreateProductSizesShoosFragment :
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var sizeAdapter: SizeLineAdapter by autoCleared()
     private val args: CreateProductSizesShoosFragmentArgs by navArgs()
+    private var sizeProperty: Property2? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initList()
-        getSizes()
         initToolBar()
+        loadChosenSize()
     }
 
     private fun initToolBar() {
@@ -97,6 +98,9 @@ class CreateProductSizesShoosFragment :
         return listShoosSizes
     }
 
+    private fun loadChosenSize(){
+        presenter.loadCreateProductData()
+    }
 
     override fun loaded(result: Any) {
 
@@ -111,6 +115,31 @@ class CreateProductSizesShoosFragment :
             ), null
         )
 
+        if(result is List<*>) {
+            val otherSize = SizeLine(-1, "", "", "", "", "", false, -1)
+            val sizeLineList = convertPropertyListToSizeLineList(result as List<Property>)
+            if(sizeProperty != null)
+                sizeLineList.forEach {size ->
+                    if(size.id.toLong() == sizeProperty!!.value) {
+                        size.isSelected = true
+                        return@forEach
+                    }
+                }
+            sizeAdapter.updateList(
+                sizeLineList + listOf(
+                    otherSize
+                ), null
+            )
+            initSaveButton(sizeLineList.any{it.isSelected})
+        }
+        if(result is com.project.morestore.models.CreateProductData){
+            sizeProperty = result.property?.find{property ->
+                listOf(3L, 6L, 9L).any {
+                    it == property.propertyCategory
+                }
+            }
+            getSizes()
+        }
     }
 
     override fun loading() {

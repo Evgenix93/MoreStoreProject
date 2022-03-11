@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -40,6 +41,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         { findNavController().navigate(R.id.action_chatFragment_to_mediaFragment) }
     )
     private var listenGeo = false
+    private lateinit var user: User
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -158,6 +160,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun showDeal(dialog: DialogWrapper){
         currentDialogId = dialog.dialog.id
+        user = dialog.dialog.user
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.orEmpty()
         with(views){
             toolbar.title.text = dialog.dialog.user.name
@@ -301,6 +304,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         //if(!listenGeo) return
         if(item.titleId == R.string.chat_menu_setGeoDeal) adapter.setItems(seller4)
         if(item.titleId == R.string.chat_menu_delete ) presenter.deleteDialog(currentDialogId ?: -1)
+        if(item.titleId == R.string.chat_menu_profile)
+            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToSellerProfileFragment(user))
     }
 
     override fun applyNewPrice(newPrice: String){
