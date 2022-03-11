@@ -327,4 +327,11 @@
 
     <string name="feedback_complete_title">Отзыв отправлен!</string>
     <string name="feedback_complete_complete">Отлично!</string>
+
+    <!--Reviews-->
+    <string name="reviews_create">Написать отзыв</string>
+    <string name="pattern_before_days">%d дней назад</string>
+    <string name="pattern_before_monthes">%d месяцев назад</string>
+    <string name="pattern_before_years">%d лет назад</string>
+
 </resources>

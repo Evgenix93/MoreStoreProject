@@ -9,4 +9,4 @@ dependencyResolutionManagement {
 rootProject.name = "More Store"
 include ':app'
 include ':stub'
-include ':stub'
+include ':widgets:ratingbar'

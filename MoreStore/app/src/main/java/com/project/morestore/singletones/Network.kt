@@ -1,8 +1,10 @@
 package com.project.morestore.singletones
 
 import com.project.morestore.apis.*
+import com.project.morestore.models.CalendarAdapter
 
 import com.project.morestore.util.TokenInterceptor
+import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,7 +22,9 @@ object Network {
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://morestore.app-rest.ru/api/v1/")
         .client(client)
-        .addConverterFactory(MoshiConverterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create(
+            Moshi.Builder().add(CalendarAdapter).build()
+        ))
         .build()
 
     val authApi: AuthApi
@@ -41,5 +45,7 @@ object Network {
     val chatApi: MessageApi
     get() = retrofit.create()
 
+    val reviewApi :ReviewApi
+    get() = retrofit.create()
 
 }
