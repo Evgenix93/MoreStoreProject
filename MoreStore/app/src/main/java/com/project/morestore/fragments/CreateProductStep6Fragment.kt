@@ -169,6 +169,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                     idBrand = args.product!!.brand!!.id,
                     address = args.product!!.address.fullAddress,
                     price = args.product!!.price.toString(),
+                    newPrice = args.product!!.priceNew.toString(),
                     sale = args.product!!.sale,
                     about = args.product!!.about,
                     phone = args.product!!.phone,

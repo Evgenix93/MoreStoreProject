@@ -18,7 +18,7 @@
         <TextView android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/feedback_product_title"
+            android:text="@string/draft"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:fontFamily="@font/manrope_bold"

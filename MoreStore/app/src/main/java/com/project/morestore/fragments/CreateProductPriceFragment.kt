@@ -116,8 +116,8 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
 
 
       val createProductData = result as com.project.morestore.models.CreateProductData
-      binding.originalPriceEditText.setText(createProductData.price)
-      binding.salePriceEditText.setText(createProductData.priceNew)
+      binding.originalPriceEditText.setText("${createProductData.price?.toFloat()?.toInt() ?: ""}")
+      binding.salePriceEditText.setText("${createProductData.priceNew?.toFloat()?.toInt() ?: ""}")
     }
 
     override fun loading() {

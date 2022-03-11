@@ -799,7 +799,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     }
 
     fun createDraftProduct(){
-        updateCreateProductData(status = 5, address = "Москва")
+        val currentAddress = productRepository.loadCreateProductData().address
+        updateCreateProductData(status = 5, address =  currentAddress ?: "Москва", id = null)
         createProduct()
     }
 

@@ -25,6 +25,7 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
         super.onViewCreated(view, savedInstanceState)
         initList()
         getDraftProducts()
+        initToolbar()
     }
 
 
@@ -42,6 +43,12 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
             adapter = productAdapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
+        }
+    }
+
+    private fun initToolbar(){
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
     }
 

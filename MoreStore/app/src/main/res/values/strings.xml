@@ -333,5 +333,6 @@
     <string name="pattern_before_days">%d дней назад</string>
     <string name="pattern_before_monthes">%d месяцев назад</string>
     <string name="pattern_before_years">%d лет назад</string>
+    <string name="draft">Черновик</string>
 
 </resources>
