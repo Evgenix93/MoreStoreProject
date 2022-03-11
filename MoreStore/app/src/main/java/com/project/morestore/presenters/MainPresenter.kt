@@ -635,15 +635,15 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     fun getSizesShoos(forWho: Int) {
         when (forWho) {
             0 -> {
-                removeProperty(6)
+                //removeProperty(6)
                 getProperties(6)
             }
             1 -> {
-                removeProperty(3)
+                //removeProperty(3)
                 getProperties(3)
             }
             2 -> {
-                removeProperty(9)
+               // removeProperty(9)
                 getProperties(9)
             }
         }

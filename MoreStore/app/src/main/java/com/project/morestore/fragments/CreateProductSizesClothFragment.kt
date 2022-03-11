@@ -113,12 +113,12 @@ class CreateProductSizesClothFragment :
             findNavController().navigate(R.id.mainFragment)
             return
         }
-        sizeAdapter.updateList(
+        if (result is List<*>) {
+            sizeAdapter.updateList(
             convertPropertyListToSizeLineList(result as List<Property>) + listOf(
                 SizeLine(-1, "", "", "", "", "", false, -1)
             ), null
         )
-        if (result is List<*>) {
             val sizeLineList = convertPropertyListToSizeLineList(result as List<Property>)
             if(sizeProperty != null)
             sizeLineList.forEach {size ->
