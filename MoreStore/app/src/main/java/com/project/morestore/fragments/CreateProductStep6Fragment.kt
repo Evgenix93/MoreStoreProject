@@ -233,6 +233,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             updateCreateProductData(result.phone!!)
             createProduct()
         }else if(result is CreateProductData) {
+            Log.d("MyDebug", "properties = ${result.property}")
             optionsAdapter.updateList(result)
             initCreateProductButton()
         }

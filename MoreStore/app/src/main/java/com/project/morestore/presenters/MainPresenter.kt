@@ -569,10 +569,10 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     else -> false
                 }
                 if (isBottomSizes) {
-                    removeProperty(5)
+                  //  removeProperty(5)
                     getProperties(5)
                 } else {
-                    removeProperty(4)
+                  //  removeProperty(4)
                     getProperties(4)
                 }
             }
@@ -584,10 +584,10 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     else -> false
                 }
                 if (isBottomSizes) {
-                    removeProperty(2)
+                  //  removeProperty(2)
                     getProperties(2)
                 } else {
-                    removeProperty(1)
+                  //  removeProperty(1)
                     getProperties(1)
                 }
             }
@@ -599,10 +599,10 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     else -> false
                 }
                 if (isBottomSizes) {
-                    removeProperty(8)
+                   // removeProperty(8)
                     getProperties(8)
                 } else {
-                    removeProperty(7)
+                   // removeProperty(7)
                     getProperties(7)
                 }
             }
@@ -1025,10 +1025,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             }
             viewState.loaded(intent)
         }
-
     }
-
-
 
 
 }

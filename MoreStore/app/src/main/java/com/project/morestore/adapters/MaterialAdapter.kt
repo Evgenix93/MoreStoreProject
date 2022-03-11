@@ -112,6 +112,7 @@ class MaterialAdapter(private val context: Context, private val isFilter: Boolea
 
     fun updateList(newList: List<MaterialLine>) {
         list = newList
+        checkedCount = list.filter{it.isSelected}.size
         notifyDataSetChanged()
     }
 }

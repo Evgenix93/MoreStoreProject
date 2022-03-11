@@ -27,8 +27,8 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
         initToolbar()
         initChecking()
         initSaveButton()
+        loadCondition()
     }
-
 
     private fun initToolbar(){
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
@@ -83,8 +83,19 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
        presenter.updateCreateProductData(extProperty = property)
    }
 
-    override fun loaded(result: Any) {
+    private fun loadCondition(){
+        presenter.loadCreateProductData()
+    }
 
+    override fun loaded(result: Any) {
+       val createProductData = result as com.project.morestore.models.CreateProductData
+       val conditionProperty = createProductData.property?.find{it.propertyCategory == 11L} ?: return
+       when (conditionProperty.value){
+           111L -> {setCheckActive(binding.newWithTagsCheckImageView)}
+           112L -> setCheckActive(binding.newWithoutTagsCheckImageView)
+           113L -> setCheckActive(binding.excellentCheckImageView)
+           114L -> setCheckActive(binding.goodCheckImageView)
+       }
     }
 
     override fun loading() {

@@ -27,7 +27,7 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initSaveButton()
-
+        loadDescription()
     }
 
     private fun initToolbar(){
@@ -61,13 +61,13 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
         presenter.updateCreateProductData(about = binding.descriptionEditText.text.toString())
     }
 
-
-
-
-
+    private fun loadDescription(){
+       presenter.loadCreateProductData()
+    }
 
     override fun loaded(result: Any) {
-        TODO("Not yet implemented")
+        val createProductData = result as com.project.morestore.models.CreateProductData
+        binding.descriptionEditText.setText(createProductData.about)
     }
 
     override fun loading() {

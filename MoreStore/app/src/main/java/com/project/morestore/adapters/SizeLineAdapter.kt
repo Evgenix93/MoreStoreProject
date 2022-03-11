@@ -180,6 +180,7 @@ class SizeLineAdapter(private val isShoos: Boolean, private val isCreateProduct:
     fun updateList(newList: List<SizeLine>, newBottomSizeList: List<SizeLine>?) {
         list = newList
         newBottomSizeList?.let { bottomSizeList = it }
+        isAnyChecked = list.any{it.isSelected}
         notifyDataSetChanged()
     }
 
