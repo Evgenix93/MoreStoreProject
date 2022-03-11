@@ -108,6 +108,28 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         }
     }
 
+    fun deleteDialog(dialogId: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val response = chatRepository.deleteDialog(dialogId)
+            when (response?.code()) {
+                200 -> {
+                    viewState.dialogDeleted()
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+        }
+    }
+
     private suspend fun getStringFromResponse(body: ResponseBody): String {
         return withContext(Dispatchers.IO) {
             val str = body.string()

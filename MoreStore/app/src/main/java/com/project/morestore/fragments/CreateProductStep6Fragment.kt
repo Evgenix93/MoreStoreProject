@@ -16,6 +16,7 @@ import com.project.morestore.adapters.OptionsAdapter
 import com.project.morestore.databinding.FragmentAddProductDetailsBinding
 import com.project.morestore.dialogs.ArchiveProductDialog
 import com.project.morestore.dialogs.DeleteProductDialog
+import com.project.morestore.dialogs.SaveProductDialog
 import com.project.morestore.models.*
 
 import com.project.morestore.mvpviews.MainMvpView
@@ -33,6 +34,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     private val presenter: MainPresenter by moxyPresenter { MainPresenter(requireContext()) }
     private var firstLaunch = true
     private var isChangingProduct = false
+    private var isSavingDraftProduct = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d("MyDebug", "onViewCreated")
@@ -43,39 +45,50 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         initChips()
         initDeleteArchiveButtons()
         loadCreateProductData()
-        if(args.product != null)
+        if (args.product != null)
             binding.placeProductButton.text = "Сохранить изменения"
+        getUserData()
     }
-
-
-
 
 
     private fun initOptionsRecyclerView() {
         optionsAdapter = OptionsAdapter(requireContext()) { position ->
 
             when (position) {
-                0 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductAddPhotoFragment(args.category?.name == "Обувь"))
+                0 -> findNavController().navigate(
+                    CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductAddPhotoFragment(
+                        args.category?.name == "Обувь"
+                    )
+                )
                 1 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductConditionFragment())
                 2 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductPriceFragment())
                 3 -> {
-                    if(args.product == null)
-                        findNavController().navigate(if (args.category!!.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(args.forWho) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(args.forWho, args.category!!.id))
+                    if (args.product == null)
+                        findNavController().navigate(
+                            if (args.category!!.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(
+                                args.forWho
+                            ) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(
+                                args.forWho,
+                                args.category!!.id
+                            )
+                        )
                     else {
-                        val forWho = when(args.product!!.property?.first{it.id == 14L}?.value){
+                        val forWho = when (args.product!!.property?.first { it.id == 14L }?.value) {
                             "Женщинам" -> 0
                             "Мужчинам" -> 1
                             "Детям" -> 2
                             else -> null
                         }
                         findNavController().navigate(
-                            if (args.product!!.category?.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(forWho!!) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(
+                            if (args.product!!.category?.name == "Обувь") CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesShoosFragment(
+                                forWho!!
+                            ) else CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductSizesClothFragment(
                                 forWho!!,
                                 args.product!!.category?.id ?: 0
                             )
                         )
                     }
-                    }
+                }
                 4 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductDescriptionFragment())
                 5 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
                 6 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
@@ -95,8 +108,9 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductHowToSellFragment())
         }
         binding.placeProductButton.setOnClickListener {
-            if(args.product == null)
-            getUserData()
+            if (args.product == null)
+            //getUserData()
+                createProduct()
             else
                 changeProduct()
         }
@@ -111,7 +125,13 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         presenter.createProduct()
     }
 
-    private fun updateCreateProductData(phone: String) {
+    fun createDraftProduct() {
+        isSavingDraftProduct = true
+        updateCreateProductData(null)
+        presenter.createDraftProduct()
+    }
+
+    private fun updateCreateProductData(phone: String?) {
         presenter.updateCreateProductData(
             forWho = args.forWho,
             idCategory = args.category?.id,
@@ -125,141 +145,142 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+        //binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+        binding.toolbar.actionIcon.setOnClickListener {
+            SaveProductDialog { createDraftProduct() }.show(childFragmentManager, null)
+        }
 
     }
 
-    private fun loadCreateProductData(){
-        if(firstLaunch)
-        if(args.product == null) {
-            presenter.loadCreateProductData()
-            presenter.loadCreateProductPhotosVideos()
-            firstLaunch = false
-        }
-        else {
-            binding.placeProductButton.text = "Сохранить изменения"
+    private fun loadCreateProductData() {
+        if (firstLaunch)
+            if (args.product == null) {
+                presenter.loadCreateProductData()
+                presenter.loadCreateProductPhotosVideos()
+                firstLaunch = false
+            } else {
+                binding.placeProductButton.text = "Сохранить изменения"
 
-           val property = args.product!!.property?.map{ Property2(it.idProperty!!, it.id) }?.toMutableList()
-            presenter.updateCreateProductData(
-                idCategory = args.product!!.category?.id,
-                //idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
-                idBrand = args.product!!.brand!!.id,
-                address = args.product!!.address.fullAddress,
-                price = args.product!!.price.toString(),
-                sale = args.product!!.sale,
-                about = args.product!!.about,
-                phone = args.product!!.phone,
-                extProperties = property,
-                id = args.product!!.id
-            )
-           presenter.loadCreateProductData()
-            val map = mutableMapOf<Int, File>()
-            map[1] = File("")
-            optionsAdapter.updatePhotoInfo(map)
-            firstLaunch = false
-        }else {
+                val property = args.product!!.property?.map { Property2(it.idProperty!!, it.id) }
+                    ?.toMutableList()
+                presenter.updateCreateProductData(
+                    idCategory = args.product!!.category?.id,
+                    //idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
+                    idBrand = args.product!!.brand!!.id,
+                    address = args.product!!.address.fullAddress,
+                    price = args.product!!.price.toString(),
+                    sale = args.product!!.sale,
+                    about = args.product!!.about,
+                    phone = args.product!!.phone,
+                    extProperties = property,
+                    id = args.product!!.id
+                )
+                presenter.loadCreateProductData()
+                val map = mutableMapOf<Int, File>()
+                map[1] = File("")
+                optionsAdapter.updatePhotoInfo(map)
+                firstLaunch = false
+            } else {
             presenter.loadCreateProductData()
             presenter.loadCreateProductPhotosVideos()
         }
     }
 
-    private fun initChips(){
-        binding.forWhoChip.text = when(args.forWho){
+    private fun initChips() {
+        binding.forWhoChip.text = when (args.forWho) {
             0 -> "Для нее"
             1 -> "Для него"
             2 -> "Детям"
             else -> ""
         }
-        if(args.category == null)
+        if (args.category == null)
             binding.categoryChip.text = args.product!!.category?.name
         else
-           binding.categoryChip.text = args.category!!.name
-        if(args.brand == null)
-            binding.brandChip.isVisible = false
+            binding.categoryChip.text = args.category!!.name
+        if (args.brand == null)
+            if (args.product?.brand == null)
+                binding.brandChip.isVisible = false
+            else binding.brandChip.text = args.product!!.brand?.name
         else
             binding.brandChip.text = args.brand!!.name
     }
 
-    private fun clearCreateProductData(){
+    private fun clearCreateProductData() {
         presenter.clearCreateProductData()
     }
 
-    private fun initCreateProductButton(){
+    private fun initCreateProductButton() {
         val options = optionsAdapter.getList().toMutableList()
-        if (options.all {it.isChecked}) {
+        if (options.all { it.isChecked }) {
             binding.addPhotoInfoTextView.text = "Отлично! Всё заполнено"
             binding.placeProductButton.isEnabled = true
-            binding.placeProductButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
-        }else{
+            binding.placeProductButton.backgroundTintList =
+                ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
+        } else {
             binding.addPhotoInfoTextView.text = "Добавьте фото и описание"
             binding.placeProductButton.isEnabled = false
-            binding.placeProductButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
+            binding.placeProductButton.backgroundTintList =
+                ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
         }
     }
 
-    private fun showLoading(loading: Boolean){
+    private fun showLoading(loading: Boolean) {
         binding.loader.isVisible = loading
     }
 
 
-
-
-    private fun initDeleteArchiveButtons(){
-        if(args.product != null){
+    private fun initDeleteArchiveButtons() {
+        if (args.product != null) {
             binding.deleteButton.isVisible = true
             binding.archiveButton.isVisible = true
         }
-        binding.deleteButton.setOnClickListener{
+        binding.deleteButton.setOnClickListener {
             DeleteProductDialog().show(childFragmentManager, null)
             // findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToDeleteProductDialog())
         }
-        binding.archiveButton.setOnClickListener{
+        binding.archiveButton.setOnClickListener {
             ArchiveProductDialog().show(childFragmentManager, null)
         }
     }
 
-     fun changeProductStatus(status: Int){
-      presenter.changeProductStatus(args.product!!.id, status)
+    fun changeProductStatus(status: Int) {
+        presenter.changeProductStatus(args.product!!.id, status)
     }
 
-    private fun changeProduct(){
+    private fun changeProduct() {
         presenter.changeProduct()
     }
 
 
     override fun loaded(result: Any) {
         showLoading(false)
-        if(result is User) {
+        if (result is User) {
             updateCreateProductData(result.phone!!)
-            createProduct()
-        }else if(result is CreateProductData) {
+            //createProduct()
+        } else if (result is CreateProductData) {
             optionsAdapter.updateList(result)
             initCreateProductButton()
-        }
-        else if(result is CreatedProductId) {
+        } else if (result is CreatedProductId) {
             clearCreateProductData()
-            findNavController().navigate(
-                CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(
-                    null,
-                    result.id.toString(),
-                    true
+            if (isSavingDraftProduct.not())
+                findNavController().navigate(
+                    CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToProductDetailsFragment(
+                        null,
+                        result.id.toString(),
+                        true
+                    )
                 )
-            )
-        }
-        else if(result is MutableMap<*,*>) {
+            else findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToMainFragment())
+        } else if (result is MutableMap<*, *>) {
             val map = mutableMapOf<Int, File>()
             map[0] = File("")
-            optionsAdapter.updatePhotoInfo(if(args.product != null) map else result as MutableMap<Int, File>)
+            optionsAdapter.updatePhotoInfo(if (args.product != null) map else result as MutableMap<Int, File>)
             initCreateProductButton()
-        }
-        else if(result is String){
+        } else if (result is String) {
             Toast.makeText(requireContext(), result, Toast.LENGTH_SHORT).show()
             findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCabinetFragment())
         }
     }
-
-
-
 
 
     override fun loading() {

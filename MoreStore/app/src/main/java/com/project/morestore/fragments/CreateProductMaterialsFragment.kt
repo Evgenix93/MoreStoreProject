@@ -14,10 +14,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.MaterialAdapter
 import com.project.morestore.databinding.FragmentCreateProductMaterialsBinding
-import com.project.morestore.models.MaterialLine
-import com.project.morestore.models.Property
-import com.project.morestore.models.Property2
-import com.project.morestore.models.SuggestionModels
+import com.project.morestore.dialogs.SaveProductDialog
+import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.CreateProductData
@@ -123,7 +121,7 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+        binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
 
     }
 
@@ -153,8 +151,10 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
 
     override fun loaded(result: Any) {
         when (result){
+            is CreatedProductId -> findNavController().navigate(R.id.mainFragment)
 
             is List<*> -> {
+
                 materialAdapter.updateList((result as List<Property>).map { MaterialLine(it.id, it.name, false, idCategory = it.idCategory?.toInt()!!) } )
 
                 if(!searchInitiated){

@@ -79,7 +79,8 @@ class ProductRepository(private val context: Context) {
         filter: Filter? = null,
         userId: Long? = null,
         productId: Long? = null,
-        limit: Int? = null
+        limit: Int? = null,
+        status: Int? = null
     ): Response<List<Product>>? {
         return try {
             var categoryStr = listOf<String>()
@@ -123,7 +124,7 @@ class ProductRepository(private val context: Context) {
                 productIdStr = listOf("id=$it")
             }
 
-            val statusStr = "status= 1"
+            val statusStr = "status= ${status ?: 1}"
 
             productPropertyStr =
                 filter?.chosenTopSizes?.filter { it.isSelected }
@@ -237,6 +238,10 @@ class ProductRepository(private val context: Context) {
 
     suspend fun getCurrentUserProducts(): Response<List<Product>>? {
         return getProducts(userId = Token.userId.toLong())
+    }
+
+    suspend fun getCurrentUserProductsWithStatus(status: Int): Response<List<Product>>?{
+        return getProducts(userId = Token.userId, status = status)
     }
 
     suspend fun getSellerProducts(userId: Long): Response<List<Product>>? {
@@ -713,7 +718,8 @@ class ProductRepository(private val context: Context) {
         extProperties: List<Property2>? = null,
         id: Long? = null,
         newPrice: String? = null,
-        name: String? = null
+        name: String? = null,
+        status: Int? = null
     ) {
 
         val property = when (forWho) {
@@ -764,6 +770,9 @@ class ProductRepository(private val context: Context) {
 
         if(name != null)
             CreateProductData.createProductData.name = name
+
+        if(status != null)
+            CreateProductData.createProductData.status = status
 
         Log.d("Debug", "createProductData = ${CreateProductData.createProductData}")
     }
@@ -924,7 +933,7 @@ class ProductRepository(private val context: Context) {
 
     suspend fun changeProductData(): Response<List<CreatedProductId>>?{
         return try {
-            productApi.changeProduct(CreateProductData.createProductData)
+            productApi.changeProduct(CreateProductData.createProductData.apply { status = 1 })
         } catch (e: Exception) {
             if (e is IOException) {
                 null

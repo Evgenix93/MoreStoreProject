@@ -33,14 +33,14 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             Log.d("productbrand", product.brand.toString())
             Log.d("product", product.toString())
             Log.d("mylog", "bind")
-            val crossedStr = "${product.price} ₽".toSpannable().apply { setSpan(StrikethroughSpan(), 0, length ,0) }
+            val crossedStr = if(product.price == 0f) "" else "${product.price} ₽".toSpannable().apply { setSpan(StrikethroughSpan(), 0, length ,0) }
             binding.productOldPriceTextView.text = crossedStr
             binding.likesCountTextView.text = product.statistic?.wishlist?.total.toString()
             binding.productNameTextView.text = product.name
-            binding.productPriceTextView.text = "${product.priceNew} ₽"
+            binding.productPriceTextView.text = if(product.priceNew == null) "" else "${product.priceNew} ₽"
             binding.productBrandTextView.text = if(product.brand == null)
-                "Другое" + "• ${product.property?.find { it.name == "Состояние" }?.value}"
-             else product.brand.name + "• ${product.property?.find { it.name == "Состояние" }?.value}"
+                "Другое" + "• ${product.property?.find { it.name == "Состояние" }?.value.orEmpty()}"
+             else product.brand.name + "• ${product.property?.find { it.name == "Состояние" }?.value.orEmpty()}"
            // binding.productConditionTextView.text = "• ${product.property?.find { it.name == "Состояние" }?.value}"
 
             Glide.with(itemView)

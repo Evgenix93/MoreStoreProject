@@ -30,6 +30,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private lateinit var views :FragmentChatBinding
     private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
     private var currentUserId: Long? = null
+    private var currentDialogId: Long? = null
     private val adapter = MessagesAdapter(
         {
             stubAcceptDealRunnable.run()
@@ -156,6 +157,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }*/
 
     private fun showDeal(dialog: DialogWrapper){
+        currentDialogId = dialog.dialog.id
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.orEmpty()
         with(views){
             toolbar.title.text = dialog.dialog.user.name
@@ -296,8 +298,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     )
 
     override fun selectAction(item: MenuBottomDialogFragment.MenuItem) {
-        if(!listenGeo) return
+        //if(!listenGeo) return
         if(item.titleId == R.string.chat_menu_setGeoDeal) adapter.setItems(seller4)
+        if(item.titleId == R.string.chat_menu_delete ) presenter.deleteDialog(currentDialogId ?: -1)
     }
 
     override fun applyNewPrice(newPrice: String){
@@ -338,5 +341,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun messageSent(message: MessageModel) {
         Toast.makeText(requireContext(), "Сообщение отправлено", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun dialogDeleted() {
+        Toast.makeText(requireContext(), "Диалог удален", Toast.LENGTH_SHORT).show()
+        findNavController().popBackStack()
     }
 }

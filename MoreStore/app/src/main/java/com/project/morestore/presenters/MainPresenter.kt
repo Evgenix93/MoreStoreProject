@@ -161,6 +161,29 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
+    fun getUserProductsWithStatus(status: Int){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getCurrentUserProductsWithStatus(status)
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                404 -> {
+                    viewState.loaded(emptyList<Product>())
+                    viewState.error(getStringFromResponse(response.errorBody()!!))
+
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+
+            }
+
+
+        }
+
+    }
+
     fun getSuggestionProducts(suggestionModels: SuggestionModels) {
         presenterScope.launch {
             viewState.loading()
@@ -775,6 +798,11 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
+    fun createDraftProduct(){
+        updateCreateProductData(status = 5, address = "Москва")
+        createProduct()
+    }
+
     fun updateCreateProductData(
         forWho: Int? = null,
         idCategory: Int? = null,
@@ -788,7 +816,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         extProperties: List<Property2>? = null,
         id: Long? = null,
         newPrice: String? = null,
-        name: String? = null
+        name: String? = null,
+        status: Int? = null
     ) {
         productRepository.updateCreateProductData(
             forWho,
@@ -803,7 +832,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             extProperties,
             id,
             newPrice,
-            name
+            name,
+            status
 
         )
     }

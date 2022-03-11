@@ -184,4 +184,8 @@ class MessagesFragment: BottomNavigationMvpFragment(), ChatMvpView {
     override fun messageSent(message: MessageModel) {
 
     }
+
+    override fun dialogDeleted() {
+
+    }
 }

@@ -112,6 +112,31 @@ class ChatRepository {
         }
     }
 
+    suspend fun deleteDialog(dialogId: Long): Response<DialogId>?{
+        return try {
+            chatApi.deleteDialog(DialogId(dialogId))
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = chatApi.deleteDialogGetError(DialogId(dialogId))
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
+        }
+    }
+
 
 
 

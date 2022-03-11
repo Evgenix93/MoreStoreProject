@@ -33,6 +33,13 @@ interface MessageApi {
     @GET("message/dialogs")
     suspend fun getDialogsGetError(): Response<String>
 
+    @POST("message/dialog/delete")
+    suspend fun deleteDialog(@Body dialogId: DialogId): Response<DialogId>
+
+    @POST("message/dialog/delete")
+    suspend fun deleteDialogGetError(@Body dialogId: DialogId): Response<String>
+
+
 
 
 

@@ -474,6 +474,9 @@
         <argument
             android:name="user"
             app:argType="com.project.morestore.models.User" />
+        <action
+            android:id="@+id/action_profileFragment_to_productDraftFragment"
+            app:destination="@id/productDraftFragment" />
     </fragment>
     <fragment
         android:id="@+id/sellerProfileFragment"
@@ -764,6 +767,9 @@
         <action
             android:id="@+id/action_createProductStep6Fragment_to_cabinetFragment"
             app:destination="@id/cabinetFragment" />
+        <action
+            android:id="@+id/action_createProductStep6Fragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/photoFinishFragment"
@@ -863,6 +869,14 @@
         <argument
             android:name="forWho"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDraftFragment"
+        android:name="com.project.morestore.fragments.ProductDraftFragment"
+        android:label="ProductDraftFragment" >
+        <action
+            android:id="@+id/action_productDraftFragment_to_createProductStep6Fragment"
+            app:destination="@id/createProductStep6Fragment" />
     </fragment>
 
 </navigation>

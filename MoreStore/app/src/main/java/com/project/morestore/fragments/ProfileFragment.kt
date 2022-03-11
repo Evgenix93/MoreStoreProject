@@ -25,6 +25,7 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         getUser()
+        setClickListeners()
     }
 
     private fun initToolbar(){
@@ -43,6 +44,12 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         Glide.with(binding.root)
             .load(args.user.avatar?.photo)
             .into(binding.avatarImageView)
+    }
+
+    private fun setClickListeners(){
+        binding.draftTextView.setOnClickListener {
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToProductDraftFragment())
+        }
     }
 
     override fun success(result: Any) {

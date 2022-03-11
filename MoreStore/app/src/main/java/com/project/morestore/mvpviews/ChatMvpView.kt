@@ -30,5 +30,8 @@ interface ChatMvpView: MvpView {
     @OneExecution
     fun messageSent(message: MessageModel)
 
+    @OneExecution
+    fun dialogDeleted()
+
 
 }

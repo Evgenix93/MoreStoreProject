@@ -63,9 +63,9 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit): 
         val materials = createProductData.property?.filter{it.propertyCategory == 13L}.orEmpty()
         val region = createProductData.address
         options[1].isChecked = conditions.isNotEmpty()
-        options[2].isChecked = price != null
+        options[2].isChecked = price != null && price != "0.0"
         options[3].isChecked = size != null
-        options[4].isChecked = about != null
+        options[4].isChecked = about != null && about != ""
         options[5].isChecked = colors.isNotEmpty()
         options[6].isChecked = materials.isNotEmpty()
         options[7].isChecked = region != null

@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -12,6 +13,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductDescriptionBinding
+import com.project.morestore.dialogs.SaveProductDialog
+import com.project.morestore.models.CreatedProductId
+import com.project.morestore.models.Product
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -32,7 +36,7 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
 
     private fun initToolbar(){
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+        binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
 
     }
 
@@ -67,7 +71,12 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
 
 
     override fun loaded(result: Any) {
-        TODO("Not yet implemented")
+
+        if(result is CreatedProductId){
+            findNavController().navigate(R.id.mainFragment)
+            return
+        }
+
     }
 
     override fun loading() {
@@ -75,7 +84,7 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
     }
 
     override fun error(message: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun showOnBoarding() {

@@ -44,7 +44,7 @@ class CreateProductStep2Fragment: MvpAppCompatFragment(R.layout.fragment_create_
             findNavController().popBackStack()
         }
         binding.toolbar.titleTextView.text = "Шаг 2 из 6"
-        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.mainFragment) }
 
     }
 

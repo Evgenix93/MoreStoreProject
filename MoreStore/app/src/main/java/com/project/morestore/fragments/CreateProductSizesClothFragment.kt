@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -11,10 +12,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.SizeLineAdapter
 import com.project.morestore.databinding.FragmentCreateProductSizesBinding
-import com.project.morestore.models.Property
-import com.project.morestore.models.Property2
-import com.project.morestore.models.SizeLine
-import com.project.morestore.models.SuggestionModels
+import com.project.morestore.dialogs.SaveProductDialog
+import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.CreateProductData
@@ -39,7 +38,7 @@ class CreateProductSizesClothFragment :
 
     private fun initToolbar(){
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
+        binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
     }
 
 
@@ -105,6 +104,11 @@ class CreateProductSizesClothFragment :
 
 
     override fun loaded(result: Any) {
+
+        if(result is CreatedProductId){
+            findNavController().navigate(R.id.mainFragment)
+            return
+        }
         sizeAdapter.updateList(
             convertPropertyListToSizeLineList(result as List<Property>) + listOf(
                 SizeLine(-1, "", "", "", "", "", false, -1)
@@ -117,6 +121,7 @@ class CreateProductSizesClothFragment :
     }
 
     override fun error(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
