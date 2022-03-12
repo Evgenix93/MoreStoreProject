@@ -21,7 +21,7 @@ data class Product(
     val priceNew: Float?,
     val sale: Float,
     val date: Long,
-    val address: Address,
+    val address: Address?,
     val photo: List<ProductPhoto>,
     val video: List<ProductVideo>?,
     val user: User?,

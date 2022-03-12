@@ -132,8 +132,8 @@ class MakePhotoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
     }
 
     override fun onPhotoCaptured(file: File) {
-        Toast.makeText(requireContext(), "фото сделано ${file.absolutePath}", Toast.LENGTH_SHORT)
-            .show()
+      //  Toast.makeText(requireContext(), "фото сделано ${file.absolutePath}", Toast.LENGTH_SHORT)
+        //    .show()
         findNavController().navigate(
             MakePhotoFragmentDirections.actionMakePhotoFragmentToPhotoFinishFragment(
                 file.path,

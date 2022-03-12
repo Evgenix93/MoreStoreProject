@@ -1,6 +1,7 @@
 package com.project.morestore.adapters
 
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -53,8 +54,9 @@ class FeedbackProductsAdapter(
                     .into(views.photo)
                 title.text = product.title
                 description.text = desc
-                newPrice.text = ctx.getString(R.string.pattern_price, String.format("%,.2f", product.newPrice))
-                oldPrice.text = ctx.getString(R.string.pattern_price, String.format("%,.2f", product.oldPrice))
+                Log.d("MyDebug", "newPrice = ${product.newPrice}")
+                newPrice.text = ctx.getString(R.string.pattern_price, String.format("%,.1f", product.newPrice?.toFloat()))
+               oldPrice.text = ctx.getString(R.string.pattern_price, String.format("%,.1f", product.price.toFloat()))
             }
         }
 
@@ -62,7 +64,7 @@ class FeedbackProductsAdapter(
 
         private val desc :String get() {
             val brand = product.brand?.name
-            val state = product.state
+            val state = product.state.orEmpty()
             brand?.let {
                 return ctx.getString(R.string.pattern_dot_divider, it, state)
             }

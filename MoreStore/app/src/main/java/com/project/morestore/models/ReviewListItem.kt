@@ -24,7 +24,7 @@ class Review(
 
 sealed class ReviewListItem{
     object Create :ReviewListItem()
-    class Review(val review :com.project.morestore.models.Review) :ReviewListItem()
+    class ReviewItem(val review :Review) :ReviewListItem()
 }
 
 class PreviewPhoto(context :Context, url :String) :FrameLayout(context){

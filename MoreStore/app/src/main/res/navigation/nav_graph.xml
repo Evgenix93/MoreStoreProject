@@ -485,6 +485,9 @@
         <argument
             android:name="user"
             app:argType="com.project.morestore.models.User" />
+        <argument
+            android:name="toReviews"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep1Fragment"

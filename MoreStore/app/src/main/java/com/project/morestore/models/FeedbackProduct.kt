@@ -12,10 +12,12 @@ class FeedbackProduct(
     val title :String,
     val brand :ProductBrand?,
     val price :String,
+    @Json(name = "price_new")
+    val newPrice: String?,
     val sale :Float,
     val property: Array<Property>
 ){
-    val newPrice get() = price.toFloat()
-    val oldPrice = newPrice / (sale/100)
+   // val newPrice get() = price.toFloat()
+   // val oldPrice = newPrice / (sale/100)
     val state :String? get() = property.find{ it.id == 11L }?.value
 }

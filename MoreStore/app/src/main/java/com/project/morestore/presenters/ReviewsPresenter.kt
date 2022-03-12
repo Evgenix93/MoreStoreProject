@@ -15,7 +15,7 @@ class ReviewsPresenter(
     override fun attachView(view: ReviewView?) {
         super.attachView(view)
         presenterScope.launch {
-            viewState.showReviews(data.getReviews(userId).map { ReviewListItem.Review(it) })
+            viewState.showReviews(data.getReviews(userId).map { ReviewListItem.ReviewItem(it) })
         }
     }
 }

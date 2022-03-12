@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -127,16 +128,16 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
 
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         if(brands.isEmpty()){
             brands = result as List<ProductBrand>
             presenter.collectBrandSearchFlow(searchFlow, brands)
         }
         brandAdapter.updateList(result as List<ProductBrand>)
-
-
     }
 
     override fun loading() {
+        binding.loader.isVisible = true
     }
 
     override fun error(message: String) {

@@ -37,7 +37,7 @@ class ReviewsAdapter(
         if(getItemViewType(position) == ADD){
             //skip
         } else {//REVIEW
-            (holder as ReviewViewHolder).bind((items[position-1] as ReviewListItem.Review).review)
+            (holder as ReviewViewHolder).bind((items[position-1] as ReviewListItem.ReviewItem).review)
         }
     }
 
@@ -50,7 +50,7 @@ class ReviewsAdapter(
         if(holder is ReviewViewHolder) holder.clear()
     }
 
-    fun setItems(newItems :List<ReviewListItem.Review>){
+    fun setItems(newItems :List<ReviewListItem.ReviewItem>){
         items = newItems
         notifyDataSetChanged()
     }
