@@ -6,7 +6,8 @@ sealed class Chat(
     val id: Long,
     val name :String,
     val description :String,
-    open val avatar :Int?
+    open val avatar: String?
+    //open val avatar :Int?,
 ){
     class Support(
         id: Long,
@@ -18,7 +19,7 @@ sealed class Chat(
         id: Long,
         product :String,
         seller :String,
-        override val avatar :Int,
+        override val avatar :String,
         val price :Float = 0f
     ) :Chat(id, product, seller, avatar)
 
@@ -26,16 +27,17 @@ sealed class Chat(
         id: Long,
         product :String,
         countBuyers :String,
-        override val avatar :Int,
+        override val avatar :String,
         val price :Float,
-        val totalUnread :Int = 0
+        val productId: Long,
+        val totalUnread :Int = 0,
     ) :Chat(id, product, countBuyers, avatar)
 
     class Personal(
         id: Long,
         name :String,
         lastMessage :String,
-        override val avatar :Int,
+        override val avatar :String,
         val price :Float,
         val totalUnread :Int = 0,
         val online :Boolean = false

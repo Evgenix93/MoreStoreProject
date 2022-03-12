@@ -12,6 +12,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/stub" />
+            <option value="$PROJECT_DIR$/widgets" />
+            <option value="$PROJECT_DIR$/widgets/ratingbar" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

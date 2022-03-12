@@ -3,6 +3,7 @@ package com.project.morestore.adapters
 import android.view.View.*
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemChatBinding
 import com.project.morestore.models.Chat
@@ -30,7 +31,7 @@ class ChatsAdapter(val callback :(Chat) -> Unit) :RecyclerView.Adapter<ChatsAdap
                     unread.visibility = GONE
                 }
                 is Chat.Personal -> {
-                    avatar.setImageResource(chat.avatar)
+                   // avatar.setImageResource(chat.avatar)
                     icon.visibility = GONE
                     if(chat.price == 0f){
                         price.visibility = INVISIBLE
@@ -47,7 +48,10 @@ class ChatsAdapter(val callback :(Chat) -> Unit) :RecyclerView.Adapter<ChatsAdap
                     }
                 }
                 is Chat.Deal -> {
-                    avatar.setImageResource(chat.avatar)
+                    //avatar.setImageResource(chat.avatar)
+                    Glide.with(avatar)
+                        .load(chat.avatar)
+                        .into(avatar)
                     icon.setImageResource(R.drawable.ic_bag_filled)
                     icon.visibility = VISIBLE
                     price.text = root.context.getString(R.string.pattern_price, String.format("%,d", chat.price.toInt()))
@@ -55,7 +59,10 @@ class ChatsAdapter(val callback :(Chat) -> Unit) :RecyclerView.Adapter<ChatsAdap
                     unread.visibility = GONE
                 }
                 is Chat.Lot -> {
-                    avatar.setImageResource(chat.avatar)
+                   // avatar.setImageResource(chat.avatar)
+                    Glide.with(avatar)
+                        .load(chat.avatar)
+                        .into(avatar)
                     icon.setImageResource(R.drawable.ic_sticker_filled)
                     icon.visibility = VISIBLE
                     price.text = root.context.getString(R.string.pattern_price, String.format("%,d", chat.price.toInt()))

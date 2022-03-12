@@ -322,7 +322,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     }
 
-    override fun dialogsLoaded(dialogs: List<DialogWrapper>) {
+    override fun dialogsLoaded(dialogs: List<Chat>) {
 
     }
 

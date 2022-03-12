@@ -748,8 +748,10 @@ class ProductRepository(private val context: Context) {
         if(property != null)
             if(CreateProductData.createProductData.property == null)
               CreateProductData.createProductData.property = mutableListOf(property)
-            else
+            else {
+                CreateProductData.createProductData.property!!.remove(property)
                 CreateProductData.createProductData.property!!.add(property)
+            }
         if(extProperty != null)
             if(CreateProductData.createProductData.property == null)
                 CreateProductData.createProductData.property = mutableListOf(extProperty)

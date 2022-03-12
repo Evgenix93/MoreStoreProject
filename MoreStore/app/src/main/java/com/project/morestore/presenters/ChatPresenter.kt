@@ -2,6 +2,8 @@ package com.project.morestore.presenters
 
 import android.content.Context
 import android.util.Log
+import com.project.morestore.models.Chat
+import com.project.morestore.models.DialogWrapper
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
@@ -86,26 +88,52 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     }
 
-    fun getDialogs(){
-        presenterScope.launch {
+    private suspend fun getSupportDialog(): List<Chat>{
+       // presenterScope.launch {
             viewState.loading()
+           // val userId = authRepository.getUserId()
             val response = chatRepository.getDialogs()
             when (response?.code()) {
                 200 -> {
-                    viewState.dialogsLoaded(response.body()!!)
+                    //val chats = response.body()?.map { dialogWrapper ->
+                       // if(dialogWrapper.product.idUser == userId )
+                            //Chat.Lot()
+                    //}
+                    //viewState.dialogsLoaded(response.body()!!)
+                    val chats = response.body()?.filter { dialogWrapper ->
+                        dialogWrapper.dialog.user.id == 1L
+
+                    }?.map {
+                        Chat.Support(
+                            it.dialog.id,
+                            "Служба поддержки",
+                            "Помощь с товаром"
+                        )
+                    }
+                    return chats.orEmpty()
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)
+                    return emptyList()
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
+                500 -> {
+                    viewState.error("500 Internal Server Error")
+                    return emptyList()
+                }
+                null -> {
+                    viewState.error("нет интернета")
+                    return emptyList()
+                }
+                else -> {
+                    viewState.error("ошибка")
+                    return emptyList()
+                }
 
             }
 
 
-        }
+        //}
     }
 
     fun deleteDialog(dialogId: Long){
@@ -127,6 +155,176 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             }
 
 
+        }
+    }
+
+    private suspend fun getDealDialogs(): List<Chat>{
+       // presenterScope.launch {
+            viewState.loading()
+            val userId = authRepository.getUserId()
+            val response = chatRepository.getDialogs()
+            when (response?.code()) {
+                200 -> {
+                    val chats = response.body()?.filter {it.product.idUser != userId }?.map { dialogWrapper ->
+                            Chat.Deal(
+                                dialogWrapper.dialog.id,
+                                dialogWrapper.product.name,
+                                dialogWrapper.dialog.user.name.orEmpty(),
+                                dialogWrapper.product.photo.first().photo,
+                                dialogWrapper.product.priceNew ?: 0f
+
+                            )
+
+                    }
+                    //viewState.dialogsLoaded(chats.orEmpty())
+                    return chats.orEmpty()
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                    return emptyList()
+
+                }
+                500 -> {
+                    viewState.error("500 Internal Server Error")
+                return emptyList()}
+                null -> {
+                    viewState.error("нет интернета")
+                return emptyList()}
+                else -> {
+                    viewState.error("ошибка")
+                    return emptyList()
+                }
+
+            }
+
+
+       // }
+
+    }
+
+    private suspend fun getLotDialogs(): List<Chat>{
+       // presenterScope.launch {
+            viewState.loading()
+            val userId = authRepository.getUserId()
+            val response = chatRepository.getDialogs()
+            when (response?.code()) {
+                200 -> {
+                    val products = response.body()?.map { dilogWrapper ->
+                        dilogWrapper.product
+
+                    }?.toSet()?.filter { it.idUser == userId }
+                    val lots = products?.map { product ->
+                        response.body()?.filter { dialogWrapper ->
+                            dialogWrapper.product == product
+                        }.orEmpty()
+
+
+                    }
+                    val chats =  lots?.map { lot ->  //response.body()?.filter {it.product.idUser == userId }?.map { dialogWrapper ->
+                        Chat.Lot(
+                            0,
+                            lot.first().product.name,
+                            "${lot.size.toString()} покупателей",
+                            lot.first().product.photo.first().photo,
+                            lot.first().product.priceNew ?: 0f,
+                            lot.first().product.id
+
+                        )
+
+                    }
+                    Log.d("mylog", chats?.size.toString())
+                    return chats.orEmpty()
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                    return emptyList()
+                }
+                500 -> {
+                    viewState.error("500 Internal Server Error")
+                    return emptyList()
+                }
+                null -> {
+                    viewState.error("нет интернета")
+                    return emptyList()
+                }
+                else -> {
+                    viewState.error("ошибка")
+                    return emptyList()
+                }
+
+            }
+
+
+        //}
+    }
+
+    private suspend fun getDialogsByProductId(id: Long): List<Chat>{
+        val response = chatRepository.getDialogs()
+        when (response?.code()) {
+            200 -> {
+                val chats = response.body()?.filter { dialogWrapper ->
+                    dialogWrapper.product.id == id
+
+                }?.map {
+                    Chat.Personal(
+                        it.dialog.id,
+                        it.dialog.user.name.orEmpty(),
+                        it.dialog.lastMessage?.text.orEmpty(),
+                        it.dialog.user.avatar?.photo.orEmpty(),
+                        it.product.priceNew ?: 0f
+
+
+                    )
+
+                }
+                return chats.orEmpty()
+            }
+            400 -> {
+                val bodyString = getStringFromResponse(response.errorBody()!!)
+                viewState.error(bodyString)
+                return emptyList()
+            }
+            500 -> {
+                viewState.error("500 Internal Server Error")
+                return emptyList()
+            }
+            null -> {
+                viewState.error("нет интернета")
+                return emptyList()
+            }
+            else -> {
+                viewState.error("ошибка")
+                return emptyList()
+            }
+
+        }
+
+
+    }
+
+    fun showDealDialogs(){
+        presenterScope.launch {
+            viewState.dialogsLoaded(getDealDialogs())
+        }
+    }
+
+    fun showLotDialogs(){
+        presenterScope.launch {
+            viewState.dialogsLoaded(getLotDialogs())
+        }
+    }
+
+    fun showAllDialogs(){
+        presenterScope.launch {
+            viewState.dialogsLoaded(getSupportDialog() + getDealDialogs() + getLotDialogs())
+        }
+    }
+
+    fun showProductDialogs(id: Long){
+        presenterScope.launch {
+            viewState.dialogsLoaded(getDialogsByProductId(id))
         }
     }
 

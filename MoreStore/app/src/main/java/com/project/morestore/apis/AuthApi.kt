@@ -34,6 +34,10 @@ interface AuthApi {
     @GET("user/islogin")
     suspend fun getUserData(): Response<User>
 
+    @GET("user/islogin")
+    suspend fun getUserDataGetError(): Response<String>
+
+
     @POST("user/login/social/get_url")
     suspend fun getSocialLoginUrl(@Body type: SocialType): Response<String>
 

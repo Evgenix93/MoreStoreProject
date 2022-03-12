@@ -765,7 +765,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     viewState.error(bodyString)
                 }
 
-                404 -> {}
+                404 -> {viewState.error("Вход не выполнен")}
                 500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")

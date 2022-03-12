@@ -26,24 +26,42 @@ import com.project.morestore.util.setSelectListener
 import moxy.ktx.moxyPresenter
 import kotlin.reflect.KClass
 
-class MessagesFragment: BottomNavigationMvpFragment(), ChatMvpView {
-    private lateinit var views :FragmentMessagesBinding
+class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
+    private lateinit var views: FragmentMessagesBinding
     private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
-    private val adapter = ChatsAdapter{
-        if(it.name == "Adidas men's blue denim"){
+    private var currentUserId: Long? = null
+    private val adapter = ChatsAdapter {
+        if (it.name == "Adidas men's blue denim") {
             findNavController().navigate(R.id.action_messagesFragment_to_chatLotsFragment)
-        } else if(it is Chat.Support){
-            findNavController().navigate(R.id.action_messagesFragment_to_chatFragment,
+        } else if (it is Chat.Support) {
+            findNavController().navigate(
+                R.id.action_messagesFragment_to_chatFragment,
                 bundleOf(createTypeBundle(Chat.Support::class))
             )
-        } else if(it.name == "Сапоги salamander 35"){
-            findNavController().navigate(R.id.action_messagesFragment_to_chatFragment,
+        } else if (it.name == "Сапоги salamander 35") {
+            findNavController().navigate(
+                R.id.action_messagesFragment_to_chatFragment,
                 bundleOf(createTypeBundle(Chat.Deal::class))
             )
-        } else{
-            findNavController().navigate(R.id.action_messagesFragment_to_chatFragment,
-            bundleOf(ChatFragment.DIALOG_ID_KEY to it.id,
-            Chat::class.java.simpleName to Chat.Deal::class.java.simpleName ))
+        } else if(it is Chat.Deal) {
+            findNavController().navigate(
+                R.id.action_messagesFragment_to_chatFragment,
+                bundleOf(
+                    ChatFragment.DIALOG_ID_KEY to it.id,
+                    Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
+                )
+            )
+        }
+        else{
+            findNavController().navigate(
+                R.id.chatLotsFragment,
+                bundleOf(
+                    LotChatsFragment.PRODUCT_ID_KEY to (it as Chat.Lot).productId,
+                    LotChatsFragment.PRODUCT_NAME to it.name,
+                    LotChatsFragment.PRODUCT_PRICE_KEY to it.price,
+                    LotChatsFragment.PRODUCT_IMAGE_KEY to it.avatar
+                )
+            )
         }
     }
 
@@ -55,94 +73,111 @@ class MessagesFragment: BottomNavigationMvpFragment(), ChatMvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(views){
+        with(views) {
             list.adapter = adapter
             list.addItemDecoration(MiddleDivider(requireContext(), R.drawable.div_horline_gray_1))
             tabs.addTab(tabs.newTab().apply { fill(0, "Все", 11) })
             tabs.addTab(tabs.newTab().apply { fill(R.drawable.sel_bag_icon, "Сделки", 2) })
-            tabs.addTab(tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления", 2) })
+            tabs.addTab(
+                tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления", 2) })
             tabs.setSelectListener {
-                adapter.setItems(
-                    when(it.position){
-                        1 -> stubs.deals
-                        2 -> stubs.lots
-                        else -> stubs.all
+                //adapter.setItems(
+                    when (it.position) {
+                        1 -> presenter.showDealDialogs() //stubs.deals
+                        2 -> presenter.showLotDialogs()//stubs.lots
+                        else -> presenter.showAllDialogs()//stubs.all
                     }
-                )
+                //)
             }
         }
+
         //adapter.setItems(stubs.all)
-        presenter.getDialogs()
+        presenter.showAllDialogs()
 
 
     }
 
-    private fun TabLayout.Tab.fill(@DrawableRes drawableId :Int, text :String, count :Int = 0){
+    private fun TabLayout.Tab.fill(@DrawableRes drawableId: Int, text: String, count: Int = 0) {
         TabCategoryBinding.inflate(this@MessagesFragment.layoutInflater, this.view, false)
             .apply {
                 customView = root
                 title.text = text
-                if(drawableId == 0) icon.visibility = GONE
+                if (drawableId == 0) icon.visibility = GONE
                 else icon.setImageResource(drawableId)
 
-                if(count == 0) this.count.visibility = GONE
+                if (count == 0) this.count.visibility = GONE
                 else this.count.text = count.toString()
             }
     }
 
-    private fun createTypeBundle(value :KClass<*>) :Pair<String, String>{
+    private fun createTypeBundle(value: KClass<*>): Pair<String, String> {
         return Chat::class.java.simpleName to value.java.simpleName
     }
 
     //todo remove stubs
-    private val stubs by lazy { Stubs() }
-    inner class Stubs{
+   // private val stubs by lazy { Stubs() }
+
+    /*inner class Stubs {
 
         val all = listOf(
-            Chat.Personal( 0,"Вечернее платье", "Здравствуйте! Еще продаете?",
+            Chat.Personal(
+                0, "Вечернее платье", "Здравствуйте! Еще продаете?",
                 R.drawable.avatar1,
                 3890f,
                 2,
                 true
             ),
-            Chat.Deal( 0,"Пальто", "Алекса Н.",
+            Chat.Deal(
+                0, "Пальто", "Алекса Н.",
                 R.drawable.avatar2,
                 5690f
             ),
-            Chat.Support(0, getString(R.string.chat_support_title), getString(R.string.chat_support_description)),
-            Chat.Personal(0,"Плащ трейч", "Здравствуйте! Еще продаете?",
+            Chat.Support(
+                0,
+                getString(R.string.chat_support_title),
+                getString(R.string.chat_support_description)
+            ),
+            Chat.Personal(
+                0, "Плащ трейч", "Здравствуйте! Еще продаете?",
                 R.drawable.avatar3,
                 8000f,
                 totalUnread = 2
             ),
-            Chat.Deal(0,"Сапоги salamander 35", "Екатерина О.",
+            Chat.Deal(
+                0, "Сапоги salamander 35", "Екатерина О.",
                 R.drawable.avatar4,
                 3650f
             ),
-            Chat.Personal(0,"Толстовка", "Анна К.",
+            Chat.Personal(
+                0, "Толстовка", "Анна К.",
                 R.drawable.avatar5,
                 2680f,
                 online = true
             ),
-            Chat.Personal(0,"Кроссовки женские", "Валентина С.",
+            Chat.Personal(
+                0, "Кроссовки женские", "Валентина С.",
                 R.drawable.avatar6,
                 3290f
             ),
-            Chat.Personal(0,"Туфли кожаные Keddo ...", "Иван К.",
+            Chat.Personal(
+                0, "Туфли кожаные Keddo ...", "Иван К.",
                 R.drawable.avatar7,
                 1350f
             ),
-            Chat.Personal(0,"Пальто", "Елена Б.",
+            Chat.Personal(
+                0, "Пальто", "Елена Б.",
                 R.drawable.avatar2,
                 12680f,
                 online = true
             ),
-            Chat.Lot(0,"Adidas men's blue denim", "5 покупателей",
+            Chat.Lot(
+                0, "Adidas men's blue denim", "5 покупателей",
                 R.drawable.avatar8,
                 2000f,
                 5
             ),
-            Chat.Lot(0,"Кроссовки мужские", "2 покупателя",
+            Chat.Lot(
+                0, "Кроссовки мужские", "2 покупателя",
                 R.drawable.avatar9,
                 2000f,
                 5,
@@ -150,18 +185,26 @@ class MessagesFragment: BottomNavigationMvpFragment(), ChatMvpView {
         )
         val deals = all.filterIsInstance<Chat.Deal>()
         val lots = all.filterIsInstance<Chat.Lot>()
-    }
+    }*/
 
     override fun loading() {
 
     }
 
-    override fun dialogsLoaded(dialogs: List<DialogWrapper>) {
-        val dialogsToShow = dialogs.map {
-            val price = it.product.price - (it.product.price/100) * it.product.sale
-            Chat.Personal(it.dialog.id, it.product.name, it.dialog.lastMessage?.text.orEmpty(), R.drawable.avatar2, price)
-        }
-        adapter.setItems(dialogsToShow)
+    override fun dialogsLoaded(dialogs: List<Chat>) {
+        /*val dialogsToShow = dialogs.map {
+
+            val price = it.product.priceNew ?: 0f
+
+            Chat.Personal(
+                it.dialog.id,
+                it.product.name,
+                it.dialog.lastMessage?.text.orEmpty(),
+                R.drawable.avatar2,
+                price
+            )
+        }*/
+        adapter.setItems(dialogs)
 
     }
 

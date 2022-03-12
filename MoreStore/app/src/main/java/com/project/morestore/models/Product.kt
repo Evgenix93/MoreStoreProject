@@ -28,6 +28,8 @@ data class Product(
     val category: Category?,
     val statistic: ProductStatistic?,
     val brand: ProductBrand?,
-    val property: List<Property>?
+    val property: List<Property>?,
+    @Json(name = "id_user")
+    val idUser: Long?
 
 ): Parcelable
