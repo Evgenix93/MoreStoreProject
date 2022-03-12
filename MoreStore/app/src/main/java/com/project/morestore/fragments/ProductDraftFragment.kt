@@ -6,8 +6,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
+import com.project.morestore.adapters.FeedbackProductsAdapter
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.databinding.FragmentProductDraftBinding
+import com.project.morestore.models.FeedbackProduct
 import com.project.morestore.models.Product
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
@@ -19,7 +21,7 @@ import moxy.ktx.moxyPresenter
 class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft), MainMvpView {
     private val binding: FragmentProductDraftBinding by viewBinding()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
-    private var productAdapter: ProductAdapter by autoCleared()
+    private var productAdapter: FeedbackProductsAdapter by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,10 +37,11 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
     }
 
     private fun initList(){
-        productAdapter = ProductAdapter(null){ product ->
+      /*  productAdapter = ProductAdapter(null){ product ->
             findNavController().navigate(ProductDraftFragmentDirections.actionProductDraftFragmentToCreateProductStep6Fragment(product = product))
 
-        }
+        }*/
+        productAdapter = FeedbackProductsAdapter{onItemClick(it)}
         with(binding.list){
             adapter = productAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -52,10 +55,48 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
         }
     }
 
+    private fun updateList(list: List<Product>){
+        val feedBackProducts = list.map{
+            FeedbackProduct(
+                it.id,
+                it.photo.toTypedArray(),
+                it.name,
+                it.brand,
+                it.price.toDouble().toString(),
+                it.priceNew?.toDouble().toString(),
+                it.sale,
+                it.property?.toTypedArray() ?: emptyArray()
+            )
+        }
+        productAdapter.setItems(feedBackProducts)
+    }
+
+    private fun onItemClick(feedbackProduct: FeedbackProduct){
+        val product = Product(
+            feedbackProduct.id,
+            feedbackProduct.title,
+            "",
+            "",
+            "",
+            5,
+            feedbackProduct.price.toFloat(),
+            feedbackProduct.newPrice?.toFloat(),
+            feedbackProduct.sale,
+            0L,
+            null,
+            feedbackProduct.photos?.toList() ?: emptyList(),
+            null,
+            null,
+            null,
+            null,
+            feedbackProduct.brand,
+            feedbackProduct.property.toList()
+        )
+        findNavController().navigate(ProductDraftFragmentDirections.actionProductDraftFragmentToCreateProductStep6Fragment(product = product))
+    }
+
     override fun loaded(result: Any) {
-        productAdapter.updateList(result as List<Product>)
-
-
+        updateList(result as List<Product>)
     }
 
     override fun loading() {

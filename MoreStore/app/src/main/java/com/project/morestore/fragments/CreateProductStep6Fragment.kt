@@ -37,7 +37,6 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     private var isSavingDraftProduct = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("MyDebug", "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         initOptionsRecyclerView()
         setClickListeners()
@@ -167,7 +166,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                     idCategory = args.product!!.category?.id,
                     //idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
                     idBrand = args.product!!.brand!!.id,
-                    address = args.product!!.address.fullAddress,
+                    address = args.product!!.address?.fullAddress,
                     price = args.product!!.price.toString(),
                     newPrice = args.product!!.priceNew.toString(),
                     sale = args.product!!.sale,
@@ -195,15 +194,20 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             else -> ""
         }
         if (args.category == null)
-            binding.categoryChip.text = args.product!!.category?.name
+            if(args.product?.category == null)
+                binding.categoryChip.isVisible = false
+             else
+                binding.categoryChip.text = args.product!!.category!!.name
         else
             binding.categoryChip.text = args.category!!.name
+
         if (args.brand == null)
             if (args.product?.brand == null)
                 binding.brandChip.isVisible = false
             else binding.brandChip.text = args.product!!.brand?.name
         else
             binding.brandChip.text = args.brand!!.name
+
     }
 
     private fun clearCreateProductData() {
@@ -212,7 +216,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     private fun initCreateProductButton() {
         val options = optionsAdapter.getList().toMutableList()
-        if (options.all { it.isChecked }) {
+        if (options.take(5).all { it.isChecked }) {
             binding.addPhotoInfoTextView.text = "Отлично! Всё заполнено"
             binding.placeProductButton.isEnabled = true
             binding.placeProductButton.backgroundTintList =
@@ -227,8 +231,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     private fun showLoading(loading: Boolean) {
         binding.loader.isVisible = loading
+        binding.placeProductButton.isEnabled = !loading
     }
-
 
     private fun initDeleteArchiveButtons() {
         if (args.product != null) {

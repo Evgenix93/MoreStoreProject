@@ -981,6 +981,9 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = productRepository.changeProductData()
             when (response?.code()) {
                 200 -> {
+                    val photosUploaded = uploadProductPhotos(response.body()?.first()?.id!!)
+                    val videosUploaded = uploadProductVideos(response.body()?.first()?.id!!)
+                    if (photosUploaded && videosUploaded)
                     viewState.loaded(response.body()!!.first())
                 }
                 400 -> {

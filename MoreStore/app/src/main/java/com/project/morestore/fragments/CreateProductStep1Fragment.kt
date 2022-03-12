@@ -28,7 +28,6 @@ class CreateProductStep1Fragment : MvpAppCompatFragment(R.layout.fragment_create
         setClickListeners()
         initToolbar()
         clearCreateProductData()
-
     }
 
 

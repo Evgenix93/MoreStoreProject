@@ -305,7 +305,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         if(item.titleId == R.string.chat_menu_setGeoDeal) adapter.setItems(seller4)
         if(item.titleId == R.string.chat_menu_delete ) presenter.deleteDialog(currentDialogId ?: -1)
         if(item.titleId == R.string.chat_menu_profile)
-            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToSellerProfileFragment(user))
+            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToSellerProfileFragment(user, false))
+        if(item.titleId == R.string.chat_menu_feedback)
+            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToSellerProfileFragment(user, true))
     }
 
     override fun applyNewPrice(newPrice: String){

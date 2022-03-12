@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.project.morestore.R
 import com.project.morestore.adapters.FeedbackPhotosAdapter
@@ -50,7 +51,10 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
         views.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         views.photos.adapter = adapter
         adapter.setItems(listOf(FeedbackItem.AddPhoto, FeedbackItem.Description))
-        views.send.setOnClickListener { presenter.createFeedback() }
+        views.send.setOnClickListener {
+            views.progressBar.isVisible = true
+            presenter.createFeedback()
+        }
     }
 
     //IMPLEMENTATION
@@ -61,6 +65,7 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
     }
 
     override fun showSuccess(review :Boolean) {
+        views.progressBar.isVisible = false
         FeedbackCompleteDialog(requireContext(), review){
             findNavController().popBackStack(R.id.sellerProfileFragment, false)
         }.show()

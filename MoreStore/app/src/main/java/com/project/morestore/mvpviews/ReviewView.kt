@@ -6,5 +6,5 @@ import moxy.viewstate.strategy.alias.AddToEndSingle
 
 @AddToEndSingle
 interface ReviewView :MvpView {
-    fun showReviews(reviews :List<ReviewListItem.Review>)
+    fun showReviews(reviewItems :List<ReviewListItem.ReviewItem>)
 }

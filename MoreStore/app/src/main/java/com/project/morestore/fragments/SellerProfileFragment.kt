@@ -47,6 +47,8 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
                 1 -> tab.text = "Отзывы"
             }
         }.attach()
+        if(args.toReviews)
+            binding.sellerViewPager.setCurrentItem(2, false)
     }
 
     private fun getSellerProducts(){
@@ -78,8 +80,8 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
             .load(user.avatar?.photo)
             .into(binding.avatarImageView)
 
-
     }
+
 
     override fun success(result: Any) {
         TODO("Not yet implemented")

@@ -192,7 +192,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             }
         }
 
-        binding.productCityTextView.text = product.address.fullAddress
+        binding.productCityTextView.text = product.address?.fullAddress
         binding.productBrandTextView.text =
             if (product.brand == null) "Другое" else product.brand.name
         binding.productSizeTextView.text =
@@ -225,7 +225,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.userClickableView.setOnClickListener {
             findNavController().navigate(
                 ProductDetailsFragmentDirections.actionProductDetailsFragmentToSellerProfileFragment(
-                    product.user!!
+                    product.user!!,
+                    false
                 )
             )
         }
@@ -264,7 +265,12 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private fun initToolBar() {
         binding.toolbar.titleTextView.text = args.product?.name
         binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
-        binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.backIcon.setOnClickListener {
+            if(args.product != null)
+            findNavController().popBackStack()
+            else
+                findNavController().navigate(R.id.catalogFragment)
+        }
     }
 
 
@@ -375,7 +381,9 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 getCurrentUser()
             }
 
-            is Intent -> startIntent(result)
+            is Intent -> {Log.d("MyDebug", "startIntent")
+                startActivity(result)
+            }
 
             is Long -> {
                 userId = result
@@ -395,7 +403,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     override fun error(message: String) {
-       // Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
