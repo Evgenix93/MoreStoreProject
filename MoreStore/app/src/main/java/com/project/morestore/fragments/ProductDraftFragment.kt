@@ -79,8 +79,8 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
             "",
             "",
             5,
-            feedbackProduct.price.toFloat(),
-            feedbackProduct.newPrice?.toFloat(),
+            feedbackProduct.price.toFloatOrNull() ?: 0f,
+            feedbackProduct.newPrice?.toFloatOrNull() ?: 0f,
             feedbackProduct.sale,
             0L,
             null,
@@ -90,7 +90,8 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
             null,
             null,
             feedbackProduct.brand,
-            feedbackProduct.property.toList()
+            feedbackProduct.property.toList(),
+            null
         )
         findNavController().navigate(ProductDraftFragmentDirections.actionProductDraftFragmentToCreateProductStep6Fragment(product = product))
     }

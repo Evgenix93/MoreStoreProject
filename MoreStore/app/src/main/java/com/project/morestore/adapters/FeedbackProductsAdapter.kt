@@ -55,8 +55,8 @@ class FeedbackProductsAdapter(
                 title.text = product.title
                 description.text = desc
                 Log.d("MyDebug", "newPrice = ${product.newPrice}")
-                newPrice.text = ctx.getString(R.string.pattern_price, String.format("%,.1f", product.newPrice?.toFloat()))
-               oldPrice.text = ctx.getString(R.string.pattern_price, String.format("%,.1f", product.price.toFloat()))
+                newPrice.text = if(product.newPrice == "null") "" else "${product.newPrice} ₽"  //ctx.getString(R.string.pattern_price, String.format("%,.1f", product.newPrice?.toFloat()))
+               oldPrice.text = if(product.price.toFloat() == 0f) "" else ctx.getString(R.string.pattern_price, String.format("%,.1f", product.price.toFloat()))
             }
         }
 
