@@ -144,14 +144,19 @@ class ChatRepository(val context: Context) {
 
     suspend fun uploadVideos(uris: List<Uri>, messageId: Long): Response<List<ProductVideo>>?{
         return withContext(Dispatchers.IO) {
-            val videos = uris.map {
+
+            val videos = uris.mapNotNull {
+                if(context.contentResolver.getType(it)?.substringAfter('/') == "mp4")
                 PhotoVideo(
                     type = "mp4",
                     base64 = context.contentResolver.openInputStream(it).use {
                         Base64.encodeToString(it?.readBytes(), Base64.DEFAULT)
                     }
-                )
+                )else
+                    null
             }
+            if(videos.isEmpty())
+                 return@withContext null
             val videoData = VideoData(
                 type = "Message",
                 idType = messageId,
@@ -184,15 +189,54 @@ class ChatRepository(val context: Context) {
         }
     }
 
-    suspend fun uploadPhotos(uris: List<Uri>, messageId: Long){
-
+    suspend fun uploadPhotos(uris: List<Uri>, messageId: Long): Response<List<ProductPhoto>>?{
+        return withContext(Dispatchers.IO) {
+            val photos = uris.mapNotNull {
+                if(context.contentResolver.getType(it)?.substringAfter('/') != "mp4")
+                PhotoVideo(
+                    type = context.contentResolver.getType(it)?.substringAfter('/') ?: "jpg",
+                    base64 = context.contentResolver.openInputStream(it).use {inputStream ->
+                        Base64.encodeToString(inputStream?.readBytes(), Base64.DEFAULT)
+                    }
+                )else
+                    null
+            }
+            if(photos.isEmpty())
+                return@withContext null
+            val photoData = PhotoData(
+                type = "MessagePhoto",
+                idType = messageId,
+                photos
+            )
+            try {
+                chatApi.uploadPhoto(photoData)
+            } catch (e: Exception) {
+                if (e is IOException) {
+                    null
+                } else {
+                    Log.d("mylog", e.message.toString())
+                    try {
+                        val response = chatApi.uploadPhotoGetError(photoData)
+                        if (response.code() == 500) {
+                            Response.error(500, "".toResponseBody(null))
+                        } else {
+                            Response.error(
+                                400,
+                                response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(
+                                    null
+                                )
+                            )
+                        }
+                    } catch (e: Throwable) {
+                        Response.error(400, "ошибка".toResponseBody(null))
+                    }
+                }
+            }
+        }
     }
 
     fun getMediaType(uri: Uri): String?{
         return context.contentResolver.getType(uri)
     }
-
-
-
 
 }

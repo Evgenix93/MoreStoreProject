@@ -11,6 +11,7 @@ import com.project.morestore.databinding.ItemReviewAddBinding
 import com.project.morestore.databinding.ItemReviewBinding
 import com.project.morestore.models.PreviewPhoto
 import com.project.morestore.models.Review
+import com.project.morestore.models.ReviewItem
 import com.project.morestore.models.ReviewListItem
 import com.project.morestore.util.createRect
 import com.project.morestore.util.diffInDays
@@ -37,7 +38,7 @@ class ReviewsAdapter(
         if(getItemViewType(position) == ADD){
             //skip
         } else {//REVIEW
-            (holder as ReviewViewHolder).bind((items[position-1] as ReviewListItem.ReviewItem).review)
+            (holder as ReviewViewHolder).bind((items[position-1] as ReviewItem).review)
         }
     }
 
@@ -50,7 +51,7 @@ class ReviewsAdapter(
         if(holder is ReviewViewHolder) holder.clear()
     }
 
-    fun setItems(newItems :List<ReviewListItem.ReviewItem>){
+    fun setItems(newItems :List<ReviewItem>){
         items = newItems
         notifyDataSetChanged()
     }

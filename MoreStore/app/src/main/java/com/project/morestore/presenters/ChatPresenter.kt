@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.Chat
-import com.project.morestore.models.DialogWrapper
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
@@ -356,7 +355,30 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     }
 
     private suspend fun uploadPhotos(uris: List<Uri>, messageId: Long): Boolean{
-        return true
+        val response = chatRepository.uploadPhotos(uris, messageId)
+        when (response?.code()) {
+            200 -> {
+                return true
+            }
+            400 -> {
+                val bodyString = getStringFromResponse(response.errorBody()!!)
+                viewState.error(bodyString)
+                return false
+            }
+            500 -> {
+                viewState.error("500 Internal Server Error")
+                return false
+            }
+            null -> {
+              //  viewState.error("нет интернета")
+                return false
+            }
+            else -> {
+                viewState.error("ошибка")
+                return false
+            }
+
+        }
     }
 
     private suspend fun uploadVideos(uris: List<Uri>, messageId: Long): Boolean{
@@ -375,7 +397,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                 return false
             }
             null -> {
-                viewState.error("нет интернета")
+               // viewState.error("нет интернета")
                 return false
             }
             else -> {
@@ -384,8 +406,6 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             }
 
         }
-
-
     }
 
     private suspend fun getStringFromResponse(body: ResponseBody): String {

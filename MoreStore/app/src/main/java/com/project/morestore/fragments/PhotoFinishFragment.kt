@@ -1,38 +1,18 @@
 package com.project.morestore.fragments
 
-import android.Manifest
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.media.AudioAttributes
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.updateBounds
-import androidx.core.net.UriCompat
 import androidx.core.net.toUri
 import androidx.core.view.drawToBitmap
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.model.ResourceLoader
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.ortiz.touchview.OnTouchImageViewListener
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentPhotoFinishBinding
@@ -40,16 +20,9 @@ import com.project.morestore.models.ProductPhoto
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
-import com.project.morestore.singletones.CreateProductData
-import io.github.muddz.quickshot.QuickShot
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.io.File
-import java.io.InputStream
 
 class PhotoFinishFragment : MvpAppCompatFragment(R.layout.fragment_photo_finish), MainMvpView {
     private val binding: FragmentPhotoFinishBinding by viewBinding()

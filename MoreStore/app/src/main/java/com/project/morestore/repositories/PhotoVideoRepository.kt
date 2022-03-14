@@ -1,9 +1,7 @@
 package com.project.morestore.repositories
 
-import android.content.ContentProvider
 import android.content.Context
 import android.graphics.Bitmap
-import com.project.morestore.singletones.CreateProductData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

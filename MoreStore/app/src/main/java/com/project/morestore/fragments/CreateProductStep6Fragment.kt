@@ -170,6 +170,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
                 val property = args.product!!.property?.map { Property2(it.idProperty!!, it.id) }
                     ?.toMutableList()
+
                 presenter.updateCreateProductData(
                     idCategory = args.product!!.category?.id,
                     //idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
@@ -181,7 +182,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                     about = args.product!!.about,
                     phone = args.product!!.phone,
                     extProperties = property,
-                    id = args.product!!.id
+                    id = args.product!!.id,
+                    name = args.product!!.name
                 )
                 presenter.loadCreateProductData()
                 val map = mutableMapOf<Int, File>()

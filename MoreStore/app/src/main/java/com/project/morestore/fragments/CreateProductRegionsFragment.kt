@@ -17,7 +17,6 @@ import com.project.morestore.models.Region
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
-import com.project.morestore.singletones.CreateProductData
 import com.project.morestore.util.autoCleared
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking

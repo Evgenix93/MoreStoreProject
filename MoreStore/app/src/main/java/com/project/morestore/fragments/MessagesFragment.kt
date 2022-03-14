@@ -236,4 +236,5 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
     override fun photoVideoLoaded() {
 
     }
+
 }

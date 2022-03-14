@@ -1,6 +1,7 @@
 package com.project.morestore.widgets
 
 import android.content.Context
+import android.util.Log
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.project.morestore.R
@@ -9,7 +10,7 @@ import com.project.morestore.models.Media
 import com.project.morestore.util.dp
 import com.project.morestore.util.inflater
 
-class ChatMedia(context :Context, media :Media) :FrameLayout(context) {
+class ChatMedia(context :Context, private val media :Media, private val size: Int) :FrameLayout(context) {
     private val views = WidgetChatMediaBinding.inflate(context.inflater, this)
 
     init {
@@ -20,20 +21,33 @@ class ChatMedia(context :Context, media :Media) :FrameLayout(context) {
         views.count
         when(media){
             is Media.Photo -> {
+                Log.d("MyDebug", "media photo")
                 Glide.with(views.image)
                     .load(media.photoUri)
                     .centerCrop()
                     .into(views.image)
-                if(media.count > 1) views.count.apply {
+                Log.d("MyDebug", "media count = ${media.count}")
+                if(media.count == 4) views.count.apply {
+                    if(size == 4)
+                        return@apply
                     visibility = VISIBLE
-                    text = context.getString(R.string.pattern_plus, media.count)
+                    text = context.getString(R.string.pattern_plus, size - 4)
                 }
+                views.play.visibility = GONE
             }
             is Media.Video -> {
+                Log.d("MyDebug", "media video")
                 Glide.with(views.image)
                     .load(media.videoUri)
                     .into(views.image)
-                views.play.visibility = VISIBLE
+             //   Log.d("MyDebug", "media size = ${media.size}")
+                if(media.count == 4) views.count.apply {
+                    if(size == 4)
+                        return@apply
+                    visibility = VISIBLE
+                    text = context.getString(R.string.pattern_plus, size - 4)
+                }
+               // views.play.visibility = VISIBLE
             }
         }
     }
