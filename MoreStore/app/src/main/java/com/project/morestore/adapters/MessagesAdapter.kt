@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.*
+import com.project.morestore.models.Media
 import com.project.morestore.models.Message
 import com.project.morestore.util.createRect
 import com.project.morestore.util.dp
@@ -19,7 +20,7 @@ import com.project.morestore.widgets.ChatMedia
 class MessagesAdapter(
     private val acceptDealCallback :() -> Unit,
     private val cancelDealCallback :() -> Unit,
-    private val showMediaCallback :() -> Unit
+    private val showMediaCallback :(Array<Media>) -> Unit
 ) :RecyclerView.Adapter<RecyclerView.ViewHolder>() {
      var avatarUri :String = ""
     private var items = listOf<Message>()
@@ -140,8 +141,9 @@ class MessagesAdapter(
                         if(it == message.msgs.last()){
                            // if(avatarId == R.drawable.ic_headphones) avatar.setPadding(5.dp, 5.dp, 5.dp, 5.dp)
                             avatar.clipToOutline = true
-                            //avatar.setImageResource(avatarId)
-                            Glide.with(itemView)
+                            if(avatarUri.isEmpty())
+                                avatar.setImageResource(R.drawable.ic_headphones)
+                            else Glide.with(itemView)
                                 .load(avatarUri)
                                 .into(avatar)
                         } else {
@@ -167,7 +169,7 @@ class MessagesAdapter(
                         (layoutParams as FrameLayout.LayoutParams).apply {
                             setMargins(8.dp, 0, 0, 0)
                         }
-                        setOnClickListener { showMediaCallback() }
+                        setOnClickListener { showMediaCallback(message.media) }
                     }
                     .also { views.media.addView(it) }
             }

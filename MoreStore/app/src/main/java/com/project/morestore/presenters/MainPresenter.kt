@@ -27,7 +27,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val authRepository = AuthRepository(context)
     private val productRepository = ProductRepository(context)
     private val userRepository = UserRepository(context)
-    private val chatRepository = ChatRepository()
+    private val chatRepository = ChatRepository(context)
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
     private lateinit var user: User
@@ -777,6 +777,9 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     fun createProduct() {
         presenterScope.launch {
             viewState.loading()
+            val productAddress = productRepository.loadCreateProductData().address
+            updateCreateProductData(address = productAddress ?: "Москва")
+
             val response = productRepository.createProduct()
             when (response?.code()) {
                 200 -> {
@@ -799,9 +802,12 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     }
 
     fun createDraftProduct(){
-        val currentAddress = productRepository.loadCreateProductData().address
-        updateCreateProductData(status = 5, address =  currentAddress ?: "Москва", id = null)
-        createProduct()
+        val currentProductData = productRepository.loadCreateProductData()
+        updateCreateProductData(status = 5)
+        if(currentProductData.id == null)
+            createProduct()
+        else
+            changeProduct()
     }
 
     fun updateCreateProductData(
@@ -998,6 +1004,11 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
 
         }
+    }
+
+    fun changeProductAndPublish(){
+        updateCreateProductData(status = 1)
+        changeProduct()
     }
 
     fun deletePhotoBackground(file: File? = null, uri: Uri? = null) {

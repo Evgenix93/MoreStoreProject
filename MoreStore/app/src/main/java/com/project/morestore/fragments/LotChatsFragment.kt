@@ -31,16 +31,16 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
                 bundleOf(createTypeBundle(Chat.Personal::class))
             )
         }
-        /*else{
+        else{
             findNavController().navigate(
                 R.id.chatFragment,
                 bundleOf(
                     ChatFragment.DIALOG_ID_KEY to it.id,
-                    Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
+                    Chat::class.java.simpleName to Chat.Personal::class.java.simpleName
                 )
 
             )
-        }*/
+        }
     }
 
     override fun onCreateView(
@@ -147,6 +147,10 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
     }
 
     override fun dialogDeleted() {
+
+    }
+
+    override fun photoVideoLoaded() {
 
     }
 }

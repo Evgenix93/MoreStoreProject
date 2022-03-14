@@ -10,8 +10,10 @@ data class MessageModel(
     val idSender: Long,
     @Json(name = "id_dialog")
     val idDialog: Long,
-    val text: String,
+    val text: String?,
     val date: Long,
     val is_read: Int,
-    val user: User
+    val user: User,
+    val photo: List<ProductPhoto>?,
+    val video: List<ProductVideo>?
 )

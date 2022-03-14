@@ -32,6 +32,9 @@ class ChatsAdapter(val callback :(Chat) -> Unit) :RecyclerView.Adapter<ChatsAdap
                 }
                 is Chat.Personal -> {
                    // avatar.setImageResource(chat.avatar)
+                    Glide.with(avatar)
+                        .load(chat.avatar)
+                        .into(avatar)
                     icon.visibility = GONE
                     if(chat.price == 0f){
                         price.visibility = INVISIBLE

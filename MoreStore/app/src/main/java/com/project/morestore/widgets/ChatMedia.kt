@@ -21,7 +21,7 @@ class ChatMedia(context :Context, media :Media) :FrameLayout(context) {
         when(media){
             is Media.Photo -> {
                 Glide.with(views.image)
-                    .load(media.photoId)
+                    .load(media.photoUri)
                     .centerCrop()
                     .into(views.image)
                 if(media.count > 1) views.count.apply {
@@ -31,7 +31,7 @@ class ChatMedia(context :Context, media :Media) :FrameLayout(context) {
             }
             is Media.Video -> {
                 Glide.with(views.image)
-                    .load(media.videoId)
+                    .load(media.videoUri)
                     .into(views.image)
                 views.play.visibility = VISIBLE
             }

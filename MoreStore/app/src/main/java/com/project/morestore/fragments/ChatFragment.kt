@@ -8,6 +8,9 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.project.morestore.R
@@ -32,13 +35,17 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
     private var currentUserId: Long? = null
     private var currentDialogId: Long? = null
+    private lateinit var filePicker: ActivityResultLauncher<Array<String>>
     private val adapter = MessagesAdapter(
         {
             stubAcceptDealRunnable.run()
             views.bottomBar.visibility = GONE
         },
         { requireContext().defToast(R.string.cancel) },
-        { findNavController().navigate(R.id.action_chatFragment_to_mediaFragment) }
+        { media ->
+            val uris = media.map { if(it is Media.Photo) it.photoUri else (it as Media.Video).videoUri  }
+            findNavController().navigate(R.id.action_chatFragment_to_mediaFragment,
+            bundleOf(MediaFragment.PHOTOS to uris.toTypedArray() )) }
     )
     private var listenGeo = false
     private lateinit var user: User
@@ -58,8 +65,18 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             list.adapter = adapter
         }
         when(val chatType = requireArguments().getString(Chat::class.java.simpleName)){
-            Chat.Support::class.java.simpleName -> showSupport()
-            Chat.Personal::class.java.simpleName -> showSell()
+            Chat.Support::class.java.simpleName -> {
+                val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
+                getDialog(dialogId)
+
+
+            }//showSupport()
+            Chat.Personal::class.java.simpleName -> {
+                val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
+                getDialog(dialogId)
+
+
+            }//showSell()
             Chat.Deal::class.java.simpleName -> {
                 val userId = requireArguments().getLong(USER_ID_KEY, 0)
                 val productId = requireArguments().getLong(PRODUCT_ID_KEY, 0)
@@ -70,9 +87,11 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }//showDeal()
             else -> throw IllegalArgumentException("Undefined chat type: $chatType")
         }
+
+        initFilePicker()
     }
 
-    private fun showSell(){
+   /* private fun showSell(){
        // adapter.avatarUri = R.drawable.user2
         with(views){
             toolbar.title.text = "Влада Т."
@@ -103,9 +122,54 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }*/
         }
         adapter.setItems(buyer)
+    }*/
+
+    private fun showSell(dialog: DialogWrapper){
+        currentDialogId = dialog.dialog.id
+        user = dialog.dialog.user
+         adapter.avatarUri = dialog.dialog.user.avatar?.photo.orEmpty()
+        with(views){
+            toolbar.title.text = dialog.dialog.user.name
+            toolbar.subtitle.text = "В сети 2 ч. назад"
+            toolbar.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_dropdown, 0)
+            toolbar.title.setOnClickListener {
+                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE)
+                    .show(childFragmentManager, null)
+            }
+            name.text = dialog.product.name
+            toolbar.icon.visibility = GONE
+            Glide.with(photo)
+                .load(dialog.product.photo.first().photo)
+                .circleCrop()
+                .into(photo)
+            WidgetSellBarBinding.inflate(layoutInflater)
+                .also {
+                    bottomBar.visibility = VISIBLE
+                    bottomBar.addView(it.root)
+                    it.startPrice.text = getString(R.string.pattern_price, String.format("%,d", 2000))
+                    it.setDiscount.setOnClickListener {
+                        PriceDialog(1500, PriceDialog.Type.DISCOUNT).show(childFragmentManager, null)
+                    }
+                }
+              addMedia.setOnClickListener {
+                  MenuBottomDialogFragment(MenuBottomDialogFragment.Type.GEO)
+                      .show(childFragmentManager, null)
+              }
+        }
+        /*val messages = dialog.messages?.map {
+            if(it.idSender == currentUserId)
+                Message.My("13:00", R.drawable.ic_check_double, it.text.orEmpty())
+            else
+                Message.Companion(listOf(Msg("13:10", it.text.orEmpty())))
+        }*/
+
+        val messages = getMessages(dialog.messages.orEmpty())
+
+        adapter.setItems(messages.orEmpty().reversed())
+        views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
-    private fun showSupport() {
+    /*private fun showSupport() {
         //adapter.avatarUri = R.drawable.ic_headphones
         with(views) {
             toolbar.icon.setPadding(7.dp, 7.dp, 7.dp, 7.dp)
@@ -123,6 +187,36 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }
         }
         adapter.setItems(support)
+    }*/
+
+    private fun showSupport(dialog: DialogWrapper){
+        //adapter.avatarUri = R.drawable.ic_headphones
+        with(views) {
+            toolbar.icon.setPadding(7.dp, 7.dp, 7.dp, 7.dp)
+            toolbar.title.setText(R.string.chat_support_title)
+            toolbar.subtitle.setText(R.string.chat_support_description)
+            Glide.with(toolbar.icon)
+                .load(R.drawable.ic_headphones)
+                .circleCrop()
+                .into(toolbar.icon)
+            product.visibility = GONE
+            productDivider.visibility = GONE
+            addMedia.setOnClickListener {
+                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.MEDIA)
+                    .show(childFragmentManager, null)
+            }
+        }
+
+        /*val messages = dialog.messages?.map {
+            if(it.idSender == currentUserId)
+                Message.My("13:00", R.drawable.ic_check_double, it.text.orEmpty())
+            else
+                Message.Companion(listOf(Msg("13:10", it.text.orEmpty())))
+        }*/
+        val messages = getMessages(dialog.messages.orEmpty())
+
+        adapter.setItems(messages.orEmpty().reversed())
+        views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
     /*private fun showDeal(){
@@ -190,14 +284,23 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                     .show(childFragmentManager, null)
             }
         }
-        val messages = dialog.messages?.map {
-            if(it.idSender == currentUserId)
-            Message.My("13:00", R.drawable.ic_check_double, it.text)
+        /*val messages = dialog.messages?.map {
+            if(it.idSender == currentUserId && it)
+            Message.My("13:00", R.drawable.ic_check_double, it.text.orEmpty())
             else
-                Message.Companion(listOf(Msg("13:10", it.text)))
-        }
+                Message.Companion(listOf(Msg("13:10", it.text.orEmpty())))
+        }*/
+        val messages = getMessages(dialog.messages.orEmpty())
         adapter.setItems(messages.orEmpty().reversed())
         views.list.scrollToPosition(adapter.itemCount - 1)
+    }
+
+    private fun showDialog(dialog: DialogWrapper){
+        when(requireArguments().getString(Chat::class.java.simpleName)){
+            Chat.Deal::class.java.simpleName -> showDeal(dialog)
+            Chat.Personal::class.java.simpleName -> showSell(dialog)
+            Chat.Support::class.java.simpleName -> showSupport(dialog)
+        }
     }
 
 
@@ -211,8 +314,33 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         presenter.getDialogById(id)
     }
 
+    private fun initFilePicker(){
+        filePicker = registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()){ uris ->
+            presenter.uploadPhotoVideo(uris)
+
+        }
+    }
+
+    private fun getMessages(list: List<MessageModel>): List<Message>{
+        val messages = list.map {
+            if(it.idSender == currentUserId && it.text != null  )
+                Message.My("13:00", R.drawable.ic_check_double, it.text.orEmpty())
+            else if((it.photo != null || it.video != null) && it.idSender == currentUserId) {
+                val photos = it.photo?.map { photo -> Media.Photo(photo.photo) }.orEmpty()
+                val videos = it.video?.map { video -> Media.Video(video.video) }.orEmpty()
+                val media = photos + videos
+                Message.MyMedia("13:00", R.drawable.ic_check_double, media.toTypedArray())
+            }
+            else
+                Message.Companion(listOf(Msg("13:10", it.text.orEmpty())))
+        }
+
+        return messages
+
+    }
+
     //todo remove stubs
-    private val support = listOf(
+    /*private val support = listOf(
         Message.Divider(R.string.today),
         Message.My("13:18", R.drawable.ic_check_double, "Здравствуйте! Мне пришел порванный товар!"),
         Message.Companion(listOf(Msg("13:19","Добрый день! Пожалуйста уточните детали"))),
@@ -226,7 +354,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             Media.Photo(R.drawable.user1),
             Media.Photo(R.drawable.user5)
         ))
-    )
+    )*/
 
     private val buyer = listOf(
         Message.Divider(R.string.today),
@@ -293,6 +421,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             views.messageEditText.text.clear()
 
         }
+
+        //views.addMedia.setOnClickListener {
+          //  filePicker.launch(arrayOf("image/*", "video/mp4"))
+        //}
     }
 
     private fun requestPrice(newPrice: String) = listOf<Message>( *seller.toTypedArray(),
@@ -308,6 +440,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             findNavController().navigate(ChatFragmentDirections.actionChatFragmentToSellerProfileFragment(user, false))
         if(item.titleId == R.string.chat_menu_feedback)
             findNavController().navigate(ChatFragmentDirections.actionChatFragmentToSellerProfileFragment(user, true))
+        if(item.titleId == R.string.chat_menu_addMedia )
+            filePicker.launch(arrayOf("image/*", "video/mp4"))
     }
 
     override fun applyNewPrice(newPrice: String){
@@ -329,7 +463,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     override fun dialogLoaded(dialog: DialogWrapper) {
-        showDeal(dialog)
+        showDialog(dialog)
 
     }
 
@@ -353,5 +487,14 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     override fun dialogDeleted() {
         Toast.makeText(requireContext(), "Диалог удален", Toast.LENGTH_SHORT).show()
         findNavController().popBackStack()
+    }
+
+    override fun photoVideoLoaded() {
+        val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
+        getDialog(dialogId)
+
+
+        Toast.makeText(requireContext(), "Медиа отпралено", Toast.LENGTH_SHORT).show()
+
     }
 }

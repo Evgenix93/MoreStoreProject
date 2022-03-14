@@ -230,7 +230,7 @@
                    android:layout_height="wrap_content"
                    android:textAppearance="@style/regular_14"
                    android:textColor="@color/black"
-                   android:text="Черновик"
+                   android:text="@string/drafts"
                    android:layout_marginStart="46dp"
                    android:layout_marginTop="211dp"/>
 

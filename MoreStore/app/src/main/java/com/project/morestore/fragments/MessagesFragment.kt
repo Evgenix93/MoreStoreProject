@@ -36,7 +36,8 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
         } else if (it is Chat.Support) {
             findNavController().navigate(
                 R.id.action_messagesFragment_to_chatFragment,
-                bundleOf(createTypeBundle(Chat.Support::class))
+                bundleOf(createTypeBundle(Chat.Support::class),
+                ChatFragment.DIALOG_ID_KEY to it.id)
             )
         } else if (it.name == "Сапоги salamander 35") {
             findNavController().navigate(
@@ -229,6 +230,10 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
     }
 
     override fun dialogDeleted() {
+
+    }
+
+    override fun photoVideoLoaded() {
 
     }
 }

@@ -126,17 +126,25 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     fun createDraftProduct() {
         isSavingDraftProduct = true
-        updateCreateProductData(null)
+        //updateCreateProductData(null)
         presenter.createDraftProduct()
     }
 
     private fun updateCreateProductData(phone: String?) {
+       // val forWho = if(args.forWho != null) args.forWho
+       // else {
+          //  when(args.product.property.find { it.idCategory == 14 }){
+
+         //   }
+      //  }
+        if(args.product == null)
         presenter.updateCreateProductData(
             forWho = args.forWho,
             idCategory = args.category?.id,
             idBrand = args.brand?.id,
             phone = phone
         )
+
     }
 
     private fun initToolbar() {
@@ -187,11 +195,21 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     }
 
     private fun initChips() {
+        if(args.product == null)
         binding.forWhoChip.text = when (args.forWho) {
             0 -> "Для нее"
             1 -> "Для него"
             2 -> "Детям"
             else -> ""
+        }
+        else{
+            Log.d("mylog", args.product.toString())
+            val forWhoProperty = args.product?.property?.find { it.id == 14L }
+            when(forWhoProperty?.idProperty){
+                140L -> binding.forWhoChip.text = "Для нее"
+                141L -> binding.forWhoChip.text = "Для него"
+                142L -> binding.forWhoChip.text = "Детям"
+            }
         }
         if (args.category == null)
             if(args.product?.category == null)
@@ -253,7 +271,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     }
 
     private fun changeProduct() {
-        presenter.changeProduct()
+        presenter.changeProductAndPublish()
     }
 
 

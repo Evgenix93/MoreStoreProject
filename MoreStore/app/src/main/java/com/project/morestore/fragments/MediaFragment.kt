@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -17,12 +19,18 @@ import androidx.viewpager2.widget.ViewPager2
 import com.project.morestore.R
 import com.project.morestore.adapters.MediaAdapter
 import com.project.morestore.databinding.FragmentMediaBinding
+import com.project.morestore.fragments.base.FullscreenMvpFragment
+import com.project.morestore.models.SuggestionModels
+import com.project.morestore.mvpviews.MainMvpView
+import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.createRect
 import com.project.morestore.util.dp
+import moxy.ktx.moxyPresenter
 
 
-class MediaFragment() :Fragment() {
+class MediaFragment() : FullscreenMvpFragment(), MainMvpView {
     private lateinit var views :FragmentMediaBinding
+    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var currentPage :Int = 0
 
     companion object{
@@ -52,7 +60,10 @@ class MediaFragment() :Fragment() {
                     .apply { changeBgColor(this, R.color.gray1) })
             }
             indicator.getChildAt(0).apply { changeBgColor(this, R.color.white) }
-            pager.adapter = MediaAdapter(this@MediaFragment, photos)
+            pager.adapter = MediaAdapter(this@MediaFragment, photos){uri ->
+                presenter.playVideo(fileUri = uri.toUri())
+
+            }
             pager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -110,6 +121,31 @@ class MediaFragment() :Fragment() {
             activity.window.statusBarColor = Color.BLACK
             activity.window.navigationBarColor = Color.BLACK
         }
+    }
+
+    override fun loaded(result: Any) {
+        startActivity(result as Intent)
+
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun error(message: String) {
+
+    }
+
+    override fun showOnBoarding() {
+
+    }
+
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
+
+    }
+
+    override fun success() {
+
     }
 
     //todo use this approach on whole app

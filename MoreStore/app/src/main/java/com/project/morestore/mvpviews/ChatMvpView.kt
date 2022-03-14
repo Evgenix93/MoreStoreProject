@@ -30,6 +30,9 @@ interface ChatMvpView: MvpView {
     @OneExecution
     fun dialogDeleted()
 
+    @OneExecution
+    fun photoVideoLoaded()
+
     //@OneExecution
     //fun productInfoLoaded(product: Product)
 

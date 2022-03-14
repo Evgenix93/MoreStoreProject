@@ -39,6 +39,13 @@ interface MessageApi {
     @POST("message/dialog/delete")
     suspend fun deleteDialogGetError(@Body dialogId: DialogId): Response<String>
 
+    @POST("upload/video")
+    suspend fun uploadVideo(@Body videoData: VideoData): Response<List<ProductVideo>>
+
+    @POST("upload/video")
+    suspend fun uploadVideoGetError(@Body videoData: VideoData): Response<String>
+
+
 
 
 

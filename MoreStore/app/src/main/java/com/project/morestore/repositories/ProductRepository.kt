@@ -761,8 +761,10 @@ class ProductRepository(private val context: Context) {
         if(extProperties != null)
             if(CreateProductData.createProductData.property == null)
                 CreateProductData.createProductData.property = extProperties.toMutableList()
-            else
+            else {
+                CreateProductData.createProductData.property!!.removeAll(extProperties)
                 CreateProductData.createProductData.property!!.addAll(extProperties)
+            }
 
         if(id != null)
             CreateProductData.createProductData.id = id
@@ -935,7 +937,7 @@ class ProductRepository(private val context: Context) {
 
     suspend fun changeProductData(): Response<List<CreatedProductId>>?{
         return try {
-            productApi.changeProduct(CreateProductData.createProductData.apply { status = 1 })
+            productApi.changeProduct(CreateProductData.createProductData)
         } catch (e: Exception) {
             if (e is IOException) {
                 null
