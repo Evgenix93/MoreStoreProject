@@ -65,6 +65,7 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
                 it.price.toDouble().toString(),
                 it.priceNew?.toDouble().toString(),
                 it.sale,
+                it.category,
                 it.property?.toTypedArray() ?: emptyArray()
             )
         }

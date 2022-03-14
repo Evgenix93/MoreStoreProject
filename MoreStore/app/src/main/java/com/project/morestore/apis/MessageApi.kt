@@ -46,8 +46,9 @@ interface MessageApi {
     suspend fun uploadVideoGetError(@Body videoData: VideoData): Response<String>
 
 
+    @POST("upload/photo")
+    suspend fun uploadPhoto(@Body photoData: PhotoData): Response<List<ProductPhoto>>
 
-
-
-
+    @POST("upload/photo")
+    suspend fun uploadPhotoGetError(@Body photoData: PhotoData): Response<String>
 }

@@ -15,6 +15,7 @@ class FeedbackProduct(
     @Json(name = "price_new")
     val newPrice: String?,
     val sale :Float,
+    val category: Category?,
     val property: Array<Property>
 ){
    // val newPrice get() = price.toFloat()

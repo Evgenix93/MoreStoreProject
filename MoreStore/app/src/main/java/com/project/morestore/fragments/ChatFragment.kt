@@ -326,8 +326,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             if(it.idSender == currentUserId && it.text != null  )
                 Message.My("13:00", R.drawable.ic_check_double, it.text.orEmpty())
             else if((it.photo != null || it.video != null) && it.idSender == currentUserId) {
-                val photos = it.photo?.map { photo -> Media.Photo(photo.photo) }.orEmpty()
-                val videos = it.video?.map { video -> Media.Video(video.video) }.orEmpty()
+                val photos = it.photo?.mapIndexed { index, photo -> Media.Photo(photo.photo, index + 1) }.orEmpty()
+                val videos = it.video?.mapIndexed { index, video -> Media.Video(video.video, photos.size + index + 1) }.orEmpty()
+                Log.d("MyDebug", "photos size = ${photos.size}")
                 val media = photos + videos
                 Message.MyMedia("13:00", R.drawable.ic_check_double, media.toTypedArray())
             }

@@ -163,15 +163,17 @@ class MessagesAdapter(
             views.time.text = message.time
             views.status.setImageResource(message.status)
             views.media.removeAllViews()
-            for (media in message.media){
-                ChatMedia(views.root.context, media)
+            for ((count, media) in message.media.withIndex()){
+                ChatMedia(views.root.context, media, message.media.size)
                     .apply {
                         (layoutParams as FrameLayout.LayoutParams).apply {
                             setMargins(8.dp, 0, 0, 0)
                         }
                         setOnClickListener { showMediaCallback(message.media) }
                     }
-                    .also { views.media.addView(it) }
+                    .also {
+                        if(count < 4)
+                        views.media.addView(it) }
             }
         }
     }

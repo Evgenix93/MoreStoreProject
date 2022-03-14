@@ -24,5 +24,5 @@ class Msg(val time :String, val message :String)
 
 sealed class Media {
     class Photo(val photoUri :String, val count :Int = 1) :Media()
-    class Video(val videoUri :String) :Media()
+    class Video(val videoUri :String, val count :Int = 1) :Media()
 }

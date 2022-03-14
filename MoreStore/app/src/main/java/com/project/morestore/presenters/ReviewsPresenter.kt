@@ -1,5 +1,6 @@
 package com.project.morestore.presenters
 
+import com.project.morestore.models.ReviewItem
 import com.project.morestore.models.ReviewListItem
 import com.project.morestore.mvpviews.ReviewView
 import com.project.morestore.repositories.ReviewRepository
@@ -15,7 +16,7 @@ class ReviewsPresenter(
     override fun attachView(view: ReviewView?) {
         super.attachView(view)
         presenterScope.launch {
-            viewState.showReviews(data.getReviews(userId).map { ReviewListItem.ReviewItem(it) })
+            viewState.showReviews(data.getReviews(userId).map { ReviewItem(it) })
         }
     }
 }

@@ -153,4 +153,5 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
     override fun photoVideoLoaded() {
 
     }
+
 }

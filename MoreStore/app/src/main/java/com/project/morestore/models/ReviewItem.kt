@@ -22,10 +22,11 @@ class Review(
     val date :Calendar
 )
 
-sealed class ReviewListItem{
-    object Create :ReviewListItem()
-    class ReviewItem(val review :Review) :ReviewListItem()
+ abstract class ReviewListItem{
+    object Create
 }
+
+class ReviewItem(val review :Review): ReviewListItem()
 
 class PreviewPhoto(context :Context, url :String) :FrameLayout(context){
 

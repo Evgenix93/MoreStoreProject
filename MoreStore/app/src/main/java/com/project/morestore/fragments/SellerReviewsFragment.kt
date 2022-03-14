@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.adapters.ReviewsAdapter
 import com.project.morestore.fragments.MediaFragment.Companion.PHOTOS
+import com.project.morestore.models.ReviewItem
 import com.project.morestore.models.ReviewListItem
 import com.project.morestore.mvpviews.ReviewView
 import com.project.morestore.presenters.ReviewsPresenter
@@ -59,7 +60,7 @@ class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
     }
 
     //IMPLEMENTATION
-    override fun showReviews(reviewItems: List<ReviewListItem.ReviewItem>) {
+    override fun showReviews(reviewItems: List<ReviewItem>) {
         adapter.setItems(reviewItems)
     }
 }
