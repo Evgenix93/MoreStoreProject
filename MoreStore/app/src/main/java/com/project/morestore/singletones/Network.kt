@@ -16,7 +16,10 @@ object Network {
     private val client = OkHttpClient.Builder()
         .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .addNetworkInterceptor(TokenInterceptor())
-        .callTimeout(60, TimeUnit.SECONDS)
+        .callTimeout(120, TimeUnit.SECONDS)
+        .writeTimeout(100, TimeUnit.SECONDS)
+        .connectTimeout(100, TimeUnit.SECONDS)
+        .readTimeout(100, TimeUnit.SECONDS)
         .build()
 
     private val retrofit = Retrofit.Builder()

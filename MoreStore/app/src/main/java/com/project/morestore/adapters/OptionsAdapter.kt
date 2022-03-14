@@ -37,7 +37,7 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit): 
 
         fun bind(option: Option, context: Context){
             binding.nameTextView.text = option.name
-            if(adapterPosition > 4 )
+            if(adapterPosition > 4 && adapterPosition != 7 )
                 binding.starTextView.isVisible = false
             if(option.isChecked)
                 binding.checkImageView.imageTintList = ColorStateList.valueOf(context.resources.getColor(R.color.green))

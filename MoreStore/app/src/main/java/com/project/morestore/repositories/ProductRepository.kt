@@ -838,7 +838,7 @@ class ProductRepository(private val context: Context) {
             Network.productApi.createProduct(CreateProductData.createProductData)
         } catch (e: Throwable) {
             if (e is IOException)
-                null
+                Response.error(400, e.message?.toResponseBody(null) ?: "сетевая ошибка".toResponseBody(null))
             else
                 Response.error(400, "".toResponseBody(null))
         }
@@ -868,7 +868,7 @@ class ProductRepository(private val context: Context) {
                 productApi.uploadProductPhotos(photoData)
             } catch (e: Exception) {
                 if (e is IOException) {
-                    null
+                    Response.error(400, e.message?.toResponseBody(null) ?: "сетевая ошибка".toResponseBody(null))
                 } else {
                     Log.d("mylog", e.message.toString())
                     try {
@@ -903,7 +903,7 @@ class ProductRepository(private val context: Context) {
             productApi.uploadProductVideos(videoData)
         } catch (e: Exception) {
             if (e is IOException) {
-                null
+                Response.error(400, e.message?.toResponseBody(null) ?: "сетевая ошибка".toResponseBody(null))
             } else {
                 Log.d("mylog", e.message.toString())
                 try {
@@ -940,7 +940,7 @@ class ProductRepository(private val context: Context) {
             productApi.changeProduct(CreateProductData.createProductData)
         } catch (e: Exception) {
             if (e is IOException) {
-                null
+                Response.error(400, e.message?.toResponseBody(null) ?: "сетевая ошибка".toResponseBody(null))
             } else {
                 Log.d("mylog", e.message.toString())
                 try {

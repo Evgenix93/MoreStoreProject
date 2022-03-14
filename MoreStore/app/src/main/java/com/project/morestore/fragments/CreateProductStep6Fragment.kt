@@ -56,7 +56,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             when (position) {
                 0 -> findNavController().navigate(
                     CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductAddPhotoFragment(
-                        args.category?.name == "Обувь"
+                        args.category?.name == "Обувь",
+                        args.product
                     )
                 )
                 1 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductConditionFragment())
@@ -187,6 +188,9 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                 val map = mutableMapOf<Int, File>()
                 map[1] = File("")
                 optionsAdapter.updatePhotoInfo(map)
+                if(args.product?.photo?.first()?.photo?.contains("no_photo") == true)
+                    optionsAdapter.updatePhotoInfo(emptyMap<Int,File>().toMutableMap())
+
                 firstLaunch = false
             } else {
             presenter.loadCreateProductData()
@@ -234,7 +238,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     private fun initCreateProductButton() {
         val options = optionsAdapter.getList().toMutableList()
-        if (options.take(5).all { it.isChecked }) {
+        if (options.take(5).all { it.isChecked } && options[7].isChecked) {
             binding.addPhotoInfoTextView.text = "Отлично! Всё заполнено"
             binding.placeProductButton.isEnabled = true
             binding.placeProductButton.backgroundTintList =
@@ -298,6 +302,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             val map = mutableMapOf<Int, File>()
             map[0] = File("")
             optionsAdapter.updatePhotoInfo(if (args.product != null) map else result as MutableMap<Int, File>)
+            if(args.product?.photo?.first()?.photo?.contains("no_photo") == true)
+                optionsAdapter.updatePhotoInfo(emptyMap<Int,File>().toMutableMap())
             initCreateProductButton()
         } else if (result is String) {
             Toast.makeText(requireContext(), result, Toast.LENGTH_SHORT).show()
@@ -313,7 +319,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     override fun error(message: String) {
         showLoading(false)
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     override fun showOnBoarding() {

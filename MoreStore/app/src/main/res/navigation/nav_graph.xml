@@ -634,6 +634,11 @@
         <argument
             android:name="isShoos"
             app:argType="boolean" />
+        <argument
+            android:name="product"
+            app:argType="com.project.morestore.models.Product"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/createProductAddBrandFragment"
