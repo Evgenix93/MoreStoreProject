@@ -328,10 +328,10 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         }
     }
 
-    fun uploadPhotoVideo(uris: List<Uri>){
+    fun uploadPhotoVideo(uris: List<Uri>, message: String){
         presenterScope.launch {
             viewState.loading()
-            val response = chatRepository.addMessage("", dialogId ?: 0)
+            val response = chatRepository.addMessage(message, dialogId ?: 0)
             when (response?.code()) {
                 200 -> {
                    val photoLoaded = uploadPhotos(uris, response.body()!!.id)
@@ -414,9 +414,10 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             Log.d("mylog", str)
             str
         }
-
-
     }
 
+    fun loadMediaUris() {
+        viewState.mediaUrisLoaded(chatRepository.loadMediaUris())
+    }
 
 }

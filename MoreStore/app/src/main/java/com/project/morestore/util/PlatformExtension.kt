@@ -41,8 +41,12 @@ fun TextView.setStartDrawable(@DrawableRes drawableId :Int){
         .also { setCompoundDrawablesWithIntrinsicBounds(it, null, null, null) }
 }
 
-fun TextView.setStartDrawable(drawable :Drawable){
-    setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+fun TextView.setStartDrawable(drawable :Drawable, greenCircle: Drawable? = null){
+    setCompoundDrawablesWithIntrinsicBounds(drawable, null, greenCircle, null)
+}
+
+fun TextView.setEndDrawable(drawable :Drawable){
+    setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
 }
 
 fun createRect(width :Int, height :Int, argbColor :Int = Color.TRANSPARENT) :Drawable{

@@ -824,6 +824,9 @@
         <action
             android:id="@+id/action_chatFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_feedbackPhotoFragment"
+            app:destination="@id/feedbackPhotoFragment" />
     </fragment>
     <fragment
         android:id="@+id/mediaFragment"
@@ -856,7 +859,11 @@
     <fragment
         android:id="@+id/feedbackPhotoFragment"
         android:name="com.project.morestore.fragments.FeedbackPhotoFragment"
-        android:label="FeedbackPhotoFragment" />
+        android:label="FeedbackPhotoFragment" >
+        <argument
+            android:name="isChat"
+            app:argType="boolean" />
+    </fragment>
     <fragment
         android:id="@+id/createProductNameFragment"
         android:name="com.project.morestore.fragments.CreateProductNameFragment"

@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Base64
 import android.util.Log
 import com.project.morestore.models.*
+import com.project.morestore.singletones.ChatMedia
 import com.project.morestore.singletones.CreateProductData
 import com.project.morestore.singletones.Network
 import kotlinx.coroutines.Dispatchers
@@ -235,8 +236,5 @@ class ChatRepository(val context: Context) {
         }
     }
 
-    fun getMediaType(uri: Uri): String?{
-        return context.contentResolver.getType(uri)
-    }
-
+    fun loadMediaUris() = ChatMedia.mediaUris
 }

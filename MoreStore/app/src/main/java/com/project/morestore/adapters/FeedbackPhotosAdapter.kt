@@ -3,6 +3,7 @@ package com.project.morestore.adapters
 import android.net.Uri
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.project.morestore.databinding.ItemPhotoAddBinding
 import com.project.morestore.databinding.ItemPhotoBinding
 import com.project.morestore.databinding.ItemPhotoDescriptionBinding
@@ -39,6 +40,8 @@ class FeedbackPhotosAdapter(
         items = newItems
         notifyDataSetChanged()
     }
+
+    fun getItems(): List<FeedbackItem> = items
 
     override fun getItemViewType(position: Int): Int {
         return when(items[position]){
@@ -79,7 +82,10 @@ class FeedbackPhotosAdapter(
 
         fun bind(photo :FeedbackItem.Photo){
             this.photo = photo.photo
-            views.photo.setImageURI(this.photo)
+           // views.photo.setImageURI(this.photo)
+            Glide.with(views.root)
+                .load(photo.photo)
+                .into(views.photo)
         }
     }
 }

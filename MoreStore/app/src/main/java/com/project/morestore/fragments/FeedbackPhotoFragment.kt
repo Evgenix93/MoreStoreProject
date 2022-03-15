@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.project.morestore.R
 import com.project.morestore.adapters.FeedbackPhotosAdapter
 import com.project.morestore.databinding.FragmentFeedbackPhotosBinding
@@ -33,12 +35,17 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
     }
     private val adapter = FeedbackPhotosAdapter{
         if(it !is FeedbackItem.AddPhoto) return@FeedbackPhotosAdapter
-        pickPhoto()
+        if(args.isChat)
+          filePicker.launch(arrayOf("image/*", "video/mp4"))
+        else
+           pickPhoto()
     }
     private val photoPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode != Activity.RESULT_OK || it.data == null) return@registerForActivityResult
         presenter.addPhoto(it.data!!.data!!)
     }
+    private val args: FeedbackPhotoFragmentArgs by navArgs()
+    private lateinit var filePicker: ActivityResultLauncher<Array<String>>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,8 +60,13 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
         adapter.setItems(listOf(FeedbackItem.AddPhoto, FeedbackItem.Description))
         views.send.setOnClickListener {
             views.progressBar.isVisible = true
-            presenter.createFeedback()
+            if(args.isChat)
+             saveMediaUris(adapter.getItems())
+            else
+               presenter.createFeedback()
         }
+        initFilePicker()
+        initActionButton()
     }
 
     //IMPLEMENTATION
@@ -71,6 +83,10 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
         }.show()
     }
 
+    override fun mediaUrisSaved() {
+        findNavController().popBackStack()
+    }
+
     //PRIVATE
     private fun pickPhoto(){
         Intent().apply {
@@ -78,5 +94,21 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
             action = ACTION_GET_CONTENT
         }
             .also { photoPickerLauncher.launch(it) }
+    }
+
+    private fun initFilePicker(){
+        filePicker = registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri ->
+           presenter.addPhoto(uri)
+        }
+    }
+
+    private fun saveMediaUris(items: List<FeedbackItem>){
+        val feedbackItemsPhoto = items.filterIsInstance<FeedbackItem.Photo>()
+        presenter.saveMediaUris(feedbackItemsPhoto.map{it.photo})
+    }
+
+    private fun initActionButton(){
+        if(args.isChat)
+            views.send.text = "Добавить"
     }
 }

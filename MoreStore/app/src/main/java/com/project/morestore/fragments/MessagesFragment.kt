@@ -1,5 +1,6 @@
 package com.project.morestore.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -235,6 +236,10 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     override fun photoVideoLoaded() {
 
+    }
+
+    override fun mediaUrisLoaded(mediaUris: List<Uri>?) {
+        TODO("Not yet implemented")
     }
 
 }
