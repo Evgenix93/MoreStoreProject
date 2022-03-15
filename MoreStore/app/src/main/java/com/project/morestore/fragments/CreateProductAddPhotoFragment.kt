@@ -29,6 +29,8 @@ class CreateProductAddPhotoFragment :
     private val binding: FragmentCreateProductAddPhotoBinding by viewBinding()
     private val args: CreateProductAddPhotoFragmentArgs by navArgs()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    private var uriMap = mutableMapOf<Int, String>()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -118,7 +120,7 @@ class CreateProductAddPhotoFragment :
         }
 
         binding.saveBtn.setOnClickListener {
-            findNavController().popBackStack()
+            savePhotos()
         }
 
 
@@ -157,6 +159,13 @@ class CreateProductAddPhotoFragment :
 
     }
 
+    private fun savePhotos(){
+        if(uriMap.isNotEmpty())
+            presenter.updateCreateProductDataPhotosVideosFromWeb(uriMap)
+        else
+            findNavController().popBackStack()
+    }
+
 
     override fun loaded(result: Any) {
 
@@ -167,10 +176,15 @@ class CreateProductAddPhotoFragment :
 
         val fileMap = result as MutableMap<Int, File>
         Log.d("mylog", fileMap[1]?.absolutePath.toString())
-        val uriMap = mutableMapOf<Int, String>()
+        val photoVideoUriMap = mutableMapOf<Int, String>()
         args.product?.photo?.forEachIndexed { index, productPhoto ->
-            uriMap[index + 1] = productPhoto.photo
+            photoVideoUriMap[index + 1] = productPhoto.photo
         }
+
+        args.product?.video?.forEachIndexed { index, productVideo ->
+            photoVideoUriMap[index + 4] = productVideo.video
+        }
+        uriMap = photoVideoUriMap
 
         binding.addPhotoCardView6.isVisible = (fileMap[4] != null && fileMap[5] != null) || (uriMap[4] != null && uriMap[5] != null)
         binding.addPhotoCardView7.isVisible = fileMap[6] != null || uriMap[6] != null
@@ -254,6 +268,7 @@ class CreateProductAddPhotoFragment :
     }
 
     override fun success() {
+        findNavController().popBackStack()
 
     }
 }

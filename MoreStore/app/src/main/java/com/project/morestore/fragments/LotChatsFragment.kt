@@ -154,4 +154,8 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     }
 
+    override fun showDialogCount(type: String, count: Int) {
+
+    }
+
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -77,10 +78,10 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
         with(views) {
             list.adapter = adapter
             list.addItemDecoration(MiddleDivider(requireContext(), R.drawable.div_horline_gray_1))
-            tabs.addTab(tabs.newTab().apply { fill(0, "Все", 11) })
-            tabs.addTab(tabs.newTab().apply { fill(R.drawable.sel_bag_icon, "Сделки", 2) })
+            tabs.addTab(tabs.newTab().apply { fill(0, "Все") })
+            tabs.addTab(tabs.newTab().apply { fill(R.drawable.sel_bag_icon, "Сделки") })
             tabs.addTab(
-                tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления", 2) })
+                tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления") })
             tabs.setSelectListener {
                 //adapter.setItems(
                     when (it.position) {
@@ -235,6 +236,17 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     override fun photoVideoLoaded() {
 
+    }
+
+    override fun showDialogCount(type: String, count: Int) {
+        when(type){
+            Chat::class.java.simpleName -> views.tabs.getTabAt(0)?.view?.findViewById<TextView>(R.id.count)?.text = count.toString()//?.fill(0, "Все", count)
+            Chat.Deal::class.java.simpleName -> views.tabs.getTabAt(1)?.view?.findViewById<TextView>(R.id.count)?.text = count.toString()//?.fill(0, "Все", count)
+            Chat.Lot::class.java.simpleName -> views.tabs.getTabAt(2)?.view?.findViewById<TextView>(R.id.count)?.text = count.toString()//?.fill(0, "Все", count)
+
+
+
+        }
     }
 
 }

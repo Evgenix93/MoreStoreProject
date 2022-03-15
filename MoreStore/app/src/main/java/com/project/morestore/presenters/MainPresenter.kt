@@ -869,6 +869,23 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
+    fun updateCreateProductDataPhotosVideosFromWeb(webUris: MutableMap<Int, String>){
+        presenterScope.launch {
+            val fileMap = productRepository.loadCreateProductPhotosVideos()
+            webUris.forEach { entry ->
+                if(fileMap[entry.key] != null)
+                    webUris.remove(entry.key)
+            }
+
+            val success = webUris.map { entry ->
+                productRepository.updateCreateProductDataPhotoVideoFromWeb(entry.value, entry.key)
+            }
+            if(success.all { it })
+                viewState.success()
+            else viewState.error("ошибка")
+        }
+    }
+
     fun removeProperty(propertyCategory: Long) {
         productRepository.removeProperty(propertyCategory)
     }
@@ -889,8 +906,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private suspend fun uploadProductPhotos(productId: Long): Boolean {
         val photosVideosMap = productRepository.loadCreateProductPhotosVideos()
         val photos =
-            photosVideosMap.filter { it.value.extension == "jpg" || it.value.extension == "png" }
-                .map { it.value }
+            photosVideosMap.filter { it.value.extension == "jpg" || it.value.extension == "png" || it.value.extension == "webp" }
+                .toSortedMap().map { it.value }
 
         if (photos.isEmpty()) {
             return true

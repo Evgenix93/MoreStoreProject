@@ -284,7 +284,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     override fun loaded(result: Any) {
         showLoading(false)
         if (result is User) {
-            updateCreateProductData(result.phone!!)
+            updateCreateProductData(result.phone)
             //createProduct()
         } else if (result is CreateProductData) {
             optionsAdapter.updateList(result)
@@ -304,7 +304,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             val map = mutableMapOf<Int, File>()
             map[0] = File("")
             optionsAdapter.updatePhotoInfo(if (args.product != null) map else result as MutableMap<Int, File>)
-            if(args.product?.photo?.first()?.photo?.contains("no_photo") == true)
+            if(args.product?.photo?.first()?.photo?.contains("no_photo") == true && result.isEmpty())
                 optionsAdapter.updatePhotoInfo(emptyMap<Int,File>().toMutableMap())
             initCreateProductButton()
         } else if (result is String) {

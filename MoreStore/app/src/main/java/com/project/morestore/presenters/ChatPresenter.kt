@@ -165,13 +165,13 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             val response = chatRepository.getDialogs()
             when (response?.code()) {
                 200 -> {
-                    val chats = response.body()?.filter {it.product.idUser != userId }?.map { dialogWrapper ->
+                    val chats = response.body()?.filter {it.product?.idUser != userId && it.dialog.user.id != 1L }?.map { dialogWrapper ->
                             Chat.Deal(
                                 dialogWrapper.dialog.id,
-                                dialogWrapper.product.name,
+                                dialogWrapper.product?.name ?: "",
                                 dialogWrapper.dialog.user.name.orEmpty(),
-                                dialogWrapper.product.photo.first().photo,
-                                dialogWrapper.product.priceNew ?: 0f
+                                dialogWrapper.product?.photo?.first()?.photo ?: "",
+                                dialogWrapper.product?.priceNew ?: 0f
 
                             )
 
@@ -213,7 +213,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                     val products = response.body()?.map { dilogWrapper ->
                         dilogWrapper.product
 
-                    }?.toSet()?.filter { it.idUser == userId }
+                    }?.toSet()?.filter { it?.idUser == userId }
                     val lots = products?.map { product ->
                         response.body()?.filter { dialogWrapper ->
                             dialogWrapper.product == product
@@ -224,11 +224,11 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                     val chats =  lots?.map { lot ->  //response.body()?.filter {it.product.idUser == userId }?.map { dialogWrapper ->
                         Chat.Lot(
                             0,
-                            lot.first().product.name,
+                            lot.first().product?.name ?: "",
                             "${lot.size.toString()} покупателей",
-                            lot.first().product.photo.first().photo,
-                            lot.first().product.priceNew ?: 0f,
-                            lot.first().product.id
+                            lot.first().product?.photo?.first()?.photo ?: "",
+                            lot.first().product?.priceNew ?: 0f,
+                            lot.first().product?.id ?: 0
 
                         )
 
@@ -265,7 +265,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         when (response?.code()) {
             200 -> {
                 val chats = response.body()?.filter { dialogWrapper ->
-                    dialogWrapper.product.id == id
+                    dialogWrapper.product?.id == id
 
                 }?.map {
                     Chat.Personal(
@@ -273,7 +273,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                         it.dialog.user.name.orEmpty(),
                         it.dialog.lastMessage?.text.orEmpty(),
                         it.dialog.user.avatar?.photo.orEmpty(),
-                        it.product.priceNew ?: 0f
+                        it.product?.priceNew ?: 0f
 
 
                     )
@@ -318,7 +318,14 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     fun showAllDialogs(){
         presenterScope.launch {
-            viewState.dialogsLoaded(getSupportDialog() + getDealDialogs() + getLotDialogs())
+            val dealDialogs = getDealDialogs()
+            val lotDialogs = getLotDialogs()
+            val allDialogs = getSupportDialog() + dealDialogs + lotDialogs
+            viewState.showDialogCount(Chat::class.java.simpleName, allDialogs.size)
+            viewState.showDialogCount(Chat.Deal::class.java.simpleName, dealDialogs.size)
+            viewState.showDialogCount(Chat.Lot::class.java.simpleName, lotDialogs.size)
+
+            viewState.dialogsLoaded(allDialogs)
         }
     }
 

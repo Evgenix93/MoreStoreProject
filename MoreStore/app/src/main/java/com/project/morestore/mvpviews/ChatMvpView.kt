@@ -33,6 +33,9 @@ interface ChatMvpView: MvpView {
     @OneExecution
     fun photoVideoLoaded()
 
+    @OneExecution
+    fun showDialogCount(type: String, count: Int)
+
     //@OneExecution
     //fun productInfoLoaded(product: Product)
 

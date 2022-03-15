@@ -136,10 +136,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE)
                     .show(childFragmentManager, null)
             }
-            name.text = dialog.product.name
+            name.text = dialog.product?.name
             toolbar.icon.visibility = GONE
             Glide.with(photo)
-                .load(dialog.product.photo.first().photo)
+                .load(dialog.product?.photo?.first()?.photo)
                 .circleCrop()
                 .into(photo)
             WidgetSellBarBinding.inflate(layoutInflater)
@@ -264,10 +264,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE)
                     .show(childFragmentManager, null)
             }
-            name.text = dialog.product.name
+            name.text = dialog.product?.name
             toolbar.icon.visibility = GONE
             Glide.with(photo)
-                .load(dialog.product.photo.first().photo)
+                .load(dialog.product?.photo?.first()?.photo)
                 .circleCrop()
                 .into(photo)
             bottomBar.visibility = VISIBLE
@@ -496,6 +496,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
 
         Toast.makeText(requireContext(), "Медиа отпралено", Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun showDialogCount(type: String, count: Int) {
 
     }
 }

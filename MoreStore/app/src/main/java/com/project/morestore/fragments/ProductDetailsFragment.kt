@@ -330,12 +330,12 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.textView17.isVisible = false
         binding.productList.isVisible = false
          if(dialogWrappers != null) {
-             if (dialogWrappers.none { it.product.id == args.product?.id })
+             if (dialogWrappers.none { it.product?.id == args.product?.id })
                  binding.promoteInfoCard.isVisible = true
              else {
                  binding.buyersCard.isVisible = true
                  binding.buyersCount.text =
-                     dialogWrappers.filter { it.product.id == args.product?.id }.size.toString()
+                     dialogWrappers.filter { it.product?.id == args.product?.id }.size.toString()
              }
          }
     }

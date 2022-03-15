@@ -3,6 +3,7 @@ package com.project.morestore.repositories
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
@@ -1044,10 +1045,22 @@ class ProductRepository(private val context: Context) {
 
     }
 
-    suspend fun downLoadFile(url: String): File?{
+    suspend fun updateCreateProductDataPhotoVideoFromWeb(webUri: String, position: Int): Boolean{
+        val file = downLoadFile(webUri)
+        file ?: return false
+        CreateProductData.productPhotosMap[position] = file
+        return true
+
+    }
+
+    private suspend fun downLoadFile(url: String): File?{
         return withContext(Dispatchers.IO){
             try{
-                val webFile = File(context.externalCacheDir, "${System.currentTimeMillis()/1000}.mp4")
+                val name = if(url.contains("mp4"))
+                    "${System.currentTimeMillis()/1000}.mp4"
+                else
+                    "${System.currentTimeMillis()/1000}.jpg"
+                val webFile = File(context.externalCacheDir, name)
                 val response = productApi.downloadImage(url)
                 response.byteStream().use { input ->
                     webFile.outputStream().use { output ->
@@ -1055,11 +1068,28 @@ class ProductRepository(private val context: Context) {
 
                     }
                 }
+                if(name.contains("mp4"))
                 webFile
+                else
+                convertFileToJpg(webFile)
 
             }catch (e: Throwable){
                 null
             }
+        }
+
+    }
+
+    private fun convertFileToJpg(file: File): File?{
+        return try {
+            val bitmap = BitmapFactory.decodeStream(file.inputStream())
+            val convertedFile = File(context.externalCacheDir, "image_${System.currentTimeMillis()}.jpg")
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, convertedFile.outputStream() )
+            return convertedFile
+
+
+        }catch (e: Throwable){
+            null
         }
 
     }
