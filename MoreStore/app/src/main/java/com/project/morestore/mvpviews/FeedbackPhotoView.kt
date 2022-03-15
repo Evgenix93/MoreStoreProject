@@ -9,4 +9,5 @@ interface FeedbackPhotoView :MvpView {
     fun showPhotos(items :List<FeedbackItem>)
     fun changeSendText()
     fun showSuccess(review :Boolean)
+    fun mediaUrisSaved()
 }

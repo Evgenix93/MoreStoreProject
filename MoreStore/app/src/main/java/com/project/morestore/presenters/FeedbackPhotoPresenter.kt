@@ -58,4 +58,10 @@ class FeedbackPhotoPresenter(
         val photo64 = Base64.encodeToString(byteArray, Base64.DEFAULT)
         photo64
     }
+
+   fun saveMediaUris(uris: List<Uri>){
+       data.saveMediaUris(uris)
+       viewState.mediaUrisSaved()
+   }
+
 }

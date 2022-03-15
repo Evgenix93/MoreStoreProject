@@ -1,5 +1,6 @@
 package com.project.morestore.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -156,6 +157,10 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     override fun showDialogCount(type: String, count: Int) {
 
+    }
+
+    override fun mediaUrisLoaded(mediaUris: List<Uri>?) {
+        TODO("Not yet implemented")
     }
 
 }

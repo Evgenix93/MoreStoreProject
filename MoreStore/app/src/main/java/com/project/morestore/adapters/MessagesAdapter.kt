@@ -6,6 +6,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.LinearLayout.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.morestore.R
@@ -163,6 +164,10 @@ class MessagesAdapter(
             views.time.text = message.time
             views.status.setImageResource(message.status)
             views.media.removeAllViews()
+            if(message.message != null){
+                views.message.isVisible = true
+                views.message.text = message.message
+            }
             for ((count, media) in message.media.withIndex()){
                 ChatMedia(views.root.context, media, message.media.size)
                     .apply {

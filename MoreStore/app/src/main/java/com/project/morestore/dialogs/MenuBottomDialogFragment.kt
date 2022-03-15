@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
@@ -17,14 +18,14 @@ import com.project.morestore.databinding.BottomdialogMenuBinding
 import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.util.createRect
 import com.project.morestore.util.dp
+import com.project.morestore.util.setEndDrawable
 import com.project.morestore.util.setStartDrawable
 
 class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
-    constructor(type :Type): this(){
-        arguments = bundleOf("type" to type.ordinal)
+    constructor(type :Type, isMediaLoaded: Boolean? = null): this(){
+        arguments = bundleOf("type" to type.ordinal, "media" to isMediaLoaded)
     }
     private lateinit var views :BottomdialogMenuBinding
-    private val bar = 1
     enum class Type{ MEDIA, GEO, PROFILE}
 
     override fun getTheme() = R.style.App_Dialog_Transparent
@@ -70,6 +71,8 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
                 .apply {
                     setText(menuItem.titleId)
                     setStartDrawable(menuItem.drawable)
+                    if(menuItem.titleId == R.string.chat_menu_addMedia && menuItem.isMediaLoaded == true)
+                    setStartDrawable(menuItem.drawable, menuItem.greenCircle!!)
                     gravity = Gravity.CENTER_VERTICAL
                     setOnClickListener {
                         (parentFragment as Callback).selectAction(menuItem)
@@ -82,7 +85,7 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
 
     //todo delete stubs
     private val media :List<MenuItem> by lazy {
-        listOf(MenuItem(drb(R.drawable.ic_camera), R.string.chat_menu_addMedia))
+        listOf(MenuItem(drb(R.drawable.ic_camera), R.string.chat_menu_addMedia, arguments?.getBoolean("media"), drb(R.drawable.ic_ellipse)))
     }
 
     private val geoMedia :List<MenuItem> by lazy { listOf(
@@ -101,7 +104,7 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
 
     private fun drb(@DrawableRes drwbId :Int) = ContextCompat.getDrawable(requireContext(), drwbId)!!
 
-    inner class MenuItem(val drawable :Drawable, @StringRes val titleId :Int)
+    inner class MenuItem(val drawable :Drawable, @StringRes val titleId :Int,  val isMediaLoaded: Boolean? = null, val greenCircle: Drawable? = null)
 
     interface Callback{
         fun selectAction(item :MenuItem)
