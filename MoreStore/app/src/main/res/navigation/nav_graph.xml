@@ -867,7 +867,8 @@
         android:label="FeedbackPhotoFragment" >
         <argument
             android:name="isChat"
-            app:argType="boolean" />
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/createProductNameFragment"

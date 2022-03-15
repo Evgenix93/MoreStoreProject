@@ -2,6 +2,7 @@ package com.project.morestore.fragments
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -79,10 +80,10 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
         with(views) {
             list.adapter = adapter
             list.addItemDecoration(MiddleDivider(requireContext(), R.drawable.div_horline_gray_1))
-            tabs.addTab(tabs.newTab().apply { fill(0, "Все") })
-            tabs.addTab(tabs.newTab().apply { fill(R.drawable.sel_bag_icon, "Сделки") })
+            tabs.addTab(tabs.newTab().apply { fill(0, "Все", 0) })
+            tabs.addTab(tabs.newTab().apply { fill(R.drawable.sel_bag_icon, "Сделки", 0) })
             tabs.addTab(
-                tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления") })
+                tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления", 0) })
             tabs.setSelectListener {
                 //adapter.setItems(
                     when (it.position) {
@@ -108,8 +109,8 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
                 if (drawableId == 0) icon.visibility = GONE
                 else icon.setImageResource(drawableId)
 
-                if (count == 0) this.count.visibility = GONE
-                else this.count.text = count.toString()
+                //if (count == 0) this.count.visibility = GONE
+                //else this.count.text = count.toString()
             }
     }
 
@@ -240,6 +241,7 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
     }
 
     override fun showDialogCount(type: String, count: Int) {
+        Log.d("tab", count.toString())
         when(type){
             Chat::class.java.simpleName -> views.tabs.getTabAt(0)?.view?.findViewById<TextView>(R.id.count)?.text = count.toString()//?.fill(0, "Все", count)
             Chat.Deal::class.java.simpleName -> views.tabs.getTabAt(1)?.view?.findViewById<TextView>(R.id.count)?.text = count.toString()//?.fill(0, "Все", count)
