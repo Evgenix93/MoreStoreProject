@@ -27,13 +27,13 @@ class FeedbackPhotoPresenter(
     private val data = ReviewRepository()
     private var photos = mutableListOf(FeedbackItem.AddPhoto, FeedbackItem.Description)
 
-    fun addPhoto(uri :Uri){
+    fun addPhoto(uris :List<Uri>){
         photos.filterIsInstance<FeedbackItem.Photo>()
             .also {
                 photos = when(it.size){
-                    0 -> mutableListOf(FeedbackItem.Photo(uri), FeedbackItem.AddPhoto)
-                    in 1..3 -> (it + FeedbackItem.Photo(uri) + FeedbackItem.AddPhoto).toMutableList()
-                    else -> (it + FeedbackItem.Photo(uri)).toMutableList()
+                    0 -> (uris.map { uri -> FeedbackItem.Photo(uri)} + listOf(FeedbackItem.AddPhoto)).toMutableList()
+                    in 1..3 -> (it + uris.map { uri -> FeedbackItem.Photo(uri)} + FeedbackItem.AddPhoto).toMutableList()
+                    else -> (it + uris.map {uri ->FeedbackItem.Photo(uri)}).toMutableList()
                 }
             }
         if(photos.filterIsInstance<FeedbackItem.Photo>().size == 1) viewState.changeSendText()

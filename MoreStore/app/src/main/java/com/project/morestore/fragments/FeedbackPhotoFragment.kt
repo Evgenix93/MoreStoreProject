@@ -19,6 +19,7 @@ import com.project.morestore.dialogs.FeedbackCompleteDialog
 import com.project.morestore.models.FeedbackItem
 import com.project.morestore.mvpviews.FeedbackPhotoView
 import com.project.morestore.presenters.FeedbackPhotoPresenter
+import com.project.morestore.singletones.ChatMedia
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -42,7 +43,7 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
     }
     private val photoPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode != Activity.RESULT_OK || it.data == null) return@registerForActivityResult
-        presenter.addPhoto(it.data!!.data!!)
+        presenter.addPhoto(listOf(it.data!!.data!!))
     }
     private val args: FeedbackPhotoFragmentArgs by navArgs()
     private lateinit var filePicker: ActivityResultLauncher<Array<String>>
@@ -67,12 +68,14 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
         }
         initFilePicker()
         initActionButton()
+        presenter.addPhoto(ChatMedia.mediaUris.orEmpty())
     }
 
     //IMPLEMENTATION
     override fun showPhotos(items: List<FeedbackItem>) = adapter.setItems(items)
 
     override fun changeSendText() {
+        if(args.isChat.not())
         views.send.setText(R.string.feedback_photos_send)
     }
 
@@ -98,7 +101,7 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
 
     private fun initFilePicker(){
         filePicker = registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri ->
-           presenter.addPhoto(uri)
+           presenter.addPhoto(listOf(uri))
         }
     }
 

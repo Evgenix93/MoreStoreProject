@@ -70,7 +70,8 @@
             app:destination="@id/registration4Fragment" />
         <argument
             android:name="code"
-            app:argType="integer" />
+            app:argType="integer"
+            android:defaultValue="0" />
         <argument
             android:name="userId"
             app:argType="integer" />
@@ -218,6 +219,9 @@
         <action
             android:id="@+id/action_mainFragment_to_firstLaunchFragment"
             app:destination="@id/firstLaunchFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_registration3Fragment"
+            app:destination="@id/registration3Fragment" />
     </fragment>
     <fragment
         android:id="@+id/catalogFragment"

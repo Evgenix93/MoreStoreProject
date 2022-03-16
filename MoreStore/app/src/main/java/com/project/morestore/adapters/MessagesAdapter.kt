@@ -165,9 +165,9 @@ class MessagesAdapter(
             views.status.setImageResource(message.status)
             views.media.removeAllViews()
             if(message.message != null){
-                views.message.isVisible = true
+                views.messageLinearLayout.isVisible = true
                 views.message.text = message.message
-            }
+            }else views.messageLinearLayout.isVisible = false
             for ((count, media) in message.media.withIndex()){
                 ChatMedia(views.root.context, media, message.media.size)
                     .apply {

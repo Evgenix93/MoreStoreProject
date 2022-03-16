@@ -287,7 +287,7 @@
     <string name="chat_dealAccepted_subtitle">@string/accessed</string>
     <string name="chat_dealDetails_title">Сделка одобрена.</string>
     <string name="chat_dealDetails_details">Подробнее о сделке.</string>
-    <string name="chat_menu_addMedia">Отправить фото / видео</string>
+    <string name="chat_menu_addMedia">Добавить фото / видео</string>
     <string name="chat_menu_setGeoDeal">Указать место встречи</string>
     <string name="chat_menu_profile">Перейти в профиль</string>
     <string name="chat_menu_call">Позвонить</string>

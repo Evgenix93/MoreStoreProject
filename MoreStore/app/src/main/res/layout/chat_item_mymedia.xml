@@ -47,17 +47,51 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/message"
+    <LinearLayout
+        android:id="@+id/messageLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/manrope_regular"
-        android:textColor="@color/black"
-        android:lineSpacingExtra="3dp"
-        android:padding="8dp"
-        android:background="@drawable/bg_rectangle_green_rounded8"
-        tools:text="Здравствуйте! Мне пришел\nпорванный товар!"
-        android:visibility="visible"
-        />
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/time2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:fontFamily="@font/manrope_regular"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            tools:ignore="SmallSp"
+            android:layout_gravity="bottom"
+            tools:text="13:18"
+            />
+
+        <ImageView
+            android:id="@+id/status2"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_check_double"
+            app:tint="@color/green"
+            />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/manrope_regular"
+            android:textColor="@color/black"
+            android:lineSpacingExtra="3dp"
+            android:padding="8dp"
+            android:background="@drawable/bg_rectangle_green_rounded8"
+            tools:text="Здравствуйте! Мне пришел\nпорванный товар!"
+            />
+
+    </LinearLayout>
+
 </LinearLayout>

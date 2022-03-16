@@ -528,7 +528,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             Message.MyMedia(
                 "13:00",
                 R.drawable.ic_check_double,
-                media.toTypedArray()
+                media.toTypedArray(),
+                null
             )
         )
         views.list.scrollToPosition(adapter.itemCount - 1)

@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration3Binding
 
@@ -33,6 +34,7 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         setClickListeners()
         initToolbar()
         initFilePickerLauncher()
+        hideBottomNavigation()
     }
 
     private fun setClickListeners() {
@@ -67,6 +69,10 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     private fun showLoading(loading: Boolean){
         binding.nextBtn.isEnabled = !loading
         binding.loader.isVisible = loading
+    }
+
+    private fun hideBottomNavigation(){
+        (activity as MainActivity).showBottomNavBar(false)
     }
 
     override fun success(result: Any) {
