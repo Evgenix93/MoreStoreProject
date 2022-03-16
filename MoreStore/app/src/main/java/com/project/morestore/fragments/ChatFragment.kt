@@ -99,6 +99,12 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         loadMediaUris()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.clearMediaUris()
+        mediaUris = null
+    }
+
     /* private fun showSell(){
         // adapter.avatarUri = R.drawable.user2
          with(views){
@@ -534,6 +540,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         )
         views.list.scrollToPosition(adapter.itemCount - 1)
         presenter.uploadPhotoVideo(mediaUris!!, "")
+        presenter.clearMediaUris()
+        mediaUris = null
     }
 
     private fun sendOnlyText() {
@@ -570,6 +578,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         )
         views.list.scrollToPosition(adapter.itemCount - 1)
         presenter.uploadPhotoVideo(mediaUris!!, message)
+        presenter.clearMediaUris()
+        mediaUris = null
     }
 
     override fun selectAction(item: MenuBottomDialogFragment.MenuItem) {

@@ -427,4 +427,8 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         viewState.mediaUrisLoaded(chatRepository.loadMediaUris())
     }
 
+    fun clearMediaUris(){
+        chatRepository.clearMediaUris()
+    }
+
 }
