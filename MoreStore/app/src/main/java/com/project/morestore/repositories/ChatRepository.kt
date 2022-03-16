@@ -237,4 +237,8 @@ class ChatRepository(val context: Context) {
     }
 
     fun loadMediaUris() = ChatMedia.mediaUris
+
+    fun clearMediaUris(){
+        ChatMedia.mediaUris = null
+    }
 }

@@ -25,14 +25,14 @@ class FeedbackPhotoPresenter(
     private val feedback :String
 ) :MvpPresenter<FeedbackPhotoView>() {
     private val data = ReviewRepository()
-    private var photos = mutableListOf(FeedbackItem.AddPhoto, FeedbackItem.Description)
+    private var photos = mutableListOf(FeedbackItem.AddPhoto(), FeedbackItem.Description())
 
-    fun addPhoto(uris :List<Uri>){
+    fun addPhoto(uris :List<Uri>, isChat: Boolean){
         photos.filterIsInstance<FeedbackItem.Photo>()
             .also {
                 photos = when(it.size){
-                    0 -> (uris.map { uri -> FeedbackItem.Photo(uri)} + listOf(FeedbackItem.AddPhoto)).toMutableList()
-                    in 1..3 -> (it + uris.map { uri -> FeedbackItem.Photo(uri)} + FeedbackItem.AddPhoto).toMutableList()
+                    0 -> (uris.map { uri -> FeedbackItem.Photo(uri)} + listOf(FeedbackItem.AddPhoto(isChat))).toMutableList()
+                    in 1..3 -> (it + uris.map { uri -> FeedbackItem.Photo(uri)} + FeedbackItem.AddPhoto(isChat)).toMutableList()
                     else -> (it + uris.map {uri ->FeedbackItem.Photo(uri)}).toMutableList()
                 }
             }

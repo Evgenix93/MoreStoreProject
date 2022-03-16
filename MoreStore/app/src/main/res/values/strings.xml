@@ -335,5 +335,7 @@
     <string name="pattern_before_years">%d лет назад</string>
     <string name="draft">Черновик</string>
     <string name="drafts">Черновики</string>
+    <string name="addPhotoVideo">Добавить фото/видео</string>
+    <string name="addPhotoVideoInfo">Добавьте до 5 фото/видео</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.net.Uri
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.project.morestore.R
 import com.project.morestore.databinding.ItemPhotoAddBinding
 import com.project.morestore.databinding.ItemPhotoBinding
 import com.project.morestore.databinding.ItemPhotoDescriptionBinding
@@ -57,10 +58,11 @@ class FeedbackPhotosAdapter(
         private val views :ItemPhotoAddBinding
     ) :RecyclerView.ViewHolder(views.root){
         init {
-            views.root.setOnClickListener{ callback(FeedbackItem.AddPhoto) }
+            views.root.setOnClickListener{ callback(FeedbackItem.AddPhoto(false)) }
         }
         fun bind(app :FeedbackItem.AddPhoto){
-            //todo implement
+            if(app.isChat)
+                views.addPhotoVideoTextView.text = views.root.context.getString(R.string.addPhotoVideo)
         }
     }
 
@@ -68,7 +70,8 @@ class FeedbackPhotosAdapter(
         private val views :ItemPhotoDescriptionBinding
     ) :RecyclerView.ViewHolder(views.root){
         fun bind(desc :FeedbackItem.Description){
-            //todo implement
+           if(desc.isChat)
+               views.addPhotosInfoTextView.text = views.root.context.getString(R.string.addPhotoVideoInfo)
         }
     }
 

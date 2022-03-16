@@ -43,7 +43,7 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
     }
     private val photoPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode != Activity.RESULT_OK || it.data == null) return@registerForActivityResult
-        presenter.addPhoto(listOf(it.data!!.data!!))
+        presenter.addPhoto(listOf(it.data!!.data!!), false)
     }
     private val args: FeedbackPhotoFragmentArgs by navArgs()
     private lateinit var filePicker: ActivityResultLauncher<Array<String>>
@@ -57,8 +57,10 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        if(args.isChat)
+            views.toolbarTitleTextView.text = getString(R.string.addPhotoVideo)
         views.photos.adapter = adapter
-        adapter.setItems(listOf(FeedbackItem.AddPhoto, FeedbackItem.Description))
+        adapter.setItems(listOf(FeedbackItem.AddPhoto(args.isChat), FeedbackItem.Description(args.isChat)))
         views.send.setOnClickListener {
             views.progressBar.isVisible = true
             if(args.isChat)
@@ -68,7 +70,8 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
         }
         initFilePicker()
         initActionButton()
-        presenter.addPhoto(ChatMedia.mediaUris.orEmpty())
+        if(args.isChat && ChatMedia.mediaUris.isNullOrEmpty().not())
+        presenter.addPhoto(ChatMedia.mediaUris!!, args.isChat)
     }
 
     //IMPLEMENTATION
@@ -101,7 +104,7 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
 
     private fun initFilePicker(){
         filePicker = registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri ->
-           presenter.addPhoto(listOf(uri))
+           presenter.addPhoto(listOf(uri), true)
         }
     }
 

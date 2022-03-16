@@ -8,6 +8,7 @@
     >
 
     <TextView
+        android:id="@+id/addPhotosInfoTextView"
         android:text="@string/feedback_photos_description"
         android:gravity="center_vertical"
         android:padding="8dp"
