@@ -16,9 +16,9 @@ class FeedbackProduct(
     val newPrice: String?,
     val sale :Float,
     val category: Category?,
-    val property: Array<Property>
+    val property: Array<Property>?
 ){
    // val newPrice get() = price.toFloat()
    // val oldPrice = newPrice / (sale/100)
-    val state :String? get() = property.find{ it.id == 11L }?.value
+    val state :String? get() = property?.find{ it.id == 11L }?.value
 }

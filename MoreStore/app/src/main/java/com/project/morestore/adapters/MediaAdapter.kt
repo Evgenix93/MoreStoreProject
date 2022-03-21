@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -57,7 +58,7 @@ class MediaAdapter(host :Fragment, val photos :Array<String>, val onClick: (Stri
                 .load(photo)
                 .into(binding.photoImageView)
 
-            if(photo.contains("mp4"))
+            if(photo.contains("mp4") || requireContext().contentResolver.getType(photo.toUri())?.contains("mp4") == true)
                 binding.playVideoImageView.isVisible = true
         }
     }

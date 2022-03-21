@@ -1,7 +1,11 @@
 package com.project.morestore.fragments
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -76,9 +80,10 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     private fun initText() {
         if (isEmail) {
-            binding.textView2.text = "В течении 2 минут вы получите письмо с кодом"
-            binding.textView3.text = "подтверждения на почту"
-            binding.phoneEmailTextView.text = args.phoneOrEmail
+
+            val spannableStr = SpannableString("В течении 2 минут вы получите письмо с кодом\nподтверждения на почту ${args.phoneOrEmail}")
+            spannableStr.setSpan(StyleSpan(Typeface.BOLD), 68, spannableStr.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.textView2.text = spannableStr
         } else {
             binding.textView2.text = "В течении 2 минут вы получите смс с кодом"
             binding.textView3.text = "подтверждения на номер"

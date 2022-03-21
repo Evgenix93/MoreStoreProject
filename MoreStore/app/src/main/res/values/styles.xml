@@ -202,4 +202,14 @@
         <item name="searchIcon">@drawable/ic_magnifying_glass</item>
     </style>
 
+    <style name="bold_14">
+        <item name="android:fontFamily">@font/manrope_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFeatureSettings">pnum, lnum</item>
+
+
+    </style>
+
 </resources>

@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.project.morestore.R
@@ -175,7 +176,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                     }
                 }
             addMedia.setOnClickListener {
-                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.GEO)
+                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.MEDIA,
+                    mediaUris.isNullOrEmpty().not()
+                )
                     .show(childFragmentManager, null)
             }
         }
@@ -225,7 +228,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             product.visibility = GONE
             productDivider.visibility = GONE
             addMedia.setOnClickListener {
-                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.MEDIA)
+                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.MEDIA,
+                    mediaUris.isNullOrEmpty().not()
+                )
                     .show(childFragmentManager, null)
             }
         }
@@ -582,6 +587,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         mediaUris = null
     }
 
+    private fun showLoading(loading: Boolean){
+        views.loader.isVisible = loading
+    }
+
     override fun selectAction(item: MenuBottomDialogFragment.MenuItem) {
         //if(!listenGeo) return
         if (item.titleId == R.string.chat_menu_setGeoDeal) adapter.setItems(seller4)
@@ -619,6 +628,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     override fun loading() {
+        showLoading(true)
 
     }
 
@@ -627,6 +637,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     override fun dialogLoaded(dialog: DialogWrapper) {
+        showLoading(false)
         showDialog(dialog)
 
     }
@@ -636,24 +647,29 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     override fun error(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
     override fun currentUserIdLoaded(id: Long) {
+        showLoading(false)
         currentUserId = id
     }
 
     override fun messageSent(message: MessageModel) {
+        showLoading(false)
         Toast.makeText(requireContext(), "Сообщение отправлено", Toast.LENGTH_SHORT).show()
     }
 
     override fun dialogDeleted() {
+        showLoading(false)
         Toast.makeText(requireContext(), "Диалог удален", Toast.LENGTH_SHORT).show()
         findNavController().popBackStack()
     }
 
     override fun photoVideoLoaded() {
+        showLoading(false)
         //  val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
         //getDialog(dialogId)
 
@@ -667,6 +683,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     override fun mediaUrisLoaded(mediaUris: List<Uri>?) {
+        showLoading(false)
         this.mediaUris = mediaUris
     }
 }

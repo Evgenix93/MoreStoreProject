@@ -12,9 +12,9 @@ data class Product(
     val id: Long,
     val name: String,
     val about: String,
-    val phone: String,
+    val phone: String?,
     @Json(name = "phone_show")
-    val phoneShow: String,
+    val phoneShow: String?,
     val status: Int,
     val price: Float,
     @Json(name = "price_new")
