@@ -998,7 +998,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun changeProduct() {
+    private fun changeProduct() {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.changeProductData()
@@ -1089,5 +1089,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
+    fun tokenCheck() {
+        viewState.loaded(authRepository.isTokenEmpty())
+    }
 
 }

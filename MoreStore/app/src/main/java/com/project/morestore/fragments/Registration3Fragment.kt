@@ -4,6 +4,8 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -50,7 +52,12 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     private fun initToolbar() {
         binding.toolbar.titleTextView.text = "Личные данные"
-        binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.backIcon.setOnClickListener {
+            if(args.fromMainFragment)
+                findNavController().navigate(Registration3FragmentDirections.actionRegistration3FragmentToFirstLaunchFragment())
+            else
+                findNavController().popBackStack()
+        }
     }
 
     private fun initFilePickerLauncher() {

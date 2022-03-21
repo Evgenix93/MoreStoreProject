@@ -233,5 +233,13 @@ class MainActivity : AppCompatActivity() {
     fun changeSoftInputMode(mode: Int){
         window.setSoftInputMode(mode)
     }
+
+    override fun onBackPressed() {
+        Log.d("MyDebug", "backstack = ${findNavController(R.id.fragmentContainerView).currentBackStackEntry?.id}")
+        if(findNavController(R.id.fragmentContainerView).previousBackStackEntry?.destination?.id == R.id.mainFragment)
+            findNavController(R.id.fragmentContainerView).navigate(R.id.firstLaunchFragment)
+        else
+           super.onBackPressed()
+    }
 }
 

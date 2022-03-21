@@ -75,6 +75,13 @@
         <argument
             android:name="userId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_registration3Fragment_to_firstLaunchFragment"
+            app:destination="@id/firstLaunchFragment" />
+        <argument
+            android:name="fromMainFragment"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/registration4Fragment"
@@ -470,6 +477,10 @@
         <action
             android:id="@+id/action_cabinetGuestFragment_to_loginDialog"
             app:destination="@id/loginDialog" />
+        <argument
+            android:name="fromCreateProduct"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -506,6 +517,9 @@
         <action
             android:id="@+id/action_createProductStep1Fragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_createProductStep1Fragment_to_cabinetGuestFragment"
+            app:destination="@id/cabinetGuestFragment" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep2Fragment"

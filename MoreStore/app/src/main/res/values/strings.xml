@@ -137,7 +137,6 @@
     <string name="search_everywhere">ИСКАТЬ ВЕЗДЕ</string>
     <string name="cancel">Отмена</string>
     <string name="sign_ruble">₽</string>
-
     <string name="banner_title">Черный снова в моде</string>
     <string name="banner_content">Стильные брендовые вещи,\nкоторые дополнят любой\nгардероб</string>
     <string name="all_category">Все товары</string>
@@ -169,6 +168,7 @@
     <string name="style">Стиль</string>
     <string name="all_styles">Все стили</string>
     <string name="brand">Бренд</string>
+    <string name="create_product">Создать товар</string>
     <string name="all_brands">Все бренды</string>
     <string name="price">Цена</string>
     <string name="condition">Состояние</string>
@@ -236,6 +236,7 @@
     <string name="wait_rating">Ждут оценки</string>
     <string name="blocked">Заблокированные</string>
     <string name="need_login">Для работы с профилем\nнеобходимо авторизоваться</string>
+    <string name="need_login2">Для публикации товара\nнеобходимо зарегистрироваться</string>
     <string name="login_register">Войти или зарегистрироваться</string>
     <string name="for_who_your_product">Для кого ваше\nпредложение</string>
     <string name="choose_category">Выберите категорию</string>
