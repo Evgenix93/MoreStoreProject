@@ -24,6 +24,7 @@ class CreateProductStep1Fragment : MvpAppCompatFragment(R.layout.fragment_create
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tokenCheck()
         initList()
         setClickListeners()
         initToolbar()
@@ -68,8 +69,8 @@ class CreateProductStep1Fragment : MvpAppCompatFragment(R.layout.fragment_create
 
     }
 
-    fun saveProduct(productId: Long) {
-
+    private fun tokenCheck(){
+        presenter.tokenCheck()
     }
 
     private fun clearCreateProductData() {
@@ -78,7 +79,9 @@ class CreateProductStep1Fragment : MvpAppCompatFragment(R.layout.fragment_create
 
 
     override fun loaded(result: Any) {
-
+       val isTokenEmpty = result as Boolean
+        if(isTokenEmpty)
+           findNavController().navigate(CreateProductStep1FragmentDirections.actionCreateProductStep1FragmentToCabinetGuestFragment(true))
     }
 
     override fun loading() {

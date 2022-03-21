@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
 import com.project.morestore.R
@@ -11,11 +12,14 @@ import com.project.morestore.databinding.FragmentCabinetGuestBinding
 
 class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
     private val binding: FragmentCabinetGuestBinding by viewBinding()
+    private val args: CabinetGuestFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setClickListeners()
         showBottomNav()
+        initToolbar()
+        initLoginTextView()
     }
 
 
@@ -28,5 +32,18 @@ class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
 
     private fun showBottomNav(){
         (activity as MainActivity).showBottomNavBar(true)
+    }
+
+    private fun initLoginTextView(){
+      if(args.fromCreateProduct){
+          binding.needLoginTextView.text = getString(R.string.need_login2)
+      }
+    }
+
+    private fun initToolbar(){
+        if(args.fromCreateProduct)
+            binding.toolbar.titleTextView.text = getString(R.string.create_product)
+        else
+            binding.toolbar.titleTextView.text = getString(R.string.cabinet)
     }
 }

@@ -465,7 +465,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
         if(result is User)
             if(result.phone == null)
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegistration3Fragment(phoneOrEmail = result.email.orEmpty(), userId = result.id.toInt()))
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegistration3Fragment(phoneOrEmail = result.email.orEmpty(), userId = result.id.toInt(), fromMainFragment = true))
     }
 
     override fun loading() {
