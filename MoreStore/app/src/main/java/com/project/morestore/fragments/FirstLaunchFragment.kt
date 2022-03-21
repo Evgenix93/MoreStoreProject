@@ -16,6 +16,7 @@ import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.Network
+import com.project.morestore.singletones.Token
 import kotlinx.coroutines.launch
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -44,6 +45,8 @@ class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch),
         }
 
         binding.guestLoginBtn.setOnClickListener{
+            Token.token = ""
+            Token.userId = 0
             findNavController().navigate(FirstLaunchFragmentDirections.actionFirstLaunchFragmentToMainFragment())
         }
     }

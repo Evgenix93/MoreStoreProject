@@ -85,6 +85,8 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
             spannableStr.setSpan(StyleSpan(Typeface.BOLD), 68, spannableStr.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.textView2.text = spannableStr
         } else {
+            binding.textView3.isVisible = true
+            binding.phoneEmailTextView.isVisible = true
             binding.textView2.text = "В течении 2 минут вы получите смс с кодом"
             binding.textView3.text = "подтверждения на номер"
             binding.phoneEmailTextView.text = args.phoneOrEmail

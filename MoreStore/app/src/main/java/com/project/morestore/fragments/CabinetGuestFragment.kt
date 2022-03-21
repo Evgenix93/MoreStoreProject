@@ -38,12 +38,23 @@ class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
       if(args.fromCreateProduct){
           binding.needLoginTextView.text = getString(R.string.need_login2)
       }
+        if(findNavController().previousBackStackEntry?.destination?.id == R.id.productDetailsFragment)
+            binding.needLoginTextView.text = "Для входа в чат\nнеобходимо зарегистрироваться"
     }
 
     private fun initToolbar(){
+        binding.toolbar.backIcon.setOnClickListener {
+            findNavController().navigate(R.id.firstLaunchFragment)
+        }
         if(args.fromCreateProduct)
             binding.toolbar.titleTextView.text = getString(R.string.create_product)
         else
             binding.toolbar.titleTextView.text = getString(R.string.cabinet)
+
+        if(findNavController().previousBackStackEntry?.destination?.id == R.id.productDetailsFragment)
+            binding.toolbar.titleTextView.text = "Чат"
+
+
+
     }
 }

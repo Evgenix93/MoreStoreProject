@@ -30,6 +30,7 @@ import com.project.morestore.databinding.FragmentProductBinding
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import com.project.morestore.singletones.Token
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.MvpAppCompatFragment
@@ -101,6 +102,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         }
 
         binding.chatBtn.setOnClickListener {
+            if(Token.token.isNotEmpty())
             findNavController().navigate(
                 R.id.action_productDetailsFragment_to_chatFragment,
                 bundleOf(
@@ -109,6 +111,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                     Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
                 )
             )
+            else
+                findNavController().navigate(R.id.cabinetGuestFragment)
         }
     }
 
