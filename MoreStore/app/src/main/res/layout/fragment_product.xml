@@ -286,6 +286,7 @@
                     android:layout_gravity="end"/>
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/openChatsButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="66dp"

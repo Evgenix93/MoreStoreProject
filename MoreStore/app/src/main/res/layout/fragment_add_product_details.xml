@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -14,7 +14,10 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/placeProductButton"
+        android:layout_marginBottom="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -146,7 +149,7 @@
                 android:layout_marginTop="34dp"
                 android:layout_marginBottom="4dp"
                 android:background="@color/gray3"
-                app:layout_constraintBottom_toTopOf="@+id/placeProductButton"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/allowBuyersBidCheckBox" />
 
             <ImageView
@@ -231,12 +234,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
                 android:text="@string/edit_cards_info"
                 android:textAppearance="@style/regular_14"
                 android:textColor="@color/gray2"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addCardButton" />
+                app:layout_constraintTop_toBottomOf="@id/addCardButton"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/deleteButton"
@@ -272,26 +277,22 @@
                 android:layout_marginTop="28dp"
                 app:layout_constraintTop_toBottomOf="@id/editCardsInfoTextView" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/placeProductButton"
-                style="@style/buttonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/place_product"
-                android:visibility="visible"
-                app:backgroundTint="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/archiveButton" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-</LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/placeProductButton"
+        style="@style/buttonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/place_product"
+        android:visibility="visible"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
     <ProgressBar
         android:id="@+id/loader"
         android:layout_width="wrap_content"

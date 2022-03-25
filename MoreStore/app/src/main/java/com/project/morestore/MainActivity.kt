@@ -238,6 +238,8 @@ class MainActivity : AppCompatActivity() {
         Log.d("MyDebug", "backstack = ${findNavController(R.id.fragmentContainerView).currentBackStackEntry?.id}")
         if(findNavController(R.id.fragmentContainerView).previousBackStackEntry?.destination?.id == R.id.mainFragment)
             findNavController(R.id.fragmentContainerView).navigate(R.id.firstLaunchFragment)
+        else if(findNavController(R.id.fragmentContainerView).previousBackStackEntry?.destination?.id == R.id.createProductStep6Fragment)
+            findNavController(R.id.fragmentContainerView).navigate(R.id.catalogFragment)
         else
            super.onBackPressed()
     }
