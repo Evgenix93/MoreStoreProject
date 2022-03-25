@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
@@ -18,8 +19,8 @@ import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class SellerProductsFragment: Fragment(R.layout.page_products) {
-   // private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+class SellerProductsFragment : Fragment(R.layout.page_products) {
+    // private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private val binding: PageProductsBinding by viewBinding()
     private var productsAdapter: ProductAdapter by autoCleared()
 
@@ -29,16 +30,23 @@ class SellerProductsFragment: Fragment(R.layout.page_products) {
 
     }
 
-    private fun initRecyclerView(){
-        productsAdapter = ProductAdapter(null){}
+    private fun initRecyclerView() {
+        productsAdapter = ProductAdapter(null) { product ->
+            findNavController().navigate(
+                SellerProfileFragmentDirections.actionSellerProfileFragmentToProductDetailsFragment(
+                    product = product,
+                    isSeller = false,
+                    productId = null
+                )
+            )
+        }
         binding.productsRecyclerView.adapter = productsAdapter
         binding.productsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         val products = arguments?.getParcelableArray(SellerProfileAdapter.PRODUCTS)
         Log.d("Debug", "products = ${products?.toList()}")
-        if(products != null)
+        if (products != null)
             productsAdapter.updateList(products.toList() as List<Product>)
     }
-
 
 
 }

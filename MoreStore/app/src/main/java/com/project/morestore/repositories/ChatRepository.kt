@@ -108,11 +108,11 @@ class ChatRepository(val context: Context) {
                     } else {
                         Response.error(
                             400,
-                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
                         )
                     }
                 } catch (e: Throwable) {
-                    Response.error(400, "ошибка".toResponseBody(null))
+                    Response.error(400, e.message.toString().toResponseBody(null))
                 }
             }
         }

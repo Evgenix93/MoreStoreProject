@@ -503,6 +503,9 @@
         <argument
             android:name="toReviews"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_sellerProfileFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep1Fragment"

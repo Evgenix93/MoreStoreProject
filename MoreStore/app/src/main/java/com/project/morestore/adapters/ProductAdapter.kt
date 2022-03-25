@@ -35,7 +35,8 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             Log.d("mylog", "bind")
             val crossedStr = if(product.price == 0f) "" else "${product.price} ₽".toSpannable().apply { setSpan(StrikethroughSpan(), 0, length ,0) }
             binding.productOldPriceTextView.text = crossedStr
-            binding.likesCountTextView.text = product.statistic?.wishlist?.total.toString()
+            val likesCount = product.statistic?.wishlist?.total ?: 0
+            binding.likesCountTextView.text = likesCount.toString()
             binding.productNameTextView.text = product.name
             binding.productPriceTextView.text = if(product.priceNew == null) "" else "${product.priceNew} ₽"
             binding.productBrandTextView.text = if(product.brand == null)
