@@ -24,6 +24,7 @@ import com.project.morestore.models.DialogWrapper
 import com.project.morestore.models.MessageModel
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
+import com.project.morestore.singletones.Token
 import com.project.morestore.util.MiddleDivider
 import com.project.morestore.util.setSelectListener
 import moxy.ktx.moxyPresenter
@@ -77,6 +78,7 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkToken()
         with(views) {
             list.adapter = adapter
             list.addItemDecoration(MiddleDivider(requireContext(), R.drawable.div_horline_gray_1))
@@ -116,6 +118,11 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     private fun createTypeBundle(value: KClass<*>): Pair<String, String> {
         return Chat::class.java.simpleName to value.java.simpleName
+    }
+
+    private fun checkToken(){
+        if(Token.token.isEmpty())
+            findNavController().navigate(R.id.cabinetGuestFragment)
     }
 
     //todo remove stubs

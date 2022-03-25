@@ -142,7 +142,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private fun showSell(dialog: DialogWrapper) {
         currentDialogId = dialog.dialog.id
         user = dialog.dialog.user
-        adapter.avatarUri = dialog.dialog.user.avatar?.photo.orEmpty()
+        adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
             toolbar.title.text = dialog.dialog.user.name
             toolbar.subtitle.text = "В сети 2 ч. назад"
@@ -283,7 +283,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private fun showDeal(dialog: DialogWrapper) {
         currentDialogId = dialog.dialog.id
         user = dialog.dialog.user
-        adapter.avatarUri = dialog.dialog.user.avatar?.photo.orEmpty()
+        adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
             toolbar.title.text = dialog.dialog.user.name
             toolbar.subtitle.text = "В сети 2 ч. назад"

@@ -223,7 +223,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.productUpLoadDateTextView.text =
             "${(System.currentTimeMillis() / 1000 - product.date) / 86400} дня назад"
         Glide.with(this)
-            .load(product.user?.avatar?.photo)
+            .load(product.user?.avatar?.photo.toString())
             .into(binding.avatarImageView)
 
         binding.userClickableView.setOnClickListener {

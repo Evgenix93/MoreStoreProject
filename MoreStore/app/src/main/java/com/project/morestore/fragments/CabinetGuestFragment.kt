@@ -40,6 +40,10 @@ class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
       }
         if(findNavController().previousBackStackEntry?.destination?.id == R.id.productDetailsFragment)
             binding.needLoginTextView.text = "Для входа в чат\nнеобходимо зарегистрироваться"
+
+        if(findNavController().previousBackStackEntry?.destination?.id == R.id.messagesFragment)
+            binding.needLoginTextView.text = "Для входа в сообщения\nнеобходимо зарегистрироваться"
+
     }
 
     private fun initToolbar(){
@@ -53,6 +57,12 @@ class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
 
         if(findNavController().previousBackStackEntry?.destination?.id == R.id.productDetailsFragment)
             binding.toolbar.titleTextView.text = "Чат"
+
+        if(findNavController().previousBackStackEntry?.destination?.id == R.id.messagesFragment)
+            binding.toolbar.titleTextView.text = "Сообщения"
+
+
+
 
 
 

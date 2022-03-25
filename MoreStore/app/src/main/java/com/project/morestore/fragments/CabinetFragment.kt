@@ -97,7 +97,7 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         else "зарегистрирован(а) $dayDiff дня назад"
 
         Glide.with(this)
-            .load(user.avatar?.photo)
+            .load(user.avatar?.photo.toString())
             .into(binding.avatarImageView)
 
 

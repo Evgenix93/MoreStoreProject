@@ -9,7 +9,7 @@ data class RegistrationData(
     val email: String?,
     val type: Int,
     val user: Int?,
-    val code: Int?,
+    val code: String?,
     val name: String?,
     val surname: String?
 )

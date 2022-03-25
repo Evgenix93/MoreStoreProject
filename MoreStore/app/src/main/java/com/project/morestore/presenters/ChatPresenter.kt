@@ -272,7 +272,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                         it.dialog.id,
                         it.dialog.user.name.orEmpty(),
                         it.dialog.lastMessage?.text.orEmpty(),
-                        it.dialog.user.avatar?.photo.orEmpty(),
+                        it.dialog.user.avatar?.photo.toString(),
                         it.product?.priceNew ?: 0f
 
 

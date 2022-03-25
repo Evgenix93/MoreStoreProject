@@ -44,14 +44,14 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
         binding.confirmBtn.setOnClickListener {
             if (!args.isLogin) {
                 presenter.register(
-                    code = binding.codeEditText.text.toString().toIntOrNull(),
+                    code = binding.codeEditText.text.toString(),
                     user = args.userId,
                     step = 2,
                     type = if (isEmail) 2 else 1
                 )
             } else {
                 presenter.login(
-                    code = binding.codeEditText.text.toString().toIntOrNull(),
+                    code = binding.codeEditText.text.toString(),
                     user = args.userId,
                     step = 2,
                     type = if (isEmail) 2 else 1
@@ -80,10 +80,11 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     private fun initText() {
         if (isEmail) {
+            binding.textView2.text = "В течении 2 минут вы получите письмо с кодом"
 
-            val spannableStr = SpannableString("В течении 2 минут вы получите письмо с кодом\nподтверждения на почту ${args.phoneOrEmail}")
-            spannableStr.setSpan(StyleSpan(Typeface.BOLD), 68, spannableStr.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            binding.textView2.text = spannableStr
+            val spannableStr = SpannableString("подтверждения на почту ${args.phoneOrEmail}")
+            spannableStr.setSpan(StyleSpan(Typeface.BOLD), 23, spannableStr.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            binding.textView3.text = spannableStr
         } else {
             binding.textView3.isVisible = true
             binding.phoneEmailTextView.isVisible = true

@@ -32,7 +32,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         step: Int,
         type: Int,
         user: Int? = null,
-        code: Int? = null,
+        code: String? = null,
         name: String? = null,
         surname: String? = null
     ) {
@@ -122,7 +122,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         step: Int,
         type: Int,
         user: Int? = null,
-        code: Int? = null
+        code: String? = null
     ) {
         presenterScope.launch {
             if (phone != null && !phone.trim().isPhoneValid()) {
