@@ -16,6 +16,7 @@ import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -62,13 +63,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         if(args.product != null)
             getCurrentUser()
 
-
-
     }
 
     private fun brandClick(brand: ProductBrand) {
         binding.chosenBrandTextView.setOnClickListener { presenter.updateBrand(brand) }
-
     }
 
     private fun hideBottomNav() {
@@ -113,6 +111,16 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             )
             else
                 findNavController().navigate(R.id.cabinetGuestFragment)
+        }
+
+        binding.openChatsButton.setOnClickListener{
+            findNavController().navigate(R.id.chatLotsFragment,
+            Bundle().apply {
+                putLong(LotChatsFragment.PRODUCT_ID_KEY, product!!.id)
+                putString(LotChatsFragment.PRODUCT_NAME, product!!.name)
+                putFloat(LotChatsFragment.PRODUCT_PRICE_KEY, product!!.price)
+                putString(LotChatsFragment.PRODUCT_IMAGE_KEY, product!!.photo[0].photo)
+            })
         }
     }
 
@@ -244,7 +252,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.sellerPhoneTextView.addTextChangedListener(listener)
         binding.sellerPhoneTextView.setText(product.phoneShow)
         if (product.user?.id == userId)
-            setSellerProduct(dialogWrappers)
+            setSellerProduct(dialogWrappers, product)
     }
 
 
@@ -270,10 +278,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.toolbar.titleTextView.text = args.product?.name
         binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener {
-            if(args.product != null)
-            findNavController().popBackStack()
-            else
+            if(findNavController().previousBackStackEntry?.destination?.id == R.id.createProductStep6Fragment)
                 findNavController().navigate(R.id.catalogFragment)
+            else
+                findNavController().popBackStack()
         }
     }
 
@@ -313,7 +321,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.productOldPriceTextView.text = crossedStr
     }
 
-    private fun setSellerProduct(dialogWrappers: List<DialogWrapper>?) {
+    private fun setSellerProduct(dialogWrappers: List<DialogWrapper>?, product: Product) {
         binding.chatBtn.isVisible = false
         binding.toolbar.actionIcon.setOnClickListener {
             findNavController().navigate(
@@ -334,12 +342,12 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.textView17.isVisible = false
         binding.productList.isVisible = false
          if(dialogWrappers != null) {
-             if (dialogWrappers.none { it.product?.id == args.product?.id })
+             if (dialogWrappers.none { it.product?.id == product.id })
                  binding.promoteInfoCard.isVisible = true
              else {
                  binding.buyersCard.isVisible = true
                  binding.buyersCount.text =
-                     dialogWrappers.filter { it.product?.id == args.product?.id }.size.toString()
+                     dialogWrappers.filter { it.product?.id == product.id }.size.toString()
              }
          }
     }
