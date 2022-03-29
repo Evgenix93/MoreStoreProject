@@ -41,7 +41,7 @@
     <color name="yellow">#FBFF2D</color>
     <color name="orange">#FFA53D</color>
     <color name="orange2">#FF8413</color>
-    <color name="transparent">#00FFFFFF</color>
+    <color name="transparent">#00000000</color>
     <color name="red">#F32C36</color>
     <color name="blue">#D1EBF3</color>
     <color name="purple">#DFDDE6</color>
@@ -62,4 +62,6 @@
     <color name="purple2">#83107F</color>
     <color name="purple3">#FF1280</color>
     <color name="yellow3">#FFD648</color>
+    <color name="pink2">#FFEEEE</color>
+    <color name="green11">#EEFFEE</color>
 </resources>

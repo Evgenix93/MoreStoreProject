@@ -338,5 +338,9 @@
     <string name="drafts">Черновики</string>
     <string name="addPhotoVideo">Добавить фото/видео</string>
     <string name="addPhotoVideoInfo">Добавьте до 5 фото/видео</string>
+    <string name="promote_info">С услугами продвижения пользователи будут видеть ваше объявление в 10 раз чаще предложений конкурентов</string>
+    <string name="for1_day">На 1 день</string>
+    <string name="for7_days">На 7 дней</string>
+    <string name="raise_product">Поднять объявление</string>
 
 </resources>

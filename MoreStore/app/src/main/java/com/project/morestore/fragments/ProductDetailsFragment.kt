@@ -122,6 +122,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 putString(LotChatsFragment.PRODUCT_IMAGE_KEY, product!!.photo[0].photo)
             })
         }
+
+        binding.raiseProductButton.setOnClickListener{
+            findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToRaiseProductFragment())
+        }
     }
 
     private fun getProductWishList() {
