@@ -54,7 +54,11 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/drawable/selected_dot2.xml" value="0.5565656565656566" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/drawable/toast_background.xml" value="0.47094017094017093" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/activity_main.xml" value="0.43566021867115223" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/bottom_menu_add_card.xml" value="0.4390625" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/bottom_menu_button.xml" value="0.4390625" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/bottom_menu_title.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/bottom_nav_bar.xml" value="0.5421875" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/bottomdialog_menu.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/chat_item_companion_media.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/chat_item_message_green.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/chat_item_mymedia.xml" value="0.5421875" />
@@ -123,10 +127,12 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_sizes_shoes.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_social_login.xml" value="0.2597305389221557" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_splash_screen.xml" value="0.4003623188405797" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_success_promote.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_banner.xml" value="0.45657894736842103" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_bottommenu.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_brand.xml" value="0.5" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_brand_create_product.xml" value="0.5421875" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_card_bottom_menu.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_category.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_material_line.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_matirial_line.xml" value="0.5421875" />
@@ -152,6 +158,7 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/toolbar_create_product.xml" value="0.5416666666666666" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/toolbar_filter.xml" value="0.45657894736842103" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/toolbar_main.xml" value="0.67" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/window_card_add_error.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/window_create_product.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/window_exit_create_product.xml" value="0.5416666666666666" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/window_login.xml" value="0.67" />

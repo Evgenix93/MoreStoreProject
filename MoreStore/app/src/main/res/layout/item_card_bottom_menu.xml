@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="58dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/cardTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_gravity="center_vertical"
+        android:fontFamily="@font/manrope_regular"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="• 1687"
+        android:drawableStart="@drawable/ic_visa"
+        android:drawablePadding="8dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@color/gray3"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"/>
+
+    <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/radioBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginEnd="5dp"
+        android:layout_gravity="end|center_vertical"
+        android:button="@drawable/radiobutton"
+        android:minWidth="30dp"
+        android:minHeight="30dp"
+        app:useMaterialThemeColors="false"
+         />
+
+
+
+</FrameLayout>

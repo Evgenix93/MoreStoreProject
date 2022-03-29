@@ -3,6 +3,7 @@ package com.project.morestore.dialogs
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -13,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.radiobutton.MaterialRadioButton
 import com.project.morestore.R
 import com.project.morestore.databinding.BottomdialogMenuBinding
 import com.project.morestore.fragments.ChatFragment
@@ -26,7 +29,8 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
         arguments = bundleOf("type" to type.ordinal, "media" to isMediaLoaded)
     }
     private lateinit var views :BottomdialogMenuBinding
-    enum class Type{ MEDIA, GEO, PROFILE}
+    enum class Type{ MEDIA, GEO, PROFILE, PAYMENT}
+    private var cardItems = mutableListOf<MenuItemCard>()
 
     override fun getTheme() = R.style.App_Dialog_Transparent
 
@@ -44,6 +48,7 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
             Type.MEDIA -> inflateItems(media)
             Type.GEO -> inflateItems(geoMedia)
             Type.PROFILE -> inflateItems(profile)
+            Type.PAYMENT -> inflateCardItems(payment)
         }
         if(type == Type.PROFILE){
             Glide.with(requireContext())
@@ -83,6 +88,48 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
         }
     }
 
+    private fun inflateCardItems(items: List<MenuItemCard>){
+        views.root.removeAllViews()
+        val title = layoutInflater.inflate(R.layout.bottom_menu_title, views.root, false)
+        val addCardView = layoutInflater.inflate(R.layout.bottom_menu_add_card, views.root, false).apply {
+            setOnClickListener {
+                (parentFragment as AddCardCallback).onAddCard()
+
+            }
+        }
+        val payBtnItem = layoutInflater.inflate(R.layout.bottom_menu_button, views.root, false)
+        views.root.addView(title)
+        cardItems = items.toMutableList()
+        items.forEach { menuItem ->
+            val item = (layoutInflater.inflate(R.layout.item_card_bottom_menu, views.root, false) as FrameLayout )
+                .apply {
+
+                    val cardTextView = findViewById<TextView>(R.id.cardTextView)
+                    val radioBtn = findViewById<MaterialRadioButton>(R.id.radioBtn)
+                    cardTextView.text = menuItem.cardNumber
+                    cardTextView.setStartDrawable(menuItem.drawable)
+                    radioBtn.isChecked = menuItem.isChecked
+                    radioBtn.setOnClickListener {
+                        cardItems.forEach { it.isChecked = false }
+                        val card = cardItems.find { cardItem -> cardItem == menuItem }
+                        card?.isChecked = true
+                        inflateCardItems(cardItems)
+                    }
+                    radioBtn.isUseMaterialThemeColors = false
+                }
+            views.root.addView(item)
+        }
+        views.root.addView(addCardView)
+        views.root.addView(payBtnItem.apply {
+            setOnClickListener { (parentFragment as PayCallback).onPayPressed(cardItems.find { it.isChecked }!!) }
+        })
+
+
+
+
+
+    }
+
     //todo delete stubs
     private val media :List<MenuItem> by lazy {
         listOf(MenuItem(drb(R.drawable.ic_camera), R.string.chat_menu_addMedia, arguments?.getBoolean("media"), drb(R.drawable.ic_ellipse)))
@@ -102,11 +149,24 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
         MenuItem(drb(R.drawable.ic_trash), R.string.chat_menu_delete)
     )}
 
+    private val payment: List<MenuItemCard> by lazy { listOf(
+        MenuItemCard(drb(R.drawable.ic_google_pay), "Google Pay", true),
+        MenuItemCard(drb(R.drawable.ic_visa), "• 1687")
+    ) }
+
     private fun drb(@DrawableRes drwbId :Int) = ContextCompat.getDrawable(requireContext(), drwbId)!!
 
     inner class MenuItem(val drawable :Drawable, @StringRes val titleId :Int,  val isMediaLoaded: Boolean? = null, val greenCircle: Drawable? = null)
+    inner class MenuItemCard(val drawable: Drawable, val cardNumber: String, var isChecked: Boolean = false)
 
     interface Callback{
         fun selectAction(item :MenuItem)
+    }
+    interface PayCallback {
+        fun onPayPressed(item: MenuItemCard)
+    }
+
+    interface AddCardCallback{
+        fun onAddCard()
     }
 }

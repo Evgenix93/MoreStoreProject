@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="58dp">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:fontFamily="@font/manrope_bold"
+    android:textSize="16sp"
+    android:textColor="@color/black"
+    android:text="Добавить карту"
+    android:drawableStart="@drawable/ic_plus"
+    android:drawableTint="@color/black"
+    android:drawablePadding="12dp">
+
+</TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@color/gray3"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"/>
+
+
+</FrameLayout>
