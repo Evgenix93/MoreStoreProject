@@ -372,6 +372,9 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_raiseProductFragment"
+            app:destination="@id/raiseProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/changeRegionFragment"
@@ -918,5 +921,9 @@
             android:id="@+id/action_productDraftFragment_to_createProductStep6Fragment"
             app:destination="@id/createProductStep6Fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/raiseProductFragment"
+        android:name="com.project.morestore.fragments.RaiseProductFragment"
+        android:label="RaiseProductFragment" />
 
 </navigation>
