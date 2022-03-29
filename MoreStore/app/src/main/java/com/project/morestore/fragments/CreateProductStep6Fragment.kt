@@ -90,9 +90,9 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                     }
                 }
                 4 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductDescriptionFragment())
-                5 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
-                6 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
-                7 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductRegionsFragment())
+                5 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductRegionsFragment())
+                6 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
+                7 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
             }
 
         }
@@ -240,14 +240,14 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     private fun initCreateProductButton() {
         val options = optionsAdapter.getList().toMutableList()
-        if (options.take(5).all { it.isChecked } && options[7].isChecked) {
+        if (options.take(6).all { it.isChecked }) {
             binding.addPhotoInfoTextView.text = "Отлично! Всё заполнено"
-            binding.placeProductButton.isEnabled = true
+            binding.placeProductButton.isClickable = true
             binding.placeProductButton.backgroundTintList =
                 ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
         } else {
             binding.addPhotoInfoTextView.text = "Добавьте фото и описание"
-            binding.placeProductButton.isEnabled = false
+            binding.placeProductButton.isClickable = false
             binding.placeProductButton.backgroundTintList =
                 ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
         }
