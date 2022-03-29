@@ -23,6 +23,7 @@ import com.project.morestore.util.createRect
 import com.project.morestore.util.dp
 import com.project.morestore.util.setEndDrawable
 import com.project.morestore.util.setStartDrawable
+import com.tbuonomo.viewpagerdotsindicator.setPaddingVertical
 
 class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
     constructor(type :Type, isMediaLoaded: Boolean? = null): this(){
@@ -90,10 +91,13 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
 
     private fun inflateCardItems(items: List<MenuItemCard>){
         views.root.removeAllViews()
+        views.root.setPaddingVertical(0)
+        views.root.dividerDrawable = null
         val title = layoutInflater.inflate(R.layout.bottom_menu_title, views.root, false)
         val addCardView = layoutInflater.inflate(R.layout.bottom_menu_add_card, views.root, false).apply {
             setOnClickListener {
                 (parentFragment as AddCardCallback).onAddCard()
+                dismiss()
 
             }
         }
@@ -121,7 +125,8 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
         }
         views.root.addView(addCardView)
         views.root.addView(payBtnItem.apply {
-            setOnClickListener { (parentFragment as PayCallback).onPayPressed(cardItems.find { it.isChecked }!!) }
+            setOnClickListener { (parentFragment as PayCallback).onPayPressed(cardItems.find { it.isChecked }!!)
+            dismiss()}
         })
 
 

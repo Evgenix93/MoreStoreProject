@@ -924,6 +924,17 @@
     <fragment
         android:id="@+id/raiseProductFragment"
         android:name="com.project.morestore.fragments.RaiseProductFragment"
-        android:label="RaiseProductFragment" />
+        android:label="RaiseProductFragment" >
+        <action
+            android:id="@+id/action_raiseProductFragment_to_addCardFragment"
+            app:destination="@id/addCardFragment" />
+        <action
+            android:id="@+id/action_raiseProductFragment_to_successPromoteFragment"
+            app:destination="@id/successPromoteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/successPromoteFragment"
+        android:name="com.project.morestore.fragments.SuccessPromoteFragment"
+        android:label="SuccessPromoteFragment" />
 
 </navigation>

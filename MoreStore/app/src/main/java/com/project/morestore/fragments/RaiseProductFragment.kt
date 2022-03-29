@@ -11,9 +11,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.project.morestore.R
 import com.project.morestore.adapters.PriceViewPagerAdapter
 import com.project.morestore.databinding.FragmentRaiseProductBinding
+import com.project.morestore.dialogs.MenuBottomDialogFragment
 import com.project.morestore.util.autoCleared
 
-class RaiseProductFragment: Fragment(R.layout.fragment_raise_product) {
+class RaiseProductFragment: Fragment(R.layout.fragment_raise_product), MenuBottomDialogFragment.AddCardCallback, MenuBottomDialogFragment.PayCallback {
     private val binding: FragmentRaiseProductBinding by viewBinding()
     private var pricesViewPagerAdapter: PriceViewPagerAdapter by autoCleared()
 
@@ -21,6 +22,7 @@ class RaiseProductFragment: Fragment(R.layout.fragment_raise_product) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initPricesViewPager()
+        setClickListeners()
     }
 
     private fun initPricesViewPager(){
@@ -57,6 +59,23 @@ class RaiseProductFragment: Fragment(R.layout.fragment_raise_product) {
         binding.toolbar.backIcon.setOnClickListener{
             findNavController().popBackStack()
         }
+    }
+
+    private fun setClickListeners(){
+        binding.raiseProductButton.setOnClickListener {
+            MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PAYMENT).show(childFragmentManager, null)
+        }
+    }
+
+    override fun onPayPressed(item: MenuBottomDialogFragment.MenuItemCard) {
+        findNavController().navigate(RaiseProductFragmentDirections.actionRaiseProductFragmentToSuccessPromoteFragment())
+
+
+    }
+
+    override fun onAddCard() {
+        findNavController().navigate(RaiseProductFragmentDirections.actionRaiseProductFragmentToAddCardFragment())
+
     }
 
 }

@@ -7,23 +7,15 @@
     android:background="@color/orange">
 
     <View
-        android:id="@+id/gradient1"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@drawable/onboarding6_gradient1"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/backgroundView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/gradient2"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@drawable/onboarding1_gradient"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/raise_product_background2"/>
+
 
 
 
