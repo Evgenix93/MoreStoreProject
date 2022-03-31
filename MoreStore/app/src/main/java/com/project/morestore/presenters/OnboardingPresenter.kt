@@ -79,6 +79,18 @@ class OnboardingPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
         getProperties(6)
     }
 
+    fun getTopSizesMen(){
+        getProperties(1)
+    }
+
+    fun getBottomSizesMen(){
+        getProperties(2)
+    }
+
+    fun getShoosSizesMen(){
+        getProperties(3)
+    }
+
     fun saveSizes(topSizes: List<Size>, bottomSizes: List<Size>, shoesSizes: List<Size>){
         presenterScope.launch {
             viewState.loading()

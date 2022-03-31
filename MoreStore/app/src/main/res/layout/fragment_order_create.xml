@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray3"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/productWindow"
+        android:layout_width="match_parent"
+        android:layout_height="134dp"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="12dp"
+        android:background="@color/white"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <ImageView
+            android:id="@+id/sellerAvatarImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/avatar"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/sellerNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/manrope_semibold"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:text="Елена Б."/>
+
+        <ImageView
+            android:id="@+id/productImageView"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="46dp"
+            android:src="@drawable/item_product_photo"/>
+
+        <TextView
+            android:id="@+id/productNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="46dp"
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:text="Вечернее платье"/>
+
+        <TextView
+            android:id="@+id/productConditionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="71dp"
+            android:fontFamily="@font/manrope_regular"
+            android:textSize="12sp"
+            android:textColor="@color/gray2"
+            android:text="Как новое"/>
+
+        <TextView
+            android:id="@+id/priceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="94dp"
+            android:fontFamily="@font/manrope_regular"
+            android:textSize="12sp"
+            android:textColor="@color/gray2"
+            android:text="Цена"/>
+
+        <TextView
+            android:id="@+id/cancelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/red"
+            android:text="Отменить сделку"/>
+
+        <TextView
+            android:id="@+id/sizeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="71dp"
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="12sp"
+            android:textColor="@color/gray2"
+            android:text="RU 48 L"/>
+
+        <TextView
+            android:id="@+id/oldPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="63dp"
+            android:layout_marginTop="96dp"
+            android:fontFamily="@font/manrope_regular"
+            android:textSize="12sp"
+            android:textColor="@color/gray2"
+            android:text="5 600 ₽ "/>
+
+        <TextView
+            android:id="@+id/newPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="94dp"
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:text="500 ₽"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/chooseReceiveMethodTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/productWindow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAppearance="@style/regular_14"
+        android:textColor="@color/black"
+        android:text="Выберите удобный способ получения товара. "/>
+
+    <TextView
+        android:id="@+id/chooseInfoTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toBottomOf="@id/chooseReceiveMethodTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/manrope_regular"
+        android:textSize="12sp"
+        android:textColor="@color/gray14"
+        android:text="Если не выбрать способ получения товара в течении\n48 часов после начала сделки, то сделка будет отменена\nавтоматически."/>
+    
+    
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/dealPlaceWindow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/chooseInfoTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="12dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/dealPlaceTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"
+            android:text="Место сделки"/>
+
+        <RadioGroup
+            android:id="@+id/radioButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="24dp">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/onSellerChoiceRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:checked="true"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black"
+                android:text="По желанию продавца"
+                android:button="@drawable/radiobutton"
+                app:useMaterialThemeColors="false"
+                android:paddingStart="12dp"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/userVariantRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black"
+                android:text="Предложить свой вариант"
+                android:button="@drawable/radiobutton"
+                app:useMaterialThemeColors="false"
+                android:paddingStart="12dp"/>
+
+
+        </RadioGroup>
+
+        <ImageView
+            android:id="@+id/placeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:src="@drawable/ic_mappin_green"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="130dp"/>
+
+        <TextView
+            android:id="@+id/chooseOnMapTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="130dp"
+            android:text="Выбрать на карте"
+            android:textAppearance="@style/bold_16"
+            android:textColor="@color/green"/>
+
+        <TextView
+            android:id="@+id/whenReceiveTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="170dp"
+            android:text="Когда забрать заказ"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"/>
+
+        <LinearLayout
+            android:id="@+id/pickers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="208dp"
+            android:layout_marginBottom="24dp">
+        
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/dateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:focusable="false"
+            android:background="@drawable/ic_field"
+            android:layout_marginEnd="4dp"
+            android:hint="Дата"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray2"
+            android:layout_weight="0.5"
+            android:drawableEnd="@drawable/ic_arrow_dropdown"
+            android:paddingEnd="9dp"
+            android:paddingStart="12dp"/>
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/timeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:focusable="false"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray2"
+                android:drawableEnd="@drawable/ic_arrow_dropdown"
+                android:paddingEnd="9dp"
+                android:paddingStart="12dp"
+                android:hint="Время"
+                android:background="@drawable/ic_field"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.5"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

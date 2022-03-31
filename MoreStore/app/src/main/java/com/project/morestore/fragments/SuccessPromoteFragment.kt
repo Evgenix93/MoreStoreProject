@@ -14,6 +14,7 @@ class SuccessPromoteFragment: Fragment(R.layout.fragment_success_promote) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
+        setClickListeners()
     }
 
 
@@ -23,6 +24,12 @@ class SuccessPromoteFragment: Fragment(R.layout.fragment_success_promote) {
             backIcon.setOnClickListener {
                 findNavController().popBackStack()
             }
+        }
+    }
+
+    private fun setClickListeners(){
+        binding.finishBtn.setOnClickListener {
+            findNavController().popBackStack(R.id.productDetailsFragment, false)
         }
     }
 }

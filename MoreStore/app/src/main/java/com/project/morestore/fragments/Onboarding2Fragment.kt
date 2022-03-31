@@ -65,11 +65,7 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     private fun setClickListeners(){
         binding.continueBtn.setOnClickListener {
-           // presenter.saveSizes(
-             //   topSizeCardAdapter.getChosenSizes(),
-               // bottomSizeCardAdapter.getChosenSizes(),
-               // shoesSizeCardAdapter.getChosenSizes()
-           // )
+
 
          presenter.saveSizes(
              topSizeCardAdapter.getSizes(),
@@ -86,10 +82,15 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
     }
 
     private fun getAllSizes(){
-        //presenter.getAllSizes()
-        presenter.getTopSizes()
-        presenter.getBottomSizes()
-        presenter.getShoosSizes()
+        if(args.isMale){
+            presenter.getTopSizesMen()
+            presenter.getBottomSizesMen()
+            presenter.getShoosSizesMen()
+        }else {
+            presenter.getTopSizes()
+            presenter.getBottomSizes()
+            presenter.getShoosSizes()
+        }
     }
 
     override fun loading() {
@@ -99,13 +100,14 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     override fun loaded(result: List<Any>) {
         showLoading(false)
-        if((result[0] as Property).idCategory?.toInt() == 4)
+        val categoryId = (result[0] as Property).idCategory?.toInt()
+        if(categoryId == 4 || categoryId == 1)
         topSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
 
-        if((result[0] as Property).idCategory?.toInt() == 5)
+        if(categoryId == 5 || categoryId == 2)
             bottomSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
 
-        if((result[0] as Property).idCategory?.toInt() == 6)
+        if(categoryId == 6 || categoryId == 3)
             shoesSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
 
 
