@@ -23,7 +23,6 @@ class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style)
         initToolBar()
         loadFilterStyles()
         setClickListeners()
-
     }
 
     private fun setClickListeners(){
@@ -80,7 +79,6 @@ class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style)
 
     override fun loaded(result: Any) {
         bind(result as List<Property>)
-
     }
 
     override fun successNewCode() {

@@ -1,5 +1,6 @@
 package com.project.morestore
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.Display
 import android.view.InputDevice
 import android.view.Window
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
@@ -242,6 +244,11 @@ class MainActivity : AppCompatActivity() {
             findNavController(R.id.fragmentContainerView).navigate(R.id.catalogFragment)
         else
            super.onBackPressed()
+    }
+
+    fun hideKeyboard() {
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
     }
 }
 

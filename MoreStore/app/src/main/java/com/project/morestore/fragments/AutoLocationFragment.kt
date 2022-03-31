@@ -41,9 +41,6 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
         getPermissions()
     }
 
-    private fun setClickListeners(){
-
-    }
 
     private fun initToolbar(){
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }

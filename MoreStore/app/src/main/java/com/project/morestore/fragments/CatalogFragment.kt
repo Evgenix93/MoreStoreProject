@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
 import com.project.morestore.R
@@ -93,13 +95,14 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         }
 
         binding.searchBtn.setOnClickListener {
-            var queryStr  = binding.toolbarMain.searchEditText.text.toString()
+            val queryStr  = binding.toolbarMain.searchEditText.text.toString()
             Log.d("mylog", "query: $queryStr")
             if(currentSuggestionModels != null)
                 presenter.getSuggestionProducts(currentSuggestionModels!!)
             else
                 presenter.getProducts(queryStr = queryStr, isFiltered = true)
-
+            (requireActivity() as MainActivity).hideKeyboard()
+            binding.searchBtn.isVisible = false
         }
     }
 
@@ -321,4 +324,5 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     override fun success() {
         TODO("Not yet implemented")
     }
+
 }

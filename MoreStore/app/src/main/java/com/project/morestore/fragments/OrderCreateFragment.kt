@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.style.StrikethroughSpan
 import android.view.View
 import androidx.core.text.toSpannable
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -63,4 +64,15 @@ class OrderCreateFragment: Fragment(R.layout.fragment_order_create) {
     }
 
 
+        initRadioButtons()
+    }
+
+    private fun initRadioButtons(){
+       binding.deliveryTypeRadioGroup.setOnCheckedChangeListener { _, radioButton ->
+           binding.prepaymentInfoTextView.isVisible = radioButton == R.id.prepaymentRadioButton
+           binding.totalCardView.isVisible = radioButton == R.id.prepaymentRadioButton
+           if(radioButton == R.id.prepaymentRadioButton)
+               binding.payButton.text = "Оплатить заказ"
+       }
+    }
 }

@@ -97,7 +97,6 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
         binding.forMenCheckBox.isChecked = filter.chosenForWho[1]
         binding.forKidsCheckBox.isChecked = filter.chosenForWho[2]
 
-
     }
 
     override fun successNewCode() {

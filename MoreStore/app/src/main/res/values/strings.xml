@@ -342,5 +342,15 @@
     <string name="for1_day">На 1 день</string>
     <string name="for7_days">На 7 дней</string>
     <string name="raise_product">Поднять объявление</string>
+    <string name="delivery_type">Способ доставки</string>
+    <string name="take_from_seller">Заберу у продавца</string>
+    <string name="to_another_city">В другой город</string>
+    <string name="payment">Оплата</string>
+    <string name="on_deal_place">На месте сделки</string>
+    <string name="prepayment">Полная предоплата через сайт</string>
+    <string name="prepayment_info">Продавец получит деньги только тогда, когда вы подтвердите получение товара.</string>
+    <string name="product_price">Стоимость товара:</string>
+    <string name="prepayment_info2">Деньги спишутся, когда продавец подтвердит наличие товара</string>
+    <string name="pay_order">Оплатить заказ</string>
 
 </resources>

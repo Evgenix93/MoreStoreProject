@@ -78,13 +78,13 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 getDialog(dialogId)
 
 
-            }//showSupport()
+            }
             Chat.Personal::class.java.simpleName -> {
                 val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
                 getDialog(dialogId)
 
 
-            }//showSell()
+            }
             Chat.Deal::class.java.simpleName -> {
                 val userId = requireArguments().getLong(USER_ID_KEY, 0)
                 val productId = requireArguments().getLong(PRODUCT_ID_KEY, 0)
@@ -92,7 +92,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 if (userId != 0L && productId != 0L)
                     createDealChat(userId, productId)
                 else getDialog(dialogId)
-            }//showDeal()
+            }
             else -> throw IllegalArgumentException("Undefined chat type: $chatType")
         }
 
@@ -182,12 +182,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                     .show(childFragmentManager, null)
             }
         }
-        /*val messages = dialog.messages?.map {
-            if(it.idSender == currentUserId)
-                Message.My("13:00", R.drawable.ic_check_double, it.text.orEmpty())
-            else
-                Message.Companion(listOf(Msg("13:10", it.text.orEmpty())))
-        }*/
 
         val messages = getMessages(dialog.messages.orEmpty())
 
@@ -216,7 +210,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }*/
 
     private fun showSupport(dialog: DialogWrapper) {
-        //adapter.avatarUri = R.drawable.ic_headphones
         with(views) {
             toolbar.icon.setPadding(7.dp, 7.dp, 7.dp, 7.dp)
             toolbar.title.setText(R.string.chat_support_title)
@@ -235,12 +228,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }
         }
 
-        /*val messages = dialog.messages?.map {
-            if(it.idSender == currentUserId)
-                Message.My("13:00", R.drawable.ic_check_double, it.text.orEmpty())
-            else
-                Message.Companion(listOf(Msg("13:10", it.text.orEmpty())))
-        }*/
         val messages = getMessages(dialog.messages.orEmpty())
 
         adapter.setItems(messages.orEmpty().reversed())
@@ -320,12 +307,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                     .show(childFragmentManager, null)
             }
         }
-        /*val messages = dialog.messages?.map {
-            if(it.idSender == currentUserId && it)
-            Message.My("13:00", R.drawable.ic_check_double, it.text.orEmpty())
-            else
-                Message.Companion(listOf(Msg("13:10", it.text.orEmpty())))
-        }*/
+
         val messages = getMessages(dialog.messages.orEmpty())
         adapter.setItems(messages.orEmpty().reversed())
         views.list.scrollToPosition(adapter.itemCount - 1)
@@ -396,18 +378,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }
         }
         return messages
-        /* if(it.idSender == currentUserId && it.text != null  )
-             Message.My("13:00", R.drawable.ic_check_double, it.text.orEmpty())
-         else if((it.photo != null || it.video != null) && it.idSender == currentUserId) {
-             val photos = it.photo?.mapIndexed { index, photo -> Media.Photo(photo.photo, index + 1) }.orEmpty()
-             val videos = it.video?.mapIndexed { index, video -> Media.Video(video.video, photos.size + index + 1) }.orEmpty()
-             Log.d("MyDebug", "photos size = ${photos.size}")
-             val media = photos + videos
-             Message.MyMedia("13:00", R.drawable.ic_check_double, media.toTypedArray())
-         }
-         else
-             Message.Companion(listOf(Msg("13:10", it.text.orEmpty())))
-     }*/
     }
 
     //todo remove stubs
@@ -670,12 +640,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun photoVideoLoaded() {
         showLoading(false)
-        //  val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
-        //getDialog(dialogId)
-
-
         Toast.makeText(requireContext(), "Медиа отпралено", Toast.LENGTH_SHORT).show()
-
     }
 
     override fun showDialogCount(type: String, count: Int) {

@@ -31,17 +31,6 @@ class FilterConditionFragment: MvpAppCompatFragment(R.layout.fragment_filter_con
         }
     }
 
-    private fun bind(){
-        if(FilterState.filter.chosenConditions.isEmpty()){
-            return
-        }
-        val allNotSelected = FilterState.filter.chosenConditions.all { !it }
-        binding.newWithTagCheckBox.isChecked =  FilterState.filter.chosenConditions[0]
-        binding.newWithotuTagCheckBox.isChecked =  FilterState.filter.chosenConditions[1]
-        binding.ExcellentCheckBox.isChecked =  FilterState.filter.chosenConditions[2]
-        binding.goodCheckBox.isChecked =  FilterState.filter.chosenConditions[3]
-    }
-
     private fun initToolBar(){
         binding.toolbar.titleTextView.text = "Состояние"
         binding.toolbar.actionTextView.isVisible = false
@@ -77,7 +66,6 @@ class FilterConditionFragment: MvpAppCompatFragment(R.layout.fragment_filter_con
         binding.newWithotuTagCheckBox.isChecked =  conditions[1]
         binding.ExcellentCheckBox.isChecked =  conditions[2]
         binding.goodCheckBox.isChecked =  conditions[3]
-
 
     }
 
