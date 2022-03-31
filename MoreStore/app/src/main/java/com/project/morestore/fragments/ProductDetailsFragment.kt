@@ -122,6 +122,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.raiseProductButton.setOnClickListener{
             findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToRaiseProductFragment())
         }
+
+        binding.addToCartBtn.setOnClickListener {
+            findNavController().navigate(R.id.createOrderFragment)
+        }
     }
 
     private fun getProductWishList() {
@@ -281,6 +285,9 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 findNavController().navigate(R.id.catalogFragment)
             else
                 findNavController().popBackStack()
+        }
+        binding.toolbar.actionIcon.setOnClickListener {
+            findNavController().navigate(R.id.createOrderFragment)
         }
     }
 

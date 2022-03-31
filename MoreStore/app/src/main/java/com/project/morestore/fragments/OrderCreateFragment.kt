@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.text.style.StrikethroughSpan
 import android.view.View
 import androidx.core.text.toSpannable
-import android.view.View
+
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentOrderCreateBinding
@@ -17,8 +18,10 @@ class OrderCreateFragment: Fragment(R.layout.fragment_order_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initToolbar()
         setClickListeners()
-        initRadioButtons()
+        initRadioPlaceButtons()
+        initRadioDeliveryButtons()
         initViews()
     }
 
@@ -45,7 +48,7 @@ class OrderCreateFragment: Fragment(R.layout.fragment_order_create) {
 
     }
 
-    private fun initRadioButtons(){
+    private fun initRadioPlaceButtons(){
         binding.radioButtons.setOnCheckedChangeListener { radioGroup, id ->
             binding.chooseOnMapTextView.isVisible = id == R.id.userVariantRadioBtn
             binding.placeIcon.isVisible = id == R.id.userVariantRadioBtn
@@ -61,18 +64,28 @@ class OrderCreateFragment: Fragment(R.layout.fragment_order_create) {
     private fun initViews(){
         val oldPriceStr = binding.oldPriceTextView.text.toSpannable().apply { setSpan(StrikethroughSpan(), 0, length, 0) }
         binding.oldPriceTextView.text = oldPriceStr
+        binding.oldPrice2TextView.text = oldPriceStr
     }
 
 
-        initRadioButtons()
-    }
 
-    private fun initRadioButtons(){
+
+
+    private fun initRadioDeliveryButtons(){
        binding.deliveryTypeRadioGroup.setOnCheckedChangeListener { _, radioButton ->
            binding.prepaymentInfoTextView.isVisible = radioButton == R.id.prepaymentRadioButton
            binding.totalCardView.isVisible = radioButton == R.id.prepaymentRadioButton
-           if(radioButton == R.id.prepaymentRadioButton)
-               binding.payButton.text = "Оплатить заказ"
+           binding.payNowButton.isVisible = radioButton == R.id.prepaymentRadioButton
+           binding.payButton.isVisible = radioButton != R.id.prepaymentRadioButton
+
        }
+    }
+
+    private fun initToolbar(){
+        binding.toolbar.titleTextView.text = "Оформление заказа"
+        binding.toolbar.actionIcon.setImageResource(R.drawable.ic_support_black)
+        binding.toolbar.backIcon.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }
