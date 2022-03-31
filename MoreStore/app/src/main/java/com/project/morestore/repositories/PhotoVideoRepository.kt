@@ -8,7 +8,6 @@ import java.io.File
 
 class PhotoVideoRepository(val context: Context) {
 
-
     fun createFileForPhoto(): File{
         val name = "${System.currentTimeMillis()/1000}_image.jpg"
         val dir = context.cacheDir

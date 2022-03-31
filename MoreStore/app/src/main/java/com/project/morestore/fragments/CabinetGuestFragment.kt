@@ -60,11 +60,5 @@ class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
 
         if(findNavController().previousBackStackEntry?.destination?.id == R.id.messagesFragment)
             binding.toolbar.titleTextView.text = "Сообщения"
-
-
-
-
-
-
     }
 }

@@ -169,7 +169,6 @@ class ProductRepository(private val context: Context) {
                     conditionList = conditionList + listOf<String>("property[11][114]=on")
                 }
 
-
             }
 
             var forWhoList = listOf<String>()
@@ -184,7 +183,6 @@ class ProductRepository(private val context: Context) {
                 if (filter.chosenForWho[2]) {
                     forWhoList = forWhoList + listOf<String>("property[14][142]=on")
                 }
-
 
             }
 
@@ -587,13 +585,6 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    suspend fun loadCategories(): MutableSet<String>? {
-        return withContext(Dispatchers.IO) {
-            val prefs = context.getSharedPreferences(USER_PREFS, Context.MODE_PRIVATE)
-            prefs.getStringSet(CATEGORIES, null)
-        }
-    }
-
     suspend fun saveOnBoardingViewed(): Boolean {
         return try {
             withContext(Dispatchers.IO) {
@@ -619,30 +610,6 @@ class ProductRepository(private val context: Context) {
 
     }
 
-    suspend fun getProductCategoriesAdults(): Response<List<ProductCategoryAdults>>? {
-        return try {
-            Network.productApi.getProductCategoriesAdults()
-        } catch (e: Throwable) {
-            Log.e("Debug", e.message.orEmpty(), e)
-            if (e is IOException)
-                null
-            else
-                Response.error(400, "".toResponseBody())
-        }
-    }
-
-    suspend fun getProductCategoriesKids(): Response<List<ProductCategoryKids1>>? {
-        return try {
-            Network.productApi.getProductCategoriesKids()
-        } catch (e: Throwable) {
-            Log.e("Debug", e.message.orEmpty(), e)
-            if (e is IOException)
-                null
-            else
-                Response.error(400, "".toResponseBody())
-        }
-    }
-
     fun getShareProductIntent(id: Long): Intent {
         val uri = Uri.withAppendedPath(Uri.parse("https://morestore.ru/products/"), id.toString())
         return Intent().apply {
@@ -652,10 +619,6 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-
-    fun loadForWho(): List<Boolean> {
-        return FilterState.filter.chosenForWho
-    }
 
     suspend fun getColors(): Response<List<Property>>? {
         return try {
@@ -703,8 +666,6 @@ class ProductRepository(private val context: Context) {
             }
         }
     }
-
-
 
     fun updateCreateProductData(
         forWho: Int? = null,
@@ -782,7 +743,6 @@ class ProductRepository(private val context: Context) {
         Log.d("Debug", "createProductData = ${CreateProductData.createProductData}")
     }
 
-
     fun updateCreateProductPhotoVideo(photoVideo: File, position: Int){
         CreateProductData.productPhotosMap[position] = photoVideo
     }
@@ -805,12 +765,7 @@ class ProductRepository(private val context: Context) {
             }catch (e: Throwable){
                 false
             }
-
-
-
-
         }
-
     }
 
     suspend fun updateCreateProductPhotoVideo(bitmap: Bitmap, position: Int): Boolean{
@@ -887,10 +842,6 @@ class ProductRepository(private val context: Context) {
                     }
                 }
             }
-
-
-
-
     }
 
     suspend fun uploadProductVideos(files: List<File>, productId: Long): Response<List<ProductVideo>>?{
@@ -922,10 +873,6 @@ class ProductRepository(private val context: Context) {
                 }
             }
         }
-
-
-
-
     }
 
     suspend fun changeProductStatus(productId: Long, status: Int): Response<Unit>?{
@@ -1086,12 +1033,9 @@ class ProductRepository(private val context: Context) {
             val convertedFile = File(context.externalCacheDir, "image_${System.currentTimeMillis()}.jpg")
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, convertedFile.outputStream() )
             return convertedFile
-
-
         }catch (e: Throwable){
             null
         }
-
     }
 
 
@@ -1100,7 +1044,6 @@ class ProductRepository(private val context: Context) {
         const val TOP_SIZES_KEY = "top_sizes_key"
         const val BOTTOM_SIZES_KEY = "bottom_sizes_key"
         const val SHOES_SIZES_KEY = "shoes_sizes_key"
-        const val CATEGORIES = "categoryIdList"
         const val ONBOARDINGVIEWED = "viewedOnBoarding"
         const val PRODUCT_OPTIONS =
             "service,user,category,property,statistics,brand,category,property_open_category"

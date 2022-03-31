@@ -93,7 +93,6 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), User
                     colorsAdapter.updateColors(result.colors)
             }
         }
-        //colorsAdapter.updateColors(result as List<Color>)
     }
 
     override fun successNewCode() {

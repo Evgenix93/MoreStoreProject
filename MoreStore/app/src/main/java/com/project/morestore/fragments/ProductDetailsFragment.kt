@@ -43,8 +43,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private var productAdapter: ProductAdapter by autoCleared()
     private val args: ProductDetailsFragmentArgs by navArgs()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
-    private var suggestedProductsLoaded = false
-    private var wishListLoaded = false
     private var isLiked = false
     private var product: Product? = null
     private var userId: Long = 0
@@ -57,12 +55,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         setClickListeners()
         hideBottomNav()
         showDialog()
-        //getCurrentUser()
         bind(args.product, userId, null)
         getProduct(args.productId?.toLong())
         if(args.product != null)
             getCurrentUser()
-
     }
 
     private fun brandClick(brand: ProductBrand) {
@@ -131,7 +127,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private fun getProductWishList() {
         presenter.getProductWishList()
     }
-
 
     private fun getProduct(id: Long?) {
         id ?: return

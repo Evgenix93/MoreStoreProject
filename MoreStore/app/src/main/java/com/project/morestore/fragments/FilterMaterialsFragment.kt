@@ -99,39 +99,6 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
         presenter.getMaterials()
     }
 
-   /* private fun generateList(): List<MaterialLine>{
-        return listOf(
-            MaterialLine(
-                0,
-            "Все материалы",
-                false),
-            MaterialLine(
-                0,
-                "Акрил",
-                false),
-            MaterialLine("Альпака",
-                false),
-            MaterialLine("Ангора",
-                false),
-            MaterialLine("Атлас",
-                false),
-            MaterialLine("Ацетат",
-                false),
-            MaterialLine("Бархат",
-                false),
-            MaterialLine("Бисер",
-                false),
-            MaterialLine("Вельвет",
-                false),
-            MaterialLine("Велюр",
-                false),
-            MaterialLine("Вискоза",
-                false)
-        )
-    }*/
-
-
-
     private fun initToolBar(){
         binding.toolbar.titleTextView.text = "Материалы"
         binding.toolbar.actionTextView.isVisible = false

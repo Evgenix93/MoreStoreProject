@@ -86,7 +86,6 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
     }
 
     private fun getAllSizes(){
-        //presenter.getAllSizes()
         presenter.getTopSizes()
         presenter.getBottomSizes()
         presenter.getShoosSizes()
@@ -94,7 +93,6 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     override fun loading() {
         showLoading(true)
-
     }
 
     override fun loaded(result: List<Any>) {
@@ -107,10 +105,6 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
         if((result[0] as Property).idCategory?.toInt() == 6)
             shoesSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
-
-
-
-
 
     }
 

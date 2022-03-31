@@ -341,8 +341,6 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
         if (!isSizesLoaded)
             getSizes()
 
-        Log.d("mytest", filter.chosenTopSizes.size.toString())
-
         when {
             isForWomen -> {
                 if (topSizeCardAdapter.getSizes().size == filter.chosenTopSizes.size || topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizes.size) {
@@ -612,7 +610,6 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
 
         if (result is Filter) {
             bindFilter(result)
-
         }
 
     }

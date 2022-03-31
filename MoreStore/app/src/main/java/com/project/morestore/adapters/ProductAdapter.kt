@@ -71,6 +71,8 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
 
     }
 
+
+
     fun updateList(newList: List<Product>){
         list = newList
         notifyDataSetChanged()

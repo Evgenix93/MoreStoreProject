@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gray5">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/deliveryTypeCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delivery_type"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="11dp"/>
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="51dp"
+            android:layout_marginBottom="25dp"
+            android:layout_marginStart="10dp">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/radiobutton"
+                android:minWidth="30dp"
+                android:minHeight="30dp"
+                app:useMaterialThemeColors="false"
+                android:text="@string/take_from_seller"
+                android:paddingStart="12dp"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/radiobutton"
+                android:minWidth="30dp"
+                android:minHeight="30dp"
+                app:useMaterialThemeColors="false"
+                android:text="По городу Казань (Яндекс Go)"
+                android:paddingStart="12dp"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black"
+                android:layout_marginTop="18dp"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:button="@drawable/radiobutton"
+                android:minWidth="30dp"
+                android:minHeight="30dp"
+                app:useMaterialThemeColors="false"
+                android:text="@string/to_another_city"
+                android:paddingStart="12dp"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black"
+                android:layout_marginTop="18dp"
+                />
+        </RadioGroup>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/cdek"
+            android:layout_marginTop="155dp"
+            android:layout_marginStart="165dp"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/paymentCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deliveryTypeCardView"
+        android:layout_marginTop="20dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/payment"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="11dp"/>
+
+        <RadioGroup
+            android:id="@+id/deliveryTypeRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="51dp"
+            android:layout_marginBottom="25dp"
+            android:layout_marginStart="10dp">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/onDealPlaceRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/radiobutton"
+                android:minWidth="30dp"
+                android:minHeight="30dp"
+                app:useMaterialThemeColors="false"
+                android:text="@string/on_deal_place"
+                android:paddingStart="12dp"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/prepaymentRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/radiobutton"
+                android:minWidth="30dp"
+                android:minHeight="30dp"
+                app:useMaterialThemeColors="false"
+                android:text="@string/prepayment"
+                android:paddingStart="12dp"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black"
+                android:layout_marginTop="18dp"/>
+
+        </RadioGroup>
+
+    </com.google.android.material.card.MaterialCardView>
+
+   <TextView
+       android:id="@+id/prepaymentInfoTextView"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:text="@string/prepayment_info"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/paymentCardView"
+       android:layout_marginTop="16dp"
+       android:layout_marginHorizontal="10dp"
+       android:textAppearance="@style/regular_14"
+       android:textSize="12dp"
+       android:visibility="gone"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/totalCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/prepaymentInfoTextView"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        android:visibility="gone">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/product_price"
+          android:textAppearance="@style/regular_16"
+          android:textColor="@color/gray2"
+          android:layout_marginStart="10dp"
+          android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="500 ₽"
+            android:layout_marginStart="165dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/black"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5 600 ₽ "
+            android:layout_marginStart="218dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Итого:"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/bold_24"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="500 ₽"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="94dp"
+            android:textAppearance="@style/bold_24"
+            android:textColor="@color/green"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prepayment_info2"
+            android:layout_marginTop="95dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:layout_marginBottom="40dp"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/payButton"
+        style="@style/buttonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

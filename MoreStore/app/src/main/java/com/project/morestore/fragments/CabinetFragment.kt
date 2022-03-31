@@ -50,9 +50,6 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
     }
 
     private fun setClickListeners(){
-        //binding.logoutBtn.setOnClickListener{
-          //  presenter.clearToken()
-       // }
 
         binding.toolbarMain.actionIcon.setOnClickListener {
             presenter.clearToken()

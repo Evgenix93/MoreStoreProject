@@ -48,12 +48,6 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
        binding.productCategoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun loadFilter() {
-        if(FilterState.filter.categories.size == productCategoriesAdapter.getProductCategories().size)
-            productCategoriesAdapter.updateList(FilterState.filter.categories)
-    }
-
-
     override fun onStop() {
         super.onStop()
         saveCategories()

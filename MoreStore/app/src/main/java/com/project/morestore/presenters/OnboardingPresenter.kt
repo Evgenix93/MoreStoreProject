@@ -190,10 +190,5 @@ class OnboardingPresenter(context: Context): MvpPresenter<OnBoardingMvpView>() {
             Log.d("mylog", str)
             str
         }
-
-
     }
-
-
-
 }

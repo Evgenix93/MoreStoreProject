@@ -31,8 +31,6 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
     private var bottomSizeList = listOf<SizeLine>()
     private var isForWomen = true
     private var isSizesLoaded = false
-    //private var filter = Filter()
-
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +39,6 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         initToolBar()
         loadFilter()
         setClickListeners()
-
     }
 
     private fun setClickListeners(){
