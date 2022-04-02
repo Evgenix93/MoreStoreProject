@@ -1,0 +1,41 @@
+package com.project.morestore.adapters
+
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.project.morestore.databinding.ItemFavoritesellerBinding
+import com.project.morestore.models.FavoriteSeller
+import com.project.morestore.util.inflater
+
+class FavoriteSellersAdapter :RecyclerView.Adapter<FavoriteSellersAdapter.FavoriteSellerHolder>() {
+    private var items = listOf<FavoriteSeller>()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteSellerHolder {
+        return FavoriteSellerHolder(
+            ItemFavoritesellerBinding.inflate(parent.inflater, parent, false)
+        )
+    }
+
+    override fun onBindViewHolder(holder: FavoriteSellerHolder, position: Int) {
+        holder.bind(items[position])
+    }
+
+    override fun getItemCount() = items.size
+
+    fun setItems(newItems :List<FavoriteSeller>){
+        items = newItems
+        notifyDataSetChanged()
+    }
+
+    inner class FavoriteSellerHolder(
+        private val views :ItemFavoritesellerBinding
+    ) :RecyclerView.ViewHolder(views.root){
+
+        fun bind(seller :FavoriteSeller){
+            with(views){
+                photo.setImageResource(seller.photo)
+                name.text = seller.name
+                rate.text = seller.rate.toString()
+            }
+        }
+    }
+}

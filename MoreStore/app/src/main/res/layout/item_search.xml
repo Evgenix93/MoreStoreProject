@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/gray3"
+    app:cardElevation="0dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+        <TextView android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            tools:text="Светлая зимняя одежда"
+            />
+
+        <TextView android:id="@+id/filters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_regular"
+            android:textColor="@color/gray1"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
+            tools:text="Женщинам • Верхняя одежда • Джинсы • Asos • Adidas • Абсолютно новое • Почти новое • 38 (XXS) • 42 (S) • Черный"
+            />
+
+        <TextView android:id="@+id/notifications"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/manrope_regular"
+            android:layout_marginTop="24dp"
+            android:textColor="@color/gray1"
+            android:textSize="16sp"
+            android:drawablePadding="8dp"
+            app:drawableStartCompat="@drawable/ic_letter"
+            tools:text="Каждую неделю"
+            />
+
+        <TextView android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="16sp"
+            android:textColor="@color/green"
+            android:text="@string/favorite_searchEdit"
+            android:fontFamily="@font/manrope_regular"
+            />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
