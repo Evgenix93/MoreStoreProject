@@ -11,4 +11,10 @@ open class BottomNavigationFragment :Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).showBottomNavBar(true)
     }
+
+    fun indicateTabAt(index :Int){
+        if(index == -1){
+            (activity as MainActivity).hideBottomIndication()
+        }
+    }
 }

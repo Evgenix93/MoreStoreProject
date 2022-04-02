@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/image1"
+        android:layout_width="83.56dp"
+        android:layout_height="111.33dp"
+        android:layout_marginEnd="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/image2"
+        app:layout_constraintEnd_toEndOf="@+id/image2"
+        app:layout_constraintTop_toTopOf="@+id/image2"
+        app:layout_constraintVertical_bias="0.493"
+        tools:background="@android:color/holo_green_dark" />
+
+    <ImageView
+        android:id="@+id/image3"
+        android:layout_width="91.01dp"
+        android:layout_height="119.23dp"
+        android:layout_marginStart="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/image2"
+        app:layout_constraintStart_toStartOf="@+id/image2"
+        app:layout_constraintTop_toTopOf="@+id/image2"
+        tools:background="@android:color/holo_red_dark" />
+
+    <ImageView
+        android:id="@+id/image2"
+        android:layout_width="140dp"
+        android:layout_height="186dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@android:color/holo_blue_dark" />
+
+</merge>

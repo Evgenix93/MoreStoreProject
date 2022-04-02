@@ -232,12 +232,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun hideBottomIndication(){
+        with(binding.bottomNavBar){
+            menu.findItem(R.id.mainFragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
+            menu.findItem(R.id.catalogFragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
+            menu.findItem(R.id.createProductStep1Fragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_create_product, null)
+            menu.findItem(R.id.messagesFragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
+            menu.findItem(R.id.cabinetFragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
+        }
+    }
+
     fun changeSoftInputMode(mode: Int){
         window.setSoftInputMode(mode)
     }
 
     override fun onBackPressed() {
-        Log.d("MyDebug", "backstack = ${findNavController(R.id.fragmentContainerView).currentBackStackEntry?.id}")
+       // Log.d("MyDebug", "backstack = ${findNavController(R.id.fragmentContainerView).currentBackStackEntry?.id}")
         if(findNavController(R.id.fragmentContainerView).previousBackStackEntry?.destination?.id == R.id.mainFragment)
             findNavController(R.id.fragmentContainerView).navigate(R.id.firstLaunchFragment)
         else if(findNavController(R.id.fragmentContainerView).previousBackStackEntry?.destination?.id == R.id.createProductStep6Fragment)

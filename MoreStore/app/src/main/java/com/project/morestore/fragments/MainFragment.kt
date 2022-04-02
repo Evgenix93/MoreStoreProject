@@ -60,6 +60,14 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initViewPager()
         setClickListeners()
         getUserData()
+        binding.toolbarMain.materialToolbar.setOnMenuItemClickListener {
+            if(it.itemId == R.id.favorite){
+                findNavController().navigate(R.id.favoritesFragment)
+                true
+            } else {
+                false
+            }
+        }
     }
 
     private fun bindFilter(filter: Filter) {
@@ -185,6 +193,17 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         }
 
         presenter.collectSearchFlow(searchFlow)
+
+        binding.toolbarMain.materialToolbar.setOnMenuItemClickListener { menuItem ->
+            return@setOnMenuItemClickListener when(menuItem.itemId){
+                R.id.favorite -> {
+                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToFavoritesFragment())
+                    true
+                }
+                else -> true
+            }
+
+        }
 
 
     }

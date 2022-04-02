@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar_titled_center"
+        />
+
+    <com.google.android.material.tabs.TabLayout android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="scrollable"
+        app:tabIndicator="@null"
+        android:paddingHorizontal="2dp"
+        app:tabRippleColor="@null"
+        app:tabPaddingStart="4dp"
+        app:tabPaddingEnd="4dp"
+        app:tabPaddingTop="8dp"
+        app:tabPaddingBottom="13dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:backgroundTint="@color/gray1"
+        />
+
+    <androidx.fragment.app.FragmentContainerView android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>

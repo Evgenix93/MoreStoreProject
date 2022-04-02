@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/createOrderFragment">
+    app:startDestination="@id/splashScreenFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -229,6 +229,9 @@
         <action
             android:id="@+id/action_mainFragment_to_registration3Fragment"
             app:destination="@id/registration3Fragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
     </fragment>
     <fragment
         android:id="@+id/catalogFragment"
@@ -940,5 +943,9 @@
         android:id="@+id/createOrderFragment"
         android:name="com.project.morestore.fragments.OrderCreateFragment"
         android:label="CreateOrderFragment" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.project.morestore.fragments.FavoritesFragment"
+        android:label="FavoritesFragment" />
 
 </navigation>

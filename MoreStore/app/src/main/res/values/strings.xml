@@ -353,4 +353,34 @@
     <string name="prepayment_info2">Деньги спишутся, когда продавец подтвердит наличие товара</string>
     <string name="pay_order">Оплатить заказ</string>
 
+
+    <!--region Favorites-->
+    <string name="favorites">Избранное</string>
+    <string name="favorites_container_title">@string/favorites</string>
+    <string name="favorites_menu_favorites">@string/favorites</string>
+    <string name="favorites_menu_cart">Корзина</string>
+
+    <string name="favorite_listEmpty_actionText">Каталог</string>
+    <string name="favorite_goodsListEmpty_message">Пока у вас нет избранных товаров, но вы можете выбрать их в каталоге</string>
+    <string name="favorite_brandsListEmpty_message">Пока у вас нет избранных брендов, но вы можете выбрать их в каталоге</string>
+    <string name="favorite_sellersListEmpty_message">Пока у вас нет избранных продавцов, но вы можете выбрать их в каталоге</string>
+    <!--region searches-->
+    <string name="favorite_searchListEmpty_message">Избранные параметры поиска отсутствуют, но вы можете выбрать их в каталоге</string>
+
+    <string name="dot_separator"> • </string>
+
+    <string name="favorite_searchEdit">Редактировать</string>
+    <string name="favorite_searchNotify_disable">Уведомления отключены</string>
+    <string name="favorite_searchNotify_weekly">Каждую неделю</string>
+    <string name="favorite_searchNotify_dayly">Каждый день</string>
+    <!--endregion searches-->
+    <!--region deleteDialog-->
+    <string name="deleteDialog_defaultTitle">Удалить?</string>
+    <string name="deleteDialog_defaultMessage">Чтобы добавить фильтр заново, придется настроить параметры заново</string>
+    <string name="deleteDialog_title_pattern">Удалить %s?</string>
+    <string name="deleteDialog_confirm">Да, удалить</string>
+    <string name="deleteDialog_cancel">Нет, отмена</string>
+    <!--endregion deleteDialog-->
+    <!--endregion Favorites-->
+
 </resources>
