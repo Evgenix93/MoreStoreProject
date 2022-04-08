@@ -141,7 +141,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getUserInfo() {
+    private fun getUserInfo() {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.getCurrentUserInfo()
@@ -643,39 +643,11 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                             when (index) {
                                 0 -> {
                                     viewState.loaded(response.body()!!.filterNot {
-                                       /* it.id == 1 ||
-                                                it.id == 2 ||
-                                                it.id == 3 ||
-                                                it.id == 4 ||
-                                                it.id == 5 ||
-                                                it.id == 6 ||
-                                                it.id == 7 ||
-                                                it.id == 9 ||
-                                                it.id == 10 ||
-                                                it.id == 11 ||
-                                                it.id == 12 ||
-                                                it.id == 13 ||
-                                                it.id == 14 ||
-                                                it.id == 15 ||
-                                                it.id == 16 ||
-                                                it.id == 17 ||
-                                                it.id == 18 ||
-                                                it.id == 19 ||
-                                                it.id == 20*/
                                         it.id == 8 || it.id == 21 || it.id == 22
                                     })
                                 }
                                 1 -> {
                                     viewState.loaded(response.body()!!.filterNot {
-                                               /* it.id == 3 ||
-                                                it.id == 4 ||
-                                                it.id == 6 ||
-                                                it.id == 7 ||
-                                                it.id == 10 ||
-                                                it.id == 18 ||
-                                                it.id == 20 ||
-                                                it.id == 21 ||
-                                                it.id == 22*/
                                           it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
                                                   it.id == 18 || it.id == 21 || it.id == 22
                                     })
@@ -927,16 +899,6 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
     fun getColors() {
-       /* presenterScope.launch {
-            val response = productRepository.getColors()
-            when (response?.code()) {
-                200 -> {
-                    viewState.loaded(response.body()!!.filter { it.idCategory?.toInt() == 12 })
-                }
-                400 -> viewState.error("Ошибка")
-                null -> viewState.error("Нет интернета")
-            }
-        }*/
         getProperties(12)
     }
 

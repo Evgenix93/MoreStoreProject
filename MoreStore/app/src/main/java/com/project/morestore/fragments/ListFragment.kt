@@ -7,18 +7,27 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.databinding.ScreenEmptylistBinding
+import com.project.morestore.models.ProductBrand
 import dev.jorik.emptylistgallery.EmptyListGallery
+import moxy.MvpAppCompatFragment
 
-abstract class ListFragment :Fragment() {
+abstract class ListFragment :MvpAppCompatFragment() {
     protected abstract val emptyList :EmptyList
     protected abstract val list :RecyclerView
+    protected val loader: ProgressBar by lazy {requireView().findViewById(R.id.loadingProgressBar)}
     private var empty :View? = null
-    private lateinit var container :FrameLayout
+    private lateinit var container :LinearLayout
     private val emptyListView :EmptyListGallery by lazy {
         EmptyListGallery(requireContext(), emptyList.img1, emptyList.img2, emptyList.img3)
             .apply {
@@ -33,7 +42,8 @@ abstract class ListFragment :Fragment() {
         savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.container_empty, container, false)
         .also {
-            this.container = it as FrameLayout
+            this.container = it.findViewById(R.id.containerLinearLayout) as LinearLayout
+            if(list.parent == null)
             this.container.addView(list)
         }
 
@@ -48,11 +58,22 @@ abstract class ListFragment :Fragment() {
                 it.action.setOnClickListener { action() }
             }
         list.visibility = View.GONE
+        requireView().findViewById<ConstraintLayout>(R.id.brandsConstraintLayout).isVisible = false
     }
 
     protected fun showList(){
         empty?.let { container.removeView(it) }
         list.visibility = View.VISIBLE
+    }
+
+    protected fun showBrandsView(brands: List<ProductBrand>){
+       val brandsConstraintLayout = requireView().findViewById<ConstraintLayout>(R.id.brandsConstraintLayout)
+       brandsConstraintLayout.isVisible = true
+       requireView().findViewById<View>(R.id.brandClickView).setOnClickListener {
+           findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToBrandsFragment(brands.toTypedArray()))
+       }
+       val brandsTextView = requireView().findViewById<TextView>(R.id.brandsTextView)
+       brandsTextView.text = brands.joinToString(", ") { it.name }
     }
 
     protected class EmptyList(

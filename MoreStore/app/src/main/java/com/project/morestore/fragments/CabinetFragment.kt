@@ -35,14 +35,13 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkToken()
         setClickListeners()
         showBottomNav()
         initToolbar()
         initProductsButtons()
         initList()
-        getActiveProducts()
         getFilter()
+        checkToken()
     }
 
     private fun checkToken(){
@@ -92,6 +91,7 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
         val monthDiff = dayDiff/30
         binding.timeFromRegistrationTextView.text = if(monthDiff > 0)"зарегистрирован(а) $monthDiff месяца назад"
         else "зарегистрирован(а) $dayDiff дня назад"
+
 
         Glide.with(this)
             .load(user.avatar?.photo.toString())

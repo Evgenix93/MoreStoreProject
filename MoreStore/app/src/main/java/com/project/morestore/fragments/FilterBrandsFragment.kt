@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
@@ -35,6 +36,7 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private lateinit var searchFlow: Flow<String>
     private var brands = listOf<ProductBrand>()
+    private val args: FilterBrandsFragmentArgs by navArgs()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,12 +44,10 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
         initToolbar()
         initSegmentsRecyclerView()
         initBrandsRecyclerView()
-        loadFilter()
         getCategorySegments()
         initSearch()
         getBrands()
         setClickListeners()
-
     }
 
     private fun setClickListeners(){
@@ -81,7 +81,6 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
         with(binding.brandsRecyclerView) {
             adapter = brandsAdapter
             layoutManager = LinearLayoutManager(requireContext())
-
         }
     }
 
@@ -120,14 +119,6 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
 
     }
 
-   // private fun initABrandsRecyclerView() {
-      //  brandsAAdapter = BrandsAdapter(false)
-       // with(binding.brandsARecyclerView) {
-        //    adapter = brandsAAdapter
-         //   layoutManager = LinearLayoutManager(requireContext())
-       // }
-    //}
-
     private fun saveFilter() {
         com.project.morestore.singletones.FilterState.filter.brands = brandsAdapter.getCurrentList()
         com.project.morestore.singletones.FilterState.filter.segments = segmentsAdapter.loadSegments2Checked()
@@ -137,22 +128,6 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
         //FilterState.isAllBrands = (segmentsAdapter.loadSegmentsChecked()
            // .all { !it } && brands9Adapter.loadBrands9Checked().all { !it } && brandsAAdapter.loadBrandsAChecked().all { !it }) || (segmentsAdapter.loadSegmentsChecked()
            // .all { it } && brands9Adapter.loadBrands9Checked().all { it } && brandsAAdapter.loadBrandsAChecked().all { it })
-    }
-
-    private fun loadFilter() {
-
-        //if (FilterState.segments.isNotEmpty()) {
-           // Log.d("Debug", "loadFilter")
-            //segmentsAdapter.updateSegmentsChecked(FilterState.segments.toMutableList())
-       // }
-
-        //if (FilterState.brands9.isNotEmpty()) {
-           // Log.d("Debug", "loadFilter brands9")
-          //  brands9Adapter.updateBrands9Checked(FilterState.brands9.toMutableList())
-       // }
-        //if (FilterState.brandsA.isNotEmpty()) {
-          //  brandsAAdapter.updateBrandsAChecked(FilterState.brandsA.toMutableList())
-        //}
     }
 
     private fun initToolbar() {
@@ -169,7 +144,6 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
 
     private fun getCategorySegments(){
         presenter.getAllCategorySegments()
-
     }
 
     private fun getBrands(){
@@ -213,26 +187,17 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
             }
             is List<*> -> {
                 if (result.isNotEmpty()) {
-                  /*  if (result[0] is Category) {
-                        if (com.project.morestore.singletones.FilterState.filter.segments.isEmpty()) {
-                            Log.d("mylog", "segments empty")
-                            //segmentsAdapter.updateList(list as List<Category>)
-                        } else {
-                            Log.d(
-                                "mylog",
-                                com.project.morestore.singletones.FilterState.filter.segments.toString()
-                            )
-                            segmentsAdapter.updateSegmentsChecked(com.project.morestore.singletones.FilterState.filter.segments.toMutableList())
-                        }
-                    }*/
                     if (result[0] is ProductBrand) {
                         if (brands.isEmpty()) {
                             brands = result as List<ProductBrand>
                             presenter.collectBrandsSearchFlow(searchFlow,  result as List<ProductBrand>)
                         }
                         brandsAdapter.updateList(result as List<ProductBrand>)
-                        checkToken()
-                        presenter.getFilter()
+                        if(args.brands == null) {
+                            checkToken()
+                            presenter.getFilter()
+                        }else
+                          brandsAdapter.updateList2(args.brands!!.toList())
                     }
 
                     if (result[0] is Long) {
