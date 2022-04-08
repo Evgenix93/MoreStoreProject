@@ -410,6 +410,11 @@
         <action
             android:id="@+id/action_brandsFragment_to_catalogFragment"
             app:destination="@id/catalogFragment" />
+        <argument
+            android:name="brands"
+            app:argType="com.project.morestore.models.ProductBrand[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/regionsFragment"
@@ -965,6 +970,14 @@
             android:name="favoriteSearchId"
             app:argType="long"
             android:defaultValue="0L" />
+    </fragment>
+        android:label="FavoritesFragment" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_brandsFragment"
+            app:destination="@id/brandsFragment" />
     </fragment>
 
 </navigation>

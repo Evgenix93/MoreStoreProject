@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -247,13 +248,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-       // Log.d("MyDebug", "backstack = ${findNavController(R.id.fragmentContainerView).currentBackStackEntry?.id}")
-        if(findNavController(R.id.fragmentContainerView).previousBackStackEntry?.destination?.id == R.id.mainFragment)
-            findNavController(R.id.fragmentContainerView).navigate(R.id.firstLaunchFragment)
-        else if(findNavController(R.id.fragmentContainerView).previousBackStackEntry?.destination?.id == R.id.createProductStep6Fragment)
-            findNavController(R.id.fragmentContainerView).navigate(R.id.catalogFragment)
-        else
-           super.onBackPressed()
+        val navController = findNavController(R.id.fragmentContainerView)
+        when (navController.previousBackStackEntry?.destination?.id) {
+            R.id.mainFragment -> navController.navigate(R.id.firstLaunchFragment)
+            R.id.createProductStep6Fragment -> navController.navigate(R.id.catalogFragment)
+            else -> super.onBackPressed()
+        }
     }
 
     fun hideKeyboard() {

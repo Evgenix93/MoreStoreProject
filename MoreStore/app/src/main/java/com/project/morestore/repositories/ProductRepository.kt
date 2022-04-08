@@ -203,6 +203,7 @@ class ProductRepository(private val context: Context) {
             }
 
             productPropertyStr = productPropertyStr + conditionList + forWhoList + stylesList
+            Log.d("MyDebug", "getProducts filter = $filter")
             productApi.getProducts(
                 limit,
                 PRODUCT_OPTIONS,
