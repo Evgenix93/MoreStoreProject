@@ -516,6 +516,45 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun getSellersWishList(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = userRepository.getSellersWishList()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                404 -> {
+
+
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+
+            }
+
+        }
+    }
+
+
+    fun addDeleteSellersInWishList(sellersIds: List<Long>){
+        presenterScope.launch {
+            viewState.loading()
+            val response = userRepository.addDeleteSellerInWishList(BrandWishList(sellersIds))
+            when (response?.code()) {
+                200 -> viewState.success(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+    }
+
     fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>) {
         searchJob = flow
             .debounce(3000)

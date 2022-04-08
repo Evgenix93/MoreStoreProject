@@ -5,22 +5,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.project.morestore.R
 import com.project.morestore.adapters.SearchesAdapter
 import com.project.morestore.dialogs.DeleteDialog
+import com.project.morestore.models.FavoriteSearch
 import com.project.morestore.models.Search
+import com.project.morestore.mvpviews.FavoritesMvpView
+import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
+import moxy.ktx.moxyPresenter
 
-class FavoritesSearchFragment :ListFragment() {
+class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
+    private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
     private val adapter = SearchesAdapter {
-        DeleteDialog(
+        /*DeleteDialog(
             requireContext(),
             requireContext().getString(R.string.deleteDialog_title_pattern, it.title),
             requireContext().getString(R.string.deleteDialog_defaultMessage),
-        ).show()
+        ).show()*/
     }
     override val emptyList by lazy {
         EmptyList(
@@ -44,9 +51,13 @@ class FavoritesSearchFragment :ListFragment() {
         }
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showEmptyList {
+        getFavoriteSearches()
+        setClickListeners()
+       /* showEmptyList {
             adapter.setItems(listOf(
                 Search(
                     "Светлая зимняя одежда",
@@ -98,6 +109,43 @@ class FavoritesSearchFragment :ListFragment() {
                 )
             ))
             showList()
+        }*/
+    }
+
+    private fun getFavoriteSearches(){
+        presenter.getFavoriteSearches()
+
+    }
+
+    private fun setClickListeners(){
+        requireView().findViewById<MaterialButton>(R.id.addSearchBtn).setOnClickListener {
+            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToEditFavoriteSearchFragment())
         }
+
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun favoritesLoaded(list: List<*>) {
+        adapter.setItems(list as List<FavoriteSearch>)
+        showList()
+        showBtn(true)
+
+    }
+
+    override fun error(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun emptyList() {
+        showEmptyList {  }
+
+    }
+
+    override fun success() {
+
     }
 }

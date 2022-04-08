@@ -11,4 +11,5 @@ object FilterState {
 
     var isLoadedFilter = false
     var filter = Filter()
+    var filterTemp = Filter()
 }

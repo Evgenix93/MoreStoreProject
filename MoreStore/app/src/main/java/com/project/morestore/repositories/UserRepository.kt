@@ -293,6 +293,146 @@ class UserRepository(val context: Context) {
 
     }
 
+    suspend fun getSellersWishList(): Response<List<User>>?{
+        return try {
+            userApi.getSellersWishList()
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.getSellersWishListGetError()
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, e.message.orEmpty().toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
+    suspend fun addDeleteSellerInWishList(wishList: BrandWishList): Response<List<Long>>?{
+        return try {
+            userApi.addDeleteSellerToWishList(wishList)
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.addDeleteSellerToWishListGetError(wishList)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, e.message.orEmpty().toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
+   suspend fun getFavoriteSearches(): Response<List<FavoriteSearch>>?{
+        return try {
+            userApi.getFavoriteSearches()
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.getFavoriteSearchesGetError()
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, e.message.orEmpty().toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
+    suspend fun getFavoriteSearchById(id: Long): Response<FavoriteSearch>?{
+        return try {
+            userApi.getFavoriteSearchById(id)
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.getFavoriteSearchByIdGetError(id)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, e.message.orEmpty().toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
+    suspend fun saveFavoriteSearch(search: FavoriteSearchValue): Response<Id>?{
+        return try {
+            userApi.saveFavoriteSearch(search)
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.saveFavoriteSearchGetError(search)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, e.message.orEmpty().toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
     suspend fun getCurrentUserInfo(): Response<User>?{
         return try {
             userApi.getUserInfoById(Token.userId)
@@ -385,6 +525,14 @@ class UserRepository(val context: Context) {
 
     fun clearFilter(){
         FilterState.filter = Filter()
+    }
+
+    fun reserveFilter(){
+        FilterState.filterTemp = FilterState.filter
+    }
+
+    fun restoreFilter(){
+        FilterState.filter = FilterState.filterTemp
     }
 
     fun saveMaterials(materials: List<MaterialLine>){

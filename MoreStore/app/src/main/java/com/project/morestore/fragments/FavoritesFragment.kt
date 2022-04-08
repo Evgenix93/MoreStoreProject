@@ -4,17 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFavoritesBinding
 import com.project.morestore.databinding.TabCategoryBinding
 import com.project.morestore.fragments.base.BottomNavigationFragment
+import com.project.morestore.models.Product
+import com.project.morestore.models.ProductBrand
+import com.project.morestore.models.User
+import com.project.morestore.mvpviews.FavoritesMvpView
+import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.util.setSelectListener
+import moxy.ktx.moxyPresenter
 
-class FavoritesFragment :BottomNavigationFragment(){
+class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
     private lateinit var views :FragmentFavoritesBinding
+    private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,10 +40,10 @@ class FavoritesFragment :BottomNavigationFragment(){
                 it.setNavigationOnClickListener { findNavController().popBackStack() }
                 it.inflateMenu(R.menu.menu_favorites)
             }
-            tabs.addTab(tabs.newTab().fill(R.drawable.sel_tshirt, "Товары", 11))
-            tabs.addTab(tabs.newTab().fill(R.drawable.sel_tag, "Бренды", 2))
-            tabs.addTab(tabs.newTab().fill(R.drawable.sel_users, "Продавцы", 2))
-            tabs.addTab(tabs.newTab().fill(R.drawable.sel_search_small, "Поиски", 2))
+            tabs.addTab(tabs.newTab().fill(R.drawable.sel_tshirt, "Товары", 0))
+            tabs.addTab(tabs.newTab().fill(R.drawable.sel_tag, "Бренды", 0))
+            tabs.addTab(tabs.newTab().fill(R.drawable.sel_users, "Продавцы", 0))
+            tabs.addTab(tabs.newTab().fill(R.drawable.sel_search_small, "Поиски", 0))
             tabs.setSelectListener {
                 when(it.position){
                     0 -> showFragment(FavoritesGoodsFragment())
@@ -44,6 +53,7 @@ class FavoritesFragment :BottomNavigationFragment(){
                 }
             }
         }
+        getFavorites()
         showFragment(FavoritesGoodsFragment())
     }
 
@@ -68,5 +78,48 @@ class FavoritesFragment :BottomNavigationFragment(){
         childFragmentManager.beginTransaction()
             .replace(R.id.container, fragment ?: listFragment, tag)
             .commit()
+    }
+
+    private fun getFavorites(){
+        presenter.getProductWishList()
+        presenter.getSellersWishList()
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun favoritesLoaded(list: List<*>) {
+        when(list[0]){
+            is Product -> {
+                val countTextView = views.tabs.getTabAt(0)?.view?.findViewById<TextView>(R.id.count)
+                countTextView?.isVisible = true
+                countTextView?.text = list.size.toString()
+            }
+            is ProductBrand -> {
+                val countTextView = views.tabs.getTabAt(1)?.view?.findViewById<TextView>(R.id.count)
+                countTextView?.isVisible = true
+                countTextView?.text = list.size.toString()
+            }
+            is User ->{
+                val countTextView = views.tabs.getTabAt(2)?.view?.findViewById<TextView>(R.id.count)
+                countTextView?.isVisible = true
+                countTextView?.text = list.size.toString()
+            }
+
+        }
+
+    }
+
+    override fun error(message: String) {
+
+    }
+
+    override fun emptyList() {
+
+    }
+
+    override fun success() {
+
     }
 }

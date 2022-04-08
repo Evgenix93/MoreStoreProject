@@ -946,6 +946,25 @@
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.project.morestore.fragments.FavoritesFragment"
-        android:label="FavoritesFragment" />
+        android:label="FavoritesFragment" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_editFavoriteSearchFragment"
+            app:destination="@id/editFavoriteSearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editFavoriteSearchFragment"
+        android:name="com.project.morestore.fragments.EditFavoriteSearchFragment"
+        android:label="EditFavoriteSearchFragment" >
+        <argument
+            android:name="favoriteSearchId"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 
 </navigation>

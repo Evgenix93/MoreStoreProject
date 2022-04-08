@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -28,6 +29,7 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private val args: SellerProfileFragmentArgs by navArgs()
     private lateinit var sellerProfileAdapter: SellerProfileAdapter
+    private var isSellerFavorite = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,6 +37,8 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         initToolbar()
         showUserInfo(args.user)
         getSellerProducts()
+        setClickListeners()
+        getSellersWishList()
     }
 
     private fun initViewPager(list: List<Product>){
@@ -82,13 +86,27 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
 
     }
 
+    private fun setClickListeners(){
+        binding.subscribeBtn.setOnClickListener {
+            presenter.addDeleteSellersInWishList(listOf(args.user.id))
+        }
+    }
+
+    private fun getSellersWishList(){
+        presenter.getSellersWishList()
+    }
+
 
     override fun success(result: Any) {
-        TODO("Not yet implemented")
+        isSellerFavorite = isSellerFavorite.not()
+        val message = if(isSellerFavorite) "Продавец добален в избранное"
+        else "Продавец убран из избранного"
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
     }
 
     override fun error(message: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun loading() {
@@ -101,10 +119,16 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
                 showUserInfo(result)
             }
             is List<*> -> {
-                val products = result as List<Product>
-                Log.d("Debug", "loaded products = ${products}")
-                //sellerProfileAdapter.updateList(result as List<Product>)
-                initViewPager(products)
+                if(result[0] is Product) {
+                    val products = result as List<Product>
+                    Log.d("Debug", "loaded products = ${products}")
+                    //sellerProfileAdapter.updateList(result as List<Product>)
+                    initViewPager(products)
+                }
+                if(result[0] is User){
+                    isSellerFavorite = (result as List<User>).find { it.id == args.user.id } != null
+
+                }
             }
         }
 

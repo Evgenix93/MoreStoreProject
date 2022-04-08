@@ -20,6 +20,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     private var list = listOf<Product>()
+    private var wishedList = listOf<Product>()
 
     class ProductViewHolder(view: View, onClick: (position: Int) -> Unit) : RecyclerView.ViewHolder(view) {
         private val binding: ItemProductBinding by viewBinding()
@@ -38,15 +39,20 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             val likesCount = product.statistic?.wishlist?.total ?: 0
             binding.likesCountTextView.text = likesCount.toString()
             binding.productNameTextView.text = product.name
-            binding.productPriceTextView.text = if(product.priceNew == null) "" else "${product.priceNew} ₽"
+            binding.productPriceTextView.text = if(product.priceNew == null) "0 ₽" else "${product.priceNew} ₽"
             binding.productBrandTextView.text = if(product.brand == null)
                 "Другое" + "• ${product.property?.find { it.name == "Состояние" }?.value.orEmpty()}"
              else product.brand.name + "• ${product.property?.find { it.name == "Состояние" }?.value.orEmpty()}"
-           // binding.productConditionTextView.text = "• ${product.property?.find { it.name == "Состояние" }?.value}"
+
 
             Glide.with(itemView)
                 .load(product.photo[0].photo)
                 .into(binding.productImageView)
+
+            binding.heartIcon.setImageResource(if(product.wishlist == true) R.drawable.ic_heart_red
+            else R.drawable.ic_heart)
+
+
 
         }
 
@@ -75,6 +81,11 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
 
     fun updateList(newList: List<Product>){
         list = newList
+        notifyDataSetChanged()
+    }
+
+    fun updateWishedList(newList: List<Product>){
+        wishedList = newList
         notifyDataSetChanged()
     }
 

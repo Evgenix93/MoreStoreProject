@@ -2,12 +2,14 @@ package com.project.morestore.adapters
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.project.morestore.databinding.ItemFavoritesellerBinding
 import com.project.morestore.models.FavoriteSeller
+import com.project.morestore.models.User
 import com.project.morestore.util.inflater
 
-class FavoriteSellersAdapter :RecyclerView.Adapter<FavoriteSellersAdapter.FavoriteSellerHolder>() {
-    private var items = listOf<FavoriteSeller>()
+class FavoriteSellersAdapter(val onClick: (User) -> Unit) :RecyclerView.Adapter<FavoriteSellersAdapter.FavoriteSellerHolder>() {
+    private var items = listOf<User>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteSellerHolder {
         return FavoriteSellerHolder(
@@ -21,7 +23,7 @@ class FavoriteSellersAdapter :RecyclerView.Adapter<FavoriteSellersAdapter.Favori
 
     override fun getItemCount() = items.size
 
-    fun setItems(newItems :List<FavoriteSeller>){
+    fun setItems(newItems :List<User>){
         items = newItems
         notifyDataSetChanged()
     }
@@ -30,11 +32,19 @@ class FavoriteSellersAdapter :RecyclerView.Adapter<FavoriteSellersAdapter.Favori
         private val views :ItemFavoritesellerBinding
     ) :RecyclerView.ViewHolder(views.root){
 
-        fun bind(seller :FavoriteSeller){
+        init {
+            itemView.setOnClickListener {
+                onClick(items[adapterPosition])
+            }
+        }
+
+        fun bind(seller :User){
             with(views){
-                photo.setImageResource(seller.photo)
+                Glide.with(itemView)
+                    .load(seller.avatar?.photo)
+                    .into(views.photo)
                 name.text = seller.name
-                rate.text = seller.rate.toString()
+                rate.text = 0.toString()
             }
         }
     }

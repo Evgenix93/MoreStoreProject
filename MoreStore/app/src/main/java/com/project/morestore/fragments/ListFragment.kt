@@ -8,13 +8,16 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.project.morestore.R
 import com.project.morestore.databinding.ScreenEmptylistBinding
 import dev.jorik.emptylistgallery.EmptyListGallery
+import moxy.MvpAppCompatFragment
 
-abstract class ListFragment :Fragment() {
+abstract class ListFragment :MvpAppCompatFragment() {
     protected abstract val emptyList :EmptyList
     protected abstract val list :RecyclerView
     private var empty :View? = null
@@ -34,6 +37,8 @@ abstract class ListFragment :Fragment() {
     ) = inflater.inflate(R.layout.container_empty, container, false)
         .also {
             this.container = it as FrameLayout
+            if(list.parent != null)
+            (list.parent as ViewGroup).removeAllViews()
             this.container.addView(list)
         }
 
@@ -53,6 +58,10 @@ abstract class ListFragment :Fragment() {
     protected fun showList(){
         empty?.let { container.removeView(it) }
         list.visibility = View.VISIBLE
+    }
+
+    protected fun showBtn(show: Boolean){
+        container.findViewById<MaterialButton>(R.id.addSearchBtn).isVisible = show
     }
 
     protected class EmptyList(

@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.text.style.StrikethroughSpan
@@ -52,6 +53,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         super.onViewCreated(view, savedInstanceState)
         initList()
         initToolBar()
+        initViews()
         setClickListeners()
         hideBottomNav()
         showDialog()
@@ -250,12 +252,17 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 return@setOnClickListener
             else brandClick(product.brand)
         }
-        val listener =
-            MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)
-        binding.sellerPhoneTextView.addTextChangedListener(listener)
+
         binding.sellerPhoneTextView.setText(product.phoneShow)
         if (product.user?.id == userId)
             setSellerProduct(dialogWrappers, product)
+
+        binding.heartIcon.setImageResource(if(product.wishlist == true) R.drawable.ic_heart_red
+        else R.drawable.ic_heart)
+        if(product.wishlist == true)
+            binding.heartIcon.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.red, null))
+        else binding.heartIcon.imageTintList = null
+
     }
 
 
@@ -319,12 +326,11 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     private fun initViews() {
-        val crossedStr = binding.productOldPriceTextView.text.toSpannable().apply {
-            setSpan(
-                StrikethroughSpan(), 0, binding.productOldPriceTextView.text.length, 0
-            )
-        }
-        binding.productOldPriceTextView.text = crossedStr
+        val listener =
+            MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)
+        binding.sellerPhoneTextView.addTextChangedListener(listener)
+
+
     }
 
     private fun setSellerProduct(dialogWrappers: List<DialogWrapper>?, product: Product) {
@@ -378,10 +384,14 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 if(result[0] is Product) {
                     productAdapter.updateList(result as List<Product>)
                 }
-                else{
+                if(result[0] is DialogWrapper){
                     loadYouMayLikeProducts(null)
                    bind(product, userId, result as List<DialogWrapper>)
                     dialogs = result
+                }
+                if(result[0] is Long){
+                    getProduct(result[0] as Long)
+
                 }
                 //}
                 /*if (!suggestedProductsLoaded) {

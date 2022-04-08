@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
 data class Filter(
+    var name: String? = "",
     var chosenMaterials: List<MaterialLine> = listOf(),
     var chosenConditions: List<Boolean> = listOf(),
     var chosenForWho: List<Boolean> = listOf(true, false, false),

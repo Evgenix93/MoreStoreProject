@@ -94,4 +94,40 @@ interface UserApi {
     @GET("property/check_save")
     suspend fun loadBrandsProperties(@Query("ip") ip: String): Response<Boolean>
 
+    @GET("wishlist/user")
+    suspend fun getSellersWishList(): Response<List<User>>
+
+    @GET("wishlist/user")
+    suspend fun getSellersWishListGetError(): Response<String>
+
+    @POST("wishlist/user")
+    suspend fun addDeleteSellerToWishList(@Body wishlist: BrandWishList): Response<List<Long>>
+
+    @POST("wishlist/user")
+    suspend fun addDeleteSellerToWishListGetError(@Body wishlist: BrandWishList): Response<String>
+
+    @GET("save_search")
+    suspend fun getFavoriteSearches(): Response<List<FavoriteSearch>>
+
+    @GET("save_search")
+    suspend fun getFavoriteSearchesGetError(): Response<String>
+
+    @GET("save_search/{id}")
+    suspend fun getFavoriteSearchById(@Path("id") id: Long): Response<FavoriteSearch>
+
+    @GET("save_search/{id}")
+    suspend fun getFavoriteSearchByIdGetError(@Path("id") id: Long): Response<String>
+
+    @POST("save_search")
+    suspend fun saveFavoriteSearch(@Body favoriteSearch: FavoriteSearchValue): Response<Id>
+
+    @POST("save_search")
+    suspend fun saveFavoriteSearchGetError(@Body favoriteSearch: FavoriteSearchValue): Response<String>
+
+
+
+
+
+
+
 }
