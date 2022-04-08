@@ -124,6 +124,20 @@ interface UserApi {
     @POST("save_search")
     suspend fun saveFavoriteSearchGetError(@Body favoriteSearch: FavoriteSearchValue): Response<String>
 
+    @POST("save_search/put")
+    suspend fun editFavoriteSearch(@Body favoriteSearch: FavoriteSearchValue): Response<FavoriteSearchValue>
+
+    @POST("save_search/put")
+    suspend fun editFavoriteSearchGetError(@Body favoriteSearch: FavoriteSearchValue): Response<String>
+
+    @POST("save_search/delete")
+    suspend fun deleteFavoriteSearch(@Body id: Id): Response<Boolean>
+
+    @POST("save_search/delete")
+    suspend fun deleteFavoriteSearchGetError(@Body id: Id): Response<String>
+
+
+
 
 
 

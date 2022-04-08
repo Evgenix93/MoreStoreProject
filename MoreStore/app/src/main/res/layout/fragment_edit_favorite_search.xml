@@ -68,21 +68,28 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/materialsClickView" />
 
-            <AutoCompleteTextView
+            <Spinner
                 android:id="@+id/notificationTypeAutoComplete"
                 style="@style/edit_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="46dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/ic_field"
-                android:editable="false"
-                android:focusable="false"
-                android:text="Раз в день"
                 android:textAppearance="@style/regular_16"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/notificationTypeTextView" />
+
+            <ImageView
+                android:id="@+id/arrowDropDownImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_dropdown"
+                app:layout_constraintTop_toTopOf="@id/notificationTypeAutoComplete"
+                app:layout_constraintBottom_toBottomOf="@id/notificationTypeAutoComplete"
+                app:layout_constraintEnd_toEndOf="@id/notificationTypeAutoComplete"
+                android:layout_marginEnd="12dp"/>
 
 
             <TextView
@@ -143,7 +150,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/view3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/view4" />
 
 
             <TextView
@@ -855,7 +862,6 @@
                 android:text="@string/show_offers"
 
                 app:backgroundTint="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/notificationTypeAutoComplete" />

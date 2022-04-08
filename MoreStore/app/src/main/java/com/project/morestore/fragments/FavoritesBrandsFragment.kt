@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
@@ -84,6 +85,7 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
     }
 
     override fun emptyList() {
+        showEmptyList { findNavController().navigate(R.id.catalogFragment) }
 
     }
 

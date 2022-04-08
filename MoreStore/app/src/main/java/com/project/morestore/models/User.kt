@@ -15,7 +15,8 @@ data class User(
     val surname: String?,
     val avatar: UserAvatar?,
     @Json(name = "created_at")
-    val createdAt: String?
+    val createdAt: String?,
+    val rating: SellerRating?
 
 
 

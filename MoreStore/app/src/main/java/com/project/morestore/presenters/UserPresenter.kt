@@ -666,6 +666,27 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun saveFavoriteSearch() {
+        presenterScope.launch {
+            viewState.loading()
+            val response = userRepository.saveFavoriteSearch(FavoriteSearchValue(value = userRepository.getFilter()))
+            when (response?.code()) {
+                200 -> {
+
+
+
+                }
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                404 -> {
+
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+            }
+        }
+    }
+
+
     fun clearFilter() {
         userRepository.clearFilter()
         viewState.success("Фильтр очищен")

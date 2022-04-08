@@ -16,19 +16,20 @@ import com.project.morestore.models.FavoriteSearch
 import com.project.morestore.models.Search
 import com.project.morestore.mvpviews.FavoritesMvpView
 import com.project.morestore.presenters.FavoritesPresenter
+import com.project.morestore.util.autoCleared
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import moxy.ktx.moxyPresenter
 
 class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
     private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
-    private val adapter = SearchesAdapter {
+    private var adapter: SearchesAdapter by autoCleared()
         /*DeleteDialog(
             requireContext(),
             requireContext().getString(R.string.deleteDialog_title_pattern, it.title),
             requireContext().getString(R.string.deleteDialog_defaultMessage),
         ).show()*/
-    }
+
     override val emptyList by lazy {
         EmptyList(
             R.drawable.img_favoritessearch_empty1,
@@ -40,6 +41,11 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
     }
 
     override val list by lazy{
+        this.adapter = SearchesAdapter { favoriteSearch ->
+            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToEditFavoriteSearchFragment(favoriteSearchId = favoriteSearch.id))
+
+
+        }
         RecyclerView(requireContext()).apply{
             layoutManager = LinearLayoutManager(requireContext())
             clipToPadding = false
@@ -141,7 +147,7 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
     }
 
     override fun emptyList() {
-        showEmptyList {  }
+        showEmptyList { findNavController().navigate(R.id.catalogFragment) }
 
     }
 

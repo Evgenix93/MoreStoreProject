@@ -67,7 +67,9 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/chat_item_message_green.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/chat_item_mymedia.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/container_empty.xml" value="0.4390625" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/delete_dialog.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/dialog_resume_registration.xml" value="0.5" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/dialog_success_save_search.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/first_launch_fragment.xml" value="0.5" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_add_card.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_add_product_details.xml" value="0.5416666666666666" />
@@ -97,7 +99,7 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_step3.xml" value="0.5416666666666666" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_step4.xml" value="0.5416666666666666" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_step5.xml" value="0.5416666666666666" />
-        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_edit_favorite_search.xml" value="0.4390625" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_edit_favorite_search.xml" value="0.34509466437177283" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_feedback_products.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_fileter_product_status.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_filter.xml" value="0.5141065830721003" />

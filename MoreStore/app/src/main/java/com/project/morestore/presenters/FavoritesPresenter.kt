@@ -131,6 +131,48 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
         }
     }
 
+    fun editFavoriteSearch(id: Long, filter: Filter){
+        presenterScope.launch {
+            viewState.loading()
+            val response = userRepository.editFavoriteSearch(FavoriteSearchValue(id, filter))
+            when (response?.code()) {
+                200 -> {
+                    viewState.success()
+
+
+                }
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                404 -> {
+                    viewState.emptyList()
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+            }
+
+        }
+    }
+
+    fun deleteFavoriteSearch(id: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val response = userRepository.deleteFavoriteSearch(Id(id))
+            when (response?.code()) {
+                200 -> {
+                    viewState.success()
+
+
+                }
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                404 -> {
+                    viewState.emptyList()
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+            }
+
+        }
+    }
+
 
 
 

@@ -59,8 +59,10 @@ class SearchesAdapter(
                             1 -> "Новое без бирок"
                             2 -> "Отличное"
                             3 -> "Хорошее"
+                            else -> ""
                         }
-                }
+                    else ""
+                }.filter { it.isNotEmpty() }
 
                     val sizes = search.value.chosenTopSizes.filter { it.isSelected }.map { it.int }
                     val sizesBottom = search.value.chosenBottomSizes.filter { it.isSelected }.map { it.int }
@@ -77,7 +79,10 @@ class SearchesAdapter(
                 val str= forWho + categoryStr + brand + condition + sizes + sizesBottom + sizesShoos + sizesTopMen + sizesBottomMen + sizesShoosMen + sizesTopKids + sizesBottomKids + sizesShoosKids + colors
                 views.filters.text = str.joinToString( context.getString(R.string.dot_separator))
 
+                views.notifications.text = search.value.notificationType
+
                 Log.d("mylog", str.joinToString(","))
+                Log.d("mylog", search.value.chosenConditions.toString())
 
 
 

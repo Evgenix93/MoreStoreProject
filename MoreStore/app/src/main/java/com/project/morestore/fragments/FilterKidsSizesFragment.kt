@@ -349,7 +349,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenTopSizes.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int, 1, it.isSelected, it.itRuFr, it.us, it.uk) })
+                            .map { Size(it.id, it.int.orEmpty(), 1, it.isSelected, it.itRuFr, it.us, it.uk) })
                 }
                 if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizes.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizes.size) {
                     bottomSizeCardAdapter.updateList(
@@ -357,7 +357,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenBottomSizes.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int, 2, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 2, it.isSelected) })
                 }
                 if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizes.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizes.size) {
 
@@ -366,7 +366,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenShoosSizes.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int, 3, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 3, it.isSelected) })
                 }
             }
             isForMen -> {
@@ -377,7 +377,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenTopSizesMen.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int, 1, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 1, it.isSelected) })
                 }
 
                 if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesMen.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesMen.size) {
@@ -386,7 +386,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenBottomSizesMen.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int, 2, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 2, it.isSelected) })
                 }
                 if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizesMen.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizesMen.size) {
 
@@ -395,7 +395,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenShoosSizesMen.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int, 3, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 3, it.isSelected) })
                 }
             }
 
@@ -407,7 +407,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenTopSizesKids.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int, 1, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 1, it.isSelected) })
                 }
                 if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesKids.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesKids.size) {
 
@@ -416,7 +416,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenBottomSizesKids.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int, 2, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 2, it.isSelected) })
                 }
                 if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizesKids.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizesKids.size) {
 
@@ -425,7 +425,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenShoosSizesKids.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int, 3, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 3, it.isSelected) })
                 }
             }
         }

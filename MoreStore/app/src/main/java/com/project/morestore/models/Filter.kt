@@ -1,6 +1,8 @@
 package com.project.morestore.models
 
 import android.os.Parcelable
+import com.project.morestore.util.NotificationType
+import com.project.morestore.util.SortingType
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
@@ -33,5 +35,7 @@ data class Filter(
     var isCurrentLocationChosen: Boolean = false,
     var fromPrice: Int? = null,
     var untilPrice: Int? = null,
-    var status: Int = 1
+    var status: Int = 1,
+    var sortingType: String = SortingType.NEW.value,
+    var notificationType: String = NotificationType.DAILY.value
 )

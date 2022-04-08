@@ -44,7 +44,7 @@ class FavoriteSellersAdapter(val onClick: (User) -> Unit) :RecyclerView.Adapter<
                     .load(seller.avatar?.photo)
                     .into(views.photo)
                 name.text = seller.name
-                rate.text = 0.toString()
+                rate.text = seller.rating?.value.toString()
             }
         }
     }

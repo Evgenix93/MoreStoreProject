@@ -13,6 +13,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFavoritesBinding
 import com.project.morestore.databinding.TabCategoryBinding
 import com.project.morestore.fragments.base.BottomNavigationFragment
+import com.project.morestore.models.FavoriteSearch
 import com.project.morestore.models.Product
 import com.project.morestore.models.ProductBrand
 import com.project.morestore.models.User
@@ -82,7 +83,9 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
 
     private fun getFavorites(){
         presenter.getProductWishList()
+        presenter.getBrandWishList()
         presenter.getSellersWishList()
+        presenter.getFavoriteSearches()
     }
 
     override fun loading() {
@@ -106,6 +109,12 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
                 countTextView?.isVisible = true
                 countTextView?.text = list.size.toString()
             }
+            is FavoriteSearch -> {
+                val countTextView = views.tabs.getTabAt(3)?.view?.findViewById<TextView>(R.id.count)
+                countTextView?.isVisible = true
+                countTextView?.text = list.size.toString()
+            }
+
 
         }
 

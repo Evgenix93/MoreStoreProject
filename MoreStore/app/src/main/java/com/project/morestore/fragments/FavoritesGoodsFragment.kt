@@ -68,7 +68,7 @@ class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
     }
 
     override fun emptyList() {
-        showEmptyList { }
+        showEmptyList {findNavController().navigate(R.id.catalogFragment) }
     }
 
     override fun success() {

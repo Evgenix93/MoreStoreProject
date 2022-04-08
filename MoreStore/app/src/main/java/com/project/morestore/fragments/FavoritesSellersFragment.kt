@@ -74,7 +74,7 @@ class FavoritesSellersFragment :ListFragment(), FavoritesMvpView {
     }
 
     override fun emptyList() {
-        showEmptyList {  }
+        showEmptyList { findNavController().navigate(R.id.catalogFragment) }
 
     }
 

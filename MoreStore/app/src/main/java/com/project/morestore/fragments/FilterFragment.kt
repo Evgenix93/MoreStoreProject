@@ -264,6 +264,7 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
 
     private fun saveFilter() {
         presenter.saveFilter()
+        presenter.saveFavoriteSearch()
     }
 
     private fun savePriceFilter(){
@@ -284,7 +285,7 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
     }
 
     override fun loading() {
-        TODO("Not yet implemented")
+
     }
 
     override fun loaded(result: Any) {

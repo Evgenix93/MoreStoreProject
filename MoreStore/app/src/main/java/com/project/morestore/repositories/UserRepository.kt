@@ -433,6 +433,62 @@ class UserRepository(val context: Context) {
 
     }
 
+    suspend fun editFavoriteSearch(search: FavoriteSearchValue): Response<FavoriteSearchValue>?{
+        return try {
+            userApi.editFavoriteSearch(search)
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.editFavoriteSearchGetError(search)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, e.message.orEmpty().toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
+    suspend fun deleteFavoriteSearch(id: Id): Response<Boolean>?{
+        return try {
+            userApi.deleteFavoriteSearch(id)
+        } catch (e: Throwable) {
+            Log.d("mylog", e.message.toString())
+            if (e is IOException) {
+                null
+            } else {
+                try {
+                    val response = userApi.deleteFavoriteSearchGetError(id)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Log.d("mylog", e.message.toString())
+                    Response.error(400, e.message.orEmpty().toResponseBody(null))
+                }
+
+            }
+        }
+
+    }
+
     suspend fun getCurrentUserInfo(): Response<User>?{
         return try {
             userApi.getUserInfoById(Token.userId)

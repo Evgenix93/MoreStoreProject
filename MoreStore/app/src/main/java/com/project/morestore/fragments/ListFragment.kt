@@ -69,7 +69,7 @@ abstract class ListFragment :MvpAppCompatFragment() {
     }
 
     protected fun showBtn(show: Boolean){
-        container.findViewById<MaterialButton>(R.id.addSearchBtn).isVisible = show
+        requireView().findViewById<MaterialButton>(R.id.addSearchBtn).isVisible = show
     }
 
     protected fun showBrandsView(brands: List<ProductBrand>){

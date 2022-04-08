@@ -1,8 +1,10 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -12,6 +14,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentEditFavoriteSearchBinding
 import com.project.morestore.databinding.FragmentFilterBinding
+import com.project.morestore.dialogs.DeleteDialog
+import com.project.morestore.dialogs.SuccessSaveSearchDialog
 import com.project.morestore.models.FavoriteSearch
 import com.project.morestore.models.Filter
 import com.project.morestore.models.SizeLine
@@ -20,6 +24,8 @@ import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
+import com.project.morestore.util.NotificationType
+import com.project.morestore.util.SortingType
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -34,6 +40,7 @@ class EditFavoriteSearchFragment : MvpAppCompatFragment(R.layout.fragment_edit_f
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, null)
         initToolBar()
+        initViews()
         loadFilter()
         getFavoriteSearch()
         firstTimeLoaded = true
@@ -56,11 +63,23 @@ class EditFavoriteSearchFragment : MvpAppCompatFragment(R.layout.fragment_edit_f
         initAutoCompleteTextView()
     }
 
-    override fun onStop() {
-        super.onStop()
-        presenter.restoreFilter()
 
+
+    override fun onDestroy() {
+        presenter.restoreFilter()
+        super.onDestroy()
     }
+
+    private fun initViews(){
+        binding.deleteTextView.isVisible = args.favoriteSearchId != 0L
+        binding.notificationTypeAutoComplete.setAdapter(ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line,
+        arrayOf(NotificationType.DAILY.value, NotificationType.WEEKLY.value, NotificationType.DISABLED.value)))
+        //binding.notificationTypeAutoComplete.setOnClickListener {
+           // binding.notificationTypeAutoComplete.showDropDown()
+        //}
+    }
+
+
 
     private fun loadFilter(){
         if(firstTimeLoaded)
@@ -202,6 +221,14 @@ class EditFavoriteSearchFragment : MvpAppCompatFragment(R.layout.fragment_edit_f
 
         binding.priceFromEditText.setText(filter.fromPrice?.toString())
         binding.priceUntilEditText.setText(filter.untilPrice?.toString())
+
+        binding.typeAutoCompleteTextView.setText(filter.sortingType,false)
+        binding.notificationTypeAutoComplete.setSelection(if(filter.notificationType == NotificationType.DAILY.value) 0
+        else if(filter.notificationType == NotificationType.WEEKLY.value) 1 else 2)
+        binding.searchNameEditText.setText(filter.name)
+
+        binding.priceFromEditText.setText(if(filter.fromPrice == null) "" else filter.fromPrice.toString())
+        binding.priceUntilEditText.setText(if(filter.untilPrice == null) "" else filter.untilPrice.toString())
     }
 
     private fun setClickListeners() {
@@ -269,6 +296,10 @@ class EditFavoriteSearchFragment : MvpAppCompatFragment(R.layout.fragment_edit_f
             presenter.reserveFilter()
             findNavController().navigate(R.id.catalogFragment)
         }
+
+        binding.deleteTextView.setOnClickListener {
+            DeleteDialog(confirmCallback = {deleteFavoriteSearch()}, context = requireContext()).show()
+        }
     }
 
 
@@ -281,6 +312,7 @@ class EditFavoriteSearchFragment : MvpAppCompatFragment(R.layout.fragment_edit_f
     }
 
     private fun initToolBar() {
+        binding.toolbarFilter.titleTextView.text = "Редактирование поиска"
         binding.toolbarFilter.backIcon.setOnClickListener { findNavController().popBackStack() }
         binding.toolbarFilter.actionIcon.isVisible = false
     }
@@ -293,8 +325,38 @@ class EditFavoriteSearchFragment : MvpAppCompatFragment(R.layout.fragment_edit_f
 
 
     private fun saveFilter() {
-        presenter.saveFavoriteSearch(filter)
+        if(binding.searchNameEditText.text.isNullOrBlank()){
+            Toast.makeText(requireContext(), "Укажите название", Toast.LENGTH_SHORT).show()
+            return
+        }
 
+        if(binding.priceFromEditText.text.isNotEmpty() && binding.priceUntilEditText.text.isNotEmpty()) {
+            filter.fromPrice = binding.priceFromEditText.text.toString().toInt()
+            filter.untilPrice = binding.priceUntilEditText.text.toString().toInt()
+        }
+
+        filter.notificationType = (binding.notificationTypeAutoComplete.selectedView as TextView).text.toString()
+        filter.sortingType = binding.typeAutoCompleteTextView.text.toString()
+        filter.name = binding.searchNameEditText.text.toString()
+        /*filter.chosenTopSizes = filter.chosenTopSizes.filter { it.id != 0 }//filter.chosenTopSizes.toMutableList().apply { removeLast() }
+        filter.chosenBottomSizes = filter.chosenBottomSizes.filter { it.id != 0 }//toMutableList().apply { removeLast() }
+        filter.chosenShoosSizes = filter.chosenShoosSizes.filter { it.id != 0 }//toMutableList().apply { removeLast() }
+        filter.chosenTopSizesMen = filter.chosenTopSizesMen.filter { it.id != 0 }//toMutableList().apply { removeLast() }
+        filter.chosenBottomSizesMen = filter.chosenBottomSizesMen.filter { it.id != 0 }//toMutableList().apply { removeLast() }
+        filter.chosenShoosSizesMen = filter.chosenShoosSizesMen.filter { it.id != 0 }//toMutableList().apply { removeLast() }
+        filter.chosenTopSizesKids = filter.chosenTopSizesKids.filter { it.id != 0 }//toMutableList().apply { removeLast() }
+        filter.chosenBottomSizesKids = filter.chosenBottomSizesKids.filter { it.id != 0 }//toMutableList().apply { removeLast() }
+        filter.chosenShoosSizesKids = filter.chosenShoosSizesKids.filter { it.id != 0 }//toMutableList().apply { removeLast() }
+*/
+        if(args.favoriteSearchId == 0L)
+        presenter.saveFavoriteSearch(filter)
+        else
+            presenter.editFavoriteSearch(args.favoriteSearchId, filter)
+
+    }
+
+    private fun deleteFavoriteSearch(){
+        presenter.deleteFavoriteSearch(args.favoriteSearchId)
     }
 
     override fun loading() {
@@ -329,7 +391,8 @@ class EditFavoriteSearchFragment : MvpAppCompatFragment(R.layout.fragment_edit_f
 
     override fun success() {
         showLoading(false)
-        Toast.makeText(requireContext(), "Поиск сохранен", Toast.LENGTH_SHORT).show()
+        SuccessSaveSearchDialog(requireContext()).show()
+        findNavController().popBackStack()
     }
 
 }
