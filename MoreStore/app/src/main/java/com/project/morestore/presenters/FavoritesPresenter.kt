@@ -111,7 +111,7 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
         }
     }
 
-    fun saveFavoriteSearch(filter: Filter){
+    fun saveFavoriteSearch(filter: Filter) {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.saveFavoriteSearch(FavoriteSearchValue(value = filter))
@@ -124,6 +124,16 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
                     viewState.emptyList()
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+            }
+        }
+    }
+
+
+
+
 
     fun getBrandWishList() {
         presenterScope.launch {

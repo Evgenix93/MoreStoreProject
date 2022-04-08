@@ -19,8 +19,8 @@
         style="@style/buttonStyle"
         android:text="Добавить поиск"/>
 
-</FrameLayout>
-    android:paddingHorizontal="10dp">
+
+
 
     <LinearLayout
         android:id="@+id/containerLinearLayout"

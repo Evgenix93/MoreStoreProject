@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/mainFragment">
 
     <fragment
         android:id="@+id/firstLaunchFragment"
@@ -961,6 +961,9 @@
         <action
             android:id="@+id/action_favoritesFragment_to_editFavoriteSearchFragment"
             app:destination="@id/editFavoriteSearchFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_brandsFragment"
+            app:destination="@id/brandsFragment" />
     </fragment>
     <fragment
         android:id="@+id/editFavoriteSearchFragment"
@@ -971,13 +974,6 @@
             app:argType="long"
             android:defaultValue="0L" />
     </fragment>
-        android:label="FavoritesFragment" >
-        <action
-            android:id="@+id/action_favoritesFragment_to_productDetailsFragment"
-            app:destination="@id/productDetailsFragment" />
-        <action
-            android:id="@+id/action_favoritesFragment_to_brandsFragment"
-            app:destination="@id/brandsFragment" />
-    </fragment>
+
 
 </navigation>

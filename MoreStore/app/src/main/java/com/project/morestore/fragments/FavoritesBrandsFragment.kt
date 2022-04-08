@@ -54,6 +54,10 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
         getFavoriteBrands()
     }
 
+    override fun loading() {
+
+    }
+
     override fun favoritesLoaded(list: List<*>) {
            if(list.isNotEmpty()) {
                showList()
@@ -77,5 +81,13 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
     override fun error(message: String) {
         loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun emptyList() {
+
+    }
+
+    override fun success() {
+
     }
 }
