@@ -26,7 +26,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
     private val binding: FragmentFilterSizesShoesBinding by viewBinding()
     private var sizeAdapter: SizeLineAdapter by autoCleared()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
-    //private var shoosSizes = listOf<SizeLine>()
+
     private var isForWomen = true
     private var isSizesLoaded = false
 
@@ -52,121 +52,9 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
             setHasFixedSize(true)
         }
 
-        //presenter.getAllSizes()
-
-       /* val list = listOf(
-            SizeLine(
-                0,
-                "XXS",
-                "26-27",
-                "42",
-                "32",
-                "32",
-                true
-            ),
-            SizeLine(
-                0,
-                "XS",
-                "28-29",
-                "44",
-                "34",
-                "34",
-                true
-            ),
-            SizeLine(
-                0,
-                "S",
-                "30-31",
-                "46",
-                "36",
-                "36",
-                true
-            ),
-            SizeLine(
-                0,
-                "M",
-                "32-33",
-                "48",
-                "38",
-                "38",
-                true
-            ),
-            SizeLine(
-                0,
-                "L",
-                "34-35",
-                "50",
-                "40",
-                "40",
-                true
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                true
-            ),
-            SizeLine(
-                0,
-                "XXL",
-                "38-39",
-                "54",
-                "44",
-                "44",
-                true
-            ),
-            SizeLine(
-                0,
-                "3XL",
-                "40-41",
-                "56",
-                "46",
-                "46",
-                true
-            ),
-            SizeLine(
-                0,
-                "4XL",
-                "42-43",
-                "58",
-                "48",
-                "48",
-                true
-            ),
-            SizeLine(
-                0,
-                "5XL",
-                "44-45",
-                "60",
-                "50",
-                "60",
-                true
-            ),
-            SizeLine(
-                0,
-                "",
-                "",
-                "",
-                "",
-                "",
-                true
-            )
 
 
-        )*/
 
-        /* sizeAdapter.updateList(if(FilterState.chosenSizes.isNotEmpty()){
-             val allNotSelected = FilterState.chosenSizes.all { !it.isSelected }
-             if(allNotSelected){
-                 for(size in FilterState.chosenSizes){
-                     size.isSelected = true
-                 }
-             }
-             FilterState.chosenSizes
-         } else emptyList())*/
     }
 
     private fun getSizes(){
@@ -185,89 +73,6 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
             sizeAdapter.cleanCheckBoxes()
         }
         binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
-    }
-
-    private fun convertSizeToSizeLine(size: Size): SizeLine{
-        val int = size.name
-        var w = ""
-        var itRuFr = ""
-        var us = ""
-        var uk = ""
-        when (size.name) {
-            "38" -> {
-                w = ""
-                itRuFr = "39"
-                us = "8"
-                uk = "5"
-            }
-            "38.5" -> {
-                w = ""
-                itRuFr = "39.5"
-                us = "8.5"
-                uk = "5.5"
-            }
-            "39" -> {
-                w = ""
-                itRuFr = "40"
-                us = "9"
-                uk = "6"
-            }
-            "39.5" -> {
-                w = ""
-                itRuFr = "40.5"
-                us = "9.5"
-                uk = "6.5"
-            }
-            "40" -> {
-                w = ""
-                itRuFr = "41"
-                us = "10"
-                uk = "7"
-            }
-            "40.5" -> {
-                w = ""
-                itRuFr = "41.5"
-                us = "10.5"
-                uk = "7.5"
-            }
-            "41" -> {
-                w = ""
-                itRuFr = "42"
-                us = "11"
-                uk = "8"
-            }
-            "41.5" -> {
-                w = ""
-                itRuFr = "42.5"
-                us = "11.5"
-                uk = "8.5"
-            }
-            "42" -> {
-                w = ""
-                itRuFr = "43"
-                us = "12"
-                uk = "9"
-            }
-            "42.5" -> {
-                w = ""
-                itRuFr = "43.5"
-                us = "12.5"
-                uk = "9.5"
-            }
-
-            "43" ->  {
-                w = ""
-                itRuFr = "44"
-                us = "13"
-                uk = "10"
-            }
-            else -> {
-            }
-        }
-
-        return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false, -1)
-
-
     }
 
     private fun showLoading(loading: Boolean){
@@ -305,7 +110,7 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
 
     override fun onStop() {
         super.onStop()
-        //FilterState.filter.chosenShoosSizes = sizeAdapter.getChosenSizes()
+
         saveShoosSizes()
     }
 

@@ -200,6 +200,18 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         presenter.collectSearchFlow(searchFlow)
 
 
+        binding.toolbarMain.materialToolbar.setOnMenuItemClickListener { menuItem ->
+            return@setOnMenuItemClickListener when(menuItem.itemId){
+                R.id.favorite -> {
+                    findNavController().navigate(CatalogFragmentDirections.actionCatalogFragmentToFavoritesFragment())
+                    true
+                }
+                else -> true
+            }
+        }
+
+
+
 
 
     }

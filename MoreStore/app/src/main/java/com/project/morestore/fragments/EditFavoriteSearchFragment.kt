@@ -2,7 +2,9 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.text.Editable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
@@ -16,6 +18,7 @@ import com.project.morestore.databinding.FragmentEditFavoriteSearchBinding
 import com.project.morestore.databinding.FragmentFilterBinding
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.dialogs.SuccessSaveSearchDialog
+import com.project.morestore.fragments.base.FullscreenMvpFragment
 import com.project.morestore.models.FavoriteSearch
 import com.project.morestore.models.Filter
 import com.project.morestore.models.SizeLine
@@ -29,12 +32,21 @@ import com.project.morestore.util.SortingType
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class EditFavoriteSearchFragment : MvpAppCompatFragment(R.layout.fragment_edit_favorite_search), FavoritesMvpView {
-    private val binding: FragmentEditFavoriteSearchBinding by viewBinding()
+class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
+    private lateinit var binding: FragmentEditFavoriteSearchBinding
     private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
     private var filter = Filter()
     private val args: EditFavoriteSearchFragmentArgs by navArgs()
     private var firstTimeLoaded = false
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return FragmentEditFavoriteSearchBinding.inflate(inflater).also { binding = it }.root
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

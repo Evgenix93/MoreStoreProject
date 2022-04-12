@@ -74,6 +74,7 @@
             android:layout_marginEnd="51dp"/>
 
         <TextView
+            android:id="@+id/sellerRatingTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5.0"

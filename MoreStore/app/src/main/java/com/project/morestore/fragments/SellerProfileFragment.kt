@@ -84,6 +84,8 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
             .load(user.avatar?.photo)
             .into(binding.avatarImageView)
 
+        binding.sellerRatingTextView.text = user.rating?.value.toString()
+
     }
 
     private fun setClickListeners(){

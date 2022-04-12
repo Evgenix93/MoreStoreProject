@@ -74,9 +74,11 @@ class SearchesAdapter(
                     val sizesBottomKids = search.value.chosenBottomSizesKids.filter { it.isSelected }.map { it.int }
                     val sizesShoosKids = search.value.chosenShoosSizesKids.filter { it.isSelected }.map { it.int }
                 val colors = search.value.colors.filter { it.isChecked == true }.map { it.name }
+                val materials = search.value.chosenMaterials.filter { it.isSelected }.map { it.name }
+                val styles = search.value.chosenStyles.filter { it.isChecked == true }.map { it.name }
 
 
-                val str= forWho + categoryStr + brand + condition + sizes + sizesBottom + sizesShoos + sizesTopMen + sizesBottomMen + sizesShoosMen + sizesTopKids + sizesBottomKids + sizesShoosKids + colors
+                val str= forWho + categoryStr + brand + condition + sizes + sizesBottom + sizesShoos + sizesTopMen + sizesBottomMen + sizesShoosMen + sizesTopKids + sizesBottomKids + sizesShoosKids + colors + materials + styles
                 views.filters.text = str.joinToString( context.getString(R.string.dot_separator))
 
                 views.notifications.text = search.value.notificationType

@@ -13,6 +13,7 @@ import com.project.morestore.adapters.SizeCardsAdapter
 import com.project.morestore.databinding.FragmentOnboarding2Binding
 import com.project.morestore.models.Property
 import com.project.morestore.models.Size
+import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.OnBoardingMvpView
 import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.util.autoCleared
@@ -63,30 +64,31 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
         }
     }
 
-    private fun setClickListeners(){
+    private fun setClickListeners() {
         binding.continueBtn.setOnClickListener {
 
 
-         presenter.saveSizes(
-             topSizeCardAdapter.getSizes(),
-             bottomSizeCardAdapter.getSizes(),
-             shoesSizeCardAdapter.getSizes()
-         )
+            presenter.saveSizes(
+                topSizeCardAdapter.getSizes(),
+                bottomSizeCardAdapter.getSizes(),
+                shoesSizeCardAdapter.getSizes(),
+                args.isMale
+            )
         }
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun showLoading(loading: Boolean){
+    private fun showLoading(loading: Boolean) {
         binding.continueBtn.isEnabled = !loading
         binding.loader.isVisible = loading
     }
 
-    private fun getAllSizes(){
-        if(args.isMale){
+    private fun getAllSizes() {
+        if (args.isMale) {
             presenter.getTopSizesMen()
             presenter.getBottomSizesMen()
             presenter.getShoosSizesMen()
-        }else {
+        } else {
             presenter.getTopSizes()
             presenter.getBottomSizes()
             presenter.getShoosSizes()
@@ -101,17 +103,83 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
     override fun loaded(result: List<Any>) {
         showLoading(false)
         val categoryId = (result[0] as Property).idCategory?.toInt()
-        if(categoryId == 4 || categoryId == 1)
-        topSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
+        if (categoryId == 4 || categoryId == 1)
+            topSizeCardAdapter.updateList((result as List<Property>).map {
+                val list = it.ico?.split(';').orEmpty()
+                val sizeLine = SizeLine(
+                    it.id.toInt(),
+                    it.name,
+                    list[0].removePrefix("W").removeSurrounding("'"),
+                    list[1].removePrefix("IT/RU/FR").removeSurrounding("'"),
+                    list[2].removePrefix("US").removeSurrounding("'"),
+                    list[3].removePrefix("UK").removeSurrounding("'"),
+                    false,
+                    idCategory = it.idCategory?.toInt()!!
+                )
+                Size(
+                    it.id.toInt(),
+                    it.name,
+                    it.idCategory?.toInt(),
+                    false,
+                    w = sizeLine.w,
+                    fr = sizeLine.itRuFr,
+                    uk = sizeLine.uk,
+                    us = sizeLine.us
+                )
+            })
 
-        if(categoryId == 5 || categoryId == 2)
-            bottomSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
+        if (categoryId == 5 || categoryId == 2)
+            bottomSizeCardAdapter.updateList((result as List<Property>).map {
+                val list = it.ico?.split(';').orEmpty()
+                val sizeLine = SizeLine(
+                    it.id.toInt(),
+                    it.name,
+                    list[0].removePrefix("W").removeSurrounding("'"),
+                    list[1].removePrefix("IT/RU/FR").removeSurrounding("'"),
+                    list[2].removePrefix("US").removeSurrounding("'"),
+                    list[3].removePrefix("UK").removeSurrounding("'"),
+                    false,
+                    idCategory = it.idCategory?.toInt()!!
+                )
+                Size(
+                    it.id.toInt(),
+                    it.name,
+                    it.idCategory?.toInt(),
+                    false,
+                    w = sizeLine.w,
+                    fr = sizeLine.itRuFr,
+                    uk = sizeLine.uk,
+                    us = sizeLine.us
+                )
+            })
 
-        if(categoryId == 6 || categoryId == 3)
-            shoesSizeCardAdapter.updateList((result as List<Property>).map { Size(it.id.toInt(), it.name, it.idCategory?.toInt(), false) })
 
 
 
+        if (categoryId == 6 || categoryId == 3)
+            shoesSizeCardAdapter.updateList((result as List<Property>).map {
+                val list = it.ico?.split(';').orEmpty()
+                val sizeLine = SizeLine(
+                    it.id.toInt(),
+                    it.name,
+                    list[0].removePrefix("W").removeSurrounding("'"),
+                    list[1].removePrefix("IT/RU/FR").removeSurrounding("'"),
+                    list[2].removePrefix("US").removeSurrounding("'"),
+                    list[3].removePrefix("UK").removeSurrounding("'"),
+                    false,
+                    idCategory = it.idCategory?.toInt()!!
+                )
+                Size(
+                    it.id.toInt(),
+                    it.name,
+                    it.idCategory?.toInt(),
+                    false,
+                    w = sizeLine.w,
+                    fr = sizeLine.itRuFr,
+                    uk = sizeLine.uk,
+                    us = sizeLine.us
+                )
+            })
 
 
     }
