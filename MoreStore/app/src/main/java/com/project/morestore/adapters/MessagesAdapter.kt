@@ -2,6 +2,7 @@ package com.project.morestore.adapters
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -37,6 +38,7 @@ class MessagesAdapter(
             Type.DIVIDER.ordinal -> DividerHolder(ChatItemDividerBinding.inflate(parent.inflater, parent, false))
             Type.MY.ordinal -> MyMessageHolder(ChatItemMessageGreenBinding.inflate(parent.inflater, parent, false))
             Type.COMPANION.ordinal -> CompanionMessageHolder(parent.context)
+            Type.COMPANION_MEDIA.ordinal -> CompanionMediaMessageHolder(ChatItemCompanionMediaBinding.inflate(parent.inflater, parent, false))
             Type.MY_MEDIA.ordinal -> MyMediaMessageHolder(ChatItemMymediaBinding.inflate(parent.inflater, parent, false))
             Type.DEAL_REQUEST.ordinal -> DealRequestHolder(ChatItemDealRequestBinding.inflate(parent.inflater, parent, false))
             Type.DEAL_ACCEPT.ordinal -> DealAcceptHolder(ChatItemDealAcceptBinding.inflate(parent.inflater, parent, false))
@@ -60,6 +62,7 @@ class MessagesAdapter(
             Type.DIVIDER.ordinal -> (holder as DividerHolder).bind(item as Message.Divider)
             Type.MY.ordinal -> (holder as MyMessageHolder).bind(item as Message.My)
             Type.COMPANION.ordinal -> (holder as CompanionMessageHolder).bind(item as Message.Companion)
+            Type.COMPANION_MEDIA.ordinal -> (holder as CompanionMediaMessageHolder).bind(item as Message.CompanionMedia)
             Type.MY_MEDIA.ordinal -> (holder as MyMediaMessageHolder).bind(item as Message.MyMedia)
             Type.DEAL_REQUEST.ordinal -> (holder as DealRequestHolder).bind(item as Message.Special.DealRequest)
             Type.DEAL_ACCEPT.ordinal -> (holder as DealAcceptHolder).bind(item as Message.Special.DealAccept)
@@ -83,6 +86,7 @@ class MessagesAdapter(
             is Message.Divider -> Type.DIVIDER.ordinal
             is Message.My -> Type.MY.ordinal
             is Message.Companion -> Type.COMPANION.ordinal
+            is Message.CompanionMedia -> Type.COMPANION_MEDIA.ordinal
             is Message.MyMedia -> Type.MY_MEDIA.ordinal
             is Message.Special.DealRequest -> Type.DEAL_REQUEST.ordinal
             is Message.Special.DealAccept -> Type.DEAL_ACCEPT.ordinal
@@ -118,6 +122,7 @@ class MessagesAdapter(
         MY,
         COMPANION,
         MY_MEDIA,
+        COMPANION_MEDIA,
         DEAL_REQUEST,
         DEAL_ACCEPT,
         DEAL_CANCEL,
@@ -205,6 +210,33 @@ class MessagesAdapter(
                     .also {
                         if(count < 4)
                         views.media.addView(it) }
+            }
+        }
+    }
+
+    inner class CompanionMediaMessageHolder(
+        private val views :ChatItemCompanionMediaBinding
+    ) :RecyclerView.ViewHolder(views.root){
+        fun bind(message :Message.CompanionMedia){
+            Log.d("MyDebug", "media = ${message.media}")
+            views.time.text = message.time
+            views.status.setImageResource(message.status)
+            views.media.removeAllViews()
+            if(message.message != null){
+                views.messageLinearLayout.isVisible = true
+                views.message.text = message.message
+            }else views.messageLinearLayout.isVisible = false
+            for ((count, media) in message.media.withIndex()){
+                ChatMedia(views.root.context, media, message.media.size)
+                    .apply {
+                        (layoutParams as FrameLayout.LayoutParams).apply {
+                            setMargins(8.dp, 0, 0, 0)
+                        }
+                        setOnClickListener { showMediaCallback(message.media) }
+                    }
+                    .also {
+                        if(count < 4)
+                            views.media.addView(it) }
             }
         }
     }
