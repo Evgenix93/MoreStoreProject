@@ -38,13 +38,16 @@ class PriceDialog() :BottomSheetDialogFragment() {
             subtitle.text = getString(R.string.setDiscount_subtitle, price)
             editText.hint = String.format("%,d", price)
             editText.addTextChangedListener {
-                it?.let { apply.isEnabled = it.length > 0 }
+                it?.let { apply.isEnabled = it.isNotEmpty() }
             }
             close.setOnClickListener { dismiss() }
             if(Type.values()[requireArguments().getInt(TYPE, 0)] == Type.DISCOUNT){
                 title.setText(R.string.setDiscount_title)
                 apply.setText(R.string.setDiscount_apply)
-
+                apply.setOnClickListener {
+                    (parentFragment as Callback).applyDiscount(editText.text.toString())
+                    dismiss()
+                }
             } else {
                 title.setText(R.string.setPrice_title)
                 apply.setText(R.string.setPrice_apply)
@@ -59,5 +62,6 @@ class PriceDialog() :BottomSheetDialogFragment() {
     enum class Type { PRICE, DISCOUNT }
     interface Callback {
         fun applyNewPrice(newPrice :String)
+        fun applyDiscount(discount: String)
     }
 }

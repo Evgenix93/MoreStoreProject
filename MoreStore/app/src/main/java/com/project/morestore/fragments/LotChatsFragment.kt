@@ -13,12 +13,10 @@ import com.project.morestore.adapters.ChatsAdapter
 import com.project.morestore.databinding.FragmentLotchatsBinding
 import com.project.morestore.fragments.base.BottomNavigationFragment
 import com.project.morestore.fragments.base.BottomNavigationMvpFragment
-import com.project.morestore.models.Chat
-import com.project.morestore.models.CreatedDialogId
-import com.project.morestore.models.DialogWrapper
-import com.project.morestore.models.MessageModel
+import com.project.morestore.models.*
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
+import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.MiddleDivider
 import moxy.ktx.moxyPresenter
 import kotlin.reflect.KClass
@@ -161,6 +159,10 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     override fun mediaUrisLoaded(mediaUris: List<Uri>?) {
         TODO("Not yet implemented")
+    }
+
+    override fun actionMessageSent(info: ChatFunctionInfo, type: MessageActionType) {
+
     }
 
 }

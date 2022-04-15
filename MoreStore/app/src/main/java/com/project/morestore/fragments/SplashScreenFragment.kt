@@ -24,12 +24,6 @@ class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen
         super.onViewCreated(view, savedInstanceState)
         hideBottomNavBar()
         presenter.checkToken()
-       // job = lifecycleScope.launch {
-          //  presenter.checkToken()
-         //   delay(2000)
-         //   findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToFirstLaunchFragment())
-
-        //}
     }
 
     override fun onDestroyView() {

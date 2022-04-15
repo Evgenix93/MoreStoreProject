@@ -4,9 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.Chat
+import com.project.morestore.models.ChatFunctionInfo
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
+import com.project.morestore.util.MessageActionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -431,4 +433,58 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         chatRepository.clearMediaUris()
     }
 
+    fun offerDiscount(info: ChatFunctionInfo){
+        viewState.loading()
+        presenterScope.launch {
+            val response = chatRepository.offerDiscount(info)
+            when(response?.code()){
+                200 -> {
+                    submitDiscount(ChatFunctionInfo(idDialog = response.body()!!.idDialog, suggest = response.body()!!.idSuggest))
+                }
+                null -> viewState.error("Ошибка")
+            }
+        }
+    }
+
+    private fun submitDiscount(info: ChatFunctionInfo){
+        presenterScope.launch {
+            val response = chatRepository.submitDiscount(info)
+            when(response?.code()){
+                200 -> {
+                    viewState.actionMessageSent(response.body()!!, MessageActionType.DiscountRequestSuggest)
+                }
+                null -> viewState.error("Ошибка")
+            }
+        }
+    }
+
+    fun submitBuy(info: ChatFunctionInfo){
+        presenterScope.launch {
+         val response = chatRepository.submitBuy(info)
+           when(response?.code()){
+               200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.BuyRequestSubmit)
+               null -> viewState.error("Ошибка")
+           }
+        }
+    }
+
+    fun submitPrice(info: ChatFunctionInfo){
+        presenterScope.launch {
+            val response = chatRepository.submitPrice(info)
+            when(response?.code()){
+                200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.PriceRequestSubmit)
+                null -> viewState.error("Ошибка")
+            }
+        }
+    }
+
+    fun cancelPrice(info: ChatFunctionInfo){
+        presenterScope.launch {
+            val response = chatRepository.cancelPrice(info)
+            when(response?.code()){
+                200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.PriceRequestCancel)
+                null -> viewState.error("Ошибка")
+            }
+        }
+    }
 }
