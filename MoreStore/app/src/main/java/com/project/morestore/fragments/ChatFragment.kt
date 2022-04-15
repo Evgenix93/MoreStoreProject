@@ -54,7 +54,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
            // stubAcceptDealRunnable.run()
            // views.bottomBar.visibility = GONE
         },
-       cancelDealCallback =  { requireContext().defToast(R.string.cancel) },
+       cancelDealCallback =  {  presenter.cancelBuyRequest(currentDialogId ?: 0, (it as Message.Special.DealRequest).suggestId ) },
        submitPriceCallback =  {
            presenter.submitPrice(ChatFunctionInfo(
                dialogId = requireArguments().getLong(DIALOG_ID_KEY),
@@ -160,8 +160,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun showSell(dialog: DialogWrapper) {
 
-        currentDialogId = dialog.dialog.id
-        user = dialog.dialog.user
+        //currentDialogId = dialog.dialog.id
+        //user = dialog.dialog.user
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
             toolbar.title.text = dialog.dialog.user.name
@@ -288,9 +288,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }*/
 
     private fun showDeal(dialog: DialogWrapper) {
-        currentDialogId = dialog.dialog.id
-        currentProductPrice = dialog.product?.priceNew
-        user = dialog.dialog.user
+        //currentDialogId = dialog.dialog.id
+        //currentProductPrice = dialog.product?.priceNew
+        //user = dialog.dialog.user
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
             toolbar.title.text = dialog.dialog.user.name
@@ -783,6 +783,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun dialogLoaded(dialog: DialogWrapper) {
         showLoading(false)
+        currentDialogId = dialog.dialog.id
+        currentProductPrice = dialog.product?.priceNew
+        user = dialog.dialog.user
         //productPrice = dialog.product?.priceNew?.toInt() ?: 0
         showDialog(dialog)
     }
