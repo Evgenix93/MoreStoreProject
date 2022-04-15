@@ -91,6 +91,10 @@ class MessagesAdapter(
         notifyDataSetChanged()
     }
 
+    fun isTodayMessages(): Boolean{
+        return items.find { it is Message.Divider && it.text == "сегодня" } != null
+    }
+
     enum class Type {
         DIVIDER,
         MY,
@@ -110,7 +114,7 @@ class MessagesAdapter(
         private val views :ChatItemDividerBinding
     ) :RecyclerView.ViewHolder(views.root){
         fun bind(divider :Message.Divider){
-            views.title.setText(divider.stringId)
+            views.title.text = divider.text
         }
     }
 
@@ -225,6 +229,9 @@ class MessagesAdapter(
             with(views){
                 time.text = buyRequest.time
                 status.setImageResource(buyRequest.statusIcon)
+                subtitle.text = buyRequest.text
+                subtitle.setTextColor(buyRequest.textColor)
+                views.icon.setImageResource(buyRequest.submitStatus)
             }
         }
     }
@@ -262,6 +269,10 @@ class MessagesAdapter(
                 time.text = priceRequest.time
                 status.setImageResource(priceRequest.status)
                 price.text = ctx.getString(R.string.pattern_price, priceRequest.newPrice)
+                requestStatus.text = priceRequest.text
+                requestStatus.setTextColor(priceRequest.textColor)
+
+
             }
         }
     }
@@ -271,7 +282,7 @@ class MessagesAdapter(
     ) :RecyclerView.ViewHolder(views.root){
         fun bind(priceAccepted :Message.Special.PriceAccepted){
             val ctx = views.root.context
-            views.root.text = ctx.getString(R.string.pattern_price, priceAccepted.newPrice)
+            views.root.text = "Цена снижена до ${priceAccepted.newPrice}₽"//ctx.getString(R.string.pattern_price, priceAccepted.newPrice)
         }
     }
 }

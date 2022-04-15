@@ -4,9 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.Chat
+import com.project.morestore.models.ChatFunctionInfo
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
+import com.project.morestore.util.MessageActionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -410,6 +412,69 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             else -> {
                 viewState.error("ошибка")
                 return false
+            }
+
+        }
+    }
+
+    fun sendBuyRequest(dialogId: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val response = chatRepository.sendBuyRequest(ChatFunctionInfo(dialogId = dialogId))
+            when (response?.code()) {
+                200 -> {
+                    viewState.actionMessageSent(response.body()!!, MessageActionType.BUY_REQUEST_SUGGEST)
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+    }
+
+    fun cancelBuyRequest(dialogId: Long, suggestId: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val response = chatRepository.cancelBuyRequest(ChatFunctionInfo(dialogId = dialogId, suggest = suggestId))
+            when (response?.code()) {
+                200 -> {
+                    viewState.actionMessageSent(response.body()!!, MessageActionType.BUY_REQUEST_CANCEL)
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+        }
+    }
+
+    fun sendPriceSuggest(dialogId: Long, value: Int){
+        presenterScope.launch {
+            viewState.loading()
+            val response = chatRepository.sendPriceSuggest(ChatFunctionInfo(dialogId = dialogId, value = value))
+            when (response?.code()) {
+                200 -> {
+                    viewState.actionMessageSent(response.body()!!, MessageActionType.PRICE_SUGGEST)
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
             }
 
         }

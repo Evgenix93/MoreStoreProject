@@ -15,5 +15,11 @@ data class MessageModel(
     val is_read: Int,
     val user: User,
     val photo: List<ProductPhoto>?,
-    val video: List<ProductVideo>?
+    val video: List<ProductVideo>?,
+    @Json(name = "buy_suggest")
+    val buySuggest: MessageActionSuggest?,
+    @Json(name = "price_suggest")
+    val priceSuggest: MessageActionSuggest?,
+    @Json(name = "sale_suggest")
+    val saleSuggest: MessageActionSuggest?
 )

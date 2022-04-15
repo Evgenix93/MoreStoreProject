@@ -24,6 +24,7 @@
         android:layout_height="16dp"
         android:layout_marginStart="4dp"
         android:layout_gravity="bottom"
+        app:tint="@color/green"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout

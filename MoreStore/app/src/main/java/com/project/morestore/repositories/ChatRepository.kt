@@ -236,6 +236,81 @@ class ChatRepository(val context: Context) {
         }
     }
 
+    suspend fun sendBuyRequest(info: ChatFunctionInfo): Response<ChatFunctionInfo>?{
+        return try {
+            chatApi.sendBuyRequest(info)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = chatApi.sendBuyRequestGetError(info)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun cancelBuyRequest(info: ChatFunctionInfo): Response<ChatFunctionInfo>?{
+        return try {
+            chatApi.cancelBuyRequest(info)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = chatApi.cancelBuyRequestGetError(info)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun sendPriceSuggest(info: ChatFunctionInfo): Response<ChatFunctionInfo>?{
+        return try {
+            chatApi.sendPriceSuggest(info)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = chatApi.sendPriceSuggestGetError(info)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
     fun loadMediaUris() = ChatMedia.mediaUris
 
     fun clearMediaUris(){

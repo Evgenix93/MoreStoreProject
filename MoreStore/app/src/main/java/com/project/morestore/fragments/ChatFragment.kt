@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -27,17 +28,21 @@ import com.project.morestore.fragments.base.FullscreenMvpFragment
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
+import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import dev.jorik.stub.defToast
 import moxy.ktx.moxyPresenter
+import java.util.*
 
 class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     PriceDialog.Callback, ChatMvpView {
     private lateinit var views: FragmentChatBinding
+    private lateinit var cancelWidgetBinding: WidgetDealCancelBinding
     private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
     private var currentUserId: Long? = null
     private var currentDialogId: Long? = null
+    private var currentProductPrice: Float? = null
     private lateinit var filePicker: ActivityResultLauncher<Array<String>>
     private val adapter = MessagesAdapter(
         {
@@ -269,6 +274,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun showDeal(dialog: DialogWrapper) {
         currentDialogId = dialog.dialog.id
+        currentProductPrice = dialog.product?.priceNew
         user = dialog.dialog.user
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
@@ -295,7 +301,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 .also {
                     bottomBar.addView(it.root)
                     it.myPrice.setOnClickListener {
-                        PriceDialog(3890, PriceDialog.Type.PRICE).show(childFragmentManager, null)
+                        PriceDialog(dialog.product?.priceNew?.toInt() ?: 0, PriceDialog.Type.PRICE).show(childFragmentManager, null)
                     }
                     it.buy.setOnClickListener { buy() }
                 }
@@ -311,6 +317,16 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         val messages = getMessages(dialog.messages.orEmpty())
         adapter.setItems(messages.orEmpty().reversed())
         views.list.scrollToPosition(adapter.itemCount - 1)
+        val buyMessage = dialog.messages?.find { it.buySuggest != null }
+        if(buyMessage != null && buyMessage.buySuggest?.status != 2){
+            views.bottomBar.removeAllViews()
+            WidgetDealCancelBinding.inflate(layoutInflater)
+                .also {
+                    views.bottomBar.addView(it.root)
+                    it.cancel.setOnClickListener { cancelBuy(buyMessage.buySuggest?.id!!) }
+                }
+
+        }
     }
 
     private fun showDialog(dialog: DialogWrapper) {
@@ -340,10 +356,22 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     private fun getMessages(list: List<MessageModel>): List<Message> {
+        Log.d("mylog", list.toString())
+        val dates = list.filter { it.saleSuggest == null }.mapNotNull {
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = it.date * 1000
+            calendar
+
+        }
         val messages = list.mapNotNull {
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = it.date * 1000
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val minute = calendar.get(Calendar.MINUTE)
+
             when {
                 it.idSender == currentUserId && it.text != null && (it.photo == null && it.video == null) -> Message.My(
-                    "13:00",
+                    "$hour:$minute",
                     R.drawable.ic_check_double,
                     it.text.orEmpty()
                 )
@@ -360,7 +388,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                     Log.d("MyDebug", "photos size = ${photos.size}")
                     val media = photos + videos
                     Message.MyMedia(
-                        "13:00",
+                        "$hour:$minute",
                         R.drawable.ic_check_double,
                         media.toTypedArray(),
                         it.text
@@ -369,15 +397,106 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 it.idSender != currentUserId && it.text != null -> Message.Companion(
                     listOf(
                         Msg(
-                            "13:10",
+                            "$hour:$minute",
                             it.text.orEmpty()
                         )
                     )
                 )
+                it.idSender == currentUserId && it.buySuggest != null -> {
+                    val text = when(it.buySuggest.status){
+                        0 -> "Еще нет ответа"
+                        1 -> "Одобрено"
+                        2 -> "Отменено"
+                        else -> ""
+                    }
+                    val color = if(it.buySuggest.status == 1)
+                        ResourcesCompat.getColor(resources, R.color.green, null)
+                    else
+                        ResourcesCompat.getColor(resources, R.color.gray2, null)
+                    val submitIcon = if(it.buySuggest.status == 1)
+                        R.drawable.ic_check_round_fill
+                    else
+                        R.drawable.ic_bag_filled_green
+                    Message.Special.BuyRequest("$hour:$minute", R.drawable.ic_check_double, text, color, submitIcon)
+                }
+                it.idSender == currentUserId && it.priceSuggest != null -> {
+                    val text = when(it.priceSuggest.status){
+                        0 -> "Еще нет ответа"
+                        1 -> "Одобрено"
+                        2 -> "Отменено"
+                        else -> ""
+                    }
+                    val color = if(it.priceSuggest.status == 1)
+                        ResourcesCompat.getColor(resources, R.color.green, null)
+                    else
+                        ResourcesCompat.getColor(resources, R.color.gray2, null)
+                    Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check_double, it.priceSuggest.value ?: "", text, color, 0)
+                }
                 else -> null
             }
         }
-        return messages
+
+        val priceDetailsIndexes = mutableListOf<Int>()
+        val buyDetailsIndexes = mutableListOf<Int>()
+
+         list.filter { it.saleSuggest == null }.forEachIndexed { index, messageModel ->
+             if(messageModel.priceSuggest != null && messageModel.priceSuggest.status == 1)
+                 priceDetailsIndexes.add(index)
+             if(messageModel.buySuggest != null && messageModel.buySuggest.status == 1)
+                 buyDetailsIndexes.add(index)
+
+        }
+
+        val datedMessages = mutableListOf<Message>()
+        messages.forEachIndexed { index, message ->
+            val currentDate = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
+            val currentDay = currentDate.get(Calendar.DAY_OF_MONTH)
+            val currentMonth = currentDate.get(Calendar.MONTH) + 1
+            val currentYear = currentDate.get(Calendar.YEAR)
+
+            val priceAccepted = if(priceDetailsIndexes.find { it == index } != null)
+                Message.Special.PriceAccepted(list.filter { it.saleSuggest == null }[index].priceSuggest?.value.toString())
+            else null
+
+            val buyAccepted = if(buyDetailsIndexes.find { it == index } != null)
+                Message.Special.BuyDetails()
+            else null
+
+
+            val day = dates[index].get(Calendar.DAY_OF_MONTH)
+                val month = dates[index].get(Calendar.MONTH) + 1
+                val year = dates[index].get(Calendar.YEAR)
+                val nextDay = if(index + 1 <= dates.lastIndex)
+                    dates[index + 1].get(Calendar.DAY_OF_MONTH)
+                else day
+                val nextMonth = if(index + 1 <= dates.lastIndex)
+                    dates[index + 1].get(Calendar.MONTH) + 1
+                else month
+                val nextYear = if(index + 1 <= dates.lastIndex)
+                    dates[index + 1].get(Calendar.YEAR)
+                else year
+                if((day != nextDay || month != nextMonth || year != nextYear) || index == dates.lastIndex){
+                    Log.d("mylog", "showDate")
+                    val text = if(currentDay == day && currentMonth == month && currentYear == year)
+                        "сегодня"
+                    else
+                        "$day.$month.$year"
+                    priceAccepted?.let { datedMessages.add(it) }
+                    buyAccepted?.let { datedMessages.add(it) }
+                    datedMessages.add(message)
+                    datedMessages.add(Message.Divider(text))
+                }else{
+                    Log.d("mylog", "index= $index, lastIndex: ${dates.lastIndex}")
+                    buyAccepted?.let { datedMessages.add(it) }
+                    priceAccepted?.let { datedMessages.add(it) }
+                    datedMessages.add(message)
+                }
+
+
+        }
+        Log.d("mylog", datedMessages.toString())
+
+        return datedMessages
     }
 
     //todo remove stubs
@@ -398,7 +517,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     )*/
 
     private val buyer = listOf(
-        Message.Divider(R.string.today),
+        //Message.Divider(R.string.today),
         Message.Companion(
             listOf(
                 Msg("13:16", "Ещё продаёте товар?"),
@@ -418,12 +537,12 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         .also { it.add(Message.Special.DealDetails()) }
 
     private val seller = listOf(
-        Message.Divider(R.string.today),
+        //Message.Divider(R.string.today),
         Message.My("13:18", R.drawable.ic_check_double, "Здравствуйте! Еще продаете? "),
         Message.Companion(listOf(Msg("13:18", "Добрый день! Для вас готова сделать скидку")))
     )
 
-    private val seller2 = seller + Message.Special.BuyRequest("13:20", R.drawable.ic_check_single)
+    private val seller2 = seller + Message.Special.BuyRequest("13:20", R.drawable.ic_check_single, "", 0, 0)
 
     private val seller3 = seller2 + Message.Special.BuyDetails()
 
@@ -436,26 +555,35 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         WidgetDealCancelBinding.inflate(layoutInflater)
             .also {
                 views.bottomBar.addView(it.root)
-                it.cancel.setOnClickListener { cancelBuy() }
+                //it.cancel.setOnClickListener { cancelBuy() }
+                cancelWidgetBinding = it
             }
-        adapter.setItems(seller2)
+        /*adapter.setItems(seller2)
         views.send.setOnClickListener {
             adapter.setItems(seller3)
             listenGeo = true
-        }
+        }*/
+
+        presenter.sendBuyRequest(currentDialogId ?: 0)
+        val timeStr = "${Calendar.getInstance().get(Calendar.HOUR_OF_DAY)}:${Calendar.getInstance().get(Calendar.MINUTE)}"
+        adapter.addMessage(Message.Special.BuyRequest(timeStr, R.drawable.ic_check_double, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), R.drawable.ic_bag_filled_green ))
+        views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
-    private fun cancelBuy() {
+    private fun cancelBuy(suggestId: Long) {
         views.bottomBar.removeAllViews()
-        adapter.setItems(seller)
+        //adapter.setItems(seller)
         WidgetBuyBarBinding.inflate(layoutInflater)
             .also {
                 views.bottomBar.addView(it.root)
-                it.myPrice.setOnClickListener { }
+                it.myPrice.setOnClickListener {
+                    PriceDialog(currentProductPrice?.toInt() ?: 0, PriceDialog.Type.PRICE).show(childFragmentManager, null)
+                }
                 it.buy.setOnClickListener { buy() }
             }
-        views.send.setOnClickListener { /* remove */ }
-        listenGeo = false
+        //views.send.setOnClickListener { /* remove */ }
+        //listenGeo = false
+        presenter.cancelBuyRequest(currentDialogId ?: 0, suggestId )
     }
 
     private fun setClickListeners() {
@@ -486,8 +614,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun requestPrice(newPrice: String) = listOf<Message>(
         *seller.toTypedArray(),
-        Message.Special.PriceRequest("13:20", R.drawable.ic_check_double, newPrice),
-        Message.Special.PriceAccepted("${getString(R.string.priceDownTo)} $newPrice")
+        //Message.Special.PriceRequest("13:20", R.drawable.ic_check_double, newPrice),
+        //Message.Special.PriceAccepted("${getString(R.string.priceDownTo)} $newPrice")
     )
 
     private fun loadMediaUris() {
@@ -520,10 +648,15 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     private fun sendOnlyText() {
+        val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
         presenter.addMessage(views.messageEditText.text.toString())
+        if(adapter.isTodayMessages().not())
+            adapter.addMessage(Message.Divider("сегодня"))
         adapter.addMessage(
             Message.My(
-                "13:00",
+                "$hour:$minute",
                 R.drawable.ic_check_double,
                 views.messageEditText.text.toString()
             )
@@ -588,7 +721,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     override fun applyNewPrice(newPrice: String) {
-        adapter.setItems(requestPrice(newPrice))
+        //adapter.setItems(requestPrice(newPrice))
+        presenter.sendPriceSuggest(currentDialogId ?: 0, newPrice.toInt())
+        adapter.addMessage(Message.Special.PriceRequest("13:00", R.drawable.ic_check_double, newPrice, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), 0))
+        views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
     companion object {
@@ -650,5 +786,22 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     override fun mediaUrisLoaded(mediaUris: List<Uri>?) {
         showLoading(false)
         this.mediaUris = mediaUris
+    }
+
+    override fun actionMessageSent(info: ChatFunctionInfo, type: MessageActionType) {
+        showLoading(false)
+        when(type){
+            MessageActionType.BUY_REQUEST_SUGGEST -> {
+                Toast.makeText(requireContext(), "Запрос на покупку отправлен", Toast.LENGTH_SHORT).show()
+                cancelWidgetBinding.cancel.setOnClickListener { cancelBuy(info.suggest!!) }
+
+            }
+            MessageActionType.BUY_REQUEST_CANCEL -> {
+                Toast.makeText(requireContext(), "Сделка отменена", Toast.LENGTH_SHORT).show()
+
+            }
+            MessageActionType.PRICE_SUGGEST -> Toast.makeText(requireContext(), "Предложение цены отправлено", Toast.LENGTH_SHORT).show()
+            else -> {}
+        }
     }
 }

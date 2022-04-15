@@ -51,4 +51,25 @@ interface MessageApi {
 
     @POST("upload/photo")
     suspend fun uploadPhotoGetError(@Body photoData: PhotoData): Response<String>
+
+    @POST("message/function/buy/suggest")
+    suspend fun sendBuyRequest(@Body info: ChatFunctionInfo): Response<ChatFunctionInfo>
+
+    @POST("message/function/buy/suggest")
+    suspend fun sendBuyRequestGetError(@Body info: ChatFunctionInfo): Response<String>
+
+    @POST("message/function/buy/cancel")
+    suspend fun cancelBuyRequest(@Body info: ChatFunctionInfo): Response<ChatFunctionInfo>
+
+    @POST("message/function/buy/cancel")
+    suspend fun cancelBuyRequestGetError(@Body info: ChatFunctionInfo): Response<String>
+
+    @POST("message/function/price/suggest")
+    suspend fun sendPriceSuggest(@Body info: ChatFunctionInfo): Response<ChatFunctionInfo>
+
+    @POST("message/function/price/suggest")
+    suspend fun sendPriceSuggestGetError(@Body info: ChatFunctionInfo): Response<String>
+
+
+
 }
