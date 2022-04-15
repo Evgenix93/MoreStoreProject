@@ -19,9 +19,6 @@
         style="@style/buttonStyle"
         android:text="Добавить поиск"/>
 
-
-
-
     <LinearLayout
         android:id="@+id/containerLinearLayout"
         android:layout_width="match_parent"

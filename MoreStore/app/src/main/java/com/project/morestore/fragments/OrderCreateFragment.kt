@@ -28,24 +28,19 @@ class OrderCreateFragment: Fragment(R.layout.fragment_order_create) {
 
     private fun setClickListeners(){
         binding.dateEditText.setOnClickListener {
-            MenuBottomDialogDateFragment(requireContext(), false, { day, month, year ->
+            MenuBottomDialogDateFragment( false, { day, month, year ->
                 binding.dateEditText.setText("$day.$month.$year")
-
             }, { _,_ ->
-
             }).show(childFragmentManager, null)
         }
 
         binding.timeEditText.setOnClickListener {
-            MenuBottomDialogDateFragment(requireContext(), true, { _, _ ,_ ->
+            MenuBottomDialogDateFragment( true, { _, _ ,_ ->
 
             }, { hour, minute ->
                 binding.timeEditText.setText("$hour:$minute")
-
-
             }).show(childFragmentManager, null)
         }
-
     }
 
     private fun initRadioPlaceButtons(){
@@ -54,11 +49,7 @@ class OrderCreateFragment: Fragment(R.layout.fragment_order_create) {
             binding.placeIcon.isVisible = id == R.id.userVariantRadioBtn
             binding.whenReceiveTextView.isVisible = id == R.id.userVariantRadioBtn
             binding.pickers.isVisible = id == R.id.userVariantRadioBtn
-
-
-
         }
-
     }
 
     private fun initViews(){

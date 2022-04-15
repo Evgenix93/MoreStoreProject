@@ -24,11 +24,6 @@ import moxy.ktx.moxyPresenter
 class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
     private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
     private var adapter: SearchesAdapter by autoCleared()
-        /*DeleteDialog(
-            requireContext(),
-            requireContext().getString(R.string.deleteDialog_title_pattern, it.title),
-            requireContext().getString(R.string.deleteDialog_defaultMessage),
-        ).show()*/
 
     override val emptyList by lazy {
         EmptyList(

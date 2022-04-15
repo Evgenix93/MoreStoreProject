@@ -214,7 +214,6 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
             )
         }*/
         adapter.setItems(dialogs)
-
     }
 
     override fun dialogLoaded(dialog: DialogWrapper) {

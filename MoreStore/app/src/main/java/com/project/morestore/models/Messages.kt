@@ -16,6 +16,17 @@ sealed class Message {
         class BuyDetails() :Special()
         class GeoDetails() :Special()
         class PriceRequest(val time :String, @DrawableRes val status :Int, val newPrice :String, val text: String, val textColor: Int, @DrawableRes val submitStatus: Int ) :Special()
+        class DealRequest(val time :String, val price: Int, val suggestId: Long) :Special()
+        class BuyRequest(val time :String, @DrawableRes val statusIcon :Int) :Special()
+        class DealAccept(val time :String): Special()
+        class DealCancel(val time: String): Special()
+        object DealDetails : Special()
+        object BuyDetails : Special()
+        object GeoDetails : Special()
+        class PriceRequest(val time :String, @DrawableRes val status :Int, val newPrice :String) :Special()
+        class PriceSubmit(val time: String, val newPrice: String, val suggestId: Long): Special()
+        class PriceSubmitted(val time: String, val newPrice: String): Special()
+        class PriceCanceled(val time: String, val newPrice: String): Special()
         class PriceAccepted(val newPrice :String) :Special()
     }
 }

@@ -316,4 +316,49 @@ class ChatRepository(val context: Context) {
     fun clearMediaUris(){
         ChatMedia.mediaUris = null
     }
+
+   suspend fun offerDiscount(info: ChatFunctionInfo): Response<ChatFunctionInfo>?{
+     return try {
+         chatApi.offerDiscount(info)
+     }catch(e: Throwable){
+         Log.e("MyDebug", "error = ${e.message}")
+         null
+       }
+    }
+
+    suspend fun submitDiscount(info: ChatFunctionInfo): Response<ChatFunctionInfo>?{
+        return try {
+            chatApi.submitDiscount(info)
+        }catch(e: Throwable){
+            Log.e("MyDebug", "error = ${e.message}")
+            null
+        }
+    }
+
+    suspend fun submitBuy(info: ChatFunctionInfo): Response<ChatFunctionInfo>?{
+        return try{
+         chatApi.submitBuy(info)
+        }catch (e: Throwable){
+            Log.e("MyDebug", "error = ${e.message}")
+            null
+        }
+    }
+
+    suspend fun submitPrice(info: ChatFunctionInfo): Response<ChatFunctionInfo>?{
+        return try{
+            chatApi.submitPrice(info)
+        }catch (e: Throwable){
+            Log.e("MyDebug", "error = ${e.message}")
+            null
+        }
+    }
+
+    suspend fun cancelPrice(info: ChatFunctionInfo): Response<ChatFunctionInfo>?{
+        return try{
+            chatApi.cancelPrice(info)
+        }catch (e: Throwable){
+            Log.e("MyDebug", "error = ${e.message}")
+            null
+        }
+    }
 }

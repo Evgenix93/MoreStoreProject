@@ -72,4 +72,19 @@ interface MessageApi {
 
 
 
+
+    @POST("message/function/sale/suggest")
+    suspend fun offerDiscount(@Body info: ChatFunctionInfo): Response<ChatFunctionInfo>
+
+    @POST("message/function/sale/ok")
+    suspend fun submitDiscount(@Body info: ChatFunctionInfo): Response<ChatFunctionInfo>
+
+    @POST("message/function/buy/ok")
+    suspend fun submitBuy(@Body info: ChatFunctionInfo): Response<ChatFunctionInfo>
+
+    @POST("message/function/price/ok")
+    suspend fun submitPrice(@Body info: ChatFunctionInfo): Response<ChatFunctionInfo>
+
+    @POST("message/function/price/cancel")
+    suspend fun cancelPrice(@Body info: ChatFunctionInfo): Response<ChatFunctionInfo>
 }

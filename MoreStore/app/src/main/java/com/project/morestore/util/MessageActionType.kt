@@ -7,4 +7,8 @@ enum class MessageActionType {
     PRICE_SUGGEST,
     PRICE_SUBMIT,
     PRICE_CANCEL
+    BuyRequestSubmit,
+    PriceRequestSubmit,
+    PriceRequestCancel,
+    DiscountRequestSuggest
 }
