@@ -363,7 +363,7 @@ class MessagesAdapter(
             with(views){
                 avatar.clipToOutline = true
                 //avatar.setImageResource(avatarUri)
-                title.text = "Своя цена"
+                title.text = "${priceSubmit.newPrice} ₽"
                 icon.setImageResource(R.drawable.ic_coins)
                 icon.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(itemView.resources, R.color.blue4, null))
                 time.text = priceSubmit.time
