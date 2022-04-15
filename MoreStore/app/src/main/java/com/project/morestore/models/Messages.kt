@@ -7,6 +7,7 @@ sealed class Message {
     class Divider(@StringRes val stringId :Int) :Message()
     class My(val time :String, @DrawableRes val status :Int, val message :String) :Message()
     class Companion(val msgs :List<Msg>) :Message()
+    class CompanionMedia(val time :String, @DrawableRes val status :Int, val media :Array<Media>, val message: String? = null): Message()
     class MyMedia(val time :String, @DrawableRes val status :Int, val media :Array<Media>, val message: String? = null) :Message()
     sealed class Special :Message(){
         class DealRequest(val time :String, val price: Int, val suggestId: Long) :Special()

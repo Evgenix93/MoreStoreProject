@@ -383,7 +383,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                         it.text
                     )
                 }
-                it.idSender != currentUserId && it.text != null -> Message.Companion(
+                it.idSender != currentUserId && it.text != null && (it.photo == null && it.video == null) -> Message.Companion(
                     listOf(
                         Msg(
                             "13:10",
@@ -391,6 +391,25 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                         )
                     )
                 )
+                (it.photo != null || it.video != null) && it.idSender != currentUserId ->{
+                    val photos =
+                        it.photo?.mapIndexed { index, photo -> Media.Photo(photo.photo, index + 1) }
+                            .orEmpty()
+                    val videos = it.video?.mapIndexed { index, video ->
+                        Media.Video(
+                            video.video,
+                            photos.size + index + 1
+                        )
+                    }.orEmpty()
+                    Log.d("MyDebug", "photos size = ${photos.size}")
+                    val media = photos + videos
+                    Message.CompanionMedia(
+                        "13:00",
+                        R.drawable.ic_check_double,
+                        media.toTypedArray(),
+                        it.text
+                    )
+                }
                 it.saleSuggest?.status == 1 -> Message.Special.PriceAccepted("Цена снижена до ${it.saleSuggest.value}")
                 it.buySuggest?.status == 0 && it.idSender != currentUserId -> Message.Special.DealRequest("13:00", productPrice, it.buySuggest.id)
                 it.buySuggest?.status == 1 && it.idSender != currentUserId -> Message.Special.DealAccept("14:00")
