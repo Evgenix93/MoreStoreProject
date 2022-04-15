@@ -502,7 +502,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             val response = chatRepository.offerDiscount(info)
             when(response?.code()){
                 200 -> {
-                    submitDiscount(ChatFunctionInfo(idDialog = response.body()!!.idDialog, suggest = response.body()!!.idSuggest))
+                    submitDiscount(ChatFunctionInfo(dialogId = response.body()!!.dialogId, suggest = response.body()!!.suggestId))
                 }
                 null -> viewState.error("Ошибка")
             }
@@ -514,7 +514,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             val response = chatRepository.submitDiscount(info)
             when(response?.code()){
                 200 -> {
-                    viewState.actionMessageSent(response.body()!!, MessageActionType.DiscountRequestSuggest)
+                    viewState.actionMessageSent(response.body()!!, MessageActionType.DISCOUNT_REQUEST_SUBMIT)
                 }
                 null -> viewState.error("Ошибка")
             }
@@ -525,7 +525,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         presenterScope.launch {
          val response = chatRepository.submitBuy(info)
            when(response?.code()){
-               200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.BuyRequestSubmit)
+               200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.BUY_REQUEST_SUBMIT)
                null -> viewState.error("Ошибка")
            }
         }
@@ -535,7 +535,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         presenterScope.launch {
             val response = chatRepository.submitPrice(info)
             when(response?.code()){
-                200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.PriceRequestSubmit)
+                200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.PRICE_REQUEST_SUBMIT)
                 null -> viewState.error("Ошибка")
             }
         }
@@ -545,7 +545,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         presenterScope.launch {
             val response = chatRepository.cancelPrice(info)
             when(response?.code()){
-                200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.PriceRequestCancel)
+                200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.PRICE_REQUEST_CANCEL)
                 null -> viewState.error("Ошибка")
             }
         }

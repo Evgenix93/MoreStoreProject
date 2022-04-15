@@ -47,7 +47,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private val adapter = MessagesAdapter(
         acceptDealCallback = {
               presenter.submitBuy(ChatFunctionInfo(
-                   idDialog = requireArguments().getLong(DIALOG_ID_KEY),
+                   dialogId = requireArguments().getLong(DIALOG_ID_KEY),
                    suggest = (it as Message.Special.DealRequest).suggestId,
                    value = it.price
               ))
@@ -57,12 +57,12 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
        cancelDealCallback =  { requireContext().defToast(R.string.cancel) },
        submitPriceCallback =  {
            presenter.submitPrice(ChatFunctionInfo(
-               idDialog = requireArguments().getLong(DIALOG_ID_KEY),
+               dialogId = requireArguments().getLong(DIALOG_ID_KEY),
                suggest = (it as Message.Special.PriceSubmit).suggestId
            ))
         }, cancelPriceCallback = {
            presenter.cancelPrice(ChatFunctionInfo(
-               idDialog = requireArguments().getLong(DIALOG_ID_KEY),
+               dialogId = requireArguments().getLong(DIALOG_ID_KEY),
                suggest = (it as Message.Special.PriceSubmit).suggestId
            ))
         },
@@ -372,7 +372,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun getMessages(list: List<MessageModel>): List<Message> {
         Log.d("mylog", list.toString())
-        val dates = list.filter { it.saleSuggest == null }.mapNotNull {
+        val dates = list.filter { it.saleSuggest?.status != 0 }.mapNotNull {
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = it.date * 1000
             calendar
@@ -447,13 +447,14 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                         ResourcesCompat.getColor(resources, R.color.gray2, null)
                     Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check_double, it.priceSuggest.value ?: "", text, color, 0)
                 }
-                it.saleSuggest?.status == 1 -> Message.Special.PriceAccepted("Цена снижена до ${it.saleSuggest.value}")
-                it.buySuggest?.status == 0 && it.idSender != currentUserId -> Message.Special.DealRequest("13:00", productPrice, it.buySuggest.id)
-                it.buySuggest?.status == 1 && it.idSender != currentUserId -> Message.Special.DealAccept("14:00")
-                it.buySuggest?.status == 2 && it.idSender != currentUserId -> Message.Special.DealAccept("14:00")
-                it.priceSuggest?.status == 1 && it.idSender != currentUserId -> Message.Special.PriceSubmitted("14:00",  it.priceSuggest.value!!)
-                it.priceSuggest?.status == 0 && it.idSender != currentUserId -> Message.Special.PriceSubmit("14:00", it.priceSuggest.value!!, it.priceSuggest.id)
-                it.priceSuggest?.status == 2 && it.idSender != currentUserId -> Message.Special.PriceCanceled("14:00", it.priceSuggest.value!!)
+                it.saleSuggest?.status == 1 -> Message.Special.PriceAccepted( it.saleSuggest.value.toString())
+                it.saleSuggest?.status == 0 -> null
+                it.buySuggest?.status == 0 && it.idSender != currentUserId -> Message.Special.DealRequest("$hour:$minute", currentProductPrice?.toInt() ?: 0, it.buySuggest.id)
+                it.buySuggest?.status == 1 && it.idSender != currentUserId -> Message.Special.DealAccept("$hour:$minute")
+                it.buySuggest?.status == 2 && it.idSender != currentUserId -> Message.Special.DealCancel("$hour:$minute")
+                it.priceSuggest?.status == 1 && it.idSender != currentUserId -> Message.Special.PriceSubmitted("$hour:$minute",  it.priceSuggest.value!!)
+                it.priceSuggest?.status == 0 && it.idSender != currentUserId -> Message.Special.PriceSubmit("$hour:$minute", it.priceSuggest.value!!, it.priceSuggest.id)
+                it.priceSuggest?.status == 2 && it.idSender != currentUserId -> Message.Special.PriceCanceled("$hour:$minute", it.priceSuggest.value!!)
                 else -> null
             }
         }
@@ -461,7 +462,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         val priceDetailsIndexes = mutableListOf<Int>()
         val buyDetailsIndexes = mutableListOf<Int>()
 
-         list.filter { it.saleSuggest == null }.forEachIndexed { index, messageModel ->
+         list.filter { it.saleSuggest?.status != 0 }.forEachIndexed { index, messageModel ->
              if(messageModel.priceSuggest != null && messageModel.priceSuggest.status == 1)
                  priceDetailsIndexes.add(index)
              if(messageModel.buySuggest != null && messageModel.buySuggest.status == 1)
@@ -477,11 +478,11 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             val currentYear = currentDate.get(Calendar.YEAR)
 
             val priceAccepted = if(priceDetailsIndexes.find { it == index } != null)
-                Message.Special.PriceAccepted(list.filter { it.saleSuggest == null }[index].priceSuggest?.value.toString())
+                Message.Special.PriceAccepted(list.filter { it.saleSuggest?.status != 0 }[index].priceSuggest?.value.toString())
             else null
 
             val buyAccepted = if(buyDetailsIndexes.find { it == index } != null)
-                Message.Special.BuyDetails()
+                Message.Special.BuyDetails
             else null
 
 
@@ -744,7 +745,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     override fun applyDiscount(discount: String) {
          adapter.addMessage(Message.Special.PriceAccepted("Цена снижена до $discount"))
          val dialogId = requireArguments().getLong(DIALOG_ID_KEY)
-         presenter.offerDiscount(ChatFunctionInfo(dialogId, discount.toInt(), null, null))
+         presenter.offerDiscount(ChatFunctionInfo(dialogId = dialogId, value = discount.toInt()))
     }
 
     companion object {
@@ -763,7 +764,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun dialogLoaded(dialog: DialogWrapper) {
         showLoading(false)
-        productPrice = dialog.product?.priceNew?.toInt() ?: 0
+        //productPrice = dialog.product?.priceNew?.toInt() ?: 0
         showDialog(dialog)
     }
 
@@ -819,17 +820,14 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
             }
             MessageActionType.PRICE_SUGGEST -> Toast.makeText(requireContext(), "Предложение цены отправлено", Toast.LENGTH_SHORT).show()
-            else -> {}
+            MessageActionType.DISCOUNT_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Скидка сделана", Toast.LENGTH_LONG).show()
+            MessageActionType.BUY_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Покупка одобрена", Toast.LENGTH_LONG).show()
+            MessageActionType.PRICE_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Цена одобрена", Toast.LENGTH_LONG).show()
+            MessageActionType.PRICE_REQUEST_CANCEL -> Toast.makeText(requireContext(), "Цена отменена", Toast.LENGTH_LONG).show()
+
+
+
         }
     }
 
-    override fun actionMessageSent(info: ChatFunctionInfo, type: MessageActionType) {
-         showLoading(false)
-         when(type){
-             MessageActionType.DiscountRequestSuggest -> Toast.makeText(requireContext(), "Скидка сделана", Toast.LENGTH_LONG).show()
-             MessageActionType.BuyRequestSubmit -> Toast.makeText(requireContext(), "Покупка одобрена", Toast.LENGTH_LONG).show()
-             MessageActionType.PriceRequestSubmit -> Toast.makeText(requireContext(), "Цена одобрена", Toast.LENGTH_LONG).show()
-             MessageActionType.PriceRequestCancel -> Toast.makeText(requireContext(), "Цена отменена", Toast.LENGTH_LONG).show()
-         }
-    }
 }

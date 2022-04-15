@@ -2,13 +2,12 @@ package com.project.morestore.util
 
 enum class MessageActionType {
     BUY_REQUEST_SUGGEST,
-    BUY_REQUEST_SUBMIT,
+    //BUY_REQUEST_SUBMIT,
     BUY_REQUEST_CANCEL,
     PRICE_SUGGEST,
-    PRICE_SUBMIT,
-    PRICE_CANCEL
-    BuyRequestSubmit,
-    PriceRequestSubmit,
-    PriceRequestCancel,
-    DiscountRequestSuggest
+    //PRICE_CANCEL,
+    BUY_REQUEST_SUBMIT,
+    PRICE_REQUEST_SUBMIT,
+    PRICE_REQUEST_CANCEL,
+    DISCOUNT_REQUEST_SUBMIT
 }
