@@ -87,4 +87,11 @@ interface MessageApi {
 
     @POST("message/function/price/cancel")
     suspend fun cancelPrice(@Body info: ChatFunctionInfo): Response<ChatFunctionInfo>
+
+    @POST("message/read")
+    suspend fun readMessages(@Body dialogId: Id): Response<Id>
+
+    @POST("message/read")
+    suspend fun readMessagesGetError(@Body dialogId: Id): Response<String>
+
 }

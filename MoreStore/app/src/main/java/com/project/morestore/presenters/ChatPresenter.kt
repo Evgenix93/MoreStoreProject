@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.Chat
 import com.project.morestore.models.ChatFunctionInfo
+import com.project.morestore.models.Id
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
@@ -548,6 +549,26 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                 200 -> viewState.actionMessageSent(response.body()!!, MessageActionType.PRICE_REQUEST_CANCEL)
                 null -> viewState.error("Ошибка")
             }
+        }
+    }
+
+    fun readMessages(dialogId: Long){
+        presenterScope.launch {
+            val response = chatRepository.readMessages(Id(dialogId))
+            when (response?.code()) {
+                200 -> {
+
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
         }
     }
 }

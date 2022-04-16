@@ -159,9 +159,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
      }*/
 
     private fun showSell(dialog: DialogWrapper) {
-
-        //currentDialogId = dialog.dialog.id
-        //user = dialog.dialog.user
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
             toolbar.title.text = dialog.dialog.user.name
@@ -288,9 +285,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }*/
 
     private fun showDeal(dialog: DialogWrapper) {
-        //currentDialogId = dialog.dialog.id
-        //currentProductPrice = dialog.product?.priceNew
-        //user = dialog.dialog.user
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
             toolbar.title.text = dialog.dialog.user.name
@@ -387,7 +381,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             when {
                 it.idSender == currentUserId && it.text != null && (it.photo == null && it.video == null) -> Message.My(
                     "$hour:$minute",
-                    R.drawable.ic_check_double,
+                    if(it.is_read == 1) R.drawable.ic_check_double else R.drawable.ic_check,
                     it.text.orEmpty()
                 )
                 (it.photo != null || it.video != null) && it.idSender == currentUserId -> {
@@ -404,7 +398,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                     val media = photos + videos
                     Message.MyMedia(
                         "$hour:$minute",
-                        R.drawable.ic_check_double,
+                        if(it.is_read == 1) R.drawable.ic_check_double else R.drawable.ic_check,
                         media.toTypedArray(),
                         it.text
                     )
@@ -451,7 +445,11 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                         R.drawable.ic_check_round_fill
                     else
                         R.drawable.ic_bag_filled_green
-                    Message.Special.BuyRequest("$hour:$minute", R.drawable.ic_check_double, text, color, submitIcon)
+                    Message.Special.BuyRequest("$hour:$minute",
+                        if(it.is_read == 1) R.drawable.ic_check_double else R.drawable.ic_check,
+                        text,
+                        color,
+                        submitIcon)
                 }
                 it.idSender == currentUserId && it.priceSuggest != null -> {
                     val text = when(it.priceSuggest.status){
@@ -470,7 +468,12 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                         2 -> R.drawable.ic_x
                         else -> null
                     }
-                    Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check_double, it.priceSuggest.value ?: "", text, color, drawable)
+                    Message.Special.PriceRequest("$hour:$minute",
+                        if(it.is_read == 1) R.drawable.ic_check_double else R.drawable.ic_check,
+                        it.priceSuggest.value ?: "",
+                        text,
+                        color,
+                        drawable)
                 }
                 it.saleSuggest?.status == 1 -> Message.Special.PriceAccepted( it.saleSuggest.value.toString())
                 it.saleSuggest?.status == 0 -> null
@@ -490,7 +493,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
          list.filter { it.saleSuggest?.status != 0 }.forEachIndexed { index, messageModel ->
              if(messageModel.priceSuggest != null && messageModel.priceSuggest.status == 1)
                  priceDetailsIndexes.add(index)
-             if(messageModel.buySuggest != null && messageModel.buySuggest.status == 1)
+             if(messageModel.buySuggest != null && messageModel.buySuggest.status == 1 && messageModel.idSender == currentUserId)
                  buyDetailsIndexes.add(index)
 
         }
@@ -684,7 +687,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         adapter.addMessage(
             Message.MyMedia(
                 "$hour:$minute",
-                R.drawable.ic_check_double,
+                R.drawable.empty,
                 media.toTypedArray(),
                 null
             )
@@ -705,7 +708,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         adapter.addMessage(
             Message.My(
                 "$hour:$minute",
-                R.drawable.ic_check_double,
+                R.drawable.empty,
                 views.messageEditText.text.toString()
             )
         )
@@ -735,7 +738,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         adapter.addMessage(
             Message.MyMedia(
                 "$hour:$minute",
-                R.drawable.ic_check_double,
+                R.drawable.empty,
                 media.toTypedArray(),
                 message
             )
@@ -784,7 +787,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         presenter.sendPriceSuggest(currentDialogId ?: 0, newPrice.toInt())
         if(adapter.isTodayMessages().not())
             adapter.addMessage(Message.Divider("сегодня"))
-        adapter.addMessage(Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check_double, newPrice, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), 0))
+        adapter.addMessage(Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check_double, newPrice, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), null))
         views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
@@ -815,6 +818,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         user = dialog.dialog.user
         //productPrice = dialog.product?.priceNew?.toInt() ?: 0
         showDialog(dialog)
+        presenter.readMessages(dialog.dialog.id)
     }
 
     override fun dialogCreated(dialogId: CreatedDialogId) {
@@ -834,6 +838,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     override fun messageSent(message: MessageModel) {
         showLoading(false)
         Toast.makeText(requireContext(), "Сообщение отправлено", Toast.LENGTH_SHORT).show()
+        //val messages = getMessages(listOf(message))
+        adapter.updateMessage()
+
     }
 
     override fun dialogDeleted() {
@@ -845,6 +852,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     override fun photoVideoLoaded() {
         showLoading(false)
         Toast.makeText(requireContext(), "Медиа отпралено", Toast.LENGTH_SHORT).show()
+        adapter.updateMessage()
     }
 
     override fun showDialogCount(type: String, count: Int) {

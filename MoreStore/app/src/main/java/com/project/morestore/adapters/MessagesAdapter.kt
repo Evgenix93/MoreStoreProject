@@ -22,6 +22,7 @@ import com.project.morestore.util.dp
 import com.project.morestore.util.inflater
 import com.project.morestore.util.setStartDrawable
 import com.project.morestore.widgets.ChatMedia
+import java.util.*
 
 class MessagesAdapter(
     private val acceptDealCallback :(Message) -> Unit,
@@ -117,6 +118,32 @@ class MessagesAdapter(
         return items.find { it is Message.Divider && it.text == "сегодня" } != null
     }
 
+    fun updateMessage(){
+        val updatedMessage = items.last()
+        if(updatedMessage is Message.My)
+            items[items.lastIndex] = updatedMessage.apply { status = R.drawable.ic_check }
+        if(updatedMessage is Message.MyMedia)
+            items[items.lastIndex] = updatedMessage.apply { status = R.drawable.ic_check }
+        notifyItemChanged(items.lastIndex)
+        //if(message is Message.My){
+            //val updatedMessage = items.find { it is Message.My && it.time == message.time && it.message == message.message }
+            //val updatePosition = items.indexOf(updatedMessage)
+            //items[items.lastIndex] = message
+            //notifyItemChanged(items.lastIndex)
+
+        //}
+        /*if(message is Message.MyMedia){
+            val updatedMessage = items.find { it is Message.MyMedia && it.time == message.time &&
+                    (it.message == message.message || (it.message == null && message.message == null)) }
+            val updatePosition = items.indexOf(updatedMessage)
+            items[updatePosition] = message
+            notifyItemChanged(updatePosition)
+
+        }*/
+
+
+    }
+
     enum class Type {
         DIVIDER,
         MY,
@@ -150,6 +177,7 @@ class MessagesAdapter(
     ) :RecyclerView.ViewHolder(views.root){
         fun bind(message :Message.My){
             views.time.text = message.time
+            views.status.isVisible = message.status != R.drawable.empty
             views.status.setImageResource(message.status)
             views.message.text= message.message
         }
@@ -193,6 +221,7 @@ class MessagesAdapter(
     ) :RecyclerView.ViewHolder(views.root){
         fun bind(message :Message.MyMedia){
             views.time.text = message.time
+            views.status.isVisible = message.status != R.drawable.empty
             views.status.setImageResource(message.status)
             views.media.removeAllViews()
             if(message.message != null){
@@ -253,12 +282,18 @@ class MessagesAdapter(
                // avatar.setImageResource(avatarUri)
                 time.text = buyRequest.time
                 acceptDeal.setOnClickListener {
-                    items[adapterPosition] = Message.Special.DealAccept("13:00")
+                    val calendar = Calendar.getInstance()
+                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    val minute = calendar.get(Calendar.MINUTE)
+                    items[adapterPosition] = Message.Special.DealAccept("$hour:$minute")
                     notifyItemChanged(adapterPosition)
                     acceptDealCallback(buyRequest)
                 }
                 cancel.setOnClickListener {
-                    items[adapterPosition] = Message.Special.DealCancel("13:00")
+                    val calendar = Calendar.getInstance()
+                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    val minute = calendar.get(Calendar.MINUTE)
+                    items[adapterPosition] = Message.Special.DealCancel("$hour:$minute")
                     notifyItemChanged(adapterPosition)
                     cancelDealCallback(buyRequest)
                 }
@@ -371,13 +406,19 @@ class MessagesAdapter(
                 time.text = priceSubmit.time
                 acceptDeal.text = "Одобрить цену"
                 acceptDeal.setOnClickListener {
-                    items[adapterPosition] = Message.Special.PriceSubmitted("14:00", priceSubmit.newPrice)
+                    val calendar = Calendar.getInstance()
+                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    val minute = calendar.get(Calendar.MINUTE)
+                    items[adapterPosition] = Message.Special.PriceSubmitted("$hour:$minute", priceSubmit.newPrice)
                     items.add(Message.Special.PriceAccepted(priceSubmit.newPrice))
                     notifyItemRangeChanged(adapterPosition, 2)
                     submitPriceCallback(priceSubmit)
                 }
                 cancel.setOnClickListener {
-                    items[adapterPosition] = Message.Special.PriceCanceled("14:00", priceSubmit.newPrice)
+                    val calendar = Calendar.getInstance()
+                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    val minute = calendar.get(Calendar.MINUTE)
+                    items[adapterPosition] = Message.Special.PriceCanceled("$hour:$minute", priceSubmit.newPrice)
                     notifyItemChanged(adapterPosition)
                     cancelPriceCallback(priceSubmit)
                 }

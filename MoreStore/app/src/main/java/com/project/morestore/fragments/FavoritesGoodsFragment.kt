@@ -58,8 +58,9 @@ class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
     }
 
     override fun favoritesLoaded(list: List<*>) {
-        productAdapter.updateList(list as List<Product>)
         showList()
+        productAdapter.updateList(list as List<Product>)
+
 
     }
 
