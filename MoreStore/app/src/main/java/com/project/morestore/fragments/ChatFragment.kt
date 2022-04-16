@@ -464,7 +464,13 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                         ResourcesCompat.getColor(resources, R.color.green, null)
                     else
                         ResourcesCompat.getColor(resources, R.color.gray2, null)
-                    Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check_double, it.priceSuggest.value ?: "", text, color, 0)
+                    val drawable = when(it.priceSuggest.status){
+                        0 -> null
+                        1 -> R.drawable.ic_check_round_fill
+                        2 -> R.drawable.ic_x
+                        else -> null
+                    }
+                    Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check_double, it.priceSuggest.value ?: "", text, color, drawable)
                 }
                 it.saleSuggest?.status == 1 -> Message.Special.PriceAccepted( it.saleSuggest.value.toString())
                 it.saleSuggest?.status == 0 -> null
@@ -667,9 +673,17 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             .mapIndexed { index, uri -> Media.Video(uri.toString(), mediaPhoto.size + index + 1) }
         val media = mediaPhoto + mediaVideo
 
+        if(adapter.isTodayMessages().not())
+            adapter.addMessage(Message.Divider("сегодня"))
+
+        val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+
         adapter.addMessage(
             Message.MyMedia(
-                "13:00",
+                "$hour:$minute",
                 R.drawable.ic_check_double,
                 media.toTypedArray(),
                 null
@@ -710,9 +724,17 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             .mapIndexed { index, uri -> Media.Video(uri.toString(), mediaPhoto.size + index + 1) }
         val media = mediaPhoto + mediaVideo
 
+        val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        if(adapter.isTodayMessages().not())
+            adapter.addMessage(Message.Divider("сегодня"))
+
+
         adapter.addMessage(
             Message.MyMedia(
-                "13:00",
+                "$hour:$minute",
                 R.drawable.ic_check_double,
                 media.toTypedArray(),
                 message
@@ -756,8 +778,13 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun applyNewPrice(newPrice: String) {
         //adapter.setItems(requestPrice(newPrice))
+        val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
         presenter.sendPriceSuggest(currentDialogId ?: 0, newPrice.toInt())
-        adapter.addMessage(Message.Special.PriceRequest("13:00", R.drawable.ic_check_double, newPrice, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), 0))
+        if(adapter.isTodayMessages().not())
+            adapter.addMessage(Message.Divider("сегодня"))
+        adapter.addMessage(Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check_double, newPrice, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), 0))
         views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
