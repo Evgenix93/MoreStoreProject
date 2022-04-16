@@ -7,6 +7,14 @@
     android:layout_height="wrap_content"
     >
 
+    <ImageView android:id="@+id/avatar"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/circle_background"
+        android:backgroundTint="@color/gray7"
+        android:layout_marginEnd="8dp"
+        />
+
     <LinearLayout
         android:id="@+id/priceBlockLinearLayout"
         android:layout_width="280dp"

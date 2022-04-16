@@ -186,6 +186,7 @@ class MessagesAdapter(
     inner class CompanionMessageHolder(
         private val context :Context
     ) :RecyclerView.ViewHolder(LinearLayout(context).apply {
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         orientation = VERTICAL
         showDividers = SHOW_DIVIDER_MIDDLE
         dividerDrawable = createRect(0, 8.dp)
@@ -199,7 +200,6 @@ class MessagesAdapter(
                     .inflate(context.inflater, holder, true)
                     .apply {
                         if(it == message.msgs.last()){
-                           // if(avatarId == R.drawable.ic_headphones) avatar.setPadding(5.dp, 5.dp, 5.dp, 5.dp)
                             avatar.clipToOutline = true
                             if(avatarUri.isEmpty())
                                 avatar.setImageResource(R.drawable.ic_headphones)
@@ -249,7 +249,10 @@ class MessagesAdapter(
         fun bind(message :Message.CompanionMedia){
             Log.d("MyDebug", "media = ${message.media}")
             views.time.text = message.time
-            views.status.setImageResource(message.status)
+            Glide.with(itemView)
+                .load(avatarUri)
+                .into(views.avatar)
+
             views.media.removeAllViews()
             if(message.message != null){
                 views.messageLinearLayout.isVisible = true
@@ -282,18 +285,12 @@ class MessagesAdapter(
                // avatar.setImageResource(avatarUri)
                 time.text = buyRequest.time
                 acceptDeal.setOnClickListener {
-                    val calendar = Calendar.getInstance()
-                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-                    val minute = calendar.get(Calendar.MINUTE)
-                    items[adapterPosition] = Message.Special.DealAccept("$hour:$minute")
+                    items[adapterPosition] = Message.Special.DealAccept(buyRequest.time)
                     notifyItemChanged(adapterPosition)
                     acceptDealCallback(buyRequest)
                 }
                 cancel.setOnClickListener {
-                    val calendar = Calendar.getInstance()
-                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-                    val minute = calendar.get(Calendar.MINUTE)
-                    items[adapterPosition] = Message.Special.DealCancel("$hour:$minute")
+                    items[adapterPosition] = Message.Special.DealCancel(buyRequest.time)
                     notifyItemChanged(adapterPosition)
                     cancelDealCallback(buyRequest)
                 }
@@ -307,8 +304,10 @@ class MessagesAdapter(
         fun bind(item :Message.Special.DealAccept){
             with(views){
                 avatar.clipToOutline = true
-                //avatar.setImageResource(avatarUri)
                 time.text = item.time
+                Glide.with(itemView)
+                    .load(avatarUri)
+                    .into(avatar)
             }
         }
     }
@@ -322,6 +321,9 @@ class MessagesAdapter(
                 time.text = item.time
                 subtitle.text = "Отменено"
                 icon.setImageResource(R.drawable.ic_x)
+                Glide.with(itemView)
+                    .load(avatarUri)
+                    .into(avatar)
             }
         }
     }
@@ -382,10 +384,6 @@ class MessagesAdapter(
                 price.text = ctx.getString(R.string.pattern_price, priceRequest.newPrice)
                 requestStatus.text = priceRequest.text
                 requestStatus.setTextColor(priceRequest.textColor)
-                priceRequest.submitStatus ?: views.requestStatus.setCompoundDrawables(null, null, null, null)
-                 priceRequest.submitStatus?.let {views.requestStatus.setStartDrawable(priceRequest.submitStatus)}
-
-
             }
         }
     }
@@ -399,26 +397,24 @@ class MessagesAdapter(
         fun bind(priceSubmit :Message.Special.PriceSubmit){
             with(views){
                 avatar.clipToOutline = true
-                //avatar.setImageResource(avatarUri)
                 title.text = "${priceSubmit.newPrice} ₽"
                 icon.setImageResource(R.drawable.ic_coins)
                 icon.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(itemView.resources, R.color.blue4, null))
                 time.text = priceSubmit.time
                 acceptDeal.text = "Одобрить цену"
+                Glide.with(itemView)
+                    .load(avatarUri)
+                    .circleCrop()
+                    .into(avatar)
+
                 acceptDeal.setOnClickListener {
-                    val calendar = Calendar.getInstance()
-                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-                    val minute = calendar.get(Calendar.MINUTE)
-                    items[adapterPosition] = Message.Special.PriceSubmitted("$hour:$minute", priceSubmit.newPrice)
+                    items[adapterPosition] = Message.Special.PriceSubmitted(priceSubmit.time, priceSubmit.newPrice)
                     items.add(Message.Special.PriceAccepted(priceSubmit.newPrice))
                     notifyItemRangeChanged(adapterPosition, 2)
                     submitPriceCallback(priceSubmit)
                 }
                 cancel.setOnClickListener {
-                    val calendar = Calendar.getInstance()
-                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-                    val minute = calendar.get(Calendar.MINUTE)
-                    items[adapterPosition] = Message.Special.PriceCanceled("$hour:$minute", priceSubmit.newPrice)
+                    items[adapterPosition] = Message.Special.PriceCanceled(priceSubmit.time, priceSubmit.newPrice)
                     notifyItemChanged(adapterPosition)
                     cancelPriceCallback(priceSubmit)
                 }
@@ -434,6 +430,10 @@ class MessagesAdapter(
             with(views){
                 time.text = priceRequest.time
                 price.text = ctx.getString(R.string.pattern_price, priceRequest.newPrice)
+                avatar.clipToOutline = true
+                Glide.with(itemView)
+                    .load(avatarUri)
+                    .into(avatar)
             }
         }
     }
@@ -448,7 +448,10 @@ class MessagesAdapter(
                 requestStatus.text = "Отменено"
                 requestStatus.setStartDrawable(ResourcesCompat.getDrawable(itemView.resources, R.drawable.ic_x, null)!!)
                 price.text = ctx.getString(R.string.pattern_price, priceRequest.newPrice)
-
+                avatar.clipToOutline = true
+                Glide.with(itemView)
+                    .load(avatarUri)
+                    .into(avatar)
             }
         }
     }

@@ -18,15 +18,6 @@
             android:layout_height="58dp"
             android:orientation="horizontal" />
 
-        <ImageView android:id="@+id/status"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="4dp"
-            app:tint="@color/green"
-            android:layout_gravity="bottom"
-            />
-
-
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
@@ -50,6 +41,14 @@
         android:visibility="visible"
         >
 
+        <ImageView android:id="@+id/avatar"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray7"
+            android:layout_marginEnd="8dp"
+            />
+
         <TextView
             android:id="@+id/message"
             android:layout_width="0dp"
@@ -62,28 +61,6 @@
             android:padding="8dp"
             android:background="@drawable/bg_rectangle_blue_rounded8"
             tools:text="Здравствуйте! Мне пришел\nпорванный товар!"
-            />
-
-        <ImageView
-            android:id="@+id/status2"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="4dp"
-            android:layout_gravity="bottom"
-            android:src="@drawable/ic_check_double"
-            app:tint="@color/green"
-            />
-
-        <TextView
-            android:id="@+id/time2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/manrope_regular"
-            android:textColor="@color/gray2"
-            android:textSize="10sp"
-            tools:ignore="SmallSp"
-            android:layout_gravity="bottom"
-            tools:text="13:18"
             />
 
     </LinearLayout>

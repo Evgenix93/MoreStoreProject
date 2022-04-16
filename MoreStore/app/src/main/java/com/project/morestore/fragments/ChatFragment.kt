@@ -159,7 +159,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
      }*/
 
     private fun showSell(dialog: DialogWrapper) {
-        adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
+
+        //currentDialogId = dialog.dialog.id
+        //user = dialog.dialog.user
+        //adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
             toolbar.title.text = dialog.dialog.user.name
             toolbar.subtitle.text = "В сети 2 ч. назад"
@@ -816,7 +819,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         currentDialogId = dialog.dialog.id
         currentProductPrice = dialog.product?.priceNew
         user = dialog.dialog.user
-        //productPrice = dialog.product?.priceNew?.toInt() ?: 0
+        adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         showDialog(dialog)
         presenter.readMessages(dialog.dialog.id)
     }
@@ -881,10 +884,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             MessageActionType.BUY_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Покупка одобрена", Toast.LENGTH_LONG).show()
             MessageActionType.PRICE_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Цена одобрена", Toast.LENGTH_LONG).show()
             MessageActionType.PRICE_REQUEST_CANCEL -> Toast.makeText(requireContext(), "Цена отменена", Toast.LENGTH_LONG).show()
-
-
-
         }
     }
-
 }
