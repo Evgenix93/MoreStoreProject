@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ import moxy.ktx.moxyPresenter
 class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
     private lateinit var views :FragmentFavoritesBinding
     private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
+    private  var selectedTab: TabLayout.Tab? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,16 +48,26 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
             tabs.addTab(tabs.newTab().fill(R.drawable.sel_users, "Продавцы", 0))
             tabs.addTab(tabs.newTab().fill(R.drawable.sel_search_small, "Поиски", 0))
             tabs.setSelectListener {
-                when(it.position){
-                    0 -> showFragment(FavoritesGoodsFragment())
-                    1 -> showFragment(FavoritesBrandsFragment())
-                    2 -> showFragment(FavoritesSellersFragment())
-                    else -> showFragment(FavoritesSearchFragment())
+                Log.d("MyTab", "tab selected")
+                selectedTab = it
+                when (it.position) {
+                    0 -> {
+                        Log.d("MyTab", "selected tab showFavoritesGoods")
+                        showFragment(FavoritesGoodsFragment())}
+                    1 -> {
+                        showFragment(FavoritesBrandsFragment())}
+                    2 -> {
+                        showFragment(FavoritesSellersFragment())}
+                    else -> {
+                        showFragment(FavoritesSearchFragment())}
                 }
             }
         }
         getFavorites()
-        showFragment(FavoritesGoodsFragment())
+        if(selectedTab == null)
+            showFragment(FavoritesGoodsFragment())
+        else
+            views.tabs.selectTab(selectedTab)
     }
 
     private fun TabLayout.Tab.fill(@DrawableRes drawableId: Int, text: String, count: Int = 0) :TabLayout.Tab {

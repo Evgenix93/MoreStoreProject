@@ -19,7 +19,7 @@ import com.project.morestore.util.autoCleared
 import moxy.ktx.moxyPresenter
 
 class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
-    private var productAdapter: ProductAdapter by autoCleared()
+    private lateinit var productAdapter: ProductAdapter
     private val presenter by moxyPresenter{ FavoritesPresenter(requireContext()) }
 
     private fun getFavoriteBrands(){
@@ -30,7 +30,6 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
     private fun getProducts(brands: List<ProductBrand>){
         presenter.getProducts(brands)
     }
-
 
     override val emptyList by lazy {
         EmptyList(
@@ -51,9 +50,10 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       // showEmptyList { Toast.makeText(requireContext(), "Список пуст", Toast.LENGTH_SHORT).show() }
         getFavoriteBrands()
     }
+
+
 
     override fun loading() {
 
@@ -69,7 +69,6 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
                    }
                    is Product -> {
                        loader.isVisible = false
-                       Log.d("MyDebug", "products loaded")
                        productAdapter.updateList(list as List<Product>)
                    }
                }
@@ -86,7 +85,6 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
 
     override fun emptyList() {
         showEmptyList { findNavController().navigate(R.id.catalogFragment) }
-
     }
 
     override fun success() {

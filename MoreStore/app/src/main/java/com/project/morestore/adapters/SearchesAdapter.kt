@@ -35,7 +35,7 @@ class SearchesAdapter(
         private val context = views.root.context
         private lateinit var search :FavoriteSearch
         init{
-            views.edit.setOnClickListener { editCallback(search) }
+            views.root.setOnClickListener { editCallback(search) }
         }
 
         fun bind(search :FavoriteSearch){

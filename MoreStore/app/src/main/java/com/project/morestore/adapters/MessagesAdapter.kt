@@ -282,7 +282,6 @@ class MessagesAdapter(
         fun bind(buyRequest :Message.Special.DealRequest){
             with(views){
                 avatar.clipToOutline = true
-               // avatar.setImageResource(avatarUri)
                 time.text = buyRequest.time
                 acceptDeal.setOnClickListener {
                     items[adapterPosition] = Message.Special.DealAccept(buyRequest.time)
@@ -294,6 +293,9 @@ class MessagesAdapter(
                     notifyItemChanged(adapterPosition)
                     cancelDealCallback(buyRequest)
                 }
+                Glide.with(itemView)
+                    .load(avatarUri)
+                    .into(avatar)
             }
         }
     }

@@ -42,6 +42,7 @@ class FavoriteSellersAdapter(val onClick: (User) -> Unit) :RecyclerView.Adapter<
             with(views){
                 Glide.with(itemView)
                     .load(seller.avatar?.photo)
+                    .circleCrop()
                     .into(views.photo)
                 name.text = seller.name
                 rate.text = seller.rating?.value.toString()
