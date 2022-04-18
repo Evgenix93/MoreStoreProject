@@ -24,7 +24,6 @@ import com.project.morestore.fragments.SplashScreenFragmentDirections
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by viewBinding()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -74,7 +73,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             val bottomNavBar = binding.bottomNavBar
-
 
             when (destination.id) {
                 R.id.catalogFragment -> {

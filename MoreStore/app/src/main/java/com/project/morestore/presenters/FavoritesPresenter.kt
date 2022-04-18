@@ -187,7 +187,7 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
                     viewState.error(bodyString)
                 }
                 404 -> {
-                    viewState.error("Список пуст")
+                    viewState.emptyList()
                 }
                 500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")

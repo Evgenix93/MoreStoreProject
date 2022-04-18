@@ -71,6 +71,6 @@ fun TabLayout.setSelectListener(callback :(TabLayout.Tab) -> Unit){
 
         override fun onTabUnselected(tab: TabLayout.Tab?) {/* skip */}
 
-        override fun onTabReselected(tab: TabLayout.Tab?) {/* skip */}
+        override fun onTabReselected(tab: TabLayout.Tab?) {}
     })
 }

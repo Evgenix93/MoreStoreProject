@@ -19,7 +19,6 @@ class PhotoViewPagerAdapter(fragment: Fragment, val onClick: (String) -> Unit): 
 
         }
 
-
     }
 
     fun updateList(newList: List<String>){
