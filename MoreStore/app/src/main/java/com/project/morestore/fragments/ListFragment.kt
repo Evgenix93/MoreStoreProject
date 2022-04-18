@@ -61,6 +61,7 @@ abstract class ListFragment :MvpAppCompatFragment() {
             }
         list.visibility = View.GONE
         requireView().findViewById<ConstraintLayout>(R.id.brandsConstraintLayout).isVisible = false
+        requireView().setBackgroundResource(R.color.white)
     }
 
     protected fun showList(){
@@ -89,4 +90,9 @@ abstract class ListFragment :MvpAppCompatFragment() {
         val message :String,
         val actionText :String
     )
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        container.removeAllViews()
+    }
 }

@@ -50,6 +50,9 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         binding.draftTextView.setOnClickListener {
             findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToProductDraftFragment())
         }
+        binding.favoriteTextView.setOnClickListener {
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToFavoritesFragment())
+        }
     }
 
     override fun success(result: Any) {

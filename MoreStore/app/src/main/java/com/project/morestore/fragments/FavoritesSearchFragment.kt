@@ -111,6 +111,8 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
             ))
             showList()
         }*/
+
+        view.setBackgroundResource(R.color.white)
     }
 
     private fun getFavoriteSearches(){

@@ -80,11 +80,11 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     }
 
-    private fun messageLike(ids: List<Long>) {
-        if (ids.contains(args.product?.id ?: args.productId)) {
+    private fun messageLike() {
+        /*if (ids.contains(args.product?.id ?: args.productId)) {
             isLiked = !isLiked
         }
-        binding.heartIcon.setImageResource(if (isLiked) R.drawable.ic_wished else R.drawable.ic_heart)
+        binding.heartIcon.setImageResource(if (isLiked) R.drawable.ic_wished else R.drawable.ic_heart)*/
         val messageStr = if (isLiked) "Добавлено в избранное" else "Удалено из избранного"
         Toast.makeText(requireContext(), messageStr, Toast.LENGTH_SHORT).show()
     }
@@ -147,6 +147,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     private fun bind(product: Product?, userId: Long, dialogWrappers: List<DialogWrapper>?) {
         product ?: return
+        isLiked = product.wishlist ?: false
         this.product = product
         initShare(product.id)
         val photoVideoFilesUris = product.photo.map { it.photo } + product.video?.map { it.video }.orEmpty()
@@ -390,7 +391,9 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                     dialogs = result
                 }
                 if(result[0] is Long){
+                    isLiked = isLiked.not()
                     getProduct(result[0] as Long)
+                    messageLike()
 
                 }
                 //}

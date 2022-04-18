@@ -82,6 +82,15 @@ class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
         super.onDestroy()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        FilterState.filter.name = binding.searchNameEditText.text.toString()
+        if(binding.priceFromEditText.text.isNotEmpty())
+            FilterState.filter.fromPrice = binding.priceFromEditText.text.toString().toInt()
+        if(binding.priceUntilEditText.text.isNotEmpty())
+            FilterState.filter.untilPrice = binding.priceUntilEditText.text.toString().toInt()
+    }
+
     private fun initViews(){
         binding.deleteTextView.isVisible = args.favoriteSearchId != 0L
         binding.notificationTypeAutoComplete.setAdapter(ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line,

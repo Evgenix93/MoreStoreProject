@@ -1,8 +1,11 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +22,17 @@ import kotlin.reflect.KClass
 
 class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
     private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
-    private var productAdapter: ProductAdapter by autoCleared()
+    private var productAdapter: ProductAdapter = ProductAdapter(null) { product ->
+        findNavController().navigate(
+            FavoritesFragmentDirections.actionFavoritesFragmentToProductDetailsFragment(
+                product = product,
+                productId = null,
+                isSeller = false
+            )
+        )
+
+    }
+    //by autoCleared()
     override val emptyList by lazy {
         EmptyList(
             R.drawable.img_favorites_empty1,
@@ -30,7 +43,18 @@ class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
         )
     }
     override val list by lazy {
-        productAdapter = ProductAdapter(null) { product ->
+        RecyclerView(requireContext())
+            .apply {
+                layoutManager = GridLayoutManager(requireContext(), 2)
+                adapter = productAdapter
+
+            }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //showEmptyList { Toast.makeText(requireContext(), "123", Toast.LENGTH_SHORT).show() }
+        /*productAdapter = ProductAdapter(null) { product ->
             findNavController().navigate(
                 FavoritesFragmentDirections.actionFavoritesFragmentToProductDetailsFragment(
                     product = product,
@@ -39,18 +63,32 @@ class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
                 )
             )
 
-        }
-        RecyclerView(requireContext())
-            .apply {
-                layoutManager = GridLayoutManager(requireContext(), 2)
-                adapter = productAdapter
-            }
+        }*/
+        //list.adapter = productAdapter
+        //view.findViewById<RecyclerView>(-1).adapter = productAdapter
+        presenter.getProductWishList()
+        Log.d("mylog", "onViewCreated")
+        list.setBackgroundResource(R.color.gray3)
+
+
+
+
+
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //showEmptyList { Toast.makeText(requireContext(), "123", Toast.LENGTH_SHORT).show() }
-        presenter.getProductWishList()
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+    }
+
+
+    private fun initList(){
+        /*list = RecyclerView(requireContext())
+            .apply {
+                layoutManager = GridLayoutManager(requireContext(), 2)
+                //adapter = productAdapter
+            }*/
+
     }
 
     override fun loading() {
@@ -59,7 +97,12 @@ class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
 
     override fun favoritesLoaded(list: List<*>) {
         showList()
+        //this.list.adapter = productAdapter
         productAdapter.updateList(list as List<Product>)
+        //Log.d("mylog", (this.list.adapter as ProductAdapter).itemCount.toString())
+        //(this.list.adapter as ProductAdapter).notifyDataSetChanged()
+        //Log.d("mylog", (this.list.parent == null).toString())
+
 
 
     }

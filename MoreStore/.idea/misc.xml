@@ -104,6 +104,7 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_step4.xml" value="0.5416666666666666" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_step5.xml" value="0.5416666666666666" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_edit_favorite_search.xml" value="0.34509466437177283" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_favorites.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_feedback_products.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_fileter_product_status.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_filter.xml" value="0.5141065830721003" />
@@ -152,7 +153,7 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_material_line.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_matirial_line.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_option.xml" value="0.5421875" />
-        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_product.xml" value="0.75" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_product.xml" value="0.41309823677581864" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_region.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_seller.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_shoes_size_line.xml" value="0.5421875" />

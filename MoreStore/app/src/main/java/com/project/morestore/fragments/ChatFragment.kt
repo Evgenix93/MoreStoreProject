@@ -620,7 +620,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
         presenter.sendBuyRequest(currentDialogId ?: 0)
         val timeStr = "${Calendar.getInstance().get(Calendar.HOUR_OF_DAY)}:${Calendar.getInstance().get(Calendar.MINUTE)}"
-        adapter.addMessage(Message.Special.BuyRequest(timeStr, R.drawable.ic_check_double, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), R.drawable.ic_bag_filled_green ))
+        adapter.addMessage(Message.Special.BuyRequest(timeStr, R.drawable.ic_check, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), R.drawable.ic_bag_filled_green ))
         views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
@@ -790,12 +790,12 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         presenter.sendPriceSuggest(currentDialogId ?: 0, newPrice.toInt())
         if(adapter.isTodayMessages().not())
             adapter.addMessage(Message.Divider("сегодня"))
-        adapter.addMessage(Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check_double, newPrice, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), null))
+        adapter.addMessage(Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check, newPrice, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), null))
         views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
     override fun applyDiscount(discount: String) {
-         adapter.addMessage(Message.Special.PriceAccepted("Цена снижена до $discount"))
+         adapter.addMessage(Message.Special.PriceAccepted(discount))
          val dialogId = requireArguments().getLong(DIALOG_ID_KEY)
          presenter.offerDiscount(ChatFunctionInfo(dialogId = dialogId, value = discount.toInt()))
     }
@@ -872,7 +872,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         when(type){
             MessageActionType.BUY_REQUEST_SUGGEST -> {
                 Toast.makeText(requireContext(), "Запрос на покупку отправлен", Toast.LENGTH_SHORT).show()
-                cancelWidgetBinding.cancel.setOnClickListener { cancelBuy(info.suggest!!) }
+                cancelWidgetBinding.cancel.setOnClickListener { cancelBuy(info.suggestId!!) }
 
             }
             MessageActionType.BUY_REQUEST_CANCEL -> {

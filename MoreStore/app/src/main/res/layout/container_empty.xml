@@ -7,6 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:viewBindingIgnore="true"
     android:paddingHorizontal="10dp"
+    android:background="@color/gray3"
     >
 
     <com.google.android.material.button.MaterialButton
@@ -23,7 +24,8 @@
         android:id="@+id/containerLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/brandsConstraintLayout"

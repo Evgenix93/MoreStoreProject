@@ -384,6 +384,9 @@ class MessagesAdapter(
                 price.text = ctx.getString(R.string.pattern_price, priceRequest.newPrice)
                 requestStatus.text = priceRequest.text
                 requestStatus.setTextColor(priceRequest.textColor)
+                priceRequest.submitStatus ?: requestStatus.setCompoundDrawables(null, null, null, null)
+                priceRequest.submitStatus?.let { requestStatus.setStartDrawable(priceRequest.submitStatus) }
+
             }
         }
     }

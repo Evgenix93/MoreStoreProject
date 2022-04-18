@@ -192,6 +192,7 @@
                    android:layout_marginTop="130dp"/>
 
                <TextView
+                   android:id="@+id/favoriteTextView"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="@string/favorite"

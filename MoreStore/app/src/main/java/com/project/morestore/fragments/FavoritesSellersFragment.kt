@@ -54,6 +54,7 @@ class FavoritesSellersFragment :ListFragment(), FavoritesMvpView {
             )
             showList()
         }*/
+        view.setBackgroundResource(R.color.white)
     }
 
     private fun getFavoriteSellers(){

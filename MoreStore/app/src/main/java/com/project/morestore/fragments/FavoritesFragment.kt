@@ -34,7 +34,7 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        indicateTabAt(-1)
+        //indicateTabAt(-1)
         with(views){
             toolbar.title.setText(R.string.favorites_container_title)
             toolbar.root.also{
