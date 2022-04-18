@@ -27,14 +27,10 @@ class FavoritesSellersFragment :ListFragment(), FavoritesMvpView {
         )
     }
     override val list by lazy {
-        adapter = FavoriteSellersAdapter{ seller ->
-            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToSellerProfileFragment(seller, false))
-
-        }
         RecyclerView(requireContext())
             .apply {
                 layoutManager = GridLayoutManager(context, 2)
-                adapter = this@FavoritesSellersFragment.adapter
+                //adapter = this@FavoritesSellersFragment.adapter
             }
     }
 
@@ -55,6 +51,12 @@ class FavoritesSellersFragment :ListFragment(), FavoritesMvpView {
             showList()
         }*/
         view.setBackgroundResource(R.color.white)
+        adapter = FavoriteSellersAdapter{ seller ->
+            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToSellerProfileFragment(seller, false))
+
+        }
+        list.adapter = this.adapter
+
     }
 
     private fun getFavoriteSellers(){

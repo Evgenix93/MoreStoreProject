@@ -84,6 +84,7 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
     }
 
     override fun emptyList() {
+        loader.isVisible = false
         showEmptyList { findNavController().navigate(R.id.catalogFragment) }
     }
 

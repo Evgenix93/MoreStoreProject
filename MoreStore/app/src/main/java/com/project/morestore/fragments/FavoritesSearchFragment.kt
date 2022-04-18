@@ -36,11 +36,6 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
     }
 
     override val list by lazy{
-        this.adapter = SearchesAdapter { favoriteSearch ->
-            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToEditFavoriteSearchFragment(favoriteSearchId = favoriteSearch.id))
-
-
-        }
         RecyclerView(requireContext()).apply{
             layoutManager = LinearLayoutManager(requireContext())
             clipToPadding = false
@@ -48,7 +43,7 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
             setSpace(vp)
             setPadding(0, vp, 0, vp)
             layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            adapter = this@FavoritesSearchFragment.adapter
+            //adapter = this@FavoritesSearchFragment.adapter
         }
     }
 
@@ -113,6 +108,13 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
         }*/
 
         view.setBackgroundResource(R.color.white)
+        this.adapter = SearchesAdapter { favoriteSearch ->
+            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToEditFavoriteSearchFragment(favoriteSearchId = favoriteSearch.id))
+
+
+        }
+        list.adapter = this.adapter
+
     }
 
     private fun getFavoriteSearches(){
