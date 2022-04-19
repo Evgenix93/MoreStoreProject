@@ -60,7 +60,7 @@ class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
     }
 
     //IMPLEMENTATION
-    override fun showReviews(reviewItems: List<ReviewItem>) {
+    override fun showReviews(reviewItems: List<ReviewListItem>) {
         adapter.setItems(reviewItems)
     }
 }

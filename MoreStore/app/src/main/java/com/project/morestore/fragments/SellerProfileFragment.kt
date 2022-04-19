@@ -1,9 +1,11 @@
 package com.project.morestore.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -98,12 +100,27 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         presenter.getSellersWishList()
     }
 
+    private fun initSubscribeBtn(isFavorite: Boolean){
+        if(isFavorite){
+            binding.subscribeBtn.text = "Отписаться"
+            binding.subscribeBtn.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black4, null))
+            binding.subscribeBtn.setIconResource(R.drawable.ic_x)
+        }else{
+            binding.subscribeBtn.text = "Подписаться"
+            binding.subscribeBtn.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.green, null))
+            binding.subscribeBtn.setIconResource(R.drawable.ic_plus)
+        }
+
+
+    }
+
 
     override fun success(result: Any) {
         isSellerFavorite = isSellerFavorite.not()
         val message = if(isSellerFavorite) "Продавец добален в избранное"
         else "Продавец убран из избранного"
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        initSubscribeBtn(isSellerFavorite)
 
     }
 
@@ -124,11 +141,11 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
                 if(result[0] is Product) {
                     val products = result as List<Product>
                     Log.d("Debug", "loaded products = ${products}")
-                    //sellerProfileAdapter.updateList(result as List<Product>)
                     initViewPager(products)
                 }
                 if(result[0] is User){
                     isSellerFavorite = (result as List<User>).find { it.id == args.user.id } != null
+                    initSubscribeBtn(isSellerFavorite)
 
                 }
             }

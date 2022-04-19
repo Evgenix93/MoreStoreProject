@@ -607,7 +607,7 @@
             app:destination="@id/createProductHowToSellFragment" />
         <action
             android:id="@+id/action_createProductStep5Fragment_to_createProductAddBrandFragment"
-            app:destination="@id/createProductAddBrandFragment" />
+            app:destination="@id/addBrandFragment" />
         <argument
             android:name="category"
             app:argType="com.project.morestore.models.ProductCategory" />
@@ -679,8 +679,8 @@
             android:defaultValue="@null" />
     </fragment>
     <fragment
-        android:id="@+id/createProductAddBrandFragment"
-        android:name="com.project.morestore.fragments.CreateProductAddBrandFragment"
+        android:id="@+id/addBrandFragment"
+        android:name="com.project.morestore.fragments.AddBrandFragment"
         android:label="CreateProductAddBrandFragment" >
         <action
             android:id="@+id/action_createProductAddBrandFragment_to_createProductStep6Fragment"
@@ -981,5 +981,26 @@
             android:defaultValue="0L" />
     </fragment>
 
+        android:label="FavoritesFragment" />
+    <fragment
+        android:id="@+id/myAddressesFragment"
+        android:name="com.project.morestore.fragments.MyAddressesFragment"
+        android:label="MyAddressesFragment" />
+    <fragment
+        android:id="@+id/newAddressFragment"
+        android:name="com.project.morestore.fragments.NewAddressFragment"
+        android:label="NewAddressFragment" />
+    <fragment
+        android:id="@+id/mapMarkerAddressesFragment"
+        android:name="com.project.morestore.fragments.MapMarkerAddressesFragment"
+        android:label="MapMarkerAddressesFragment" />
+    <fragment
+        android:id="@+id/mapMarkerPickupsFragment"
+        android:name="com.project.morestore.fragments.MapMarkerPickupsFragment"
+        android:label="MapMarkerPickupsFragment" />
+    <fragment
+        android:id="@+id/citiesFragment"
+        android:name="com.project.morestore.fragments.CitiesFragment"
+        android:label="CitiesFragment" />
 
 </navigation>

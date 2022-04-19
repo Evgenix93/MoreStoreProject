@@ -51,18 +51,8 @@
         />
 
     <TextView android:id="@+id/send"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/App.Button.Main.Bottom"
         android:text="@string/feedback_photos_sendWithoutPhotos"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_rectangle_bordered_round8"
-        android:backgroundTint="@color/green"
-        android:padding="12dp"
-        android:gravity="center"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="24dp"
-        android:fontFamily="@font/manrope_bold"
-        android:textSize="16sp"
         />
     </LinearLayout>
 

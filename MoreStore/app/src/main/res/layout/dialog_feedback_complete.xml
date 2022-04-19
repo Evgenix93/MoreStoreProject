@@ -42,16 +42,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
-    <TextView
-        android:id="@+id/complete"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_rectangle_green_rounded8"
-        android:backgroundTint="@color/green"
-        android:gravity="center"
-        android:padding="12dp"
+    <TextView android:id="@+id/complete"
+        style="@style/App.Button.Main"
         android:text="@string/feedback_complete_complete"
-        android:textColor="@color/white"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

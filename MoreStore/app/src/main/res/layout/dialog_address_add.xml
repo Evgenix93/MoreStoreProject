@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@drawable/bg_rectangle_roundtop12"
+    android:orientation="vertical">
+
+    <ImageView android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:src="@drawable/ic_cross"
+        app:tint="@color/gray2" />
+    
+    <TextView android:id="@+id/courier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/myAddress_add_courier"
+        android:textAppearance="@style/ManropeReg_14_black"
+        android:paddingBottom="16dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray1"
+        />
+
+    <TextView android:id="@+id/delivery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="@string/myAddress_add_delivery"
+        android:textAppearance="@style/ManropeReg_14_black"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray1"
+        />
+
+    <TextView android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/bg_rectangle_rounded4_black"
+        android:padding="12dp"
+        android:gravity="center"
+        android:textAppearance="@style/ManropeBold_16_white"
+        android:text="@string/cancel"
+        />
+
+</LinearLayout>

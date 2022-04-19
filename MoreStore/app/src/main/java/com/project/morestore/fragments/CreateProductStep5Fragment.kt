@@ -5,7 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +31,7 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
     private lateinit var searchFlow: Flow<String>
     private var brands = listOf<ProductBrand>()
     private val args: CreateProductStep5FragmentArgs by navArgs()
+    private var brandName = ""
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -106,7 +107,10 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
         }
 
         binding.addBrandTextView.setOnClickListener {
-            findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductAddBrandFragment(args.category, args.forWho))
+            setFragmentResultListener(AddBrandFragment.REQUEST_BRAND){_, bundle ->
+                brandName = bundle.getString(AddBrandFragment.BRAND)!!
+            }
+            findNavController().navigate(R.id.addBrandFragment)
         }
 
         binding.skipBtn.setOnClickListener { findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToSkipStepDialog(args.category, args.forWho, true)) }

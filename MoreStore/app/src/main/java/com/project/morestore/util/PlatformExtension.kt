@@ -8,13 +8,21 @@ import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
+import ru.tinkoff.decoro.MaskImpl
+import ru.tinkoff.decoro.slots.PredefinedSlots
+import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 import kotlin.math.roundToInt
 
 val Int.dp: Int get() = (this * Resources.getSystem().displayMetrics.density).roundToInt()
@@ -22,6 +30,16 @@ val Int.dp: Int get() = (this * Resources.getSystem().displayMetrics.density).ro
 val Context.inflater :LayoutInflater get() = LayoutInflater.from(this)
 
 val ViewGroup.inflater :LayoutInflater get() = LayoutInflater.from(context)
+
+fun ViewGroup.createView(@LayoutRes layoutId :Int) :View{
+    return inflater.inflate(layoutId, this, false)
+}
+
+val Fragment.args get() = requireArguments()
+
+fun EditText.addTextChangeListener(callback :(String) -> Unit){
+    addTextChangedListener { callback(it!!.toString()) }
+}
 
 fun RecyclerView.setSpace(px :Int){
     addItemDecoration(
@@ -73,4 +91,13 @@ fun TabLayout.setSelectListener(callback :(TabLayout.Tab) -> Unit){
 
         override fun onTabReselected(tab: TabLayout.Tab?) {}
     })
+}
+
+fun EditText.setPhoneField(){
+    MaskImpl(PredefinedSlots.RUS_PHONE_NUMBER, true)
+        .also{ MaskFormatWatcher(it).installOn(this) }
+}
+
+fun Toolbar.attachNavigation(){
+    setNavigationOnClickListener { findNavController().popBackStack() }//todo apply for whole app
 }

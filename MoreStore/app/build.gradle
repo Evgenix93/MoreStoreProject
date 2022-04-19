@@ -26,8 +26,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -55,8 +55,9 @@ dependencies {
     debugImplementation project(':stub')
 
     //navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.4.1"
-    implementation "androidx.navigation:navigation-ui-ktx:2.4.1"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
+    implementation "androidx.fragment:fragment-ktx:1.4.1"
 
     //viewBinding
     implementation 'com.kirich1409.viewbindingpropertydelegate:viewbindingpropertydelegate:1.4.1'
@@ -96,6 +97,7 @@ dependencies {
     implementation 'com.tbuonomo:dotsindicator:4.2'
     implementation project(':widgets:ratingbar')
     implementation project(':widgets:emptylistgallery')
+    implementation project(':widgets:titledtextfield')
 
     //location
     implementation 'com.google.android.gms:play-services-location:19.0.1'

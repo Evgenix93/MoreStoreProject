@@ -383,4 +383,44 @@
     <!--endregion deleteDialog-->
     <!--endregion Favorites-->
 
+    <!--region my addresses-->
+    <string name="myAddress_title">Мои адреса</string>
+    <string name="myAddress_pickup">Адрес курьерской доставки</string>
+    <string name="myAddress_delivery">Адрес пункта выдачи</string>
+    <string name="myAddress_addAddress">Добавить адрес</string>
+
+    <string name="myAddress_empty">Здесь пока нет ни одного адреса</string>
+
+    <string name="myAddress_add_courier">Адрес для курьера</string>
+    <string name="myAddress_add_delivery">Пункт выдачи СДЭК</string>
+    <!--region New Address-->
+    <string name="myAddress_new_title">Новый адрес</string>
+    <string name="myAddress_new_personal_title">Личные данные получателя</string>
+    <string name="myAddress_new_personal_fio">ФИО</string>
+    <string name="myAddress_new_personal_phone">Телефон</string>
+    <string name="myAddress_new_address_title">Адрес</string>
+    <string name="myAddress_new_address_mapSelect">Выбрать на карте</string>
+    <string name="myAddress_new_address_city">Город</string>
+    <string name="myAddress_new_address_city_hint">Выберите город</string>
+    <string name="myAddress_new_address_city_notFound">Город не найден</string>
+    <string name="myAddress_new_address_street">Улица</string>
+    <string name="myAddress_new_address_street_hint">Введите улицу</string>
+    <string name="myAddress_new_address_index">Индекс</string>
+    <string name="myAddress_new_address_index_hint">000000</string>
+    <string name="myAddress_new_address_house">Дом</string>
+    <string name="myAddress_new_address_house_hint">Номер дома</string>
+    <string name="myAddress_new_address_housing">Корпус</string>
+    <string name="myAddress_new_address_building">Строение</string>
+    <string name="myAddress_new_address_apartment">Квартира</string>
+    <string name="myAddress_new_address_default">Адрес по умолчанию</string>
+    <string name="myAddress_new_address_save">Сохранить</string>
+    <string name="myAddress_new_pickOnMap_pickup_title">Выберите пункт выдачи</string>
+    <string name="myAddress_new_pickOnMap_button">Выбрать</string>
+    <string name="myAddress_new_pickCity_title">Поиск города</string>
+    <!--endregion New Address-->
+    <!--endregion my addresses-->
+
+    <!--region city-->
+    <string name="searchCity">Поиск города</string>
+    <!--endregion city-->
 </resources>

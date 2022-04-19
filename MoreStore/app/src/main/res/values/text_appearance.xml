@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ManropeBold_16_black">
+        <item name="android:fontFamily">@font/manrope_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ManropeBold_16_white">
+        <item name="android:fontFamily">@font/manrope_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ManropeReg_14_gray2">
+        <item name="android:fontFamily">@font/manrope_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/gray2</item>
+    </style>
+
+    <style name="ManropeReg_16_gray2">
+        <item name="android:fontFamily">@font/manrope_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/gray2</item>
+    </style>
+
+    <style name="ManropeReg_14_black">
+        <item name="android:fontFamily">@font/manrope_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ManropeSemibold_14_black">
+        <item name="android:fontFamily">@font/manrope_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ManropeSemibold_12_gray2">
+        <item name="android:fontFamily">@font/manrope_semibold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/gray2</item>
+    </style>
+</resources>

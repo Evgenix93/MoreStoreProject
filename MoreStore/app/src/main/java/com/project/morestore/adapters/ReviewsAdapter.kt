@@ -51,7 +51,7 @@ class ReviewsAdapter(
         if(holder is ReviewViewHolder) holder.clear()
     }
 
-    fun setItems(newItems :List<ReviewItem>){
+    fun setItems(newItems :List<ReviewListItem>){
         items = newItems
         notifyDataSetChanged()
     }

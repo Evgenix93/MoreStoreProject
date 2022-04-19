@@ -277,7 +277,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
+        <com.google.android.material.card.MaterialCardView android:id="@+id/myAddresses"
             android:layout_width="162dp"
             android:layout_height="46dp"
             android:layout_gravity="bottom|end"

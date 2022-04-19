@@ -894,6 +894,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         viewState.loaded(productRepository.loadCreateProductData())
     }
 
+    fun getProductData() :CreateProductData = productRepository.loadCreateProductData()
+
     fun clearCreateProductData() {
         productRepository.clearCreateProductData()
     }

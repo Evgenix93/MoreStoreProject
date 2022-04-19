@@ -10,4 +10,5 @@ rootProject.name = "More Store"
 include ':app'
 include ':stub'
 include ':widgets:ratingbar',
-        ':widgets:emptylistgallery'
+        ':widgets:emptylistgallery',
+        ':widgets:titledtextfield'

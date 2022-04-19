@@ -9,5 +9,5 @@ data class Region(
     val name: String,
     @Json(name = "id_country")
     val idCountry: Long,
-    var isChecked: Boolean?
+    var isChecked: Boolean = false
 )

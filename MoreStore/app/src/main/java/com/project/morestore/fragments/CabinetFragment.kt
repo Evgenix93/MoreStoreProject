@@ -16,6 +16,7 @@ import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.databinding.FragmentCabinetBinding
+import com.project.morestore.fragments.base.BottomNavigationMvpFragment
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
 import com.project.morestore.models.User
@@ -26,7 +27,7 @@ import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpView {
+class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), UserMvpView {
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private val binding: FragmentCabinetBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
@@ -35,6 +36,8 @@ class CabinetFragment: MvpAppCompatFragment(R.layout.fragment_cabinet), UserMvpV
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.myAddresses.setOnClickListener { findNavController().navigate(R.id.myAddressesFragment) }
+        checkToken()
         setClickListeners()
         showBottomNav()
         initToolbar()

@@ -6,4 +6,4 @@ import com.squareup.moshi.JsonClass
 data class NewProductBrand(
     val id: Long?,
     var name: String?
-    )
+)

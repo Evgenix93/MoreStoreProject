@@ -24,3 +24,7 @@ fun AutoCompleteTextView.showDropdown(adapter: ArrayAdapter<String>?) {
 fun Calendar.diffInDays(after :Calendar) :Int{
     return TimeUnit.MILLISECONDS.toDays(abs(timeInMillis - after.timeInMillis)).toInt()
 }
+
+fun String.isFilled(minLength :Int = 1) :Boolean{
+    return this.trim().length >= minLength
+}

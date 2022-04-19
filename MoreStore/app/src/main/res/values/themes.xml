@@ -39,7 +39,6 @@
         <item name="colorOnPrimary">@color/black</item>
     </style>
 
-    <style name="App"/>
     <style name="App.Dialog"/>
     <style name="App.Dialog.Transparent" parent="Theme.Material3.DayNight.BottomSheetDialog"/>
     <style name="App.Dialog.AlertTransparent" parent="Theme.MaterialComponents.Dialog.Alert">
