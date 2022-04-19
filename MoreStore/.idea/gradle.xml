@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/widgets" />
             <option value="$PROJECT_DIR$/widgets/emptylistgallery" />
             <option value="$PROJECT_DIR$/widgets/ratingbar" />
+            <option value="$PROJECT_DIR$/widgets/titledtextfield" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -96,7 +96,14 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                     }
                 }
                 4 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductDescriptionFragment())
-                5 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductRegionsFragment())
+                5 -> {
+                    setFragmentResultListener(CitiesFragment.REQUEST_KEY){_ , bundle ->
+                        val regionName = bundle.getParcelable<ParcelRegion>(SINGLE)!!.entity.name
+                        presenter.updateCreateProductData(address = regionName)
+                        loadCreateProductData()
+                    }
+                    findNavController().navigate(R.id.citiesFragment, bundleOf(TYPE to 0))
+                }
                 6 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
                 7 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
             }

@@ -135,9 +135,10 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
         binding.loader.isVisible = false
         if(brands.isEmpty()){
             brands = result as List<ProductBrand>
-            presenter.collectBrandSearchFlow(searchFlow, brands)
+
         }
         brandAdapter.updateList(result as List<ProductBrand>)
+        presenter.collectBrandSearchFlow(searchFlow, brands)
     }
 
     override fun loading() {

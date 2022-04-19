@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:viewBindingIgnore="true"
     android:paddingHorizontal="10dp"
-    android:background="@color/gray3"
+
     >
 
     <com.google.android.material.button.MaterialButton

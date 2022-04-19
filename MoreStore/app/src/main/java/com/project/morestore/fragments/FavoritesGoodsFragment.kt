@@ -68,7 +68,7 @@ class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
         //view.findViewById<RecyclerView>(-1).adapter = productAdapter
         presenter.getProductWishList()
         Log.d("mylog", "onViewCreated")
-        list.setBackgroundResource(R.color.gray3)
+
 
 
 

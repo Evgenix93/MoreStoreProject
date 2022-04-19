@@ -18,7 +18,7 @@ object AddressesRepository{
     suspend fun getAllAddresses() :Array<MyAddress>{
         return try {
             network.getAddress()
-        } catch (ex :JsonDataException) {
+        } catch (ex :Throwable) {
             arrayOf()
         }
     }
