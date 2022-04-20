@@ -191,7 +191,7 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                     )
                 })
         }else {
-            brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
+            /*brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
             val forWhoId = brandsPropertiesDataWrapper.data.property?.firstOrNull {
                  it == 140L || it == 141L || it == 142L
             }
@@ -199,7 +199,7 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                 140L -> getAllSizes(false)
                 141L -> getAllSizes(true)
                 else -> getAllSizes(true)
-            }
+            }*/
         }
     }
 

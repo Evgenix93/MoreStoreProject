@@ -52,22 +52,24 @@ class CategoryAdapter(
             }
 
 
-            if (isOnboarding)
-                binding.categoryCheckBox.isChecked = isAllChecked
-              else
+            //if (isOnboarding)
+              //  binding.categoryCheckBox.isChecked = isAllChecked
+              //else
                 binding.categoryCheckBox.isChecked = isChecked
 
-            binding.categoryCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            binding.categoryCheckBox.setOnClickListener { _ ->
                 if(!isOnboarding)
                // segments2Checked[position] = isChecked
-                   checkBoxClick2(adapterPosition, isChecked)
+                   checkBoxClick2(adapterPosition, binding.categoryCheckBox.isChecked)
                 else
-                    segments1Checked[position] = isChecked
+                    segments1Checked[position] = binding.categoryCheckBox.isChecked
                 if (category.id == 0) {
                     Log.d("Debug", "allCheck")
-                    allCheckCallback(isChecked)
-                } else
-                    checkBoxClick(category.id, isChecked)
+                    allCheckCallback(binding.categoryCheckBox.isChecked)
+                } else {
+                    checkBoxClick(category.id, binding.categoryCheckBox.isChecked)
+                    checkBoxClick2(adapterPosition, binding.categoryCheckBox.isChecked)
+                }
             }
         }
     }
@@ -80,6 +82,8 @@ class CategoryAdapter(
 
     fun updateSegmentsChecked(newList: MutableList<Boolean>){
         segments2Checked = newList
+        val allChecked = newList.all { it }
+        segments1Checked = (mutableListOf(allChecked) + newList).toMutableList()
         Log.d("mylog", "segments $segments2Checked")
         notifyDataSetChanged()
     }
@@ -100,17 +104,22 @@ class CategoryAdapter(
             segments2Checked,
             checkBoxClick,
             {position, isChecked ->
+                if(isOnboarding.not())
               segments2Checked[position] = isChecked
+                else
+                    segments2Checked[position - 1] = isChecked
             },
-         {
-            isAllChecked = it
+         { allChecked ->
+            //isAllChecked = it
+             segments2Checked = mutableListOf(allChecked, allChecked, allChecked, allChecked)
+             segments1Checked = mutableListOf(allChecked, allChecked, allChecked, allChecked, allChecked)
             notifyDataSetChanged()
         })
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         if (isOnboarding)
-            holder.bind(segments1[position], isAllChecked, position, isOnboarding, false)
+            holder.bind(segments1[position], isAllChecked, position, isOnboarding, segments1Checked[position])//false)
         else
             holder.bind(segments2[position], isAllChecked, position, isOnboarding, segments2Checked[position])
     }

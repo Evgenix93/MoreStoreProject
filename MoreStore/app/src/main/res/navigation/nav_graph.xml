@@ -133,6 +133,10 @@
         <argument
             android:name="isMale"
             app:argType="boolean" />
+        <argument
+            android:name="fromProfile"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/onboarding4Fragment"
@@ -528,6 +532,9 @@
         <action
             android:id="@+id/action_profileFragment_to_onboarding2Fragment"
             app:destination="@id/onboarding2Fragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_onboarding3Fragment"
+            app:destination="@id/onboarding3Fragment" />
     </fragment>
     <fragment
         android:id="@+id/sellerProfileFragment"

@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -11,7 +12,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.CategoryAdapter
 import com.project.morestore.databinding.FragmentOnboarding3Binding
+import com.project.morestore.models.BrandsPropertiesDataWrapper
 import com.project.morestore.models.Category
+import com.project.morestore.models.ProductBrand
 import com.project.morestore.mvpviews.OnBoardingMvpView
 
 import com.project.morestore.presenters.OnboardingPresenter
@@ -24,12 +27,16 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
     private val args: Onboarding3FragmentArgs by navArgs()
     private var categoryAdapter: CategoryAdapter by autoCleared()
     private val presenter by moxyPresenter { OnboardingPresenter(requireContext()) }
+    private var onBoardingData: BrandsPropertiesDataWrapper? = null
+    private var allBrands: List<ProductBrand> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         setClickListeners()
         getCategories()
+        if(args.fromProfile)
+            getOnBoardingData()
 
         /* binding.allCheckBox.setOnCheckedChangeListener { _, isChecked ->
              binding.luxuryCheckBox.isChecked = isChecked
@@ -52,7 +59,36 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
 
     private fun setClickListeners() {
         binding.continueBtn.setOnClickListener {
-            presenter.safeCategories(categoryAdapter.loadSegments1Checked())
+            //presenter.safeCategories(categoryAdapter.loadSegments1Checked())
+            if(args.fromProfile.not())
+                presenter.safeCategories(categoryAdapter.loadSegments2Checked())
+            else{
+                val luxBrands = if(categoryAdapter.loadSegments2Checked()[0])
+                    allBrands.filter { it.idCategory == 1L }.map { it.id }
+                else
+                    emptyList()
+
+                val middleBrands = if(categoryAdapter.loadSegments2Checked()[1])
+                    allBrands.filter { it.idCategory == 2L }.map { it.id }
+                else
+                    emptyList()
+
+                val massBrands = if(categoryAdapter.loadSegments2Checked()[2])
+                    allBrands.filter { it.idCategory == 3L }.map { it.id }
+                else
+                    emptyList()
+
+                val ecoBrands = if(categoryAdapter.loadSegments2Checked()[3])
+                    allBrands.filter { it.idCategory == 3L }.map { it.id }
+                else
+                    emptyList()
+
+
+
+
+
+
+            }
         }
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
@@ -64,6 +100,31 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
     private fun showLoading(loading: Boolean){
         binding.continueBtn.isEnabled = !loading
         binding.loader.isVisible = loading
+    }
+
+    private fun getOnBoardingData(){
+        presenter.loadOnboardingData()
+
+    }
+
+    private fun showChosenBrands(allBrands: List<ProductBrand>){
+        var luxSegment = false
+        var middleSegment = false
+        var massMarketSegment = false
+        var ecoSegment = false
+        Log.d("mylog", onBoardingData?.data?.brand.orEmpty())
+        val brandIds = onBoardingData?.data?.brand?.split(";")?.mapNotNull { it.toLongOrNull() }
+        brandIds?.forEach { brandId ->
+            val brand = allBrands.find { it.id == brandId }
+            when(brand?.idCategory){
+                1L -> luxSegment = true
+                2L -> middleSegment = true
+                3L -> massMarketSegment = true
+                4L -> ecoSegment = true
+            }
+
+        }
+        categoryAdapter.updateSegmentsChecked(mutableListOf(luxSegment, middleSegment, massMarketSegment, ecoSegment))
     }
 
     override fun success() {
@@ -88,7 +149,21 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
 
     override fun loaded(result: List<Any>) {
         showLoading(false)
-        val categories = result as List<Category>
-        categoryAdapter.updateList(categories)
+        when(result[0]) {
+            is Category -> {
+                val categories = result as List<Category>
+                categoryAdapter.updateList(categories)
+            }
+            is BrandsPropertiesDataWrapper -> {
+                onBoardingData = result.last() as BrandsPropertiesDataWrapper
+                presenter.getAllBrands()
+                binding.continueBtn.text = "Сохранить"
+
+            }
+            is ProductBrand -> {
+                showChosenBrands(result as List<ProductBrand>)
+                allBrands = result
+            }
+        }
     }
 }

@@ -220,6 +220,25 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
         }
     }
 
+    fun getAllBrands(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = repository.getBrands()
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("Нет интернета")
+                else -> viewState.error("Ошибка")
+            }
+
+
+        }
+    }
+
     private suspend fun getStringFromResponse(body: ResponseBody): String {
         return withContext(Dispatchers.IO) {
             val str = body.string()

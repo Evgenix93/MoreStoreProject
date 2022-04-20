@@ -621,10 +621,10 @@ class UserRepository(val context: Context) {
     }
 
 
-    suspend fun saveBrandsProperties(brandsPropertiesData: BrandsPropertiesData): Response<Boolean>?{
-    fun loadStyles(): List<Property>{
-        return FilterState.filter.chosenStyles
-    }
+    //suspend fun saveBrandsProperties(brandsPropertiesData: BrandsPropertiesData): Response<Boolean>?{
+    //fun loadStyles(): List<Property>{
+      //  return FilterState.filter.chosenStyles
+    //}
 
    suspend fun saveBrandsProperties(brandsId: List<Long>?, propertiesId: List<Long>): Response<Boolean>?{
       return  try {
