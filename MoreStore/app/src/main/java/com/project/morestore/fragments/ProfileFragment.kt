@@ -91,14 +91,14 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
     }
 
     override fun loaded(result: Any) {
-            val currentAddress = result as Address
-            binding.currentRegionTextView.text = currentAddress.fullAddress.substringBefore(",")
             if(result is List<*>){
               brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
             }
         else {
-                val currentRegion = result as Region
-                binding.currentRegionTextView.text = currentRegion.name
+                val currentAddress = result as Address
+                binding.currentRegionTextView.text = currentAddress.fullAddress.substringBefore(",")
+
+
             }
     }
 

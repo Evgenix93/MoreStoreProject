@@ -83,6 +83,9 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
                 else
                     emptyList()
 
+                presenter.saveOnBoardingData(luxBrands + middleBrands + massBrands + ecoBrands,
+                onBoardingData?.data?.property?.split(";")?.mapNotNull { it.toLongOrNull() }.orEmpty())
+
 
 
 
@@ -108,6 +111,7 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
     }
 
     private fun showChosenBrands(allBrands: List<ProductBrand>){
+        showLoading(true)
         var luxSegment = false
         var middleSegment = false
         var massMarketSegment = false
@@ -125,15 +129,19 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
 
         }
         categoryAdapter.updateSegmentsChecked(mutableListOf(luxSegment, middleSegment, massMarketSegment, ecoSegment))
+        showLoading(false)
     }
 
     override fun success() {
         showLoading(false)
+        if(args.fromProfile.not())
         findNavController().navigate(
             Onboarding3FragmentDirections.actionOnboarding3FragmentToOnboarding4Fragment(
                 args.isMale
             )
         )
+        else
+            findNavController().popBackStack()
 
     }
 
