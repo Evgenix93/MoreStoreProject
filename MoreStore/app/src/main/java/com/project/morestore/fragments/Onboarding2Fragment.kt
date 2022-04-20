@@ -37,10 +37,11 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
         loadOnboardingData()
     }
 
-    private fun initContinueButton(){
-        if(args.fromProfile)
+    private fun initContinueButton() {
+        if (args.fromProfile)
             binding.continueBtn.text = "Сохранить"
     }
+
     private fun initLists() {
         topSizeCardAdapter = SizeCardsAdapter(true)
         bottomSizeCardAdapter = SizeCardsAdapter(true)
@@ -70,17 +71,21 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     private fun setClickListeners() {
         binding.continueBtn.setOnClickListener {
-            if(args.fromProfile){
-                val propertyIds = topSizeCardAdapter.getChosenSizes().map{it.id.toLong()} + bottomSizeCardAdapter.getChosenSizes().map{it.id.toLong()} + shoesSizeCardAdapter.getChosenSizes().map{it.id.toLong()}
-                 presenter.saveOnBoardingData(null, propertyIds)
-            }
-            else
-              presenter.saveSizes(
-                topSizeCardAdapter.getSizes(),
-                bottomSizeCardAdapter.getSizes(),
-                shoesSizeCardAdapter.getSizes(),
-                args.isMale
-            )
+            if (args.fromProfile) {
+                val propertyIds = topSizeCardAdapter.getChosenSizes()
+                    .map { it.id.toLong() } + bottomSizeCardAdapter.getChosenSizes()
+                    .map { it.id.toLong() } + shoesSizeCardAdapter.getChosenSizes()
+                    .map { it.id.toLong() } + if (isMale) listOf(141L) else listOf(140L) + brandsPropertiesDataWrapper.data.brand?.split(
+                    ';'
+                )?.mapNotNull { it.toLongOrNull() }.orEmpty()
+                presenter.saveOnBoardingData(null, propertyIds)
+            } else
+                presenter.saveSizes(
+                    topSizeCardAdapter.getSizes(),
+                    bottomSizeCardAdapter.getSizes(),
+                    shoesSizeCardAdapter.getSizes(),
+                    args.isMale
+                )
         }
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
     }
@@ -102,9 +107,9 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
         }
     }
 
-    private fun loadOnboardingData(){
-        if(args.fromProfile)
-        presenter.loadOnboardingData()
+    private fun loadOnboardingData() {
+        if (args.fromProfile)
+            presenter.loadOnboardingData()
         else
             getAllSizes(args.isMale)
     }
@@ -116,7 +121,7 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     override fun loaded(result: List<Any>) {
         showLoading(false)
-        if(result[0] is Property) {
+        if (result[0] is Property) {
             val categoryId = (result[0] as Property).idCategory?.toInt()
             if (categoryId == 4 || categoryId == 1)
                 topSizeCardAdapter.updateList((result as List<Property>).map {
@@ -135,8 +140,10 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                         it.id.toInt(),
                         it.name,
                         it.idCategory.toInt(),
-                        if(args.fromProfile)
-                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id}
+                        if (args.fromProfile)
+                            brandsPropertiesDataWrapper.data.property?.split(';')
+                                ?.mapNotNull { string -> string.toLongOrNull() }
+                                ?.any { id -> id == it.id }
                         else
                             false,
                         w = sizeLine.w,
@@ -163,8 +170,10 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                         it.id.toInt(),
                         it.name,
                         it.idCategory.toInt(),
-                        if(args.fromProfile)
-                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id}
+                        if (args.fromProfile)
+                            brandsPropertiesDataWrapper.data.property?.split(';')
+                                ?.mapNotNull { string -> string.toLongOrNull() }
+                                ?.any { id -> id == it.id }
                         else
                             false,
                         w = sizeLine.w,
@@ -192,8 +201,10 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                         it.id.toInt(),
                         it.name,
                         it.idCategory.toInt(),
-                        if(args.fromProfile)
-                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id}
+                        if (args.fromProfile)
+                            brandsPropertiesDataWrapper.data.property?.split(';')
+                                ?.mapNotNull { string -> string.toLongOrNull() }
+                                ?.any { id -> id == it.id }
                         else false,
                         w = sizeLine.w,
                         fr = sizeLine.itRuFr,
@@ -201,18 +212,25 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                         us = sizeLine.us
                     )
                 })
-        }else {
+        } else {
             brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
-            val forWhoId = brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{it.toLongOrNull()}?.firstOrNull {
-                 it == 140L || it == 141L
+            val forWhoId = brandsPropertiesDataWrapper.data.property?.split(';')
+                ?.mapNotNull { it.toLongOrNull() }?.firstOrNull {
+                it == 140L || it == 141L
             }
-            when(forWhoId){
-                140L -> {isMale = false
-                    getAllSizes(false)}
-                141L -> {isMale = true
-                    getAllSizes(true)}
-                else -> {isMale = true
-                    getAllSizes(true)}
+            when (forWhoId) {
+                140L -> {
+                    isMale = false
+                    getAllSizes(false)
+                }
+                141L -> {
+                    isMale = true
+                    getAllSizes(true)
+                }
+                else -> {
+                    isMale = true
+                    getAllSizes(true)
+                }
             }
         }
     }
@@ -224,13 +242,13 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     override fun success() {
         showLoading(false)
-        if(args.fromProfile)
+        if (args.fromProfile)
             findNavController().popBackStack()
         else
-          findNavController().navigate(
-            Onboarding2FragmentDirections.actionOnboarding2FragmentToOnboarding3Fragment(
-                args.isMale
+            findNavController().navigate(
+                Onboarding2FragmentDirections.actionOnboarding2FragmentToOnboarding3Fragment(
+                    args.isMale
+                )
             )
-        )
     }
 }
