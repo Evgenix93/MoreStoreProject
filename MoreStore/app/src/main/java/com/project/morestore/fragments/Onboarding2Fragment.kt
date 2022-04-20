@@ -135,7 +135,10 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                         it.id.toInt(),
                         it.name,
                         it.idCategory.toInt(),
-                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id},
+                        if(args.fromProfile)
+                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id}
+                        else
+                            false,
                         w = sizeLine.w,
                         fr = sizeLine.itRuFr,
                         uk = sizeLine.uk,
@@ -160,7 +163,10 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                         it.id.toInt(),
                         it.name,
                         it.idCategory.toInt(),
-                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id},
+                        if(args.fromProfile)
+                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id}
+                        else
+                            false,
                         w = sizeLine.w,
                         fr = sizeLine.itRuFr,
                         uk = sizeLine.uk,
@@ -186,7 +192,9 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                         it.id.toInt(),
                         it.name,
                         it.idCategory.toInt(),
-                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id},
+                        if(args.fromProfile)
+                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id}
+                        else false,
                         w = sizeLine.w,
                         fr = sizeLine.itRuFr,
                         uk = sizeLine.uk,
