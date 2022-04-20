@@ -43,9 +43,9 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
     }
 
     private fun initLists() {
-        topSizeCardAdapter = SizeCardsAdapter(true)
-        bottomSizeCardAdapter = SizeCardsAdapter(true)
-        shoesSizeCardAdapter = SizeCardsAdapter(true)
+        topSizeCardAdapter = SizeCardsAdapter(false)
+        bottomSizeCardAdapter = SizeCardsAdapter(false)
+        shoesSizeCardAdapter = SizeCardsAdapter(false)
         with(binding.topSizeCardsList) {
             adapter = topSizeCardAdapter
             layoutManager =
@@ -72,13 +72,14 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
     private fun setClickListeners() {
         binding.continueBtn.setOnClickListener {
             if (args.fromProfile) {
-                val propertyIds = topSizeCardAdapter.getChosenSizes()
-                    .map { it.id.toLong() } + bottomSizeCardAdapter.getChosenSizes()
-                    .map { it.id.toLong() } + shoesSizeCardAdapter.getChosenSizes()
-                    .map { it.id.toLong() } + if (isMale) listOf(141L) else listOf(140L) + brandsPropertiesDataWrapper.data.brand?.split(
+                val propertyIds = topSizeCardAdapter.getSizes().filter { it.chosen == true }
+                    .map { it.id.toLong() } + bottomSizeCardAdapter.getSizes().filter { it.chosen == true }
+                    .map { it.id.toLong() } + shoesSizeCardAdapter.getSizes().filter { it.chosen == true }
+                    .map { it.id.toLong() } + if (isMale) listOf(141L) else listOf(140L)
+                val brandsIds = brandsPropertiesDataWrapper.data.brand?.split(
                     ';'
                 )?.mapNotNull { it.toLongOrNull() }.orEmpty()
-                presenter.saveOnBoardingData(null, propertyIds)
+                presenter.saveOnBoardingData(brandsIds, propertyIds)
             } else
                 presenter.saveSizes(
                     topSizeCardAdapter.getSizes(),
@@ -228,8 +229,8 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                     getAllSizes(true)
                 }
                 else -> {
-                    isMale = true
-                    getAllSizes(true)
+                    isMale = false
+                    getAllSizes(false)
                 }
             }
         }
