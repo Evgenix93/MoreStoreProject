@@ -945,6 +945,18 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
+    fun getCurrentUserAddress(){
+        val currentAddress = userRepository.getCurrentUserAddress()
+        if(currentAddress != null)
+            viewState.loaded(currentAddress)
+    }
+
+    fun changeCurrentUserAddress(address: Address){
+        userRepository.changeCurrentUserAddress(address)
+        viewState.success(Unit)
+    }
+
+
     fun saveCategories(productCategories: List<ProductCategory>) {
         val filter = userRepository.getFilter()
         filter.categories = productCategories

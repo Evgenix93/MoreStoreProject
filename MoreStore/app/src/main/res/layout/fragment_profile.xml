@@ -118,11 +118,12 @@
                    android:id="@+id/currentRegionTextView"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   tools:text="Москва, Центральный р-н"
+                   android:text="Город не обнаружен"
                    android:layout_marginStart="46dp"
                    android:layout_marginTop="123dp"/>
 
                <TextView
+                   android:id="@+id/changeAddressTextView"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="@string/change"

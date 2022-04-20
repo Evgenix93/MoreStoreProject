@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -30,7 +31,7 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
     private val binding: FragmentAutoregionBinding by viewBinding()
     private lateinit var permissionsLauncher: ActivityResultLauncher<String>
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
-    private lateinit var filter: Filter
+    private val args: AutoLocationFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -138,10 +139,16 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
             binding.yesBtn.isVisible = true
             binding.noBtn.isVisible = true
             binding.yesBtn.setOnClickListener {
+                if(args.isForFilter)
                 presenter.changeUserCity(result.fullAddress.substringBefore(","))
+                else
+                    presenter.changeCurrentUserAddress(result)
             }
             binding.noBtn.setOnClickListener {
+                if(args.isForFilter)
                 findNavController().popBackStack(R.id.catalogFragment, false)
+                else
+                    findNavController().popBackStack(R.id.profileFragment, false)
             }
         }
 

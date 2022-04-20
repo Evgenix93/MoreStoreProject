@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -15,6 +16,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.RegionsAdapter
 import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentChangeRegionBinding
+import com.project.morestore.models.Address
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
@@ -32,6 +34,7 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
     private var cities = listOf<Region>()
     private var cityAdapter: RegionsAdapter by autoCleared()
     private lateinit var searchFlow: kotlinx.coroutines.flow.Flow<String>
+    private val args: ChangeRegionFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -117,20 +120,15 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
             binding.searchEditText.setText("")
         }
 
-        binding.view12.setOnClickListener { findNavController().navigate(ChangeRegionFragmentDirections.actionChangeRegionFragmentToAutoLocationFragment()) }
+        binding.view12.setOnClickListener { findNavController().navigate(ChangeRegionFragmentDirections.actionChangeRegionFragmentToAutoLocationFragment(isForFilter = args.isForFilter)) }
         binding.chooseRegionBtn.setOnClickListener {
             if(binding.searchEditText.text.isNullOrEmpty()){
                 return@setOnClickListener
             }
+            if(args.isForFilter)
             presenter.changeUserCity(binding.searchEditText.text.toString())
-            /*FilterState.filter.currentLocation = cities.first { it.name == binding.searchEditText.text.toString() }
-            if(FilterState.filter.regions.isNotEmpty()){
-                FilterState.filter.regions.first { it.name == binding.searchEditText.text.toString() }.apply { isChecked = true }
-            }else{
-                cities.first { it.name == binding.searchEditText.text.toString() }.apply { isChecked = true }
-                FilterState.filter.regions = cities
-            }
-            findNavController().popBackStack()*/
+            else
+                presenter.changeCurrentUserAddress(Address(binding.searchEditText.text.toString(), -1))
 
         }
     }
@@ -158,16 +156,6 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
         cityAdapter.updateList(citiesList)
 
         Log.d("mylog", citiesList.toString())
-        //binding.searchEditText.setAdapter(
-          //  SuggestionArrayAdapter(
-            //    requireContext(),
-              //  R.layout.item_suggestion_textview,
-                //listOf("каол", "fdf", "defoi")
-            //citiesList.map { it.name }
-            //)
-        //)
-
-
 
     }
 

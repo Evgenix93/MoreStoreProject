@@ -591,10 +591,6 @@ class UserRepository(val context: Context) {
         FilterState.filter = FilterState.filterTemp
     }
 
-    fun saveMaterials(materials: List<MaterialLine>){
-        FilterState.filter.chosenMaterials = materials
-    }
-
     fun loadMaterials(): List<MaterialLine>{
         return FilterState.filter.chosenMaterials
     }
@@ -608,41 +604,16 @@ class UserRepository(val context: Context) {
 
     }
 
-    fun saveForWho(forWho: List<Boolean>){
-        FilterState.filter.chosenForWho = forWho
-    }
-
-    fun loadForWho(): List<Boolean>{
-        return FilterState.filter.chosenForWho
-
-    }
-
-    fun saveTopSizes(sizes: List<SizeLine>){
-        FilterState.filter.chosenTopSizes = sizes
-    }
-
     fun loadTopSizes(): List<SizeLine>{
         return FilterState.filter.chosenTopSizes
-    }
-
-    fun saveBottomSizes(sizes: List<SizeLine>){
-        FilterState.filter.chosenBottomSizes = sizes
     }
 
     fun loadBottomSizes(): List<SizeLine>{
         return FilterState.filter.chosenBottomSizes
     }
 
-    fun saveShoosSizes(sizes: List<SizeLine>){
-        FilterState.filter.chosenShoosSizes = sizes
-    }
-
     fun loadShoosSizes(): List<SizeLine>{
         return FilterState.filter.chosenShoosSizes
-    }
-
-    fun saveProductStatuses(statuses: List<Boolean>){
-        FilterState.filter.chosenProductStatus = statuses
     }
 
     fun loadProductStatuses(): List<Boolean>{
@@ -650,11 +621,7 @@ class UserRepository(val context: Context) {
     }
 
 
-    fun loadStyles(): List<Property>{
-        return FilterState.filter.chosenStyles
-    }
-
-   suspend fun saveBrandsProperties(brandsPropertiesData: BrandsPropertiesData): Response<Boolean>?{
+    suspend fun saveBrandsProperties(brandsPropertiesData: BrandsPropertiesData): Response<Boolean>?{
       return  try {
             Network.userApi.saveBrandsProperties(brandsPropertiesData)
         }catch(e: Throwable){
@@ -669,5 +636,12 @@ class UserRepository(val context: Context) {
     }catch (e: Throwable){
         null
     }
+    }
+
+    fun changeCurrentUserAddress(address: Address){
+        Token.currentUserAddress = address
+    }
+    fun getCurrentUserAddress(): Address?{
+        return Token.currentUserAddress
     }
 }

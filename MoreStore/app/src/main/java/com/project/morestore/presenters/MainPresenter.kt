@@ -30,7 +30,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val chatRepository = ChatRepository(context)
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
-    private lateinit var user: User
 
 
     fun addProductToWishList(id: Long) {
@@ -100,21 +99,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
-
-    fun loadOnBoardingViewed() {
-        presenterScope.launch {
-            viewState.loading()
-            if (productRepository.loadOnBoardingViewed()) {
-                viewState.loaded(Unit)
-            } else {
-                if (!authRepository.isTokenEmpty()) {
-                    viewState.showOnBoarding()
-                } else {
-                    viewState.loaded(Unit)
-                }
-            }
-        }
-    }
 
     fun getProducts(
         queryStr: String? = null,
@@ -319,6 +303,13 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     }
 
+    fun changeCurrentUserAddress(address: Address){
+        userRepository.changeCurrentUserAddress(address)
+    }
+    fun getCurrentUserAddress(){
+        viewState.loaded(userRepository.getCurrentUserAddress() ?: Address("", -1))
+    }
+
     fun shareProduct(id: Long) {
         viewState.loaded(productRepository.getShareProductIntent(id))
     }
@@ -446,16 +437,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         viewState.success()
     }
 
-    fun addProductCategory(productCategoryId: Long) {
-        val filter = userRepository.getFilter()
-        if (filter.categories.all { it.isChecked == false || it.isChecked == null }.not())
-            filter.categories.find { it.id == productCategoryId.toInt() }
-                ?.apply { isChecked = true }
-        userRepository.updateFilter(filter)
-
-    }
-
-  fun loadFilter(){
+    fun loadFilter(){
       presenterScope.launch{
           userRepository.loadFilter()
           viewState.loaded(userRepository.getFilter())
@@ -467,25 +449,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             .apply { brands = listOf(ProductBrand(0, "Stub", 0, null, null), brand.apply { isChecked = true }) }
         userRepository.updateFilter(filter)
         viewState.success()
-    }
-
-    fun addBrand(brandId: Long) {
-        // presenterScope.launch {
-        val filter = userRepository.getFilter()
-        if (filter.brands.isNotEmpty())
-            filter.brands.find { it.id == brandId }?.apply { isChecked = true }
-        else {
-            filter.brands = listOf(ProductBrand(brandId, "", null, true, null))
-            //val response = productRepository.getBrands()
-            // if(response?.code() == 200) {
-            // filter.brands = response.body()!!
-            //filter.brands.find { it.id == brandId }?.apply { isChecked = true }
-            // }
-        }
-        userRepository.updateFilter(filter)
-
-        //}
-
     }
 
     fun getCategories(forWho: Int) {
@@ -649,26 +612,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getTopSizesWomen() {
-        getProperties(4)
-    }
-
-    fun getTopSizesMen() {
-        getProperties(1)
-    }
-
-    fun getTopSizesKids() {
-        getProperties(7)
-    }
-
-    fun getBottomSizesWomen() {
-
-    }
-
-    fun getShoosMen() {
-        getProperties(3)
-    }
-
     fun getColors() {
         getProperties(12)
     }
@@ -726,28 +669,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
             }.launchIn(presenterScope)
 
-    }
-
-    fun addNewBrand(brandName: String) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.addNewBrand(NewProductBrand(null, brandName))
-            when (response?.code()) {
-                200 -> {
-                    viewState.loaded(response.body()!!.apply { name = brandName })
-                }
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-
-            }
-
-
-        }
     }
 
     fun getUserData() {
@@ -894,8 +815,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         viewState.loaded(productRepository.loadCreateProductData())
     }
 
-    fun getProductData() :CreateProductData = productRepository.loadCreateProductData()
-
     fun clearCreateProductData() {
         productRepository.clearCreateProductData()
     }
@@ -1037,7 +956,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             when (response?.code()) {
                 200 -> {
                     viewState.loaded(response.body()!!.first())
-                    //viewState.loaded(productRepository.downLoadProductImage(response.body()!!.first().photo) ?: "")
+
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -1094,5 +1013,22 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     fun tokenCheck() {
         viewState.loaded(authRepository.isTokenEmpty())
     }
+
+    fun getCityByCoordinates(coordinates: String) {
+        presenterScope.launch {
+            viewState.loading()
+            val response = userRepository.getCityByCoordinates(coordinates)
+            when (response?.code()) {
+                200 -> viewState.loaded(response.body()!!)
+                400 -> {}
+                500 -> {}
+                null -> {}
+                else -> {}
+
+            }
+
+        }
+    }
+
 
 }

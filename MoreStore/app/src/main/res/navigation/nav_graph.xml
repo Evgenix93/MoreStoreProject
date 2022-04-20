@@ -389,6 +389,10 @@
         <action
             android:id="@+id/action_changeRegionFragment_to_autoLocationFragment"
             app:destination="@id/autoLocationFragment" />
+        <argument
+            android:name="isForFilter"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/filterForWhoFragment"
@@ -475,7 +479,12 @@
     <fragment
         android:id="@+id/autoLocationFragment"
         android:name="com.project.morestore.fragments.AutoLocationFragment"
-        android:label="AutoLocationFragment" />
+        android:label="AutoLocationFragment" >
+        <argument
+            android:name="isForFilter"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
     <fragment
         android:id="@+id/filterShoosSizesFragment"
         android:name="com.project.morestore.fragments.FilterShoosSizesFragment"
@@ -509,6 +518,9 @@
         <action
             android:id="@+id/action_profileFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_changeRegionFragment"
+            app:destination="@id/changeRegionFragment" />
     </fragment>
     <fragment
         android:id="@+id/sellerProfileFragment"

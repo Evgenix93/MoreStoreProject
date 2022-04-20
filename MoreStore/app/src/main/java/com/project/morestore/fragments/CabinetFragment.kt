@@ -37,7 +37,7 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.myAddresses.setOnClickListener { findNavController().navigate(R.id.myAddressesFragment) }
-        checkToken()
+        //checkToken()
         setClickListeners()
         showBottomNav()
         initToolbar()

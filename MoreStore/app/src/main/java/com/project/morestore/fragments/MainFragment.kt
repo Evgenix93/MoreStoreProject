@@ -1,5 +1,6 @@
 package com.project.morestore.fragments
 
+import android.Manifest
 import android.content.Context
 import android.database.Cursor
 import android.database.MatrixCursor
@@ -14,6 +15,8 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -23,6 +26,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.MainFragmenViewPagerAdapter
@@ -49,6 +56,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     private var kidsProductAdapter: ProductAdapter by autoCleared()
     private var isMainLoaded = false
     private var currentSuggestionModels: SuggestionModels? = null
+    private lateinit var permissionLauncher: ActivityResultLauncher<String>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,6 +68,9 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initViewPager()
         setClickListeners()
         getUserData()
+        initPermissionLauncher()
+        getCurrentUserAddress()
+
     }
 
     private fun bindFilter(filter: Filter) {
@@ -74,10 +85,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         if (filter.chosenForWho[2]) {
             presenter.getProducts(forWho = listOf(false, false, true), isFiltered = true)
         }
-    }
-
-    private fun checkToken() {
-        presenter.checkToken()
     }
 
 
@@ -117,7 +124,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             isNestedScrollingEnabled = false
         }
 
-        // presenter.getProducts( queryStr = null,  isFiltered = false, productCategories = null)
+
 
 
     }
@@ -359,59 +366,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                     ProductCategory(22, "Праздничные костюмы", true)
                 )
             )
-            /*  findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment(
-                  null,
-                  arrayOf(
-                      ProductCategory(21, "Школьная форма", true),
-                      ProductCategory(22, "Праздничные костюмы", true)
-                  )
-              ))*/
-        }
-    }
-
-    private fun initSuggestions(): androidx.cursoradapter.widget.CursorAdapter {
-
-        val items = mutableListOf<String>();
-
-        //проверка
-        items.add("Плащ мужской");
-        items.add("Плащ женский");
-        items.add("Плащ-палатка");
-        items.add("Плащ дождевик");
-
-
-        // Cursor
-        val columns = arrayOf("_id", "text");
-        val temp = arrayOf<Any>(0, "default")
-
-        val cursor = MatrixCursor(columns);
-
-
-        for (i in 0 until items.size) {
-
-            temp[0] = i;
-            temp[1] = items.get(i);
-
-            cursor.addRow(temp);
-        }
-
-
-
-
-        return object : androidx.cursoradapter.widget.CursorAdapter(requireContext(), cursor) {
-            override fun newView(p0: Context?, p1: Cursor?, p2: ViewGroup?): View {
-                return LayoutInflater.from(p0).inflate(R.layout.item_suggestion, p2, false)
-
-            }
-
-            override fun bindView(p0: View?, p1: Context?, p2: Cursor?) {
-                val textView = p0?.findViewById<TextView>(R.id.suggestionTextView)
-
-                val str = p2?.getString(1)
-                textView?.text = str
-
-            }
-
         }
     }
 
@@ -427,6 +381,60 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     private fun loadOnboardingData(){
       presenter.loadOnboardingData()
     }
+
+    private fun getCity(){
+        try {
+            val locationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
+            val cancelToken = object : CancellationToken() {
+                override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
+                    return this
+
+                }
+
+                override fun isCancellationRequested(): Boolean {
+                    return false
+
+                }
+            }
+            locationProvider.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, cancelToken ).addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    Log.d("mylog", task.result.longitude.toString())
+                    task.result?.let {
+                        presenter.getCityByCoordinates("${it.latitude},${it.longitude}")
+                    }
+                    task.result ?: run {
+
+
+                    }
+                }else{
+
+
+
+                }
+
+            }
+
+        }catch (e: SecurityException){
+
+        }
+    }
+
+    private fun initPermissionLauncher(){
+        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ granted ->
+            if(granted)
+                getCity()
+
+        }
+    }
+
+    private fun requestPermissions(){
+        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    private fun getCurrentUserAddress(){
+        presenter.getCurrentUserAddress()
+    }
+
 
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -455,12 +463,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             kidsProductAdapter.updateList(result as List<Product>)
         }
 
-        //if (result is Boolean)
-        // if (!result) {
-        //    findNavController().navigate(MainFragmentDirections.actionMainFragmentToFirstLaunchFragment())
-
-        // }
-
         if (result is Filter) {
             bindFilter(result)
         }
@@ -471,6 +473,14 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         if(result is User)
             if(result.phone == null)
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegistration3Fragment(phoneOrEmail = result.email.orEmpty(), userId = result.id.toInt(), fromMainFragment = true))
+
+        if(result is Address){
+            if(result.fullAddress.isNotEmpty())
+                presenter.changeCurrentUserAddress(result)
+            else
+                requestPermissions()
+
+        }
     }
 
     override fun loading() {
