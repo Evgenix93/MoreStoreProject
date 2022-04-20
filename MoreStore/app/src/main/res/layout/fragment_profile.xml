@@ -212,6 +212,7 @@
                    android:layout_marginTop="170dp"/>
 
                <TextView
+                   android:id="@+id/forWhoTextView"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:textAppearance="@style/regular_14"
