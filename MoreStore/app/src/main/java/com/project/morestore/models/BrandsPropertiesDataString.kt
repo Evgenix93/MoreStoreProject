@@ -7,6 +7,6 @@ import com.squareup.moshi.JsonClass
 data class BrandsPropertiesDataString(
     @Json(name = "id_user")
     val userId: Long?,
-    val brand: String,
-    val property: String
+    val brand: String?,
+    val property: String?
     )
