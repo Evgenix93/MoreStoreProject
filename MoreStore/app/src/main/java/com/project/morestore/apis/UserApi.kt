@@ -92,7 +92,7 @@ interface UserApi {
     suspend fun saveBrandsProperties(@Body brandsPropertiesData: BrandsPropertiesData): Response<Boolean>
 
     @GET("property/check_save")
-    suspend fun loadBrandsProperties(@Query("ip") ip: String): Response<Boolean>
+    suspend fun loadBrandsProperties(@Query("id_user") idUser: Long): Response<List<BrandsPropertiesDataWrapper>>
 
     @GET("wishlist/user")
     suspend fun getSellersWishList(): Response<List<User>>

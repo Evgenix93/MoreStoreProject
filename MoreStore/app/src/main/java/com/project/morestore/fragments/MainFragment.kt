@@ -61,7 +61,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isMainLoaded = false
-        loadOnboardingData()
+        getUserData()
         showBottomNavBar()
         initToolbar()
         initLists()
@@ -480,6 +480,17 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             else
                 requestPermissions()
 
+        }
+        if(result is User) {
+            if (result.phone == null)
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToRegistration3Fragment(
+                        phoneOrEmail = result.email.orEmpty(),
+                        userId = result.id.toInt(),
+                        fromMainFragment = true
+                    )
+                )
+            loadOnboardingData()
         }
     }
 

@@ -118,6 +118,10 @@
         <argument
             android:name="isMale"
             app:argType="boolean" />
+        <argument
+            android:name="fromProfile"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/onboarding3Fragment"
@@ -521,6 +525,9 @@
         <action
             android:id="@+id/action_profileFragment_to_changeRegionFragment"
             app:destination="@id/changeRegionFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_onboarding2Fragment"
+            app:destination="@id/onboarding2Fragment" />
     </fragment>
     <fragment
         android:id="@+id/sellerProfileFragment"

@@ -654,9 +654,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             val colorsId = filter.colors.map{it.id}
             val materials = filter.chosenMaterials.map{it.id}
             val propertiesId = forWhoId + stylesId + sizesId + colorsId + materials
-            val response = userRepository.saveBrandsProperties(
-                BrandsPropertiesData("https://morestore.app-rest.ru/api/v1", brandsId, propertiesId)
-            )
+            val response = userRepository.saveBrandsProperties(brandsId, propertiesId)
             when(response?.code()){
                 200 -> {if (userRepository.saveFilter())
                     viewState.success("Фильтр сохранен")

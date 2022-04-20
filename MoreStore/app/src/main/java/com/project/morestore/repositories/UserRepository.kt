@@ -622,18 +622,25 @@ class UserRepository(val context: Context) {
 
 
     suspend fun saveBrandsProperties(brandsPropertiesData: BrandsPropertiesData): Response<Boolean>?{
+    fun loadStyles(): List<Property>{
+        return FilterState.filter.chosenStyles
+    }
+
+   suspend fun saveBrandsProperties(brandsId: List<Long>?, propertiesId: List<Long>): Response<Boolean>?{
       return  try {
-            Network.userApi.saveBrandsProperties(brandsPropertiesData)
+            Network.userApi.saveBrandsProperties(BrandsPropertiesData(Token.userId, brandsId, propertiesId))
         }catch(e: Throwable){
             Log.e("MyDebug", "error = ${e.message}")
             null
         }
     }
 
-    suspend fun loadBrandsProperties(): Response<Boolean>?{
+    suspend fun loadBrandsProperties(): Response<List<BrandsPropertiesDataWrapper>>?{
     return try {
-        Network.userApi.loadBrandsProperties("https://morestore.app-rest.ru/api/v1")
+        Log.d("MyDebug", "loadBrandsProperties")
+        Network.userApi.loadBrandsProperties(Token.userId)
     }catch (e: Throwable){
+        Log.e("MyDebug", "error = ${e.message}")
         null
     }
     }
