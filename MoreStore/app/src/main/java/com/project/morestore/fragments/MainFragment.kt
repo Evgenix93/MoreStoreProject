@@ -53,13 +53,12 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isMainLoaded = false
-        loadOnboardingData()
+        getUserData()
         showBottomNavBar()
         initToolbar()
         initLists()
         initViewPager()
         setClickListeners()
-        getUserData()
     }
 
     private fun bindFilter(filter: Filter) {
@@ -468,9 +467,17 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         if(result is Unit)
             loadFilter()
 
-        if(result is User)
-            if(result.phone == null)
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegistration3Fragment(phoneOrEmail = result.email.orEmpty(), userId = result.id.toInt(), fromMainFragment = true))
+        if(result is User) {
+            if (result.phone == null)
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToRegistration3Fragment(
+                        phoneOrEmail = result.email.orEmpty(),
+                        userId = result.id.toInt(),
+                        fromMainFragment = true
+                    )
+                )
+            loadOnboardingData()
+        }
     }
 
     override fun loading() {

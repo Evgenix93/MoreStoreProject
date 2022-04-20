@@ -69,19 +69,6 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                     if (step == 1) {
                         viewState.success(response.body()!!)
                     }
-                    //if(step == 3) {
-                    // if (photoUri != null) {
-                    //   Log.d("Debug", "photoUri = $photoUri")
-                    //    uploadPhoto(photoUri!!)
-                    //  }else{
-                    //    viewState.success(response.body()!!)
-                    //  }
-                    //}//else {
-                    // Log.d("Debug", "photoUri = null")
-                    //  viewState.success(response.body()!!)
-                    // }
-
-
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)

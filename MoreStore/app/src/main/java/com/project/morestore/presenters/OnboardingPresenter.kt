@@ -173,17 +173,17 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
             else
                 listOf(true, false, false)
             val propertiesId = if (isMale.not()) {
-                filter.chosenTopSizes.map { it.id.toLong() }
+                filter.chosenTopSizes.filter{it.isSelected}.map { it.id.toLong() }
             } else {
-                filter.chosenTopSizesMen.map { it.id.toLong() }
+                filter.chosenTopSizesMen.filter{it.isSelected}.map { it.id.toLong() }
             } + if (isMale.not()) {
-                filter.chosenBottomSizes.map { it.id.toLong() }
+                filter.chosenBottomSizes.filter{it.isSelected}.map { it.id.toLong() }
             } else {
-                filter.chosenBottomSizesMen.map { it.id.toLong() }
+                filter.chosenBottomSizesMen.filter{it.isSelected}.map { it.id.toLong() }
             } + if (isMale.not()) {
-                filter.chosenShoosSizes.map { it.id.toLong() }
+                filter.chosenShoosSizes.filter{it.isSelected}.map { it.id.toLong() }
             } else {
-                filter.chosenShoosSizesMen.map { it.id.toLong() }
+                filter.chosenShoosSizesMen.filter{it.isSelected}.map { it.id.toLong() }
             } + forWho.mapIndexedNotNull { index, checked ->
                 if (checked) {
                     when (index) {
@@ -196,16 +196,26 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
                     null
             }
 
-            val response = userRepository.saveBrandsProperties(
-                BrandsPropertiesData(
-                    "https://morestore.app-rest.ru/api/v1",
-                    null,
-                    propertiesId
-                )
-            )
+            val response = userRepository.saveBrandsProperties(null, propertiesId)
             when (response?.code()) {
                 200 -> saveFilter(isMale)
                 null -> viewState.error("Ошибка")
+            }
+        }
+    }
+
+    fun loadOnboardingData(){
+        presenterScope.launch {
+            val response = userRepository.loadBrandsProperties()
+            when(response?.code()){
+                200 -> {
+                    Log.d("MyDebug", "load brandsPropert success")
+                    viewState.loaded(response.body()!!)
+                }
+                null -> viewState.error("Ошибка")
+                else -> {
+                    viewState.error("Ошибка")
+                }
             }
         }
     }

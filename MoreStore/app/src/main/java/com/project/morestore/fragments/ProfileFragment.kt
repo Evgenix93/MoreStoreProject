@@ -53,6 +53,9 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         binding.favoriteTextView.setOnClickListener {
             findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToFavoritesFragment())
         }
+        binding.mySizesTextView.setOnClickListener{
+           findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToOnboarding2Fragment(isMale = true, fromProfile = true))
+        }
     }
 
     override fun success(result: Any) {
