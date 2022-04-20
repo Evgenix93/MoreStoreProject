@@ -9,6 +9,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentProfileBinding
+import com.project.morestore.models.BrandsPropertiesDataWrapper
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
@@ -20,12 +21,14 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private val binding: FragmentProfileBinding by viewBinding()
     private val args: ProfileFragmentArgs by navArgs()
+    private lateinit var brandsPropertiesDataWrapper: BrandsPropertiesDataWrapper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         getUser()
         setClickListeners()
+        loadOnBoardingData()
     }
 
     private fun initToolbar(){
@@ -56,6 +59,15 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         binding.mySizesTextView.setOnClickListener{
            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToOnboarding2Fragment(isMale = true, fromProfile = true))
         }
+        binding.forWhoTextView.setOnClickListener {
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToForWhoDialog(
+              brandsPropertiesDataWrapper.data.property?.split(';')?.any{it == "141"} ?: false
+            ))
+        }
+    }
+
+    private fun loadOnBoardingData(){
+        presenter.loadOnboardingData()
     }
 
     override fun success(result: Any) {
@@ -71,8 +83,13 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
     }
 
     override fun loaded(result: Any) {
-            val currentRegion = result as Region
-            binding.currentRegionTextView.text = currentRegion.name
+            if(result is List<*>){
+              brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
+            }
+        else {
+                val currentRegion = result as Region
+                binding.currentRegionTextView.text = currentRegion.name
+            }
     }
 
     override fun successNewCode() {

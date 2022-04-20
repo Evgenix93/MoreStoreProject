@@ -960,4 +960,19 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         getProperties(12)
     }
 
+    fun loadOnboardingData(){
+        presenterScope.launch {
+            val response = userRepository.loadBrandsProperties()
+            when(response?.code()){
+                200 -> {
+                    Log.d("MyDebug", "load brandsPropert success")
+                    viewState.loaded(response.body()!!)
+                }
+                null -> viewState.error("Ошибка")
+                else -> {
+                    viewState.error("Ошибка")
+                }
+            }
+        }
+    }
 }

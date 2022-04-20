@@ -204,6 +204,16 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
         }
     }
 
+    fun saveOnBoardingData(brandsId: List<Long>?, propertiesId: List<Long>){
+        presenterScope.launch {
+            val response = userRepository.saveBrandsProperties(brandsId, propertiesId)
+            when (response?.code()) {
+                200 -> viewState.success()
+                null -> viewState.error("Ошибка")
+            }
+        }
+    }
+
     fun loadOnboardingData(){
         presenterScope.launch {
             val response = userRepository.loadBrandsProperties()

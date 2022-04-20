@@ -516,6 +516,9 @@
         <action
             android:id="@+id/action_profileFragment_to_onboarding2Fragment"
             app:destination="@id/onboarding2Fragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_forWhoDialog"
+            app:destination="@id/forWhoDialog" />
     </fragment>
     <fragment
         android:id="@+id/sellerProfileFragment"
@@ -1009,5 +1012,13 @@
         android:id="@+id/citiesFragment"
         android:name="com.project.morestore.fragments.CitiesFragment"
         android:label="CitiesFragment" />
+    <dialog
+        android:id="@+id/forWhoDialog"
+        android:name="com.project.morestore.dialogs.ForWhoDialog"
+        android:label="ForWhoDialog" >
+        <argument
+            android:name="isMale"
+            app:argType="boolean" />
+    </dialog>
 
 </navigation>

@@ -17,6 +17,7 @@ import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import okhttp3.internal.delimiterOffset
 
 class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2), OnBoardingMvpView {
     private val binding: FragmentOnboarding2Binding by viewBinding()
@@ -26,7 +27,7 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
     private var bottomSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var shoesSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private lateinit var brandsPropertiesDataWrapper: BrandsPropertiesDataWrapper
-
+    private var isMale = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,8 +70,10 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
 
     private fun setClickListeners() {
         binding.continueBtn.setOnClickListener {
-            if(args.fromProfile)
-                presenter.saveOnboardingData(args.isMale)
+            if(args.fromProfile){
+                val propertyIds = topSizeCardAdapter.getChosenSizes().map{it.id.toLong()} + bottomSizeCardAdapter.getChosenSizes().map{it.id.toLong()} + shoesSizeCardAdapter.getChosenSizes().map{it.id.toLong()}
+                 presenter.saveOnBoardingData(null, propertyIds)
+            }
             else
               presenter.saveSizes(
                 topSizeCardAdapter.getSizes(),
@@ -131,8 +134,8 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                     Size(
                         it.id.toInt(),
                         it.name,
-                        it.idCategory?.toInt(),
-                        false,
+                        it.idCategory.toInt(),
+                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id},
                         w = sizeLine.w,
                         fr = sizeLine.itRuFr,
                         uk = sizeLine.uk,
@@ -156,8 +159,8 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                     Size(
                         it.id.toInt(),
                         it.name,
-                        it.idCategory?.toInt(),
-                        false,
+                        it.idCategory.toInt(),
+                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id},
                         w = sizeLine.w,
                         fr = sizeLine.itRuFr,
                         uk = sizeLine.uk,
@@ -182,8 +185,8 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                     Size(
                         it.id.toInt(),
                         it.name,
-                        it.idCategory?.toInt(),
-                        false,
+                        it.idCategory.toInt(),
+                        brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{string -> string.toLongOrNull()}?.any{id -> id == it.id},
                         w = sizeLine.w,
                         fr = sizeLine.itRuFr,
                         uk = sizeLine.uk,
@@ -192,13 +195,16 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                 })
         }else {
             brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
-            val forWhoId = brandsPropertiesDataWrapper.data.property?.firstOrNull {
-                 it == 140L || it == 141L || it == 142L
+            val forWhoId = brandsPropertiesDataWrapper.data.property?.split(';')?.mapNotNull{it.toLongOrNull()}?.firstOrNull {
+                 it == 140L || it == 141L
             }
             when(forWhoId){
-                140L -> getAllSizes(false)
-                141L -> getAllSizes(true)
-                else -> getAllSizes(true)
+                140L -> {isMale = false
+                    getAllSizes(false)}
+                141L -> {isMale = true
+                    getAllSizes(true)}
+                else -> {isMale = true
+                    getAllSizes(true)}
             }
         }
     }
