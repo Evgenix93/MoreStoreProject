@@ -3,6 +3,7 @@ package com.project.morestore.presenters
 import android.content.Context
 import android.util.Log
 import com.project.morestore.models.BrandsPropertiesData
+import com.project.morestore.models.ProductBrand
 
 
 import com.project.morestore.models.Size
@@ -196,7 +197,39 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
                     null
             }
 
-            val response = userRepository.saveBrandsProperties(null, propertiesId)
+            val brands = getAllBrandsInstant()
+            var luxBrands = listOf<Long>()
+            var middleBrands = listOf<Long>()
+            var massBrands = listOf<Long>()
+            var ecoBrands = listOf<Long>()
+            filter.segments.forEachIndexed { index, selected ->
+                luxBrands = if(selected && index == 0)
+                    brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id }
+                else emptyList()
+
+                middleBrands = if(selected && index == 1)
+                    brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id }
+                else emptyList()
+
+                massBrands = if(selected && index == 2)
+                    brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id }
+                else emptyList()
+
+                ecoBrands = if(selected && index == 3)
+                    brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id }
+                else emptyList()
+
+
+
+
+
+
+            }
+
+
+
+
+            val response = userRepository.saveBrandsProperties(luxBrands + middleBrands + massBrands + ecoBrands, propertiesId)
             when (response?.code()) {
                 200 -> saveFilter(isMale)
                 null -> viewState.error("Ошибка")
@@ -248,6 +281,36 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
 
         }
     }
+
+    private suspend fun getAllBrandsInstant(): List<ProductBrand>{
+
+
+            val response = repository.getBrands()
+            when (response?.code()) {
+                200 -> return response.body()!!
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                    return emptyList()
+                }
+                500 -> {
+                    viewState.error("500 Internal Server Error")
+                    return emptyList()
+                }
+                null -> {
+                    viewState.error("Нет интернета")
+                    return emptyList()
+                }
+                else -> {
+                    viewState.error("Ошибка")
+                    return emptyList()
+                }
+            }
+
+
+
+    }
+
 
     private suspend fun getStringFromResponse(body: ResponseBody): String {
         return withContext(Dispatchers.IO) {

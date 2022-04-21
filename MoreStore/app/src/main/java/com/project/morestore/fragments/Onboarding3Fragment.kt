@@ -79,7 +79,7 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
                     emptyList()
 
                 val ecoBrands = if(categoryAdapter.loadSegments2Checked()[3])
-                    allBrands.filter { it.idCategory == 3L }.map { it.id }
+                    allBrands.filter { it.idCategory == 4L }.map { it.id }
                 else
                     emptyList()
 

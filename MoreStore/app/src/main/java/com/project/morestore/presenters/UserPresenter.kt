@@ -557,7 +557,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>) {
         searchJob = flow
-            .debounce(3000)
+            .debounce(800)
             .mapLatest { query ->
                 withContext(Dispatchers.IO) {
                     regions.filter { it.name.contains(query, true) }

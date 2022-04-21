@@ -151,8 +151,9 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
         val citiesList = (result as List<Region>)
         if(cities.isEmpty()) {
             cities = citiesList
-            presenter.collectRegionSearchFlow(searchFlow, citiesList)
         }
+            presenter.collectRegionSearchFlow(searchFlow, cities)
+
         cityAdapter.updateList(citiesList)
 
         Log.d("mylog", citiesList.toString())
