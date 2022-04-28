@@ -48,7 +48,7 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
 
     }
 
-    fun getProperties(propertyId: Long) {
+    private fun getProperties(propertyId: Long) {
         presenterScope.launch {
             viewState.loading()
             val response = repository.getProperties()
@@ -122,13 +122,7 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
         }
     }
 
-    fun safeCategories(segmentsChecked: List<Boolean>) {
-        /* presenterScope.launch {
-            if (repository.safeCategories(categoryIdList))
-                viewState.success()
-             else
-                 viewState.error("Ошибка")
-         }*/
+    fun saveCategories(segmentsChecked: List<Boolean>) {
         repository.safeCategories(segmentsChecked)
         viewState.success()
     }
@@ -219,15 +213,7 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
                     brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id }
                 else emptyList()
 
-
-
-
-
-
             }
-
-
-
 
             val response = userRepository.saveBrandsProperties(luxBrands + middleBrands + massBrands + ecoBrands, propertiesId)
             when (response?.code()) {
@@ -248,6 +234,7 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
     }
 
     fun loadOnboardingData(){
+        viewState.loading()
         presenterScope.launch {
             val response = userRepository.loadBrandsProperties()
             when(response?.code()){

@@ -68,9 +68,7 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
             findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToOnboarding3Fragment(isMale = true, fromProfile = true))
         }
         binding.forWhoTextView.setOnClickListener {
-            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToForWhoDialog(
-              brandsPropertiesDataWrapper.data.property?.split(';')?.any{it == "141"} ?: false
-            ))
+           findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToProfileForWhoFragment())
         }
     }
 
@@ -97,8 +95,6 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         else {
                 val currentAddress = result as Address
                 binding.currentRegionTextView.text = currentAddress.fullAddress.substringBefore(",")
-
-
             }
     }
 

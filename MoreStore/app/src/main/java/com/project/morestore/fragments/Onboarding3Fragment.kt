@@ -61,7 +61,7 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
         binding.continueBtn.setOnClickListener {
             //presenter.safeCategories(categoryAdapter.loadSegments1Checked())
             if(args.fromProfile.not())
-                presenter.safeCategories(categoryAdapter.loadSegments2Checked())
+                presenter.saveCategories(categoryAdapter.loadSegments2Checked())
             else{
                 val luxBrands = if(categoryAdapter.loadSegments2Checked()[0])
                     allBrands.filter { it.idCategory == 1L }.map { it.id }

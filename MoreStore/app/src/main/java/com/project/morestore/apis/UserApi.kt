@@ -136,12 +136,6 @@ interface UserApi {
     @POST("save_search/delete")
     suspend fun deleteFavoriteSearchGetError(@Body id: Id): Response<String>
 
-
-
-
-
-
-
-
-
+    @GET("review/not_leave_review")
+    suspend fun getWaitReviewSellers(): Response<List<User>>
 }

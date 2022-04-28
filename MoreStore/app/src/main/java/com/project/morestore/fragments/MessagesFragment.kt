@@ -31,7 +31,6 @@ import kotlin.reflect.KClass
 class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
     private lateinit var views: FragmentMessagesBinding
     private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
-    private var currentUserId: Long? = null
     private val adapter = ChatsAdapter {
         if (it.name == "Adidas men's blue denim") {
             findNavController().navigate(R.id.action_messagesFragment_to_chatLotsFragment)
@@ -80,37 +79,30 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
         with(views) {
             list.adapter = adapter
             list.addItemDecoration(MiddleDivider(requireContext(), R.drawable.div_horline_gray_1))
-            tabs.addTab(tabs.newTab().apply { fill(0, "Все", 0) })
-            tabs.addTab(tabs.newTab().apply { fill(R.drawable.sel_bag_icon, "Сделки", 0) })
+            tabs.addTab(tabs.newTab().apply { fill(0, "Все") })
+            tabs.addTab(tabs.newTab().apply { fill(R.drawable.sel_bag_icon, "Сделки") })
             tabs.addTab(
-                tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления", 0) })
+                tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления") })
             tabs.setSelectListener {
-                //adapter.setItems(
                     when (it.position) {
-                        1 -> presenter.showDealDialogs() //stubs.deals
-                        2 -> presenter.showLotDialogs()//stubs.lots
-                        else -> presenter.showAllDialogs()//stubs.all
+                        1 -> presenter.showDealDialogs()
+                        2 -> presenter.showLotDialogs()
+                        else -> presenter.showAllDialogs()
                     }
-                //)
+
             }
         }
-
-        //adapter.setItems(stubs.all)
         presenter.showAllDialogs()
-
 
     }
 
-    private fun TabLayout.Tab.fill(@DrawableRes drawableId: Int, text: String, count: Int = 0) {
+    private fun TabLayout.Tab.fill(@DrawableRes drawableId: Int, text: String) {
         TabCategoryBinding.inflate(this@MessagesFragment.layoutInflater, this.view, false)
             .apply {
                 customView = root
                 title.text = text
                 if (drawableId == 0) icon.visibility = GONE
                 else icon.setImageResource(drawableId)
-
-                //if (count == 0) this.count.visibility = GONE
-                //else this.count.text = count.toString()
             }
     }
 
