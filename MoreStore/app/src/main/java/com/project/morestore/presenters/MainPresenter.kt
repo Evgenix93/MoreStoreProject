@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+import com.google.firebase.messaging.FirebaseMessaging
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
@@ -13,15 +14,14 @@ import com.project.morestore.repositories.ChatRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.singletones.Token
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
 import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val authRepository = AuthRepository(context)
@@ -674,7 +674,9 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     fun getUserData() {
         presenterScope.launch {
             viewState.loading()
-            val response = authRepository.getUserData()
+            val fireBaseToken = getFcmToken()
+            fireBaseToken ?: return@launch
+            val response = authRepository.getUserData(fireBaseToken)
             when (response?.code()) {
                 200 -> {
 
@@ -1027,6 +1029,23 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
             }
 
+        }
+    }
+
+    private suspend fun getFcmToken() : String? {
+        return suspendCoroutine {
+            FirebaseMessaging.getInstance().token
+                .addOnSuccessListener { token ->
+                    Log.d("mylog", "token $token")
+                    it.resume(token)
+
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("mylog", exception.message.toString())
+                    viewState.error(exception.message.orEmpty())
+                    it.resume(null)
+
+                }
         }
     }
 

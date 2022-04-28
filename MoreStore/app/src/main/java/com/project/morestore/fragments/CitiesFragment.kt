@@ -2,6 +2,7 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -9,6 +10,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.project.morestore.R
@@ -20,6 +22,7 @@ import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.CitiesView
 import com.project.morestore.presenters.CitiesPresenter
 import com.project.morestore.singletones.Network
+import com.project.morestore.singletones.Token
 import com.project.morestore.util.addTextChangeListener
 import com.project.morestore.util.args
 import com.project.morestore.util.attachNavigation
@@ -61,6 +64,7 @@ class CitiesFragment :MvpAppCompatFragment(), CitiesView {
         else CitiesPresenter.Type.MULTIPLY
         CitiesPresenter(type, args.getLongArray(SELECTED) ?: longArrayOf(), Network.cities)
     }
+    private var isCitiesFirstLoaded = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,6 +101,12 @@ class CitiesFragment :MvpAppCompatFragment(), CitiesView {
         with(views){
             list.adapter = adapter
             editText3.addTextChangeListener { presenter.search(it) }
+            if(Token.currentUserAddress != null){
+                imageView25.isVisible = true
+                textView42.isVisible = true
+                textView42.text = Token.currentUserAddress?.fullAddress?.substringBefore(",")
+
+            }
         }
     }
 
@@ -111,6 +121,18 @@ class CitiesFragment :MvpAppCompatFragment(), CitiesView {
 
     override fun showCities(cities: Array<Region>) {
         adapter.items = cities
+        if(!isCitiesFirstLoaded){
+            Log.d("mylog", cities.toString())
+            val region = cities.find { it.name == Token.currentUserAddress?.fullAddress?.substringBefore(",") }
+            if(region != null){
+                views.textView42.setOnClickListener {
+                    setFragmentResult(REQUEST_KEY, bundleOf(SINGLE to ParcelRegion(region)))
+                    findNavController().navigateUp()
+                }
+            }
+            isCitiesFirstLoaded = true
+        }
+
     }
     //endregion View implementation
 }

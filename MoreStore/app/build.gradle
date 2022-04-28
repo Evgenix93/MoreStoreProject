@@ -4,6 +4,7 @@ plugins {
     id "androidx.navigation.safeargs.kotlin"
     id 'kotlin-kapt'
     id("kotlin-parcelize")
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -115,5 +116,9 @@ dependencies {
 
     //quickShot
     implementation 'io.github.muddz:quickshot:1.4.0'
+
+    //firebase
+    implementation platform('com.google.firebase:firebase-bom:29.3.1')
+    implementation 'com.google.firebase:firebase-messaging'
 
 }

@@ -33,7 +33,7 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initToolbar()
+        //initToolbar()
         initRegionsRecyclerView()
         initEditText()
         initViews()
@@ -58,7 +58,7 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
     }
 
 
-    private fun initToolbar() {
+    /*private fun initToolbar() {
         binding.toolbarCreateProduct.titleTextView.text = "Поиск города"
         binding.toolbarCreateProduct.actionIcon.isVisible = false
         binding.toolbarCreateProduct.backIcon.setOnClickListener {
@@ -66,7 +66,7 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
         }
         binding.toolbarFilter.root.isVisible = false
 
-    }
+    }*/
 
     private fun saveRegion(region: String){
         presenter.updateCreateProductData(address = region)

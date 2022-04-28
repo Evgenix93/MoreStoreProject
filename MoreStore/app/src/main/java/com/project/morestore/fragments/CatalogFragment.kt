@@ -28,6 +28,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentCatalogBinding
+import com.project.morestore.models.Address
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
 import com.project.morestore.models.SuggestionModels
@@ -61,6 +62,11 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         showBottomNav()
         loadProducts( queryStr)
         loadForWho()
+        getCurrentUserAddress()
+    }
+
+    private fun getCurrentUserAddress(){
+        presenter.getCurrentUserAddress()
     }
 
     private fun loadForWho(){
@@ -85,9 +91,6 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
             )
         }
 
-        binding.yesTextView.setOnClickListener {
-            presenter.changeUserCity("Санкт-Петербург")
-        }
 
         binding.AllRegionsTextView.setOnClickListener {
             presenter.changeUserCity(null)
@@ -294,6 +297,17 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
         if(result is Filter)
             binding.changeRegionCard.isVisible = !result.isCurrentLocationChosen
+
+        if (result is Address)
+            if(result.fullAddress.isNotEmpty()) {
+                binding.regionInfoTextView.text =
+                    "Хотите искать объявления в ${result.fullAddress.substringBefore(",")}?"
+                binding.yesTextView.isVisible = true
+                binding.yesTextView.setOnClickListener {
+                    presenter.changeUserCity(result.fullAddress.substringBefore(","))
+                }
+
+            }
 
     }
 

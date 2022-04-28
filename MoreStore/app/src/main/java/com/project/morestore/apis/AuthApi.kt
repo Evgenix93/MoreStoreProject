@@ -32,10 +32,10 @@ interface AuthApi {
 
 
     @GET("user/islogin")
-    suspend fun getUserData(): Response<User>
+    suspend fun getUserData(@Query("firebase_token") token: String?): Response<User>
 
     @GET("user/islogin")
-    suspend fun getUserDataGetError(): Response<String>
+    suspend fun getUserDataGetError(@Query("firebase_token") token: String?): Response<String>
 
 
     @POST("user/login/social/get_url")

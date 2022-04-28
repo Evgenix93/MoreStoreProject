@@ -6,6 +6,7 @@ import com.project.morestore.util.isEmailValid
 
 
 import android.util.Log
+import com.google.firebase.messaging.FirebaseMessaging
 import com.project.morestore.models.RegistrationData
 import com.project.morestore.models.SocialType
 import com.project.morestore.models.User
@@ -20,6 +21,8 @@ import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
 
@@ -160,7 +163,9 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
     fun getUserData() {
         presenterScope.launch {
             viewState.loading()
-            val response = repository.getUserData()
+            val firebaseToken = getFcmToken()
+            firebaseToken ?: return@launch
+            val response = repository.getUserData(firebaseToken)
             when (response?.code()) {
                 200 -> {
                     val user = response.body()!!
@@ -245,6 +250,24 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         return user.name != null && user.surname != null && user.phone != null
 
     }
+
+    private suspend fun getFcmToken() : String? {
+        return suspendCoroutine {
+            FirebaseMessaging.getInstance().token
+                .addOnSuccessListener { token ->
+                    Log.d("mylog", "token $token")
+                    it.resume(token)
+
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("mylog", exception.message.toString())
+                    viewState.error(exception.message.orEmpty())
+                    it.resume(null)
+
+                }
+        }
+    }
+
 
 
 }

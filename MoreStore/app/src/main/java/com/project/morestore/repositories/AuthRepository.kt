@@ -67,17 +67,17 @@ class AuthRepository(private val context: Context) {
 
     }
 
-    suspend fun getUserData(): Response<User>?{
+    suspend fun getUserData(fireBaseToken: String? = null): Response<User>?{
         Log.d("mylog", "getUserData")
         return try {
-            authApi.getUserData()
+            authApi.getUserData(fireBaseToken)
         }catch (e: Throwable){
             if(e is IOException){
                 null
             }else{
                 Log.d("mylog", e.message.toString())
                 try {
-                    val response = authApi.getUserDataGetError()
+                    val response = authApi.getUserDataGetError(fireBaseToken)
                     if(response.code() == 500){
                         Response.error(500, "".toResponseBody(null))
                     }else {

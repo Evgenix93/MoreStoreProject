@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "601818596039",
+    "project_id": "morestore-7fdb2",
+    "storage_bucket": "morestore-7fdb2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:601818596039:android:2b7a9f8ab4d737deec74e2",
+        "android_client_info": {
+          "package_name": "com.project.morestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "601818596039-n67cnksfur4m6ivjsbt89jcgqqpml1bc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwhOq8FiLwcXiKY1zA4eczikSKpLG05pk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "601818596039-n67cnksfur4m6ivjsbt89jcgqqpml1bc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

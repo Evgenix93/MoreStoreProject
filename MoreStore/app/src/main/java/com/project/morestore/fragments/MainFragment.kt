@@ -70,6 +70,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initPermissionLauncher()
         getCurrentUserAddress()
 
+
+
     }
 
     private fun bindFilter(filter: Filter) {
@@ -397,7 +399,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             }
             locationProvider.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, cancelToken ).addOnCompleteListener { task ->
                 if(task.isSuccessful){
-                    Log.d("mylog", task.result.longitude.toString())
+                   // Log.d("mylog", task.result.longitude.toString())
                     task.result?.let {
                         presenter.getCityByCoordinates("${it.latitude},${it.longitude}")
                     }

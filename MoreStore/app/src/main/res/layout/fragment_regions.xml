@@ -9,12 +9,6 @@
         android:id="@+id/toolbarFilter"
         />
 
-    <include
-        android:id="@+id/toolbarCreateProduct"
-        layout="@layout/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/anchor"
@@ -54,6 +48,7 @@
         android:id="@+id/imageView25"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +59,7 @@
         android:id="@+id/textView42"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:text="@string/st_petersburg"

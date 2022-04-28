@@ -13,6 +13,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.RegionsAdapter
 import com.project.morestore.databinding.FragmentRegionsBinding
+import com.project.morestore.models.Address
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
@@ -38,6 +39,15 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
         initViews()
         setClickListeners()
 
+
+    }
+
+    private fun saveRegions(regions: List<Region>){
+        presenter.saveRegions(regions)
+    }
+
+    private fun getCurrentUserAddress(){
+        presenter.getCurrentUserAddress()
     }
 
     private fun setClickListeners(){
@@ -74,13 +84,6 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
                // regions[index].isChecked = true
            // }
         com.project.morestore.singletones.FilterState.filter.regions = regions
-    }
-   private fun loadFilter(){
-       // if(FilterState.regions.isNotEmpty()) {
-           // Log.d("Debug", "loadFilter")
-           // regionsAdapter.updateList(FilterState.regions)
-
-        //}
     }
 
     private fun initToolbar() {
@@ -149,9 +152,31 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
 
     override fun loaded(result: Any) {
         showLoading(false)
+        if(result is Address){
+            if(result.fullAddress.isNotEmpty()) {
+                binding.imageView25.isVisible = true
+                binding.textView42.isVisible = true
+                binding.textView42.text = result.fullAddress.substringBefore(",")
+                val region = regions.find { it.name == result.fullAddress.substringBefore(",") }
+                if(region != null)
+                binding.textView42.setOnClickListener {
+                    //regions.forEach { it.isChecked = false }
+                    //regions[regions.indexOf(region)].isChecked = true
+                        //saveRegions(regions)
+
+                    regions.forEach { it.isChecked = false }
+                    regions[regions.indexOf(region)].isChecked = true
+                    regionsAdapter.updateList(listOf(Region(-1, "Все города", 1, false)) + regions)
+                    findNavController().popBackStack()
+                }
+
+            }
+            return
+        }
         if(regions.isEmpty()){
             regions = result as List<Region>
             presenter.collectRegionSearchFlow(searchFlow, regions)
+            getCurrentUserAddress()
         }
         val list = (result as List<Region>)
         if(list.size + 1 == com.project.morestore.singletones.FilterState.filter.regions.size){

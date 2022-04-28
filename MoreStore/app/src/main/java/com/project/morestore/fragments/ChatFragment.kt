@@ -1,5 +1,9 @@
 package com.project.morestore.fragments
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.project.morestore.R
@@ -29,6 +34,7 @@ import com.project.morestore.models.*
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.util.MessageActionType
+import com.project.morestore.util.MessagingService
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import dev.jorik.stub.defToast
@@ -78,6 +84,18 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private var listenGeo = false
     private lateinit var user: User
     private var mediaUris: List<Uri>? = null
+    private val messageBroadCastReceiver = object : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, intent: Intent?) {
+            val message = intent?.getParcelableExtra<MessageModel>(MessagingService.MESSAGE_KEY)
+            message?.let {
+                adapter.addMessage(getMessages(listOf(it)).first())
+            }
+
+        }
+
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,6 +105,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        registerReceiver()
         setClickListeners()
         with(views) {
             toolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
@@ -125,6 +144,11 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         mediaUris = null
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        unregisterReceiver()
+    }
+
     /* private fun showSell(){
         // adapter.avatarUri = R.drawable.user2
          with(views){
@@ -157,6 +181,16 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
          }
          adapter.setItems(buyer)
      }*/
+
+    private fun registerReceiver(){
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(messageBroadCastReceiver,
+        IntentFilter(MessagingService.MESSAGE_INTENT)
+        )
+    }
+
+    private fun unregisterReceiver(){
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(messageBroadCastReceiver)
+    }
 
     private fun showSell(dialog: DialogWrapper) {
 

@@ -755,6 +755,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         viewState.loaded(userRepository.getFilter())
     }
 
+    fun saveRegions(regions: List<Region>){
+        val filter = userRepository.getFilter()
+        filter.regions = regions
+        userRepository.updateFilter(filter)
+    }
+
     fun saveColors(colors: List<Property>) {
         val filter = userRepository.getFilter()
         filter.colors = colors
