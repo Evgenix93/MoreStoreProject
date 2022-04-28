@@ -620,12 +620,6 @@ class UserRepository(val context: Context) {
         return FilterState.filter.chosenProductStatus
     }
 
-
-    //suspend fun saveBrandsProperties(brandsPropertiesData: BrandsPropertiesData): Response<Boolean>?{
-    //fun loadStyles(): List<Property>{
-      //  return FilterState.filter.chosenStyles
-    //}
-
    suspend fun saveBrandsProperties(brandsId: List<Long>?, propertiesId: List<Long>): Response<Boolean>?{
       return  try {
             Network.userApi.saveBrandsProperties(BrandsPropertiesData(Token.userId, brandsId, propertiesId))
@@ -650,5 +644,14 @@ class UserRepository(val context: Context) {
     }
     fun getCurrentUserAddress(): Address?{
         return Token.currentUserAddress
+    }
+
+   suspend fun getWaitReviewSellers(): Response<List<User>>?{
+       return try{
+           Network.userApi.getWaitReviewSellers()
+       }catch (e: Throwable){
+           Log.e("MyDebug", "error = ${e.message}")
+           null
+       }
     }
 }

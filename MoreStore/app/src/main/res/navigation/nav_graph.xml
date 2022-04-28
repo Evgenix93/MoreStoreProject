@@ -533,11 +533,11 @@
             android:id="@+id/action_profileFragment_to_onboarding2Fragment"
             app:destination="@id/onboarding2Fragment" />
         <action
-            android:id="@+id/action_profileFragment_to_forWhoDialog"
-            app:destination="@id/forWhoDialog" />
-        <action
             android:id="@+id/action_profileFragment_to_onboarding3Fragment"
             app:destination="@id/onboarding3Fragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_profileForWhoFragment"
+            app:destination="@id/profileForWhoFragment" />
     </fragment>
     <fragment
         android:id="@+id/sellerProfileFragment"
@@ -1039,5 +1039,9 @@
             android:name="isMale"
             app:argType="boolean" />
     </dialog>
+    <fragment
+        android:id="@+id/profileForWhoFragment"
+        android:name="com.project.morestore.fragments.ProfileForWhoFragment"
+        android:label="ProfileForWhoFragment" />
 
 </navigation>
