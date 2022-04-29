@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -17,7 +18,6 @@ import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import okhttp3.internal.delimiterOffset
 
 class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2), OnBoardingMvpView {
     private val binding: FragmentOnboarding2Binding by viewBinding()
@@ -27,7 +27,7 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
     private var bottomSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var shoesSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private lateinit var brandsPropertiesDataWrapper: BrandsPropertiesDataWrapper
-    private var isMale = true
+    private var forWhoIds = listOf<Long>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,7 +75,7 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                 val propertyIds = topSizeCardAdapter.getSizes().filter { it.chosen == true }
                     .map { it.id.toLong() } + bottomSizeCardAdapter.getSizes().filter { it.chosen == true }
                     .map { it.id.toLong() } + shoesSizeCardAdapter.getSizes().filter { it.chosen == true }
-                    .map { it.id.toLong() } + if (isMale) listOf(141L) else listOf(140L)
+                    .map { it.id.toLong() } +  forWhoIds
                 val brandsIds = brandsPropertiesDataWrapper.data.brand?.split(
                     ';'
                 )?.mapNotNull { it.toLongOrNull() }.orEmpty()
@@ -96,15 +96,23 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
         binding.loader.isVisible = loading
     }
 
-    private fun getAllSizes(isMale: Boolean) {
-        if (isMale) {
-            presenter.getTopSizesMen()
-            presenter.getBottomSizesMen()
-            presenter.getShoosSizesMen()
-        } else {
-            presenter.getTopSizes()
-            presenter.getBottomSizes()
-            presenter.getShoosSizes()
+    private fun getAllSizes(forWhoIds: List<Long>) {
+        when(forWhoIds[0]) {
+            140L -> { presenter.getTopSizes()
+                presenter.getBottomSizes()
+                presenter.getShoosSizes()
+            }
+            141L -> {
+                presenter.getTopSizesMen()
+                presenter.getBottomSizesMen()
+                presenter.getShoosSizesMen()
+            }
+            142L  -> {
+                Log.d("MyKids", "isKids")
+                presenter.getTopSizesKids()
+                presenter.getBottomSizesKids()
+                presenter.getShoosSizesKids()
+            }
         }
     }
 
@@ -112,7 +120,7 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
         if (args.fromProfile)
             presenter.loadOnboardingData()
         else
-            getAllSizes(args.isMale)
+            getAllSizes(if(args.isMale)listOf(141L) else listOf(140L))
     }
 
     override fun loading() {
@@ -213,26 +221,71 @@ class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2),
                         us = sizeLine.us
                     )
                 })
+            if(categoryId == 7)
+                topSizeCardAdapter.updateList((result as List<Property>).map {
+                    val list = it.ico?.split(';').orEmpty()
+                    Size(
+                        it.id.toInt(),
+                        it.name,
+                        it.idCategory?.toInt(),
+                        if (args.fromProfile)
+                            brandsPropertiesDataWrapper.data.property?.split(';')
+                                ?.mapNotNull { string -> string.toLongOrNull() }
+                                ?.any { id -> id == it.id }
+                        else
+                            false,
+                        w = if(list.isNotEmpty()) list[0].removePrefix("W").removeSurrounding("'") else "",
+                        fr = if(list.isNotEmpty()) list[1].removePrefix("IT/RU/FR").removeSurrounding("'") else "",
+                        us = if(list.isNotEmpty()) list[2].removePrefix("US").removeSurrounding("'")else "",
+                        uk = if(list.isNotEmpty()) list[3].removePrefix("UK").removeSurrounding("'") else ""
+                    )
+
+                })
+            if(categoryId == 8)
+                bottomSizeCardAdapter.updateList((result as List<Property>).map {
+                    val list = it.ico?.split(';').orEmpty()
+                    Size(
+                        it.id.toInt(),
+                        it.name,
+                        it.idCategory?.toInt(),
+                        if (args.fromProfile)
+                            brandsPropertiesDataWrapper.data.property?.split(';')
+                                ?.mapNotNull { string -> string.toLongOrNull() }
+                                ?.any { id -> id == it.id }
+                        else
+                            false,
+                        w = if(list.isNotEmpty()) list[0].removePrefix("W").removeSurrounding("'") else "",
+                        fr = if(list.isNotEmpty()) list[1].removePrefix("IT/RU/FR").removeSurrounding("'") else "",
+                        us = if(list.isNotEmpty()) list[2].removePrefix("US").removeSurrounding("'")else "",
+                        uk = if(list.isNotEmpty()) list[3].removePrefix("UK").removeSurrounding("'")else ""
+                    )
+                })
+            if(categoryId == 9)
+                shoesSizeCardAdapter.updateList((result as List<Property>).map {
+                    val list = it.ico?.split(';').orEmpty()
+                    Size(
+                        it.id.toInt(),
+                        it.name,
+                        it.idCategory?.toInt(),
+                        if (args.fromProfile)
+                            brandsPropertiesDataWrapper.data.property?.split(';')
+                                ?.mapNotNull { string -> string.toLongOrNull() }
+                                ?.any { id -> id == it.id }
+                        else
+                            false,
+                        fr = if(list.isNotEmpty()) list[0].removePrefix("FR").removeSurrounding("'") else "",
+                        us = if(list.isNotEmpty()) list[1].removePrefix("US").removeSurrounding("'") else "" ,
+                        uk = if(list.isNotEmpty()) list[2].removePrefix("UK").removeSurrounding("'") else ""
+                    )
+
+                })
         } else {
             brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
-            val forWhoId = brandsPropertiesDataWrapper.data.property?.split(';')
-                ?.mapNotNull { it.toLongOrNull() }?.firstOrNull {
-                it == 140L || it == 141L
-            }
-            when (forWhoId) {
-                140L -> {
-                    isMale = false
-                    getAllSizes(false)
-                }
-                141L -> {
-                    isMale = true
-                    getAllSizes(true)
-                }
-                else -> {
-                    isMale = false
-                    getAllSizes(false)
-                }
-            }
+             forWhoIds = brandsPropertiesDataWrapper.data.property?.split(';')
+                ?.mapNotNull { it.toLongOrNull() }?.filter {
+                it == 140L || it == 141L || it == 142L
+            }.orEmpty()
+            getAllSizes(forWhoIds)
         }
     }
 

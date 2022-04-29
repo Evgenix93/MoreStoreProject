@@ -492,6 +492,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                     )
                 )
             loadOnboardingData()
+            //showOnBoarding()
         }
     }
 

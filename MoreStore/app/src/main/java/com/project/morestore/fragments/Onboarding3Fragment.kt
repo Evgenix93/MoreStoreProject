@@ -35,8 +35,7 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
         initRecyclerView()
         setClickListeners()
         getCategories()
-        if(args.fromProfile)
-            getOnBoardingData()
+        getOnBoardingData()
 
         /* binding.allCheckBox.setOnCheckedChangeListener { _, isChecked ->
              binding.luxuryCheckBox.isChecked = isChecked
@@ -61,7 +60,7 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
         binding.continueBtn.setOnClickListener {
             //presenter.safeCategories(categoryAdapter.loadSegments1Checked())
             if(args.fromProfile.not())
-                presenter.saveCategories(categoryAdapter.loadSegments2Checked())
+                presenter.saveCategories(categoryAdapter.loadSegments2Checked().also{Log.d("MyDebug", "segments checked = $it")})
             else{
                 val luxBrands = if(categoryAdapter.loadSegments2Checked()[0])
                     allBrands.filter { it.idCategory == 1L }.map { it.id }
@@ -106,8 +105,8 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
     }
 
     private fun getOnBoardingData(){
+        if(args.fromProfile)
         presenter.loadOnboardingData()
-
     }
 
     private fun showChosenBrands(allBrands: List<ProductBrand>){
@@ -152,11 +151,11 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
 
     override fun loading() {
         showLoading(true)
-
     }
 
     override fun loaded(result: List<Any>) {
-        showLoading(false)
+       if(args.fromProfile.not())
+           showLoading(false)
         when(result[0]) {
             is Category -> {
                 val categories = result as List<Category>
