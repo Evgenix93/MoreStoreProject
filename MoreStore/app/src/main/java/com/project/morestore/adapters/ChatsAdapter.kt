@@ -2,6 +2,7 @@ package com.project.morestore.adapters
 
 import android.view.View.*
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.morestore.R
@@ -22,13 +23,14 @@ class ChatsAdapter(val callback :(Chat) -> Unit) :RecyclerView.Adapter<ChatsAdap
         val chat = items[position]
         holder.bind(chat)
         with(holder.views){
+            unread.isVisible = chat.isUnread
             when (chat){
                 is Chat.Support -> {
                     avatar.setImageResource(R.drawable.ic_headphones)
                     icon.visibility = GONE
                     price.visibility = GONE
                     online.visibility = GONE
-                    unread.visibility = GONE
+                    //unread.visibility = GONE
                 }
                 is Chat.Personal -> {
                    // avatar.setImageResource(chat.avatar)
@@ -43,12 +45,12 @@ class ChatsAdapter(val callback :(Chat) -> Unit) :RecyclerView.Adapter<ChatsAdap
                         price.visibility = VISIBLE
                     }
                     online.visibility = if(chat.online) VISIBLE else GONE
-                    if(chat.totalUnread == 0){
+                    /*if(chat.totalUnread == 0){
                         unread.visibility = GONE
                     } else {
                         unread.visibility = VISIBLE
                         unread.text = chat.totalUnread.toString()
-                    }
+                    }*/
                 }
                 is Chat.Deal -> {
                     //avatar.setImageResource(chat.avatar)
@@ -59,7 +61,7 @@ class ChatsAdapter(val callback :(Chat) -> Unit) :RecyclerView.Adapter<ChatsAdap
                     icon.visibility = VISIBLE
                     price.text = root.context.getString(R.string.pattern_price, String.format("%,d", chat.price.toInt()))
                     online.visibility = GONE
-                    unread.visibility = GONE
+                    //unread.visibility = GONE
                 }
                 is Chat.Lot -> {
                    // avatar.setImageResource(chat.avatar)
@@ -70,12 +72,12 @@ class ChatsAdapter(val callback :(Chat) -> Unit) :RecyclerView.Adapter<ChatsAdap
                     icon.visibility = VISIBLE
                     price.text = root.context.getString(R.string.pattern_price, String.format("%,d", chat.price.toInt()))
                     online.visibility = GONE
-                    if(chat.totalUnread == 0){
+                    /*if(chat.totalUnread == 0){
                         unread.visibility = GONE
                     } else {
                         unread.visibility = VISIBLE
                         unread.text = chat.totalUnread.toString()
-                    }
+                    }*/
                 }
             }
             name.text = chat.name

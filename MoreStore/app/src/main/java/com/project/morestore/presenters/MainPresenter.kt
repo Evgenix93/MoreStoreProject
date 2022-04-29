@@ -1049,5 +1049,18 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
+    fun showUnreadMessages(){
+        presenterScope.launch {
+            val userId = authRepository.getUserId()
+            val response = chatRepository.getDialogs()
+            if(response?.code() != 200)
+                return@launch
+            val dialogs = response.body()
+            dialogs ?: return@launch
+            val unreadDialog = dialogs.find { it.dialog.lastMessage?.is_read == 0 && it.dialog.lastMessage.idSender != userId }
+            viewState.loaded(unreadDialog != null)
+        }
+    }
+
 
 }

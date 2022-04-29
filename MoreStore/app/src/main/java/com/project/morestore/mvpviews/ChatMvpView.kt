@@ -44,6 +44,12 @@ interface ChatMvpView: MvpView {
     @OneExecution
     fun actionMessageSent(info: ChatFunctionInfo, type: MessageActionType )
 
+    @OneExecution
+    fun showUnreadMessagesStatus(show: Boolean)
+
+    @OneExecution
+    fun showUnreadTab(tab: Int, unread: Boolean)
+
     //@OneExecution
     //fun productInfoLoaded(product: Product)
 

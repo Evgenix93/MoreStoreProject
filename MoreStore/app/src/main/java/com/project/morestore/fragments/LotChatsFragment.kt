@@ -1,11 +1,16 @@
 package com.project.morestore.fragments
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.project.morestore.R
@@ -17,6 +22,7 @@ import com.project.morestore.models.*
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.util.MessageActionType
+import com.project.morestore.util.MessagingService
 import com.project.morestore.util.MiddleDivider
 import moxy.ktx.moxyPresenter
 import kotlin.reflect.KClass
@@ -41,6 +47,19 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
             )
         }
     }
+    private val messageReceiver = object : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, intent: Intent?) {
+            val dialogId = intent?.getLongExtra(MessagingService.MESSAGE_KEY, -1L)
+            dialogId?.let {
+                val productId = arguments?.getLong(PRODUCT_ID_KEY, -1)
+                presenter.handlePushMessageLotsChatFragment(it, productId ?: -1)
+
+            }
+
+
+        }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +69,7 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        registerReceiver()
         with(views){
             //todo create toolbar widget
             val productId = arguments?.getLong(PRODUCT_ID_KEY, -1)
@@ -73,6 +93,21 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
                 .into(toolbar.icon)
         }
         //adapter.setItems(stubs)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        unregisterReceiver()
+    }
+
+    private fun registerReceiver(){
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(messageReceiver,
+        IntentFilter(MessagingService.MESSAGE_INTENT)
+        )
+    }
+
+    private fun unregisterReceiver(){
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(messageReceiver)
     }
 
     private fun createTypeBundle(value : KClass<*>) :Pair<String, String>{
@@ -162,6 +197,14 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
     }
 
     override fun actionMessageSent(info: ChatFunctionInfo, type: MessageActionType) {
+
+    }
+
+    override fun showUnreadMessagesStatus(show: Boolean) {
+
+    }
+
+    override fun showUnreadTab(tab: Int, unread: Boolean) {
 
     }
 

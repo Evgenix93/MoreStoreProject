@@ -18,9 +18,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.MessagesAdapter
 import com.project.morestore.databinding.FragmentChatBinding
@@ -38,6 +40,8 @@ import com.project.morestore.util.MessagingService
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import dev.jorik.stub.defToast
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import moxy.ktx.moxyPresenter
 import java.util.*
 
@@ -90,7 +94,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             dialogId?.let {
                 Log.d("fire", "current $currentDialogId, id $it")
                 if(currentDialogId == it) {
-                    getDialog(it)
+                    lifecycleScope.launch {
+                        delay(2000)
+                        getDialog(it)
+                    }
                 }
             }
 
@@ -922,5 +929,13 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             MessageActionType.PRICE_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Цена одобрена", Toast.LENGTH_LONG).show()
             MessageActionType.PRICE_REQUEST_CANCEL -> Toast.makeText(requireContext(), "Цена отменена", Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun showUnreadMessagesStatus(show: Boolean) {
+        (activity as MainActivity).showUnreadMessagesIcon(show)
+    }
+
+    override fun showUnreadTab(tab: Int, unread: Boolean) {
+
     }
 }

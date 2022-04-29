@@ -1,7 +1,9 @@
 package com.project.morestore
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +14,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
@@ -21,15 +24,27 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.project.morestore.databinding.ActivityMainBinding
 import com.project.morestore.fragments.SplashScreenFragmentDirections
+import com.project.morestore.util.MessagingService
 
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by viewBinding()
+    private var isMessagesUnread = false
+    private val messageReceiver = object : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            isMessagesUnread = true
+            showUnreadMessagesIcon(isMessagesUnread)
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         checkGooglePlayServices()
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver,
+        IntentFilter(MessagingService.MESSAGE_INTENT)
+        )
     }
 
     override fun onStart() {
@@ -61,6 +76,10 @@ class MainActivity : AppCompatActivity() {
 
     fun showBottomNavBar(show: Boolean) {
         binding.bottomNavBar.isVisible = show
+        if(show)
+            binding.newMessagesIcon.isVisible = isMessagesUnread
+        else
+            binding.newMessagesIcon.isVisible = false
     }
 
     private fun initNavController() {
@@ -275,6 +294,11 @@ class MainActivity : AppCompatActivity() {
             Log.i("googlePlay", "Google play services updated")
             true
         }
+    }
+
+    fun showUnreadMessagesIcon(show: Boolean){
+        binding.newMessagesIcon.isVisible = show
+        isMessagesUnread = show
     }
 }
 

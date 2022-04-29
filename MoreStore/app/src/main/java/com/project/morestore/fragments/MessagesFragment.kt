@@ -1,5 +1,9 @@
 package com.project.morestore.fragments
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -7,9 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.project.morestore.R
@@ -23,6 +30,7 @@ import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.singletones.Token
 import com.project.morestore.util.MessageActionType
+import com.project.morestore.util.MessagingService
 import com.project.morestore.util.MiddleDivider
 import com.project.morestore.util.setSelectListener
 import moxy.ktx.moxyPresenter
@@ -66,6 +74,19 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
             )
         }
     }
+    private val messageReceiver = object : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, intent: Intent?) {
+            val dialogId = intent?.getLongExtra(MessagingService.MESSAGE_KEY, -1)
+            dialogId ?: return
+            when(views.tabs.selectedTabPosition){
+                1 -> presenter.handlePushMessageMessagesFragment(dialogId, Chat.Deal::class.simpleName.orEmpty())
+                2 -> presenter.handlePushMessageMessagesFragment(dialogId, Chat.Lot::class.simpleName.orEmpty())
+                else -> presenter.handlePushMessageMessagesFragment(dialogId, Chat::class.simpleName.orEmpty())
+            }
+
+        }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,6 +96,7 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        registerReceiver()
         checkToken()
         with(views) {
             list.adapter = adapter
@@ -94,6 +116,21 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
         }
         presenter.showAllDialogs()
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        unregisterReceiver()
+    }
+
+    private fun registerReceiver(){
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(messageReceiver,
+        IntentFilter(MessagingService.MESSAGE_INTENT)
+        )
+    }
+
+    private fun unregisterReceiver(){
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(messageReceiver)
     }
 
     private fun TabLayout.Tab.fill(@DrawableRes drawableId: Int, text: String) {
@@ -253,6 +290,22 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
     }
 
     override fun actionMessageSent(info: ChatFunctionInfo, type: MessageActionType) {
+
+    }
+
+    override fun showUnreadMessagesStatus(show: Boolean) {
+
+    }
+
+    override fun showUnreadTab(tab: Int, unread: Boolean) {
+        when(tab){
+            0 -> views.tabs.getTabAt(0)?.view?.findViewById<ImageView>(R.id.unreadIcon)?.isVisible = unread//?.fill(0, "Все", count)
+            1 -> views.tabs.getTabAt(1)?.view?.findViewById<ImageView>(R.id.unreadIcon)?.isVisible = unread//?.fill(0, "Все", count)
+            2 -> views.tabs.getTabAt(2)?.view?.findViewById<ImageView>(R.id.unreadIcon)?.isVisible = unread//?.fill(0, "Все", count)
+
+
+
+        }
 
     }
 

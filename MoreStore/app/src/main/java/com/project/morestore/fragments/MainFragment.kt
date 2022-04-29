@@ -72,6 +72,11 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
 
 
+
+    }
+
+    private fun showUnreadMessagesStatus(){
+        presenter.showUnreadMessages()
     }
 
     private fun bindFilter(filter: Filter) {
@@ -492,6 +497,10 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                     )
                 )
             loadOnboardingData()
+            showUnreadMessagesStatus()
+        }
+        if(result is Boolean){
+            (activity as MainActivity).showUnreadMessagesIcon(result)
         }
     }
 
