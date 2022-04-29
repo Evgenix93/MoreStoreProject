@@ -128,11 +128,11 @@ class ProductRepository(private val context: Context) {
             val statusStr = "status= ${status ?: 1}"
 
             productPropertyStr =
-                filter?.chosenTopSizes?.filter { it.isSelected }
+                filter?.chosenTopSizesWomen?.filter { it.isSelected }
                     ?.map { "property[${it.idCategory}][${it.id}]=on" }
-                    .orEmpty() + filter?.chosenBottomSizes?.filter { it.isSelected }
+                    .orEmpty() + filter?.chosenBottomSizesWomen?.filter { it.isSelected }
                     ?.map { "property[${it.idCategory}][${it.id}]=on" }
-                    .orEmpty() + filter?.chosenShoosSizes?.filter { it.isSelected }
+                    .orEmpty() + filter?.chosenShoosSizesWomen?.filter { it.isSelected }
                     ?.map { "property[${it.idCategory}][${it.id}]=on" }
                     .orEmpty() + filter?.chosenTopSizesMen?.filter { it.isSelected }
                     ?.map { "property[${it.idCategory}][${it.id}]=on" }
@@ -154,7 +154,7 @@ class ProductRepository(private val context: Context) {
 
             var conditionList = listOf<String>()
             if (filter?.chosenConditions?.isNotEmpty() == true) {
-                if (filter!!.chosenConditions[0]) {
+                if (filter.chosenConditions[0]) {
                     conditionList = conditionList + listOf<String>("property[11][111]=on")
                 }
                 if (filter.chosenConditions[1]) {
@@ -203,13 +203,13 @@ class ProductRepository(private val context: Context) {
             }
 
             productPropertyStr = productPropertyStr + conditionList + forWhoList + stylesList
-            Log.d("MyDebug", "getProducts filter = $filter")
+           // Log.d("MyDebug", "getProducts filter = $filter")
             productApi.getProducts(
                 limit,
                 PRODUCT_OPTIONS,
                 (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr + statusStr).joinToString(
                     ";"
-                ),
+                ).also{Log.d("MyDebug", "getProducts filter = $it")},
                 userId
             )
 
@@ -541,7 +541,7 @@ class ProductRepository(private val context: Context) {
         }
         FilterState.filter.chosenTopSizes = sizeList*/
         if(isMale.not()) {
-            FilterState.filter.chosenTopSizes = topSizesList.map {
+            FilterState.filter.chosenTopSizesWomen = topSizesList.map {
                 SizeLine(
                     it.id,
                     it.name,
@@ -553,7 +553,7 @@ class ProductRepository(private val context: Context) {
                     it.id_category ?: -1
                 )
             }
-            FilterState.filter.chosenBottomSizes = bottomSizesList.map {
+            FilterState.filter.chosenBottomSizesWomen = bottomSizesList.map {
                 SizeLine(
                     it.id,
                     it.name,
@@ -566,7 +566,7 @@ class ProductRepository(private val context: Context) {
                 )
             }
 
-            FilterState.filter.chosenShoosSizes = shoesSizesList.map {
+            FilterState.filter.chosenShoosSizesWomen = shoesSizesList.map {
                 SizeLine(
                     it.id,
                     it.name,

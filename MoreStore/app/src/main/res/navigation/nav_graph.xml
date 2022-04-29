@@ -538,6 +538,9 @@
         <action
             android:id="@+id/action_profileFragment_to_profileForWhoFragment"
             app:destination="@id/profileForWhoFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_waitReviewSellersFragment"
+            app:destination="@id/waitReviewSellersFragment" />
     </fragment>
     <fragment
         android:id="@+id/sellerProfileFragment"
@@ -1043,5 +1046,13 @@
         android:id="@+id/profileForWhoFragment"
         android:name="com.project.morestore.fragments.ProfileForWhoFragment"
         android:label="ProfileForWhoFragment" />
+    <fragment
+        android:id="@+id/waitReviewSellersFragment"
+        android:name="com.project.morestore.fragments.WaitReviewSellersFragment"
+        android:label="WaitReviewSellersFragment" >
+        <action
+            android:id="@+id/action_waitReviewSellersFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
+    </fragment>
 
 </navigation>

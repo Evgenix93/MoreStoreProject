@@ -2,7 +2,6 @@ package com.project.morestore.presenters
 
 import android.content.Context
 import android.util.Log
-import com.project.morestore.models.BrandsPropertiesData
 import com.project.morestore.models.ProductBrand
 
 
@@ -168,15 +167,15 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
             else
                 listOf(true, false, false)
             val propertiesId = if (isMale.not()) {
-                filter.chosenTopSizes.filter{it.isSelected}.map { it.id.toLong() }
+                filter.chosenTopSizesWomen.filter{it.isSelected}.map { it.id.toLong() }
             } else {
                 filter.chosenTopSizesMen.filter{it.isSelected}.map { it.id.toLong() }
             } + if (isMale.not()) {
-                filter.chosenBottomSizes.filter{it.isSelected}.map { it.id.toLong() }
+                filter.chosenBottomSizesWomen.filter{it.isSelected}.map { it.id.toLong() }
             } else {
                 filter.chosenBottomSizesMen.filter{it.isSelected}.map { it.id.toLong() }
             } + if (isMale.not()) {
-                filter.chosenShoosSizes.filter{it.isSelected}.map { it.id.toLong() }
+                filter.chosenShoosSizesWomen.filter{it.isSelected}.map { it.id.toLong() }
             } else {
                 filter.chosenShoosSizesMen.filter{it.isSelected}.map { it.id.toLong() }
             } + forWho.mapIndexedNotNull { index, checked ->

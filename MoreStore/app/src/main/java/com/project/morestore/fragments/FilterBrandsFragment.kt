@@ -137,7 +137,7 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
             brandsAdapter.clearCheckboxes()
             segmentsAdapter.clearCheckboxes()
         }
-        binding.toolbarFilter.imageView2.setOnClickListener {
+        binding.toolbarFilter.arrowBackImageView.setOnClickListener {
             findNavController().popBackStack()
         }
     }

@@ -39,7 +39,7 @@ class FilterProductStatusFragment: MvpAppCompatFragment(R.layout.fragment_filter
     private fun initToolBar(){
         binding.toolbar.titleTextView.text = "Показывать товары"
         binding.toolbar.actionTextView.isVisible = false
-        binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.arrowBackImageView.setOnClickListener { findNavController().popBackStack() }
     }
 
     private fun getFilter(){

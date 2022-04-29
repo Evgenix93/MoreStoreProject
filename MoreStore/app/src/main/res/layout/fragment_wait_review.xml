@@ -6,12 +6,37 @@
 
     <include layout="@layout/toolbar_filter"
         android:id="@+id/toolbar"/>
+    
+    <ImageView
+        android:id="@+id/emptyListImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/empty_list_image"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/emptyListTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Список пуст"
+        android:textAppearance="@style/regular_16"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/emptyListImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/usersRecyclerView"
+        android:id="@+id/sellersRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"/>
+    
 
 </androidx.constraintlayout.widget.ConstraintLayout>

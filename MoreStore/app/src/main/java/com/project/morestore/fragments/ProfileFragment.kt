@@ -68,7 +68,11 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
             findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToOnboarding3Fragment(isMale = true, fromProfile = true))
         }
         binding.forWhoTextView.setOnClickListener {
-           findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToProfileForWhoFragment())
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToProfileForWhoFragment())
+        }
+
+         binding.waitReviewSellersTextView.setOnClickListener{
+             findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToWaitReviewSellersFragment())
         }
     }
 

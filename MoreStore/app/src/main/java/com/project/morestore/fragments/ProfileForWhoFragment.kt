@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -40,9 +41,12 @@ class ProfileForWhoFragment: MvpAppCompatFragment(R.layout.fragment_profile_for_
                 if(forKidsCheckBox.isChecked)
                     add(142L)
                 addAll(brandsPropertiesDataWrapper.data.property?.split(';')
-                    ?.mapNotNull{it.toLongOrNull()}?.filter{it != 140L && it!= 141L && it != 142L}.orEmpty())
+                    ?.mapNotNull{it.toLongOrNull()}?.filter{it != 140L && it!= 141L && it != 142L}.orEmpty().also {
+                        Log.d("MyDebug", "addAll = $it")
+                    })
+
             }
-        }
+        }.also{Log.d("MyDebug", "propertiesId = $it")}
         val brandsId = brandsPropertiesDataWrapper.data.brand?.split(';')
             ?.mapNotNull { it.toLongOrNull() }
         presenter.saveOnBoardingData(brandsId, propertiesId)
@@ -62,7 +66,7 @@ class ProfileForWhoFragment: MvpAppCompatFragment(R.layout.fragment_profile_for_
         with(binding.toolbar) {
             actionTextView.isVisible = false
             titleTextView.text = "Кому ищите товары"
-            imageView2.setOnClickListener { findNavController().popBackStack() }
+            arrowBackImageView.setOnClickListener { findNavController().popBackStack() }
         }
     }
 

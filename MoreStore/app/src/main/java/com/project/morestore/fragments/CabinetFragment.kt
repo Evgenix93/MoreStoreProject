@@ -36,8 +36,6 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.myAddresses.setOnClickListener { findNavController().navigate(R.id.myAddressesFragment) }
-        //checkToken()
         setClickListeners()
         showBottomNav()
         initToolbar()
@@ -60,10 +58,10 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
        binding.createNewProductBtn.setOnClickListener{
            findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToCreateProductStep1Fragment())
        }
-
         binding.createNewProductBtn2.setOnClickListener{
             findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToCreateProductStep1Fragment())
         }
+        binding.myAddresses.setOnClickListener { findNavController().navigate(R.id.myAddressesFragment) }
     }
 
     private fun showBottomNav(){
@@ -95,11 +93,9 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
         binding.timeFromRegistrationTextView.text = if(monthDiff > 0)"зарегистрирован(а) $monthDiff месяца назад"
         else "зарегистрирован(а) $dayDiff дня назад"
 
-
         Glide.with(this)
             .load(user.avatar?.photo.toString())
             .into(binding.avatarImageView)
-
 
     }
 

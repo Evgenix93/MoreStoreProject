@@ -1,10 +1,8 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -17,7 +15,6 @@ import com.project.morestore.models.Size
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
-import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -57,7 +54,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
             bottomSizeCardAdapter.cleanChosenSizes()
             shoesSizeCardAdapter.cleanChosenSizes()
         }
-        binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.arrowBackImageView.setOnClickListener { findNavController().popBackStack() }
     }
 
     private fun initLists() {
@@ -343,27 +340,27 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
 
         when {
             isForWomen -> {
-                if (topSizeCardAdapter.getSizes().size == filter.chosenTopSizes.size || topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizes.size) {
+                if (topSizeCardAdapter.getSizes().size == filter.chosenTopSizesWomen.size || topSizeCardAdapter.getSizes().size + 1 == filter.chosenTopSizesWomen.size) {
                     topSizeCardAdapter.updateList(
-                        filter.chosenTopSizes.toMutableList().apply {
-                            if (filter.chosenTopSizes.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                        filter.chosenTopSizesWomen.toMutableList().apply {
+                            if (filter.chosenTopSizesWomen.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
                             .map { Size(it.id, it.int.orEmpty(), 1, it.isSelected, it.itRuFr, it.us, it.uk) })
                 }
-                if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizes.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizes.size) {
+                if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesWomen.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesWomen.size) {
                     bottomSizeCardAdapter.updateList(
-                        filter.chosenBottomSizes.toMutableList().apply {
-                            if (filter.chosenBottomSizes.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                        filter.chosenBottomSizesWomen.toMutableList().apply {
+                            if (filter.chosenBottomSizesWomen.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
                             .map { Size(it.id, it.int.orEmpty(), 2, it.isSelected) })
                 }
-                if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizes.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizes.size) {
+                if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizesWomen.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizesWomen.size) {
 
                     shoesSizeCardAdapter.updateList(
-                        filter.chosenShoosSizes.toMutableList().apply {
-                            if (filter.chosenShoosSizes.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
+                        filter.chosenShoosSizesWomen.toMutableList().apply {
+                            if (filter.chosenShoosSizesWomen.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
                             .map { Size(it.id, it.int.orEmpty(), 3, it.isSelected) })

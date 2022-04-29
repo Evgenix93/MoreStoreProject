@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemSearchBinding
 import com.project.morestore.models.FavoriteSearch
-import com.project.morestore.models.Search
 import com.project.morestore.util.inflater
 
 class SearchesAdapter(
@@ -64,9 +63,9 @@ class SearchesAdapter(
                     else ""
                 }.filter { it.isNotEmpty() }
 
-                    val sizes = search.value.chosenTopSizes.filter { it.isSelected }.map { it.int }
-                    val sizesBottom = search.value.chosenBottomSizes.filter { it.isSelected }.map { it.int }
-                    val sizesShoos = search.value.chosenShoosSizes.filter { it.isSelected }.map { it.int }
+                    val sizes = search.value.chosenTopSizesWomen.filter { it.isSelected }.map { it.int }
+                    val sizesBottom = search.value.chosenBottomSizesWomen.filter { it.isSelected }.map { it.int }
+                    val sizesShoos = search.value.chosenShoosSizesWomen.filter { it.isSelected }.map { it.int }
                     val sizesTopMen = search.value.chosenTopSizesMen.filter { it.isSelected }.map { it.int }
                     val sizesBottomMen = search.value.chosenBottomSizesMen.filter { it.isSelected }.map { it.int }
                     val sizesShoosMen = search.value.chosenShoosSizesMen.filter { it.isSelected }.map { it.int }
