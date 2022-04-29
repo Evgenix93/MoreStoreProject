@@ -605,15 +605,15 @@ class UserRepository(val context: Context) {
     }
 
     fun loadTopSizes(): List<SizeLine>{
-        return FilterState.filter.chosenTopSizes
+        return FilterState.filter.chosenTopSizesWomen
     }
 
     fun loadBottomSizes(): List<SizeLine>{
-        return FilterState.filter.chosenBottomSizes
+        return FilterState.filter.chosenBottomSizesWomen
     }
 
     fun loadShoosSizes(): List<SizeLine>{
-        return FilterState.filter.chosenShoosSizes
+        return FilterState.filter.chosenShoosSizesWomen
     }
 
     fun loadProductStatuses(): List<Boolean>{

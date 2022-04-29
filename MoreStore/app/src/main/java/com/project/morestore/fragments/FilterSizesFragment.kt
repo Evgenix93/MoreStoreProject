@@ -64,7 +64,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         binding.toolbar.actionTextView.setOnClickListener {
             sizeAdapter.cleanCheckBoxes()
         }
-        binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.arrowBackImageView.setOnClickListener { findNavController().popBackStack() }
     }
 
     private fun showLoading(loading: Boolean){
@@ -94,13 +94,13 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         if(!isSizesLoaded)
         getSizes()
 
-        Log.d("mytest", filter.chosenTopSizes.size.toString())
+        Log.d("mytest", filter.chosenTopSizesWomen.size.toString())
 
 
 
         when {
-         filter.chosenForWho[0] ->   if (sizeAdapter.getChosenSizes().size == filter.chosenTopSizes.size) {
-                sizeAdapter.updateList(filter.chosenTopSizes, null)
+         filter.chosenForWho[0] ->   if (sizeAdapter.getChosenSizes().size == filter.chosenTopSizesWomen.size) {
+                sizeAdapter.updateList(filter.chosenTopSizesWomen, null)
             }
 
             filter.chosenForWho[1] ->  if (sizeAdapter.getChosenSizes().size == filter.chosenTopSizesMen.size) {
@@ -146,7 +146,6 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
     override fun loading() {
         showLoading(true)
-
     }
 
     override fun loaded(result: Any) {
@@ -164,24 +163,13 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
             }else{
                 sizeAdapter.updateList( sizeAdapter.getChosenSizes(), sizes + listOf(SizeLine(0, "", "", "", "", "", false, -1)) )
             }
-
-
-
-
             isSizesLoaded = true
             loadFilter()
-
-
-
         }
 
         if(result is Filter){
             bindFilter(result)
-
-
         }
-
-
     }
 
     override fun successNewCode() {

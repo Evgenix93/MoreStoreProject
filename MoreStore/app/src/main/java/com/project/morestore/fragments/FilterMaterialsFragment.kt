@@ -102,7 +102,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
     private fun initToolBar(){
         binding.toolbar.titleTextView.text = "Материалы"
         binding.toolbar.actionTextView.isVisible = false
-        binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.arrowBackImageView.setOnClickListener { findNavController().popBackStack() }
     }
 
     private fun loadFilter(){

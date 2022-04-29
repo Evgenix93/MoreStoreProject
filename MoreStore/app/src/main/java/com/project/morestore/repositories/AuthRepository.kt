@@ -19,7 +19,6 @@ class AuthRepository(private val context: Context) {
 
     private val authApi = Network.authApi
 
-
     suspend fun register(data: RegistrationData): Response<RegistrationResponse>? {
         return try {
             clearToken()

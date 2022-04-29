@@ -45,7 +45,7 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), User
     private fun initToolbar(){
         binding.toolbarFilter.titleTextView.text = "Цвет"
         binding.toolbarFilter.actionTextView.isVisible = false
-        binding.toolbarFilter.imageView2.setOnClickListener{
+        binding.toolbarFilter.arrowBackImageView.setOnClickListener{
             findNavController().popBackStack()
         }
     }

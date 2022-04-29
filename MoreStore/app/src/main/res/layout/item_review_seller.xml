@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/selectableItemBackground">
 
    <com.google.android.material.card.MaterialCardView
        android:id="@+id/avatarCardView"
@@ -21,7 +22,6 @@
            android:id="@+id/avatarImageView"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
-           android:src="@color/black"
            android:scaleType="centerCrop" />
    </com.google.android.material.card.MaterialCardView>
 

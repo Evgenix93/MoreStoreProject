@@ -89,7 +89,7 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
     private fun initToolbar() {
         binding.toolbarFilter.titleTextView.text = "Регион поиска"
         binding.toolbarFilter.actionTextView.isVisible = false
-        binding.toolbarFilter.imageView2.setOnClickListener {
+        binding.toolbarFilter.arrowBackImageView.setOnClickListener {
             findNavController().popBackStack()
         }
     }

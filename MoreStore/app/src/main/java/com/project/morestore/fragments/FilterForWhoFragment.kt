@@ -59,7 +59,7 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
     private fun initToolBar(){
         binding.toolbar.titleTextView.text = "Кому"
         binding.toolbar.actionTextView.isVisible = false
-        binding.toolbar.imageView2.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.arrowBackImageView.setOnClickListener { findNavController().popBackStack() }
     }
 
     private fun getFilter(){

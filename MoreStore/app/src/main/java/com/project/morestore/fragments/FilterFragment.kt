@@ -140,13 +140,13 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
             }.joinToString(", ")
 
         binding.sizesGreenDotImageView.isVisible =
-            (filter.chosenTopSizes.all { it.isSelected } || filter.chosenTopSizes.all { !it.isSelected }).not() ||
-                    (filter.chosenBottomSizes.all { it.isSelected } || filter.chosenBottomSizes.all { !it.isSelected }).not() ||
-                    (filter.chosenShoosSizes.all { it.isSelected } || filter.chosenShoosSizes.all { !it.isSelected }).not()
+            (filter.chosenTopSizesWomen.all { it.isSelected } || filter.chosenTopSizesWomen.all { !it.isSelected }).not() ||
+                    (filter.chosenBottomSizesWomen.all { it.isSelected } || filter.chosenBottomSizesWomen.all { !it.isSelected }).not() ||
+                    (filter.chosenShoosSizesWomen.all { it.isSelected } || filter.chosenShoosSizesWomen.all { !it.isSelected }).not()
 
 
         val sizes = when(filter.chosenForWho.indexOf(true)) {
-            0 -> filter.chosenTopSizes + filter.chosenBottomSizes + filter.chosenShoosSizes
+            0 -> filter.chosenTopSizesWomen + filter.chosenBottomSizesWomen + filter.chosenShoosSizesWomen
             1 -> filter.chosenTopSizesMen + filter.chosenBottomSizesMen + filter.chosenShoosSizesMen
             2 -> filter.chosenTopSizesKids + filter.chosenBottomSizesKids + filter.chosenShoosSizesKids
             else -> emptyList()
@@ -229,7 +229,6 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
         }
 
         binding.safeFilterBtn.setOnClickListener {
-
             saveFilter()
         }
 
@@ -252,7 +251,7 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
     }
 
     private fun initToolBar() {
-        binding.toolbarFilter.imageView2.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbarFilter.arrowBackImageView.setOnClickListener { findNavController().popBackStack() }
         binding.toolbarFilter.actionTextView.setOnClickListener{
             presenter.clearFilter()
         }

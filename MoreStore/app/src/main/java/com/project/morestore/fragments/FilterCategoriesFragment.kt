@@ -60,7 +60,7 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
     private fun initToolbar(){
         binding.toolbarFilter.titleTextView.text = "Категории"
         binding.toolbarFilter.actionTextView.isVisible = false
-        binding.toolbarFilter.imageView2.setOnClickListener{
+        binding.toolbarFilter.arrowBackImageView.setOnClickListener{
             findNavController().popBackStack()
         }
     }

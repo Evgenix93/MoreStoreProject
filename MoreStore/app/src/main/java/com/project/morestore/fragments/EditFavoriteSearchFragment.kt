@@ -1,7 +1,6 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +8,10 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentEditFavoriteSearchBinding
-import com.project.morestore.databinding.FragmentFilterBinding
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.dialogs.SuccessSaveSearchDialog
 import com.project.morestore.fragments.base.FullscreenMvpFragment
@@ -23,13 +19,9 @@ import com.project.morestore.models.FavoriteSearch
 import com.project.morestore.models.Filter
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.FavoritesMvpView
-import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.FavoritesPresenter
-import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.NotificationType
-import com.project.morestore.util.SortingType
-import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
@@ -208,13 +200,13 @@ class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
                 }.joinToString(", ")
 
         binding.sizesGreenDotImageView.isVisible =
-            (filter.chosenTopSizes.all { it.isSelected } || filter.chosenTopSizes.all { !it.isSelected }).not() ||
-                    (filter.chosenBottomSizes.all { it.isSelected } || filter.chosenBottomSizes.all { !it.isSelected }).not() ||
-                    (filter.chosenShoosSizes.all { it.isSelected } || filter.chosenShoosSizes.all { !it.isSelected }).not()
+            (filter.chosenTopSizesWomen.all { it.isSelected } || filter.chosenTopSizesWomen.all { !it.isSelected }).not() ||
+                    (filter.chosenBottomSizesWomen.all { it.isSelected } || filter.chosenBottomSizesWomen.all { !it.isSelected }).not() ||
+                    (filter.chosenShoosSizesWomen.all { it.isSelected } || filter.chosenShoosSizesWomen.all { !it.isSelected }).not()
 
 
         val sizes: List<SizeLine> = when (filter.chosenForWho.indexOf(true)) {
-            0 -> filter.chosenTopSizes + filter.chosenBottomSizes + filter.chosenShoosSizes
+            0 -> filter.chosenTopSizesWomen + filter.chosenBottomSizesWomen + filter.chosenShoosSizesWomen
             1 -> filter.chosenTopSizesMen + filter.chosenBottomSizesMen + filter.chosenShoosSizesMen
             2 -> filter.chosenTopSizesKids + filter.chosenBottomSizesKids + filter.chosenShoosSizesKids
             else -> emptyList<SizeLine>()
