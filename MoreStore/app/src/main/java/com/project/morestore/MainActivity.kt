@@ -17,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.project.morestore.databinding.ActivityMainBinding
 import com.project.morestore.fragments.SplashScreenFragmentDirections
 
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        checkGooglePlayServices()
     }
 
     override fun onStart() {
@@ -257,6 +260,21 @@ class MainActivity : AppCompatActivity() {
     fun hideKeyboard() {
         val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    }
+
+    private fun checkGooglePlayServices(): Boolean {
+        // 1
+        val status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+        // 2
+        return if (status != ConnectionResult.SUCCESS) {
+            Log.e("googlePlay", "Error")
+            // ask user to update google play services and manage the error.
+            false
+        } else {
+            // 3
+            Log.i("googlePlay", "Google play services updated")
+            true
+        }
     }
 }
 

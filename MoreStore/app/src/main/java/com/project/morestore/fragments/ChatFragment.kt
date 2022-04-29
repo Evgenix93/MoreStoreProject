@@ -86,9 +86,12 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private var mediaUris: List<Uri>? = null
     private val messageBroadCastReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, intent: Intent?) {
-            val message = intent?.getParcelableExtra<MessageModel>(MessagingService.MESSAGE_KEY)
-            message?.let {
-                adapter.addMessage(getMessages(listOf(it)).first())
+            val dialogId = intent?.getLongExtra(MessagingService.MESSAGE_KEY, -1L)
+            dialogId?.let {
+                Log.d("fire", "current $currentDialogId, id $it")
+                if(currentDialogId == it) {
+                    getDialog(it)
+                }
             }
 
         }

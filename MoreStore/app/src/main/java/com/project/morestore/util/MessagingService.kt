@@ -24,7 +24,11 @@ class MessagingService: FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Log.d("fire", "onMessageReceived ${message.data}")
+        super.onMessageReceived(message)
+        Log.d("fire", "onMessageReceived ${message.data["message"]}")
+        val dialogId = message.data["message"]?.substringAfter(":")?.substringBefore("}")?.toLong()
+        Log.d("fire", dialogId.toString())
+        dialogId ?: return
 
         /*val id: Long = message.data["id"]!!.toLong()
 
@@ -61,13 +65,13 @@ class MessagingService: FirebaseMessagingService() {
             buySuggest = null,
             priceSuggest = null,
             saleSuggest = null
-        )
+        )*/
 
         val intent = Intent(MESSAGE_INTENT).apply {
-            putExtra(MESSAGE_KEY, messageModel )
+           putExtra(MESSAGE_KEY, dialogId  )
         }
 
-        broadcaster.sendBroadcast(intent)*/
+        broadcaster.sendBroadcast(intent)
 
 
 
