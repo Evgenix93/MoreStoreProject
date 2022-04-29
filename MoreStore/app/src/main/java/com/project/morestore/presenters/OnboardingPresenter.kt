@@ -91,6 +91,18 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
         getProperties(3)
     }
 
+    fun getTopSizesKids() {
+        getProperties(7)
+    }
+
+    fun getBottomSizesKids() {
+        getProperties(8)
+    }
+
+    fun getShoosSizesKids() {
+        getProperties(9)
+    }
+
     fun saveSizes(
         topSizes: List<Size>,
         bottomSizes: List<Size>,
@@ -191,29 +203,27 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
             }
 
             val brands = getAllBrandsInstant()
-            var luxBrands = listOf<Long>()
-            var middleBrands = listOf<Long>()
-            var massBrands = listOf<Long>()
-            var ecoBrands = listOf<Long>()
+            val luxBrands = mutableListOf<Long>()
+            val middleBrands = mutableListOf<Long>()
+            val massBrands = mutableListOf<Long>()
+            val ecoBrands = mutableListOf<Long>()
+            Log.d("MyDebug", "segments = ${filter.segments}")
             filter.segments.forEachIndexed { index, selected ->
-                luxBrands = if(selected && index == 0)
-                    brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id }
-                else emptyList()
+                 if(selected && index == 0) {
+                    Log.d("MyDebug", "segments isNotEmpty")
+                   luxBrands.addAll(brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id })
+                }
+                 if(selected && index == 1)
+                   middleBrands.addAll(brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id })
 
-                middleBrands = if(selected && index == 1)
-                    brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id }
-                else emptyList()
+                 if(selected && index == 2)
+                    massBrands.addAll(brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id })
 
-                massBrands = if(selected && index == 2)
-                    brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id }
-                else emptyList()
-
-                ecoBrands = if(selected && index == 3)
-                    brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id }
-                else emptyList()
+                 if(selected && index == 3)
+                   ecoBrands.addAll( brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id })
 
             }
-
+            Log.d("MyDebug", "luxBrands = $luxBrands")
             val response = userRepository.saveBrandsProperties(luxBrands + middleBrands + massBrands + ecoBrands, propertiesId)
             when (response?.code()) {
                 200 -> saveFilter(isMale)
@@ -250,8 +260,8 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
     }
 
     fun getAllBrands(){
+        viewState.loading()
         presenterScope.launch {
-            viewState.loading()
             val response = repository.getBrands()
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)

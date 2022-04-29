@@ -234,8 +234,10 @@
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/drawable/bg_rectangle_border_green_round4.xml" value="0.2595" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/drawable/bg_rectangle_border_green_round8.xml" value="0.2595" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/drawable/checkbox.xml" value="0.315" />
+        <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/drawable/ic_chat.xml" value="0.3155" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/drawable/ic_x.xml" value="0.2595" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/drawable/radiobutton.xml" value="0.251" />
+        <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/activity_main.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/bottomdialog_date.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/bottomdialog_menu.xml" value="0.36133733390484357" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/bottomdialog_setdiscount.xml" value="0.36973684210526314" />
@@ -268,6 +270,8 @@
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_media.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_myaddress_new.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_onboarding2.xml" value="0.36973684210526314" />
+        <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_onboarding3.xml" value="0.36973684210526314" />
+        <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_onboarding5.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_order_create.xml" value="0.36133733390484357" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_photo.xml" value="0.36133733390484357" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_product.xml" value="0.3300704776820673" />
@@ -294,6 +298,7 @@
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/window_exit_create_product.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/window_for_who.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/window_login.xml" value="0.36133733390484357" />
+        <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/menu/menu_bottom_nav_bar.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/menu/menu_favorites.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/menu/menu_toolbar.xml" value="0.36133733390484357" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/mipmap-anydpi-v26/ic_launcher_more_store.xml" value="0.2555" />
