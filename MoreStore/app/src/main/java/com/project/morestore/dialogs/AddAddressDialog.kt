@@ -23,17 +23,17 @@ class AddAddressDialog(private val callback :(Type) -> Unit) : BottomSheetDialog
         with(views){
             close.setOnClickListener { dismiss() }
             courier.setOnClickListener {
-                callback(Type.COURIER)
+                callback(Type.DELIVERY)
                 dismiss()
             }
             delivery.setOnClickListener {
-                callback(Type.DELIVERY)
+                callback(Type.PICKUP)
                 dismiss()
             }
             cancel.setOnClickListener { dismiss() }
         }
     }
 
-    enum class Type{ COURIER, DELIVERY }
+    enum class Type{ PICKUP, DELIVERY }
 
 }

@@ -439,7 +439,7 @@
                         android:minWidth="30dp"
                         android:minHeight="30dp"
                         android:paddingStart="12dp"
-                        android:text="@string/prepayment"
+                        android:text="Безопасная сделка"
                         android:textAppearance="@style/regular_14"
                         android:textColor="@color/black"
                         app:useMaterialThemeColors="false" />
