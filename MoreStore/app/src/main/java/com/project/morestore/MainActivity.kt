@@ -297,6 +297,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showUnreadMessagesIcon(show: Boolean){
+        if(binding.bottomNavBar.isVisible)
         binding.newMessagesIcon.isVisible = show
         isMessagesUnread = show
     }

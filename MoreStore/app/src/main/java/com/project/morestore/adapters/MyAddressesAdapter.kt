@@ -7,12 +7,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemMyaddressBinding
+import com.project.morestore.models.AddressType
 import com.project.morestore.models.DeliveryAddress
 import com.project.morestore.models.MyAddress
 import com.project.morestore.util.inflater
 import java.lang.StringBuilder
 
-class MyAddressesAdapter : RecyclerView.Adapter<MyAddressesAdapter.MyAddressHolder>(){
+class MyAddressesAdapter(val callback :(MyAddress)->Unit) : RecyclerView.Adapter<MyAddressesAdapter.MyAddressHolder>(){
     private var items = arrayOf<MyAddress>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyAddressHolder {
@@ -33,15 +34,20 @@ class MyAddressesAdapter : RecyclerView.Adapter<MyAddressesAdapter.MyAddressHold
     inner class MyAddressHolder(
         private val views : ItemMyaddressBinding
     ) :RecyclerView.ViewHolder(views.root){
+        private lateinit var item :MyAddress
+        init {
+            itemView.setOnClickListener { callback.invoke(item) }
+        }
         fun bind(myAddress : MyAddress){
+            item = myAddress
             with(views){
                 when(myAddress.type){
-                    MyAddress.Type.PICKUP -> {
+                    AddressType.CDEK.id -> {
                         icon.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(views.root.context, R.color.green))
                         icon.setImageResource(R.drawable.ic_envelope)
                         title.setText(R.string.myAddress_delivery)
                     }
-                    MyAddress.Type.DELIVERY -> {
+                    AddressType.HOME.id -> {
                         icon.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(views.root.context, R.color.blue4))
                         icon.setImageResource(R.drawable.ic_package)
                         title.setText(R.string.myAddress_pickup)

@@ -2,6 +2,7 @@ package com.project.morestore.dialogs
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.project.morestore.R
 import com.project.morestore.databinding.DeleteDialogBinding
@@ -10,7 +11,7 @@ import com.project.morestore.util.inflater
 class DeleteDialog(
     context :Context,
     private val title :String = context.getString(R.string.deleteDialog_defaultTitle),
-    private val message :String = context.getString(R.string.deleteDialog_defaultMessage),
+    private val message :String? = context.getString(R.string.deleteDialog_defaultMessage),
     private val confirmText :String = context.getString(R.string.deleteDialog_confirm),
     private val confirmCallback :(()->Unit)? = null,
     private val cancelText :String = context.getString(R.string.deleteDialog_cancel),
@@ -22,7 +23,11 @@ class DeleteDialog(
         setView(views.root)
 
         views.title.text = title
-        views.text.text = message
+        if (message == null) {
+            views.text.visibility = View.GONE
+        }else {
+            views.text.text = message
+        }
         views.confirm.text = confirmText
         views.close.setOnClickListener { dismiss() }
         views.confirm.setOnClickListener {

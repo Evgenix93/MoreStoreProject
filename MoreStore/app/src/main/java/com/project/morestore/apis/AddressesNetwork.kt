@@ -21,4 +21,24 @@ interface AddressesNetwork {
     suspend fun createAddressError(
         @Body newAddress :MyAddressData
     ) :String
+
+    @POST("save_address/put")
+    suspend fun editAddress(
+        @Body newAddress :MyAddress
+    ) :MyAddress
+
+    @POST("save_address/put")
+    suspend fun editAddressError(
+        @Body newAddress :MyAddress
+    ) :String
+
+    @POST("save_address/delete")
+    suspend fun deleteAddress(
+        @Body id :Id
+    ) :Any
+
+    @POST("save_address/delete")
+    suspend fun deleteAddressError(
+        @Body id :Id
+    ) :String
 }

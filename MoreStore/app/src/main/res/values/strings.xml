@@ -382,6 +382,72 @@
     <string name="deleteDialog_cancel">Нет, отмена</string>
     <!--endregion deleteDialog-->
     <!--endregion Favorites-->
+    <string name="yes_small">Да</string>
+
+    <!--  active orders  -->
+    <string name="active_order_price">Цена</string>
+    <string name="active_order_delivery_date">Дата доставки</string>
+    <string name="active_order_delivery">Доставка:</string>
+    <string name="active_order_delivery_more">Подробнее</string>
+    <string name="active_order_delivery_content">Если вы не подтвердите получение в течении 24 часов, то сделка завершится автоматически.</string>
+    <string name="active_order_accept_order">Подтвердить получение товара</string>
+    <string name="active_order_problem">Проблема с товаром</string>
+    <string name="active_order_new_meeting_place">Продавец предложил место встречи</string>
+    <string name="active_order_accept_meeting">Подтвердить место втречи</string>
+    <string name="active_order_decline_meeting">Отказаться и предложить другое</string>
+
+    <!--  active orders statuses  -->
+    <string name="active_order_meeting_not_accepted">Продавец не подтвердил встречу</string>
+    <string name="active_order_at_courier">Курьер в пути</string>
+    <string name="active_order_recivied">Заказ получен</string>
+    <string name="active_order_waiting_courier">Продавец скоро передаст заказ курьеру</string>
+
+    <!--  order_history  -->
+    <string name="order_history_price">Цена</string>
+    <string name="order_history_delivery_date">Дата доставки</string>
+    <string name="order_history_delivery">Доставка:</string>
+    <string name="order_history_delivery_more">Подробнее</string>
+    <string name="order_history_completed">Сделка завершена</string>
+
+    <!--  cart  -->
+    <string name="cart_condition">Как новое</string>
+    <string name="cart_color">Цвет</string>
+    <string name="cart_price">Цена</string>
+    <string name="cart_delivery">Доставка</string>
+    <string name="cart_delivery_more"><u>подробнее</u></string>
+    <string name="cart_price_from">от</string>
+    <string name="cart_make_order">Оформить заказ</string>
+
+    <!--  order problems  -->
+    <string name="order_problem_content">Если товар не соответствует ожиданиям, укажите причину и комментарий ниже. Мы свяжемся с вами по указанному номеру и постараемся во всем разобраться.</string>
+    <string name="order_problem_phone">Номер для связи</string>
+    <string name="order_problem_reason">Почему товар вам не понравился?</string>
+    <string name="order_problem_comment">Комментарий</string>
+    <string name="order_problem_comment_min_size">0</string>
+    <string name="order_problem_comment_size_divider">/</string>
+    <string name="order_problem_comment_max_size">3000</string>
+    <string name="order_problem_next">Далее</string>
+
+    <!--  order problems photo  -->
+    <string name="order_problem_photos_content">Сфотографируйте товар. Это поможет быстрее решить вашу проблему.</string>
+    <string name="order_problem_photos_add">Добавить фото</string>
+    <string name="order_problem_photos_complete">Завершить</string>
+    <string name="order_problem_photos_dialog_title">Ваш запрос успешно отправлен</string>
+    <string name="order_problem_photos_dialog_content">Мы свяжемся с вами в течение 24 часов</string>
+
+    <!--  problem type  -->
+    <string name="problem_type_size">Не подходит размер</string>
+    <string name="problem_type_wrong_description">Внешний вид не соответствует описанию</string>
+    <string name="problem_type_wrong_good">Пришёл другой товар</string>
+    <string name="problem_type_other">Другое</string>
+    <string name="active_order_accept_dialog_title">Вы получили товар?</string>
+    <string name="orders_menu_purchase_history">История покупок</string>
+    <string name="orders_menu_orders">Покупки</string>
+    <string name="orders_menu_cart">Корзина</string>
+    <string name="cart_delete_title">Удалить товар?</string>
+
+    <string name="product_remove_from_cart">Удалить из корзирины</string>
+    <string name="product_add_cart">Добавить в корзину</string>
 
     <!--region my addresses-->
     <string name="myAddress_title">Мои адреса</string>
@@ -414,10 +480,20 @@
     <string name="myAddress_new_address_apartment">Квартира</string>
     <string name="myAddress_new_address_default">Адрес по умолчанию</string>
     <string name="myAddress_new_address_save">Сохранить</string>
+    <string name="myAddress_new_address_delete">Удалить</string>
     <string name="myAddress_new_pickOnMap_pickup_title">Выберите пункт выдачи</string>
     <string name="myAddress_new_pickOnMap_button">Выбрать</string>
     <string name="myAddress_new_pickCity_title">Поиск города</string>
     <!--endregion New Address-->
+    <!--region Address Delete-->
+    <string name="myAddress_delete_title">Удалить адрес?</string>
+    <string name="myAddress_delete_message">Этот адрес перестанет отображаться в списке ваших адресов при покупке товара с доставкой.</string>
+    <string name="myAddress_delete_confirm">Да, удалить</string>
+    <string name="myAddress_delete_cancel">Нет, отмена</string>
+    <!--endregion Address Delete-->
+    <!--region Address Delete-->
+    <string name="myAddress_edit_address_delete">Удалить адрес</string>
+    <!--endregion Address Delete-->
     <!--endregion my addresses-->
 
     <!--region city-->

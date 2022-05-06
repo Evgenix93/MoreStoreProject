@@ -2,15 +2,42 @@ package com.project.morestore.fragments.base
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.*
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.project.morestore.databinding.FragmentMapMarkerBinding
+import com.yandex.mapkit.MapKitFactory
+import com.yandex.mapkit.logo.Alignment
+import com.yandex.mapkit.logo.HorizontalAlignment.LEFT
+import com.yandex.mapkit.logo.VerticalAlignment.TOP
+import moxy.MvpAppCompatFragment
 
-abstract class MapMarkerFragment :Fragment() {//todo create child fragment
-    protected abstract val markerCallback :(Double, Double) -> Unit
+abstract class MapMarkerFragment :MvpAppCompatFragment() {//todo create child fragment
     protected abstract val buttonText :String
     protected lateinit var views :FragmentMapMarkerBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        MapKitFactory.initialize(requireContext())
+        lifecycle.addObserver(object :LifecycleEventObserver{
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                when(event){//other ignored
+                    Lifecycle.Event.ON_START -> {
+                        views.map.onStart()
+                        MapKitFactory.getInstance().onStart()
+                    }
+                    Lifecycle.Event.ON_STOP -> {
+                        views.map.onStop()
+                        MapKitFactory.getInstance().onStop()
+                    }
+                    else -> {}//ignore
+                }
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,28 +49,7 @@ abstract class MapMarkerFragment :Fragment() {//todo create child fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.save.text = buttonText
-        //todo add marker programmatically
-        views.marker.setOnTouchListener { v, event ->
-            val topMargin = views.root.getChildAt(0).height
-            val params = v.layoutParams as CoordinatorLayout.LayoutParams
-            when (event.action) {
-                MotionEvent.ACTION_UP -> {
-                    params.topMargin = event.rawY.toInt() - (v.height + topMargin)
-                    params.leftMargin = event.rawX.toInt() - (v.width / 2)
-                    v.layoutParams = params
-                    markerCallback.invoke(0.0, 0.0)//todo implement
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    params.topMargin = event.rawY.toInt() - (v.height + topMargin)
-                    params.leftMargin = event.rawX.toInt() - (v.width / 2)
-                    v.layoutParams = params
-                }
-                MotionEvent.ACTION_DOWN -> {
-                    params.gravity = Gravity.START or Gravity.TOP
-                    v.layoutParams = params
-                }
-            }
-            true
-        }
+        views.map.map.isRotateGesturesEnabled = false
+        views.map.map.logo.setAlignment(Alignment(LEFT, TOP))
     }
 }

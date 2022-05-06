@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/orderItemHistoryUserIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray7"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/avatar" />
+
+        <TextView
+            android:id="@+id/orderItemHistoryUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/orderItemHistoryUserIcon"
+            app:layout_constraintStart_toEndOf="@+id/orderItemHistoryUserIcon"
+            app:layout_constraintTop_toTopOf="@+id/orderItemHistoryUserIcon"
+            tools:text="Елена Б." />
+
+        <TextView
+            android:id="@+id/orderItemHistoryId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_regular"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textColor="@color/gray2"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/orderItemHistoryUserIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/orderItemHistoryUserIcon"
+            tools:text="№ 1234567890" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/orderItemHistoryCardImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemHistoryUserIcon">
+
+            <ImageView
+                android:id="@+id/orderItemHistoryPreview"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/bg_rectangle_border_round8"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/first_launch" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/orderItemHistoryMainBlockContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/orderItemHistoryCardImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/orderItemHistoryCardImage"
+            app:layout_constraintTop_toTopOf="@+id/orderItemHistoryCardImage">
+
+            <TextView
+                android:id="@+id/orderItemHistoryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_bold"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Вечернее платье" />
+
+            <TextView
+                android:id="@+id/orderItemHistoryPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/order_history_price"
+                android:textColor="@color/gray2"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/orderItemHistoryName"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemHistoryName" />
+
+            <TextView
+                android:id="@+id/orderItemHistoryPriceFinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_bold"
+                android:paddingTop="1dp"
+                android:textColor="@color/green"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/orderItemHistoryPrice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/orderItemHistoryPrice"
+                tools:text="840 Р" />
+
+            <TextView
+                android:id="@+id/orderItemHistoryDelivery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/order_history_delivery_date"
+                android:textColor="@color/gray2"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/orderItemHistoryPrice"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemHistoryPrice" />
+
+            <TextView
+                android:id="@+id/orderItemHistoryDeliveryDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_regular"
+                android:textColor="@color/green"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/orderItemHistoryDelivery"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/orderItemHistoryDelivery"
+                tools:text="12-14 ноября" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/orderItemHistoryTopDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/gray3"
+            app:layout_constraintTop_toBottomOf="@id/orderItemHistoryMainBlockContainer" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/orderItemHistoryDeliveryBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
+            app:layout_constraintTop_toBottomOf="@id/orderItemHistoryTopDivider">
+
+            <TextView
+                android:id="@+id/orderItemHistoryDeliveryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/order_history_delivery"
+                android:textColor="@color/gray2"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/orderItemHistoryDeliveryContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/imageView28"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/orderItemHistoryDeliveryTitle"
+                app:layout_constraintTop_toTopOf="@+id/orderItemHistoryDeliveryTitle"
+                tools:text="Курьером СДЭК в пункт выдачи" />
+
+            <TextView
+                android:id="@+id/orderItemHistoryDeliveryAdditional"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/order_history_delivery_more"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/orderItemHistoryDeliveryTitle"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemHistoryDeliveryContent" />
+
+            <ImageView
+                android:id="@+id/imageView28"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="7dp"
+                android:rotation="180"
+                android:src="@drawable/arrow_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/orderItemHistoryBottomDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray3"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemHistoryDeliveryBlock" />
+
+        <LinearLayout
+            android:id="@+id/orderItemHistoryStatusBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            app:layout_constraintTop_toBottomOf="@id/orderItemHistoryBottomDivider">
+
+            <ImageView
+                android:id="@+id/orderItemHistoryStatusImage"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_fill_checkcircle" />
+
+            <TextView
+                android:id="@+id/orderItemHistoryStatusContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="11dp"
+                android:fontFamily="@font/manrope_regular"
+                android:text="@string/order_history_completed"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/orderItemHistoryDeliveryTitle"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemHistoryDeliveryContent" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

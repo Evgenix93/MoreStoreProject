@@ -12,5 +12,6 @@ interface NewAddressView :MvpView {
     fun notFoundCity()
     fun validForm(valid :Boolean)
     fun back()
+    fun confirmDelete()
     fun showMessage(message :String)
 }

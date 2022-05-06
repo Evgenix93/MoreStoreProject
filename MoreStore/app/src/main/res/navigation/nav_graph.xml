@@ -235,6 +235,9 @@
             android:id="@+id/action_mainFragment_to_firstLaunchFragment"
             app:destination="@id/firstLaunchFragment" />
         <action
+            android:id="@+id/action_mainFragment_to_ordersCartFragment"
+            app:destination="@id/ordersCartFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_registration3Fragment"
             app:destination="@id/registration3Fragment" />
         <action
@@ -361,7 +364,7 @@
         android:label="FilterMaterialsFragment" />
     <fragment
         android:id="@+id/productDetailsFragment"
-        android:name="com.project.morestore.fragments.ProductDetailsFragment"
+        android:name="com.project.morestore.fragments.product.details.ProductDetailsFragment"
         android:label="ProductDetailsFragment" >
         <argument
             android:name="product"
@@ -389,6 +392,9 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_raiseProductFragment"
             app:destination="@id/raiseProductFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_ordersCartFragment"
+            app:destination="@id/ordersCartFragment" />
     </fragment>
     <fragment
         android:id="@+id/changeRegionFragment"
@@ -984,8 +990,12 @@
         android:label="SuccessPromoteFragment" />
     <fragment
         android:id="@+id/createOrderFragment"
-        android:name="com.project.morestore.fragments.OrderCreateFragment"
-        android:label="CreateOrderFragment" />
+        android:name="com.project.morestore.fragments.orders.create.OrderCreateFragment"
+        android:label="CreateOrderFragment" >
+        <argument
+            android:name="product"
+            app:argType="com.project.morestore.models.Product" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.project.morestore.fragments.FavoritesFragment"
@@ -1053,6 +1063,92 @@
         <action
             android:id="@+id/action_waitReviewSellersFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myAddressPickupFragment"
+        android:name="com.project.morestore.fragments.MyAddressPickupFragment"
+        android:label="MyAddressPickupFragment" />
+    <fragment
+        android:id="@+id/ordersCartFragment"
+        android:name="com.project.morestore.fragments.orders.cart.OrdersCartFragment"
+        android:label="OrdersCartFragment" >
+        <action
+            android:id="@+id/action_ordersCartFragment_to_ordersHistoryFragment"
+            app:destination="@id/ordersHistoryFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/ordersCartFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_ordersCartFragment_to_ordersActiveFragment"
+            app:destination="@id/ordersActiveFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/ordersCartFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_ordersCartFragment_to_createOrderFragment"
+            app:destination="@id/createOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ordersHistoryFragment"
+        android:name="com.project.morestore.fragments.orders.history.OrdersHistoryFragment"
+        android:label="OrdersHistoryFragment" >
+        <action
+            android:id="@+id/action_ordersHistoryFragment_to_ordersCartFragment"
+            app:destination="@id/ordersCartFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/ordersCartFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_ordersHistoryFragment_to_ordersActiveFragment"
+            app:destination="@id/ordersActiveFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/ordersCartFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/ordersActiveFragment"
+        android:name="com.project.morestore.fragments.orders.active.OrdersActiveFragment"
+        android:label="OrdersActiveFragment" >
+        <action
+            android:id="@+id/action_ordersActiveFragment_to_ordersCartFragment"
+            app:destination="@id/ordersCartFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/ordersCartFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_ordersActiveFragment_to_ordersHistoryFragment"
+            app:destination="@id/ordersHistoryFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/ordersCartFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_ordersActiveFragment_to_orderProblemsFragment"
+            app:destination="@id/orderProblemsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderProblemsFragment"
+        android:name="com.project.morestore.fragments.orders.problems.OrderProblemsFragment"
+        android:label="OrderProblemsFragment" >
+        <action
+            android:id="@+id/action_orderProblemsFragment_to_orderProblemsPhotoFragment"
+            app:destination="@id/orderProblemsPhotoFragment" />
+        <argument
+            android:name="productId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderProblemsPhotoFragment"
+        android:name="com.project.morestore.fragments.orders.problems.photos.OrderProblemsPhotoFragment"
+        android:label="OrderProblemsPhotoFragment" >
+        <argument
+            android:name="problemData"
+            app:argType="com.project.morestore.models.ProductProblemsData" />
+        <action
+            android:id="@+id/action_orderProblemsPhotoFragment_to_ordersActiveFragment"
+            app:destination="@id/ordersActiveFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/ordersActiveFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
 </navigation>

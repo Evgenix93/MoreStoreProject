@@ -1,9 +1,12 @@
 package com.project.morestore.models
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class DeliveryAddress(
     val city :String,//город
     val street :String,//улица
@@ -16,7 +19,7 @@ data class DeliveryAddress(
     val building :String?,//строение
     @Json(name = "house_flat")
     val apartment :String?//квартира
-)
+) :Parcelable
 
 /*
 {

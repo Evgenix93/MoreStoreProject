@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/gray3">
+
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar_titled_center" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="11dp"
+            android:paddingHorizontal="10dp"
+            android:paddingBottom="24dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/ManropeReg_16_gray2"
+                android:text="@string/myAddress_new_personal_title"
+                />
+
+            <!--todo replace by TitledTextField-->
+            <TextView
+                style="@style/App.TextView.Title.Field"
+                android:layout_marginTop="17dp"
+                android:text="@string/myAddress_new_personal_fio"
+                />
+
+            <EditText android:id="@+id/fullname"
+                style="@style/App.EditText.Field"
+                android:inputType="textCapWords"
+                />
+
+            <TextView
+                style="@style/App.TextView.Title.Field"
+                android:layout_marginTop="16dp"
+                android:text="@string/myAddress_new_personal_phone"
+                />
+
+            <EditText android:id="@+id/phoneNumber"
+                style="@style/App.EditText.Field"
+                android:inputType="phone"
+                />
+
+            <CheckBox android:id="@+id/defaultAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/green"
+                android:text="@string/myAddress_new_address_default"
+                android:textAppearance="@style/ManropeReg_14_black"
+                android:layout_marginTop="16dp"
+                />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <com.google.android.material.button.MaterialButton android:id="@+id/delete"
+        style="@style/App.Button.Action"
+        android:text="@string/myAddress_new_address_delete"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <com.google.android.material.button.MaterialButton android:id="@+id/save"
+        style="@style/App.Button.Main.Bottom"
+        android:text="@string/myAddress_new_address_save"
+        />
+
+</LinearLayout>

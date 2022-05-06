@@ -6,19 +6,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@+id/map"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@drawable/bg_map"
         >
 
-        <View android:id="@+id/marker"
-            android:layout_width="36dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_geomarker_select"
-            />
+        <com.yandex.mapkit.mapview.MapView android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <LinearLayout android:id="@+id/bottomSheet"
             android:layout_width="match_parent"
@@ -46,6 +42,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
             android:layout_gravity="bottom|end"
+            android:clipChildren="false"
             app:layout_anchorGravity="top|end"
             app:layout_anchor="@id/bottomSheet"
             app:layout_dodgeInsetEdges="bottom"

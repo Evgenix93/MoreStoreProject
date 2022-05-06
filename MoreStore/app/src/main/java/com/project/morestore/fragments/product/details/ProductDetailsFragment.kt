@@ -1,4 +1,4 @@
-package com.project.morestore.fragments
+package com.project.morestore.fragments.product.details
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -10,25 +10,22 @@ import android.util.Range
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
-import androidx.core.view.marginLeft
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayoutMediator
 import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.PhotoViewPagerAdapter
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.databinding.FragmentProductBinding
+import com.project.morestore.fragments.ChatFragment
+import com.project.morestore.fragments.LotChatsFragment
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -37,17 +34,19 @@ import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import java.util.*
 
 class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), MainMvpView {
+
     private val binding: FragmentProductBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
+
     private val args: ProductDetailsFragmentArgs by navArgs()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var isLiked = false
     private var product: Product? = null
     private var userId: Long = 0
     private var dialogs: List<DialogWrapper>? = null
+    private var currentState: Boolean = false;
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,7 +58,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         showDialog()
         bind(args.product, userId, null)
         getProduct(args.productId?.toLong())
-        if(args.product != null)
+        if (args.product != null)
             getCurrentUser()
     }
 
@@ -98,35 +97,42 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         }
 
         binding.chatBtn.setOnClickListener {
-            if(Token.token.isNotEmpty())
-            findNavController().navigate(
-                R.id.action_productDetailsFragment_to_chatFragment,
-                bundleOf(
-                    ChatFragment.USER_ID_KEY to product?.user?.id,
-                    ChatFragment.PRODUCT_ID_KEY to product?.id,
-                    Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
+            if (Token.token.isNotEmpty())
+                findNavController().navigate(
+                    R.id.action_productDetailsFragment_to_chatFragment,
+                    bundleOf(
+                        ChatFragment.USER_ID_KEY to product?.user?.id,
+                        ChatFragment.PRODUCT_ID_KEY to product?.id,
+                        Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
+                    )
                 )
-            )
             else
                 findNavController().navigate(R.id.cabinetGuestFragment)
         }
 
-        binding.openChatsButton.setOnClickListener{
+        binding.openChatsButton.setOnClickListener {
             findNavController().navigate(R.id.chatLotsFragment,
-            Bundle().apply {
-                putLong(LotChatsFragment.PRODUCT_ID_KEY, product!!.id)
-                putString(LotChatsFragment.PRODUCT_NAME, product!!.name)
-                putFloat(LotChatsFragment.PRODUCT_PRICE_KEY, product!!.price)
-                putString(LotChatsFragment.PRODUCT_IMAGE_KEY, product!!.photo[0].photo)
-            })
+                Bundle().apply {
+                    putLong(LotChatsFragment.PRODUCT_ID_KEY, product!!.id)
+                    putString(LotChatsFragment.PRODUCT_NAME, product!!.name)
+                    putFloat(LotChatsFragment.PRODUCT_PRICE_KEY, product!!.price)
+                    putString(LotChatsFragment.PRODUCT_IMAGE_KEY, product!!.photo[0].photo)
+                })
         }
 
-        binding.raiseProductButton.setOnClickListener{
+        binding.raiseProductButton.setOnClickListener {
+
             findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToRaiseProductFragment())
         }
 
         binding.addToCartBtn.setOnClickListener {
-            findNavController().navigate(R.id.createOrderFragment)
+            if (product != null) {
+                if (!currentState) {
+                    presenter.addProductToCart(productId = product!!.id, userId)
+                }else{
+                    presenter.removeProductFromCart(productId = product!!.id, userId)
+                }
+            }
         }
     }
 
@@ -150,7 +156,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         isLiked = product.wishlist ?: false
         this.product = product
         initShare(product.id)
-        val photoVideoFilesUris = product.photo.map { it.photo } + product.video?.map { it.video }.orEmpty()
+        val photoVideoFilesUris =
+            product.photo.map { it.photo } + product.video?.map { it.video }.orEmpty()
         initViewPager(photoVideoFilesUris)
         binding.toolbar.titleTextView.text = product.name
         binding.chosenBrandTextView.text =
@@ -270,7 +277,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private fun initViewPager(filesUriList: List<String>) {
         val photoAdapter = PhotoViewPagerAdapter(this) { fileUri ->
             Log.d("mylog", fileUri)
-            if(fileUri.contains("mp4"))
+            if (fileUri.contains("mp4"))
                 presenter.playVideo(fileUri = fileUri.toUri())
 
         }
@@ -289,13 +296,19 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.toolbar.titleTextView.text = args.product?.name
         binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener {
-            if(findNavController().previousBackStackEntry?.destination?.id == R.id.createProductStep6Fragment)
+            if (findNavController().previousBackStackEntry?.destination?.id == R.id.createProductStep6Fragment)
                 findNavController().navigate(R.id.catalogFragment)
             else
                 findNavController().popBackStack()
         }
         binding.toolbar.actionIcon.setOnClickListener {
-            findNavController().navigate(R.id.createOrderFragment)
+            if (product != null) {
+                if (!currentState) {
+                    presenter.addProductToCart(productId = product!!.id, userId)
+                }else{
+                    presenter.removeProductFromCart(productId = product!!.id, userId)
+                }
+            }
         }
     }
 
@@ -354,15 +367,15 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.userClickableView.isVisible = false
         binding.textView17.isVisible = false
         binding.productList.isVisible = false
-         if(dialogWrappers != null) {
-             if (dialogWrappers.none { it.product?.id == product.id })
-                 binding.promoteInfoCard.isVisible = true
-             else {
-                 binding.buyersCard.isVisible = true
-                 binding.buyersCount.text =
-                     dialogWrappers.filter { it.product?.id == product.id }.size.toString()
-             }
-         }
+        if (dialogWrappers != null) {
+            if (dialogWrappers.none { it.product?.id == product.id })
+                binding.promoteInfoCard.isVisible = true
+            else {
+                binding.buyersCard.isVisible = true
+                binding.buyersCount.text =
+                    dialogWrappers.filter { it.product?.id == product.id }.size.toString()
+            }
+        }
     }
 
 
@@ -373,7 +386,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToProductIsCreatedDialog())
     }
 
-    private fun getDialogs(){
+    private fun getDialogs() {
         presenter.getDialogs()
     }
 
@@ -381,13 +394,13 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         when (result) {
             is List<*> -> {
                 //if (result.isNotEmpty() && result[0] is Long) {
-                   // messageLike(result as List<Long>)
-                if(result[0] is Product) {
+                // messageLike(result as List<Long>)
+                if (result[0] is Product) {
                     productAdapter.updateList(result as List<Product>)
                 }
                 if(result[0] is DialogWrapper){
                     loadYouMayLikeProducts(null)
-                   bind(product, userId, result as List<DialogWrapper>)
+                    bind(product, userId, result as List<DialogWrapper>)
                     dialogs = result
                 }
                 if(result[0] is Long){
@@ -412,19 +425,35 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 getCurrentUser()
             }
 
-            is Intent -> {Log.d("MyDebug", "startIntent")
+            is Intent -> {
+                Log.d("MyDebug", "startIntent")
                 startActivity(result)
             }
 
             is Long -> {
                 userId = result
+                if (product != null) {
+                    presenter.loadCart(userId, product!!.id) {
+                        currentState = it;
+                        if (currentState) {
+                            binding.addToCartBtn.text = getText(R.string.product_remove_from_cart)
+                        }
+                    }
+                }
                 Log.d("MyDebug", "userId = $result")
-                if(result == 0) {
+                if (result == 0) {
                     loadYouMayLikeProducts(args.product?.category)
                     bind(product, userId, null)
-                }
-                else
+                } else
                     getDialogs()
+            }
+            is String -> {
+                currentState = !currentState
+                if (currentState) {
+                    findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToOrdersCartFragment())
+                } else {
+                    binding.addToCartBtn.text = getText(R.string.product_add_cart)
+                }
             }
         }
     }
@@ -449,4 +478,5 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     override fun success() {
         findNavController().navigate(R.id.catalogFragment)
     }
+
 }

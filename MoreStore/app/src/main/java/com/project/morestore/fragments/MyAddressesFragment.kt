@@ -5,14 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.adapters.MyAddressesAdapter
 import com.project.morestore.databinding.FragmentMyaddressesBinding
 import com.project.morestore.dialogs.AddAddressDialog
+import com.project.morestore.fragments.MapMarkerPickupsFragment.Companion.PICKUP_ADDRESS
 import com.project.morestore.fragments.base.FullscreenMvpFragment
+import com.project.morestore.models.AddressType
+import com.project.morestore.models.DeliveryAddress
 import com.project.morestore.models.MyAddress
+import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.MyAddressesView
 import com.project.morestore.presenters.MyAddressesPresenter
 import com.project.morestore.repositories.AddressesRepository
@@ -23,7 +28,19 @@ import com.project.morestore.util.setSpace
 import moxy.ktx.moxyPresenter
 
 class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
-    private val adapter = MyAddressesAdapter()
+    private val adapter = MyAddressesAdapter{
+        if(it.type == AddressType.CDEK.id) {
+            findNavController().navigate(
+                R.id.myAddressPickupFragment,
+                bundleOf(MyAddressPickupFragment.EDIT_ADDRESS to it)
+            )
+        } else {
+            findNavController().navigate(
+                R.id.newAddressFragment,
+                bundleOf(NewAddressFragment.EDIT_ADDRESS to it)
+            )
+        }
+    }
     private lateinit var views : FragmentMyaddressesBinding
     private val presenter :MyAddressesPresenter by moxyPresenter {
         MyAddressesPresenter(AddressesRepository.apply { init(Network.addresses) })
@@ -43,15 +60,10 @@ class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
         }
         with(views){
             add.setOnClickListener {
-                //select address type
-//                AddAddressDialog {
-//                    findNavController().navigate(R.id.newAddressFragment,
-//                        bundleOf(AddAddressDialog.Type::class.simpleName!! to it.ordinal)
-//                    )
-//                }.show(childFragmentManager, null)
-                findNavController().navigate(R.id.newAddressFragment,
-                    bundleOf(AddAddressDialog.Type::class.simpleName!! to AddAddressDialog.Type.DELIVERY)
-                )
+                AddAddressDialog {
+                    if(it == AddAddressDialog.Type.PICKUP) showRegions()
+                    else findNavController().navigate(R.id.newAddressFragment)
+                }.show(childFragmentManager, null)
             }
         }
     }
@@ -73,4 +85,22 @@ class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
         adapter.setItems(addresses)
     }
     //endregion View implementation
+
+    private fun showRegions(){
+        setFragmentResultListener(CitiesFragment.REQUEST_KEY) { _, bundle ->
+            showMap(bundle.getParcelable<ParcelRegion>(CitiesFragment.SINGLE)!!.entity)
+        }
+        findNavController().navigate(R.id.citiesFragment, bundleOf(CitiesFragment.TYPE to 0))
+    }
+
+    private fun showMap(region :Region){
+        setFragmentResultListener(MapMarkerPickupsFragment.KEY_ADDRESS){ _, bundle ->
+            showUserData(bundle.getParcelable(PICKUP_ADDRESS)!!)
+        }
+        findNavController().navigate(R.id.mapMarkerPickupsFragment, bundleOf(MapMarkerPickupsFragment.REGION to region.name))
+    }
+
+    private fun showUserData(deliveryAddress :DeliveryAddress){
+        findNavController().navigate(R.id.myAddressPickupFragment, bundleOf(MyAddressPickupFragment.ADDRESS to deliveryAddress))
+    }
 }

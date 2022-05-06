@@ -2,9 +2,7 @@ package com.project.morestore.presenters
 
 import android.util.Log
 import com.project.morestore.Geolocator
-import com.project.morestore.models.Address
-import com.project.morestore.models.DeliveryAddress
-import com.project.morestore.models.MyAddressData
+import com.project.morestore.models.*
 import com.project.morestore.mvpviews.NewAddressView
 import com.project.morestore.repositories.AddressesRepository
 import com.project.morestore.repositories.GeoRepository
@@ -20,38 +18,39 @@ class NewAddressPresenter(
     private val geolocator :Geolocator,
     private val geoRepository :GeoRepository,
     private val userProvider :UserNetworkGateway,
-    private val addressRepository :AddressesRepository
+    private val addressRepository :AddressesRepository,
+    private val address : MyAddress? = null
 ) :MvpPresenter<NewAddressView>() {
     private val displayError = CoroutineExceptionHandler { _, ex ->
         viewState.showMessage(ex.message ?: "неизвестная ошибка")
     }
-    var fullname = ""
+    var fullname = address?.name ?: ""
         set(value){
             field = value
             viewState.validForm(validateForm())
         }
-    var phone = ""
+    var phone = address?.phone ?: ""
         set(value){
             field = value
             viewState.validForm(validateForm())
         }
-    var city = ""
+    var city = address?.address?.city ?: ""
         set(value){
             field = value
             searchUserCity?.cancel()
             viewState.validForm(validateForm())
         }
-    var street = ""
+    var street = address?.address?.street ?: ""
         set(value){
             field = value
             viewState.validForm(validateForm())
         }
-    var index = ""
+    var index = address?.address?.index ?: ""
         set(value){
             field = value
             viewState.validForm(validateForm())
         }
-    var house = ""
+    var house = address?.address?.house ?: ""
         set(value){
             field = value
             viewState.validForm(validateForm())
@@ -63,8 +62,10 @@ class NewAddressPresenter(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        viewState.requestCity()
-        presenterScope.launch { requestUser() }
+        if(address == null) {
+            viewState.requestCity()
+            presenterScope.launch { requestUser() }
+        }
     }
 
     fun findCity(){
@@ -96,22 +97,55 @@ class NewAddressPresenter(
 
     fun save(isDefault :Boolean){
         presenterScope.launch(displayError) {
-            addressRepository.createAddress(
-                MyAddressData(
-                    fullname,
-                    phone.replace(Regex("\\D"), ""),
-                    DeliveryAddress(
-                        city,
-                        street,
-                        index,
-                        house,
-                        housing.takeIf { it.isFilled() },
-                        building.takeIf { it.isFilled() },
-                        apartment.takeIf { it.isFilled() }
-                    ),
-                    isDefault
+            if(address == null) {
+                addressRepository.createAddress(
+                    MyAddressData(
+                        fullname,
+                        phone.replace(Regex("\\D"), ""),
+                        DeliveryAddress(
+                            city,
+                            street,
+                            index,
+                            house,
+                            housing.takeIf { it.isFilled() },
+                            building.takeIf { it.isFilled() },
+                            apartment.takeIf { it.isFilled() }
+                        ),
+                        isDefault,
+                        AddressType.HOME.id
+                    )
                 )
-            )
+            } else {
+                addressRepository.editAddress(
+                    MyAddress(
+                        address.id,
+                        phone.replace(Regex("\\D"), ""),
+                        DeliveryAddress(
+                            city,
+                            street,
+                            index,
+                            house,
+                            housing.takeIf { it.isFilled() },
+                            building.takeIf { it.isFilled() },
+                            apartment.takeIf { it.isFilled() }
+                        ),
+                        fullname,
+                        isDefault,
+                        AddressType.HOME.id
+                    )
+                )
+            }
+            viewState.back()
+        }
+    }
+
+    fun delete(){
+        viewState.confirmDelete()
+    }
+
+    fun confirmDelete(){
+        presenterScope.launch {
+            addressRepository.deleteAddress(address!!)
             viewState.back()
         }
     }

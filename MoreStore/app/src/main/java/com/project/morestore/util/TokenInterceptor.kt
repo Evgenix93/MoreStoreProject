@@ -12,6 +12,5 @@ class TokenInterceptor: Interceptor {
             .build()
 
         return chain.proceed(newRequest)
-
     }
 }

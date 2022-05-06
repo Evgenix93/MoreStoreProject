@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_simple" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/problemGoodsDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingStart="0dp"
+                android:paddingEnd="10dp"
+                android:text="@string/order_problem_content"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/problemGoodsPhoneInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/manrope_bold"
+                android:text="@string/order_problem_phone"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/problemGoodsDescription"
+                app:layout_constraintTop_toBottomOf="@+id/problemGoodsDescription" />
+
+            <EditText
+                android:id="@+id/problemGoodsPhone"
+                style="@style/edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:autofillHints="+7 (999) 111-22-33"
+                android:background="@drawable/ic_field"
+                android:fontFamily="@font/manrope_regular"
+                android:inputType="phone"
+                app:layout_constraintEnd_toEndOf="@+id/problemGoodsDescription"
+                app:layout_constraintStart_toStartOf="@+id/problemGoodsPhoneInfo"
+                app:layout_constraintTop_toBottomOf="@+id/problemGoodsPhoneInfo" />
+
+            <View
+                android:id="@+id/problemGoodsDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/gray1"
+                app:layout_constraintStart_toStartOf="@+id/problemGoodsPhone"
+                app:layout_constraintTop_toBottomOf="@+id/problemGoodsPhone" />
+
+            <RelativeLayout
+                android:id="@+id/problemGoodsReasonContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/ic_field"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/problemGoodsDivider"
+                app:layout_constraintTop_toBottomOf="@+id/problemGoodsDivider">
+
+                <TextView
+                    android:id="@+id/problemGoodsReasonContent"
+                    style="@style/edit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/manrope_regular"
+                    android:text="@string/order_problem_reason"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="17dp"
+                    android:src="@drawable/ic_arrow_dropdown" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/problemGoodsCommentInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/manrope_bold"
+                android:text="@string/order_problem_comment"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/problemGoodsReasonContainer" />
+
+            <EditText
+                android:id="@+id/problemGoodsCommentContent"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rectangle_bordered_round8"
+                android:fontFamily="@font/manrope_regular"
+                android:gravity="start|top"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                app:layout_constraintEnd_toEndOf="@+id/problemGoodsReasonContainer"
+                app:layout_constraintStart_toStartOf="@+id/problemGoodsCommentInfo"
+                app:layout_constraintTop_toBottomOf="@+id/problemGoodsCommentInfo" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/problemGoodsCommentContent"
+                app:layout_constraintTop_toBottomOf="@+id/problemGoodsCommentContent">
+
+                <TextView
+                    android:id="@+id/problemGoodsCommentsLength"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_regular"
+                    android:text="@string/order_problem_comment_min_size"
+                    android:textColor="@color/gray2"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/problemGoodsCommentsLengthDivider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_regular"
+                    android:text="@string/order_problem_comment_size_divider"
+                    android:textColor="@color/gray2"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/problemGoodsCommentsMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_regular"
+                    android:text="@string/order_problem_comment_max_size"
+                    android:textColor="@color/gray2"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/problemGoodsNext"
+                style="@style/buttonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:enabled="false"
+                android:text="@string/order_problem_next"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/problemGoodsCommentContent"
+                app:layout_constraintStart_toStartOf="@+id/problemGoodsCommentContent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="1.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

@@ -10,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
@@ -100,4 +102,14 @@ fun EditText.setPhoneField(){
 
 fun Toolbar.attachNavigation(){
     setNavigationOnClickListener { findNavController().popBackStack() }//todo apply for whole app
+}
+
+val EditText.string :String get() = text.toString()
+
+fun Fragment.defToast(message :String){
+    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+}
+
+fun Fragment.defToast(@StringRes messageId :Int){
+    Toast.makeText(requireContext(), messageId, Toast.LENGTH_SHORT).show()
 }

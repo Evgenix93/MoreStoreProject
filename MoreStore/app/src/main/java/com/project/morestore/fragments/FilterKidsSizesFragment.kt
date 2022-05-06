@@ -82,7 +82,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
             setHasFixedSize(true)
 
         }
-        //presenter.getAllSizes()
+
 
 
     }
@@ -92,77 +92,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
     }
 
     private fun convertSizeToSizeLine(size: Size): SizeLine {
-        val int = size.name
-        var w = ""
-        var itRuFr = ""
-        var us = ""
-        var uk = ""
-        when (size.name) {
-            "XXS" -> {
-                w = "26-27"
-                itRuFr = "42"
-                us = "32"
-                uk = "32"
-            }
-            "XS" -> {
-                w = "28-29"
-                itRuFr = "44"
-                us = "34"
-                uk = "34"
-            }
-            "S" -> {
-                w = "30-31"
-                itRuFr = "46"
-                us = "36"
-                uk = "36"
-            }
-            "M" -> {
-                w = "32-33"
-                itRuFr = "48"
-                us = "38"
-                uk = "38"
-            }
-            "L" -> {
-                w = "34-35"
-                itRuFr = "50"
-                us = "40"
-                uk = "40"
-            }
-            "XL" -> {
-                w = "36-37"
-                itRuFr = "52"
-                us = "42"
-                uk = "42"
-            }
-            "XXL" -> {
-                w = "38-39"
-                itRuFr = "54"
-                us = "44"
-                uk = "44"
-            }
-            "3XL" -> {
-                w = "40-41"
-                itRuFr = "56"
-                us = "46"
-                uk = "46"
-            }
-            "4XL" -> {
-                w = "42-43"
-                itRuFr = "58"
-                us = "48"
-                uk = "48"
-            }
-            "5XL" -> {
-                w = "44-45"
-                itRuFr = "60"
-                us = "50"
-                uk = "60"
-            }
-            else -> {
-            }
-        }
-
-        return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false, idCategory = -1)
+        return SizeLine(size.id, size.name, size.w, size.fr, size.us, size.uk, size.chosen ?: false, idCategory = size.id_category ?: -1)
 
 
     }
@@ -179,152 +109,6 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
             idCategory = size.id_category ?: -1
         )
     }
-    /*
-    val int = size.name
-    var w = ""
-    var itRuFr = ""
-    var us = ""
-    var uk = ""
-    when (size.name) {
-        "35" -> {
-
-        w = "",
-                itRuFr = "36",
-        us = "5",
-        uk = "2"
-    }
-        ,
-
-            "71" -> {
-            w = "35.5",
-
-            w = ""
-            itRuFr = "36.5"
-            us = "5.5"
-            uk = "2.5"
-        }
-
-        ,
-
-
-
-            "36" -> {
-            w = ""
-            itRuFr = "37"
-            us = "6"
-            uk = "3"
-
-
-        },
-        {
-
-
-            "36.6" ->
-                w =  73,
-                itRuFr =  "36.5",
-            us = 6.5,
-            uk = 3.5
-
-
-            }
-        },
-
-    "id": 75,
-    "name": "37.5",
-    "ico": "FR'38.5';US'7.5';UK'4.5'",
-    "id_category": 6
-
-    "37.5" ->
-    w = ""
-    itRuFr = "38.5"
-    us = "7.5"
-    uk = "4.5"
-
-
-
-
-           "37" ->
-            w
-            itRuFr = "38"
-            us = "4"
-            uk = "4"
-
-
-        "38" -> {
-            w = ""
-            itRuFr = "38.5"
-            us = "7.5"
-            uk = "4.5"
-        }
-        "38.5" -> {
-            w = ""
-            itRuFr = "39.5"
-            us = "8.5"
-            uk = "5.5"
-        }
-        "39" -> {
-            w = ""
-            itRuFr = "40"
-            us = "9"
-            uk = "6"
-        }
-        "39.5" -> {
-            w = ""
-            itRuFr = "40.5"
-            us = "9.5"
-            uk = "6.5"
-        }
-        "40" -> {
-            w = ""
-            itRuFr = "41"
-            us = "10"
-            uk = "7"
-        }
-        "40.5" -> {
-            w = ""
-            itRuFr = "41.5"
-            us = "10.5"
-            uk = "7.5"
-        }
-        "41" -> {
-            w = ""
-            itRuFr = "42"
-            us = "11"
-            uk = "8"
-        }
-        "41.5" -> {
-            w = ""
-            itRuFr = "42.5"
-            us = "11.5"
-            uk = "8.5"
-        }
-        "42" -> {
-            w = ""
-            itRuFr = "43"
-            us = "12"
-            uk = "9"
-        }
-        "42.5" -> {
-            w = ""
-            itRuFr = "43.5"
-            us = "12.5"
-            uk = "9.5"
-        }
-
-        "43" ->  {
-            w = ""
-            itRuFr = "44"
-            us = "13"
-            uk = "10"
-        }
-        else -> {
-        }
-
-
-    return SizeLine(size.id, int, w, itRuFr, us, uk, size.chosen ?: false)
-
-
-}*/
 
     private fun loadFilter() {
         presenter.getFilter()
@@ -346,7 +130,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenTopSizesWomen.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int.orEmpty(), 1, it.isSelected, it.itRuFr, it.us, it.uk) })
+                            .map { Size(it.id, it.int.orEmpty(), 4, it.isSelected, it.itRuFr, it.us, it.uk) })
                 }
                 if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesWomen.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesWomen.size) {
                     bottomSizeCardAdapter.updateList(
@@ -354,7 +138,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenBottomSizesWomen.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int.orEmpty(), 2, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 5, it.isSelected) })
                 }
                 if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizesWomen.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizesWomen.size) {
 
@@ -363,7 +147,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenShoosSizesWomen.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int.orEmpty(), 3, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 6, it.isSelected) })
                 }
             }
             isForMen -> {
@@ -404,7 +188,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenTopSizesKids.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int.orEmpty(), 1, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 7, it.isSelected) })
                 }
                 if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesKids.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesKids.size) {
 
@@ -413,7 +197,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenBottomSizesKids.size == bottomSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int.orEmpty(), 2, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 8, it.isSelected) })
                 }
                 if (shoesSizeCardAdapter.getSizes().size == filter.chosenShoosSizesKids.size || shoesSizeCardAdapter.getSizes().size + 1 == filter.chosenShoosSizesKids.size) {
 
@@ -422,7 +206,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenShoosSizesKids.size == shoesSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int.orEmpty(), 3, it.isSelected) })
+                            .map { Size(it.id, it.int.orEmpty(), 9, it.isSelected) })
                 }
             }
         }
@@ -484,12 +268,6 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
     override fun onStop() {
         super.onStop()
         saveSizes()
-        //FilterState.filter.chosenTopSizes = topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) } + if(FilterState.filter.chosenTopSizes.isNotEmpty()) listOf(FilterState.filter.chosenTopSizes.last()) else listOf(
-        //   SizeLine(0, "Другое", "", "", "", "", false)
-        // )
-        // FilterState.filter.chosenBottomSizes = bottomSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) } + if(FilterState.filter.chosenBottomSizes.isNotEmpty()) listOf(FilterState.filter.chosenBottomSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
-        // FilterState.filter.chosenShoosSizes = shoesSizeCardAdapter.getSizes().map { convertShoeSizeToSizeLine(it) } + if(FilterState.filter.chosenShoosSizes.isNotEmpty()) listOf(FilterState.filter.chosenShoosSizes.last()) else listOf(SizeLine(0, "Другое", "", "", "", "", false))
-
     }
 
     override fun success(result: Any) {
@@ -514,20 +292,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                     val list = it.ico?.split(';').orEmpty()
                     it
                 })
-            //Size(it.id.toInt(), it.name, list[0].removePrefix("W").removeSurrounding("'"), list[1].removePrefix("IT/RU/FR").removeSurrounding("'"), list[2].removePrefix("US").removeSurrounding("'"), list[3].removePrefix("UK").removeSurrounding("'"), false)
-            //Size(it.id.toInt(), it.name, it.idCategory.toInt(), false, list[0].removePrefix("FR").removeSurrounding("'"), list[1].removePrefix("US").removeSurrounding("'"), list[2].removePrefix("UK").removeSurrounding("'")) })
-            //val bottomSizes = (result).filter { it.id_category == 2 }.sortedBy { it.toInt() }
-            //val shoosSizes = (result).filter { it.id_category == 3 }.sortedBy { it.toInt() }
-            // if (topSizes.size + 1 == FilterState.filter.chosenTopSizes.size) {
-            //   topSizeCardAdapter.updateList(FilterState.filter.chosenTopSizes.map {
-            //     Size(
-            //       it.id,
-            //     it.int,
-            //   1,
-            // it.isSelected
-            // )
-            // }.toMutableList().apply { removeLast() })
-            //} else {
+
             if (sizes[0].idCategory?.toInt() == 1 || sizes[0].idCategory?.toInt() == 4 || sizes[0].idCategory?.toInt() == 7)
                 topSizeCardAdapter.updateList(sizes.map {
                     val list = it.ico?.split(';').orEmpty()
@@ -543,23 +308,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                     )
 
                 })
-            // })
-            //}
-            //if (bottomSizes.size + 1 == FilterState.filter.chosenBottomSizes.size) {
-            //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
-            //val list = FilterState.filter.chosenBottomSizes.map {
-            //  Size(
-            //    it.id,
-            //  it.int,
-            // 2,
-            // it.isSelected
-            // )
-            //}
-            // bottomSizeCardAdapter.updateList(list.toMutableList().apply { removeLast() })
-            // Log.d("mylog3", FilterState.filter.chosenBottomSizes.toString())
 
-            //} else {
-            //  Log.d("mylog3", FilterState.filter.chosenBottomSizes.size.toString())
             if(sizes[0].idCategory?.toInt() == 2 || sizes[0].idCategory?.toInt() == 5 || sizes[0].idCategory?.toInt() == 8)
             bottomSizeCardAdapter.updateList(sizes.map {
                 val list = it.ico?.split(';').orEmpty()
@@ -574,18 +323,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                     uk = if(list.isNotEmpty()) list[3].removePrefix("UK").removeSurrounding("'")else ""
                 )
             })
-            //}
 
-            //  if (shoosSizes.size + 1 == FilterState.filter.chosenShoosSizes.size) {
-            //    shoesSizeCardAdapter.updateList(FilterState.filter.chosenShoosSizes.map {
-            //      Size(
-            //        it.id,
-            //      it.int,
-            //    3,
-            //  it.isSelected
-            // )
-            // }.toMutableList().apply { removeLast() })
-            // } else {
             if (sizes[0].idCategory?.toInt() == 3 || sizes[0].idCategory?.toInt() == 6 || sizes[0].idCategory?.toInt() == 9)
                 shoesSizeCardAdapter.updateList(sizes.map {
                     val list = it.ico?.split(';').orEmpty()
@@ -600,7 +338,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                     )
 
                 })
-            //}
+
             isSizesLoaded = true
             loadFilter()
         }

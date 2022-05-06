@@ -18,6 +18,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "MAP_KEY", "\"58d995df-fec6-45dd-aeb9-f913994fd48f\"")
     }
 
     buildTypes {
@@ -102,6 +103,8 @@ dependencies {
 
     //location
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+    //map
+    implementation 'com.yandex.android:maps.mobile:4.0.0-full'
 
     //camera
     def camerax_version = "1.1.0-beta01"

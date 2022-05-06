@@ -84,9 +84,9 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
 
     override fun showSuccess(review :Boolean) {
         views.progressBar.isVisible = false
-        FeedbackCompleteDialog(requireContext(), review){
+        FeedbackCompleteDialog(requireContext(), {
             findNavController().popBackStack(R.id.sellerProfileFragment, false)
-        }.show()
+        }).show()
     }
 
     override fun mediaUrisSaved() {

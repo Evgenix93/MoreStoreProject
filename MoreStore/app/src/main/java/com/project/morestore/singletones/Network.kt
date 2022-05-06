@@ -56,6 +56,10 @@ object Network {
     val geo :GeoApi get() = retrofit.create()
     val userServerApi :UserServerApi get() = retrofit.create()
     val addresses :AddressesNetwork get() = retrofit.create()
+    val cdekAddresses :CdekAddressApi get() = retrofit.create()
+
+    val ordersApi :OrdersApi
+    get() = retrofit.create()
 
     val brandApi :BrandApi get() = retrofit.create()
 

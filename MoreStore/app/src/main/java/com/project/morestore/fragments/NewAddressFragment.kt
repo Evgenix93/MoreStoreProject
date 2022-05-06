@@ -4,6 +4,7 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,10 +15,15 @@ import androidx.navigation.fragment.findNavController
 import com.project.morestore.Geolocator
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentMyaddressNewBinding
-import com.project.morestore.dialogs.AddAddressDialog
+import com.project.morestore.dialogs.AddressDeleteDialog
 import com.project.morestore.fragments.CitiesFragment.Companion.REQUEST_KEY
 import com.project.morestore.fragments.CitiesFragment.Companion.SINGLE
 import com.project.morestore.fragments.CitiesFragment.Companion.TYPE
+import com.project.morestore.fragments.MapMarkerAddressesFragment.Companion.CITY
+import com.project.morestore.fragments.MapMarkerAddressesFragment.Companion.HOUSE
+import com.project.morestore.fragments.MapMarkerAddressesFragment.Companion.INDEX
+import com.project.morestore.fragments.MapMarkerAddressesFragment.Companion.STREET
+import com.project.morestore.models.MyAddress
 import com.project.morestore.mvpviews.NewAddressView
 import com.project.morestore.presenters.NewAddressPresenter
 import com.project.morestore.repositories.AddressesRepository
@@ -29,14 +35,16 @@ import com.project.morestore.util.setPhoneField
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class NewAddressFragment : MvpAppCompatFragment(), NewAddressView {
+class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
+    companion object { const val EDIT_ADDRESS = "edit_address" }
     private lateinit var views : FragmentMyaddressNewBinding
     private val presenter :NewAddressPresenter by moxyPresenter {
         NewAddressPresenter(
             Geolocator(requireContext()),
             GeoRepository(),
             UserNetworkGateway(),
-            AddressesRepository
+            AddressesRepository,
+            arguments?.getParcelable(EDIT_ADDRESS)
         )
     }
     //todo create delegate
@@ -79,10 +87,16 @@ class NewAddressFragment : MvpAppCompatFragment(), NewAddressView {
                 }
             phoneNumber.apply{ setText("+7 (") }.setPhoneField()
             selectOnMap.setOnClickListener {
-                if(requireArguments().getInt(AddAddressDialog.Type::class.simpleName) == AddAddressDialog.Type.COURIER.ordinal)
-                    findNavController().navigate(R.id.mapMarkerAddressesFragment)
-                else
-                    findNavController().navigate(R.id.mapMarkerPickupsFragment)
+                setFragmentResultListener(MapMarkerAddressesFragment.KEY){_, bundle ->
+                    bundle.getString(CITY)?.let {
+                        presenter.city = it
+                        showCity(it)
+                    }
+                    bundle.getString(STREET)?.let { views.street.setText(it) }
+                    bundle.getString(INDEX)?.let { views.index.setText(it) }
+                    bundle.getString(HOUSE)?.let { views.house.setText(it) }
+                }
+                findNavController().navigate(R.id.mapMarkerAddressesFragment)
             }
             city.setOnClickListener {
                 setFragmentResultListener(REQUEST_KEY) { _, bundle ->
@@ -98,6 +112,19 @@ class NewAddressFragment : MvpAppCompatFragment(), NewAddressView {
             }
             save.setOnClickListener {
                 presenter.save(defaultAddress.isChecked)
+            }
+            arguments?.getParcelable<MyAddress>(EDIT_ADDRESS)?.let {
+                showFullname(it.name)
+                showPhone(it.phone)
+                showCity(it.address.city)
+                street.setText(it.address.street)
+                index.setText(it.address.index)
+                house.setText(it.address.house)
+                building.setText(it.address.building)
+                housing.setText(it.address.housing)
+                apartment.setText(it.address.apartment)
+                delete.visibility = VISIBLE
+                delete.setOnClickListener { presenter.delete() }
             }
         }
     }
@@ -117,14 +144,22 @@ class NewAddressFragment : MvpAppCompatFragment(), NewAddressView {
 
     override fun showCity(city :String) {
         views.city.text = city
+        views.city.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        views.city.setBackgroundResource(R.drawable.bg_rect_borddark_round4)
     }
 
     override fun notFoundCity() {
         views.city.setText(R.string.myAddress_new_address_city_notFound)
+        views.city.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray2))
+        views.city.setBackgroundResource(R.drawable.bg_rect_bordlight_round4)
     }
 
     override fun validForm(valid: Boolean) {
         views.save.isEnabled = valid
+    }
+
+    override fun confirmDelete() {
+        AddressDeleteDialog(requireContext()){ presenter.confirmDelete() }.show()
     }
 
     override fun back() {

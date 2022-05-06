@@ -13,10 +13,6 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductBinding
 import com.project.morestore.models.Product
-import com.project.morestore.models.ProductBrand
-import com.project.morestore.models.ProductBrandJsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     private var list = listOf<Product>()

@@ -4,27 +4,24 @@ import android.Manifest
 import android.content.Context
 import android.database.Cursor
 import android.database.MatrixCursor
-import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -38,9 +35,7 @@ import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentMainBinding
 import com.project.morestore.models.*
 import com.project.morestore.models.Filter
-import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.mvpviews.MainMvpView
-import com.project.morestore.presenters.AuthPresenter
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
 import kotlinx.coroutines.channels.awaitClose
@@ -70,6 +65,23 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         initPermissionLauncher()
         getCurrentUserAddress()
 
+        binding.toolbarMain.materialToolbar.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.favorite -> {
+                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToFavoritesFragment())
+                    true
+                }
+                R.id.cart -> {
+                    findNavController().navigate(
+                        MainFragmentDirections.actionMainFragmentToOrdersCartFragment()
+                    )
+                    true
+                }
+                else -> true
+            }
+        }
+
+
 
 
 
@@ -77,6 +89,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
     private fun showUnreadMessagesStatus(){
         presenter.showUnreadMessages()
+        //getUserData()
+
     }
 
     private fun bindFilter(filter: Filter) {
@@ -147,6 +161,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
     private fun initToolbar() {
         val toolbar = binding.toolbarMain.materialToolbar
+
         val searchItem = toolbar.menu.findItem(R.id.search)
         searchItem.setOnMenuItemClickListener {
             binding.toolbarMain.searchFrameLayout.isVisible = true
@@ -196,15 +211,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         }
 
         presenter.collectSearchFlow(searchFlow)
-        binding.toolbarMain.materialToolbar.setOnMenuItemClickListener { menuItem ->
-            return@setOnMenuItemClickListener when(menuItem.itemId){
-                R.id.favorite -> {
-                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToFavoritesFragment())
-                    true
-                }
-                else -> true
-            }
-        }
     }
 
     private fun setClickListeners() {
@@ -379,13 +385,13 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         presenter.loadFilter()
     }
 
-    private fun getUserData(){
+    private fun getUserData() {
         presenter.getUserData()
     }
 
 
-    private fun loadOnboardingData(){
-      presenter.loadOnboardingData()
+    private fun loadOnboardingData() {
+        presenter.loadOnboardingData()
     }
 
     private fun getCity(){
@@ -473,7 +479,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             bindFilter(result)
         }
 
-        if(result is Unit)
+        if (result is Unit)
             loadFilter()
 
         //if(result is User)
@@ -496,8 +502,9 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                         fromMainFragment = true
                     )
                 )
-            loadOnboardingData()
+                    loadOnboardingData()
             showUnreadMessagesStatus()
+            //showOnBoarding()
         }
         if(result is Boolean){
             (activity as MainActivity).showUnreadMessagesIcon(result)

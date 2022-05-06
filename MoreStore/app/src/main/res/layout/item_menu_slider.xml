@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sliderContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/product_status_btn_shape"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingStart="15dp"
+    android:padding="10dp"
+    android:paddingEnd="12dp"
+    android:layout_marginHorizontal="5dp"
+    app:cardElevation="0dp">
+
+    <ImageView
+        android:src="@drawable/ic_cart"
+        android:id="@+id/sliderIcon"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="12dp"
+        app:tint="@color/green"
+        app:layout_constraintBottom_toBottomOf="@+id/sliderContent"
+        app:layout_constraintEnd_toStartOf="@+id/sliderContent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sliderContent" />
+
+    <TextView
+        android:id="@+id/sliderContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/manrope_medium"
+        android:text="Активные"
+        android:textColor="@color/green"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/sliderIcon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sliderCount"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sliderCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle_background"
+        android:fontFamily="@font/manrope_semibold"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@color/green"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/sliderContent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sliderContent"
+        tools:ignore="SmallSp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

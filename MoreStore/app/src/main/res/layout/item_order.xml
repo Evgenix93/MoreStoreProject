@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/orderItemUserIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray7"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/avatar" />
+
+        <TextView
+            android:id="@+id/orderItemUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/orderItemUserIcon"
+            app:layout_constraintStart_toEndOf="@+id/orderItemUserIcon"
+            app:layout_constraintTop_toTopOf="@+id/orderItemUserIcon"
+            tools:text="Елена Б." />
+
+        <TextView
+            android:id="@+id/orderItemId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_regular"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textColor="@color/gray2"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/orderItemUserIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/orderItemUserIcon"
+            tools:text="№ 1234567890" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/orderItemCardImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemUserIcon">
+
+            <ImageView
+                android:id="@+id/orderItemPreview"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/bg_rectangle_border_round8"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/first_launch" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/orderItemMainBlockContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/orderItemCardImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/orderItemCardImage"
+            app:layout_constraintTop_toTopOf="@+id/orderItemCardImage">
+
+            <TextView
+                android:id="@+id/orderItemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_bold"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Вечернее платье" />
+
+            <TextView
+                android:id="@+id/orderItemCondition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/active_order_price"
+                android:textColor="@color/gray2"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/orderItemName"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemName" />
+
+            <TextView
+                android:id="@+id/orderItemPriceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_bold"
+                android:paddingTop="1dp"
+                android:textColor="@color/green"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/orderItemCondition"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/orderItemCondition"
+                tools:text="840 Р" />
+
+            <TextView
+                android:id="@+id/orderItemDeliveryDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/active_order_delivery_date"
+                android:textColor="@color/gray2"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/orderItemCondition"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemCondition" />
+
+            <TextView
+                android:id="@+id/orderItemDeliveryDateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_regular"
+                android:textColor="@color/green"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/orderItemDeliveryDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/orderItemDeliveryDate"
+                tools:text="12-14 ноября" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/orderItemTopDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/gray3"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemMainBlockContainer" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/orderItemDeliveryBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemTopDivider">
+
+            <TextView
+                android:id="@+id/orderItemDeliveryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/active_order_delivery"
+                android:textColor="@color/gray2"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/orderItemDeliveryContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/imageView28"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/orderItemDeliveryTitle"
+                app:layout_constraintTop_toTopOf="@+id/orderItemDeliveryTitle"
+                tools:text="Курьером СДЭК в пункт выдачи" />
+
+            <TextView
+                android:id="@+id/orderItemDeliveryAdditional"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/active_order_delivery_more"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/orderItemDeliveryTitle"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryContent" />
+
+            <ImageView
+                android:id="@+id/imageView28"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="7dp"
+                android:rotation="180"
+                android:src="@drawable/arrow_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/orderItemBottomDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray3"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryBlock" />
+
+        <LinearLayout
+            android:id="@+id/orderItemStatusBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemBottomDivider">
+
+            <ImageView
+                android:id="@+id/orderItemStatusImage"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                app:tint="@color/blue4"
+                tools:src="@drawable/ic_checkcircle" />
+
+            <TextView
+                android:id="@+id/orderItemStatusContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="11dp"
+                android:fontFamily="@font/manrope_regular"
+                android:textColor="@color/blue4"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/orderItemDeliveryTitle"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryContent"
+                tools:text="Заказ получен" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/orderItemAcceptBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="6dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemStatusBlock">
+
+            <View
+                android:id="@+id/orderItemAcceptDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/orderItemAcceptDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="@string/active_order_delivery_content"
+                android:textColor="@color/gray2"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/orderItemAcceptButton"
+                style="@style/buttonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/active_order_accept_order"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemAcceptDescription" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/orderItemAcceptProblemsButton"
+                style="@style/buttonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/outlined_button2"
+                android:text="@string/active_order_problem"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemAcceptButton" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/orderItemDeliveryChangeBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="6dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemBottomDivider">
+
+            <ImageView
+                android:id="@+id/orderItemDeliveryChangeIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_warning"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/orderItemDeliveryChangeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/manrope_bold"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:text="@string/active_order_new_meeting_place"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/orderItemDeliveryChangeIcon"
+                app:layout_constraintTop_toTopOf="@+id/orderItemDeliveryChangeIcon" />
+
+            <TextView
+                android:id="@+id/orderItemDeliveryChangeContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_regular"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/orderItemDeliveryChangeTitle"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryChangeTitle"
+                tools:text="Пр. Ленина №123 19:00" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/orderItemChangeDeliveryAcceptButton"
+                style="@style/buttonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/active_order_accept_meeting"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryChangeContent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/orderItemChangeDeliveryDeclineButton"
+                style="@style/buttonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/outlined_button2"
+                android:text="@string/active_order_decline_meeting"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemChangeDeliveryAcceptButton" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
