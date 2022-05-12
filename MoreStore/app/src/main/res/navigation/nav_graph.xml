@@ -995,6 +995,12 @@
         <argument
             android:name="product"
             app:argType="com.project.morestore.models.Product" />
+        <argument
+            android:name="cartId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_createOrderFragment_to_myAddressesFragment"
+            app:destination="@id/myAddressesFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -1027,7 +1033,16 @@
     <fragment
         android:id="@+id/myAddressesFragment"
         android:name="com.project.morestore.fragments.MyAddressesFragment"
-        android:label="MyAddressesFragment" />
+        android:label="MyAddressesFragment" >
+        <argument
+            android:name="isSelectAddress"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="addressType"
+            app:argType="string"
+            android:defaultValue="ALL" />
+    </fragment>
     <fragment
         android:id="@+id/newAddressFragment"
         android:name="com.project.morestore.fragments.NewAddressFragment"

@@ -15,4 +15,10 @@ interface OrdersActiveView : MvpView {
     fun initActiveOrders(adapter: OrdersAdapter)
     @OneExecution
     fun showAcceptOrderDialog(acceptDialog: YesNoDialog)
+    @OneExecution
+    fun showMessage(message: String)
+    @OneExecution
+    fun loading()
+    @OneExecution
+    fun navigateToChat(userId: Long, productId: Long)
 }

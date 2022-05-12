@@ -2,8 +2,7 @@ package com.project.morestore.repositories
 
 import android.content.Context
 import android.util.Log
-import com.project.morestore.models.AddCartData
-import com.project.morestore.models.ProductProblemsData
+import com.project.morestore.models.*
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.singletones.Network
 import com.project.morestore.util.DeviceUtils
@@ -11,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
+import java.io.IOException
 
 class OrdersRepository(private val context: Context) {
 
@@ -72,6 +72,106 @@ class OrdersRepository(private val context: Context) {
             ordersApi.sendProblem(productProblem)
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    suspend fun createOrder(order: NewOrder): Response<Unit>?{
+        return try {
+            ordersApi.createOrder(order)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.createOrderGetError(order)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getAllOrders(): Response<List<Order>>?{
+        return try {
+            ordersApi.getAllOrders()
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.getAllOrdersGetError()
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getOrderAddresses(): Response<List<OfferedOrderPlace>>?{
+        return try {
+            ordersApi.getOrderAddresses()
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.getOrderAddressesGetError()
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun changeOrderPlaceStatus(change: OfferedOrderPlaceChange): Response<Unit>?{
+        return try {
+            ordersApi.changeOrderPlaceStatus(change)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.changeOrderPlaceStatusGetError(change)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
         }
     }
 

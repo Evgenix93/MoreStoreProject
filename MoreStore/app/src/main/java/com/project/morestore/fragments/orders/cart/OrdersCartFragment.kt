@@ -70,10 +70,11 @@ class OrdersCartFragment
         binding.toolbar.sliderMenu.adapter = adapter
     }
 
-    override fun navigate(product: Product) {
+    override fun navigate(product: Product, cartId: Long) {
         findNavController().navigate(
             OrdersCartFragmentDirections.actionOrdersCartFragmentToCreateOrderFragment(
-                product
+                product,
+                cartId
             )
         )
     }

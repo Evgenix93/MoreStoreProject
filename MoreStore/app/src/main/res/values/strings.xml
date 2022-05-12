@@ -394,7 +394,7 @@
     <string name="active_order_problem">Проблема с товаром</string>
     <string name="active_order_new_meeting_place">Продавец предложил место встречи</string>
     <string name="active_order_accept_meeting">Подтвердить место втречи</string>
-    <string name="active_order_decline_meeting">Отказаться и предложить другое</string>
+    <string name="active_order_decline_meeting">Обсудить в диалоге</string>
 
     <!--  active orders statuses  -->
     <string name="active_order_meeting_not_accepted">Продавец не подтвердил встречу</string>

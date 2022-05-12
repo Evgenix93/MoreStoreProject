@@ -229,12 +229,24 @@
 
                 </RadioGroup>
 
+                <TextView
+                    android:id="@+id/chosenAddressTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="130dp"
+                    android:textAppearance="@style/semibold_14"
+                    android:textColor="@color/black"
+                    tools:text="пр-т. Ленина, 158"/>
+
+
                 <ImageView
                     android:id="@+id/placeIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="130dp"
+                    android:layout_marginTop="160dp"
                     android:src="@drawable/ic_mappin_green"
                     android:visibility="gone" />
 
@@ -243,8 +255,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="42dp"
-                    android:layout_marginTop="130dp"
-                    android:text="Выбрать на карте"
+                    android:layout_marginTop="160dp"
+                    android:text="Выбрать"
                     android:textAppearance="@style/bold_16"
                     android:textColor="@color/green"
                     android:visibility="gone" />
@@ -329,6 +341,7 @@
                     android:textColor="@color/gray2" />
 
                 <RadioGroup
+                    android:id="@+id/deliveryVariantRadioGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"

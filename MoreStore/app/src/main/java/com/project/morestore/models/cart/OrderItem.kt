@@ -5,10 +5,10 @@ import android.graphics.Bitmap
 data class OrderItem(
     val id: Long,
 
-    val userIcon: Bitmap,
+    val userIcon: String,
     val userName: String,
 
-    val photo: Bitmap,
+    val photo: String,
     val name: String,
 
     val price: Int,
@@ -18,5 +18,8 @@ data class OrderItem(
     val status: OrderStatus,
 
     val newAddress: String?,
-    val newTime: String?
+    val newTime: String?,
+    val sellerId: Long,
+    val productId: Long,
+    val newAddressId: Long?
 )

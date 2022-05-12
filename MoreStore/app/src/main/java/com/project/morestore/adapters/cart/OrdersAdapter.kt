@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemOrderBinding
 import com.project.morestore.models.cart.OrderItem
@@ -22,9 +23,11 @@ class OrdersAdapter(
             with(binding) {
                 orderItemId.text = "№ ${orderItem.id}"
 
-                orderItemUserIcon.setImageBitmap(orderItem.userIcon)
+                //orderItemUserIcon.setImageBitmap(orderItem.userIcon)
+                Glide.with(itemView).load(orderItem.userIcon).into(orderItemUserIcon)
                 orderItemUserName.text = orderItem.userName
-                orderItemPreview.setImageBitmap(orderItem.photo)
+                //orderItemPreview.setImageBitmap(orderItem.photo)
+                Glide.with(itemView).load(orderItem.photo).into(orderItemPreview)
                 orderItemName.text = orderItem.name
                 orderItemDeliveryContent.text = orderItem.deliveryInfo
 
@@ -55,6 +58,10 @@ class OrdersAdapter(
                         orderItemDeliveryChangeBlock.visibility = View.VISIBLE
                         orderItemDeliveryChangeContent.text =
                             "${orderItem.newAddress} ${orderItem.newTime}"
+                    }
+                    OrderStatus.CHANGE_MEETING_FROM_ME -> {
+                        orderItemStatusImage.setImageResource(R.drawable.ic_clock)
+                        orderItemStatusContent.text = context.getString(R.string.active_order_meeting_not_accepted)
                     }
                 }
             }

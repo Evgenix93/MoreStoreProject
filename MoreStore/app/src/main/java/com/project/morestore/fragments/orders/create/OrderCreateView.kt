@@ -12,4 +12,10 @@ interface OrderCreateView : MvpView {
 
     @AddToEndSingle
     fun setProductInfo(product: Product)
+
+    @OneExecution
+    fun loading()
+
+    @OneExecution
+    fun showMessage(message: String)
 }

@@ -44,7 +44,7 @@ class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>()
     private fun initContent(items: List<CartItem>?, onDelete: (CartItem) -> Unit) {
         if (items != null) {
             adapter = CartAdapter(items.toMutableList(), {
-                viewState.navigate(it.product);
+                viewState.navigate(it.product, it.id);
             }, {}, {
                 val deleteDialog = DeleteDialog(
                     title = context.getString(R.string.cart_delete_title),

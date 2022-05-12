@@ -2,6 +2,8 @@ package com.project.morestore.fragments.orders.active
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -10,7 +12,10 @@ import com.project.morestore.adapters.SliderMenuAdapter
 import com.project.morestore.adapters.cart.OrdersAdapter
 import com.project.morestore.databinding.FragmentOrdersBinding
 import com.project.morestore.dialogs.YesNoDialog
+import com.project.morestore.fragments.ChatFragment
+import com.project.morestore.models.Chat
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
+import com.project.morestore.models.slidermenu.SliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartView
 import moxy.MvpAppCompatFragment
@@ -71,12 +76,32 @@ class OrdersActiveFragment
 
     override fun initActiveOrders(adapter: OrdersAdapter) {
         binding.ordersRecyclerView.adapter = adapter
+        //(binding.toolbar.sliderMenu.adapter as SliderMenuAdapter<SliderMenu<*>>).changeOrdersItemsSize(adapter.itemCount)
     }
 
     override fun showAcceptOrderDialog(acceptDialog: YesNoDialog) {
         if (isAdded) {
             acceptDialog.show(parentFragmentManager, YesNoDialog.TAG)
         }
+    }
+
+    override fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun navigateToChat(userId: Long, productId: Long) {
+        findNavController().navigate(
+            R.id.chatFragment,
+            bundleOf(
+                ChatFragment.USER_ID_KEY to userId,
+                ChatFragment.PRODUCT_ID_KEY to productId,
+                Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
+            )
+        )
     }
 
     ///////////////////////////////////////////////////////////////////////////

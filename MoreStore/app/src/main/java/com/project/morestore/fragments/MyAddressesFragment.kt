@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.adapters.MyAddressesAdapter
@@ -28,7 +30,13 @@ import com.project.morestore.util.setSpace
 import moxy.ktx.moxyPresenter
 
 class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
+    private val args: MyAddressesFragmentArgs by navArgs()
     private val adapter = MyAddressesAdapter{
+        if(args.isSelectAddress){
+            setFragmentResult(ADDRESS_REQUEST, bundleOf(ADDRESS_KEY to it)  )
+            findNavController().navigateUp()
+            return@MyAddressesAdapter
+        }
         if(it.type == AddressType.CDEK.id) {
             findNavController().navigate(
                 R.id.myAddressPickupFragment,
@@ -60,10 +68,14 @@ class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
         }
         with(views){
             add.setOnClickListener {
-                AddAddressDialog {
-                    if(it == AddAddressDialog.Type.PICKUP) showRegions()
-                    else findNavController().navigate(R.id.newAddressFragment)
-                }.show(childFragmentManager, null)
+                when (args.addressType) {
+                   ADDRESSES_ALL -> AddAddressDialog {
+                        if (it == AddAddressDialog.Type.PICKUP) showRegions()
+                        else findNavController().navigate(R.id.newAddressFragment)
+                    }.show(childFragmentManager, null)
+                    ADDRESSES_HOME -> findNavController().navigate(R.id.newAddressFragment)
+                    ADDRESSES_CDEK -> showRegions()
+                }
             }
         }
     }
@@ -82,7 +94,13 @@ class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
                 setSpace(8.dp)
             }
             .also { views.content.addView(it) }
-        adapter.setItems(addresses)
+        val addressesToShow: Array<MyAddress> = when(args.addressType){
+            ADDRESSES_ALL -> addresses
+            ADDRESSES_HOME -> addresses.filter { it.type == AddressType.HOME.id }.toTypedArray()
+            ADDRESSES_CDEK -> addresses.filter { it.type == AddressType.CDEK.id }.toTypedArray()
+            else -> addresses
+        }
+        adapter.setItems(addressesToShow)
     }
     //endregion View implementation
 
@@ -102,5 +120,13 @@ class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
 
     private fun showUserData(deliveryAddress :DeliveryAddress){
         findNavController().navigate(R.id.myAddressPickupFragment, bundleOf(MyAddressPickupFragment.ADDRESS to deliveryAddress))
+    }
+
+    companion object{
+        const val ADDRESS_REQUEST = "address_request"
+        const val ADDRESS_KEY = "address_key"
+        const val ADDRESSES_ALL = "ALL"
+        const val ADDRESSES_HOME = "home"
+        const val ADDRESSES_CDEK = "cdek"
     }
 }
