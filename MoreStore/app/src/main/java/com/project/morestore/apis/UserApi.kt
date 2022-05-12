@@ -138,4 +138,9 @@ interface UserApi {
 
     @GET("review/not_leave_review")
     suspend fun getWaitReviewSellers(): Response<List<User>>
+
+    @GET("user/{id}")
+    suspend fun getUser(@Path("id") id: Long): Response<User>
+
+    suspend fun getUserError(@Path("id") id: Long): String
 }

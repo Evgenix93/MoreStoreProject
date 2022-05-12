@@ -11,6 +11,7 @@ import com.project.morestore.singletones.Token
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.File
@@ -654,4 +655,19 @@ class UserRepository(val context: Context) {
            null
        }
     }
+
+  suspend fun getUser(id: Long): Response<User>?{
+      return try {
+          Network.userApi.getUser(id)
+      }catch (e: Throwable){
+        if(e is IOException)
+            null
+          else try{
+              val error = Network.userApi.getUserError(id)
+              Response.error(400, error.toResponseBody())
+          }catch (e: Throwable){
+              Response.error(0, "Ошибка".toResponseBody())
+          }
+      }
+  }
 }

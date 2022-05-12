@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gray3">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/dealPlaceWindow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <TextView
+            android:id="@+id/dealPlaceTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Место сделки"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2" />
+
+        <ImageView
+            android:id="@+id/placeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/ic_mappin_green"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/chooseOnMapTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="50dp"
+            android:text="Выбрать"
+            android:textAppearance="@style/bold_16"
+            android:textColor="@color/green"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/whenReceiveTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="100dp"
+            android:text="Когда забрать заказ"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/pickers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="135dp"
+            android:layout_marginBottom="24dp"
+            android:visibility="visible">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/dateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/ic_field"
+                android:drawableEnd="@drawable/ic_arrow_dropdown"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Дата"
+                android:paddingStart="12dp"
+                android:paddingEnd="9dp"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray2" />
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/timeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/ic_field"
+                android:drawableEnd="@drawable/ic_arrow_dropdown"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Время"
+                android:paddingStart="12dp"
+                android:paddingEnd="9dp"
+                android:textAppearance="@style/regular_14"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray2" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveButton"
+        style="@style/buttonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,6 +14,7 @@ import com.project.morestore.databinding.FragmentOrdersBinding
 import com.project.morestore.dialogs.YesNoDialog
 import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.models.Chat
+import com.project.morestore.fragments.orders.cart.OrdersCartFragmentDirections
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.models.slidermenu.SliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
@@ -56,6 +57,10 @@ class OrdersActiveFragment
             R.id.ordersHistoryFragment -> {
                 findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToOrdersHistoryFragment())
             }
+            R.id.salesActiveFragment ->{
+                findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToSalesActiveFragment())
+            }
+            R.id.salesHistoryFragment -> findNavController().navigate(R.id.salesHistoryFragment)
         }
     }
 
