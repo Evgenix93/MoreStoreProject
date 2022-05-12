@@ -30,52 +30,11 @@ class MessagingService: FirebaseMessagingService() {
         Log.d("fire", dialogId.toString())
         dialogId ?: return
 
-        /*val id: Long = message.data["id"]!!.toLong()
-
-        val idSender: Long = message.data["id_sender"]!!.toLong()
-       // @Json(name = "id_dialog")
-        val idDialog: Long = message.data["id_dialog"]!!.toLong()
-        val text: String? = message.data["text"]
-        val date: Long = message.data["date"]!!.toLong()
-        val is_read: Int = message.data["is_read"]!!.toInt()
-        //val user: User,
-        val photoAdapter = ProductPhotoJsonAdapter(Moshi.Builder().build())
-        val photo = photoAdapter.fromJson(message.data["photo"]!!)
-        val videoAdapter = ProductVideoJsonAdapter(Moshi.Builder().build())
-        val video = videoAdapter.fromJson(message.data["video"]!!)
-        //@Json(name = "buy_suggest)
-        val messageActionAdapter = MessageActionSuggestJsonAdapter(Moshi.Builder().build())
-        val buySuggest = messageActionAdapter.fromJson(message.data["buy_suggest"])
-
-        //@Json(name = "price_suggest")
-        val priceSuggest = messageActionAdapter.fromJson(message.data["price_suggest"])
-        //@Json(name = "sale_suggest")
-        val saleSuggest = messageActionAdapter.fromJson(message.data["sale_suggest"])
-
-        val messageModel = MessageModel(
-            id = id,
-            idSender = idSender,
-            idDialog = idDialog,
-            date = date,
-            is_read = is_read,
-            text = text,
-            user = User(-1, null, null, null, null, null, null, null),
-            photo = ,
-            video = null,
-            buySuggest = null,
-            priceSuggest = null,
-            saleSuggest = null
-        )*/
-
         val intent = Intent(MESSAGE_INTENT).apply {
            putExtra(MESSAGE_KEY, dialogId  )
         }
 
         broadcaster.sendBroadcast(intent)
-
-
-
-
 
     }
 

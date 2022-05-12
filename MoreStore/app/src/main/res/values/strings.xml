@@ -272,6 +272,7 @@
     <string name="pattern_plus">+%d</string>
     <string name="pattern_dot_divider">%s • %s</string>
     <string name="continue_text">Продолжить</string>
+    <string name="sale">Продажа</string>
 
     <!--chats-->
     <string name="chat_support_title">Служба поддержки</string>
@@ -445,7 +446,7 @@
     <string name="orders_menu_orders">Покупки</string>
     <string name="orders_menu_cart">Корзина</string>
     <string name="cart_delete_title">Удалить товар?</string>
-
+    <string name="orders_menu_sales_history">История продаж</string>
     <string name="product_remove_from_cart">Удалить из корзирины</string>
     <string name="product_add_cart">Добавить в корзину</string>
 

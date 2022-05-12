@@ -18,6 +18,7 @@ class SliderMenuAdapter<T>(
     private lateinit var recyclerView: RecyclerView
     private lateinit var currentSelected: SliderViewHolder
 
+
     class SliderViewHolder(menuItem: View) : RecyclerView.ViewHolder(menuItem) {
         val binding: ItemMenuSliderBinding by viewBinding()
 
@@ -65,8 +66,8 @@ class SliderMenuAdapter<T>(
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
 
         if (items[position].isSelected) {
-            currentSelected = holder
-            recyclerView.scrollToPosition(position)
+           // currentSelected = holder
+           // recyclerView.scrollToPosition(position)
         }
 
         holder.bind(items[position])
@@ -77,8 +78,8 @@ class SliderMenuAdapter<T>(
                 return@setOnClickListener
             }
 
-            items[currentSelected.adapterPosition].isSelected = false;
-            notifyItemChanged(currentSelected.adapterPosition)
+           // items[currentSelected.adapterPosition].isSelected = false;
+          //  notifyItemChanged(currentSelected.adapterPosition)
 
             items[position].isSelected = true
             notifyItemChanged(position)

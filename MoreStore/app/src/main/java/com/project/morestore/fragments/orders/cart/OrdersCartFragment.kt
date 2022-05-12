@@ -63,6 +63,10 @@ class OrdersCartFragment
             R.id.ordersHistoryFragment -> {
                 findNavController().navigate(OrdersCartFragmentDirections.actionOrdersCartFragmentToOrdersHistoryFragment())
             }
+            R.id.salesActiveFragment ->{
+                findNavController().navigate(OrdersCartFragmentDirections.actionOrdersCartFragmentToSalesActiveFragment())
+            }
+            R.id.salesHistoryFragment -> findNavController().navigate(R.id.salesHistoryFragment)
         }
     }
 

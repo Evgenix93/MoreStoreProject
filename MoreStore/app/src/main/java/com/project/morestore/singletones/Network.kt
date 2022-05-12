@@ -60,7 +60,7 @@ object Network {
 
     val ordersApi :OrdersApi
     get() = retrofit.create()
+    val salesApi: SalesApi get() = retrofit.create()
 
     val brandApi :BrandApi get() = retrofit.create()
-
 }

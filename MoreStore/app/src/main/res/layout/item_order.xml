@@ -26,7 +26,7 @@
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/avatar" />
+            android:src="@drawable/avatar" />
 
         <TextView
             android:id="@+id/orderItemUserName"
@@ -71,7 +71,7 @@
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/bg_rectangle_border_round8"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/first_launch" />
+                android:src="@drawable/first_launch" />
         </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -122,7 +122,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/orderItemCondition"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/orderItemCondition"
-                tools:text="840 Р" />
+                android:text="840 Р" />
 
             <TextView
                 android:id="@+id/orderItemDeliveryDate"
@@ -194,7 +194,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/orderItemDeliveryTitle"
                 app:layout_constraintTop_toTopOf="@+id/orderItemDeliveryTitle"
-                tools:text="Курьером СДЭК в пункт выдачи" />
+                android:text="Курьером СДЭК в пункт выдачи" />
 
             <TextView
                 android:id="@+id/orderItemDeliveryAdditional"
@@ -242,7 +242,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 app:tint="@color/blue4"
-                tools:src="@drawable/ic_checkcircle" />
+                android:src="@drawable/ic_checkcircle" />
 
             <TextView
                 android:id="@+id/orderItemStatusContent"
@@ -254,7 +254,7 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@+id/orderItemDeliveryTitle"
                 app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryContent"
-                tools:text="Заказ получен" />
+                android:text="Заказ получен" />
 
         </LinearLayout>
 

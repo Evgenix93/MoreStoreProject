@@ -1087,6 +1087,9 @@
         <action
             android:id="@+id/action_ordersCartFragment_to_createOrderFragment"
             app:destination="@id/createOrderFragment" />
+        <action
+            android:id="@+id/action_ordersCartFragment_to_salesActiveFragment"
+            app:destination="@id/salesActiveFragment" />
     </fragment>
     <fragment
         android:id="@+id/ordersHistoryFragment"
@@ -1104,6 +1107,9 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/ordersCartFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_ordersHistoryFragment_to_salesActiveFragment"
+            app:destination="@id/salesActiveFragment" />
     </fragment>
     <fragment
         android:id="@+id/ordersActiveFragment"
@@ -1124,6 +1130,9 @@
         <action
             android:id="@+id/action_ordersActiveFragment_to_orderProblemsFragment"
             app:destination="@id/orderProblemsFragment" />
+        <action
+            android:id="@+id/action_ordersActiveFragment_to_salesActiveFragment"
+            app:destination="@id/salesActiveFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderProblemsFragment"
@@ -1150,5 +1159,25 @@
             app:popUpTo="@id/ordersActiveFragment"
             app:popUpToInclusive="false" />
     </fragment>
+    <fragment
+        android:id="@+id/salesActiveFragment"
+        android:name="com.project.morestore.fragments.SalesActiveFragment"
+        android:label="SalesActiveFragment" >
+        <action
+            android:id="@+id/action_salesActiveFragment_to_dealPlaceFragment"
+            app:destination="@id/dealPlaceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dealPlaceFragment"
+        android:name="com.project.morestore.fragments.DealPlaceFragment"
+        android:label="DealPlaceFragment" >
+        <argument
+            android:name="orderId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/salesHistoryFragment"
+        android:name="com.project.morestore.fragments.SalesHistoryFragment"
+        android:label="SalesHistoryFragment" />
 
 </navigation>
