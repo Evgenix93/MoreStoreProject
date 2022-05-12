@@ -20,6 +20,7 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
     private val binding: FragmentDealPlaceBinding by viewBinding()
     private val presenter by moxyPresenter{SalesPresenter(requireContext())}
     private val args: DealPlaceFragmentArgs by navArgs()
+    //private val chosenAddress:
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

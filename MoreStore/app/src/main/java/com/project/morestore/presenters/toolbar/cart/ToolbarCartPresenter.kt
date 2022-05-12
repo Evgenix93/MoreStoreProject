@@ -49,7 +49,7 @@ class ToolbarCartPresenter(val context: Context, val selectedMenu: OrdersSliderM
                         SliderMenu(
                                 R.drawable.ic_cart,
                                 context.getString(R.string.orders_menu_cart),
-                                2u,
+                                0u,
                                 selectedMenu == OrdersSliderMenu.CART,
                                 OrdersSliderMenu.CART
                         ),
@@ -70,7 +70,7 @@ class ToolbarCartPresenter(val context: Context, val selectedMenu: OrdersSliderM
                         SliderMenu(
                                 R.drawable.ic_reverse_clockwise,
                                 context.getString(R.string.orders_menu_purchase_history),
-                                4u,
+                                0u,
                                 selectedMenu == OrdersSliderMenu.ORDERS_HISTORY,
                                 OrdersSliderMenu.ORDERS_HISTORY
                         ),
