@@ -18,7 +18,7 @@ import com.project.morestore.models.MyAddress
 import com.project.morestore.models.OfferedOrderPlace
 import com.project.morestore.models.Order
 import com.project.morestore.models.OrderPlace
-import com.project.morestore.models.OrderPlace
+
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.mvpviews.SalesMvpView
@@ -147,7 +147,13 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
 
     }
 
-    override fun onSalesLoaded(sales: List<Order>) {
+
+
+    override fun onSalesLoaded(
+        sales: List<Order>,
+        addresses: List<OfferedOrderPlace>,
+        users: List<User?>
+    ) {
 
     }
 
