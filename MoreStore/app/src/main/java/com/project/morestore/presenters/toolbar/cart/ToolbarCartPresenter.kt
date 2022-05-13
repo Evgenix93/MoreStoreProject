@@ -106,7 +106,7 @@ class ToolbarCartPresenter(val context: Context, val selectedMenu: OrdersSliderM
             val cartItems = getCartItems()
             val orderItems = getOrderItems()
             adapter.changeCartItemsSize(cartItems?.size ?: 0)
-            adapter.changeOrdersItemsSize(orderItems?.filter { it.status == 0 }?.size ?: 0)
+            adapter.changeOrdersItemsSize(orderItems?.filter { it.status == 0 && it.cart != null }?.size ?: 0)
             adapter.changeOrderHistorySize(orderItems?.filter { it.status == 1 }?.size ?: 0)
             viewState.initMenuAdapter(adapter)
         }
