@@ -15,5 +15,9 @@ data class Order(
     @Json(name = "place_address")
     val placeAddress: String?,
     val place: Int,
+    @Json(name = "id_user")
+    val idUser: Long?,
+    @Json(name = "id_seller")
+    val idSeller: Long?,
     val sum: Int
 )

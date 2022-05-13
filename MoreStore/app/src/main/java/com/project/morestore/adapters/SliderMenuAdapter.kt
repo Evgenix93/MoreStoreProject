@@ -90,6 +90,7 @@ class SliderMenuAdapter<T>(
         }
     }
 
+
     override fun getItemCount() = items.size
 
     fun changeCartItemsSize(size: Int){
@@ -101,5 +102,13 @@ class SliderMenuAdapter<T>(
         notifyItemChanged(1)
     }
 
+    fun changeSalesItemsSize(size: Int){
+        items[2].itemsCount = size.toUInt()
+        notifyItemChanged(2)
+    }
 
+    fun changeSalesHistorySize(size: Int){
+        items[4].itemsCount = size.toUInt()
+        notifyItemChanged(4)
+    }
 }

@@ -1,8 +1,8 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.DealPlace
-import com.project.morestore.models.Order
+import com.project.morestore.models.*
 import com.project.morestore.models.cart.OrderItem
+import com.yandex.mapkit.search.PlaceInfo
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -20,5 +20,5 @@ interface SalesApi {
     suspend fun addDealPlace(@Body dealPlace: DealPlace): Response<Boolean>
 
     @GET("order/address")
-    suspend fun getAddresses(): Response<List<DealPlace>>
+    suspend fun getAddresses(): Response<List<OrderPlace>>
 }

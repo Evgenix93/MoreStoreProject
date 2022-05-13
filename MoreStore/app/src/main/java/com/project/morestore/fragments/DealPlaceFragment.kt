@@ -9,7 +9,11 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentDealPlaceBinding
+import com.project.morestore.models.OfferedOrderPlace
 import com.project.morestore.models.Order
+import com.project.morestore.models.OrderPlace
+import com.project.morestore.models.User
+import com.project.morestore.models.cart.CartItem
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.presenters.SalesPresenter
 import moxy.MvpAppCompatFragment
@@ -38,7 +42,7 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
 
     private fun initSaveButton(){
       binding.saveButton.setOnClickListener{
-         presenter.addDealPlace(args.orderId, "Москва, кутузовская 5;${Calendar.getInstance().timeInMillis}")
+         presenter.addDealPlace(args.orderId, "Москва, кутузовская 5;${System.currentTimeMillis()}")
       }
     }
 
@@ -46,7 +50,7 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onSalesLoaded(sales: List<Order>) {
+    override fun onSalesLoaded(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>) {
 
     }
 
@@ -61,5 +65,19 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
     override fun onDealPlaceAdded() {
         showToast("Адрес успешно добавлен")
         findNavController().popBackStack()
+    }
+
+    override fun onDealPlaceAccepted() {
+
+    }
+
+    override fun onItemsLoaded(
+        cartItems: List<CartItem>,
+        activeOrders: List<Order>,
+        activeSales: List<Order>,
+        inactiveOrders: List<Order>,
+        inactiveSales: List<Order>
+    ) {
+
     }
 }
