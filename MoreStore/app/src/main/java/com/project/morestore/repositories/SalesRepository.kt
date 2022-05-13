@@ -3,6 +3,7 @@ package com.project.morestore.repositories
 import android.util.Log
 import com.project.morestore.models.DealPlace
 import com.project.morestore.models.Order
+import com.project.morestore.models.OrderPlace
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.singletones.Network
 import com.squareup.moshi.JsonDataException
@@ -38,4 +39,13 @@ class SalesRepository {
            null
        }
    }
+
+    suspend fun getAddresses(): Response<List<OrderPlace>>?{
+        return try{
+            Network.salesApi.getAddresses()
+        }catch (e: Throwable){
+            Log.e("MyDebug", "error = ${e.message}")
+            null
+        }
+    }
 }

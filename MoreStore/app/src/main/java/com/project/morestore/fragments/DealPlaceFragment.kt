@@ -15,8 +15,12 @@ import com.project.morestore.dialogs.MenuBottomDialogDateFragment
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.fragments.orders.create.OrderCreateFragmentDirections
 import com.project.morestore.models.MyAddress
+import com.project.morestore.models.OfferedOrderPlace
 import com.project.morestore.models.Order
 import com.project.morestore.models.OrderPlace
+import com.project.morestore.models.OrderPlace
+import com.project.morestore.models.User
+import com.project.morestore.models.cart.CartItem
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.presenters.SalesPresenter
 import moxy.MvpAppCompatFragment
@@ -158,5 +162,19 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
     override fun onDealPlaceAdded() {
         showToast("Адрес успешно добавлен")
         findNavController().popBackStack()
+    }
+
+    override fun onDealPlaceAccepted() {
+
+    }
+
+    override fun onItemsLoaded(
+        cartItems: List<CartItem>,
+        activeOrders: List<Order>,
+        activeSales: List<Order>,
+        inactiveOrders: List<Order>,
+        inactiveSales: List<Order>
+    ) {
+
     }
 }
