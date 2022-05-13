@@ -76,7 +76,7 @@ class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(ord
                         binding.orderItemStatusBlock.isVisible = true
                         if(address.status == 0)
                             binding.orderItemStatusContent.text = "Покупатель ещё не подтвердил место встречи"
-                        else
+                        else if(isHistory.not())
                             binding.orderItemStatusContent.text = "Ожидание встречи с покупателем"
                     }
                     OfferedPlaceType.APPLICATION.value -> {
@@ -99,7 +99,7 @@ class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(ord
                                 declineDealPlace(it.id, order.cart!![0].id)
                                }
                            }
-                       }else
+                       }else if(isHistory.not())
                            binding.orderItemStatusContent.text = "Ожидание встречи с покупателем"
                     }
                 }
