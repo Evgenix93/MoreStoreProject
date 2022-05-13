@@ -48,8 +48,8 @@ class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(ord
         }
 
         fun bind(order: Order, address: DealPlace?){
-           binding.orderItemName.text = order.cart[0].name
-           binding.orderItemPriceText.text = "${order.cart[0].priceNew?.toInt()}Р"
+           binding.orderItemName.text = order.cart?.get(0)?.name ?: ""
+           binding.orderItemPriceText.text = "${order.cart?.get(0)?.priceNew?.toInt()}Р"
             binding.orderItemAcceptButton.setOnClickListener{
                 addDealPlace(order.id)
             }
@@ -57,7 +57,7 @@ class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(ord
                 binding.orderItemDeliveryContent.text = it.address
             }
            Glide.with(itemView)
-               .load(order.cart[0].photo[0].photo)
+               .load(order.cart?.get(0)?.photo?.get(0)?.photo)
                .into(binding.orderItemPreview)
         }
     }

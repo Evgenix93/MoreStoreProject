@@ -161,7 +161,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             }
             val place = if(placeId == PLACE_FROM_SELLER) OrderPlace(placeId.toLong(), null, null)
             else OrderPlace(placeId.toLong(),
-                "${chosenAddress?.address?.street}, ${chosenAddress?.address?.building}",
+                "${chosenAddress?.address?.street}, ${chosenAddress?.address?.building.orEmpty()};${chosenTime?.timeInMillis}",
                 chosenTime?.timeInMillis ?: 0/1000)
             presenter.onCreateOrder(args.cartId, deliveryId, place, payId)
 
@@ -178,8 +178,9 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             setFragmentResultListener(MyAddressesFragment.ADDRESS_REQUEST){_, bundle ->
                 val address = bundle.getParcelable<MyAddress>(MyAddressesFragment.ADDRESS_KEY)
                 chosenAddress = address
-                binding.chosenAddressTextView.text = "${address?.address?.street}, ${address?.address?.building}"
+                binding.chosenAddressTextView.text = "${address?.address?.street}, ${address?.address?.building.orEmpty()}"
                 binding.chosenAddressTextView.isVisible = true
+                binding.chooseOnMapTextView.text = "Изменить"
 
 
             }

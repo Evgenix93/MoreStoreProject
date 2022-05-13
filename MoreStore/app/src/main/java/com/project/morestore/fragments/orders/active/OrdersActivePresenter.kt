@@ -66,9 +66,11 @@ class OrdersActivePresenter(val context: Context)
                         null,
                         object : YesNoDialog.onClickListener {
                             override fun onYesClick() {
+                                submitReceiveOrder(orderItem.id)
                             }
 
                             override fun onNoClick() {
+
                             }
 
                         })
@@ -84,7 +86,7 @@ class OrdersActivePresenter(val context: Context)
                 val orders = getAllOrders() ?: return@launch
                 val orderAddresses = getOrderAddresses() ?: return@launch
 
-                val orderItems = orders.filter { it.cart != null }.map { order ->
+                val orderItems = orders.filter { it.cart != null && it.status == 0 }.map { order ->
                     val user = getSellerUser(order.cart!!.first().idUser!!)
                     val address = orderAddresses.find { it.idOrder == order.id  }
                     val time = if(address != null) Calendar.getInstance()
@@ -107,7 +109,7 @@ class OrdersActivePresenter(val context: Context)
                         photo = order.cart.first().photo.first().photo,
                         name = order.cart.first().name,
                         price = order.cart.first().priceNew?.toInt() ?: 0,
-                        deliveryDate = if(time == null)"-" else
+                        deliveryDate = if(time == null || time.timeInMillis == 0L)"-" else
                             "${time.get(Calendar.DAY_OF_MONTH)}.${time.get(Calendar.MONTH) + 1}.${time.get(Calendar.YEAR)}",
                         deliveryInfo = when (order.delivery) {
                             OrderCreateFragment.TAKE_FROM_SELLER -> "Заберу у продавца"
@@ -276,6 +278,30 @@ class OrdersActivePresenter(val context: Context)
                 else -> {}
 
             }
+        }
+    }
+
+    private fun submitReceiveOrder(orderId: Long){
+        presenterScope.launch {
+            val response = ordersRepository.submitReceiveOrder(OrderId(orderId))
+            when(response?.code()){
+                200 -> viewState.navigate(R.id.ordersHistoryFragment)
+                null -> {
+                    viewState.showMessage("нет интернета")
+
+                }
+                400 -> {
+                    viewState.showMessage(response.errorBody()!!.string())
+
+                }
+                500 -> {
+                    viewState.showMessage("500 Internal Server Error")
+
+                }
+                else -> {}
+
+            }
+
         }
     }
 

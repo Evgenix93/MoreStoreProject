@@ -38,9 +38,11 @@ class YesNoDialog(val title: String, val content: String?, val listener: onClick
         with(binding) {
             ynDIalogNoBtn.setOnClickListener {
                 listener.onNoClick()
+                dismiss()
             }
             ynDIalogYesBtn.setOnClickListener{
                 listener.onYesClick()
+                dismiss()
             }
 
             ynDIalogTitle.text = title

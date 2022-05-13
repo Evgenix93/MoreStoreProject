@@ -69,6 +69,10 @@ class OrdersHistoryFragment
         binding.ordersHistoryRecyclerView.adapter = adapter
     }
 
+    override fun showMessage(message: String) {
+
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     //                      Private
     ///////////////////////////////////////////////////////////////////////////

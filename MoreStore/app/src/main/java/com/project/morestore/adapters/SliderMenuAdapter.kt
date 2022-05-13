@@ -100,6 +100,10 @@ class SliderMenuAdapter<T>(
         items[1].itemsCount = size.toUInt()
         notifyItemChanged(1)
     }
+    fun changeOrderHistorySize(size: Int){
+        items[3].itemsCount = size.toUInt()
+        notifyItemChanged(3)
+    }
 
 
 }

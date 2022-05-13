@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemOrderHistoryBinding
 import com.project.morestore.models.cart.OrderHistoryItem
@@ -20,9 +21,11 @@ class OrdersHistoryAdapter(
         fun bind(orderHistoryItem: OrderHistoryItem) {
             with(binding) {
                 orderItemHistoryId.text = orderHistoryItem.id
-                orderItemHistoryUserIcon.setImageBitmap(orderHistoryItem.userIcon)
+                //orderItemHistoryUserIcon.setImageBitmap(orderHistoryItem.userIcon)
+                Glide.with(itemView).load(orderHistoryItem.userIcon).into(orderItemHistoryUserIcon)
                 orderItemHistoryUserName.text = orderHistoryItem.userName
-                orderItemHistoryPreview.setImageBitmap(orderHistoryItem.photo)
+                //orderItemHistoryPreview.setImageBitmap(orderHistoryItem.photo)
+                Glide.with(itemView).load(orderHistoryItem.photo).into(orderItemHistoryPreview)
                 orderItemHistoryName.text = orderHistoryItem.name
                 orderItemHistoryPriceFinal.text = "${orderHistoryItem.price} ₽"
                 orderItemHistoryDeliveryDate.text = orderHistoryItem.deliveryDate

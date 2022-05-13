@@ -1189,6 +1189,9 @@
         <argument
             android:name="orderId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_dealPlaceFragment_to_myAddressesFragment"
+            app:destination="@id/myAddressesFragment" />
     </fragment>
     <fragment
         android:id="@+id/salesHistoryFragment"

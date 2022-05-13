@@ -45,4 +45,10 @@ interface OrdersApi {
     @POST("order/put_address")
     suspend fun changeOrderPlaceStatusGetError(@Body addressChange: OfferedOrderPlaceChange): Response<String>
 
+    @POST("order/successfully")
+    suspend fun submitReceiveOrder(@Body orderId: OrderId): Response<Unit>
+
+    @POST("order/successfully")
+    suspend fun submitReceiveOrderGetError(@Body orderId: OrderId): Response<String>
+
 }

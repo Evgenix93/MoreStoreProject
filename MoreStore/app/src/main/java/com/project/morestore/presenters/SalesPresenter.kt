@@ -23,6 +23,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
             val response = repository.getSales()
             when(response?.code()){
                 200 -> {
+                    viewState.onSalesLoaded(response.body()!!)
 
                 }
                 400 -> {viewState.onError(getError(response.errorBody()!!))}

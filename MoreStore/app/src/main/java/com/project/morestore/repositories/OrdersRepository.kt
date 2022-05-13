@@ -175,4 +175,29 @@ class OrdersRepository(private val context: Context) {
         }
     }
 
+    suspend fun submitReceiveOrder(orderId: OrderId): Response<Unit>?{
+        return try {
+            ordersApi.submitReceiveOrder(orderId)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.submitReceiveOrderGetError(orderId)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
 }
