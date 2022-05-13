@@ -57,7 +57,7 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
                     R.drawable.ic_coin,
                     requireContext().getString(R.string.sale),
                     0u,
-                    true,
+                    false,
                     OrdersSliderMenu.SALES
                 ),
                 SliderMenu(
@@ -71,7 +71,7 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
                     R.drawable.ic_clockwise,
                     requireContext().getString(R.string.orders_menu_sales_history),
                     0u,
-                    false,
+                    true,
                     OrdersSliderMenu.SALES_HISTORY
                 )
             )
