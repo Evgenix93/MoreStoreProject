@@ -37,6 +37,7 @@ class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>()
                 }
                 500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
+                404 -> initContent(emptyList(), onDelete)
             }
         }
     }

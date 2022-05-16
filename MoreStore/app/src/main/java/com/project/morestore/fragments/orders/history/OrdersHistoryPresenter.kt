@@ -207,6 +207,7 @@ class OrdersHistoryPresenter(context: Context)
                 viewState.showMessage("500 Internal Server Error")
                 null
             }
+            404 -> emptyList()
             else -> null
 
         }
@@ -253,6 +254,7 @@ class OrdersHistoryPresenter(context: Context)
                 viewState.showMessage(response.errorBody()?.string().orEmpty())
                 null
             }
+            404 -> emptyList()
             else -> null
 
         }
