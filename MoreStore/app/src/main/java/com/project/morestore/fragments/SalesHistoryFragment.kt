@@ -146,6 +146,7 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
         menuAdapter.changeCartItemsSize(cartItems.size)
         menuAdapter.changeOrdersItemsSize(activeOrders.size)
         menuAdapter.changeSalesItemsSize(activeSales.size)
+        menuAdapter.changeOrderHistorySize(inactiveOrders.size)
         menuAdapter.changeSalesHistorySize(inactiveSales.size)
     }
 }
