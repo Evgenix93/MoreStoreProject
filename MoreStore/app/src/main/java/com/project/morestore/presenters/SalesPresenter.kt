@@ -76,7 +76,14 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                     viewState.onItemsLoaded(cartItems, activeOrders, activeSales, inactiveOrders, inactiveSales)
                 }
                 400 -> {viewState.onError(getError(response.errorBody()!!))}
-                404 -> viewState.onSalesLoaded(emptyList(), emptyList(), emptyList())
+                404 -> {
+                    viewState.onSalesLoaded(emptyList(), emptyList(), emptyList())
+                    val cartItems = getCartItems() ?: emptyList()
+                    val orderItems = getOrderItems()?.filter{it.cart != null}
+                    val activeOrders = orderItems?.filter { it.status == 0 } ?: emptyList()
+                    val inactiveOrders = orderItems?.filter{it.status == 1}.also{Log.d("Sales", "inactiveOrders = $it")} ?: emptyList()
+                    viewState.onItemsLoaded(cartItems, activeOrders, emptyList(), inactiveOrders, emptyList())
+                }
                 0 -> {viewState.onError(getError(response.errorBody()!!))}
                 null -> {viewState.onError("Нет интернета")}
             }
