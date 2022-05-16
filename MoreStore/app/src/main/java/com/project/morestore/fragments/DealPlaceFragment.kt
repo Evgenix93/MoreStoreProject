@@ -222,10 +222,6 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
 
     }
 
-    override fun onUserLoaded() {
-
-    }
-
     override fun onError(message: String) {
         showToast(message)
     }

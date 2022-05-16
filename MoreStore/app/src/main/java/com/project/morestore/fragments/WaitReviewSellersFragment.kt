@@ -53,9 +53,9 @@ class WaitReviewSellersFragment: MvpAppCompatFragment(R.layout.fragment_wait_rev
         }
     }
 
-    override fun onSellersLoaded(sellers: List<User>) {
+    override fun onSellersLoaded(sellers: Set<User>) {
         emptyList(false)
-        sellersAdapter.updateList(sellers)
+        sellersAdapter.updateList(sellers.toList())
     }
 
     override fun onError(message: String) {

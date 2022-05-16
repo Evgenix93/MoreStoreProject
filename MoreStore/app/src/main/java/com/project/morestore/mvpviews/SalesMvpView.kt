@@ -12,9 +12,6 @@ interface SalesMvpView: MvpView {
     fun onSalesLoaded(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>)
 
     @OneExecution
-    fun onUserLoaded()
-
-    @OneExecution
     fun onError(message: String)
 
     @OneExecution

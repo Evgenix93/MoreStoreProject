@@ -18,6 +18,8 @@ import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
+import java.util.*
+import kotlin.math.absoluteValue
 
 class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
     private val salesRepository = SalesRepository()
@@ -31,7 +33,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
             val response = salesRepository.getSales()
             when(response?.code()){
                 200 -> {
-                    val sales = response.body()!!
+                    val sales = response.body()!!.reversed()
                     val addresses = getAddresses()
                     val avatars = sales.map{
                         if(it.idUser == null)
@@ -39,17 +41,38 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                         else
                            getUser(it.idUser)
                     }
-                    Log.d("MyDebug", "avatars = $avatars")
                     val activeSales = sales.filter{it.status == 0}
                     val inactiveSales = sales.filter{it.status == 1}
-                    if(isHistory)
-                    viewState.onSalesLoaded(inactiveSales, addresses, avatars)
-                    else
-                        viewState.onSalesLoaded(activeSales, addresses, avatars)
+                    if(isHistory) {
+                        val inactiveSalesSorted = inactiveSales
+                            .sortedBy {sale ->
+                             val timestamp = addresses.find{address -> address.idOrder == sale.id}
+                                    ?.address?.substringAfter(';')?.toLongOrNull()
+                                if(timestamp != null)
+                                    timestamp - System.currentTimeMillis()
+                                else
+                                    null
+                            }
+
+                        viewState.onSalesLoaded(inactiveSalesSorted, addresses, avatars)
+                    }
+                    else {
+                        val activeSalesSorted = activeSales
+                            .sortedBy {sale ->
+                              val timestamp = addresses.find{address -> address.idOrder == sale.id}
+                                    ?.address?.substringAfter(';')?.toLongOrNull()
+                                if(timestamp != null)
+                                    (timestamp - System.currentTimeMillis())
+                                else {
+                                    null
+                                }
+                            }
+                        viewState.onSalesLoaded(activeSalesSorted, addresses, avatars)
+                    }
                     val cartItems = getCartItems() ?: emptyList()
-                    val orderItems = getOrderItems()
+                    val orderItems = getOrderItems()?.filter{it.cart != null}
                     val activeOrders = orderItems?.filter { it.status == 0 } ?: emptyList()
-                    val inactiveOrders = orderItems?.filter{it.status == 1} ?: emptyList()
+                    val inactiveOrders = orderItems?.filter{it.status == 1}.also{Log.d("Sales", "inactiveOrders = $it")} ?: emptyList()
                     viewState.onItemsLoaded(cartItems, activeOrders, activeSales, inactiveOrders, inactiveSales)
                 }
                 400 -> {viewState.onError(getError(response.errorBody()!!))}

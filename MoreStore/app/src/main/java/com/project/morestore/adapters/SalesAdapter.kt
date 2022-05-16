@@ -1,13 +1,9 @@
 package com.project.morestore.adapters
 
-import android.content.res.ColorStateList
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +12,6 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemOrderBinding
 import com.project.morestore.models.*
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.cart.OrderStatus
-import java.sql.Time
 import java.util.*
 
 class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(orderId: Long) -> Unit, private val acceptDealPlace:(OfferedOrderPlaceChange) -> Unit, private val declineDealPlace:(Long, Long) -> Unit): RecyclerView.Adapter<SalesAdapter.SaleViewHolder>() {
@@ -30,15 +23,12 @@ class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(ord
         val binding: ItemOrderBinding by viewBinding()
 
         init {
-          binding.orderItemAcceptBlock.isVisible = true
           binding.orderItemAcceptDescription.isVisible = false
-            binding.orderItemAcceptButton.isVisible = isHistory.not()
           binding.orderItemAcceptProblemsButton.isVisible = false
           binding.orderItemAcceptButton.text = "Добавить место встречи"
           binding.orderItemDeliveryDateText.text = "Самовывоз"
           binding.orderItemDeliveryDateText.setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.black, null))
           binding.orderItemDeliveryDate.text = "Доставка"
-          binding.orderItemDeliveryContent.text = "по желанию продавца"
           binding.orderItemStatusContent.text = "Необходимо добавить место встречи"
           binding.orderItemDeliveryTitle.text = "Адрес:"
 
@@ -48,7 +38,6 @@ class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(ord
                 binding.orderItemStatusImage.imageTintList = null
                 binding.orderItemStatusContent.setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.black, null))
                 binding.orderItemStatusContent.text = "Сделка завершена"
-
             }
         }
 
@@ -58,18 +47,26 @@ class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(ord
             binding.orderItemAcceptButton.setOnClickListener{
                 addDealPlace(order.id)
             }
-            address?.let{offeredOrderPlace ->
-                val timeStamp = offeredOrderPlace.address.substringAfter(';').toLongOrNull()
+            binding.orderItemAcceptBlock.isVisible = address == null
+
+            if(address != null){
+                val timeStamp = address.address.substringAfter(';').toLongOrNull()
                 if(timeStamp != null) {
                     val calendar = Calendar.getInstance()
                         .apply { timeInMillis = timeStamp }
                     val hours = calendar.get(Calendar.HOUR_OF_DAY)
+                    val hoursStr = if(hours < 10) "0$hours" else hours.toString()
                     val minutes = calendar.get(Calendar.MINUTE)
+                    val minutesStr = if(minutes < 10) "0$minutes" else minutes.toString()
+                    val day = calendar.get(Calendar.DAY_OF_MONTH)
+                    val dayStr = if(day < 10) "0$day" else day.toString()
+                    val month = calendar.get(Calendar.MONTH) + 1
+                    val monthStr = if(month < 10) "0$month" else month.toString()
                     binding.orderItemDeliveryContent.text =
-                        "${offeredOrderPlace.address.substringBefore(';')}, $hours:$minutes"
+                        "${address.address.substringBefore(';')} $dayStr.$monthStr $hoursStr:$minutesStr"
                 }else
-                    binding.orderItemDeliveryContent.text = offeredOrderPlace.address
-                binding.orderItemAcceptButton.isVisible = false
+                    binding.orderItemDeliveryContent.text = address.address
+
                 when(address.type){
                     OfferedPlaceType.PROPOSED.value -> {
                         binding.orderItemDeliveryChangeBlock.isVisible = false
@@ -89,8 +86,8 @@ class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(ord
                            binding.orderItemChangeDeliveryAcceptButton.setOnClickListener{
                                acceptDealPlace(OfferedOrderPlaceChange(
                                    idOrder = order.id,
-                                   idAddress = offeredOrderPlace.id,
-                                   address = offeredOrderPlace.address,
+                                   idAddress = address.id,
+                                   address = address.address,
                                    status = 1
                                ))
                            }
@@ -103,7 +100,8 @@ class SalesAdapter(private val isHistory: Boolean, private val addDealPlace:(ord
                            binding.orderItemStatusContent.text = "Ожидание встречи с покупателем"
                     }
                 }
-            }
+            }else
+                binding.orderItemDeliveryContent.text = "по желанию продавца"
 
             binding.orderItemUserName.text = "${user?.name} ${user?.surname}"
             Glide.with(itemView)

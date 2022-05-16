@@ -86,7 +86,16 @@ class OrdersActivePresenter(val context: Context)
                 val orders = getAllOrders() ?: return@launch
                 val orderAddresses = getOrderAddresses() ?: return@launch
 
-                val orderItems = orders.filter { it.cart != null && it.status == 0 }.map { order ->
+                val orderItems = orders.filter { it.cart != null && it.status == 0 }.sortedBy{order ->
+                    val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
+                        ?.address?.substringAfter(';')?.toLongOrNull()
+                    if(timestamp != null)
+                        (timestamp - System.currentTimeMillis())
+                    else {
+                        null
+                    }
+                }
+                    .map { order ->
                     val user = getSellerUser(order.cart!!.first().idUser!!)
                     val address = orderAddresses.find { it.idOrder == order.id  }
                     val time = if(address != null) Calendar.getInstance()
@@ -198,6 +207,7 @@ class OrdersActivePresenter(val context: Context)
                 viewState.showMessage("500 Internal Server Error")
                 null
             }
+            404 -> emptyList()
             else -> null
 
         }
@@ -244,6 +254,8 @@ class OrdersActivePresenter(val context: Context)
                 viewState.showMessage(response.errorBody()?.string().orEmpty())
                 null
             }
+            404 -> emptyList()
+
             else -> null
 
         }

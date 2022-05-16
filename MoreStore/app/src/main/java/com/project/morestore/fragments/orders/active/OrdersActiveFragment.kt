@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -40,6 +41,7 @@ class OrdersActiveFragment
         super.onViewCreated(view, savedInstanceState)
         showBottomNav()
         initToolbar()
+        showLoading(true)
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -81,6 +83,7 @@ class OrdersActiveFragment
     ///////////////////////////////////////////////////////////////////////////
 
     override fun initActiveOrders(adapter: OrdersAdapter) {
+        showLoading(false)
         binding.ordersRecyclerView.adapter = adapter
         //(binding.toolbar.sliderMenu.adapter as SliderMenuAdapter<SliderMenu<*>>).changeOrdersItemsSize(adapter.itemCount)
     }
@@ -92,6 +95,7 @@ class OrdersActiveFragment
     }
 
     override fun showMessage(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
@@ -105,6 +109,7 @@ class OrdersActiveFragment
             bundleOf(
                 ChatFragment.USER_ID_KEY to userId,
                 ChatFragment.PRODUCT_ID_KEY to productId,
+                ChatFragment.FROM_ORDERS to true,
                 Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
             )
         )
@@ -122,5 +127,9 @@ class OrdersActiveFragment
         binding.toolbar.toolbarBack.setOnClickListener {
             toolbarPresenter.onBackClick();
         }
+    }
+
+    private fun showLoading(isLoading: Boolean){
+        binding.loader.isVisible = isLoading
     }
 }

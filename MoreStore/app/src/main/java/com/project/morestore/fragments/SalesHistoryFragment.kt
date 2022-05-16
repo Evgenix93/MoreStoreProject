@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -104,6 +105,7 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
     }
 
     private fun getSalesHistory(){
+      binding.loader.isVisible = true
       presenter.getSales(true)
     }
 
@@ -116,14 +118,13 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
         addresses: List<OfferedOrderPlace>,
         users: List<User?>
     ) {
+        binding.loader.isVisible = false
         salesAdapter.updateList(sales, addresses, users)
     }
 
-    override fun onUserLoaded() {
-        TODO("Not yet implemented")
-    }
-
+    
     override fun onError(message: String) {
+        binding.loader.isVisible = false
         showToast(message)
     }
 
