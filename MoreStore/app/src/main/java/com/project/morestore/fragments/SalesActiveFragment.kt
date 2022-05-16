@@ -42,7 +42,6 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
     }
 
     private fun initSalesList(){
-       Dispatchers
        binding.ordersRecyclerView.apply {
            adapter = SalesAdapter(false,{
              findNavController().navigate(SalesActiveFragmentDirections.actionSalesActiveFragmentToDealPlaceFragment(it))
