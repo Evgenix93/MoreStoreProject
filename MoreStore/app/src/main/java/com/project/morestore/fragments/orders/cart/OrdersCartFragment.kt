@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -89,6 +90,7 @@ class OrdersCartFragment
     ///////////////////////////////////////////////////////////////////////////
 
     override fun initCart(adapter: CartAdapter) {
+        showLoading(false)
         binding.recyclerView.adapter = adapter
     }
 
@@ -97,10 +99,12 @@ class OrdersCartFragment
     ///////////////////////////////////////////////////////////////////////////
 
     override fun loaded(result: Any) {
+        showLoading(false)
         when (result) {
             is Long -> {
                 userId = result
                 Log.d("MyDebug", "userId = $result")
+                showLoading(true)
                 presenter.loadCartData(result) {
                     mainPresenter.removeProductFromCart(it.product.id, userId)
                 }
@@ -109,9 +113,11 @@ class OrdersCartFragment
     }
 
     override fun loading() {
+        showLoading(true)
     }
 
     override fun error(message: String) {
+        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
@@ -142,5 +148,9 @@ class OrdersCartFragment
         binding.toolbar.toolbarBack.setOnClickListener {
             toolbarPresenter.onBackClick();
         }
+    }
+
+    private fun showLoading(isLoading: Boolean){
+        binding.loader.isVisible = isLoading
     }
 }

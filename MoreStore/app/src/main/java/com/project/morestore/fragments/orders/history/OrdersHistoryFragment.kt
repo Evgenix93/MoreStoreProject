@@ -92,6 +92,6 @@ class OrdersHistoryFragment
     }
 
     private fun showLoading(isLoading: Boolean){
-       // binding.loader.isVisible = isLoading
+        binding.loader.isVisible = isLoading
     }
 }

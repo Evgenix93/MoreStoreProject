@@ -132,6 +132,8 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_onboarding6.xml" value="0.4003623188405797" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_order_create.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_orders.xml" value="0.4390625" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_orders_cart.xml" value="0.4390625" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_orders_history.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_photo.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_photo_finish.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_product.xml" value="0.67" />
@@ -279,19 +281,16 @@
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_onboarding3.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_onboarding5.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_order_create.xml" value="0.36133733390484357" />
-        <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_orders.xml" value="0.3897722389342501" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_photo.xml" value="0.36133733390484357" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_product.xml" value="0.3300704776820673" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_profile.xml" value="0.36133733390484357" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_profile_for_who.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_raise_product.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_regions.xml" value="0.36973684210526314" />
-        <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_seller_profile.xml" value="0.3897722389342501" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_success_promote.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_wait_review.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/item_card_bottom_menu.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/item_favoriteseller.xml" value="0.36973684210526314" />
-        <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/item_order.xml" value="0.3897722389342501" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/item_photo.xml" value="0.36973684210526314" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/item_product.xml" value="0.36133733390484357" />
         <entry key="..\:/freelance/MoreStore(Git)/MoreStoreProject/MoreStore/app/src/main/res/layout/item_review.xml" value="0.36133733390484357" />

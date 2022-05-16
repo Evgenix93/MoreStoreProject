@@ -9,6 +9,7 @@ import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.models.slidermenu.SliderMenu
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.OrdersRepository
+import com.project.morestore.repositories.SalesRepository
 import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
@@ -20,6 +21,7 @@ class ToolbarCartPresenter(val context: Context, val selectedMenu: OrdersSliderM
     private lateinit var adapter: SliderMenuAdapter<OrdersSliderMenu>
     private val ordersRepository = OrdersRepository(context)
     private val authRepository = AuthRepository(context)
+    private val saleRepository = SalesRepository()
 
     override fun attachView(view: ToolbarCartView) {
         super.attachView(view)
@@ -105,9 +107,12 @@ class ToolbarCartPresenter(val context: Context, val selectedMenu: OrdersSliderM
             viewState.initMenuAdapter(adapter)
             val cartItems = getCartItems()
             val orderItems = getOrderItems()
+            val salesItems = getSalesItems()
             adapter.changeCartItemsSize(cartItems?.size ?: 0)
             adapter.changeOrdersItemsSize(orderItems?.filter { it.status == 0 && it.cart != null }?.size ?: 0)
             adapter.changeOrderHistorySize(orderItems?.filter { it.status == 1 }?.size ?: 0)
+            adapter.changeSalesItemsSize(salesItems?.filter { it.status == 0 && it.cart != null }?.size ?: 0)
+            adapter.changeSalesHistorySize(salesItems?.filter { it.status == 1 && it.cart != null }?.size ?: 0)
             viewState.initMenuAdapter(adapter)
         }
     }
@@ -123,4 +128,12 @@ class ToolbarCartPresenter(val context: Context, val selectedMenu: OrdersSliderM
         return if(response?.code() == 200 ) response.body() else null
 
     }
+
+    private suspend fun getSalesItems(): List<Order>?{
+        val response = saleRepository.getSales()
+        return if(response?.code() == 200 ) response.body() else null
+
+    }
+
+
 }
