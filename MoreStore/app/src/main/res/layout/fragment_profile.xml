@@ -63,7 +63,8 @@
                    android:fontFamily="@font/manrope_regular"
                    android:textColor="@color/gray2"
                    android:backgroundTint="@color/white"
-                   android:paddingVertical="0dp"/>
+                   android:paddingVertical="0dp"
+                   android:enabled="false"/>
 
               <View
                   android:layout_width="65dp"

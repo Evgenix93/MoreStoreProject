@@ -14,7 +14,7 @@ class WaitReviewSellersPresenter(context: Context): MvpPresenter<WaitReviewSelle
         presenterScope.launch {
           val response = repository.getWaitReviewSellers()
           when(response?.code()){
-              200 -> viewState.onSellersLoaded(response.body()!!)
+              200 -> viewState.onSellersLoaded(response.body()!!.toSet())
               404 -> viewState.onError("Список пуст")
               500 -> viewState.onError("500 Internal Server Error")
               null -> viewState.onError("Нет сети")

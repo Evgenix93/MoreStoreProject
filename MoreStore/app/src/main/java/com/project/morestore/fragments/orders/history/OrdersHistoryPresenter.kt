@@ -90,7 +90,16 @@ class OrdersHistoryPresenter(context: Context)
                     val orderAddresses = getOrderAddresses() ?: return@launch
 
 
-                    val orderItems = orders.filter { it.cart != null }.map { order ->
+                    val orderItems = orders.filter { it.cart != null }.sortedBy{order ->
+                        val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
+                            ?.address?.substringAfter(';')?.toLongOrNull()
+                        if(timestamp != null)
+                            (timestamp - System.currentTimeMillis())
+                        else {
+                            null
+                        }
+                    }
+                        .map { order ->
                         val user = getSellerUser(order.cart!!.first().idUser!!)
                         val address = orderAddresses.find { it.idOrder == order.id && it.status == 1 }
                         val time = if (address != null) Calendar.getInstance()

@@ -7,7 +7,7 @@ import moxy.viewstate.strategy.alias.OneExecution
 interface WaitReviewSellersMvpView: MvpView {
 
   @OneExecution
-  fun  onSellersLoaded(sellers: List<User>)
+  fun  onSellersLoaded(sellers: Set<User>)
 
   @OneExecution
   fun onError(message: String)

@@ -2,6 +2,7 @@ package com.project.morestore.fragments.orders.history;
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -33,6 +34,7 @@ class OrdersHistoryFragment
         super.onViewCreated(view, savedInstanceState)
         showBottomNav()
         initToolbar()
+        showLoading(true)
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -66,11 +68,12 @@ class OrdersHistoryFragment
     ///////////////////////////////////////////////////////////////////////////
 
     override fun initOrdersHistory(adapter: OrdersHistoryAdapter) {
+        showLoading(false)
         binding.ordersHistoryRecyclerView.adapter = adapter
     }
 
     override fun showMessage(message: String) {
-
+          showLoading(false)
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -85,5 +88,9 @@ class OrdersHistoryFragment
         binding.toolbar.toolbarBack.setOnClickListener {
             toolbarPresenter.onBackClick();
         }
+    }
+
+    private fun showLoading(isLoading: Boolean){
+       // binding.loader.isVisible = isLoading
     }
 }

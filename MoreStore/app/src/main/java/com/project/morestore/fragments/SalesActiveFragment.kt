@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,7 @@ import com.project.morestore.models.slidermenu.SliderMenu
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.presenters.SalesPresenter
 import com.project.morestore.util.autoCleared
+import kotlinx.coroutines.Dispatchers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -40,6 +42,7 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
     }
 
     private fun initSalesList(){
+       Dispatchers
        binding.ordersRecyclerView.apply {
            adapter = SalesAdapter(false,{
              findNavController().navigate(SalesActiveFragmentDirections.actionSalesActiveFragmentToDealPlaceFragment(it))
@@ -51,6 +54,7 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
                    bundleOf(
                        ChatFragment.USER_ID_KEY to userId,
                        ChatFragment.PRODUCT_ID_KEY to productId,
+                       ChatFragment.FROM_ORDERS to true,
                        Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
                    )
                )
@@ -120,6 +124,7 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
     }
 
     private fun getSales(){
+      binding.loader.isVisible = true
       presenter.getSales(false)
     }
 
@@ -139,14 +144,13 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
 
     override fun onSalesLoaded(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>) {
         Log.d("MyDebug", "onSalesLoaded")
+        binding.loader.isVisible = false
         updateSalesList(sales, addresses, users)
     }
 
-    override fun onUserLoaded() {
-
-    }
 
     override fun onError(message: String) {
+        binding.loader.isVisible = false
         showToast(message)
     }
 
@@ -169,6 +173,7 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
         menuAdapter.changeCartItemsSize(cartItems.size)
         menuAdapter.changeOrdersItemsSize(activeOrders.size)
         menuAdapter.changeSalesItemsSize(activeSales.size)
+        menuAdapter.changeOrderHistorySize(inactiveOrders.size)
         menuAdapter.changeSalesHistorySize(inactiveSales.size)
     }
 }
