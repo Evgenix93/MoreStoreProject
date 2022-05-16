@@ -76,6 +76,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                     viewState.onItemsLoaded(cartItems, activeOrders, activeSales, inactiveOrders, inactiveSales)
                 }
                 400 -> {viewState.onError(getError(response.errorBody()!!))}
+                404 -> viewState.onSalesLoaded(emptyList(), emptyList(), emptyList())
                 0 -> {viewState.onError(getError(response.errorBody()!!))}
                 null -> {viewState.onError("Нет интернета")}
             }
