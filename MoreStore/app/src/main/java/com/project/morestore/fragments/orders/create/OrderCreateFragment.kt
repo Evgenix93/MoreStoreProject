@@ -2,6 +2,7 @@ package com.project.morestore.fragments.orders.create
 
 import android.os.Bundle
 import android.text.style.StrikethroughSpan
+import android.util.Log
 import android.util.Range
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     private val args: OrderCreateFragmentArgs by navArgs()
     private var chosenAddress: MyAddress? = null
     private var chosenTime: Calendar? = null//Calendar.getInstance()
+    private var chosenAddressStr = ""
 
     ///////////////////////////////////////////////////////////////////////////
     //                      View
@@ -110,10 +112,44 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     private fun setClickListeners() {
         binding.dateEditText.setOnClickListener {
             MenuBottomDialogDateFragment(/*requireContext(),*/ false, { day, month, year ->
-                binding.dateEditText.setText("$day.$month.$year")
-                chosenTime?.set(year, month - 1, day)
-                if(chosenTime == null)
-                    chosenTime = Calendar.getInstance().apply { set(year, month - 1, day) }
+                val currentCalendar = Calendar.getInstance()
+                val choiceCalendar = Calendar.getInstance().apply { set(year, month - 1, day) }
+                val timeDiff = choiceCalendar.timeInMillis - currentCalendar.timeInMillis
+                val currDay = currentCalendar.get(Calendar.DAY_OF_MONTH)
+                val currMonth = currentCalendar.get(Calendar.MONTH) + 1
+                val currYear = currentCalendar.get(Calendar.YEAR)
+                val dayStr = if(day < 10) "0$day" else day.toString()
+                val monthStr = if(month < 10) "0$month" else month.toString()
+                val yearStr = year.toString().takeLast(2)
+                if(timeDiff > 0) {
+                    binding.dateEditText.setText("$dayStr.$monthStr.$yearStr")
+                    chosenTime?.set(year, month - 1, day)
+                    if(chosenTime == null)
+                        chosenTime = Calendar.getInstance().apply { set(year, month - 1, day) }
+
+                }
+                else{
+                    val currDayStr = if(currDay < 10) "0$currDay" else currDay.toString()
+                    val currMonthStr = if(currMonth < 10) "0$currMonth" else currMonth.toString()
+                    val currYearStr = currYear.toString().takeLast(2)
+                    binding.dateEditText.setText("$currDayStr.$currMonthStr.$currYearStr")
+                    chosenTime?.set(currYear, currMonth - 1, currDay)
+
+                    if((chosenTime != null) && chosenTime!!.timeInMillis - System.currentTimeMillis() < 3600 * 1000){
+                        binding.timeEditText.setText(
+                            "${currentCalendar.get(Calendar.HOUR_OF_DAY) + 1}:${
+                                currentCalendar.get(
+                                    Calendar.MINUTE
+                                )
+                            }"
+                        )
+                        chosenTime?.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY) + 1)
+                        chosenTime?.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE))
+                    }
+                    if(chosenTime == null)
+                        chosenTime = Calendar.getInstance().apply { set(currYear, currMonth - 1, currDay) }
+                }
+
 
             }, { _, _ ->
 
@@ -124,16 +160,32 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             MenuBottomDialogDateFragment(/*requireContext(),*/ true, { _, _, _ ->
 
             }, { hour, minute ->
-                binding.timeEditText.setText("$hour:$minute")
+                val currentCalendar = Calendar.getInstance()
                 chosenTime?.set(Calendar.HOUR_OF_DAY, hour)
                 chosenTime?.set(Calendar.MINUTE, minute)
-                if(chosenTime == null){
+                if(chosenTime != null) {
+                    val timeDiff = chosenTime!!.timeInMillis - currentCalendar.timeInMillis
+                    if(timeDiff > 0)
+                        binding.timeEditText.setText("$hour:$minute")
+                    else {
+                        binding.timeEditText.setText(
+                            "${currentCalendar.get(Calendar.HOUR_OF_DAY) + 1}:${
+                                currentCalendar.get(
+                                    Calendar.MINUTE
+                                )
+                            }"
+                        )
+                        chosenTime?.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY) + 1)
+                        chosenTime?.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE))
+                    }
+
+                }else {
+                    binding.timeEditText.setText("$hour:$minute")
                     chosenTime = Calendar.getInstance().apply {
                         set(Calendar.HOUR_OF_DAY, hour)
                         set(Calendar.MINUTE, minute)
                     }
                 }
-
 
             }).show(childFragmentManager, null)
         }
@@ -161,7 +213,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             }
             val place = if(placeId == PLACE_FROM_SELLER) OrderPlace(placeId.toLong(), null, null)
             else OrderPlace(placeId.toLong(),
-                "${chosenAddress?.address?.street}, ${chosenAddress?.address?.building.orEmpty()};${chosenTime?.timeInMillis}",
+                if(chosenAddressStr.isNotEmpty()) "$chosenAddressStr;${chosenTime?.timeInMillis}" else null,
                 chosenTime?.timeInMillis ?: 0/1000)
             presenter.onCreateOrder(args.cartId, deliveryId, place, payId)
 
@@ -177,8 +229,17 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             }
             setFragmentResultListener(MyAddressesFragment.ADDRESS_REQUEST){_, bundle ->
                 val address = bundle.getParcelable<MyAddress>(MyAddressesFragment.ADDRESS_KEY)
+                Log.d("mylog", "address $address")
                 chosenAddress = address
-                binding.chosenAddressTextView.text = "${address?.address?.street}, ${address?.address?.building.orEmpty()}"
+                val streetStr = address?.address?.street
+                val houseStr = if(address?.address?.house != null) "дом.${address.address.house}" else null
+                val housingStr = if(address?.address?.housing != null) "кп.${address.address.housing}" else null
+                val buildingStr = if(address?.address?.building != null) "стр.${address.address.building}" else null
+                val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
+                val strings =
+                    arrayOf(streetStr, houseStr, housingStr, buildingStr, apartmentStr).filterNotNull()
+                binding.chosenAddressTextView.text = strings.joinToString(", ")
+                chosenAddressStr = strings.joinToString(", ")
                 binding.chosenAddressTextView.isVisible = true
                 binding.chooseOnMapTextView.text = "Изменить"
 
@@ -197,6 +258,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.placeIcon.isVisible = id == R.id.userVariantRadioBtn
             binding.whenReceiveTextView.isVisible = id == R.id.userVariantRadioBtn
             binding.pickers.isVisible = id == R.id.userVariantRadioBtn
+            binding.chosenAddressTextView.isVisible = id == R.id.userVariantRadioBtn && chosenAddress != null
         }
     }
 

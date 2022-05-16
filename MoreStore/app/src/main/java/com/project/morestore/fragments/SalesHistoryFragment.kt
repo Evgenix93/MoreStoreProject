@@ -93,6 +93,7 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
                 }
             }
         }.also{menuAdapter = it}
+        binding.toolbar.sliderMenu.scrollToPosition(4)
     }
 
     private fun initSalesHistoryList(){

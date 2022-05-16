@@ -53,7 +53,7 @@ class OrderProblemsPresenter(context: Context) : MvpPresenter<OrderProblemsView>
             val response = userRepository.getCurrentUserInfo()
             when (response?.code()) {
                 200 -> {
-                    productProblemsData.phone = response.body()?.phone?.substring(1)
+                    productProblemsData.phone = response.body()?.phone//?.substring(1)
                     productProblemsData.phone?.let { viewState.setPhone(it) }
                 }
             }

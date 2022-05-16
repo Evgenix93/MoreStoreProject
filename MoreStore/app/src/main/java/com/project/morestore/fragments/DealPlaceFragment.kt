@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -33,6 +34,7 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
     private val args: DealPlaceFragmentArgs by navArgs()
     private var chosenAddress: MyAddress? = null
     private var chosenTime: Calendar? = null
+    private var chosenAddressStr = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,7 +57,7 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
               Toast.makeText(requireContext(), "Выберите адрес и время", Toast.LENGTH_SHORT).show()
               return@setOnClickListener
           }
-          presenter.addDealPlace(args.orderId, "${chosenAddress?.address?.street},${chosenAddress?.address?.building.orEmpty()};${chosenTime?.timeInMillis}")
+          presenter.addDealPlace(args.orderId, "$chosenAddressStr;${chosenTime?.timeInMillis}")
       }
     }
 
@@ -66,32 +68,84 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
     private fun setClickListeners(){
         binding.dateEditText.setOnClickListener {
             MenuBottomDialogDateFragment(/*requireContext(),*/ false, { day, month, year ->
-                binding.dateEditText.setText("$day.$month.$year")
-                chosenTime?.set(year, month - 1, day)
-                if(chosenTime == null)
-                    chosenTime = Calendar.getInstance().apply { set(year, month - 1, day) }
+                val currentCalendar = Calendar.getInstance()
+                val choiceCalendar = Calendar.getInstance().apply { set(year, month - 1, day) }
+                val timeDiff = choiceCalendar.timeInMillis - currentCalendar.timeInMillis
+                val currDay = currentCalendar.get(Calendar.DAY_OF_MONTH)
+                val currMonth = currentCalendar.get(Calendar.MONTH) + 1
+                val currYear = currentCalendar.get(Calendar.YEAR)
+                val dayStr = if(day < 10) "0$day" else day.toString()
+                val monthStr = if(month < 10) "0$month" else month.toString()
+                val yearStr = year.toString().takeLast(2)
+                if(timeDiff > 0) {
+                    binding.dateEditText.setText("$dayStr.$monthStr.$yearStr")
+                    chosenTime?.set(year, month - 1, day)
+                    if(chosenTime == null)
+                        chosenTime = Calendar.getInstance().apply { set(year, month - 1, day) }
+
+                }
+                else{
+                    val currDayStr = if(currDay < 10) "0$currDay" else currDay.toString()
+                    val currMonthStr = if(currMonth < 10) "0$currMonth" else currMonth.toString()
+                    val currYearStr = currYear.toString().takeLast(2)
+                    binding.dateEditText.setText("$currDayStr.$currMonthStr.$currYearStr")
+                    chosenTime?.set(currYear, currMonth - 1, currDay)
+
+                    if((chosenTime != null) && chosenTime!!.timeInMillis - System.currentTimeMillis() < 3600 * 1000){
+                        binding.timeEditText.setText(
+                            "${currentCalendar.get(Calendar.HOUR_OF_DAY) + 1}:${
+                                currentCalendar.get(
+                                    Calendar.MINUTE
+                                )
+                            }"
+                        )
+                        chosenTime?.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY) + 1)
+                        chosenTime?.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE))
+                    }
+                    if(chosenTime == null)
+                        chosenTime = Calendar.getInstance().apply { set(currYear, currMonth - 1, currDay) }
+                }
+
 
             }, { _, _ ->
 
             }).show(childFragmentManager, null)
+
         }
 
         binding.timeEditText.setOnClickListener {
             MenuBottomDialogDateFragment(/*requireContext(),*/ true, { _, _, _ ->
 
             }, { hour, minute ->
-                binding.timeEditText.setText("$hour:$minute")
+                val currentCalendar = Calendar.getInstance()
                 chosenTime?.set(Calendar.HOUR_OF_DAY, hour)
                 chosenTime?.set(Calendar.MINUTE, minute)
-                if(chosenTime == null){
+                if(chosenTime != null) {
+                    val timeDiff = chosenTime!!.timeInMillis - currentCalendar.timeInMillis
+                    if(timeDiff > 0)
+                        binding.timeEditText.setText("$hour:$minute")
+                    else {
+                        binding.timeEditText.setText(
+                            "${currentCalendar.get(Calendar.HOUR_OF_DAY) + 1}:${
+                                currentCalendar.get(
+                                    Calendar.MINUTE
+                                )
+                            }"
+                        )
+                        chosenTime?.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY) + 1)
+                        chosenTime?.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE))
+                    }
+
+                }else {
+                    binding.timeEditText.setText("$hour:$minute")
                     chosenTime = Calendar.getInstance().apply {
                         set(Calendar.HOUR_OF_DAY, hour)
                         set(Calendar.MINUTE, minute)
                     }
                 }
 
-
             }).show(childFragmentManager, null)
+
         }
 
         //binding.cancelTextView.setOnClickListener {
@@ -133,9 +187,20 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
             }*/
             setFragmentResultListener(MyAddressesFragment.ADDRESS_REQUEST){_, bundle ->
                 val address = bundle.getParcelable<MyAddress>(MyAddressesFragment.ADDRESS_KEY)
+                Log.d("mylog", "address $address")
                 chosenAddress = address
-                binding.chosenAddressTextView.text = "${address?.address?.street}, ${address?.address?.building.orEmpty()}"
+                val streetStr = address?.address?.street
+                val houseStr = if(address?.address?.house != null) "дом.${address.address.house}" else null
+                val housingStr = if(address?.address?.housing != null) "кп.${address.address.housing}" else null
+                val buildingStr = if(address?.address?.building != null) "стр.${address.address.building}" else null
+                val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
+                val strings =
+                    arrayOf(streetStr, houseStr, housingStr, buildingStr, apartmentStr).filterNotNull()
+                binding.chosenAddressTextView.text = strings.joinToString(", ")
+                chosenAddressStr = strings.joinToString(", ")
                 binding.chosenAddressTextView.isVisible = true
+                binding.chooseOnMapTextView.text = "Изменить"
+
 
 
             }

@@ -146,6 +146,7 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
     private fun initFilePickerLauncher() {
         filePickerLauncher =
             registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+                if(uri == null) return@registerForActivityResult
                 findNavController().navigate(
                     MakeVideoFragmentDirections.actionMakeVideoFragmentToPhotoFinishFragment(
                         uri.toString(),

@@ -1173,6 +1173,9 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/ordersActiveFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_orderProblemsPhotoFragment_to_makePhotoFragment"
+            app:destination="@id/makePhotoFragment" />
     </fragment>
     <fragment
         android:id="@+id/salesActiveFragment"

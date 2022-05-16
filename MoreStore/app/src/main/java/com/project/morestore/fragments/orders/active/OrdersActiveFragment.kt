@@ -73,6 +73,7 @@ class OrdersActiveFragment
 
     override fun initMenuAdapter(adapter: SliderMenuAdapter<OrdersSliderMenu>) {
         binding.toolbar.sliderMenu.adapter = adapter
+        binding.toolbar.sliderMenu.scrollToPosition(1)
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -62,6 +62,7 @@ class NewAddressPresenter(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
+        address?.favorite?.let { viewState.showFavorite(it) }
         if(address == null) {
             viewState.requestCity()
             presenterScope.launch { requestUser() }

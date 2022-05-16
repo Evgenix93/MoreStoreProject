@@ -18,6 +18,7 @@ import com.project.morestore.dialogs.FeedbackCompleteDialog
 import com.project.morestore.fragments.orders.problems.OrderProblemsFragmentDirections
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import java.io.File
 
 class OrderProblemsPhotoFragment
     : MvpAppCompatFragment(R.layout.fragment_problem_goods_photos), OrderProblemsPhotosView {
@@ -31,7 +32,7 @@ class OrderProblemsPhotoFragment
             if (it.resultCode != Activity.RESULT_OK || it.data == null) {
                 return@registerForActivityResult
             }
-            presenter.addPhoto(it.data!!.data!!)
+           // presenter.addPhoto(it.data!!.data!!)
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,16 +49,24 @@ class OrderProblemsPhotoFragment
         }
 
         binding.problemGoodsPhotosAddFirstCard.setOnClickListener() {
-            pickPhoto()
+            //pickPhoto()
+            findNavController().navigate(OrderProblemsPhotoFragmentDirections.actionOrderProblemsPhotoFragmentToMakePhotoFragment(1))
         }
         binding.problemGoodsPhotosAddSecondCard.setOnClickListener() {
-            pickPhoto()
+            //pickPhoto()
+            findNavController().navigate(OrderProblemsPhotoFragmentDirections.actionOrderProblemsPhotoFragmentToMakePhotoFragment(2))
+
+
         }
         binding.problemGoodsPhotosAddThirdCard.setOnClickListener() {
-            pickPhoto()
+            //pickPhoto()
+            findNavController().navigate(OrderProblemsPhotoFragmentDirections.actionOrderProblemsPhotoFragmentToMakePhotoFragment(3))
+
         }
         binding.problemGoodsPhotosAddForthCard.setOnClickListener() {
-            pickPhoto()
+            //pickPhoto()
+            findNavController().navigate(OrderProblemsPhotoFragmentDirections.actionOrderProblemsPhotoFragmentToMakePhotoFragment(4))
+
         }
     }
 
@@ -72,6 +81,7 @@ class OrderProblemsPhotoFragment
     }
 
     private fun initContent() {
+        presenter.getPhotos()
     }
 
     //PRIVATE
@@ -87,7 +97,7 @@ class OrderProblemsPhotoFragment
     //                            View
     ///////////////////////////////////////////////////////////////////////////
 
-    override fun showPhoto(data: Uri, position: Int) {
+    override fun showPhoto(data: File, position: Int) {
         val loadTo = getPhotoTarget(position)
 
         if (loadTo != null) {
@@ -109,6 +119,7 @@ class OrderProblemsPhotoFragment
             dialog.show()
         }
     }
+
 
     ///////////////////////////////////////////////////////////////////////////
     //                      private

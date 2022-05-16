@@ -142,6 +142,13 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
         views.phoneNumber.setText(phone)
     }
 
+    override fun showFavorite(isFavorite: Boolean) {
+        views.defaultAddress.apply{
+            isChecked = isFavorite
+            jumpDrawablesToCurrentState()
+        }
+    }
+
     override fun showCity(city :String) {
         views.city.text = city
         views.city.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))

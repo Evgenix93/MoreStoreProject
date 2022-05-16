@@ -12,6 +12,10 @@ class EditMyAddressPickupPresenter(
 ) :MyAddressPickupPresenter(addressNetwork) {
     override val address = myAddress.address
 
+    init {
+        isDefault = myAddress.favorite
+    }
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.showFullname(myAddress.name)

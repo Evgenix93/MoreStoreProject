@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.morestore.databinding.BottomdialogDateBinding
+import java.util.*
 
 class MenuBottomDialogDateFragment(private val isTime: Boolean, val onDatePicked: (day: Int, month: Int, year: Int) -> Unit,
 val onTimePicked: (hour: Int, minute: Int) -> Unit): BottomSheetDialogFragment() {
@@ -26,6 +27,8 @@ val onTimePicked: (hour: Int, minute: Int) -> Unit): BottomSheetDialogFragment()
         binding.datePicker.isVisible = isTime.not()
         binding.timePicker.isVisible = isTime
         binding.timePicker.setIs24HourView(true)
+        val calendar = Calendar.getInstance()
+        binding.timePicker.currentHour = calendar.get(Calendar.HOUR_OF_DAY) + 1
     }
 
     override fun onDismiss(dialog: DialogInterface) {

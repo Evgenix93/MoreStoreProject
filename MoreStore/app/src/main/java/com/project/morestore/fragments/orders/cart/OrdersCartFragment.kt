@@ -72,6 +72,7 @@ class OrdersCartFragment
 
     override fun initMenuAdapter(adapter: SliderMenuAdapter<OrdersSliderMenu>) {
         binding.toolbar.sliderMenu.adapter = adapter
+        binding.toolbar.sliderMenu.scrollToPosition(0)
     }
 
     override fun navigate(product: Product, cartId: Long) {

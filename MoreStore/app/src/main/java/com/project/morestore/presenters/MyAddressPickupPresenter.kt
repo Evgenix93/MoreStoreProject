@@ -21,6 +21,11 @@ abstract class MyAddressPickupPresenter(
     }
     protected var isDefault = false
 
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        viewState.showIsDefault(isDefault)
+    }
+
     override fun attachView(view: MyAddressPickupView?) {
         super.attachView(view)
         waitingDelegate.attachView(view)

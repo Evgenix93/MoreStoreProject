@@ -209,6 +209,10 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
                     findNavController().navigate(CatalogFragmentDirections.actionCatalogFragmentToFavoritesFragment())
                     true
                 }
+                R.id.cart -> {
+                    findNavController().navigate(R.id.ordersCartFragment)
+                    true
+                }
                 else -> true
             }
         }

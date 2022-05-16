@@ -117,6 +117,7 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
                 }
             }
         }.also{menuAdapter = it}
+        binding.toolbar.sliderMenu.scrollToPosition(2)
     }
 
     private fun getSales(){

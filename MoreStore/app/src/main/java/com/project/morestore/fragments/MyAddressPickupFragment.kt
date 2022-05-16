@@ -74,6 +74,13 @@ class MyAddressPickupFragment :MvpAppCompatFragment(), MyAddressPickupView {
 
     override fun showPhone(phoneNumber: String) = views.phoneNumber.setText(phoneNumber)
 
+    override fun showIsDefault(isDefault: Boolean) {
+        views.defaultAddress.apply{
+            isChecked = isDefault
+            jumpDrawablesToCurrentState()
+        }
+    }
+
     override fun showMessage(message: String) = defToast(message)
 
     override fun showLoading(show: Boolean) {
