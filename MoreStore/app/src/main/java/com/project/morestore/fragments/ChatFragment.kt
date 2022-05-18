@@ -119,7 +119,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         registerReceiver()
         setClickListeners()
         with(views) {
-            toolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+            toolbar.toolbar.setNavigationOnClickListener {
+                if(findNavController().previousBackStackEntry?.destination?.id ==
+                    R.id.createOrderFragment) findNavController().navigate(R.id.messagesFragment)
+                else findNavController().popBackStack() }
             list.setSpace(24.dp)
             list.adapter = adapter
         }
