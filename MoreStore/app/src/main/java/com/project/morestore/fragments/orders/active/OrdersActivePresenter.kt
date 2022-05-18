@@ -103,9 +103,9 @@ class OrdersActivePresenter(val context: Context)
                     val time = if(address != null) Calendar.getInstance()
                         .apply { timeInMillis = address.address.substringAfter(";").toLongOrNull() ?: 0 }
                     else null
-                    val dialogs = getDialogs()
+                    val dialogs = getDialogs().reversed()
                     val buySuggest = dialogs.find{it.product?.id == order.cart.first().id}
-                        ?.messages?.map{it.buySuggest}?.findLast{it?.status == 1}
+                        ?.messages?.map{it.buySuggest}?.findLast{it != null}
                     val status = when(buySuggest?.status) {
                         0 -> OrderStatus.NOT_SUBMITTED
                         1 -> {

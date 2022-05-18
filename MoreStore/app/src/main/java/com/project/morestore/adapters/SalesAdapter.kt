@@ -79,6 +79,7 @@ class SalesAdapter(
             }
             val buySuggest = dialog?.messages?.map{it.buySuggest}?.findLast{it != null}
                 if (buySuggest?.status == 1) {
+                    binding.orderItemDeliveryChangeBlock.isVisible = false
                     binding.orderItemAcceptBlock.isVisible = address == null
                     if (address != null) {
                         val timeStamp = address.address.substringAfter(';').toLongOrNull()
@@ -149,7 +150,7 @@ class SalesAdapter(
                     binding.orderItemChangeDeliveryDeclineButton.text = "Отклонить"
                     binding.orderItemChangeDeliveryAcceptButton.setOnClickListener {
                         if(buySuggest != null)
-                        acceptDeal(ChatFunctionInfo(dialogId = dialog.dialog.id, suggest = buySuggest.id, value = buySuggest.value!!.toInt()))
+                        acceptDeal(ChatFunctionInfo(dialogId = dialog.dialog.id, suggest = buySuggest.id, value = order.cart!!.first().priceNew!!.toInt()))
                     }
                     binding.orderItemChangeDeliveryDeclineButton.setOnClickListener {
                         if(buySuggest != null)

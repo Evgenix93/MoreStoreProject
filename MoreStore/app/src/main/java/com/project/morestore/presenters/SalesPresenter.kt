@@ -63,7 +63,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                                     null
                                 }
                             }
-                        val dialogs = getDialogs()
+                        val dialogs = getDialogs().reversed()
                         viewState.onSalesLoaded(activeSalesSorted, addresses, avatars, dialogs)
                     }
                     val cartItems = getCartItems() ?: emptyList()
