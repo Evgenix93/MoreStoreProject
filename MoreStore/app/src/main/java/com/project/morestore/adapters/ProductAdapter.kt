@@ -60,7 +60,7 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
                     binding.statusTextView.text = "Уже купили"
                 }
             }
-                if(product.userStatus?.read == true){
+                if(product.statusUser?.read == true){
                 binding.statusReadInfoCardView.isVisible = true
                 binding.productImageView.alpha = 0.65f
             }
