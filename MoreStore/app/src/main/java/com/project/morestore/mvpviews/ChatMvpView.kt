@@ -50,6 +50,9 @@ interface ChatMvpView: MvpView {
     @OneExecution
     fun showUnreadTab(tab: Int, unread: Boolean)
 
+    @OneExecution
+    fun productAddedToCart(product: Product, cartId: Long)
+
     //@OneExecution
     //fun productInfoLoaded(product: Product)
 

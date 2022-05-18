@@ -302,13 +302,14 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 findNavController().popBackStack()
         }
         binding.toolbar.actionIcon.setOnClickListener {
-            if (product != null) {
+           /* if (product != null) {
                 if (!currentState) {
                     presenter.addProductToCart(productId = product!!.id, userId)
                 }else{
                     presenter.removeProductFromCart(productId = product!!.id, userId)
                 }
-            }
+            }*/
+            findNavController().navigate(R.id.ordersCartFragment)
         }
     }
 

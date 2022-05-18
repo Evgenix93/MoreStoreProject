@@ -53,6 +53,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private var currentUserId: Long? = null
     private var currentDialogId: Long? = null
     private var currentProductPrice: Float? = null
+    private var currentProductId: Long? = null
     private lateinit var filePicker: ActivityResultLauncher<Array<String>>
     private val adapter = MessagesAdapter(
         acceptDealCallback = {
@@ -138,7 +139,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 val productId = requireArguments().getLong(PRODUCT_ID_KEY, 0)
                 val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
                 if (userId != 0L && productId != 0L)
-                    createDealChat(userId, productId)
+                    createDealChat(userId, productId, findNavController().previousBackStackEntry?.destination?.id == R.id.createOrderFragment)
                 else getDialog(dialogId)
             }
             else -> throw IllegalArgumentException("Undefined chat type: $chatType")
@@ -395,8 +396,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
 
-    private fun createDealChat(userId: Long, productId: Long) {
-        presenter.createDialog(userId, productId)
+    private fun createDealChat(userId: Long, productId: Long, withBuySuggest: Boolean) {
+        presenter.createDialog(userId, productId, withBuySuggest)
 
     }
 
@@ -650,7 +651,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private val stubAcceptDealRunnable: Runnable get() = Runnable { adapter.setItems(accepted) }
 
     private fun buy() {
-        views.bottomBar.removeAllViews()
+        /*views.bottomBar.removeAllViews()
         WidgetDealCancelBinding.inflate(layoutInflater)
             .also {
                 views.bottomBar.addView(it.root)
@@ -666,7 +667,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         presenter.sendBuyRequest(currentDialogId ?: 0)
         val timeStr = "${Calendar.getInstance().get(Calendar.HOUR_OF_DAY)}:${Calendar.getInstance().get(Calendar.MINUTE)}"
         adapter.addMessage(Message.Special.BuyRequest(timeStr, R.drawable.ic_check, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), R.drawable.ic_bag_filled_green ))
-        views.list.scrollToPosition(adapter.itemCount - 1)
+        views.list.scrollToPosition(adapter.itemCount - 1)*/
+        presenter.buyProduct(currentProductId!!, currentUserId!!)
+
     }
 
     private fun cancelBuy(suggestId: Long) {
@@ -864,6 +867,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         showLoading(false)
         currentDialogId = dialog.dialog.id
         currentProductPrice = dialog.product?.priceNew
+        currentProductId = dialog.product?.id
         user = dialog.dialog.user
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         showDialog(dialog)
@@ -918,7 +922,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         when(type){
             MessageActionType.BUY_REQUEST_SUGGEST -> {
                 Toast.makeText(requireContext(), "Запрос на покупку отправлен", Toast.LENGTH_SHORT).show()
-                cancelWidgetBinding.cancel.setOnClickListener { cancelBuy(info.suggestId!!) }
+                //cancelWidgetBinding.cancel.setOnClickListener { cancelBuy(info.suggestId!!) }
 
             }
             MessageActionType.BUY_REQUEST_CANCEL -> {
@@ -927,7 +931,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }
             MessageActionType.PRICE_SUGGEST -> Toast.makeText(requireContext(), "Предложение цены отправлено", Toast.LENGTH_SHORT).show()
             MessageActionType.DISCOUNT_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Скидка сделана", Toast.LENGTH_LONG).show()
-            MessageActionType.BUY_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Покупка одобрена", Toast.LENGTH_LONG).show()
+            MessageActionType.BUY_REQUEST_SUBMIT -> {
+                Toast.makeText(requireContext(), "Покупка одобрена", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.salesActiveFragment)
+            }
             MessageActionType.PRICE_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Цена одобрена", Toast.LENGTH_LONG).show()
             MessageActionType.PRICE_REQUEST_CANCEL -> Toast.makeText(requireContext(), "Цена отменена", Toast.LENGTH_LONG).show()
         }
@@ -939,5 +946,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun showUnreadTab(tab: Int, unread: Boolean) {
 
+    }
+
+    override fun productAddedToCart(product: Product, cartId: Long) {
+        findNavController().navigate(ChatFragmentDirections.actionChatFragmentToCreateOrderFragment(product, cartId))
     }
 }

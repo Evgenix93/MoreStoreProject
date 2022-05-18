@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
@@ -18,7 +19,9 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentOrderCreateBinding
 import com.project.morestore.dialogs.MenuBottomDialogDateFragment
+import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.fragments.MyAddressesFragment
+import com.project.morestore.models.Chat
 import com.project.morestore.models.MyAddress
 import com.project.morestore.models.OrderPlace
 import com.project.morestore.models.Product
@@ -64,6 +67,16 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             }
             R.id.ordersActiveFragment -> {
                 findNavController().navigate(R.id.ordersActiveFragment)
+            }
+            R.id.chatFragment -> {
+                findNavController().navigate(
+                    R.id.chatFragment,
+                    bundleOf(
+                        ChatFragment.USER_ID_KEY to args.product.user?.id,
+                        ChatFragment.PRODUCT_ID_KEY to args.product.id,
+                        Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
+                    )
+                )
             }
         }
     }
@@ -215,7 +228,8 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             else OrderPlace(placeId.toLong(),
                 if(chosenAddressStr.isNotEmpty()) "$chosenAddressStr;${chosenTime?.timeInMillis}" else null,
                 chosenTime?.timeInMillis ?: 0/1000)
-            presenter.onCreateOrder(args.cartId, deliveryId, place, payId)
+            presenter.onCreateOrder(args.cartId, deliveryId, place, payId,
+                findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment, args.product)
 
 
         }

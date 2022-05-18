@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.toSpannable
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -47,6 +49,21 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
 
             binding.heartIcon.setImageResource(if(product.wishlist == true) R.drawable.ic_heart_red
             else R.drawable.ic_heart)
+
+            binding.statusInfoCardView.isVisible = false
+            binding.statusReadInfoCardView.isVisible = false
+
+            when(product.status){
+                2 -> {
+                    binding.statusInfoCardView.isVisible = true
+                    binding.statusInfoCardView.setCardBackgroundColor(ResourcesCompat.getColor(itemView.resources, R.color.black, null))
+                    binding.statusTextView.text = "Уже купили"
+                }
+            }
+                if(product.userStatus?.read == true){
+                binding.statusReadInfoCardView.isVisible = true
+                binding.productImageView.alpha = 0.65f
+            }
 
 
 

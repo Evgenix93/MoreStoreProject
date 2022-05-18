@@ -908,6 +908,9 @@
         <action
             android:id="@+id/action_chatFragment_to_feedbackPhotoFragment"
             app:destination="@id/feedbackPhotoFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_createOrderFragment"
+            app:destination="@id/createOrderFragment" />
     </fragment>
     <fragment
         android:id="@+id/mediaFragment"

@@ -6,9 +6,11 @@ import android.util.Log
 import com.project.morestore.models.Chat
 import com.project.morestore.models.ChatFunctionInfo
 import com.project.morestore.models.Id
+import com.project.morestore.models.cart.CartItem
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
+import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.util.MessageActionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,16 +22,19 @@ import okhttp3.ResponseBody
 class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     private val chatRepository = ChatRepository(context)
     private val authRepository = AuthRepository(context)
+    private val ordersRepository = OrdersRepository(context)
     private var dialogId: Long? = null
 
-    fun createDialog(userId: Long, productId: Long) {
+    fun createDialog(userId: Long, productId: Long, withBuySuggest: Boolean = false) {
         presenterScope.launch {
             viewState.currentUserIdLoaded(authRepository.getUserId())
             viewState.loading()
             val response = chatRepository.createDialog(userId, productId)
             when (response?.code()) {
                 200 -> {
-
+                    if(withBuySuggest){
+                        sendSuspendBuyRequest(response.body()?.id!!)
+                    }
                     getDialogById(response.body()?.id!!)
                 }
                 400 -> {
@@ -461,6 +466,25 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         }
     }
 
+    private suspend fun sendSuspendBuyRequest(dialogId: Long){
+        val response = chatRepository.sendBuyRequest(ChatFunctionInfo(dialogId = dialogId))
+            when (response?.code()) {
+                200 -> {
+                    viewState.actionMessageSent(response.body()!!, MessageActionType.BUY_REQUEST_SUGGEST)
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+
+            }
+
+
+    }
+
     fun cancelBuyRequest(dialogId: Long, suggestId: Long){
         presenterScope.launch {
             viewState.loading()
@@ -629,6 +653,17 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     }
 
+    fun buyProduct(productId: Long, userId: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val productAdded = addProductToCart(productId, userId)
+            if(productAdded.not()) return@launch
+            val cartItem = loadCartData(userId)?.find { it.product.id == productId }
+            cartItem?.let { viewState.productAddedToCart(it.product, it.id) }
+        }
+
+    }
+
     private suspend fun showUnreadMessages() {
         val userId = authRepository.getUserId()
         val response = chatRepository.getDialogs()
@@ -639,6 +674,74 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         val unreadDialog =
             dialogs.find { it.dialog.lastMessage?.is_read == 0 && it.dialog.lastMessage.idSender != userId }
         viewState.showUnreadMessagesStatus(unreadDialog != null)
+    }
+
+    private suspend fun loadCartData(
+        userId: Long? = null
+    ): List<CartItem>? {
+        Log.d("mylog", "addProductToCart")
+
+            val response = ordersRepository.getCartItems(
+                userId = userId
+            )
+
+            return when (response?.code()) {
+                200 -> {
+                    response.body()
+                }
+                500 -> {
+                    viewState.error("500 Internal Server Error")
+                    null
+                }
+                null -> {
+                    viewState.error("нет интернета")
+                    null
+                }
+                404 -> {
+                    viewState.error("товар не был добавлен в корзину")
+                    null
+                }
+                else -> {
+                    viewState.error("")
+                    null
+                }
+            }
+
+    }
+
+    private  suspend fun addProductToCart(
+        productId: Long,
+        userId: Long? = null,
+    ): Boolean {
+        Log.d("mylog", "addProductToCart")
+        val response = ordersRepository.addCartItem(
+                productId = productId,
+                userId = userId
+            )
+
+            return when (response?.code()) {
+                200 -> {
+                    true
+                }
+                500 -> {
+                    viewState.error("500 Internal Server Error")
+                    false
+                }
+                null -> {
+                    viewState.error("нет интернета")
+                    false
+                }
+                400 -> {
+                    viewState.error("Товар находится в ваших покупках")
+                    false
+                }
+                else -> {
+                    viewState.error("")
+                    false
+                }
+
+            }
+
     }
 
 

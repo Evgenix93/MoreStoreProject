@@ -166,6 +166,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 }
                 500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
+                400 -> viewState.error("Товар находится в ваших покупках")
 
             }
         }

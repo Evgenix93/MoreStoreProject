@@ -309,4 +309,8 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
     }
 
+    override fun productAddedToCart(product: Product, cartId: Long) {
+
+    }
+
 }
