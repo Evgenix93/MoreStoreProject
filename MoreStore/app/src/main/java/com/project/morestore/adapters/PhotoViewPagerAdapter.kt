@@ -6,7 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.project.morestore.fragments.PhotoFragment
 import com.project.morestore.models.ProductPhoto
 
-class PhotoViewPagerAdapter(fragment: Fragment, val onClick: (String) -> Unit): FragmentStateAdapter(fragment) {
+class PhotoViewPagerAdapter(fragment: Fragment, private val isSold: Boolean, val onClick: (String) -> Unit): FragmentStateAdapter(fragment) {
     private var list = listOf<String>()
     override fun getItemCount(): Int {
         return list.size
@@ -15,8 +15,8 @@ class PhotoViewPagerAdapter(fragment: Fragment, val onClick: (String) -> Unit): 
 
     override fun createFragment(position: Int): Fragment {
         return PhotoFragment{onClick(list[position])}.apply {
-            arguments = Bundle().apply { putString("photo", list[position]) }
-
+            arguments = Bundle().apply { putString("photo", list[position])
+            putBoolean(PhotoFragment.IS_SOLD, isSold)}
         }
 
     }

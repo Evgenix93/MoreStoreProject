@@ -15,12 +15,8 @@ import com.project.morestore.databinding.FragmentDealPlaceBinding
 import com.project.morestore.dialogs.MenuBottomDialogDateFragment
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.fragments.orders.create.OrderCreateFragmentDirections
-import com.project.morestore.models.MyAddress
-import com.project.morestore.models.OfferedOrderPlace
-import com.project.morestore.models.Order
-import com.project.morestore.models.OrderPlace
+import com.project.morestore.models.*
 
-import com.project.morestore.models.User
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.presenters.SalesPresenter
@@ -212,14 +208,13 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
 
     }
 
-
-
     override fun onSalesLoaded(
         sales: List<Order>,
         addresses: List<OfferedOrderPlace>,
-        users: List<User?>
+        users: List<User?>,
+        dialogs: List<DialogWrapper>
     ) {
-
+        TODO("Not yet implemented")
     }
 
     override fun onError(message: String) {
@@ -243,5 +238,9 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
         inactiveSales: List<Order>
     ) {
 
+    }
+
+    override fun onDealStatusChanged() {
+        TODO("Not yet implemented")
     }
 }

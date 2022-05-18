@@ -57,6 +57,10 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
                        Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
                    )
                )
+           }, acceptDeal = {
+                presenter.submitBuy(it)
+           }, cancelDeal = {
+               presenter.cancelBuyRequest(it)
            }).also{salesAdapter = it}
            layoutManager = LinearLayoutManager(requireContext())
        }
@@ -138,14 +142,14 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
         }
     }
 
-    private fun updateSalesList(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>){
-        salesAdapter.updateList(sales, addresses, users)
+    private fun updateSalesList(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>, dialogs: List<DialogWrapper>){
+        salesAdapter.updateList(sales, addresses, users, dialogs)
     }
 
-    override fun onSalesLoaded(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>) {
+    override fun onSalesLoaded(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>, dialogs: List<DialogWrapper>) {
         Log.d("MyDebug", "onSalesLoaded")
         binding.loader.isVisible = false
-        updateSalesList(sales, addresses, users)
+        updateSalesList(sales, addresses, users, dialogs)
     }
 
 
@@ -175,5 +179,9 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
         menuAdapter.changeSalesItemsSize(activeSales.size)
         menuAdapter.changeOrderHistorySize(inactiveOrders.size)
         menuAdapter.changeSalesHistorySize(inactiveSales.size)
+    }
+
+    override fun onDealStatusChanged() {
+        getSales()
     }
 }
