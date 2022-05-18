@@ -140,6 +140,7 @@ class SalesAdapter(
                     } else
                         binding.orderItemDeliveryContent.text = "по желанию продавца"
                 }else{
+                    binding.orderItemDeliveryContent.text = "по желанию продавца"
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
                     binding.orderItemDeliveryChangeTitle.text =
