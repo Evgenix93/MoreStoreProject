@@ -2,16 +2,11 @@ package com.project.morestore.presenters
 
 import android.content.Context
 import android.util.Log
-import com.project.morestore.models.OfferedOrderPlace
-import com.project.morestore.models.OfferedOrderPlaceChange
-import com.project.morestore.models.Order
-import com.project.morestore.models.User
+import com.project.morestore.models.*
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.mvpviews.SalesMvpView
-import com.project.morestore.repositories.AuthRepository
-import com.project.morestore.repositories.OrdersRepository
-import com.project.morestore.repositories.SalesRepository
-import com.project.morestore.repositories.UserRepository
+import com.project.morestore.repositories.*
+import com.project.morestore.util.MessageActionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,6 +21,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
     private val userRepository = UserRepository(context)
     private val ordersRepository = OrdersRepository(context)
     private val authRepository  = AuthRepository(context)
+    private val chatRepository = ChatRepository(context)
 
 
     fun getSales(isHistory: Boolean){
@@ -54,7 +50,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                                     null
                             }
 
-                        viewState.onSalesLoaded(inactiveSalesSorted, addresses, avatars)
+                        viewState.onSalesLoaded(inactiveSalesSorted, addresses, avatars, emptyList())
                     }
                     else {
                         val activeSalesSorted = activeSales
@@ -67,7 +63,8 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                                     null
                                 }
                             }
-                        viewState.onSalesLoaded(activeSalesSorted, addresses, avatars)
+                        val dialogs = getDialogs()
+                        viewState.onSalesLoaded(activeSalesSorted, addresses, avatars, dialogs)
                     }
                     val cartItems = getCartItems() ?: emptyList()
                     val orderItems = getOrderItems()?.filter{it.cart != null}
@@ -77,7 +74,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                 }
                 400 -> {viewState.onError(getError(response.errorBody()!!))}
                 404 -> {
-                    viewState.onSalesLoaded(emptyList(), emptyList(), emptyList())
+                    viewState.onSalesLoaded(emptyList(), emptyList(), emptyList(), emptyList())
                     val cartItems = getCartItems() ?: emptyList()
                     val orderItems = getOrderItems()?.filter{it.cart != null}
                     val activeOrders = orderItems?.filter { it.status == 0 } ?: emptyList()
@@ -157,6 +154,46 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
         val response = ordersRepository.getAllOrders()
         return if(response?.code() == 200 ) response.body() else null
 
+    }
+
+    private suspend fun getDialogs(): List<DialogWrapper>{
+        val response = chatRepository.getDialogs()
+        return if(response?.code() == 200) response.body()!! else emptyList()
+    }
+
+    fun submitBuy(info: ChatFunctionInfo){
+        presenterScope.launch {
+            val response = chatRepository.submitBuy(info)
+            when(response?.code()){
+                200 -> viewState.onDealStatusChanged()
+                400 -> {
+                    val bodyString = getError(response.errorBody()!!)
+                    viewState.onError(bodyString)
+                }
+                500 -> viewState.onError("500 Internal Server Error")
+                null -> viewState.onError("Ошибка")
+            }
+        }
+    }
+
+    fun cancelBuyRequest(info: ChatFunctionInfo){
+        presenterScope.launch {
+            val response = chatRepository.cancelBuyRequest(info)
+            when (response?.code()) {
+                200 -> {
+                    viewState.onDealStatusChanged()
+                }
+                400 -> {
+                    val bodyString = getError(response.errorBody()!!)
+                    viewState.onError(bodyString)
+                }
+                500 -> viewState.onError("500 Internal Server Error")
+                null -> viewState.onError("нет интернета")
+                else -> viewState.onError("ошибка")
+
+            }
+
+        }
     }
 
   private suspend fun getError(errorBody: ResponseBody): String{

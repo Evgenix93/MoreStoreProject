@@ -16,6 +16,7 @@ import com.project.morestore.models.*
 
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
+import com.project.morestore.repositories.ChatRepository
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ class OrdersActivePresenter(val context: Context)
     private var adapter: OrdersAdapter? = null
     private val ordersRepository = OrdersRepository(context)
     private val userRepository = UserRepository(context)
+    private val chatRepository = ChatRepository(context)
 
     override fun attachView(view: OrdersActiveView) {
         super.attachView(view)
@@ -101,15 +103,26 @@ class OrdersActivePresenter(val context: Context)
                     val time = if(address != null) Calendar.getInstance()
                         .apply { timeInMillis = address.address.substringAfter(";").toLongOrNull() ?: 0 }
                     else null
-                    val status = if(address == null) OrderStatus.MEETING_NOT_ACCEPTED
-                    else when{
-                        address.type == OfferedPlaceType.APPLICATION.value
-                                && address.status == 0 -> OrderStatus.CHANGE_MEETING
-                        address.status == 1 -> OrderStatus.RECEIVED
-                        address.type == OfferedPlaceType.PROPOSED.value
-                                && address.status == 0 -> OrderStatus.CHANGE_MEETING_FROM_ME
-                        else -> OrderStatus.MEETING_NOT_ACCEPTED
+                    val dialogs = getDialogs()
+                    val buySuggest = dialogs.find{it.product?.id == order.cart.first().id}
+                        ?.messages?.map{it.buySuggest}?.findLast{it?.status == 1}
+                    val status = when(buySuggest?.status) {
+                        0 -> OrderStatus.NOT_SUBMITTED
+                        1 -> {
+                            if (address == null) OrderStatus.MEETING_NOT_ACCEPTED
+                            else when {
+                                address.type == OfferedPlaceType.APPLICATION.value
+                                        && address.status == 0 -> OrderStatus.CHANGE_MEETING
+                                address.status == 1 -> OrderStatus.RECEIVED
+                                address.type == OfferedPlaceType.PROPOSED.value
+                                        && address.status == 0 -> OrderStatus.CHANGE_MEETING_FROM_ME
+                                else -> OrderStatus.MEETING_NOT_ACCEPTED
+                            }
+                        }
+                        2 -> OrderStatus.DECLINED
+                        else -> OrderStatus.NOT_SUBMITTED
                     }
+
 
                     OrderItem(
                         id = order.id,
@@ -317,6 +330,10 @@ class OrdersActivePresenter(val context: Context)
         }
     }
 
+    private suspend fun getDialogs(): List<DialogWrapper>{
+        val response = chatRepository.getDialogs()
+        return if(response?.code() == 200) response.body()!! else emptyList()
+    }
     /*private suspend fun initAdapter(): OrdersAdapter{
         val orders = getAllOrders()
         if(orders == null){

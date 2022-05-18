@@ -12,6 +12,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.SalesAdapter
 import com.project.morestore.adapters.SliderMenuAdapter
 import com.project.morestore.databinding.FragmentOrdersBinding
+import com.project.morestore.models.DialogWrapper
 import com.project.morestore.models.OfferedOrderPlace
 import com.project.morestore.models.Order
 import com.project.morestore.models.User
@@ -99,7 +100,7 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
 
     private fun initSalesHistoryList(){
         binding.ordersRecyclerView.apply {
-            adapter = SalesAdapter(true,{},{},{_,_ ->}).also{salesAdapter = it}
+            adapter = SalesAdapter(true,{},{},{_,_ ->}, acceptDeal = {}, cancelDeal = {}).also{salesAdapter = it}
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
@@ -116,10 +117,11 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
     override fun onSalesLoaded(
         sales: List<Order>,
         addresses: List<OfferedOrderPlace>,
-        users: List<User?>
+        users: List<User?>,
+        dialogs: List<DialogWrapper>
     ) {
         binding.loader.isVisible = false
-        salesAdapter.updateList(sales, addresses, users)
+        salesAdapter.updateList(sales, addresses, users, dialogs)
     }
 
     
@@ -148,5 +150,9 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
         menuAdapter.changeSalesItemsSize(activeSales.size)
         menuAdapter.changeOrderHistorySize(inactiveOrders.size)
         menuAdapter.changeSalesHistorySize(inactiveSales.size)
+    }
+
+    override fun onDealStatusChanged() {
+        TODO("Not yet implemented")
     }
 }

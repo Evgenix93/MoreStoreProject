@@ -33,6 +33,5 @@ data class Product(
     val idUser: Long?,
     val wishlist: Boolean?,
     @Json(name = "status_user")
-    val userStatus: ProductUserStatus? = null
-
+    val statusUser: ProductUserStatus?,
 ): Parcelable

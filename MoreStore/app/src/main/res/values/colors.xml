@@ -60,4 +60,5 @@
     <color name="yellow3">#FFD648</color>
     <color name="pink2">#FFEEEE</color>
     <color name="green11">#EEFFEE</color>
+    <color name="semitransparent">#00000000</color>
 </resources>

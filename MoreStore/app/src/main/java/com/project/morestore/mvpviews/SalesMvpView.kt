@@ -9,7 +9,7 @@ import moxy.viewstate.strategy.alias.OneExecution
 interface SalesMvpView: MvpView {
 
     @OneExecution
-    fun onSalesLoaded(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>)
+    fun onSalesLoaded(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>, dialogs: List<DialogWrapper>)
 
     @OneExecution
     fun onError(message: String)
@@ -22,4 +22,7 @@ interface SalesMvpView: MvpView {
 
     @OneExecution
     fun onItemsLoaded(cartItems: List<CartItem>, activeOrders: List<Order>, activeSales: List<Order>, inactiveOrders: List<Order>, inactiveSales: List<Order>)
+
+    @OneExecution
+    fun onDealStatusChanged()
 }

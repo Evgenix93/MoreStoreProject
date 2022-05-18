@@ -92,6 +92,14 @@ class OrdersAdapter(
                         orderItemAcceptBlock.isVisible = false
                         orderItemDeliveryChangeBlock.isVisible = false
                     }
+                    OrderStatus.NOT_SUBMITTED -> {
+                        orderItemAcceptBlock.isVisible = false
+                        orderItemStatusContent.text = "Ожидание подтверждения от продавца"
+                    }
+                    OrderStatus.DECLINED -> {
+                        orderItemAcceptBlock.isVisible = false
+                        orderItemStatusContent.text = "К сожалению продавец отклонил сделку"
+                    }
                 }
             }
         }

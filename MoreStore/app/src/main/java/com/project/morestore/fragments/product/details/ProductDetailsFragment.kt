@@ -158,7 +158,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         initShare(product.id)
         val photoVideoFilesUris =
             product.photo.map { it.photo } + product.video?.map { it.video }.orEmpty()
-        initViewPager(photoVideoFilesUris)
+        initViewPager(photoVideoFilesUris, product.status == 2)
         binding.toolbar.titleTextView.text = product.name
         binding.chosenBrandTextView.text =
             if (product.brand == null) "Другое" else product.brand.name
@@ -270,12 +270,21 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         if(product.wishlist == true)
             binding.heartIcon.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.red, null))
         else binding.heartIcon.imageTintList = null
-
+       when(product.status){
+           2 -> {
+               binding.productSoldCardView.isVisible = true
+               binding.addToCartBtn.isVisible = false
+           }
+           6 -> {
+               binding.productIsBookedCardView.isVisible = true
+               binding.addToCartBtn.isVisible = false
+           }
+       }
     }
 
 
-    private fun initViewPager(filesUriList: List<String>) {
-        val photoAdapter = PhotoViewPagerAdapter(this) { fileUri ->
+    private fun initViewPager(filesUriList: List<String>, isSold: Boolean) {
+        val photoAdapter = PhotoViewPagerAdapter(this, isSold) { fileUri ->
             Log.d("mylog", fileUri)
             if (fileUri.contains("mp4"))
                 presenter.playVideo(fileUri = fileUri.toUri())
@@ -284,11 +293,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         photoAdapter.updateList(filesUriList)
         binding.productPhotoViewPager.adapter = photoAdapter
         binding.viewPagerDots.setViewPager2(binding.productPhotoViewPager)
-
-        //TabLayoutMediator(binding.viewPagerDots, binding.productPhotoViewPager) { tab, position ->
-        ////Some implementation
-        //}.attach()
-
 
     }
 

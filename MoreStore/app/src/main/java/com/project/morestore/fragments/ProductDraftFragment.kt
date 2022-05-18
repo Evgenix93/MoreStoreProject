@@ -93,6 +93,7 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
             feedbackProduct.brand,
             feedbackProduct.property?.toList(),
             null,
+            null,
             null
         )
         findNavController().navigate(ProductDraftFragmentDirections.actionProductDraftFragmentToCreateProductStep6Fragment(product = product))
