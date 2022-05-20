@@ -112,8 +112,9 @@ class OrdersHistoryPresenter(context: Context)
 
                         OrderHistoryItem(
                             id = order.id.toString(),
-                            userIcon = user?.avatar?.photo.toString(),
-                            userName = user?.name.orEmpty(),
+                            //userIcon = user?.avatar?.photo.toString(),
+                            //userName = user?.name.orEmpty(),
+                            user = user,
                             photo = order.cart.first().photo.first().photo,
                             name = order.cart.first().name,
                             price = order.cart.first().priceNew?.toInt() ?: 0,
@@ -136,7 +137,9 @@ class OrdersHistoryPresenter(context: Context)
 
                     }
 
-                    adapter = OrdersHistoryAdapter(orderItems){}
+                    adapter = OrdersHistoryAdapter(orderItems,{}, {user ->
+                        viewState.navigate(user)
+                    })
 
 
                     /*adapter = OrdersAdapter(

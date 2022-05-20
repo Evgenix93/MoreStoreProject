@@ -61,7 +61,9 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
                 presenter.submitBuy(it)
            }, cancelDeal = {
                presenter.cancelBuyRequest(it)
-           }).also{salesAdapter = it}
+           },
+           onProfileClick = {user -> findNavController()
+               .navigate(SalesActiveFragmentDirections.actionSalesActiveFragmentToSellerProfileFragment(user, false)) }).also{salesAdapter = it}
            layoutManager = LinearLayoutManager(requireContext())
        }
     }

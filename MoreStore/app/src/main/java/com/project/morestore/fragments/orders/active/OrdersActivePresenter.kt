@@ -126,8 +126,9 @@ class OrdersActivePresenter(val context: Context)
 
                     OrderItem(
                         id = order.id,
-                        userIcon = user?.avatar?.photo.toString(),
-                        userName = user?.name.orEmpty(),
+                        //userIcon = user?.avatar?.photo.toString(),
+                        //userName = user?.name.orEmpty(),
+                        user = user,
                         photo = order.cart.first().photo.first().photo,
                         name = order.cart.first().name,
                         price = order.cart.first().priceNew?.toInt() ?: 0,
@@ -151,7 +152,7 @@ class OrdersActivePresenter(val context: Context)
 
                 }
 
-                adapter = OrdersAdapter(orderItems, listener)
+                adapter = OrdersAdapter(orderItems, listener){user -> viewState.navigate(user) }
 
 
                 /*adapter = OrdersAdapter(

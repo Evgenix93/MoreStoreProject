@@ -15,6 +15,7 @@ import com.project.morestore.databinding.FragmentOrdersCartBinding
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.models.Product
 import com.project.morestore.models.SuggestionModels
+import com.project.morestore.models.User
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -83,6 +84,10 @@ class OrdersCartFragment
                 cartId
             )
         )
+    }
+
+    override fun navigate(user: User) {
+        findNavController().navigate(OrdersCartFragmentDirections.actionOrdersCartFragmentToSellerProfileFragment(user, false))
     }
 
     ///////////////////////////////////////////////////////////////////////////

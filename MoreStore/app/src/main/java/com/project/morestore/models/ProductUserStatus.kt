@@ -10,5 +10,6 @@ data class ProductUserStatus(
     val buy: MessageActionSuggest?,
     val sale: MessageActionSuggest?,
     val price: MessageActionSuggest?,
-    val read: Boolean
+    val read: Boolean,
+    val order: OrderStatus?
 ): Parcelable

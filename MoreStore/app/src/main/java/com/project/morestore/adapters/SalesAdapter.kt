@@ -21,6 +21,7 @@ class SalesAdapter(
     private val declineDealPlace: (Long, Long) -> Unit,
     private val acceptDeal:(ChatFunctionInfo) -> Unit,
     private val cancelDeal:(ChatFunctionInfo) -> Unit,
+    private val onProfileClick: (User) -> Unit
 ) : RecyclerView.Adapter<SalesAdapter.SaleViewHolder>() {
     private var sales = listOf<Order>()
     private var addresses = listOf<OfferedOrderPlace>()
@@ -139,7 +140,7 @@ class SalesAdapter(
                         }
                     } else
                         binding.orderItemDeliveryContent.text = "по желанию продавца"
-                }else{
+                }else if(buySuggest?.status == 0){
                     binding.orderItemDeliveryContent.text = "по желанию продавца"
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
@@ -147,6 +148,8 @@ class SalesAdapter(
                         "Необходимо подтвердить наличие товара"
                     binding.orderItemDeliveryChangeContent.isVisible = false
                     binding.orderItemStatusBlock.isVisible = false
+                    binding.orderItemChangeDeliveryAcceptButton.isVisible = true
+                    binding.orderItemChangeDeliveryDeclineButton.isVisible = true
                     binding.orderItemChangeDeliveryAcceptButton.text = "Подтвердить"
                     binding.orderItemChangeDeliveryDeclineButton.text = "Отклонить"
                     binding.orderItemChangeDeliveryAcceptButton.setOnClickListener {
@@ -157,16 +160,35 @@ class SalesAdapter(
                         if(buySuggest != null)
                             cancelDeal(ChatFunctionInfo(dialogId = dialog.dialog.id, suggest = buySuggest.id))
                     }
+                }else{
+                    binding.orderItemDeliveryContent.text = "по желанию продавца"
+                    binding.orderItemAcceptBlock.isVisible = false
+                    binding.orderItemDeliveryChangeBlock.isVisible = true
+                    binding.orderItemDeliveryChangeTitle.text =
+                        "Сделка отклонена"
+                    binding.orderItemDeliveryChangeContent.isVisible = false
+                    binding.orderItemStatusBlock.isVisible = false
+                    binding.orderItemChangeDeliveryAcceptButton.isVisible = false
+                    binding.orderItemChangeDeliveryDeclineButton.isVisible = false
+
                 }
 
             binding.orderItemUserName.text = "${user?.name} ${user?.surname}"
             Glide.with(itemView)
                 .load(user?.avatar?.photo)
+                .circleCrop()
                 .into(binding.orderItemUserIcon)
 
             Glide.with(itemView)
                 .load(order.cart?.get(0)?.photo?.get(0)?.photo)
                 .into(binding.orderItemPreview)
+
+            binding.orderItemUserIcon.setOnClickListener {
+                if(user != null) onProfileClick(user)
+            }
+            binding.orderItemUserName.setOnClickListener {
+                if(user != null) onProfileClick(user)
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.project.morestore.adapters.cart
 
+import com.project.morestore.models.User
 import com.project.morestore.models.cart.OrderItem
 
 interface OrderClickListener {

@@ -63,7 +63,9 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     override fun navigate(pageId: Int?) {
         when (pageId) {
             null -> {
+                if(findNavController().previousBackStackEntry?.destination?.id != R.id.chatFragment)
                 findNavController().popBackStack()
+                else findNavController().navigate(R.id.ordersCartFragment)
             }
             R.id.ordersActiveFragment -> {
                 findNavController().navigate(R.id.ordersActiveFragment)

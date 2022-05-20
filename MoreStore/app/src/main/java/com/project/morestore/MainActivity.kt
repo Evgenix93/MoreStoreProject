@@ -24,16 +24,23 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.project.morestore.databinding.ActivityMainBinding
 import com.project.morestore.fragments.SplashScreenFragmentDirections
+import com.project.morestore.models.SuggestionModels
+import com.project.morestore.mvpviews.MainMvpView
+import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.MessagingService
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : MvpAppCompatActivity(), MainMvpView {
     private val binding: ActivityMainBinding by viewBinding()
+    private val presenter by moxyPresenter { MainPresenter(this) }
     private var isMessagesUnread = false
     private val messageReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
-            isMessagesUnread = true
-            showUnreadMessagesIcon(isMessagesUnread)
+            //isMessagesUnread = true
+            //showUnreadMessagesIcon(isMessagesUnread)
+            presenter.showUnreadMessages()
         }
 
     }
@@ -300,6 +307,32 @@ class MainActivity : AppCompatActivity() {
         if(binding.bottomNavBar.isVisible)
         binding.newMessagesIcon.isVisible = show
         isMessagesUnread = show
+    }
+
+    override fun loaded(result: Any) {
+        val isUnread = result as Boolean
+        showUnreadMessagesIcon(isUnread)
+
+    }
+
+    override fun loading() {
+
+    }
+
+    override fun error(message: String) {
+
+    }
+
+    override fun showOnBoarding() {
+
+    }
+
+    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
+
+    }
+
+    override fun success() {
+
     }
 }
 

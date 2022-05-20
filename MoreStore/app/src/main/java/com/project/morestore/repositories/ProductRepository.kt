@@ -729,7 +729,7 @@ class ProductRepository(private val context: Context) {
             CreateProductData.createProductData.idBrand = idBrand
         CreateProductData.createProductData.date = System.currentTimeMillis() / 1000
         CreateProductData.createProductData.dateEnd = (System.currentTimeMillis() + 3000000) / 1000
-        CreateProductData.createProductData.status = 1
+        //CreateProductData.createProductData.status = 1
         if (phone != null)
             CreateProductData.createProductData.phone = phone
         if (price != null)

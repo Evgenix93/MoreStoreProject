@@ -100,7 +100,10 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
 
     private fun initSalesHistoryList(){
         binding.ordersRecyclerView.apply {
-            adapter = SalesAdapter(true,{},{},{_,_ ->}, acceptDeal = {}, cancelDeal = {}).also{salesAdapter = it}
+            adapter = SalesAdapter(true,{},{},{_,_ ->}, acceptDeal = {}, cancelDeal = {}, onProfileClick =
+            {user -> findNavController()
+                .navigate(SalesHistoryFragmentDirections
+                    .actionSalesHistoryFragmentToSellerProfileFragment(user, false))}).also{salesAdapter = it}
             layoutManager = LinearLayoutManager(requireContext())
         }
     }

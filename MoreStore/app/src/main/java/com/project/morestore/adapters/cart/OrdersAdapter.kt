@@ -9,15 +9,17 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemOrderBinding
+import com.project.morestore.models.User
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
 
 class OrdersAdapter(
     private val items: List<OrderItem>,
-    private val onClickListener: OrderClickListener
+    private val onClickListener: OrderClickListener,
+    private val onProfileClick: (User) -> Unit
 ) : RecyclerView.Adapter<OrdersAdapter.OrderItemHolder>() {
 
-    class OrderItemHolder(menuItem: View) : RecyclerView.ViewHolder(menuItem) {
+    inner class OrderItemHolder(menuItem: View) : RecyclerView.ViewHolder(menuItem) {
         val binding: ItemOrderBinding by viewBinding()
 
         fun bind(orderItem: OrderItem) {
@@ -25,8 +27,8 @@ class OrdersAdapter(
                 orderItemId.text = "№ ${orderItem.id}"
 
                 //orderItemUserIcon.setImageBitmap(orderItem.userIcon)
-                Glide.with(itemView).load(orderItem.userIcon).into(orderItemUserIcon)
-                orderItemUserName.text = orderItem.userName
+                Glide.with(itemView).load(orderItem.user?.avatar?.photo).circleCrop().into(orderItemUserIcon)
+                orderItemUserName.text = orderItem.user?.name
                 //orderItemPreview.setImageBitmap(orderItem.photo)
                 Glide.with(itemView).load(orderItem.photo).into(orderItemPreview)
                 orderItemName.text = orderItem.name
@@ -34,6 +36,9 @@ class OrdersAdapter(
 
                 orderItemPriceText.text = "${orderItem.price} ₽"
                 orderItemDeliveryDateText.text = orderItem.deliveryDate
+
+                orderItemUserIcon.setOnClickListener { if(orderItem.user != null) onProfileClick(orderItem.user) }
+                orderItemUserName.setOnClickListener { if(orderItem.user != null) onProfileClick(orderItem.user) }
 
                 val context = itemView.context;
                 when (orderItem.status) {
@@ -76,6 +81,8 @@ class OrdersAdapter(
                     OrderStatus.CHANGE_MEETING -> {
                         orderItemStatusBlock.visibility = View.GONE
                         orderItemDeliveryChangeBlock.visibility = View.VISIBLE
+                        orderItemChangeDeliveryAcceptButton.isVisible = true
+                        orderItemChangeDeliveryDeclineButton.isVisible = true
                         orderItemDeliveryChangeContent.text =
                             "${orderItem.newAddress?.substringBefore(";")} ${orderItem.newTime}"
                         orderItemDeliveryAddress.isVisible = false
@@ -93,12 +100,17 @@ class OrdersAdapter(
                         orderItemDeliveryChangeBlock.isVisible = false
                     }
                     OrderStatus.NOT_SUBMITTED -> {
+                        orderItemStatusBlock.isVisible = true
                         orderItemAcceptBlock.isVisible = false
                         orderItemStatusContent.text = "Ожидание подтверждения от продавца"
                     }
                     OrderStatus.DECLINED -> {
+                        orderItemStatusBlock.isVisible = false
                         orderItemAcceptBlock.isVisible = false
-                        orderItemStatusContent.text = "К сожалению продавец отклонил сделку"
+                        orderItemDeliveryChangeBlock.isVisible = true
+                        orderItemChangeDeliveryAcceptButton.isVisible = false
+                        orderItemChangeDeliveryDeclineButton.isVisible = false
+                        orderItemDeliveryChangeTitle.text = "К сожалению продавец отклонил сделку"
                     }
                 }
             }

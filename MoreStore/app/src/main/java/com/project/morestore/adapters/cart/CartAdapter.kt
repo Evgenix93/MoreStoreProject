@@ -12,16 +12,18 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemCartProductBinding
+import com.project.morestore.models.User
 import com.project.morestore.models.cart.CartItem
 
 class CartAdapter(
     private val items: MutableList<CartItem>,
     private val onPurchaseClickListener: (CartItem) -> Unit,
     private val onDeliveryClickListener: (CartItem) -> Unit,
-    private val onDeleteClickListener: (CartItem) -> Unit
+    private val onDeleteClickListener: (CartItem) -> Unit,
+    private val onProfileClickListener: (User) -> Unit
 ) : RecyclerView.Adapter<CartAdapter.CartItemHolder>() {
 
-    class CartItemHolder(menuItem: View) : RecyclerView.ViewHolder(menuItem) {
+    inner class CartItemHolder(menuItem: View) : RecyclerView.ViewHolder(menuItem) {
         val binding: ItemCartProductBinding by viewBinding()
 
         fun bind(cartItem: CartItem) {
@@ -61,6 +63,14 @@ class CartAdapter(
                     cartProductCostFinal.text = "${cartItem.product.price} ₽"
                 }
                 //cartProductDeliveryCost.text = "${cartItem.product.deliveryPrice} ₽"
+
+                cartProductUserIcon.setOnClickListener {
+                    onProfileClickListener(cartItem.product.user!!)
+
+                }
+                cartProductUserName.setOnClickListener {
+                    onProfileClickListener(cartItem.product.user!!)
+                }
             }
         }
     }

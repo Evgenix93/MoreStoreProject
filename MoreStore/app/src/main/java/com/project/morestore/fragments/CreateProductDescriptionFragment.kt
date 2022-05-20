@@ -76,7 +76,7 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
     }
 
     override fun loading() {
-        TODO("Not yet implemented")
+
     }
 
     override fun error(message: String) {
@@ -84,14 +84,14 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
     }
 
     override fun showOnBoarding() {
-        TODO("Not yet implemented")
+
     }
 
     override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-        TODO("Not yet implemented")
+
     }
 
     override fun success() {
-        TODO("Not yet implemented")
+
     }
 }

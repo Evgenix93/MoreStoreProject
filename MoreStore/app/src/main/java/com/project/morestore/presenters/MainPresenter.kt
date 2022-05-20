@@ -132,9 +132,18 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 )
 
             when (response?.code()) {
-                200 -> if (productId == null) viewState.loaded(response.body()!!) else viewState.loaded(
+                200 -> {
+                    //val allOrders = getAllOrders()
+                    //val products = response.body()?.map {
+                        //val status = when {
+                          //  it.statusUser?.order?.status == 1 -> 2
+                            //it.statusUser?.order?.status ==
+                                // }
+                    //}
+                    if (productId == null) viewState.loaded(response.body()!!) else viewState.loaded(
                         response.body()?.first()!!
-                )
+                    )
+                }
                 400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
                     viewState.loaded(emptyList<Product>())
@@ -761,7 +770,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         presenterScope.launch {
             viewState.loading()
             val productAddress = productRepository.loadCreateProductData().address
-            updateCreateProductData(address = productAddress ?: "Москва")
+            val productStatus = productRepository.loadCreateProductData().status
+            updateCreateProductData(address = productAddress ?: "Москва", status = productStatus ?: 1)
 
             val response = productRepository.createProduct()
             when (response?.code()) {
@@ -1138,6 +1148,12 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val unreadDialog = dialogs.find { it.dialog.lastMessage?.is_read == 0 && it.dialog.lastMessage.idSender != userId }
             viewState.loaded(unreadDialog != null)
         }
+    }
+
+    private suspend fun getAllOrders(): List<Order>?{
+        val response = ordersRepository.getAllOrders()
+        return if(response?.code() == 200) response.body()
+        else null
     }
 
 

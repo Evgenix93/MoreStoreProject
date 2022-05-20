@@ -58,7 +58,7 @@ class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>()
                 );
 
                 viewState.showDeleteDialog(deleteDialog)
-            })
+            }, {user ->  viewState.navigate(user) })
             viewState.initCart(adapter)
         }
     }

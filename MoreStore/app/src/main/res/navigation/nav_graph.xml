@@ -1108,6 +1108,9 @@
         <action
             android:id="@+id/action_ordersCartFragment_to_salesActiveFragment"
             app:destination="@id/salesActiveFragment" />
+        <action
+            android:id="@+id/action_ordersCartFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/ordersHistoryFragment"
@@ -1128,6 +1131,9 @@
         <action
             android:id="@+id/action_ordersHistoryFragment_to_salesActiveFragment"
             app:destination="@id/salesActiveFragment" />
+        <action
+            android:id="@+id/action_ordersHistoryFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/ordersActiveFragment"
@@ -1151,6 +1157,9 @@
         <action
             android:id="@+id/action_ordersActiveFragment_to_salesActiveFragment"
             app:destination="@id/salesActiveFragment" />
+        <action
+            android:id="@+id/action_ordersActiveFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderProblemsFragment"
@@ -1187,6 +1196,9 @@
         <action
             android:id="@+id/action_salesActiveFragment_to_dealPlaceFragment"
             app:destination="@id/dealPlaceFragment" />
+        <action
+            android:id="@+id/action_salesActiveFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/dealPlaceFragment"
@@ -1202,6 +1214,10 @@
     <fragment
         android:id="@+id/salesHistoryFragment"
         android:name="com.project.morestore.fragments.SalesHistoryFragment"
-        android:label="SalesHistoryFragment" />
+        android:label="SalesHistoryFragment" >
+        <action
+            android:id="@+id/action_salesHistoryFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
+    </fragment>
 
 </navigation>
