@@ -85,7 +85,7 @@ class OrdersActivePresenter(val context: Context)
                 }
             }
             presenterScope.launch {
-                val orders = getAllOrders() ?: return@launch
+                val orders = getAllOrders()?.reversed() ?: return@launch
                 val orderAddresses = getOrderAddresses() ?: return@launch
                // val dialogs = getDialogs().reversed()
                 val orderItems = orders.filter { it.cart != null && it.status == 0 }.sortedBy{order ->
@@ -98,10 +98,10 @@ class OrdersActivePresenter(val context: Context)
                     }*/
                     val address = orderAddresses.find { order.id == it.idOrder }
                     when{
-                        order.cart?.first()?.statusUser?.buy == null -> 1
-                        address?.type == OfferedPlaceType.APPLICATION.value -> 1
-                        address?.status == 1 -> 1
+                        order.cart?.first()?.statusUser?.buy == null -> 2
                         order.cart.first().statusUser?.buy?.status == 2 -> 3
+                        address?.type == OfferedPlaceType.APPLICATION.value && address.status == 0 -> 1
+                        address?.status == 1 -> 1
                         else -> 2
                     }
                 }

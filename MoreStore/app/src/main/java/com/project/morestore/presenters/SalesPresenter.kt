@@ -29,7 +29,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
             val response = salesRepository.getSales()
             when(response?.code()){
                 200 -> {
-                    val sales = response.body()!!
+                    val sales = response.body()!!.reversed()
                     val addresses = getAddresses()
                     val avatars = sales.map{
                         if(it.idUser == null)
@@ -68,10 +68,10 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                            val address = addresses.find { sale.id == it.idOrder }
                                 when{
                                     sale.cart?.first()?.statusUser?.buy == null -> 1
+                                    sale.cart.first().statusUser?.buy?.status == 2 -> 3
                                     sale.cart.first().statusUser?.buy?.status == 0 -> 1
                                     address == null -> 1
-                                    address.type == OfferedPlaceType.APPLICATION.value -> 1
-                                    sale.cart.first().statusUser?.buy?.status == 2 -> 3
+                                    address.type == OfferedPlaceType.APPLICATION.value && address.status == 0 -> 1
                                     else -> 2
                                 }
                             }
@@ -200,6 +200,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                 }
                 500 -> viewState.onError("500 Internal Server Error")
                 null -> viewState.onError("нет интернета")
+                404 -> viewState.onError("ошибка 404 not found")
                 else -> viewState.onError("ошибка")
 
             }

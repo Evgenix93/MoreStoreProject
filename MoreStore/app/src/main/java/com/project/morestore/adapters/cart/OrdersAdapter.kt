@@ -79,7 +79,7 @@ class OrdersAdapter(
                         orderItemDeliveryChangeBlock.isVisible = false
                     }
                     OrderStatus.CHANGE_MEETING -> {
-                        orderItemStatusBlock.visibility = View.GONE
+                        orderItemStatusBlock.isVisible = false //= View.GONE
                         orderItemDeliveryChangeBlock.visibility = View.VISIBLE
                         orderItemChangeDeliveryAcceptButton.isVisible = true
                         orderItemChangeDeliveryDeclineButton.isVisible = true
@@ -102,6 +102,7 @@ class OrdersAdapter(
                     OrderStatus.NOT_SUBMITTED -> {
                         orderItemStatusBlock.isVisible = true
                         orderItemAcceptBlock.isVisible = false
+                        orderItemDeliveryChangeBlock.isVisible = false
                         orderItemStatusContent.text = "Ожидание подтверждения от продавца"
                     }
                     OrderStatus.DECLINED -> {

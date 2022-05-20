@@ -142,7 +142,7 @@ class SalesAdapter(
                         }
                     } else
                         binding.orderItemDeliveryContent.text = "по желанию продавца"
-                }else if(buySuggest?.status == 0){
+                }else if(buySuggest?.status == 0 || buySuggest == null){
                     binding.orderItemDeliveryContent.text = "по желанию продавца"
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
