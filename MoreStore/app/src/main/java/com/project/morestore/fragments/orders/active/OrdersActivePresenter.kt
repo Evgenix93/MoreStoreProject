@@ -87,14 +87,22 @@ class OrdersActivePresenter(val context: Context)
             presenterScope.launch {
                 val orders = getAllOrders() ?: return@launch
                 val orderAddresses = getOrderAddresses() ?: return@launch
-
+               // val dialogs = getDialogs().reversed()
                 val orderItems = orders.filter { it.cart != null && it.status == 0 }.sortedBy{order ->
-                    val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
+                  /*  val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
                         ?.address?.substringAfter(';')?.toLongOrNull()
                     if(timestamp != null)
                         (timestamp - System.currentTimeMillis())
                     else {
                         null
+                    }*/
+                    val address = orderAddresses.find { order.id == it.idOrder }
+                    when{
+                        order.cart?.first()?.statusUser?.buy == null -> 1
+                        address?.type == OfferedPlaceType.APPLICATION.value -> 1
+                        address?.status == 1 -> 1
+                        order.cart.first().statusUser?.buy?.status == 2 -> 3
+                        else -> 2
                     }
                 }
                     .map { order ->
@@ -103,9 +111,8 @@ class OrdersActivePresenter(val context: Context)
                     val time = if(address != null) Calendar.getInstance()
                         .apply { timeInMillis = address.address.substringAfter(";").toLongOrNull() ?: 0 }
                     else null
-                    val dialogs = getDialogs().reversed()
-                    val buySuggest = dialogs.find{it.product?.id == order.cart.first().id}
-                        ?.messages?.map{it.buySuggest}?.findLast{it != null}
+
+                    val buySuggest = order.cart.first().statusUser?.buy
                     val status = when(buySuggest?.status) {
                         0 -> OrderStatus.NOT_SUBMITTED
                         1 -> {

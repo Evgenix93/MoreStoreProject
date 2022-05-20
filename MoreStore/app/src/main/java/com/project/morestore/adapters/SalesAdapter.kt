@@ -48,6 +48,7 @@ class SalesAdapter(
 
 
             if (isHistory) {
+                binding.orderItemAcceptBlock.isVisible = false
                 binding.orderItemStatusImage.setImageResource(R.drawable.ic_fill_checkcircle)
                 binding.orderItemStatusImage.imageTintList = null
                 binding.orderItemStatusContent.setTextColor(
@@ -69,15 +70,16 @@ class SalesAdapter(
         ) {
             binding.orderItemName.text = order.cart?.get(0)?.name
             val specialPrice = dialog?.messages?.map{it.priceSuggest ?: it.saleSuggest}?.findLast{it?.status == 1}?.value?.toIntOrNull()
-            if(specialPrice != null)
-                binding.orderItemPriceText.text = "${specialPrice}Р"
-            else
-               binding.orderItemPriceText.text = "${order.cart?.get(0)?.priceNew?.toInt()}Р"
+                ?: order.cart?.get(0)?.priceNew?.toInt()
+
+            binding.orderItemPriceText.text = "${specialPrice}Р"
 
             binding.orderItemAcceptButton.setOnClickListener {
                 addDealPlace(order.id)
             }
-            val buySuggest = dialog?.messages?.map{it.buySuggest}?.findLast{it != null}
+            if(isHistory.not()) {
+               // val buySuggest = dialog?.messages?.map { it.buySuggest }?.findLast { it != null }
+                   val buySuggest = order.cart?.first()?.statusUser?.buy
                 if (buySuggest?.status == 1) {
                     binding.orderItemDeliveryChangeBlock.isVisible = false
                     binding.orderItemAcceptBlock.isVisible = address == null
@@ -129,7 +131,7 @@ class SalesAdapter(
                                     }
                                     binding.orderItemChangeDeliveryDeclineButton.setOnClickListener {
                                         user?.let {
-                                            declineDealPlace(it.id, order.cart!![0].id)
+                                            declineDealPlace(it.id, order.cart[0].id)
                                         }
                                     }
                                 } else if (isHistory.not())
@@ -139,7 +141,7 @@ class SalesAdapter(
                         }
                     } else
                         binding.orderItemDeliveryContent.text = "по желанию продавца"
-                }else{
+                } else {
                     binding.orderItemDeliveryContent.text = "по желанию продавца"
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
@@ -150,14 +152,26 @@ class SalesAdapter(
                     binding.orderItemChangeDeliveryAcceptButton.text = "Подтвердить"
                     binding.orderItemChangeDeliveryDeclineButton.text = "Отклонить"
                     binding.orderItemChangeDeliveryAcceptButton.setOnClickListener {
-                        if(buySuggest != null)
-                        acceptDeal(ChatFunctionInfo(dialogId = dialog.dialog.id, suggest = buySuggest.id, value = order.cart!!.first().priceNew!!.toInt()))
+                        if (buySuggest != null)
+                            acceptDeal(
+                                ChatFunctionInfo(
+                                    dialogId = dialog!!.dialog.id,
+                                    suggest = buySuggest.id,
+                                    value = specialPrice
+                                )
+                            )
                     }
                     binding.orderItemChangeDeliveryDeclineButton.setOnClickListener {
-                        if(buySuggest != null)
-                            cancelDeal(ChatFunctionInfo(dialogId = dialog.dialog.id, suggest = buySuggest.id))
+                        if (buySuggest != null)
+                            cancelDeal(
+                                ChatFunctionInfo(
+                                    dialogId = dialog!!.dialog.id,
+                                    suggest = buySuggest.id
+                                )
+                            )
                     }
                 }
+            }
 
             binding.orderItemUserName.text = "${user?.name} ${user?.surname}"
             Glide.with(itemView)

@@ -39,14 +39,13 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     private val binding: FragmentProductBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
-
     private val args: ProductDetailsFragmentArgs by navArgs()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var isLiked = false
     private var product: Product? = null
     private var userId: Long = 0
     private var dialogs: List<DialogWrapper>? = null
-    private var currentState: Boolean = false;
+    private var currentState: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -280,6 +279,9 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                binding.addToCartBtn.isVisible = false
            }
        }
+       if(product.statusUser?.read == false)
+           viewProduct(product.id)
+
     }
 
 
@@ -395,6 +397,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         presenter.getDialogs()
     }
 
+    private fun viewProduct(idProduct: Long){
+      presenter.viewProduct(idProduct)
+    }
+
     override fun loaded(result: Any) {
         when (result) {
             is List<*> -> {
@@ -458,6 +464,12 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                     findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToOrdersCartFragment())
                 } else {
                     binding.addToCartBtn.text = getText(R.string.product_add_cart)
+                }
+            }
+            is Boolean -> {
+                if(result) {
+                    Toast.makeText(requireContext(), "Просмотрено", Toast.LENGTH_SHORT).show()
+                    bind(product, userId, dialogs)
                 }
             }
         }

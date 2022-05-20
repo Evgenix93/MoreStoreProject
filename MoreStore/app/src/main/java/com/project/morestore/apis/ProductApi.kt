@@ -93,6 +93,7 @@ interface ProductApi {
     @GET()
     suspend fun downloadImage(@Url url: String): ResponseBody
 
-
+    @POST("statistic/view")
+    suspend fun viewProduct(@Body viewProductData: ViewProductData): Response<Boolean>
 
 }
