@@ -29,7 +29,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
             val response = salesRepository.getSales()
             when(response?.code()){
                 200 -> {
-                    val sales = response.body()!!.reversed()
+                    val sales = response.body()!!
                     val addresses = getAddresses()
                     val avatars = sales.map{
                         if(it.idUser == null)
@@ -40,7 +40,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                     val activeSales = sales.filter{it.status == 0}
                     val inactiveSales = sales.filter{it.status == 1}
                     if(isHistory) {
-                        val inactiveSalesSorted = inactiveSales
+                     /*   val inactiveSalesSorted = inactiveSales
                             .sortedBy {sale ->
                              val timestamp = addresses.find{address -> address.idOrder == sale.id}
                                     ?.address?.substringAfter(';')?.toLongOrNull()
@@ -48,12 +48,12 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                                     timestamp - System.currentTimeMillis()
                                 else
                                     null
-                            }
+                            }*/
 
-                        viewState.onSalesLoaded(inactiveSalesSorted, addresses, avatars, emptyList())
+                        viewState.onSalesLoaded(inactiveSales, addresses, avatars, emptyList())
                     }
                     else {
-                        val activeSalesSorted = activeSales
+                       /* val activeSalesSorted = activeSales
                             .sortedBy {sale ->
                               val timestamp = addresses.find{address -> address.idOrder == sale.id}
                                     ?.address?.substringAfter(';')?.toLongOrNull()
@@ -62,8 +62,19 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                                 else {
                                     null
                                 }
-                            }
+                            }*/
                         val dialogs = getDialogs().reversed()
+                       val activeSalesSorted = activeSales.sortedBy { sale ->
+                           val address = addresses.find { sale.id == it.idOrder }
+                                when{
+                                    sale.cart?.first()?.statusUser?.buy == null -> 1
+                                    sale.cart.first().statusUser?.buy?.status == 0 -> 1
+                                    address == null -> 1
+                                    address.type == OfferedPlaceType.APPLICATION.value -> 1
+                                    sale.cart.first().statusUser?.buy?.status == 2 -> 3
+                                    else -> 2
+                                }
+                            }
                         viewState.onSalesLoaded(activeSalesSorted, addresses, avatars, dialogs)
                     }
                     val cartItems = getCartItems() ?: emptyList()

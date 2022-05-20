@@ -1157,4 +1157,12 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     }
 
 
+   fun viewProduct(idProduct: Long){
+       presenterScope.launch{
+          val response = productRepository.viewProduct(authRepository.getUserId(), idProduct)
+           when(response?.code()){
+               200 -> viewState.loaded(response.body()!!)
+           }
+       }
+   }
 }

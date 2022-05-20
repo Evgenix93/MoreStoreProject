@@ -1106,6 +1106,14 @@ class ProductRepository(private val context: Context) {
         }
     }
 
+  suspend  fun viewProduct(idUser: Long, idProduct: Long): Response<Boolean>?{
+        return try{
+         Network.productApi.viewProduct(ViewProductData(idUser, idProduct))
+        }catch (e: Throwable){
+            Log.e("MyDebug", "error = ${e.message}")
+            null
+        }
+    }
 
     companion object {
         const val USER_PREFS = "user_prefs"
