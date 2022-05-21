@@ -17,7 +17,13 @@ data class User(
     @Json(name = "created_at")
     val createdAt: String?,
     val rating: SellerRating?
+): Parcelable{
+    override fun equals(other: Any?): Boolean {
+        val otherUser = other as User?
+        return id == otherUser?.id
+    }
 
-
-
-): Parcelable
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
