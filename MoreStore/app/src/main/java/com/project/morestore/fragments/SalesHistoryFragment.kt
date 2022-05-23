@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -33,6 +34,7 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initToolbar()
         initMenuList()
         initSalesHistoryList()
         getSalesHistory()
@@ -78,20 +80,21 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
                 )
             )
         ) {
+            val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
             when (it) {
                 OrdersSliderMenu.SALES -> {
-                  findNavController().navigate(R.id.salesActiveFragment)
+                  findNavController().navigate(R.id.salesActiveFragment, null, navOptions)
                 }
                 OrdersSliderMenu.SALES_HISTORY -> {
                 }
                 OrdersSliderMenu.CART -> {
-                    findNavController().navigate(R.id.ordersCartFragment)
+                    findNavController().navigate(R.id.ordersCartFragment, null, navOptions)
                 }
                 OrdersSliderMenu.ORDERS_HISTORY -> {
-                    findNavController().navigate(R.id.ordersHistoryFragment)
+                    findNavController().navigate(R.id.ordersHistoryFragment, null, navOptions)
                 }
                 OrdersSliderMenu.ORDERS -> {
-                    findNavController().navigate(R.id.ordersActiveFragment)
+                    findNavController().navigate(R.id.ordersActiveFragment, null, navOptions)
                 }
             }
         }.also{menuAdapter = it}
@@ -115,6 +118,12 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
 
     private fun showToast(message: String){
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun initToolbar() {
+        binding.toolbar.toolbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onSalesLoaded(
