@@ -54,11 +54,33 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             binding.statusReadInfoCardView.isVisible = false
 
             when(product.status){
-                2 -> {
+                1 -> {
+                    binding.statusReadInfoCardView.isVisible = false
+                    binding.statusInfoCardView.isVisible = false
+                    binding.productImageView.alpha = 1f
+                }
+                6 -> {
+                    binding.statusReadInfoCardView.isVisible = false
+                    binding.statusInfoCardView.isVisible = true
+                    binding.statusInfoCardView.setCardBackgroundColor(ResourcesCompat.getColor(itemView.resources, R.color.green, null))
+                    binding.statusTextView.text = "Одобрено"
+                    binding.productImageView.alpha = 1f
+                }
+                7 -> {
+                    binding.statusReadInfoCardView.isVisible = false
+                    binding.statusInfoCardView.isVisible = true
+                    binding.statusInfoCardView.setCardBackgroundColor(ResourcesCompat.getColor(itemView.resources, R.color.orange, null))
+                    binding.statusTextView.text = "Забронировано"
+                    binding.productImageView.alpha = 1f
+                }
+                8 -> {
+                    binding.statusReadInfoCardView.isVisible = false
                     binding.statusInfoCardView.isVisible = true
                     binding.statusInfoCardView.setCardBackgroundColor(ResourcesCompat.getColor(itemView.resources, R.color.black, null))
                     binding.statusTextView.text = "Уже купили"
+                    binding.productImageView.alpha = 1f
                 }
+
             }
                 if(product.statusUser?.read == true){
                 binding.statusReadInfoCardView.isVisible = true

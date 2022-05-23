@@ -140,7 +140,18 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                             //it.statusUser?.order?.status ==
                                 // }
                     //}
-                    if (productId == null) viewState.loaded(response.body()!!) else viewState.loaded(
+                    val currentUserId = authRepository.getUserId()
+                    response.body()?.forEach {
+                        val status = when(it.statusUser?.order?.status) {
+                            0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
+                            else if(it.statusUser.buy?.status != 2) 7 else 1
+                            1 -> 8
+                            else -> 1
+                        }
+                        it.status = status
+                    }
+
+                    if (productId == null) viewState.loaded(response.body()!!.filter { it.status != 8 }) else viewState.loaded(
                         response.body()?.first()!!
                     )
                 }

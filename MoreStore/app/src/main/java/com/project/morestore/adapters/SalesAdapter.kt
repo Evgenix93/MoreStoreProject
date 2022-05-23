@@ -178,7 +178,7 @@ class SalesAdapter(
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
                     binding.orderItemDeliveryChangeTitle.text =
-                        "Сделка отклонена"
+                        "Сделка отменена"
                     binding.orderItemDeliveryChangeContent.isVisible = false
                     binding.orderItemStatusBlock.isVisible = false
                     binding.orderItemChangeDeliveryAcceptButton.isVisible = false
