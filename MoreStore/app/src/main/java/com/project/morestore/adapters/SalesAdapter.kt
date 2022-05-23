@@ -70,9 +70,10 @@ class SalesAdapter(
             dialog: DialogWrapper?
         ) {
             binding.orderItemName.text = order.cart?.get(0)?.name
-            val specialPrice = dialog?.messages?.map{it.priceSuggest ?: it.saleSuggest}?.findLast{it?.status == 1}?.value?.toIntOrNull()
-                ?: order.cart?.get(0)?.priceNew?.toInt()
-
+            //val specialPrice = dialog?.messages?.map{it.priceSuggest ?: it.saleSuggest}?.findLast{it?.status == 1}?.value?.toIntOrNull()
+              //  ?: order.cart?.get(0)?.priceNew?.toInt()
+            val specialPrice = order.cart?.first()?.statusUser?.price?.value?.toIntOrNull() ?: order.cart?.first()?.statusUser?.sale?.value?.toIntOrNull()
+                    ?: order.cart?.first()?.priceNew?.toInt()
             binding.orderItemPriceText.text = "${specialPrice}Р"
 
             binding.orderItemAcceptButton.setOnClickListener {

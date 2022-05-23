@@ -3,6 +3,7 @@ package com.project.morestore.fragments.orders.history;
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -43,20 +44,21 @@ class OrdersHistoryFragment
     ///////////////////////////////////////////////////////////////////////////
 
     override fun navigate(pageId: Int?) {
+        val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
         when (pageId) {
             null -> {
                 findNavController().popBackStack()
             }
             R.id.ordersCartFragment -> {
-                findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToOrdersCartFragment())
+                findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToOrdersCartFragment(), navOptions)
             }
             R.id.ordersActiveFragment -> {
-                findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToOrdersActiveFragment())
+                findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToOrdersActiveFragment(), navOptions)
             }
             R.id.salesActiveFragment ->{
-                findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToSalesActiveFragment())
+                findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToSalesActiveFragment(), navOptions)
             }
-            R.id.salesHistoryFragment -> findNavController().navigate(R.id.salesHistoryFragment)
+            R.id.salesHistoryFragment -> findNavController().navigate(R.id.salesHistoryFragment, null, navOptions)
         }
     }
 

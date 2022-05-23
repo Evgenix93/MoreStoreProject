@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -108,21 +109,22 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
                 )
             )
         ) {
+            val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
             when (it) {
                 OrdersSliderMenu.SALES -> {
 
                 }
                 OrdersSliderMenu.SALES_HISTORY -> {
-                    findNavController().navigate(R.id.salesHistoryFragment)
+                    findNavController().navigate(R.id.salesHistoryFragment, null, navOptions)
                 }
                 OrdersSliderMenu.CART -> {
-                    findNavController().navigate(R.id.ordersCartFragment)
+                    findNavController().navigate(R.id.ordersCartFragment, null, navOptions)
                 }
                 OrdersSliderMenu.ORDERS_HISTORY -> {
-                   findNavController().navigate(R.id.ordersHistoryFragment)
+                   findNavController().navigate(R.id.ordersHistoryFragment, null, navOptions)
                 }
                 OrdersSliderMenu.ORDERS -> {
-                   findNavController().navigate(R.id.ordersActiveFragment)
+                   findNavController().navigate(R.id.ordersActiveFragment, null, navOptions)
                 }
             }
         }.also{menuAdapter = it}

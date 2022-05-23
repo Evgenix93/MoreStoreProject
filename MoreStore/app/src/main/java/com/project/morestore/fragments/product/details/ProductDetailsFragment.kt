@@ -270,12 +270,16 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             binding.heartIcon.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.red, null))
         else binding.heartIcon.imageTintList = null
        when(product.status){
-           2 -> {
+           8 -> {
                binding.productSoldCardView.isVisible = true
                binding.addToCartBtn.isVisible = false
            }
-           6 -> {
+           7 -> {
                binding.productIsBookedCardView.isVisible = true
+               binding.addToCartBtn.isVisible = false
+           }
+           6 -> {
+               binding.dealIsSubmittedCardView.isVisible = true
                binding.addToCartBtn.isVisible = false
            }
        }

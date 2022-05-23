@@ -5,6 +5,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.Navigator
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -50,20 +53,24 @@ class OrdersActiveFragment
     ///////////////////////////////////////////////////////////////////////////
 
     override fun navigate(pageId: Int?) {
+        val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
         when (pageId) {
             null -> {
                 findNavController().popBackStack()
             }
             R.id.ordersCartFragment -> {
-                findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToOrdersCartFragment())
+                findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToOrdersCartFragment(),
+                    navOptions)
             }
             R.id.ordersHistoryFragment -> {
-                findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToOrdersHistoryFragment())
+                findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToOrdersHistoryFragment(), navOptions)
             }
             R.id.salesActiveFragment ->{
-                findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToSalesActiveFragment())
+                findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToSalesActiveFragment(), navOptions)
             }
-            R.id.salesHistoryFragment -> findNavController().navigate(R.id.salesHistoryFragment)
+            R.id.salesHistoryFragment -> {
+                findNavController().navigate(R.id.salesHistoryFragment, null, navOptions)
+            }
         }
     }
 

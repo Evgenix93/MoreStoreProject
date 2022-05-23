@@ -87,7 +87,6 @@ class OrdersActivePresenter(val context: Context)
             presenterScope.launch {
                 val orders = getAllOrders()?.reversed() ?: return@launch
                 val orderAddresses = getOrderAddresses() ?: return@launch
-               // val dialogs = getDialogs().reversed()
                 val orderItems = orders.filter { it.cart != null && it.status == 0 }.sortedBy{order ->
                   /*  val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
                         ?.address?.substringAfter(';')?.toLongOrNull()
@@ -138,7 +137,8 @@ class OrdersActivePresenter(val context: Context)
                         user = user,
                         photo = order.cart.first().photo.first().photo,
                         name = order.cart.first().name,
-                        price = order.cart.first().priceNew?.toInt() ?: 0,
+                        price = order.cart.first().statusUser?.price?.value?.toIntOrNull() ?: order.cart.first().statusUser?.sale?.value?.toIntOrNull()
+                        ?: order.cart.first().priceNew?.toInt() ?: 0,
                         deliveryDate = if(time == null || time.timeInMillis == 0L)"-" else
                             "${time.get(Calendar.DAY_OF_MONTH)}.${time.get(Calendar.MONTH) + 1}.${time.get(Calendar.YEAR)}",
                         deliveryInfo = when (order.delivery) {
