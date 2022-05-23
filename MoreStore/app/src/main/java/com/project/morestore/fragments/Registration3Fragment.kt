@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -54,7 +55,8 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         binding.toolbar.titleTextView.text = "Личные данные"
         binding.toolbar.backIcon.setOnClickListener {
             if(args.fromMainFragment)
-                findNavController().navigate(Registration3FragmentDirections.actionRegistration3FragmentToFirstLaunchFragment())
+                findNavController().navigate(Registration3FragmentDirections.actionRegistration3FragmentToFirstLaunchFragment(),
+                NavOptions.Builder().setPopUpTo(R.id.splashScreenFragment, false).build())
             else
                 findNavController().popBackStack()
         }

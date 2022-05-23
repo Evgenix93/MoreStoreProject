@@ -14,6 +14,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -307,7 +308,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.toolbar.actionIcon.setImageResource(R.drawable.ic_cart)
         binding.toolbar.backIcon.setOnClickListener {
             if (findNavController().previousBackStackEntry?.destination?.id == R.id.createProductStep6Fragment)
-                findNavController().navigate(R.id.catalogFragment)
+                findNavController().navigate(R.id.catalogFragment, null,
+                NavOptions.Builder().setPopUpTo(R.id.mainFragment, false).build())
             else
                 findNavController().popBackStack()
         }

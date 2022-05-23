@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
@@ -277,8 +278,12 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
     override fun onBackPressed() {
         val navController = findNavController(R.id.fragmentContainerView)
         when (navController.previousBackStackEntry?.destination?.id) {
-            R.id.mainFragment -> navController.navigate(R.id.firstLaunchFragment)
-            R.id.createProductStep6Fragment -> navController.navigate(R.id.catalogFragment)
+            R.id.mainFragment -> if(navController.currentDestination?.id
+                == R.id.registration3Fragment) navController.navigate(R.id.firstLaunchFragment, null,
+            NavOptions.Builder().setPopUpTo(R.id.splashScreenFragment, false).build())
+            else super.onBackPressed()
+            R.id.createProductStep6Fragment -> navController.navigate(R.id.catalogFragment, null,
+            NavOptions.Builder().setPopUpTo(R.id.mainFragment, false).build())
             else -> super.onBackPressed()
         }
     }
