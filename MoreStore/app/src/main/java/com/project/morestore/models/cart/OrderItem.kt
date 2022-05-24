@@ -32,3 +32,7 @@ data class OrderItem(
     val product: Product,
     val chatFunctionInfo: ChatFunctionInfo? = null
 ): Parcelable
+    val newAddressId: Long?,
+    val chatFunctionInfo: ChatFunctionInfo?,
+    val offeredOrderPlace: OfferedOrderPlace?
+): Parcelable
