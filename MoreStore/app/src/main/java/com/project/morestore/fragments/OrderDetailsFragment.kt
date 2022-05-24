@@ -219,18 +219,37 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemDeliveryChangeBlock.isVisible = true
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
-                    orderItemDeliveryChangeTitle.text = "Сделка отлонена продавцом"
+                    orderItemDeliveryChangeTitle.text = "Сделка отклонена продавцом"
                     myAddressBlock.isVisible = false
                     dealPlaceTextView.isVisible = false
+                    cancelTextView.isVisible = false
                     //icon.isVisible = false
                     //title.isVisible = false
                     //name.isVisible = false
                     //address.isVisible = false
                 }
+                OrderStatus.DECLINED_BUYER -> {
+                    //orderItemStatusBlock.isVisible = false
+                    //orderItemAcceptBlock.isVisible = false
+
+                    orderItemDeliveryChangeBlock.isVisible = true
+                    orderItemChangeDeliveryAcceptButton.isVisible = false
+                    orderItemChangeDeliveryDeclineButton.isVisible = false
+                    orderItemDeliveryChangeTitle.text = "Сделка отклонена покупателем"
+                    myAddressBlock.isVisible = false
+                    dealPlaceTextView.isVisible = false
+                    cancelTextView.isVisible = false
+                    //icon.isVisible = false
+                    //title.isVisible = false
+                    //name.isVisible = false
+                    //address.isVisible = false
+                }
+
                 OrderStatus.RECEIVED_SUCCESSFULLY -> {
                     address.text = order.newAddress
                     orderItemStatusBlock.isVisible = false
                     orderItemHistoryStatusBlock.isVisible = true
+                    cancelTextView.isVisible = false
 
 
                 }
