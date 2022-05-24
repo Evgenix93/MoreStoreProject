@@ -270,9 +270,11 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptButton.text = "Подтвердить"
         binding.orderItemAcceptProblemsButton.text = "Отменить"
         binding.orderItemAcceptButton.setOnClickListener{
+            if(args.orderItem.chatFunctionInfo != null)
             presenter.submitBuy(args.orderItem.chatFunctionInfo!!, args.orderItem)
         }
         binding.orderItemAcceptProblemsButton.setOnClickListener{
+            if(args.orderItem.chatFunctionInfo != null)
             presenter.cancelBuyRequest(args.orderItem.chatFunctionInfo!!, args.orderItem.sellerId)
         }
     }

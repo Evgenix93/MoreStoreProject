@@ -53,6 +53,7 @@ class SalesAdapter(
 
 
             if (isHistory) {
+                binding.orderItemDeliveryChangeBlock.isVisible = false
                 binding.orderItemAcceptBlock.isVisible = false
                 binding.orderItemStatusImage.setImageResource(R.drawable.ic_fill_checkcircle)
                 binding.orderItemStatusImage.imageTintList = null
@@ -199,7 +200,10 @@ class SalesAdapter(
                     binding.orderItemDeliveryContent.text = "по желанию продавца"
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
-                    binding.orderItemDeliveryChangeTitle.text =
+                    if(order.cart.first().statusUser?.buy?.idCanceled != order.idSeller)
+                        binding.orderItemDeliveryChangeTitle.text = "Сделка отменена покупателем"
+                   else
+                       binding.orderItemDeliveryChangeTitle.text =
                         "Сделка отменена"
                     binding.orderItemDeliveryChangeContent.isVisible = false
                     binding.orderItemStatusBlock.isVisible = false
@@ -244,11 +248,12 @@ class SalesAdapter(
                   sellerId = order.cart.first().idUser!!,
                   productId = order.cart.first().id,
                   newAddressId = address?.id,
-                  chatFunctionInfo = ChatFunctionInfo(
-                      dialogId = dialog!!.dialog.id,
+                  chatFunctionInfo = if(dialog != null)
+                      ChatFunctionInfo(
+                      dialogId = dialog.dialog.id,
                       suggest = buySuggest?.id,
                       value = null
-                  ),
+                  )else null,
                   offeredOrderPlace = address,
                   product = order.cart.first()
               ))
