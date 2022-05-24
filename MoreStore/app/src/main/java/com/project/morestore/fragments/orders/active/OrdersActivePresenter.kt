@@ -16,6 +16,7 @@ import com.project.morestore.models.*
 
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
+import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.UserRepository
@@ -31,6 +32,7 @@ class OrdersActivePresenter(val context: Context)
     private val ordersRepository = OrdersRepository(context)
     private val userRepository = UserRepository(context)
     private val chatRepository = ChatRepository(context)
+    private val authRepository = AuthRepository(context)
 
     override fun attachView(view: OrdersActiveView) {
         super.attachView(view)
@@ -87,6 +89,7 @@ class OrdersActivePresenter(val context: Context)
             presenterScope.launch {
                 val orders = getAllOrders()?.reversed() ?: return@launch
                 val orderAddresses = getOrderAddresses() ?: return@launch
+                val dialogs = getDialogs()
                 val orderItems = orders.filter { it.cart != null && it.status == 0 }.sortedBy{order ->
                   /*  val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
                         ?.address?.substringAfter(';')?.toLongOrNull()
@@ -106,6 +109,10 @@ class OrdersActivePresenter(val context: Context)
                 }
                     .map { order ->
                     val user = getSellerUser(order.cart!!.first().idUser!!)
+                        val dialog = dialogs?.find { it.dialog.user.id == user?.id }
+                        val chatFunctionInfo = if(user != null && dialog != null && order.cart.first().statusUser?.buy?.status != 2)
+                            ChatFunctionInfo(dialogId = dialog.dialog.id, suggest = order.cart.first().statusUser?.buy?.id )
+                        else null
                     val address = orderAddresses.find { it.idOrder == order.id  }
                     val time = if(address != null) Calendar.getInstance()
                         .apply { timeInMillis = address.address.substringAfter(";").toLongOrNull() ?: 0 }
@@ -125,7 +132,11 @@ class OrdersActivePresenter(val context: Context)
                                 else -> OrderStatus.MEETING_NOT_ACCEPTED
                             }
                         }
-                        2 -> OrderStatus.DECLINED
+                        2 -> {
+                            if(buySuggest.idCanceled == authRepository.getUserId() )
+                            OrderStatus.DECLINED_BUYER
+                            else OrderStatus.DECLINED
+                        }
                         else -> OrderStatus.NOT_SUBMITTED
                     }
 
@@ -153,7 +164,9 @@ class OrdersActivePresenter(val context: Context)
                             else null,
                         sellerId = order.cart.first().idUser!!,
                         productId = order.cart.first().id,
-                        newAddressId = address?.id
+                        newAddressId = address?.id,
+                        product = order.cart.first(),
+                        chatFunctionInfo
 
                                 )
 
@@ -338,9 +351,9 @@ class OrdersActivePresenter(val context: Context)
         }
     }
 
-    private suspend fun getDialogs(): List<DialogWrapper>{
+    private suspend fun getDialogs(): List<DialogWrapper>?{
         val response = chatRepository.getDialogs()
-        return if(response?.code() == 200) response.body()!! else emptyList()
+        return if(response?.code() == 200) response.body()!! else null
     }
     /*private suspend fun initAdapter(): OrdersAdapter{
         val orders = getAllOrders()

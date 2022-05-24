@@ -233,7 +233,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             WidgetSellBarBinding.inflate(layoutInflater)
                 .also {
                     bottomBar.isVisible = requireArguments().getBoolean(FROM_ORDERS, false).not() &&
-                            dialog.product?.status == 1
+                            dialog.product?.status != 7 && dialog.product?.status != 8
                     bottomBar.addView(it.root)
                     it.startPrice.text =
                         getString(R.string.pattern_price, String.format("%,d", dialog.product?.priceNew?.toInt()))
@@ -358,7 +358,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 .circleCrop()
                 .into(photo)
             bottomBar.isVisible = requireArguments().getBoolean(FROM_ORDERS, false).not() &&
-                    dialog.product?.status == 1
+                    dialog.product?.status != 7 && dialog.product?.status != 8
 
 
             WidgetBuyBarBinding.inflate(layoutInflater)

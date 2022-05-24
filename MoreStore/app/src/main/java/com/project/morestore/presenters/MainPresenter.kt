@@ -133,17 +133,11 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
             when (response?.code()) {
                 200 -> {
-                    //val allOrders = getAllOrders()
-                    //val products = response.body()?.map {
-                        //val status = when {
-                          //  it.statusUser?.order?.status == 1 -> 2
-                            //it.statusUser?.order?.status ==
-                                // }
-                    //}
                     val currentUserId = authRepository.getUserId()
                     response.body()?.forEach {
                         val status = when(it.statusUser?.order?.status) {
                             0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
+                            else if(it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
                             else if(it.statusUser.buy?.status != 2) 7 else 1
                             1 -> 8
                             else -> 1

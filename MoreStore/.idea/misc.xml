@@ -131,6 +131,7 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_onboarding5.xml" value="0.67" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_onboarding6.xml" value="0.4003623188405797" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_order_create.xml" value="0.4390625" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_order_details.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_orders.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_orders_cart.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_orders_history.xml" value="0.4390625" />
@@ -161,8 +162,10 @@
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_date.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_material_line.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_matirial_line.xml" value="0.5421875" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_myaddress.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_option.xml" value="0.5421875" />
-        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_order.xml" value="0.4390625" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_order.xml" value="0.4760522496371553" />
+        <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_order_history.xml" value="0.4390625" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_product.xml" value="0.46262341325811" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_region.xml" value="0.5421875" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/layout/item_seller.xml" value="0.4390625" />

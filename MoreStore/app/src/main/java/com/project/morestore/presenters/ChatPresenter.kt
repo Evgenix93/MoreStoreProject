@@ -62,6 +62,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                     val product = response.body()?.product
                     val status = when(product?.statusUser?.order?.status) {
                         0 -> if (product.statusUser.order.idUser == currentUserId && product.statusUser.buy?.status != 2) 6
+                        else if(product.idUser == currentUserId && product.statusUser.buy?.status != 2) 6
                         else if(product.statusUser.buy?.status != 2) 7 else 1
                         1 -> 8
                         else -> 1
