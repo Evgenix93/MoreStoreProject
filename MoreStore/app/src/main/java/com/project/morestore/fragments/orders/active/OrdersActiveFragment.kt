@@ -20,6 +20,7 @@ import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.models.Chat
 import com.project.morestore.fragments.orders.cart.OrdersCartFragmentDirections
 import com.project.morestore.models.User
+import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.models.slidermenu.SliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
@@ -83,6 +84,10 @@ class OrdersActiveFragment
 
     override fun navigate(user: User) {
         findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToSellerProfileFragment(user, false))
+    }
+
+    override fun navigate(order: OrderItem) {
+        findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToOrderDetailsFragment(order))
     }
 
     override fun initMenuAdapter(adapter: SliderMenuAdapter<OrdersSliderMenu>) {

@@ -1160,6 +1160,9 @@
         <action
             android:id="@+id/action_ordersActiveFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_ordersActiveFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderProblemsFragment"
@@ -1199,6 +1202,9 @@
         <action
             android:id="@+id/action_salesActiveFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_salesActiveFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/dealPlaceFragment"

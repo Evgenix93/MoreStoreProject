@@ -249,7 +249,8 @@ class SalesAdapter(
                       suggest = buySuggest?.id,
                       value = null
                   ),
-                  offeredOrderPlace = address
+                  offeredOrderPlace = address,
+                  product = order.cart.first()
               ))
             }
         }

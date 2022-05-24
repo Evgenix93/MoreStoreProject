@@ -172,7 +172,9 @@ class OrdersActivePresenter(val context: Context)
 
                 }
 
-                adapter = OrdersAdapter(orderItems, listener){user -> viewState.navigate(user) }
+                adapter = OrdersAdapter(orderItems, listener, {user -> viewState.navigate(user) }, {
+                    viewState.navigate(it)
+                })
 
 
                 /*adapter = OrdersAdapter(

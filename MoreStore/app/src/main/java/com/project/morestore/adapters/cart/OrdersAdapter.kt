@@ -16,11 +16,15 @@ import com.project.morestore.models.cart.OrderStatus
 class OrdersAdapter(
     private val items: List<OrderItem>,
     private val onClickListener: OrderClickListener,
-    private val onProfileClick: (User) -> Unit
+    private val onProfileClick: (User) -> Unit,
+    private val onClick: (OrderItem) -> Unit
 ) : RecyclerView.Adapter<OrdersAdapter.OrderItemHolder>() {
 
     inner class OrderItemHolder(menuItem: View) : RecyclerView.ViewHolder(menuItem) {
         val binding: ItemOrderBinding by viewBinding()
+        init {
+            itemView.setOnClickListener { onClick(items[adapterPosition]) }
+        }
 
         fun bind(orderItem: OrderItem) {
             with(binding) {

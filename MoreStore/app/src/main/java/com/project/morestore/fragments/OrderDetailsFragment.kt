@@ -18,6 +18,7 @@ import com.project.morestore.databinding.FragmentOrderDetailsBinding
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.fragments.orders.active.OrdersActiveFragmentDirections
 import com.project.morestore.models.Chat
+import com.project.morestore.models.OfferedOrderPlaceChange
 import com.project.morestore.models.Order
 import com.project.morestore.models.Product
 import com.project.morestore.models.cart.OrderItem
@@ -40,8 +41,10 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     private fun bind(order: OrderItem) {
         setProductInfo(order.product)
+        setAddress()
         binding.chosenDeliveryTypeTextView.text = order.deliveryInfo
         setStatusInfo(order)
+        setOrderStatus(order.status)
         binding.sellerAvatarImageView.setOnClickListener {
             if (order.user != null)
                 findNavController().navigate(
@@ -61,7 +64,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     if (order.chatFunctionInfo != null) presenter.cancelBuyRequest(order.chatFunctionInfo,
                     order.product.idUser!!)
                 }
-            )
+            ).show()
         }
     }
 
@@ -241,7 +244,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         args.orderItem.status = status
         bind(args.orderItem)
         setAddress()
-        setOrderStatus(args.orderItem.status)
+
     }
 
 
@@ -270,7 +273,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             presenter.submitBuy(args.orderItem.chatFunctionInfo!!, args.orderItem)
         }
         binding.orderItemAcceptProblemsButton.setOnClickListener{
-            presenter.cancelBuyRequest(args.orderItem.chatFunctionInfo!!)
+            presenter.cancelBuyRequest(args.orderItem.chatFunctionInfo!!, args.orderItem.sellerId)
         }
     }
 
@@ -285,12 +288,15 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptButton.text = "Принять место встречи"
         binding.orderItemAcceptProblemsButton.text = "Обсудить в диалоге"
         binding.orderItemAcceptButton.setOnClickListener{
-            presenter.acceptOrderPlace(OfferedOrderPlaceChange(
+            presenter.acceptOrderPlace(
+              //  OfferedOrderPlaceChange(
                 args.orderItem.id,
                 args.orderItem.newAddressId!!,
                 args.orderItem.newAddress!!,
-                1
-            ))
+                false
+                //1
+            //)
+            )
         }
     }
 
@@ -314,16 +320,10 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         }
     }
 
-    override fun loading(isLoading: Boolean) {
-        TODO("Not yet implemented")
-    }
-
-    override fun orderStatusChanged(status: OrderStatus) {
-        setOrderStatus(status)
-    }
 
 
-    override fun onError(message: String) {
-        TODO("Not yet implemented")
-    }
+
+
+
+
 }
