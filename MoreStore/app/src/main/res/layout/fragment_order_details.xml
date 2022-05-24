@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/gray3">
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/toolbar"/>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/productWindow"
@@ -28,7 +30,7 @@
                 android:background="@color/white"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                >
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/sellerAvatarImageView"
@@ -143,85 +145,38 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/deliveryTypeCardView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
-                >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="11dp"
-                    android:text="@string/delivery_type"
-                    android:textAppearance="@style/regular_16"
-                    android:textColor="@color/gray2" />
 
-                    <TextView
-                        android:id="@+id/takeFromSellerTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/to_another_city"
-                        android:textAppearance="@style/regular_14"
-                        android:textColor="@color/black"
-                        android:layout_marginTop="42dp"
-                        android:layout_marginStart="10dp"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="123dp"
-                    android:layout_marginTop="42dp"
-                    android:layout_marginBottom="26dp"
-                    android:src="@drawable/cdek" />
-
-            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/deliveryPlaceCardView"
-                android:layout_width="match_parent"
+                android:id="@+id/dealPlaceWindow"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@color/white"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                >
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/deliveryWhereBlock">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="11dp"
-                    android:text="Куда доставить?"
-                    android:textAppearance="@style/regular_16"
-                    android:textColor="@color/gray2" />
-
-                <TextView
-                    android:id="@+id/deliveryPlaceTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="До двери"
-                    android:textAppearance="@style/regular_14"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="42dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="24dp"/>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
-                android:layout_marginTop="16dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/dealPlaceTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Адрес"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/myAddressBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
                     android:padding="16dp">
 
                     <ImageView
@@ -233,9 +188,8 @@
                         android:padding="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:backgroundTint="@color/blue4"
-                        app:tint="@color/white"
-                        android:src="@drawable/ic_package" />
+                        tools:backgroundTint="@color/green"
+                        tools:src="@drawable/ic_envelope" />
 
                     <TextView
                         android:id="@+id/title"
@@ -280,98 +234,270 @@
                         tools:layout_editor_absoluteX="16dp"
                         tools:text="Казань, 420141, ул. Юлиуса Фучика, дом 49, квартира 75" />
 
+                    <View
+                        android:id="@+id/orderItemBottomDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="32dp"
+                        android:background="@color/gray3"
+                        app:layout_constraintTop_toBottomOf="@+id/address" />
+
+                    <LinearLayout
+                        android:id="@+id/orderItemStatusBlock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/orderItemBottomDivider">
+
+                        <ImageView
+                            android:id="@+id/orderItemStatusImage"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            app:tint="@color/blue4"
+                            android:src="@drawable/ic_checkcircle" />
+
+                        <TextView
+                            android:id="@+id/orderItemStatusContent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="11dp"
+                            android:fontFamily="@font/manrope_regular"
+                            android:textColor="@color/blue4"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="@+id/orderItemDeliveryTitle"
+                            app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryContent"
+                            android:text="Заказ получен" />
+
+                    </LinearLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/orderItemAcceptBlock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="6dp"
+                        android:visibility="visible"
+                        app:layout_constraintTop_toBottomOf="@+id/orderItemStatusBlock">
+
+                        <View
+                            android:id="@+id/orderItemAcceptDivider"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/gray3"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/orderItemAcceptDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/manrope_regular"
+                            android:paddingTop="1dp"
+                            android:paddingBottom="1dp"
+                            android:text="@string/active_order_delivery_content"
+                            android:textColor="@color/gray2"
+                            android:textSize="10sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/orderItemAcceptButton"
+                            style="@style/buttonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/active_order_accept_order"
+                            app:layout_constraintTop_toBottomOf="@+id/orderItemAcceptDescription" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/orderItemAcceptProblemsButton"
+                            style="@style/buttonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/outlined_button2"
+                            android:text="@string/active_order_problem"
+                            android:textColor="@color/black"
+                            app:layout_constraintTop_toBottomOf="@+id/orderItemAcceptButton" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/orderItemDeliveryChangeBlock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="6dp"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/orderItemBottomDivider">
+
+                        <ImageView
+                            android:id="@+id/orderItemDeliveryChangeIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_warning"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/orderItemDeliveryChangeTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/manrope_bold"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:text="@string/active_order_new_meeting_place"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toEndOf="@+id/orderItemDeliveryChangeIcon"
+                            app:layout_constraintTop_toTopOf="@+id/orderItemDeliveryChangeIcon" />
+
+                        <TextView
+                            android:id="@+id/orderItemDeliveryChangeContent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/manrope_regular"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="@+id/orderItemDeliveryChangeTitle"
+                            app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryChangeTitle"
+                            tools:text="Пр. Ленина №123 19:00" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/orderItemChangeDeliveryAcceptButton"
+                            style="@style/buttonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/active_order_accept_meeting"
+                            app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryChangeContent" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/orderItemChangeDeliveryDeclineButton"
+                            style="@style/buttonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:background="@drawable/outlined_button2"
+                            android:text="@string/active_order_decline_meeting"
+                            android:textColor="@color/black"
+                            app:layout_constraintTop_toBottomOf="@+id/orderItemChangeDeliveryAcceptButton" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
-
-            <View
-                android:id="@+id/lineView"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray3"
-                />
-
-            <LinearLayout
-                android:id="@+id/orderItemStatusBlock"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="10dp"
-                android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/orderItemBottomDivider">
-
-                <ImageView
-                    android:id="@+id/orderItemStatusImage"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    app:tint="@color/blue4"
-                    android:src="@drawable/ic_checkcircle" />
-
-                <TextView
-                    android:id="@+id/orderItemStatusContent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="11dp"
-                    android:fontFamily="@font/manrope_regular"
-                    android:textColor="@color/blue4"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@+id/orderItemDeliveryTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryContent"
-                    android:text="Заказ получен" />
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/lineView2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray3"
-                />
-
-            <TextView
-                android:id="@+id/orderItemAcceptDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/manrope_regular"
-                android:paddingTop="1dp"
-                android:paddingBottom="1dp"
-                android:text="@string/active_order_delivery_content"
-                android:textColor="@color/gray2"
-                android:textSize="10sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
 
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/orderItemAcceptButton"
-                style="@style/buttonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/active_order_accept_order"
-                app:layout_constraintTop_toBottomOf="@+id/orderItemAcceptDescription" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/orderItemAcceptProblemsButton"
-                style="@style/buttonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/outlined_button2"
-                android:text="@string/active_order_problem"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@+id/orderItemAcceptButton" />
+
+
+
+
+
+
+            </com.google.android.material.card.MaterialCardView>
+
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/commentCardView"
+                android:id="@+id/deliveryTypeCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                >
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/productWindow">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="11dp"
+                    android:text="@string/delivery_type"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+                <TextView
+                    android:id="@+id/chosenDeliveryTypeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="В другой город "
+                    android:textAppearance="@style/regular_14"
+                    android:textColor="@color/black"/>
+
+
+                <ImageView
+                    android:id="@+id/deliveryIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginStart="123dp"
+                    android:layout_marginTop="42dp"
+                    android:layout_marginBottom="26dp"
+                    android:src="@drawable/cdek" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/deliveryWhereBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/deliveryTypeCardView">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="11dp"
+                    android:text="Куда доставить?"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+                <TextView
+                    android:id="@+id/deliveryWhereTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="24dp"
+                    tools:text="До двери"
+                    android:textAppearance="@style/regular_14"
+                    android:textColor="@color/black"/>
+
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/deliveryCommentBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dealPlaceWindow">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -383,34 +509,43 @@
                     android:textColor="@color/gray2" />
 
                 <TextView
-                    android:id="@+id/commentTextView"
+                    android:id="@+id/deliveryCommentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Оставить товар у двери. В домофон не звонить"
-                    android:textAppearance="@style/regular_14"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="42dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginBottom="24dp"/>
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="24dp"
+                    tools:text="Оставить товар у двери. В домофон не звонить"
+                    android:textAppearance="@style/regular_14"
+                    android:textColor="@color/black"/>
+
+
 
             </com.google.android.material.card.MaterialCardView>
 
+
+
+
+
+
             <TextView
-                android:id="@+id/prepaymentInfoTextView"
-                android:layout_width="wrap_content"
+                android:id="@+id/infoTextView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/prepayment_info"
+                android:layout_marginBottom="24dp"
+                android:text="Продавец получит деньги только тогда,\nкогда вы подтвердите получение товара."
                 android:textAppearance="@style/regular_14"
                 android:textSize="12dp"
-                android:layout_marginBottom="24dp"
                 android:visibility="visible"
-                 />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/deliveryCommentBlock"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        </LinearLayout>
 
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
