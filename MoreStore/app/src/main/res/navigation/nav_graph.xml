@@ -1219,5 +1219,13 @@
             android:id="@+id/action_salesHistoryFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/orderDetailsFragment"
+        android:name="com.project.morestore.fragments.OrderDetailsFragment"
+        android:label="OrderDetailsFragment" >
+        <argument
+            android:name="orderItem"
+            app:argType="com.project.morestore.models.cart.OrderItem" />
+    </fragment>
 
 </navigation>

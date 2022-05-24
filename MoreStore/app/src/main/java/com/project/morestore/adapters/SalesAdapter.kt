@@ -11,7 +11,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemOrderBinding
+import com.project.morestore.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.models.*
+import com.project.morestore.models.cart.OrderItem
+import com.project.morestore.models.cart.OrderStatus
 import java.util.*
 
 class SalesAdapter(
@@ -21,7 +24,8 @@ class SalesAdapter(
     private val declineDealPlace: (Long, Long) -> Unit,
     private val acceptDeal:(ChatFunctionInfo) -> Unit,
     private val cancelDeal:(ChatFunctionInfo) -> Unit,
-    private val onProfileClick: (User) -> Unit
+    private val onProfileClick: (User) -> Unit,
+    private val onClick: (OrderItem) -> Unit
 ) : RecyclerView.Adapter<SalesAdapter.SaleViewHolder>() {
     private var sales = listOf<Order>()
     private var addresses = listOf<OfferedOrderPlace>()
@@ -69,6 +73,7 @@ class SalesAdapter(
             user: User?,
             dialog: DialogWrapper?
         ) {
+            var orderStatus = OrderStatus.NOT_SUBMITTED
             binding.orderItemName.text = order.cart?.get(0)?.name
             //val specialPrice = dialog?.messages?.map{it.priceSuggest ?: it.saleSuggest}?.findLast{it?.status == 1}?.value?.toIntOrNull()
               //  ?: order.cart?.get(0)?.priceNew?.toInt()
@@ -79,9 +84,11 @@ class SalesAdapter(
             binding.orderItemAcceptButton.setOnClickListener {
                 addDealPlace(order.id)
             }
+            var date = "-"
+            var time = "-"
+            val buySuggest = order.cart?.first()?.statusUser?.buy
             if(isHistory.not()) {
-               // val buySuggest = dialog?.messages?.map { it.buySuggest }?.findLast { it != null }
-                   val buySuggest = order.cart?.first()?.statusUser?.buy
+
                 if (buySuggest?.status == 1) {
                     binding.orderItemDeliveryChangeBlock.isVisible = false
                     binding.orderItemAcceptBlock.isVisible = address == null
@@ -98,6 +105,9 @@ class SalesAdapter(
                             val dayStr = if (day < 10) "0$day" else day.toString()
                             val month = calendar.get(Calendar.MONTH) + 1
                             val monthStr = if (month < 10) "0$month" else month.toString()
+                            val year = calendar.get(Calendar.YEAR)
+                            date = "$dayStr.$monthStr.$year"
+                            time = "$hoursStr:$minutesStr"
                             binding.orderItemDeliveryContent.text =
                                 "${address.address.substringBefore(';')} $dayStr.$monthStr $hoursStr:$minutesStr"
                         } else
@@ -107,15 +117,20 @@ class SalesAdapter(
                             OfferedPlaceType.PROPOSED.value -> {
                                 binding.orderItemDeliveryChangeBlock.isVisible = false
                                 binding.orderItemStatusBlock.isVisible = true
-                                if (address.status == 0)
+                                if (address.status == 0) {
+                                    orderStatus = OrderStatus.MEETING_NOT_ACCEPTED_SELLER
                                     binding.orderItemStatusContent.text =
                                         "Покупатель ещё не подтвердил место встречи"
-                                else if (isHistory.not())
+                                }
+                                else {
+                                    orderStatus = OrderStatus.RECEIVED_SELLER
                                     binding.orderItemStatusContent.text =
                                         "Ожидание встречи с покупателем"
+                                }
                             }
                             OfferedPlaceType.APPLICATION.value -> {
                                 if (address.status == 0) {
+                                    orderStatus = OrderStatus.CHANGE_MEETING_SELLER
                                     binding.orderItemDeliveryChangeBlock.isVisible = true
                                     binding.orderItemDeliveryChangeTitle.text =
                                         "Покупатель предложил место встречи"
@@ -136,14 +151,19 @@ class SalesAdapter(
                                             declineDealPlace(it.id, order.cart[0].id)
                                         }
                                     }
-                                } else if (isHistory.not())
+                                } else {
+                                    orderStatus = OrderStatus.RECEIVED_SELLER
                                     binding.orderItemStatusContent.text =
                                         "Ожидание встречи с покупателем"
+                                }
                             }
                         }
-                    } else
+                    } else {
+                        orderStatus = OrderStatus.ADD_MEETING
                         binding.orderItemDeliveryContent.text = "по желанию продавца"
+                    }
                 }else if(buySuggest?.status == 0 || buySuggest == null){
+                    orderStatus = OrderStatus.NOT_SUBMITTED_SELLER
                     binding.orderItemDeliveryContent.text = "по желанию продавца"
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
@@ -175,6 +195,7 @@ class SalesAdapter(
                             )
                     }
                 }else{
+                    orderStatus = OrderStatus.DECLINED
                     binding.orderItemDeliveryContent.text = "по желанию продавца"
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
@@ -203,6 +224,33 @@ class SalesAdapter(
             }
             binding.orderItemUserName.setOnClickListener {
                 if(user != null) onProfileClick(user)
+            }
+            binding.root.setOnClickListener{
+              onClick(OrderItem(
+                  id = order.id,
+                  user = user,
+                  photo = order.cart!!.first().photo.first().photo,
+                  name = order.cart.first().name,
+                  price = specialPrice ?: 0,
+                  deliveryDate = date,
+                  deliveryInfo = when (order.delivery) {
+                      OrderCreateFragment.TAKE_FROM_SELLER -> "Заберу у продавца"
+                      OrderCreateFragment.YANDEX_GO -> "yandex"
+                      OrderCreateFragment.ANOTHER_CITY -> "СДЕК"
+                      else -> ""},
+                  status = orderStatus,
+                  newAddress = address?.address,
+                  newTime = time,
+                  sellerId = order.cart.first().idUser!!,
+                  productId = order.cart.first().id,
+                  newAddressId = address?.id,
+                  chatFunctionInfo = ChatFunctionInfo(
+                      dialogId = dialog!!.dialog.id,
+                      suggest = buySuggest?.id,
+                      value = null
+                  ),
+                  offeredOrderPlace = address
+              ))
             }
         }
     }

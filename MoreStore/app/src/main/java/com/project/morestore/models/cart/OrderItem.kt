@@ -1,8 +1,13 @@
 package com.project.morestore.models.cart
 
 import android.graphics.Bitmap
+import android.os.Parcelable
+import com.project.morestore.models.ChatFunctionInfo
+import com.project.morestore.models.OfferedOrderPlace
 import com.project.morestore.models.User
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class OrderItem(
     val id: Long,
 
@@ -23,5 +28,7 @@ data class OrderItem(
     val newTime: String?,
     val sellerId: Long,
     val productId: Long,
-    val newAddressId: Long?
-)
+    val newAddressId: Long?,
+    val chatFunctionInfo: ChatFunctionInfo?,
+    val offeredOrderPlace: OfferedOrderPlace?
+): Parcelable
