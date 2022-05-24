@@ -130,7 +130,14 @@ class OrdersHistoryPresenter(context: Context)
                                 OrderCreateFragment.ANOTHER_CITY -> "СДЕК"
                                 else -> ""
                             },
-                            status = OrderHistoryStatus.COMPLETED
+                            status = OrderHistoryStatus.COMPLETED,
+                            newAddress = address?.address,
+                            newTime = if(time != null) "${time.get(Calendar.HOUR_OF_DAY)}:${time.get(Calendar.MINUTE)}"
+                            else null,
+                            sellerId = order.cart.first().idUser!!,
+                            productId = order.cart.first().id,
+                            newAddressId = address?.id,
+                            product = order.cart.first()
 
 
                         )
@@ -139,6 +146,9 @@ class OrdersHistoryPresenter(context: Context)
 
                     adapter = OrdersHistoryAdapter(orderItems,{}, {user ->
                         viewState.navigate(user)
+                    }, {
+                        viewState.navigate(it)
+
                     })
 
 

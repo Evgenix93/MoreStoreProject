@@ -10,15 +10,41 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemOrderHistoryBinding
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.OrderHistoryItem
+import com.project.morestore.models.cart.OrderItem
+import com.project.morestore.models.cart.OrderStatus
 
 class OrdersHistoryAdapter(
     private val items: List<OrderHistoryItem>,
     private val onDeliveryClickListener: (OrderHistoryItem) -> Unit,
-    private val onProfileClick: (User) -> Unit
+    private val onProfileClick: (User) -> Unit,
+    private val onClick: (OrderItem) -> Unit
 ) : RecyclerView.Adapter<OrdersHistoryAdapter.OrderHistoryItemHolder>() {
 
     inner class OrderHistoryItemHolder(menuItem: View) : RecyclerView.ViewHolder(menuItem) {
         val binding: ItemOrderHistoryBinding by viewBinding()
+
+        init {
+            itemView.setOnClickListener {
+                onClick(
+                    OrderItem(
+                    id = items[adapterPosition].id.toLong(),
+                    user = items[adapterPosition].user,
+                    product = items[adapterPosition].product,
+                    deliveryInfo = items[adapterPosition].deliveryInfo,
+                    deliveryDate = items[adapterPosition].deliveryDate,
+                    name = items[adapterPosition].name,
+                    newAddressId = items[adapterPosition].newAddressId,
+                    newAddress = items[adapterPosition].newAddress,
+                    photo = items[adapterPosition].photo,
+                    productId = items[adapterPosition].productId,
+                    newTime = items[adapterPosition].newTime,
+                    sellerId = items[adapterPosition].sellerId,
+                    price = items[adapterPosition].price,
+                    status = OrderStatus.RECEIVED_SUCCESSFULLY
+                )
+                )
+            }
+        }
 
         fun bind(orderHistoryItem: OrderHistoryItem) {
             with(binding) {

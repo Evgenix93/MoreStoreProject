@@ -170,6 +170,10 @@
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/gray2" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -177,7 +181,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="48dp"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/icon"
@@ -188,8 +193,8 @@
                         android:padding="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:backgroundTint="@color/green"
-                        tools:src="@drawable/ic_envelope" />
+                        android:backgroundTint="@color/green"
+                        android:src="@drawable/ic_envelope" />
 
                     <TextView
                         android:id="@+id/title"
@@ -201,7 +206,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/favorite"
                         app:layout_constraintStart_toEndOf="@+id/icon"
                         app:layout_constraintTop_toTopOf="@+id/icon"
-                        tools:text="@string/myAddress_pickup" />
+                        android:text="@string/myAddress_pickup" />
 
                     <ImageView
                         android:id="@+id/favorite"
@@ -233,20 +238,22 @@
                         app:layout_constraintTop_toBottomOf="@+id/name"
                         tools:layout_editor_absoluteX="16dp"
                         tools:text="Казань, 420141, ул. Юлиуса Фучика, дом 49, квартира 75" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
                         android:id="@+id/orderItemBottomDivider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="16dp"
                         android:background="@color/gray3"
-                        app:layout_constraintTop_toBottomOf="@+id/address" />
+                        app:layout_constraintTop_toBottomOf="@+id/myAddressBlock" />
 
                     <LinearLayout
                         android:id="@+id/orderItemStatusBlock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingVertical="10dp"
+                        android:paddingHorizontal="10dp"
                         app:layout_constraintTop_toBottomOf="@+id/orderItemBottomDivider">
 
                         <ImageView
@@ -416,6 +423,7 @@
                             android:textColor="@color/black"
                             app:layout_constraintTop_toBottomOf="@+id/orderItemChangeDeliveryAcceptButton" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 

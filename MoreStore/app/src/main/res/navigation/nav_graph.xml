@@ -1134,6 +1134,9 @@
         <action
             android:id="@+id/action_ordersHistoryFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_ordersHistoryFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/ordersActiveFragment"
@@ -1224,6 +1227,9 @@
         <action
             android:id="@+id/action_salesHistoryFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_salesHistoryFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderDetailsFragment"

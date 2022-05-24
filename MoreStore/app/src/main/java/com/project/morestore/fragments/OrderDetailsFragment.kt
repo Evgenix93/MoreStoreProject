@@ -149,10 +149,13 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemStatusImage.setImageResource(R.drawable.ic_clock)
                     orderItemStatusContent.text =
                         requireContext().getString(R.string.active_order_meeting_not_accepted)
-                    icon.isVisible = false
-                    title.isVisible = false
-                    name.isVisible = false
-                    address.isVisible = false
+                    myAddressBlock.isVisible = false
+                    dealPlaceTextView.isVisible = false
+
+                    //icon.isVisible = false
+                    //title.isVisible = false
+                    //name.isVisible = false
+                    //address.isVisible = false
                     //orderItemDeliveryAddress.isVisible = false
                     //orderItemDeliveryAddressContent.isVisible = false
                     //orderItemAcceptBlock.isVisible = false
@@ -199,10 +202,12 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 }
                 OrderStatus.NOT_SUBMITTED -> {
                     orderItemStatusBlock.isVisible = true
-                    icon.isVisible = false
-                    title.isVisible = false
-                    name.isVisible = false
-                    address.isVisible = false
+                    myAddressBlock.isVisible = false
+                    dealPlaceTextView.isVisible = false
+                    //icon.isVisible = false
+                    //title.isVisible = false
+                    //name.isVisible = false
+                    //address.isVisible = false
                    // orderItemAcceptBlock.isVisible = false
                     //orderItemDeliveryChangeBlock.isVisible = false
                     orderItemStatusContent.text = "Ожидание подтверждения от продавца"
@@ -214,11 +219,13 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemDeliveryChangeBlock.isVisible = true
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
-                    orderItemDeliveryChangeTitle.text = "Сделка отменена"
-                    icon.isVisible = false
-                    title.isVisible = false
-                    name.isVisible = false
-                    address.isVisible = false
+                    orderItemDeliveryChangeTitle.text = "Сделка отлонена продавцом"
+                    myAddressBlock.isVisible = false
+                    dealPlaceTextView.isVisible = false
+                    //icon.isVisible = false
+                    //title.isVisible = false
+                    //name.isVisible = false
+                    //address.isVisible = false
                 }
                 OrderStatus.RECEIVED_SUCCESSFULLY -> {
                     address.text = order.newAddress
@@ -250,7 +257,11 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     private fun setAddress(){
         binding.name.text = args.orderItem.user?.name
-        binding.address.text = args.orderItem.newAddress
+        binding.address.text = args.orderItem.newAddress?.substringBefore(";")
+        if(args.orderItem.newAddress == null) {
+            binding.myAddressBlock.isVisible = false
+            binding.dealPlaceTextView.isVisible = false
+        }
     }
 
     private fun setOrderStatus(status: OrderStatus){
@@ -264,7 +275,11 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     }
 
     private fun setNotSubmittedStatus(){
-        binding.orderItemStatusBlock.isVisible = false
+        binding.orderItemStatusBlock.isVisible = true
+        binding.orderItemStatusContent.text = "Неоходимо подтвердить наличие товара"
+        binding.orderItemStatusContent.setTextColor(resources.getColor(R.color.black))
+        binding.orderItemStatusImage.setImageResource(R.drawable.ic_warning)
+        binding.orderItemStatusImage.drawable.setTint(resources.getColor(R.color.orange))
         binding.orderItemAcceptBlock.isVisible = true
         binding.orderItemAcceptDescription.isVisible = false
         binding.orderItemAcceptButton.text = "Подтвердить"

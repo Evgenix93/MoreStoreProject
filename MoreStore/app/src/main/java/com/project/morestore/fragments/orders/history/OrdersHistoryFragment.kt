@@ -11,8 +11,10 @@ import com.project.morestore.R
 import com.project.morestore.adapters.SliderMenuAdapter
 import com.project.morestore.adapters.cart.OrdersHistoryAdapter
 import com.project.morestore.databinding.FragmentOrdersHistoryBinding
+import com.project.morestore.fragments.OrderDetailsFragmentDirections
 import com.project.morestore.fragments.orders.cart.OrdersCartFragmentDirections
 import com.project.morestore.models.User
+import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartView
@@ -82,6 +84,10 @@ class OrdersHistoryFragment
 
     override fun navigate(user: User) {
         findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToSellerProfileFragment(user, false))
+    }
+
+    override fun navigate(order: OrderItem) {
+        findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToOrderDetailsFragment(order))
     }
 
     ///////////////////////////////////////////////////////////////////////////
