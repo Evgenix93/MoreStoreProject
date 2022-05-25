@@ -89,7 +89,6 @@ class SalesAdapter(
             var time = "-"
             val buySuggest = order.cart?.first()?.statusUser?.buy
             if(isHistory.not()) {
-
                 if (buySuggest?.status == 1) {
                     binding.orderItemDeliveryChangeBlock.isVisible = false
                     binding.orderItemAcceptBlock.isVisible = address == null
@@ -211,6 +210,8 @@ class SalesAdapter(
                     binding.orderItemChangeDeliveryDeclineButton.isVisible = false
 
                 }
+            }else{
+              orderStatus = OrderStatus.RECEIVED_SUCCESSFULLY
             }
 
             binding.orderItemUserName.text = "${user?.name} ${user?.surname}"
@@ -252,7 +253,7 @@ class SalesAdapter(
                       ChatFunctionInfo(
                       dialogId = dialog.dialog.id,
                       suggest = buySuggest?.id,
-                      value = null
+                      value = specialPrice
                   )else null,
                   offeredOrderPlace = address,
                   product = order.cart.first()

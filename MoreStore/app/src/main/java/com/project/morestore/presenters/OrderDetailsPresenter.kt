@@ -149,14 +149,14 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
         }
     }
 
-    fun cancelBuyRequest(info: ChatFunctionInfo, sellerId: Long) {
+    fun cancelBuyRequest(orderItem: OrderItem) {
         presenterScope.launch {
             viewState.loading(true)
-            val response = chatRepository.cancelBuyRequest(info)
+            val response = chatRepository.cancelBuyRequest(orderItem.chatFunctionInfo!!)
             when (response?.code()) {
                 200 -> {
                     viewState.loading(false)
-                    viewState.orderStatusChanged(if (authRepository.getUserId() == sellerId) OrderStatus.DECLINED else OrderStatus.DECLINED_BUYER)
+                    viewState.orderStatusChanged(if (authRepository.getUserId() == orderItem.sellerId) OrderStatus.DECLINED else OrderStatus.DECLINED_BUYER)
                 }
                 400 -> {
                     viewState.loading(false)
@@ -182,9 +182,9 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
         }
     }
 
-    fun submitBuy(info: ChatFunctionInfo, orderItem: OrderItem){
+    fun submitBuy(orderItem: OrderItem){
         presenterScope.launch {
-            val response = chatRepository.submitBuy(info)
+            val response = chatRepository.submitBuy(orderItem.chatFunctionInfo!!)
             when(response?.code()){
                 200 -> {
                    when {

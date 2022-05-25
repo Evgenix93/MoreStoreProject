@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -53,6 +55,7 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
               Toast.makeText(requireContext(), "Выберите адрес и время", Toast.LENGTH_SHORT).show()
               return@setOnClickListener
           }
+          setFragmentResult(ADDRESS_REQUEST, bundleOf(ADDRESS to "$chosenAddressStr;${chosenTime?.timeInMillis}"))
           presenter.addDealPlace(args.orderId, "$chosenAddressStr;${chosenTime?.timeInMillis}")
       }
     }
@@ -242,5 +245,10 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
 
     override fun onDealStatusChanged() {
         TODO("Not yet implemented")
+    }
+
+    companion object{
+        const val ADDRESS_REQUEST = "address key"
+        const val ADDRESS = "address"
     }
 }
