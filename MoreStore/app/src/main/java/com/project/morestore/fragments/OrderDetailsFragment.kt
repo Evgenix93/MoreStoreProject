@@ -84,6 +84,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             DeleteDialog(context = requireContext(),
                 title = "Отменить сделку?",
                 message = "Товар будет снова доступен для покупки другими покупателями.",
+                confirmText = "Да, отменить",
+                cancelText = "Нет",
                 confirmCallback = {
                     if (order.chatFunctionInfo != null) presenter.cancelBuyRequest(order)
                 }
@@ -268,9 +270,11 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
                     orderItemDeliveryChangeTitle.text = "Сделка отклонена продавцом"
-                    myAddressBlock.isVisible = false
-                    dealPlaceTextView.isVisible = false
+                    //myAddressBlock.isVisible = true
+                    //dealPlaceTextView.isVisible = true
                     cancelTextView.isVisible = false
+                    orderItemAcceptBlock.isVisible = false
+                    orderItemStatusBlock.isVisible = false
                     //icon.isVisible = false
                     //title.isVisible = false
                     //name.isVisible = false
@@ -284,9 +288,11 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
                     orderItemDeliveryChangeTitle.text = "Сделка отклонена покупателем"
-                    myAddressBlock.isVisible = false
-                    dealPlaceTextView.isVisible = false
+                    //myAddressBlock.isVisible = false
+                    //dealPlaceTextView.isVisible = false
                     cancelTextView.isVisible = false
+                    orderItemStatusBlock.isVisible = false
+                    orderItemAcceptBlock.isVisible = false
                     //icon.isVisible = false
                     //title.isVisible = false
                     //name.isVisible = false
