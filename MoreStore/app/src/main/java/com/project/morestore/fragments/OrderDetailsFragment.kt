@@ -37,6 +37,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initToolbar()
         if(args.orderItem != null) {
             bind(args.orderItem!!)
             presenter.getProductById(args.orderItem!!.productId)
@@ -45,9 +46,16 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     }
 
+    private fun initToolbar(){
+        binding.toolbar.titleTextView.text = "Статус заказа"
+        binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.actionIcon.isVisible = false
+    }
+
 
     private fun bind(order: OrderItem) {
         setAddress(order)
+        presenter.initProfile(order)
         binding.chosenDeliveryTypeTextView.text = order.deliveryInfo
         setStatusInfo(order)
         setOrderStatus(order)
@@ -74,10 +82,10 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     }
 
     private fun setProductInfo(product: Product) {
-        Glide.with(this)
-            .load(product.user?.avatar?.photo.toString())
-            .into(binding.sellerAvatarImageView)
-        binding.sellerNameTextView.text = product.user?.name
+        //Glide.with(this)
+          //  .load(product.user?.avatar?.photo.toString())
+            //.into(binding.sellerAvatarImageView)
+        //binding.sellerNameTextView.text = product.user?.name
 
 
         Glide.with(this)
@@ -313,6 +321,13 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     override fun orderItemLoaded(orderItem: OrderItem) {
         bind(orderItem)
         presenter.getProductById(orderItem.productId)
+    }
+
+    override fun setProfileInfo(avatar: String, name: String) {
+        Glide.with(this)
+            .load(avatar)
+            .into(binding.sellerAvatarImageView)
+        binding.sellerNameTextView.text = name
     }
 
 

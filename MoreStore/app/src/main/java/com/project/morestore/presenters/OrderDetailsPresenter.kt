@@ -353,6 +353,19 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
         }
     }
 
+    fun initProfile(order: OrderItem){
+        presenterScope.launch {
+            val currentUserId = authRepository.getUserId()
+            if (currentUserId == order.sellerId) {
+                val user = getUserById(order.user?.id ?: -1)
+                viewState.setProfileInfo(user?.avatar?.photo.toString(), user?.name.orEmpty())
+            }else{
+                val user = getUserById(order.sellerId)
+                viewState.setProfileInfo(user?.avatar?.photo.toString(), user?.name.orEmpty())
+            }
+        }
+    }
+
     private suspend fun getAllOrders(): List<Order>?{
         val response = ordersRepository.getAllOrders()
         return when(response?.code()){

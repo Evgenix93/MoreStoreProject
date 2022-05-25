@@ -18,4 +18,6 @@ interface OrderDetailsView: MvpView {
     fun productLoaded(product: Product)
     @OneExecution
     fun orderItemLoaded(orderItem: OrderItem)
+    @OneExecution
+    fun setProfileInfo(avatar: String, name: String)
 }
