@@ -311,6 +311,8 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                     }
                 }
 
+            if(order.status == 1) status = OrderStatus.RECEIVED_SUCCESSFULLY
+
 
 
             val orderItem = OrderItem(
