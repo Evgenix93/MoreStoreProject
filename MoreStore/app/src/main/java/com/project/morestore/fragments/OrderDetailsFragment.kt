@@ -69,6 +69,16 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 )
 
         }
+        binding.sellerNameTextView.setOnClickListener {
+            if (order.user != null)
+                findNavController().navigate(
+                    OrderDetailsFragmentDirections.actionOrderDetailsFragmentToSellerProfileFragment(
+                        order.user,
+                        false
+                    )
+                )
+
+        }
 
         binding.cancelTextView.setOnClickListener {
             DeleteDialog(context = requireContext(),
@@ -328,15 +338,19 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             .load(avatar)
             .into(binding.sellerAvatarImageView)
         binding.sellerNameTextView.text = name
+        binding.name.text = name
     }
 
 
     private fun setAddress(order: OrderItem){
-        binding.name.text = order.user?.name
         binding.address.text = order.newAddress?.substringBefore(";")
         if(order.newAddress == null) {
             binding.myAddressBlock.isVisible = false
             binding.dealPlaceTextView.isVisible = false
+        }else{
+            binding.myAddressBlock.isVisible = true
+            binding.dealPlaceTextView.isVisible = true
+
         }
     }
 
