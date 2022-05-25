@@ -195,15 +195,18 @@ class SalesAdapter(
                             )
                     }
                 }else{
-                    orderStatus = OrderStatus.DECLINED
                     binding.orderItemDeliveryContent.text = "по желанию продавца"
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
-                    if(order.cart.first().statusUser?.buy?.idCanceled != order.idSeller)
-                        binding.orderItemDeliveryChangeTitle.text = "Сделка отменена покупателем"
-                   else
-                       binding.orderItemDeliveryChangeTitle.text =
-                        "Сделка отменена"
+                    if(order.cart.first().statusUser?.buy?.idCanceled != order.idSeller) {
+                        orderStatus = OrderStatus.DECLINED_BUYER
+                        binding.orderItemDeliveryChangeTitle.text = "К сожалению покупатель отклонил сделку"
+                    }
+                   else {
+                        orderStatus = OrderStatus.DECLINED
+                        binding.orderItemDeliveryChangeTitle.text =
+                            "Сделка отклонена"
+                    }
                     binding.orderItemDeliveryChangeContent.isVisible = false
                     binding.orderItemStatusBlock.isVisible = false
                     binding.orderItemChangeDeliveryAcceptButton.isVisible = false
