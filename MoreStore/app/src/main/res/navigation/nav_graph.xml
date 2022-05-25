@@ -911,6 +911,9 @@
         <action
             android:id="@+id/action_chatFragment_to_createOrderFragment"
             app:destination="@id/createOrderFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/mediaFragment"
@@ -1237,10 +1240,19 @@
         android:label="OrderDetailsFragment" >
         <argument
             android:name="orderItem"
-            app:argType="com.project.morestore.models.cart.OrderItem" />
+            app:argType="com.project.morestore.models.cart.OrderItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <action
             android:id="@+id/action_orderDetailsFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_orderProblemsFragment"
+            app:destination="@id/orderProblemsFragment" />
+        <argument
+            android:name="orderId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
 
 </navigation>

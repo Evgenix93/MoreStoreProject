@@ -109,6 +109,13 @@ class OrdersHistoryPresenter(context: Context)
                             }
                         else null
 
+                            val discountedPrice = when{
+                                order.cart.first().statusUser?.price?.status == 1 -> order.cart.first().statusUser?.price?.value?.toIntOrNull()
+                                order.cart.first().statusUser?.sale?.status == 1 -> order.cart.first().statusUser?.sale?.value?.toIntOrNull()
+                                else -> null
+
+                            }
+
 
                         OrderHistoryItem(
                             id = order.id.toString(),
@@ -117,7 +124,7 @@ class OrdersHistoryPresenter(context: Context)
                             user = user,
                             photo = order.cart.first().photo.first().photo,
                             name = order.cart.first().name,
-                            price = order.cart.first().priceNew?.toInt() ?: 0,
+                            price = discountedPrice ?: order.cart.first().priceNew?.toInt() ?: 0,
                             deliveryDate = if (time == null || time.timeInMillis == 0L) "-" else
                                 "${time.get(Calendar.DAY_OF_MONTH)}.${time.get(Calendar.MONTH) + 1}.${
                                     time.get(

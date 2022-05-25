@@ -29,7 +29,8 @@ class MessagesAdapter(
     private val cancelDealCallback :(Message) -> Unit,
     private val submitPriceCallback: (Message) -> Unit,
     private val cancelPriceCallback: (Message) -> Unit,
-    private val showMediaCallback :(Array<Media>) -> Unit
+    private val showMediaCallback :(Array<Media>) -> Unit,
+    private val onDealDetailsCallback : (Long) -> Unit
 ) :RecyclerView.Adapter<RecyclerView.ViewHolder>() {
      var avatarUri :String = ""
     private var items = mutableListOf<Message>()
@@ -333,6 +334,10 @@ class MessagesAdapter(
     inner class DealDetailsHolder(
         private val views :ChatItemDealDetailsBinding
     ) :RecyclerView.ViewHolder(views.root){
+        init {
+            itemView.setOnClickListener {
+                onDealDetailsCallback((items[adapterPosition] as Message.Special.DealDetails).orderId) }
+        }
         fun bind(item :Message.Special.DealDetails){
         }
     }

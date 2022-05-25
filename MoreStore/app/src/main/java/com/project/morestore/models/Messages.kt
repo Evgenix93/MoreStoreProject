@@ -21,7 +21,7 @@ sealed class Message {
         //class BuyRequest(val time :String, @DrawableRes val statusIcon :Int) :Special()
         //class DealAccept(val time :String): Special()
         class DealCancel(val time: String): Special()
-        object DealDetails : Special()
+        class DealDetails(val orderId: Long) : Special()
         object BuyDetails : Special()
         object GeoDetails : Special()
         //class PriceRequest(val time :String, @DrawableRes val status :Int, val newPrice :String) :Special()

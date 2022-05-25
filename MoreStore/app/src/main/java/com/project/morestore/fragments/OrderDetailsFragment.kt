@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentOrderDetailsBinding
 import com.project.morestore.dialogs.DeleteDialog
+import com.project.morestore.dialogs.YesNoDialog
 import com.project.morestore.fragments.orders.active.OrdersActiveFragmentDirections
 import com.project.morestore.models.Chat
 import com.project.morestore.models.OfferedOrderPlaceChange
@@ -35,16 +36,20 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bind(args.orderItem)
+        if(args.orderItem != null) {
+            bind(args.orderItem!!)
+            presenter.getProductById(args.orderItem!!.productId)
+        }
+        else presenter.getOrderItem(args.orderId)
+
     }
 
 
     private fun bind(order: OrderItem) {
-        setProductInfo(order.product)
-        setAddress()
+        setAddress(order)
         binding.chosenDeliveryTypeTextView.text = order.deliveryInfo
         setStatusInfo(order)
-        setOrderStatus(order.status)
+        setOrderStatus(order)
         binding.sellerAvatarImageView.setOnClickListener {
             if (order.user != null)
                 findNavController().navigate(
@@ -94,7 +99,12 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             )
         }
         binding.oldPriceTextView.text = crossedStr
-        binding.newPriceTextView.text = product.priceNew.toString()
+        val discountedPrice = when{
+            product.statusUser?.price?.status == 1 -> product.statusUser.price.value
+            product.statusUser?.sale?.status == 1 -> product.statusUser.sale.value
+            else -> null
+        }
+        binding.newPriceTextView.text = discountedPrice ?: product.priceNew.toString()
     }
 
     /*private fun setDeliveryTypeInfo(delivery: Int){
@@ -129,7 +139,27 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemAcceptBlock.visibility = View.VISIBLE
                     orderItemStatusContent.text = requireContext().getString(R.string.active_order_recivied)
                     address.text = order.newAddress?.substringBefore(";")
-                    orderItemAcceptButton.setOnClickListener { presenter.submitReceiveOrder(order.id) }
+                    orderItemAcceptButton.setOnClickListener {
+                        YesNoDialog(
+                            requireContext().getString(R.string.active_order_accept_dialog_title),
+                            null,
+                            object : YesNoDialog.onClickListener {
+                                override fun onYesClick() {
+                                    presenter.submitReceiveOrder(order.id)
+                                }
+
+                                override fun onNoClick() {
+
+                                }
+
+                            }).show(childFragmentManager, null)
+
+                         }
+                    orderItemAcceptProblemsButton.setOnClickListener {
+                        findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToOrderProblemsFragment(order.productId))
+                    }
+                    orderItemAcceptButton.text = "Подтвердить получение товара"
+                    orderItemAcceptProblemsButton.text = "Проблема с товаром"
                 //orderItemDeliveryAddress.isVisible = false
                     //orderItemDeliveryAddressContent.isVisible = false
                     //orderItemDeliveryChangeBlock.isVisible = false
@@ -250,6 +280,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemStatusBlock.isVisible = false
                     orderItemHistoryStatusBlock.isVisible = true
                     cancelTextView.isVisible = false
+                    orderItemAcceptBlock.isVisible = false
 
 
                 }
@@ -267,33 +298,44 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     }
 
     override fun orderStatusChanged(status: OrderStatus) {
-        args.orderItem.status = status
-        bind(args.orderItem)
-        setAddress()
+        args.orderItem?.status = status
+        if(args.orderItem != null)
+        bind(args.orderItem!!)
+        else presenter.getOrderItem(args.orderId)
+
 
     }
 
+    override fun productLoaded(product: Product) {
+        setProductInfo(product)
+    }
 
-    private fun setAddress(){
-        binding.name.text = args.orderItem.user?.name
-        binding.address.text = args.orderItem.newAddress?.substringBefore(";")
-        if(args.orderItem.newAddress == null) {
+    override fun orderItemLoaded(orderItem: OrderItem) {
+        bind(orderItem)
+        presenter.getProductById(orderItem.productId)
+    }
+
+
+    private fun setAddress(order: OrderItem){
+        binding.name.text = order.user?.name
+        binding.address.text = order.newAddress?.substringBefore(";")
+        if(order.newAddress == null) {
             binding.myAddressBlock.isVisible = false
             binding.dealPlaceTextView.isVisible = false
         }
     }
 
-    private fun setOrderStatus(status: OrderStatus){
-        when(status){
-          OrderStatus.NOT_SUBMITTED_SELLER -> setNotSubmittedStatus()
+    private fun setOrderStatus(order: OrderItem){
+        when(order.status){
+          OrderStatus.NOT_SUBMITTED_SELLER -> setNotSubmittedStatus(order)
           OrderStatus.MEETING_NOT_ACCEPTED_SELLER -> setMeetingNotAcceptedSellerStatus()
-          OrderStatus.CHANGE_MEETING_SELLER -> setChangeMeetingSellerStatus()
+          OrderStatus.CHANGE_MEETING_SELLER -> setChangeMeetingSellerStatus(order)
           OrderStatus.RECEIVED_SELLER -> setReceivedSellerStatus()
-          OrderStatus.ADD_MEETING ->  setAddMeetingStatus()
+          OrderStatus.ADD_MEETING ->  setAddMeetingStatus(order)
         }
     }
 
-    private fun setNotSubmittedStatus(){
+    private fun setNotSubmittedStatus(order: OrderItem){
         binding.orderItemStatusBlock.isVisible = true
         binding.orderItemStatusContent.text = "Неоходимо подтвердить наличие товара"
         binding.orderItemStatusContent.setTextColor(resources.getColor(R.color.black))
@@ -304,12 +346,12 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptButton.text = "Подтвердить"
         binding.orderItemAcceptProblemsButton.text = "Отменить"
         binding.orderItemAcceptButton.setOnClickListener{
-            if(args.orderItem.chatFunctionInfo != null)
-            presenter.submitBuy(args.orderItem.chatFunctionInfo!!, args.orderItem)
+            if(order.chatFunctionInfo != null)
+            presenter.submitBuy(order.chatFunctionInfo!!, order)
         }
         binding.orderItemAcceptProblemsButton.setOnClickListener{
-            if(args.orderItem.chatFunctionInfo != null)
-            presenter.cancelBuyRequest(args.orderItem.chatFunctionInfo!!, args.orderItem.sellerId)
+            if(order.chatFunctionInfo != null)
+            presenter.cancelBuyRequest(order.chatFunctionInfo!!, order.sellerId)
         }
     }
 
@@ -318,7 +360,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemStatusContent.text = "Покупатель ещё не подтвердил место встречи"
     }
 
-    private fun setChangeMeetingSellerStatus(){
+    private fun setChangeMeetingSellerStatus(order: OrderItem){
         binding.orderItemStatusBlock.isVisible = false
         binding.orderItemAcceptDescription.isVisible = false
         binding.orderItemAcceptButton.text = "Принять место встречи"
@@ -326,9 +368,9 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptButton.setOnClickListener{
             presenter.acceptOrderPlace(
               //  OfferedOrderPlaceChange(
-                args.orderItem.id,
-                args.orderItem.newAddressId!!,
-                args.orderItem.newAddress!!,
+                order.id,
+                order.newAddressId!!,
+                order.newAddress!!,
                 false
                 //1
             //)
@@ -342,7 +384,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             "Ожидание встречи с покупателем"
     }
 
-    private fun setAddMeetingStatus(){
+    private fun setAddMeetingStatus(order: OrderItem){
         binding.orderItemStatusBlock.isVisible = false
         binding.orderItemAcceptBlock.isVisible = true
         binding.orderItemAcceptDescription.isVisible = false
@@ -350,8 +392,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptProblemsButton.isVisible = false
         binding.orderItemAcceptButton.setOnClickListener{
             presenter.addDealPlace(
-                args.orderItem.id,
-                args.orderItem.newAddress!!
+                order.id,
+                order.newAddress!!
             )
         }
     }

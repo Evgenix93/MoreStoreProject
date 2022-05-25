@@ -84,6 +84,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 R.id.action_chatFragment_to_mediaFragment,
                 bundleOf(MediaFragment.PHOTOS to uris.toTypedArray())
             )
+        },
+        onDealDetailsCallback = {
+            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToOrderDetailsFragment(orderId = it))
         }
     )
     private var listenGeo = false
@@ -252,7 +255,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }
         }
 
-        val messages = getMessages(dialog.messages.orEmpty())
+        val messages = getMessages(dialog.messages.orEmpty(), dialog.product?.statusUser)
         adapter.setItems(messages.orEmpty().reversed())
         views.list.scrollToPosition(adapter.itemCount - 1)
 
@@ -297,7 +300,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }
         }
 
-        val messages = getMessages(dialog.messages.orEmpty())
+        val messages = getMessages(dialog.messages.orEmpty(), null)
 
         adapter.setItems(messages.orEmpty().reversed())
         views.list.scrollToPosition(adapter.itemCount - 1)
@@ -378,7 +381,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }
         }
 
-        val messages = getMessages(dialog.messages.orEmpty())
+        val messages = getMessages(dialog.messages.orEmpty(), dialog.product?.statusUser)
         adapter.setItems(messages.orEmpty().reversed())
         views.list.scrollToPosition(adapter.itemCount - 1)
         val buyMessage = dialog.messages?.find { it.buySuggest != null }
@@ -419,7 +422,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             }
     }
 
-    private fun getMessages(list: List<MessageModel>): List<Message> {
+    private fun getMessages(list: List<MessageModel>, statusUser: ProductUserStatus?): List<Message> {
         Log.d("mylog", list.toString())
         val dates = list.filter { it.saleSuggest?.status != 0 }.mapNotNull {
             val calendar = Calendar.getInstance()
@@ -565,7 +568,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             else null
 
             val buyAccepted = if(buyDetailsIndexes.find { it == index } != null)
-                Message.Special.BuyDetails
+                //Message.Special.BuyDetails
+                    Message.Special.DealDetails(statusUser?.order?.id ?: -1)
             else null
 
 
@@ -640,7 +644,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private val accepted = buyer
         .map { if (it is Message.Special.DealRequest) Message.Special.DealAccept("13:19") else it }
         .toMutableList()
-        .also { it.add(Message.Special.DealDetails) }
+        .also { it.add(Message.Special.DealDetails(-1)) }
 
     private val seller = listOf(
         //Message.Divider(R.string.today),

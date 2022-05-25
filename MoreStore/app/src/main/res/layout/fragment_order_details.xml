@@ -193,8 +193,9 @@
                         android:padding="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:backgroundTint="@color/green"
-                        android:src="@drawable/ic_envelope" />
+                        android:backgroundTint="@color/blue4"
+                        android:src="@drawable/ic_package"
+                        app:tint="@color/white"/>
 
                     <TextView
                         android:id="@+id/title"
@@ -472,7 +473,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="40dp"
                     android:layout_marginBottom="24dp"
-                    android:text="В другой город "
+                    tools:text="В другой город "
                     android:textAppearance="@style/regular_14"
                     android:textColor="@color/black"/>
 
@@ -493,6 +494,7 @@
                 android:id="@+id/deliveryWhereBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
@@ -529,6 +531,7 @@
                 android:id="@+id/deliveryCommentBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"

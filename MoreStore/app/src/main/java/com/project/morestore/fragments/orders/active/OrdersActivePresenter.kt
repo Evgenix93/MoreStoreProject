@@ -109,7 +109,7 @@ class OrdersActivePresenter(val context: Context)
                 }
                     .map { order ->
                     val user = getSellerUser(order.cart!!.first().idUser!!)
-                        val dialog = dialogs?.find { it.dialog.user.id == user?.id }
+                        val dialog = dialogs?.find { it.product?.id == order.cart.first().id }
                         val chatFunctionInfo = if(user != null && dialog != null && order.cart.first().statusUser?.buy?.status != 2)
                             ChatFunctionInfo(dialogId = dialog.dialog.id, suggest = order.cart.first().statusUser?.buy?.id )
                         else null
@@ -140,6 +140,13 @@ class OrdersActivePresenter(val context: Context)
                         else -> OrderStatus.NOT_SUBMITTED
                     }
 
+                        val discountedPrice = when{
+                            order.cart.first().statusUser?.price?.status == 1 -> order.cart.first().statusUser?.price?.value?.toIntOrNull()
+                            order.cart.first().statusUser?.sale?.status == 1 -> order.cart.first().statusUser?.sale?.value?.toIntOrNull()
+                            else -> null
+
+                        }
+
 
                     OrderItem(
                         id = order.id,
@@ -148,8 +155,7 @@ class OrdersActivePresenter(val context: Context)
                         user = user,
                         photo = order.cart.first().photo.first().photo,
                         name = order.cart.first().name,
-                        price = order.cart.first().statusUser?.price?.value?.toIntOrNull() ?: order.cart.first().statusUser?.sale?.value?.toIntOrNull()
-                        ?: order.cart.first().priceNew?.toInt() ?: 0,
+                        price = discountedPrice ?: order.cart.first().priceNew?.toInt() ?: 0,
                         deliveryDate = if(time == null || time.timeInMillis == 0L)"-" else
                             "${time.get(Calendar.DAY_OF_MONTH)}.${time.get(Calendar.MONTH) + 1}.${time.get(Calendar.YEAR)}",
                         deliveryInfo = when (order.delivery) {
