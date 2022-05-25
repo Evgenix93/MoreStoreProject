@@ -67,7 +67,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 title = "Отменить сделку?",
                 message = "Товар будет снова доступен для покупки другими покупателями.",
                 confirmCallback = {
-                    if (order.chatFunctionInfo != null) presenter.cancelBuyRequest(args.orderItem)
+                    if (order.chatFunctionInfo != null) presenter.cancelBuyRequest(order)
                 }
             ).show()
         }
@@ -346,12 +346,12 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptButton.text = "Подтвердить"
         binding.orderItemAcceptProblemsButton.text = "Отменить"
         binding.orderItemAcceptButton.setOnClickListener{
-            if(args.orderItem.chatFunctionInfo != null)
-            presenter.submitBuy(args.orderItem)
+            if(order.chatFunctionInfo != null)
+            presenter.submitBuy(order)
         }
         binding.orderItemAcceptProblemsButton.setOnClickListener{
-            if(args.orderItem.chatFunctionInfo != null)
-            presenter.cancelBuyRequest(args.orderItem)
+            if(order.chatFunctionInfo != null)
+            presenter.cancelBuyRequest(order)
         }
     }
 
@@ -392,11 +392,11 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptProblemsButton.isVisible = false
         setFragmentResultListener(DealPlaceFragment.ADDRESS_REQUEST){_, bundle ->
             binding.myAddressBlock.isVisible = true
-            args.orderItem.newAddress = bundle.getString(DealPlaceFragment.ADDRESS)
-            setAddress()
+            order.newAddress = bundle.getString(DealPlaceFragment.ADDRESS)
+            setAddress(order)
         }
         binding.orderItemAcceptButton.setOnClickListener{
-            findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToDealPlaceFragment(args.orderItem.id))
+            findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToDealPlaceFragment(order.id))
         }
     }
 }
