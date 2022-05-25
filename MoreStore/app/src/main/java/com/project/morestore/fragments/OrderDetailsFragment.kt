@@ -407,8 +407,10 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptProblemsButton.isVisible = false
         setFragmentResultListener(DealPlaceFragment.ADDRESS_REQUEST){_, bundle ->
             binding.myAddressBlock.isVisible = true
+            order.status =  OrderStatus.MEETING_NOT_ACCEPTED_SELLER
             order.newAddress = bundle.getString(DealPlaceFragment.ADDRESS)
             setAddress(order)
+            setOrderStatus(order)
         }
         binding.orderItemAcceptButton.setOnClickListener{
             findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToDealPlaceFragment(order.id))
