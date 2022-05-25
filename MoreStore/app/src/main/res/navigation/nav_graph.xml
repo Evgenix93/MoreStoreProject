@@ -1247,6 +1247,9 @@
             android:id="@+id/action_orderDetailsFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
         <action
+            android:id="@+id/action_orderDetailsFragment_to_dealPlaceFragment"
+            app:destination="@id/dealPlaceFragment" />
+        <action
             android:id="@+id/action_orderDetailsFragment_to_orderProblemsFragment"
             app:destination="@id/orderProblemsFragment" />
         <argument

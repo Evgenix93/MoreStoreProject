@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -66,8 +67,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 title = "Отменить сделку?",
                 message = "Товар будет снова доступен для покупки другими покупателями.",
                 confirmCallback = {
-                    if (order.chatFunctionInfo != null) presenter.cancelBuyRequest(order.chatFunctionInfo,
-                    order.product.idUser!!)
+                    if (order.chatFunctionInfo != null) presenter.cancelBuyRequest(args.orderItem)
                 }
             ).show()
         }
@@ -337,7 +337,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     private fun setNotSubmittedStatus(order: OrderItem){
         binding.orderItemStatusBlock.isVisible = true
-        binding.orderItemStatusContent.text = "Неоходимо подтвердить наличие товара"
+        binding.orderItemStatusContent.text = "Необходимо подтвердить наличие товара"
         binding.orderItemStatusContent.setTextColor(resources.getColor(R.color.black))
         binding.orderItemStatusImage.setImageResource(R.drawable.ic_warning)
         binding.orderItemStatusImage.drawable.setTint(resources.getColor(R.color.orange))
@@ -346,12 +346,12 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptButton.text = "Подтвердить"
         binding.orderItemAcceptProblemsButton.text = "Отменить"
         binding.orderItemAcceptButton.setOnClickListener{
-            if(order.chatFunctionInfo != null)
-            presenter.submitBuy(order.chatFunctionInfo!!, order)
+            if(args.orderItem.chatFunctionInfo != null)
+            presenter.submitBuy(args.orderItem)
         }
         binding.orderItemAcceptProblemsButton.setOnClickListener{
-            if(order.chatFunctionInfo != null)
-            presenter.cancelBuyRequest(order.chatFunctionInfo!!, order.sellerId)
+            if(args.orderItem.chatFunctionInfo != null)
+            presenter.cancelBuyRequest(args.orderItem)
         }
     }
 
@@ -379,7 +379,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     }
 
     private fun setReceivedSellerStatus(){
-        binding.orderItemStatusBlock.isVisible = false
+        binding.orderItemStatusBlock.isVisible = true
         binding.orderItemStatusContent.text =
             "Ожидание встречи с покупателем"
     }
@@ -390,18 +390,13 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptDescription.isVisible = false
         binding.orderItemAcceptButton.text = "Добавить место встречи"
         binding.orderItemAcceptProblemsButton.isVisible = false
+        setFragmentResultListener(DealPlaceFragment.ADDRESS_REQUEST){_, bundle ->
+            binding.myAddressBlock.isVisible = true
+            args.orderItem.newAddress = bundle.getString(DealPlaceFragment.ADDRESS)
+            setAddress()
+        }
         binding.orderItemAcceptButton.setOnClickListener{
-            presenter.addDealPlace(
-                order.id,
-                order.newAddress!!
-            )
+            findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToDealPlaceFragment(args.orderItem.id))
         }
     }
-
-
-
-
-
-
-
 }

@@ -25,7 +25,7 @@ data class OrderItem(
 
     var status: OrderStatus,
 
-    val newAddress: String?,
+    var newAddress: String?,
     val newTime: String?,
     val sellerId: Long,
     val productId: Long,
