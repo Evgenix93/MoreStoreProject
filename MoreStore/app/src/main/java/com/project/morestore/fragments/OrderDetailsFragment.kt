@@ -269,7 +269,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemDeliveryChangeBlock.isVisible = true
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
-                    orderItemDeliveryChangeTitle.text = "Сделка отклонена продавцом"
+                    orderItemDeliveryChangeTitle.text = "К сожалению продавец отклонил сделку"
                     //myAddressBlock.isVisible = true
                     //dealPlaceTextView.isVisible = true
                     cancelTextView.isVisible = false
@@ -287,7 +287,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemDeliveryChangeBlock.isVisible = true
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
-                    orderItemDeliveryChangeTitle.text = "Сделка отклонена покупателем"
+                    orderItemDeliveryChangeTitle.text = "К сожалению покупатель отклонил сделку"
                     //myAddressBlock.isVisible = false
                     //dealPlaceTextView.isVisible = false
                     cancelTextView.isVisible = false

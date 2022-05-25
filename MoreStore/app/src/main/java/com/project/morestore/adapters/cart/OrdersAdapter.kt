@@ -115,7 +115,7 @@ class OrdersAdapter(
                         orderItemDeliveryChangeBlock.isVisible = true
                         orderItemChangeDeliveryAcceptButton.isVisible = false
                         orderItemChangeDeliveryDeclineButton.isVisible = false
-                        orderItemDeliveryChangeTitle.text = "Сделка отклонена продавцом"
+                        orderItemDeliveryChangeTitle.text = "К сожалению продавец отклонил сделку"
                     }
                     OrderStatus.DECLINED_BUYER -> {
                         orderItemStatusBlock.isVisible = false
@@ -123,7 +123,7 @@ class OrdersAdapter(
                         orderItemDeliveryChangeBlock.isVisible = true
                         orderItemChangeDeliveryAcceptButton.isVisible = false
                         orderItemChangeDeliveryDeclineButton.isVisible = false
-                        orderItemDeliveryChangeTitle.text = "Сделка отклонена"
+                        orderItemDeliveryChangeTitle.text = "К сожалению покупатель отклонил сделку"
                     }
                 }
             }
