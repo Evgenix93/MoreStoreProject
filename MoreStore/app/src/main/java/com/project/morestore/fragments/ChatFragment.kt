@@ -551,7 +551,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
          list.filter { it.saleSuggest?.status != 0 }.forEachIndexed { index, messageModel ->
              if(messageModel.priceSuggest != null && messageModel.priceSuggest.status == 1)
                  priceDetailsIndexes.add(index)
-             if(messageModel.buySuggest != null && messageModel.buySuggest.status == 1 && messageModel.idSender == currentUserId)
+             if(messageModel.buySuggest != null && messageModel.buySuggest.status == 1) //&& messageModel.idSender == currentUserId)
                  buyDetailsIndexes.add(index)
 
         }
