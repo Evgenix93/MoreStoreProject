@@ -52,7 +52,7 @@ class BlackListFragment: MvpAppCompatFragment(R.layout.fragment_wait_review), Bl
                  message = null,
                  confirmText = "Да",
                  cancelText = "Нет",
-                 confirmCallback = {presenter.blockUnblockUser()}
+                 confirmCallback = {presenter.blockUnblockUser(it.id)}
              ).show()
             }.also{usersAdapter = it}
             layoutManager = LinearLayoutManager(requireContext())

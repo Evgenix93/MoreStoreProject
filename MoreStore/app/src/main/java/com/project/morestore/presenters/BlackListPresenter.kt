@@ -27,12 +27,45 @@ class BlackListPresenter(context: Context): MvpPresenter<BlackListMvpView>() {
                     viewState.onEmptyList(true)
                     viewState.loading(false)
                     viewState.onError(getErrorString(response.errorBody()!!))}
+                404 -> {
+                    viewState.loading(false)
+                    viewState.onEmptyList(true)
+                }
             }
         }
     }
 
-    fun blockUnblockUser(){
-        viewState.onBlockUnblockUser()
+    fun blockUnblockUser(id: Long){
+        presenterScope.launch {
+            viewState.loading(true)
+            val response = userRepository.blockUnblockUser(id)
+            when(response?.code()){
+                200 -> {
+                    viewState.loading(false)
+                    if(response.body() == "unblock")
+                        viewState.onBlockUnblockUser()
+                    else viewState.onError(response.body()!!)
+                }
+                400 -> {
+                    viewState.loading(false)
+                    viewState.onError(getErrorString(response.errorBody()!!))
+                }
+                null -> {
+                    viewState.loading(false)
+                    viewState.onError("Нет интернета")
+                }
+                500 -> {
+                    viewState.loading(false)
+                    viewState.onError("500 Internal Server Error")
+                }
+                else -> {
+                    viewState.loading(false)
+                }
+
+            }
+
+
+        }
     }
 
     private suspend fun getErrorString(body: ResponseBody): String{

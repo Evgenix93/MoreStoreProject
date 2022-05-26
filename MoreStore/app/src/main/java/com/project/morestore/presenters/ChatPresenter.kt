@@ -776,15 +776,10 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     }
 
     private suspend fun getBlockedUsers(): List<User>? {
-        Log.d("mylog", "addProductToCart")
-
-        //val response = userRepository.getBlockedUsers()
-        val code = 200
-
-        return when (code) {
+        val response = userRepository.getBlackList()
+        return when (response?.code()) {
             200 -> {
-                //response.body()
-                emptyList()
+                response.body()
             }
             500 -> {
                 viewState.error("500 Internal Server Error")
@@ -796,7 +791,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             }
             404 -> {
 
-                null
+                emptyList()
             }
             else -> {
 

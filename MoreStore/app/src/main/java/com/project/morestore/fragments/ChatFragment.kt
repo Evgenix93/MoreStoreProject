@@ -679,6 +679,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         val timeStr = "${Calendar.getInstance().get(Calendar.HOUR_OF_DAY)}:${Calendar.getInstance().get(Calendar.MINUTE)}"
         adapter.addMessage(Message.Special.BuyRequest(timeStr, R.drawable.ic_check, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), R.drawable.ic_bag_filled_green ))
         views.list.scrollToPosition(adapter.itemCount - 1)*/
+        if(this::user.isInitialized && user.isBlackList == true){
+            error("Собеседник вас заблокировал")
+            return
+        }
         presenter.buyProduct(currentProductId!!, currentUserId!!)
 
     }
@@ -858,6 +862,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun applyNewPrice(newPrice: String) {
         //adapter.setItems(requestPrice(newPrice))
+        if(this::user.isInitialized && user.isBlackList == true){
+            error("Собеседник вас заблокировал")
+            return
+        }
         val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
@@ -869,6 +877,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     override fun applyDiscount(discount: String) {
+        if(this::user.isInitialized && user.isBlackList == true){
+            error("Собеседник вас заблокировал")
+            return
+        }
          adapter.addMessage(Message.Special.PriceAccepted(discount))
          val dialogId = requireArguments().getLong(DIALOG_ID_KEY)
          presenter.offerDiscount(ChatFunctionInfo(dialogId = dialogId, value = discount.toInt()))
