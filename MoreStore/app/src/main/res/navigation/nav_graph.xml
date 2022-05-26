@@ -1257,5 +1257,9 @@
             app:argType="long"
             android:defaultValue="-1L" />
     </fragment>
+    <fragment
+        android:id="@+id/blackListFragment"
+        android:name="com.project.morestore.fragments.BlackListFragment"
+        android:label="BlackListFragment" />
 
 </navigation>

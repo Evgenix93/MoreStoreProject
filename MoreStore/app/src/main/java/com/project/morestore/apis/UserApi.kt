@@ -142,5 +142,12 @@ interface UserApi {
     @GET("user/{id}")
     suspend fun getUser(@Path("id") id: Long): Response<User>
 
+    @GET("user/{id}")
     suspend fun getUserError(@Path("id") id: Long): String
+
+    @GET("user/blacklist")
+    suspend fun getBlackList(): Response<List<User>>
+
+    @GET("user/blacklist")
+    suspend fun getBlackListError(): String
 }

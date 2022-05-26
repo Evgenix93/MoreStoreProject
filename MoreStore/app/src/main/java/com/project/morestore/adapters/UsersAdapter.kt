@@ -1,6 +1,5 @@
 package com.project.morestore.adapters
 
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -8,7 +7,7 @@ import com.project.morestore.databinding.ItemReviewSellerBinding
 import com.project.morestore.models.User
 import com.project.morestore.util.inflater
 
-class SellersAdapter(private val onClick:(User) -> Unit): RecyclerView.Adapter<SellersAdapter.SellerHolder>() {
+class UsersAdapter(private val onClick:(User) -> Unit): RecyclerView.Adapter<UsersAdapter.SellerHolder>() {
     private var sellers = listOf<User>()
 
     fun updateList(newList: List<User>){

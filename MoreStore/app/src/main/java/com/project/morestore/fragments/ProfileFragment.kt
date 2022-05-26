@@ -74,6 +74,10 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
          binding.waitReviewSellersTextView.setOnClickListener{
              findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToWaitReviewSellersFragment())
         }
+
+        binding.blackListTextView.setOnClickListener{
+            findNavController().navigate(R.id.blackListFragment)
+        }
     }
 
     private fun loadOnBoardingData(){
