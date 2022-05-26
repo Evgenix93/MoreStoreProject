@@ -681,4 +681,16 @@ class UserRepository(val context: Context) {
                 Response.error(400, e.message.orEmpty().toResponseBody())
         }
     }
+
+  suspend fun getBlackList(): Response<List<User>>?{
+      return try {
+          Network.userApi.getBlackList()
+      }catch (e: Throwable){
+          Log.e("MyDebug", "getBlackListError ${e.message}")
+          if(e is IOException)
+              null
+          else
+             Response.error(0, e.message?.toResponseBody() ?: "".toResponseBody())
+      }
+  }
 }
