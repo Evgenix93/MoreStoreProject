@@ -29,11 +29,8 @@ class OrdersAdapter(
         fun bind(orderItem: OrderItem) {
             with(binding) {
                 orderItemId.text = "№ ${orderItem.id}"
-
-                //orderItemUserIcon.setImageBitmap(orderItem.userIcon)
                 Glide.with(itemView).load(orderItem.user?.avatar?.photo).circleCrop().into(orderItemUserIcon)
                 orderItemUserName.text = orderItem.user?.name
-                //orderItemPreview.setImageBitmap(orderItem.photo)
                 Glide.with(itemView).load(orderItem.photo).into(orderItemPreview)
                 orderItemName.text = orderItem.name
                 orderItemDeliveryContent.text = orderItem.deliveryInfo

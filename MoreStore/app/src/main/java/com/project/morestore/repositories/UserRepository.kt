@@ -670,4 +670,15 @@ class UserRepository(val context: Context) {
           }
       }
   }
+
+    suspend fun blockUnblockUser(id: Long): Response<String>?{
+        return try {
+            userApi.blockUnblockUser(id)
+        }catch (e: Throwable){
+            if(e is IOException)
+                null
+            else
+                Response.error(400, e.message.orEmpty().toResponseBody())
+        }
+    }
 }

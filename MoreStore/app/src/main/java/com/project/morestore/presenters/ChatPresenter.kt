@@ -6,11 +6,13 @@ import android.util.Log
 import com.project.morestore.models.Chat
 import com.project.morestore.models.ChatFunctionInfo
 import com.project.morestore.models.Id
+import com.project.morestore.models.User
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
 import com.project.morestore.repositories.OrdersRepository
+import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.MessageActionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +25,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     private val chatRepository = ChatRepository(context)
     private val authRepository = AuthRepository(context)
     private val ordersRepository = OrdersRepository(context)
+    private val userRepository = UserRepository(context)
     private var dialogId: Long? = null
 
     fun createDialog(userId: Long, productId: Long, withBuySuggest: Boolean = false) {
@@ -751,6 +754,79 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                 }
 
             }
+
+    }
+
+    fun blockUser(userId: Long){
+        presenterScope.launch {
+            viewState.loading()
+            val blockedUsers = getBlockedUsers()
+            blockedUsers ?: return@launch
+            val isUserBlocked = blockedUsers.find { it.id == userId } != null
+            if(isUserBlocked){
+                viewState.error("Пользователь уже заблокирован")
+            }else{
+                val success = blockUnblockUser(userId)
+                if(success == true) viewState.error("Пользователь заблокирован")
+            }
+
+
+
+        }
+    }
+
+    private suspend fun getBlockedUsers(): List<User>? {
+        Log.d("mylog", "addProductToCart")
+
+        //val response = userRepository.getBlockedUsers()
+        val code = 200
+
+        return when (code) {
+            200 -> {
+                //response.body()
+                emptyList()
+            }
+            500 -> {
+                viewState.error("500 Internal Server Error")
+                null
+            }
+            null -> {
+                viewState.error("нет интернета")
+                null
+            }
+            404 -> {
+
+                null
+            }
+            else -> {
+
+                null
+            }
+        }
+
+    }
+
+    private suspend fun blockUnblockUser(id: Long): Boolean? {
+        val response = userRepository.blockUnblockUser(id)
+        return when (response?.code()) {
+            200 -> {
+                response.body() == "block" || response.body() == "unblock"
+            }
+            500 -> {
+                viewState.error("500 Internal Server Error")
+                null
+            }
+            null -> {
+                viewState.error("нет интернета")
+                null
+            }
+            404 -> {
+                null
+            }
+            else -> {
+                null
+            }
+        }
 
     }
 

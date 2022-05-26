@@ -212,7 +212,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     private fun showSell(dialog: DialogWrapper) {
 
         //currentDialogId = dialog.dialog.id
-        //user = dialog.dialog.user
+        user = dialog.dialog.user
         //adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
             toolbar.title.text = dialog.dialog.user.name
@@ -340,6 +340,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }*/
 
     private fun showDeal(dialog: DialogWrapper) {
+        user = dialog.dialog.user
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
             toolbar.title.text = dialog.dialog.user.name
@@ -727,6 +728,11 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     private fun sendOnlyMedia() {
+        if(this::user.isInitialized && user.isBlackList == true){
+            error("Собеседник вас заблокировал")
+            return
+        }
+
         val mediaPhoto = mediaUris!!.filter {
             requireContext().contentResolver.getType(it)?.substringAfter('/') != "mp4"
         }
@@ -760,6 +766,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     private fun sendOnlyText() {
+        if(this::user.isInitialized && user.isBlackList == true){
+            error("Собеседник вас заблокировал")
+            return
+        }
         val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
@@ -778,6 +788,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     private fun sendTextMedia(message: String) {
+        if(this::user.isInitialized && user.isBlackList == true){
+            error("Собеседник вас заблокировал")
+            return
+        }
         val mediaPhoto = mediaUris!!.filter {
             requireContext().contentResolver.getType(it)?.substringAfter('/') != "mp4"
         }
@@ -838,6 +852,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                     true
                 )
             )
+        if(item.titleId == R.string.chat_menu_block)
+            presenter.blockUser(user.id)
     }
 
     override fun applyNewPrice(newPrice: String) {

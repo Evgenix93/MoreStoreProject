@@ -143,4 +143,7 @@ interface UserApi {
     suspend fun getUser(@Path("id") id: Long): Response<User>
 
     suspend fun getUserError(@Path("id") id: Long): String
+
+    @POST("user/blacklist/{id}")
+    suspend fun blockUnblockUser(@Path("id") id: Long): Response<String>
 }

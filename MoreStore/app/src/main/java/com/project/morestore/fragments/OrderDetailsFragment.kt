@@ -94,12 +94,6 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     }
 
     private fun setProductInfo(product: Product) {
-        //Glide.with(this)
-          //  .load(product.user?.avatar?.photo.toString())
-            //.into(binding.sellerAvatarImageView)
-        //binding.sellerNameTextView.text = product.user?.name
-
-
         Glide.with(this)
             .load(product.photo[0].photo)
             .into(binding.productImageView)
@@ -127,18 +121,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.newPriceTextView.text = discountedPrice ?: product.priceNew.toString()
     }
 
-    /*private fun setDeliveryTypeInfo(delivery: Int){
-        binding.chosenDeliveryTypeTextView.text = when(delivery){
-            1 -> "заберу у продавца"
-            2 -> "по городу"
-            3 -> {
-                binding.deliveryIcon.isVisible = true
-                "в другой город"
-            }
 
-        }
-
-    }*/
 
     private fun setStatusInfo(order: OrderItem){
         with(binding) {
@@ -148,10 +131,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemStatusImage.setImageResource(R.drawable.ic_package)
                     orderItemStatusContent.text =
                         requireContext().getString(R.string.active_order_waiting_courier)
-                    //orderItemDeliveryAddress.isVisible = false
-                    //orderItemDeliveryAddressContent.isVisible = false
-                    //orderItemAcceptBlock.isVisible = false
-                    //orderItemDeliveryChangeBlock.isVisible = false
+
                 }
                 OrderStatus.RECEIVED -> {
                     orderItemStatusBlock.isVisible = true
@@ -180,19 +160,14 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     }
                     orderItemAcceptButton.text = "Подтвердить получение товара"
                     orderItemAcceptProblemsButton.text = "Проблема с товаром"
-                //orderItemDeliveryAddress.isVisible = false
-                    //orderItemDeliveryAddressContent.isVisible = false
-                    //orderItemDeliveryChangeBlock.isVisible = false
+
                 }
                 OrderStatus.AT_COURIER -> {
                     orderItemStatusBlock.isVisible = true
                     orderItemStatusImage.setImageResource(R.drawable.ic_truck)
                     orderItemStatusContent.text =
                         requireContext().getString(R.string.active_order_at_courier)
-                    //orderItemDeliveryAddress.isVisible = false
-                    //orderItemDeliveryAddressContent.isVisible = false
-                    //orderItemDeliveryChangeBlock.isVisible = false
-                    //orderItemAcceptBlock.isVisible = false
+
                 }
                 OrderStatus.MEETING_NOT_ACCEPTED -> {
                     orderItemStatusBlock.isVisible = true
@@ -202,14 +177,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     myAddressBlock.isVisible = false
                     dealPlaceTextView.isVisible = false
 
-                    //icon.isVisible = false
-                    //title.isVisible = false
-                    //name.isVisible = false
-                    //address.isVisible = false
-                    //orderItemDeliveryAddress.isVisible = false
-                    //orderItemDeliveryAddressContent.isVisible = false
-                    //orderItemAcceptBlock.isVisible = false
-                    //orderItemDeliveryChangeBlock.isVisible = false
+
                 }
                 OrderStatus.CHANGE_MEETING -> {
                     orderItemStatusBlock.isVisible = false //= View.GONE
@@ -230,73 +198,45 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                             )
                         )
                     }
-                    //orderItemChangeDeliveryAcceptButton.isVisible = true
-                    //orderItemChangeDeliveryDeclineButton.isVisible = true
+
                     address.text =
                         "${order.newAddress?.substringBefore(";")} ${order.newTime}"
-                    //orderItemDeliveryAddress.isVisible = false
-                    //orderItemDeliveryAddressContent.isVisible = false
-                    //orderItemAcceptBlock.isVisible = false
+
                 }
                 OrderStatus.CHANGE_MEETING_FROM_ME -> {
                     orderItemStatusBlock.isVisible = true
                     orderItemStatusImage.setImageResource(R.drawable.ic_clock)
                     orderItemStatusContent.text =
                         requireContext().getString(R.string.active_order_meeting_not_accepted)
-                            //orderItemDeliveryAddress.isVisible = true
-                    //orderItemDeliveryAddressContent.isVisible = true
+
                     address.text =
                         order.newAddress?.substringBefore(";")
-                    //orderItemAcceptBlock.isVisible = false
-                    //orderItemDeliveryChangeBlock.isVisible = false
+
                 }
                 OrderStatus.NOT_SUBMITTED -> {
                     orderItemStatusBlock.isVisible = true
                     myAddressBlock.isVisible = false
                     dealPlaceTextView.isVisible = false
-                    //icon.isVisible = false
-                    //title.isVisible = false
-                    //name.isVisible = false
-                    //address.isVisible = false
-                   // orderItemAcceptBlock.isVisible = false
-                    //orderItemDeliveryChangeBlock.isVisible = false
                     orderItemStatusContent.text = "Ожидание подтверждения от продавца"
                 }
                 OrderStatus.DECLINED -> {
-                    //orderItemStatusBlock.isVisible = false
-                    //orderItemAcceptBlock.isVisible = false
-
                     orderItemDeliveryChangeBlock.isVisible = true
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
                     orderItemDeliveryChangeTitle.text = "К сожалению продавец отклонил сделку"
-                    //myAddressBlock.isVisible = true
-                    //dealPlaceTextView.isVisible = true
                     cancelTextView.isVisible = false
                     orderItemAcceptBlock.isVisible = false
                     orderItemStatusBlock.isVisible = false
-                    //icon.isVisible = false
-                    //title.isVisible = false
-                    //name.isVisible = false
-                    //address.isVisible = false
+
                 }
                 OrderStatus.DECLINED_BUYER -> {
-                    //orderItemStatusBlock.isVisible = false
-                    //orderItemAcceptBlock.isVisible = false
-
                     orderItemDeliveryChangeBlock.isVisible = true
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
                     orderItemDeliveryChangeTitle.text = "К сожалению покупатель отклонил сделку"
-                    //myAddressBlock.isVisible = false
-                    //dealPlaceTextView.isVisible = false
                     cancelTextView.isVisible = false
                     orderItemStatusBlock.isVisible = false
                     orderItemAcceptBlock.isVisible = false
-                    //icon.isVisible = false
-                    //title.isVisible = false
-                    //name.isVisible = false
-                    //address.isVisible = false
                 }
 
                 OrderStatus.RECEIVED_SUCCESSFULLY -> {
@@ -305,8 +245,6 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemHistoryStatusBlock.isVisible = true
                     cancelTextView.isVisible = false
                     orderItemAcceptBlock.isVisible = false
-
-
                 }
             }
         }
@@ -402,13 +340,10 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptProblemsButton.text = "Обсудить в диалоге"
         binding.orderItemAcceptButton.setOnClickListener{
             presenter.acceptOrderPlace(
-              //  OfferedOrderPlaceChange(
                 order.id,
                 order.newAddressId!!,
                 order.newAddress!!,
                 false
-                //1
-            //)
             )
         }
     }

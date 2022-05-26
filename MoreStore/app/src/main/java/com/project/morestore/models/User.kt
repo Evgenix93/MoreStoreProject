@@ -16,7 +16,9 @@ data class User(
     val avatar: UserAvatar?,
     @Json(name = "created_at")
     val createdAt: String?,
-    val rating: SellerRating?
+    val rating: SellerRating?,
+    @Json(name = "is_blacklist")
+    val isBlackList: Boolean?
 ): Parcelable{
     override fun equals(other: Any?): Boolean {
         val otherUser = other as User?
