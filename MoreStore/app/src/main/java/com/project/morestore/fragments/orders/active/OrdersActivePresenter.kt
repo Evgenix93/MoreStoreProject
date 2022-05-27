@@ -110,7 +110,7 @@ class OrdersActivePresenter(val context: Context)
                     .map { order ->
                     val user = getSellerUser(order.cart!!.first().idUser!!)
                         val dialog = dialogs?.find { it.product?.id == order.cart.first().id }
-                        val chatFunctionInfo = if(user != null && dialog != null && order.cart.first().statusUser?.buy?.status != 2)
+                        val chatFunctionInfo = if(dialog != null && order.cart.first().statusUser?.buy != null)
                             ChatFunctionInfo(dialogId = dialog.dialog.id, suggest = order.cart.first().statusUser?.buy?.id )
                         else null
                     val address = orderAddresses.find { it.idOrder == order.id  }

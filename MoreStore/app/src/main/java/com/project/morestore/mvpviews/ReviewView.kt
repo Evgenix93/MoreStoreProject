@@ -8,4 +8,5 @@ import moxy.viewstate.strategy.alias.AddToEndSingle
 @AddToEndSingle
 interface ReviewView :MvpView {
     fun showReviews(reviewItems :List<ReviewListItem>)
+    fun showReviewButton(show: Boolean)
 }

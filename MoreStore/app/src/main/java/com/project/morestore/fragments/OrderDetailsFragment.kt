@@ -88,12 +88,17 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 cancelText = "Нет",
                 confirmCallback = {
                     if (order.chatFunctionInfo != null) presenter.cancelBuyRequest(order)
+                    else showMessage("Диалог или заявка на покупку не найдены")
                 }
             ).show()
         }
     }
 
     private fun setProductInfo(product: Product) {
+        binding.productClickView.setOnClickListener {
+            findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToProductDetailsFragment(
+                product = product, isSeller = false, productId = null))
+        }
         Glide.with(this)
             .load(product.photo[0].photo)
             .into(binding.productImageView)

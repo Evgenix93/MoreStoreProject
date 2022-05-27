@@ -95,14 +95,14 @@ class ChatRepository(val context: Context) {
 
     suspend fun getDialogs(): Response<List<DialogWrapper>>? {
         return try {
-            chatApi.getDialogs()
+            chatApi.getDialogs(1000)
         } catch (e: Exception) {
             if (e is IOException) {
                 null
             } else {
                 Log.d("mylog", e.message.toString())
                 try {
-                    val response = chatApi.getDialogsGetError()
+                    val response = chatApi.getDialogsGetError(1000)
                     if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))
                     } else {

@@ -252,10 +252,10 @@ class SalesAdapter(
                   sellerId = order.cart.first().idUser!!,
                   productId = order.cart.first().id,
                   newAddressId = address?.id,
-                  chatFunctionInfo = if(dialog != null)
+                  chatFunctionInfo = if(dialog != null && buySuggest != null)
                       ChatFunctionInfo(
                       dialogId = dialog.dialog.id,
-                      suggest = buySuggest?.id,
+                      suggest = buySuggest.id,
                       value = specialPrice
                   )else null,
                   offeredOrderPlace = address,
@@ -273,7 +273,8 @@ class SalesAdapter(
 
     override fun onBindViewHolder(holder: SaleViewHolder, position: Int) {
         val address = addresses.find { sales[position].id == it.idOrder }
-        val dialog = dialogs.find { it.product?.id == sales[position].cart?.first()?.id }
+        val dialog = dialogs.find { it.product?.id == sales[position].cart?.first()?.id &&
+        it.dialog.user.id == sales[position].idUser}
         holder.bind(sales[position], address, users[position], dialog)
     }
 

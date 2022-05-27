@@ -224,7 +224,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 0
             )
             toolbar.title.setOnClickListener {
-                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE)
+                MenuBottomDialogFragment(type = MenuBottomDialogFragment.Type.PROFILE,
+                avatar = dialog.dialog.user.avatar?.photo.toString())
                     .show(childFragmentManager, null)
             }
             name.text = dialog.product?.name
@@ -249,7 +250,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 }
             addMedia.setOnClickListener {
                 MenuBottomDialogFragment(MenuBottomDialogFragment.Type.MEDIA,
-                    mediaUris.isNullOrEmpty().not()
+                    mediaUris.isNullOrEmpty().not(), avatar = null
                 )
                     .show(childFragmentManager, null)
             }
@@ -294,7 +295,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             productDivider.visibility = GONE
             addMedia.setOnClickListener {
                 MenuBottomDialogFragment(MenuBottomDialogFragment.Type.MEDIA,
-                    mediaUris.isNullOrEmpty().not()
+                    mediaUris.isNullOrEmpty().not(), avatar = null
                 )
                     .show(childFragmentManager, null)
             }
@@ -352,7 +353,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 0
             )
             toolbar.title.setOnClickListener {
-                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE)
+                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE, avatar =
+                dialog.dialog.user.avatar?.photo.toString())
                     .show(childFragmentManager, null)
             }
             name.text = dialog.product?.name

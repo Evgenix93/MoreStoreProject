@@ -145,7 +145,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                         it.status = status
                     }
 
-                    if (productId == null) viewState.loaded(response.body()!!.filter { it.status != 8 }) else viewState.loaded(
+                    if (productId == null) viewState.loaded(response.body()!!) else viewState.loaded(
                         response.body()?.first()!!
                     )
                 }

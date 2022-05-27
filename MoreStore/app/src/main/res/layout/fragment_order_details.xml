@@ -145,6 +145,17 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <View
+                android:id="@+id/productClickView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="46dp"
+                android:background="?attr/selectableItemBackground"
+                app:layout_constraintStart_toStartOf="@id/productWindow"
+                app:layout_constraintEnd_toEndOf="@id/productWindow"
+                app:layout_constraintTop_toTopOf="@id/productWindow"
+                app:layout_constraintBottom_toBottomOf="@id/productWindow"/>
+
 
 
 

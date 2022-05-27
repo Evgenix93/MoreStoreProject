@@ -21,10 +21,12 @@ import java.util.*
 
 class ReviewsAdapter(
     private val create :()->Unit,
-    private val viewPhotos :(Review) -> Unit
+    private val viewPhotos :(Review) -> Unit,
+
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items = listOf<ReviewListItem>()
     private val now = Calendar.getInstance()//todo refactor
+    private var showReviewButton: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(viewType == ADD){
@@ -38,13 +40,13 @@ class ReviewsAdapter(
         if(getItemViewType(position) == ADD){
             //skip
         } else {//REVIEW
-            (holder as ReviewViewHolder).bind((items[position-1] as ReviewItem).review)
+            (holder as ReviewViewHolder).bind((items[if(showReviewButton) position-1 else position] as ReviewItem).review)
         }
     }
 
-    override fun getItemCount() = items.size + 1
+    override fun getItemCount() = if(showReviewButton) items.size + 1 else items.size
 
-    override fun getItemViewType(position: Int) = if(position == 0) ADD else REVIEW
+    override fun getItemViewType(position: Int) = if(position == 0 && showReviewButton) ADD else REVIEW
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
@@ -54,6 +56,12 @@ class ReviewsAdapter(
     fun setItems(newItems :List<ReviewListItem>){
         items = newItems
         notifyDataSetChanged()
+    }
+
+    fun showReviewButton(show: Boolean){
+        showReviewButton = show
+        notifyDataSetChanged()
+
     }
 
     companion object{

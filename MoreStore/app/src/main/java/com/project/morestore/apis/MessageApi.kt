@@ -2,10 +2,7 @@ package com.project.morestore.apis
 
 import com.project.morestore.models.*
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface MessageApi {
 
@@ -28,10 +25,10 @@ interface MessageApi {
     suspend fun addMessageGetError(@Body message: CreatingMessage): Response<String>
 
     @GET("message/dialogs")
-    suspend fun getDialogs(): Response<List<DialogWrapper>>
+    suspend fun getDialogs(@Query("limit") limit: Int): Response<List<DialogWrapper>>
 
     @GET("message/dialogs")
-    suspend fun getDialogsGetError(): Response<String>
+    suspend fun getDialogsGetError(@Query("limit") limit: Int): Response<String>
 
     @POST("message/dialog/delete")
     suspend fun deleteDialog(@Body dialogId: DialogId): Response<DialogId>

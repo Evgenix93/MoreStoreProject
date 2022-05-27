@@ -25,8 +25,8 @@ import com.project.morestore.util.setEndDrawable
 import com.project.morestore.util.setStartDrawable
 import com.tbuonomo.viewpagerdotsindicator.setPaddingVertical
 
-class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
-    constructor(type :Type, isMediaLoaded: Boolean? = null): this(){
+class MenuBottomDialogFragment(val avatar: String?) :BottomSheetDialogFragment(){
+    constructor(type :Type, isMediaLoaded: Boolean? = null, avatar: String? = null): this(avatar){
         arguments = bundleOf("type" to type.ordinal, "media" to isMediaLoaded)
     }
     private lateinit var views :BottomdialogMenuBinding
@@ -53,7 +53,7 @@ class MenuBottomDialogFragment() :BottomSheetDialogFragment(){
         }
         if(type == Type.PROFILE){
             Glide.with(requireContext())
-                .load(R.drawable.user1)
+                .load(avatar)
                 .apply { override(24.dp) }
                 .circleCrop()
                 .into(object :CustomTarget<Drawable>(){

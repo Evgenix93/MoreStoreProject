@@ -42,7 +42,8 @@ class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
     private val presenter :ReviewsPresenter by moxyPresenter {
         ReviewsPresenter(
             requireArguments().getLong(USER_ID),
-            ReviewRepository()
+            ReviewRepository(),
+            requireContext()
         )
     }
 
@@ -62,5 +63,10 @@ class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
     //IMPLEMENTATION
     override fun showReviews(reviewItems: List<ReviewListItem>) {
         adapter.setItems(reviewItems)
+    }
+
+    override fun showReviewButton(show: Boolean) {
+        adapter.showReviewButton(show)
+
     }
 }
