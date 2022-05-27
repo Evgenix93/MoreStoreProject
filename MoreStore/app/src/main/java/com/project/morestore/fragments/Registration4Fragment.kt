@@ -4,6 +4,7 @@ import android.icu.text.DisplayContext
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -21,6 +22,7 @@ import java.sql.Types
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
 import androidx.annotation.NonNull
 import androidx.core.view.isVisible
+import com.project.morestore.MainActivity
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.redmadrobot.inputmask.MaskedTextChangedListener
@@ -36,11 +38,14 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setSoftInputMode()
         setClickListeners()
         initToolbar()
         initEditText()
+    }
 
-
+    private fun setSoftInputMode(){
+        (activity as MainActivity).changeSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
     private fun setClickListeners() {

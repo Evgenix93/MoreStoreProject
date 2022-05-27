@@ -24,7 +24,6 @@ import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
-import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), UserMvpView {
@@ -101,18 +100,18 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
 
     private fun initProductsButtons(){
         binding.activeProductsBtn.setOnClickListener {
-            getActiveProducts()
+            getProducts(true)
             setUpActiveButton(binding.activeProductsBtn, binding.activeCountTextView, binding.activeProductsTextView)
             binding.glassesImageView.setImageResource(emptyActiveListImageRes)
 
         }
         binding.onModerationBtn.setOnClickListener {
-            getActiveProducts()
+            productAdapter.updateList(emptyList())
             setUpActiveButton(binding.onModerationBtn, binding.onModerationCountTextView, binding.onModerationTextView)
             binding.glassesImageView.setImageResource(emptyOnModerationImageRes)
         }
         binding.archivedProductsBtn.setOnClickListener {
-            getActiveProducts()
+            getProducts(false)
             setUpActiveButton(binding.archivedProductsBtn, binding.archivedCountTextView, binding.archiveTextView)
         }
     }
@@ -142,9 +141,9 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
         listNameTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.green, null))
     }
 
-    private fun getActiveProducts(){
+    private fun getProducts(isActive: Boolean){
         Log.d("MyDebug", "getActiveProducts")
-        presenter.getUserProducts()
+        presenter.getUserProducts(isActive)
     }
 
     private fun getFilter(){
@@ -209,7 +208,7 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             binding.profileBtn.setOnClickListener {
                 findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToProfileFragment(result))
             }
-            getActiveProducts()
+            getProducts(true)
             return
         }
         if(result is Boolean) {

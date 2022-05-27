@@ -285,6 +285,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     override fun setProfileInfo(avatar: String, name: String) {
         Glide.with(this)
             .load(avatar)
+            .circleCrop()
             .into(binding.sellerAvatarImageView)
         binding.sellerNameTextView.text = name
         binding.name.text = name

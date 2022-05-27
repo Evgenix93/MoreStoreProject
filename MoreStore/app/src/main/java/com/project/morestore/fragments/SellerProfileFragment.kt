@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -17,10 +18,12 @@ import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.SellerProfileAdapter
 import com.project.morestore.databinding.FragmentSellerProfileBinding
+import com.project.morestore.models.Chat
 import com.project.morestore.models.Product
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
+import com.project.morestore.singletones.Token
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.MvpAppCompatFragment
@@ -66,6 +69,8 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         binding.toolbar.filterBtn.isVisible = true
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
+
+
         }
     }
 
@@ -93,6 +98,11 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
     private fun setClickListeners(){
         binding.subscribeBtn.setOnClickListener {
             presenter.addDeleteSellersInWishList(listOf(args.user.id))
+        }
+
+        binding.profileBtn.setOnClickListener{
+           if(args.user.isBlackList == true)
+               Toast.makeText(requireContext(), "Собеседник вас заблокировал", Toast.LENGTH_LONG).show()
         }
     }
 

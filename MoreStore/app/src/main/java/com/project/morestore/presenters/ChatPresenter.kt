@@ -27,6 +27,8 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     private val ordersRepository = OrdersRepository(context)
     private val userRepository = UserRepository(context)
     private var dialogId: Long? = null
+    private var tabPosition: Int = 0
+
 
     fun createDialog(userId: Long, productId: Long, withBuySuggest: Boolean = false) {
         presenterScope.launch {
@@ -85,6 +87,16 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
         }
 
+    }
+
+    fun getTabPosition(): Int = tabPosition
+
+    fun showDialogs(){
+        when(tabPosition){
+            0 -> showAllDialogs()
+            1 -> showDealDialogs()
+            2 -> showLotDialogs()
+        }
     }
 
     fun addMessage(text: String){
@@ -178,6 +190,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
         }
     }
+
 
     private suspend fun getDealDialogs(): List<Chat>{
        // presenterScope.launch {
@@ -333,6 +346,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     fun showDealDialogs(){
         presenterScope.launch {
+            tabPosition = 1
             val dialogs = getDealDialogs()
             viewState.dialogsLoaded(dialogs)
             viewState.showDialogCount(Chat.Deal::class.java.simpleName, dialogs.size)
@@ -344,6 +358,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     fun showLotDialogs(){
         presenterScope.launch {
+            tabPosition = 2
             val dialogs = getLotDialogs()
             viewState.dialogsLoaded(dialogs)
             viewState.showDialogCount(Chat.Lot::class.java.simpleName, dialogs.size)
@@ -355,6 +370,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     fun showAllDialogs(){
         presenterScope.launch {
+            tabPosition = 0
             val dealDialogs = getDealDialogs()
             val lotDialogs = getLotDialogs()
             val allDialogs = getSupportDialog() + dealDialogs + lotDialogs

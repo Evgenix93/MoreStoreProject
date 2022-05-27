@@ -4,13 +4,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Insets
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Display
-import android.view.InputDevice
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -271,8 +270,8 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
         }
     }
 
-    fun changeSoftInputMode(mode: Int){
-        window.setSoftInputMode(mode)
+    fun changeSoftInputMode(mode: Int) {
+            window.setSoftInputMode(mode)
     }
 
     override fun onBackPressed() {
