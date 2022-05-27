@@ -69,6 +69,8 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         binding.toolbar.filterBtn.isVisible = true
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
+
+
         }
     }
 
