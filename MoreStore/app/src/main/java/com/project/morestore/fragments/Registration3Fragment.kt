@@ -3,6 +3,9 @@ package com.project.morestore.fragments
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -16,6 +19,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.MainActivity
 import com.project.morestore.R
+import com.project.morestore.adapters.MessagesAdapter
 import com.project.morestore.databinding.FragmentRegistration3Binding
 
 import com.project.morestore.mvpviews.AuthMvpView
@@ -34,10 +38,16 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setSoftInputMode()
         setClickListeners()
         initToolbar()
         initFilePickerLauncher()
         hideBottomNavigation()
+    }
+
+    private fun setSoftInputMode(){
+        (activity as MainActivity).changeSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+
     }
 
     private fun setClickListeners() {

@@ -202,12 +202,17 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getUserProducts() {
+    fun getUserProducts(isActive: Boolean) {
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getCurrentUserProducts()
             when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
+                200 -> {
+                    if(isActive)
+                    viewState.loaded(response.body()!!.filter{it.statusUser?.order?.status == 0})
+                    else
+                        viewState.loaded(response.body()!!.filter{it.statusUser?.order?.status == 1})
+                }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)

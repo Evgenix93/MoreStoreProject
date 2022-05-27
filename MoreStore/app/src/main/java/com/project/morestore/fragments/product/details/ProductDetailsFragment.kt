@@ -158,7 +158,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         initShare(product.id)
         val photoVideoFilesUris =
             product.photo.map { it.photo } + product.video?.map { it.video }.orEmpty()
-        initViewPager(photoVideoFilesUris, product.status == 2)
+        initViewPager(photoVideoFilesUris, product.status == 8)
         binding.toolbar.titleTextView.text = product.name
         binding.chosenBrandTextView.text =
             if (product.brand == null) "Другое" else product.brand.name
@@ -274,6 +274,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
            8 -> {
                binding.productSoldCardView.isVisible = true
                binding.addToCartBtn.isVisible = false
+               binding.chatBtn.isVisible = false
            }
            7 -> {
                binding.productIsBookedCardView.isVisible = true

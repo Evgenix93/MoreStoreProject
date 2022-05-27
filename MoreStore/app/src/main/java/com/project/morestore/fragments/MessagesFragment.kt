@@ -106,16 +106,17 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
             tabs.addTab(
                 tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления") })
             tabs.setSelectListener {
+                Log.d("MyDebug", "selectTabListener")
                     when (it.position) {
-                        1 -> presenter.showDealDialogs()
+                        1 ->  presenter.showDealDialogs()
                         2 -> presenter.showLotDialogs()
                         else -> presenter.showAllDialogs()
                     }
 
             }
+            tabs.selectTab(tabs.getTabAt(presenter.getTabPosition()))
         }
-        presenter.showAllDialogs()
-
+        presenter.showDialogs()
     }
 
     override fun onDestroyView() {
