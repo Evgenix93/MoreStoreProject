@@ -91,11 +91,11 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     fun getTabPosition(): Int = tabPosition
 
-    fun showDialogs(){
+    fun showDialogs(userId: Long){
         when(tabPosition){
-            0 -> showAllDialogs()
-            1 -> showDealDialogs()
-            2 -> showLotDialogs()
+            0 -> showAllDialogs(userId)
+            1 -> showDealDialogs(userId)
+            2 -> showLotDialogs(userId)
         }
     }
 
@@ -192,20 +192,26 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     }
 
 
-    private suspend fun getDealDialogs(): List<Chat>{
+    private suspend fun getDealDialogs(userId: Long): List<Chat>{
        // presenterScope.launch {
             viewState.loading()
-            val userId = authRepository.getUserId()
+            val currentUserId = authRepository.getUserId()
             val response = chatRepository.getDialogs()
             when (response?.code()) {
                 200 -> {
-                    val chats = response.body()?.filter {it.product?.idUser != userId && it.dialog.user.id != 1L }?.map { dialogWrapper ->
+                    val chats = response.body()?.filter {it.product?.idUser != currentUserId && it.dialog.user.id != 1L}
+                        ?.filter{
+                            if(userId == -1L)
+                                true
+                            else
+                                it.dialog.user.id == userId
+                        }?.map { dialogWrapper ->
 
                         Chat.Deal(
                                 dialogWrapper.dialog.id,
                                 dialogWrapper.product?.name ?: "",
                                 dialogWrapper.dialog.user.name.orEmpty(),
-                            dialogWrapper.dialog.lastMessage?.idSender != userId && dialogWrapper.dialog.lastMessage?.is_read == 0,
+                            dialogWrapper.dialog.lastMessage?.idSender != currentUserId && dialogWrapper.dialog.lastMessage?.is_read == 0,
                                 dialogWrapper.product?.photo?.first()?.photo ?: "",
                                 dialogWrapper.product?.priceNew ?: 0f
 
@@ -239,14 +245,17 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     }
 
-    private suspend fun getLotDialogs(): List<Chat>{
+    private suspend fun getLotDialogs(userId: Long): List<Chat>{
        // presenterScope.launch {
             viewState.loading()
             val userId = authRepository.getUserId()
             val response = chatRepository.getDialogs()
             when (response?.code()) {
                 200 -> {
-                    val products = response.body()?.map { dilogWrapper ->
+                    val products = response.body()?.filter{if(userId == -1L)
+                        true
+                    else
+                        it.dialog.user.id == userId}?.map { dilogWrapper ->
                         dilogWrapper.product
 
                     }?.toSet()?.filter { it?.idUser == userId }
@@ -344,10 +353,10 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     }
 
-    fun showDealDialogs(){
+    fun showDealDialogs(userId: Long){
         presenterScope.launch {
             tabPosition = 1
-            val dialogs = getDealDialogs()
+            val dialogs = getDealDialogs(userId)
             viewState.dialogsLoaded(dialogs)
             viewState.showDialogCount(Chat.Deal::class.java.simpleName, dialogs.size)
             val isUnread = dialogs.find { it.isUnread } != null
@@ -356,10 +365,10 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         }
     }
 
-    fun showLotDialogs(){
+    fun showLotDialogs(userId: Long){
         presenterScope.launch {
             tabPosition = 2
-            val dialogs = getLotDialogs()
+            val dialogs = getLotDialogs(userId)
             viewState.dialogsLoaded(dialogs)
             viewState.showDialogCount(Chat.Lot::class.java.simpleName, dialogs.size)
             val isUnread = dialogs.find { it.isUnread } != null
@@ -368,11 +377,11 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         }
     }
 
-    fun showAllDialogs(){
+    fun showAllDialogs(userId: Long){
         presenterScope.launch {
             tabPosition = 0
-            val dealDialogs = getDealDialogs()
-            val lotDialogs = getLotDialogs()
+            val dealDialogs = getDealDialogs(userId)
+            val lotDialogs = getLotDialogs(userId)
             val allDialogs = getSupportDialog() + dealDialogs + lotDialogs
             viewState.showDialogCount(Chat::class.java.simpleName, allDialogs.size)
             viewState.showDialogCount(Chat.Deal::class.java.simpleName, dealDialogs.size)
@@ -667,13 +676,13 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                 when(chatType){
                     Chat.Deal::class.simpleName -> {
                         if(it.product?.idUser != userId && it.dialog.user.id != 1L)
-                            showDealDialogs()
+                            showDealDialogs(-1)
                     }
                     Chat.Lot::class.simpleName -> {
                         if(it.product?.idUser == userId)
-                            showLotDialogs()
+                            showLotDialogs(-1)
                     }
-                    else -> showAllDialogs()
+                    else -> showAllDialogs(-1)
                 }
 
             }

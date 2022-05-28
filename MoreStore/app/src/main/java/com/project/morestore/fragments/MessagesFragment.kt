@@ -18,6 +18,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayout
 import com.project.morestore.R
 import com.project.morestore.adapters.ChatsAdapter
@@ -39,6 +40,7 @@ import kotlin.reflect.KClass
 class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
     private lateinit var views: FragmentMessagesBinding
     private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
+    private val args: MessagesFragmentArgs by navArgs()
     private val adapter = ChatsAdapter {
         if (it.name == "Adidas men's blue denim") {
             findNavController().navigate(R.id.action_messagesFragment_to_chatLotsFragment)
@@ -106,17 +108,16 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
             tabs.addTab(
                 tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления") })
             tabs.setSelectListener {
-                Log.d("MyDebug", "selectTabListener")
                     when (it.position) {
-                        1 ->  presenter.showDealDialogs()
-                        2 -> presenter.showLotDialogs()
-                        else -> presenter.showAllDialogs()
+                        1 ->  presenter.showDealDialogs(args.userId)
+                        2 -> presenter.showLotDialogs(args.userId)
+                        else -> presenter.showAllDialogs(args.userId)
                     }
 
             }
             tabs.selectTab(tabs.getTabAt(presenter.getTabPosition()))
         }
-        presenter.showDialogs()
+        presenter.showDialogs(args.userId)
     }
 
     override fun onDestroyView() {

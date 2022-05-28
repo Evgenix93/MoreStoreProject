@@ -293,6 +293,31 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <ImageView
+            android:id="@+id/orderItemDeliveryChangeIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_warning"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cartProductDeliveryContainer"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/orderItemDeliveryChangeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/manrope_bold"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="@string/product_is_reserved"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/orderItemDeliveryChangeIcon"
+            app:layout_constraintTop_toTopOf="@+id/orderItemDeliveryChangeIcon" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/cartProductPurchaseButton"
             style="@style/buttonStyle"

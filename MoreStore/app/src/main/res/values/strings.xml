@@ -499,5 +499,6 @@
 
     <!--region city-->
     <string name="searchCity">Поиск города</string>
+    <string name="product_is_reserved">К сожалению данный товар уже забронировали</string>
     <!--endregion city-->
 </resources>
