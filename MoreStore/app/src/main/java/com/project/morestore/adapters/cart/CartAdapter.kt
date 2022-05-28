@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -71,6 +72,9 @@ class CartAdapter(
                 cartProductUserName.setOnClickListener {
                     onProfileClickListener(cartItem.product.user!!)
                 }
+                cartProductPurchaseButton.isVisible = cartItem.product.statusUser?.order == null
+                orderItemDeliveryChangeIcon.isVisible = cartItem.product.statusUser?.order != null
+                orderItemDeliveryChangeTitle.isVisible = cartItem.product.statusUser?.order != null
             }
         }
     }

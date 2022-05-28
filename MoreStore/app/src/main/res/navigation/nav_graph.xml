@@ -290,6 +290,10 @@
         <action
             android:id="@+id/action_messagesFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
+        <argument
+            android:name="userId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
     <fragment
         android:id="@+id/cabinetFragment"
@@ -561,6 +565,9 @@
         <action
             android:id="@+id/action_sellerProfileFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_sellerProfileFragment_to_messagesFragment"
+            app:destination="@id/messagesFragment" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep1Fragment"

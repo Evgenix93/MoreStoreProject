@@ -103,6 +103,8 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         binding.profileBtn.setOnClickListener{
            if(args.user.isBlackList == true)
                Toast.makeText(requireContext(), "Собеседник вас заблокировал", Toast.LENGTH_LONG).show()
+            else
+                findNavController().navigate(SellerProfileFragmentDirections.actionSellerProfileFragmentToMessagesFragment(args.user.id))
         }
     }
 
