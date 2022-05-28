@@ -33,6 +33,7 @@ import moxy.ktx.moxyPresenter
 class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details), OrderDetailsView {
     private val binding: FragmentOrderDetailsBinding by viewBinding()
     private val args: OrderDetailsFragmentArgs by navArgs()
+    private var orderStatus: OrderStatus? = null
     private val presenter by moxyPresenter { OrderDetailsPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,6 +55,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
 
     private fun bind(order: OrderItem) {
+        orderStatus = order.status
         setAddress(order)
         presenter.initProfile(order)
         binding.chosenDeliveryTypeTextView.text = order.deliveryInfo
@@ -96,8 +98,12 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     private fun setProductInfo(product: Product) {
         binding.productClickView.setOnClickListener {
+            val productStatus = when(orderStatus){
+                OrderStatus.RECEIVED_SUCCESSFULLY -> 8
+                else -> 6
+            }
             findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToProductDetailsFragment(
-                product = product, isSeller = false, productId = null))
+                product = product.apply { status = productStatus }, isSeller = false, productId = null))
         }
         Glide.with(this)
             .load(product.photo[0].photo)

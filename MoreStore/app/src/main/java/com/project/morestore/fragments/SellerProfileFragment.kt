@@ -28,6 +28,7 @@ import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import java.util.*
 
 class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profile), UserMvpView {
     private val binding: FragmentSellerProfileBinding by viewBinding()
@@ -82,10 +83,14 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
 
         binding.userPhoneTextView.setText(user.phone)
         val diffSeconds = System.currentTimeMillis()/1000 - user.createdAt!!.toLong()
-        val dayDiff = diffSeconds/86400
-        val monthDiff = dayDiff/30
-        binding.timeFromRegistrationTextView.text = if(monthDiff > 0)"зарегистрирован(а) $monthDiff месяца назад"
-        else "зарегистрирован(а) $dayDiff дня назад"
+            //val dayDiff = diffSeconds/86400
+        //val monthDiff = dayDiff/30
+        val calendar = Calendar.getInstance().apply { timeInMillis = user.createdAt.toLong() * 1000 }
+        //binding.timeFromRegistrationTextView.text = if(monthDiff > 0)"зарегистрирован(а) $monthDiff месяца назад"
+        //else "зарегистрирован(а) $dayDiff дня назад"
+        Log.d("mylog", "calendar ${calendar.get(Calendar.MONTH)}")
+        binding.timeFromRegistrationTextView.text =
+            "зарегистрирован(а) ${calendar.get(Calendar.DAY_OF_MONTH)}.${calendar.get(Calendar.MONTH) + 1}.${calendar.get(Calendar.YEAR)}"
 
         Glide.with(this)
             .load(user.avatar?.photo)
@@ -103,6 +108,7 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         binding.profileBtn.setOnClickListener{
            if(args.user.isBlackList == true)
                Toast.makeText(requireContext(), "Собеседник вас заблокировал", Toast.LENGTH_LONG).show()
+            else findNavController().navigate(R.id.messagesFragment)
         }
     }
 

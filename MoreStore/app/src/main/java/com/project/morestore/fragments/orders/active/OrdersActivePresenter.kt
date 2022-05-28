@@ -13,6 +13,7 @@ import com.project.morestore.dialogs.YesNoDialog
 import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.models.*
+import com.project.morestore.models.cart.CartItem
 
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
@@ -89,6 +90,7 @@ class OrdersActivePresenter(val context: Context)
             presenterScope.launch {
                 val orders = getAllOrders()?.reversed() ?: return@launch
                 val orderAddresses = getOrderAddresses() ?: return@launch
+                val cartItems = getCartItems() ?: return@launch
                 val dialogs = getDialogs()
                 val orderItems = orders.filter { it.cart != null && it.status == 0 }.sortedBy{order ->
                   /*  val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
@@ -178,7 +180,11 @@ class OrdersActivePresenter(val context: Context)
 
                 }
 
-                adapter = OrdersAdapter(orderItems, listener, {user -> viewState.navigate(user) }, {
+                val filteredOrderItems = orderItems.filter { orderItems.find { orderCheck -> orderCheck.id != it.id && orderCheck.productId == it.productId &&
+                        orderCheck.id > it.id } == null &&
+                        cartItems.find { cartItem -> cartItem.product.id == it.productId  } == null}
+
+                adapter = OrdersAdapter(filteredOrderItems, listener, {user -> viewState.navigate(user) }, {
                     viewState.navigate(it)
                 })
 
@@ -362,6 +368,30 @@ class OrdersActivePresenter(val context: Context)
     private suspend fun getDialogs(): List<DialogWrapper>?{
         val response = chatRepository.getDialogs()
         return if(response?.code() == 200) response.body()!! else null
+    }
+
+    private suspend fun getCartItems(): List<CartItem>?{
+        val response = ordersRepository.getCartItems(authRepository.getUserId())
+        return when(response?.code()){
+            200 -> response.body()
+            null -> {
+                viewState.showMessage("нет интернета")
+                null
+            }
+            400 -> {
+                viewState.showMessage(response.errorBody()!!.string())
+                null
+            }
+            500 -> {
+                viewState.showMessage("500 Internal Server Error")
+                null
+            }
+            404 -> emptyList()
+            else -> null
+
+        }
+
+
     }
     /*private suspend fun initAdapter(): OrdersAdapter{
         val orders = getAllOrders()

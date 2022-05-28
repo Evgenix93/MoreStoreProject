@@ -64,7 +64,9 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                                 }
                             }*/
                         val dialogs = getDialogs().reversed()
-                       val activeSalesSorted = activeSales.sortedBy { sale ->
+                       val activeSalesSorted = activeSales.filter { activeSales.find { saleCheck ->
+                           saleCheck.id != it.id && saleCheck.cart?.first()?.id == it.cart?.first()?.id &&
+                                   saleCheck.idUser == it.idUser && saleCheck.id > it.id } == null }.sortedBy { sale ->
                            val address = addresses.find { sale.id == it.idOrder }
                                 when{
                                     sale.cart?.first()?.statusUser?.buy == null -> 1
