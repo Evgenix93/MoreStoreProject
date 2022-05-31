@@ -245,17 +245,17 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     }
 
-    private suspend fun getLotDialogs(userId: Long): List<Chat>{
+    private suspend fun getLotDialogs(companionUserId: Long): List<Chat>{
        // presenterScope.launch {
             viewState.loading()
             val userId = authRepository.getUserId()
             val response = chatRepository.getDialogs()
             when (response?.code()) {
                 200 -> {
-                    val products = response.body()?.filter{if(userId == -1L)
+                    val products = response.body()?.filter{if(companionUserId == -1L)
                         true
                     else
-                        it.dialog.user.id == userId}?.map { dilogWrapper ->
+                        it.dialog.user.id == companionUserId}?.map { dilogWrapper ->
                         dilogWrapper.product
 
                     }?.toSet()?.filter { it?.idUser == userId }
