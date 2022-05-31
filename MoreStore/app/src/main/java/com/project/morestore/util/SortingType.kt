@@ -1,8 +1,8 @@
 package com.project.morestore.util
 
 enum class SortingType(val value: String) {
-    NEW("Новое"),
-    CHEAP("Дешевле"),
-    EXPENSIVE("Дороже"),
+    NEW("date"),
+    CHEAP("price_start"),
+    EXPENSIVE("price_end"),
     POPULAR("Популярные")
 }

@@ -25,6 +25,7 @@ import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.ktx.moxyPresenter
+import java.util.*
 
 class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), UserMvpView {
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
@@ -89,8 +90,12 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
         val diffSeconds = System.currentTimeMillis()/1000 - user.createdAt!!.toLong()
         val dayDiff = diffSeconds/86400
         val monthDiff = dayDiff/30
-        binding.timeFromRegistrationTextView.text = if(monthDiff > 0)"зарегистрирован(а) $monthDiff месяца назад"
-        else "зарегистрирован(а) $dayDiff дня назад"
+        //binding.timeFromRegistrationTextView.text = if(monthDiff > 0)"зарегистрирован(а) $monthDiff месяца назад"
+        //else "зарегистрирован(а) $dayDiff дня назад"
+        val calendar = Calendar.getInstance().apply { timeInMillis = user.createdAt.toLong() * 1000 }
+        binding.timeFromRegistrationTextView.text =
+            "зарегистрирован(а) ${calendar.get(Calendar.DAY_OF_MONTH)}.${calendar.get(Calendar.MONTH) + 1}.${calendar.get(
+                Calendar.YEAR)}"
 
         Glide.with(this)
             .load(user.avatar?.photo.toString())
@@ -230,6 +235,11 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             binding.emptyScrollView.isVisible = false
             binding.productList.isVisible = result.isNotEmpty()
             productAdapter.updateList(result as List<Product>)
+            when{
+                result.firstOrNull()?.status == 1 || result.firstOrNull()?.status == 6 ->
+                    binding.activeCountTextView.text = result.size.toString()
+                result.firstOrNull()?.status == 8 -> binding.archivedCountTextView.text = result.size.toString()
+            }
 
         }
 

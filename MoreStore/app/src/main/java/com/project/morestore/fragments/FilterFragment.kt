@@ -13,6 +13,7 @@ import com.project.morestore.models.Filter
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
+import com.project.morestore.util.SortingType
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -171,6 +172,14 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
 
         binding.priceFromEditText.setText(filter.fromPrice?.toString())
         binding.priceUntilEditText.setText(filter.untilPrice?.toString())
+
+        binding.typeAutoCompleteTextView.setText(when(filter.sortingType){
+            SortingType.NEW.value -> "Новое"
+            SortingType.CHEAP.value -> "Дешевле"
+            SortingType.EXPENSIVE.value -> "Дороже"
+            else -> "Новое"
+        }
+        )
     }
 
     private fun setClickListeners() {
@@ -247,6 +256,14 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
         ArrayAdapter(requireContext(), R.layout.item_suggestion_textview, types).also { adapter ->
             binding.typeAutoCompleteTextView.setAdapter(adapter)
 
+        }
+        binding.typeAutoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
+            presenter.changeSortingType(when(position){
+                0 -> SortingType.NEW.value
+                1 -> SortingType.CHEAP.value
+                2 -> SortingType.EXPENSIVE.value
+                else -> SortingType.NEW.value
+            })
         }
     }
 

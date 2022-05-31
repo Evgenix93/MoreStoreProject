@@ -210,7 +210,8 @@ class ProductRepository(private val context: Context) {
                 (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr + statusStr).joinToString(
                     ";"
                 ).also{Log.d("MyDebug", "getProducts filter = $it")},
-                userId
+                userId,
+                filter?.sortingType
             )
 
         } catch (e: Exception) {
@@ -222,7 +223,8 @@ class ProductRepository(private val context: Context) {
                     val response = productApi.getProductsGetError(
                         PRODUCT_OPTIONS,
                         listOf<String>().joinToString(";"),
-                        userId
+                        userId,
+                        filter?.sortingType
                     )
                     if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))

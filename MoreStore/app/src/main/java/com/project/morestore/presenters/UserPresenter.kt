@@ -1015,4 +1015,9 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             }
         }
     }
+
+    fun changeSortingType(sort: String){
+        val filter = userRepository.getFilter().apply { sortingType = sort }
+        userRepository.updateFilter(filter)
+    }
 }

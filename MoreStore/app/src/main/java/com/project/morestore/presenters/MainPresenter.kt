@@ -15,6 +15,7 @@ import com.project.morestore.repositories.UserRepository
 import com.project.morestore.singletones.Token
 import kotlinx.coroutines.*
 import com.project.morestore.repositories.*
+import com.project.morestore.util.SortingType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -122,13 +123,16 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 productRepository.getProducts(
                         query = queryStr,
                         filter = filter,
-                        productId = productId
+                        productId = productId,
+                    limit = 500
+
                 )
             } else
                 productRepository.getProducts(
                         query = queryStr,
                         filter = if (isFiltered) userRepository.getFilter() else null,
-                        productId = productId
+                        productId = productId,
+                    limit = 500
                 )
 
             when (response?.code()) {
