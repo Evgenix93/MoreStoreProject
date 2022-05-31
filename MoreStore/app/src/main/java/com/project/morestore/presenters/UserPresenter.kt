@@ -25,6 +25,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     private val userRepository = UserRepository(context)
     private val authRepository = AuthRepository(context)
     private val productRepository = ProductRepository(context)
+    private lateinit var user: User
     private var photoUri: Uri? = null
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
@@ -144,7 +145,10 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             viewState.loading()
             val response = userRepository.getCurrentUserInfo()
             when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
+                200 -> {
+                    user = response.body()!!
+                    viewState.loaded(response.body()!!)
+                }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)
@@ -157,6 +161,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
 
         }
+    }
+
+    fun getUser() = user
+
+    fun setUser(user: User){
+        this.user = user
     }
 
     fun getUserData() {
@@ -182,12 +192,16 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getSellerInfo(userId: Int) {
+    fun getSellerInfo(userId: Long) {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.getSellerInfo(userId)
             when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
+                200 -> {
+                    user = response.body()!!
+                    viewState.loaded(response.body()!!)
+                }
+
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)

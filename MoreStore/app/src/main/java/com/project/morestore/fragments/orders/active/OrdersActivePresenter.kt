@@ -264,7 +264,7 @@ class OrdersActivePresenter(val context: Context)
     }
 
     private suspend fun getSellerUser(userId: Long): User?{
-        val response = userRepository.getSellerInfo(userId.toInt())
+        val response = userRepository.getSellerInfo(userId)
         return when(response?.code()){
             200 -> response.body()
             null -> {

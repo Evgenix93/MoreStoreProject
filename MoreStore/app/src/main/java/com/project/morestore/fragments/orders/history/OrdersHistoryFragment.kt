@@ -83,7 +83,7 @@ class OrdersHistoryFragment
     }
 
     override fun navigate(user: User) {
-        findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToSellerProfileFragment(user, false))
+        findNavController().navigate(OrdersHistoryFragmentDirections.actionOrdersHistoryFragmentToSellerProfileFragment(user = user, toReviews = false))
     }
 
     override fun navigate(order: OrderItem) {

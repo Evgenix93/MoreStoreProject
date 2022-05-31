@@ -83,7 +83,7 @@ class OrdersActiveFragment
     }
 
     override fun navigate(user: User) {
-        findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToSellerProfileFragment(user, false))
+        findNavController().navigate(OrdersActiveFragmentDirections.actionOrdersActiveFragmentToSellerProfileFragment(user = user, toReviews = false))
     }
 
     override fun navigate(order: OrderItem) {

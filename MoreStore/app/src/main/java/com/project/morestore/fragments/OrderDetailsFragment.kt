@@ -65,8 +65,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             if (order.user != null)
                 findNavController().navigate(
                     OrderDetailsFragmentDirections.actionOrderDetailsFragmentToSellerProfileFragment(
-                        order.user,
-                        false
+                        user = order.user,
+                        toReviews = false
                     )
                 )
 
@@ -75,8 +75,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             if (order.user != null)
                 findNavController().navigate(
                     OrderDetailsFragmentDirections.actionOrderDetailsFragmentToSellerProfileFragment(
-                        order.user,
-                        false
+                      user =  order.user,
+                       toReviews = false
                     )
                 )
 

@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavOptions
@@ -23,6 +24,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.project.morestore.databinding.ActivityMainBinding
+import com.project.morestore.fragments.SellerProfileFragment
 import com.project.morestore.fragments.SplashScreenFragmentDirections
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
@@ -63,10 +65,14 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
     }
 
     private fun handleIntent(intent: Intent){
-        Log.d("error", "handleIntent")
+        if(intent.data?.path?.contains("products") == true)
         intent.data?.let {
             findNavController(R.id.fragmentContainerView).navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToProductDetailsFragment(null, it.lastPathSegment.orEmpty(), false))
-        }
+        }else if(intent.data?.path?.contains("users") == true)
+            intent.data?.let{
+                findNavController(R.id.fragmentContainerView).navigate(R.id.sellerProfileFragment, bundleOf(
+                    SellerProfileFragment.USER_ID to it.lastPathSegment?.toLong()))
+            }
     }
 
     private fun changeStatusBarColor(colorRes: Int) {

@@ -841,15 +841,15 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         if (item.titleId == R.string.chat_menu_profile)
             findNavController().navigate(
                 ChatFragmentDirections.actionChatFragmentToSellerProfileFragment(
-                    user,
-                    false
+                   user = user,
+                   toReviews =  false
                 )
             )
         if (item.titleId == R.string.chat_menu_feedback)
             findNavController().navigate(
                 ChatFragmentDirections.actionChatFragmentToSellerProfileFragment(
-                    user,
-                    true
+                  user =  user,
+                   toReviews =  true
                 )
             )
         if (item.titleId == R.string.chat_menu_addMedia)

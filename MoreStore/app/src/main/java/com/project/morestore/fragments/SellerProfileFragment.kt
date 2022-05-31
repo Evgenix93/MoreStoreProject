@@ -1,5 +1,6 @@
 package com.project.morestore.fragments
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -41,14 +42,12 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        showUserInfo(args.user)
-        getSellerProducts()
+        getUser()
         setClickListeners()
-        getSellersWishList()
     }
 
     private fun initViewPager(list: List<Product>){
-        sellerProfileAdapter = SellerProfileAdapter(this, args.user.id)
+        sellerProfileAdapter = SellerProfileAdapter(this, presenter.getUser().id)
         sellerProfileAdapter.updateList(list)
      binding.sellerViewPager.adapter = sellerProfileAdapter
         TabLayoutMediator(binding.tabLayout, binding.sellerViewPager){tab,position ->
@@ -61,8 +60,13 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
             binding.sellerViewPager.setCurrentItem(2, false)
     }
 
-    private fun getSellerProducts(){
-        presenter.getSellerProducts(args.user.id)
+    private fun getUser(){
+        if(args.user != null) {
+            showUserInfo(args.user!!)
+        }
+        else {
+            presenter.getSellerInfo(requireArguments().getLong(USER_ID))
+        }
     }
 
     private fun initToolbar(){
@@ -76,6 +80,9 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
     }
 
     private fun showUserInfo(user: User){
+        presenter.setUser(user)
+        presenter.getSellerProducts(user.id)
+        presenter.getSellersWishList()
         binding.userNameTextView.text = "${user.name} ${user.surname}"
         val listener =
             MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.userPhoneTextView)
@@ -102,14 +109,19 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
 
     private fun setClickListeners(){
         binding.subscribeBtn.setOnClickListener {
-            presenter.addDeleteSellersInWishList(listOf(args.user.id))
+            presenter.addDeleteSellersInWishList(listOf(presenter.getUser().id))
         }
 
         binding.profileBtn.setOnClickListener{
-           if(args.user.isBlackList == true)
+           if(presenter.getUser().isBlackList == true)
                Toast.makeText(requireContext(), "Собеседник вас заблокировал", Toast.LENGTH_LONG).show()
             else
-                findNavController().navigate(SellerProfileFragmentDirections.actionSellerProfileFragmentToMessagesFragment(args.user.id))
+                findNavController().navigate(SellerProfileFragmentDirections.actionSellerProfileFragmentToMessagesFragment(presenter.getUser().id))
+        }
+        binding.shareImageView.setOnClickListener {
+            val userId = presenter.getUser().id
+            val intent = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, "https://morestore.ru/users/$userId")
+            startActivity(intent)
         }
     }
 
@@ -161,7 +173,7 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
                     initViewPager(products)
                 }
                 if(result[0] is User){
-                    isSellerFavorite = (result as List<User>).find { it.id == args.user.id } != null
+                    isSellerFavorite = (result as List<User>).find { it.id == presenter.getUser().id } != null
                     initSubscribeBtn(isSellerFavorite)
 
                 }
@@ -172,5 +184,9 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
 
     override fun successNewCode() {
         TODO("Not yet implemented")
+    }
+
+    companion object{
+        const val USER_ID = "user id"
     }
 }

@@ -38,7 +38,7 @@ class WaitReviewSellersFragment: MvpAppCompatFragment(R.layout.fragment_wait_rev
         with(binding.sellersRecyclerView){
             adapter = UsersAdapter{
                 findNavController().navigate(WaitReviewSellersFragmentDirections
-                    .actionWaitReviewSellersFragmentToSellerProfileFragment(it, false))
+                    .actionWaitReviewSellersFragmentToSellerProfileFragment(user = it, toReviews = false))
             }.also{usersAdapter = it}
             layoutManager = LinearLayoutManager(requireContext())
         }
