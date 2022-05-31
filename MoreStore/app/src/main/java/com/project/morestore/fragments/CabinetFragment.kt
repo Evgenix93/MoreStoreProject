@@ -109,6 +109,8 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             .load(user.avatar?.photo.toString())
             .into(binding.avatarImageView)
 
+        binding.userRatingTextView.text = user.rating?.value.toString()
+
     }
 
     private fun initProductsButtons(){
