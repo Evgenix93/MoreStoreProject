@@ -208,10 +208,20 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             val response = productRepository.getCurrentUserProducts()
             when (response?.code()) {
                 200 -> {
-                    if(isActive)
-                    viewState.loaded(response.body()!!.filter{it.statusUser?.order?.status == 0})
+                    response.body()?.forEach {
+                        val status = when{
+                            it.statusUser?.order?.status == 1 -> 8
+                            it.statusUser?.order?.status == 0 -> 6
+                            else -> it.status
+                        }
+                        it.status = status
+                    }
+                    if(isActive) {
+                        viewState.loaded(
+                            response.body()!!.filter { it.status == 1 || it.status == 6 })
+                    }
                     else
-                        viewState.loaded(response.body()!!.filter{it.statusUser?.order?.status == 1})
+                        viewState.loaded(response.body()!!.filter{it.status == 8})
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -231,7 +241,20 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             viewState.loading()
             val response = productRepository.getSellerProducts(userId)
             when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
+                200 -> {
+                    val currentUserId = authRepository.getUserId()
+                    response.body()?.forEach {
+                        val status = when(it.statusUser?.order?.status) {
+                            0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
+                            else if(it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
+                            else if(it.statusUser.buy?.status != 2) 7 else 1
+                            1 -> 8
+                            else -> 1
+                        }
+                        it.status = status
+                    }
+                    viewState.loaded(response.body()!!)
+                }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)

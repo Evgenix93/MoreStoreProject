@@ -83,7 +83,13 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                     val orderItems = getOrderItems()?.filter{it.cart != null}
                     val activeOrders = orderItems?.filter { it.status == 0 } ?: emptyList()
                     val inactiveOrders = orderItems?.filter{it.status == 1}.also{Log.d("Sales", "inactiveOrders = $it")} ?: emptyList()
-                    viewState.onItemsLoaded(cartItems, activeOrders, activeSales, inactiveOrders, inactiveSales)
+                    val filteredOrderItems = activeOrders.filter { activeOrders.find { orderCheck -> orderCheck.id != it.id && orderCheck.cart?.first()?.id == it.cart?.first()?.id &&
+                            orderCheck.id > it.id } == null &&
+                            cartItems.find { cartItem -> cartItem.product.id == it.cart?.first()?.id } == null}
+                    val activeSalesFiltered = activeSales.filter { activeSales.find { saleCheck ->
+                        saleCheck.id != it.id && saleCheck.cart?.first()?.id == it.cart?.first()?.id &&
+                                saleCheck.idUser == it.idUser && saleCheck.id > it.id } == null }
+                    viewState.onItemsLoaded(cartItems, filteredOrderItems, activeSalesFiltered, inactiveOrders, inactiveSales)
                 }
                 400 -> {viewState.onError(getError(response.errorBody()!!))}
                 404 -> {

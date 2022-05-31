@@ -108,10 +108,16 @@ class ToolbarCartPresenter(val context: Context, val selectedMenu: OrdersSliderM
             val cartItems = getCartItems()
             val orderItems = getOrderItems()
             val salesItems = getSalesItems()
+            val filteredOrderItems = orderItems?.filter { orderItems.find { orderCheck -> orderCheck.id != it.id && orderCheck.cart?.first()?.id == it.cart?.first()?.id &&
+                    orderCheck.id > it.id } == null &&
+                    cartItems?.find { cartItem -> cartItem.product.id == it.cart?.first()?.id } == null}
+            val activeSalesFiltered = salesItems?.filter { salesItems.find { saleCheck ->
+                saleCheck.id != it.id && saleCheck.cart?.first()?.id == it.cart?.first()?.id &&
+                        saleCheck.idUser == it.idUser && saleCheck.id > it.id } == null }
             adapter.changeCartItemsSize(cartItems?.size ?: 0)
-            adapter.changeOrdersItemsSize(orderItems?.filter { it.status == 0 && it.cart != null }?.size ?: 0)
+            adapter.changeOrdersItemsSize(filteredOrderItems?.filter { it.status == 0 && it.cart != null }?.size ?: 0)
             adapter.changeOrderHistorySize(orderItems?.filter { it.status == 1 }?.size ?: 0)
-            adapter.changeSalesItemsSize(salesItems?.filter { it.status == 0 && it.cart != null }?.size ?: 0)
+            adapter.changeSalesItemsSize(activeSalesFiltered?.filter { it.status == 0 && it.cart != null }?.size ?: 0)
             adapter.changeSalesHistorySize(salesItems?.filter { it.status == 1 && it.cart != null }?.size ?: 0)
             viewState.initMenuAdapter(adapter)
         }
