@@ -52,7 +52,7 @@ class FavoritesSellersFragment :ListFragment(), FavoritesMvpView {
         }*/
         view.setBackgroundResource(R.color.white)
         adapter = FavoriteSellersAdapter{ seller ->
-            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToSellerProfileFragment(seller, false))
+            findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToSellerProfileFragment(user = seller, toReviews = false))
 
         }
         list.adapter = this.adapter

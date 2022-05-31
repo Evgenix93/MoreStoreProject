@@ -250,8 +250,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.userClickableView.setOnClickListener {
             findNavController().navigate(
                 ProductDetailsFragmentDirections.actionProductDetailsFragmentToSellerProfileFragment(
-                    product.user!!,
-                    false
+                   user = product.user!!,
+                   toReviews = false
                 )
             )
         }

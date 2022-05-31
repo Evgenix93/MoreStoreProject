@@ -518,9 +518,9 @@ class UserRepository(val context: Context) {
 
     }
 
-    suspend fun getSellerInfo(userId: Int): Response<User>?{
+    suspend fun getSellerInfo(userId: Long): Response<User>?{
         return try {
-            userApi.getUserInfoById(userId.toLong())
+            userApi.getUserInfoById(userId)
         } catch (e: Throwable) {
             Log.d("mylog", e.message.toString())
             if (e is IOException) {

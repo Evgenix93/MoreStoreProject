@@ -195,6 +195,9 @@
         <action
             android:id="@+id/action_splashScreenFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_splashScreenFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/registration5Fragment"
@@ -558,10 +561,13 @@
         android:label="SellerProfileFragment" >
         <argument
             android:name="user"
-            app:argType="com.project.morestore.models.User" />
+            app:argType="com.project.morestore.models.User"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <argument
             android:name="toReviews"
-            app:argType="boolean" />
+            app:argType="boolean"
+            android:defaultValue="false" />
         <action
             android:id="@+id/action_sellerProfileFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />

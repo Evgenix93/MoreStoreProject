@@ -1,5 +1,6 @@
 package com.project.morestore.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,6 +8,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -61,6 +63,12 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToCreateProductStep1Fragment())
         }
         binding.myAddresses.setOnClickListener { findNavController().navigate(R.id.myAddressesFragment) }
+
+        binding.shareImageView.setOnClickListener{
+           val userId = presenter.getUser().id
+           val intent = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, "https://morestore.ru/users/$userId")
+           startActivity(intent)
+        }
     }
 
     private fun showBottomNav(){

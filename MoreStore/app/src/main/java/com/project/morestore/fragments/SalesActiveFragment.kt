@@ -64,7 +64,7 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
                presenter.cancelBuyRequest(it)
            },
            onProfileClick = {user -> findNavController()
-               .navigate(SalesActiveFragmentDirections.actionSalesActiveFragmentToSellerProfileFragment(user, false))},
+               .navigate(SalesActiveFragmentDirections.actionSalesActiveFragmentToSellerProfileFragment(user = user, toReviews = false))},
                onClick = {
                    findNavController().navigate(SalesActiveFragmentDirections.actionSalesActiveFragmentToOrderDetailsFragment(it))
                }).also{salesAdapter = it}
