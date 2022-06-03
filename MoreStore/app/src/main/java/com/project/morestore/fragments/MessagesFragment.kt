@@ -17,6 +17,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayout
@@ -150,8 +151,10 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
     }
 
     private fun checkToken(){
-        if(Token.token.isEmpty())
-            findNavController().navigate(R.id.cabinetGuestFragment)
+        if(Token.token.isEmpty()) {
+            val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
+            findNavController().navigate(R.id.cabinetGuestFragment, bundleOf(CabinetGuestFragment.FRAGMENT_ID to R.id.messagesFragment), navOptions)
+        }
     }
 
     //todo remove stubs

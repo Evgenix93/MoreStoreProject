@@ -402,6 +402,9 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_ordersCartFragment"
             app:destination="@id/ordersCartFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_cabinetGuestFragment"
+            app:destination="@id/cabinetGuestFragment" />
     </fragment>
     <fragment
         android:id="@+id/changeRegionFragment"
@@ -522,9 +525,8 @@
             android:id="@+id/action_cabinetGuestFragment_to_loginDialog"
             app:destination="@id/loginDialog" />
         <argument
-            android:name="fromCreateProduct"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:name="fragmentId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -1037,6 +1039,9 @@
         <action
             android:id="@+id/action_favoritesFragment_to_brandsFragment"
             app:destination="@id/brandsFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_cabinetGuestFragment"
+            app:destination="@id/cabinetGuestFragment" />
     </fragment>
     <fragment
         android:id="@+id/editFavoriteSearchFragment"
@@ -1127,6 +1132,9 @@
         <action
             android:id="@+id/action_ordersCartFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_ordersCartFragment_to_cabinetGuestFragment"
+            app:destination="@id/cabinetGuestFragment" />
     </fragment>
     <fragment
         android:id="@+id/ordersHistoryFragment"

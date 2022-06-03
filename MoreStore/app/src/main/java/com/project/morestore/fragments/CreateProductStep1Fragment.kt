@@ -2,7 +2,9 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -80,8 +82,14 @@ class CreateProductStep1Fragment : MvpAppCompatFragment(R.layout.fragment_create
 
     override fun loaded(result: Any) {
        val isTokenEmpty = result as Boolean
-        if(isTokenEmpty)
-           findNavController().navigate(CreateProductStep1FragmentDirections.actionCreateProductStep1FragmentToCabinetGuestFragment(true))
+        if(isTokenEmpty) {
+            val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
+            findNavController().navigate(
+                R.id.cabinetGuestFragment,
+                bundleOf(CabinetGuestFragment.FRAGMENT_ID to R.id.createProductStep1Fragment),
+                navOptions
+            )
+        }
     }
 
     override fun loading() {

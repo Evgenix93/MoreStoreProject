@@ -25,6 +25,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.PhotoViewPagerAdapter
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.databinding.FragmentProductBinding
+import com.project.morestore.fragments.CabinetGuestFragment
 import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.fragments.LotChatsFragment
 import com.project.morestore.models.*
@@ -106,8 +107,9 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                         Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
                     )
                 )
-            else
-                findNavController().navigate(R.id.cabinetGuestFragment)
+            else {
+                findNavController().navigate(R.id.cabinetGuestFragment, bundleOf(CabinetGuestFragment.FRAGMENT_ID to R.id.productDetailsFragment))
+            }
         }
 
         binding.openChatsButton.setOnClickListener {

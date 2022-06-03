@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.project.morestore.R
@@ -147,7 +149,8 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
     }
 
     override fun isGuest() {
-        findNavController().navigate(R.id.cabinetGuestFragment)
+        val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
+        findNavController().navigate(R.id.cabinetGuestFragment, bundleOf(CabinetGuestFragment.FRAGMENT_ID to R.id.favoritesFragment), navOptions)
     }
 
     override fun emptyList() {

@@ -35,36 +35,44 @@ class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
     }
 
     private fun initLoginTextView(){
-      if(args.fromCreateProduct){
+          when(requireArguments().getInt(FRAGMENT_ID)){
+              R.id.createProductStep1Fragment -> {
+                  binding.needLoginTextView.text = getString(R.string.need_login2)
+                  binding.toolbar.titleTextView.text = getString(R.string.create_product)
+              }
 
-          binding.needLoginTextView.text = getString(R.string.need_login2)
-      }
-        if(findNavController().previousBackStackEntry?.destination?.id == R.id.productDetailsFragment)
-            binding.needLoginTextView.text = "Для входа в чат\nнеобходимо зарегистрироваться"
-
-        if(findNavController().previousBackStackEntry?.destination?.id == R.id.messagesFragment)
-            binding.needLoginTextView.text = "Для входа в сообщения\nнеобходимо зарегистрироваться"
-
-        if(findNavController().previousBackStackEntry?.destination?.id == R.id.ordersCartFragment)
-            binding.needLoginTextView.text = "Для входа в корзину\nнеобходимо зарегистрироваться"
-
-        if(findNavController().previousBackStackEntry?.destination?.id == R.id.favoritesFragment)
-            binding.needLoginTextView.text = "Для входа в избранное\nнеобходимо зарегистрироваться"
-    }
+                  R.id.productDetailsFragment -> {
+                      binding.toolbar.titleTextView.text = "Чат"
+                      binding.needLoginTextView.text = "Для входа в чат\nнеобходимо зарегистрироваться"
+                  }
+                  R.id.messagesFragment -> {
+                      binding.toolbar.titleTextView.text = "Сообщения"
+                      binding.needLoginTextView.text = "Для входа в сообщения\nнеобходимо зарегистрироваться"
+                  }
+                  R.id.ordersCartFragment -> {
+                      binding.toolbar.titleTextView.text = "Корзина"
+                      binding.needLoginTextView.text = "Для входа в корзину\nнеобходимо зарегистрироваться"
+                  }
+                  R.id.favoritesFragment -> {
+                      binding.toolbar.titleTextView.text = "Избранное"
+                      binding.needLoginTextView.text = "Для входа в избранное\nнеобходимо зарегистрироваться"
+                  }
+              }
+          }
 
     private fun initToolbar(){
         binding.toolbar.backIcon.setOnClickListener {
-            findNavController().navigate(R.id.firstLaunchFragment)
+            findNavController().popBackStack()
         }
-        if(args.fromCreateProduct)
-            binding.toolbar.titleTextView.text = getString(R.string.create_product)
-        else
-            binding.toolbar.titleTextView.text = getString(R.string.cabinet)
 
+        binding.toolbar.titleTextView.text = "Кабинет"
         if(findNavController().previousBackStackEntry?.destination?.id == R.id.productDetailsFragment)
             binding.toolbar.titleTextView.text = "Чат"
 
         if(findNavController().previousBackStackEntry?.destination?.id == R.id.messagesFragment)
             binding.toolbar.titleTextView.text = "Сообщения"
+    }
+    companion object{
+        const val FRAGMENT_ID = "fragment id"
     }
 }
