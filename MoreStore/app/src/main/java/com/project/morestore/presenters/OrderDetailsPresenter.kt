@@ -1,6 +1,7 @@
 package com.project.morestore.presenters
 
 import android.content.Context
+import android.util.Log
 import androidx.core.view.isVisible
 import com.project.morestore.R
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
@@ -247,6 +248,7 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             }
             order ?: return@launch
             val isBuyer = order.idUser == authRepository.getUserId()
+            Log.d("mylog", "orderUserId ${order.idUser}")
             val dialog = getAllDialogs()?.find { it.product?.id == order.cart?.first()?.id }
             val discountedPrice = when{
                 order.cart?.first()?.statusUser?.price?.status == 1 -> order.cart?.first()?.statusUser?.price?.value?.toIntOrNull()
@@ -309,6 +311,7 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
 
                         }
                     }
+                    null -> status = OrderStatus.ADD_MEETING
                 }
 
             if(order.status == 1) status = OrderStatus.RECEIVED_SUCCESSFULLY

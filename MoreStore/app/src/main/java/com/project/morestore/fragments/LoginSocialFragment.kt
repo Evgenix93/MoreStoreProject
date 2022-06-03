@@ -31,7 +31,7 @@ class LoginSocialFragment : MvpAppCompatFragment(R.layout.fragment_social_login)
 
     }
 
-    override fun success(result: Any) {
+    override fun success(result: Any, extra: Any?) {
         if (result is RegistrationResponse) {
             presenter.getUserData()
             return

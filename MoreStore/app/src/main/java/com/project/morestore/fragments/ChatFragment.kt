@@ -86,6 +86,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             )
         },
         onDealDetailsCallback = {
+            if(it != -1L)
             findNavController().navigate(ChatFragmentDirections.actionChatFragmentToOrderDetailsFragment(orderId = it))
         }
     )

@@ -42,7 +42,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     private fun setClickListeners() {
         binding.confirmBtn.setOnClickListener {
-            if (!args.isLogin) {
+            if (!args.isLogin && args.isLoginFromRegistration.not()) {
                 presenter.register(
                     code = binding.codeEditText.text.toString(),
                     user = args.userId,
@@ -120,7 +120,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
         timer.cancel()
     }
 
-    override fun success(result: Any) {
+    override fun success(result: Any, extra: Any?) {
         showLoading(false)
     }
 
@@ -147,7 +147,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
     override fun registrationComplete(complete: Boolean, user: User) {
         showLoading(false)
         if(complete) {
-            if (!args.isLogin) {
+            if (!args.isLogin && args.isLoginFromRegistration) {
                 findNavController().navigate(
                     RegistrationLogin2FragmentDirections.actionRegistration2FragmentToResumeRegisterDialog(
                         isEmail = isEmail,

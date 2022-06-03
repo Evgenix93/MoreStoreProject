@@ -57,6 +57,10 @@
         <action
             android:id="@+id/action_registration2Fragment_to_onboarding1Fragment2"
             app:destination="@id/onboarding1Fragment" />
+        <argument
+            android:name="isLoginFromRegistration"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/registration3Fragment"

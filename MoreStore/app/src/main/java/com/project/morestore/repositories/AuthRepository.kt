@@ -219,9 +219,17 @@ class AuthRepository(private val context: Context) {
         return Token.token.isEmpty()
     }
 
-    fun clearToken(){
+    suspend fun clearToken(){
         Token.token = ""
         Token.userId = 0
+        deleteTokenSharedPrefs()
+    }
+
+    private suspend fun deleteTokenSharedPrefs(){
+        withContext(Dispatchers.IO){
+            val prefs = context.getSharedPreferences(TOKEN_PREF, Context.MODE_PRIVATE)
+            prefs.edit().clear().commit()
+        }
     }
 
     companion object{

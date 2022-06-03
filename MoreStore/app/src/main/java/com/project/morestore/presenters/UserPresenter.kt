@@ -665,8 +665,10 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
     fun clearToken() {
-        authRepository.clearToken()
-        viewState.success(Unit)
+        presenterScope.launch {
+            authRepository.clearToken()
+            viewState.success(Unit)
+        }
     }
 
     fun saveFilter() {

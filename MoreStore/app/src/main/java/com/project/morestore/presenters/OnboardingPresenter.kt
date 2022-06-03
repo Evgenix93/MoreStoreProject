@@ -152,7 +152,9 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
     }
 
     fun changeToGuestMode() {
-        authRepository.clearToken()
+        presenterScope.launch {
+            authRepository.clearToken()
+        }
     }
 
     fun saveFilter(isMale: Boolean) {

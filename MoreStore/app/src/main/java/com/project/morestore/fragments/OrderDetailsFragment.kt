@@ -2,6 +2,7 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.text.style.StrikethroughSpan
+import android.util.Log
 import android.util.Range
 import android.view.View
 import android.widget.Toast
@@ -55,6 +56,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
 
     private fun bind(order: OrderItem) {
+        Log.d("mylog", "orderStatus ${order.status}")
+        binding.allBlocks.isVisible = true
         orderStatus = order.status
         setAddress(order)
         presenter.initProfile(order)
@@ -100,6 +103,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.productClickView.setOnClickListener {
             val productStatus = when(orderStatus){
                 OrderStatus.RECEIVED_SUCCESSFULLY -> 8
+                OrderStatus.DECLINED_BUYER -> 1
+                OrderStatus.DECLINED -> 1
                 else -> 6
             }
             findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToProductDetailsFragment(
@@ -267,6 +272,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     }
 
     override fun loading(loading: Boolean) {
+        binding.loader.isVisible = loading
 
     }
 
@@ -367,7 +373,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     }
 
     private fun setAddMeetingStatus(order: OrderItem){
-        binding.orderItemStatusBlock.isVisible = false
+        binding.orderItemStatusBlock.isVisible = true
+        binding.orderItemStatusContent.text = "Необходимо добавить место встречи"
         binding.orderItemAcceptBlock.isVisible = true
         binding.orderItemAcceptDescription.isVisible = false
         binding.orderItemAcceptButton.text = "Добавить место встречи"

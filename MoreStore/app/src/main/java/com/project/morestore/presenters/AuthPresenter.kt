@@ -87,7 +87,8 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                                 step = step,
                                 type = type,
                                 user = user,
-                                code = code
+                                code = code,
+                                isFromRegistration = true
                             )
                         } else {
                             viewState.error(bodyString)
@@ -112,7 +113,8 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
         step: Int,
         type: Int,
         user: Int? = null,
-        code: String? = null
+        code: String? = null,
+        isFromRegistration: Boolean = false
     ) {
         presenterScope.launch {
             if (phone != null && !phone.trim().isPhoneValid()) {
@@ -144,7 +146,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                         repository.saveToken(response.body()?.token!!, response.body()!!.expires!!)
                         getUserData()
                     } else {
-                        viewState.success(response.body()!!)
+                        viewState.success(response.body()!!, if(isFromRegistration) true else null)
                     }
                 }
                 400 -> {

@@ -9,7 +9,7 @@ import moxy.viewstate.strategy.alias.SingleState
 interface AuthMvpView: MvpView {
 
     @OneExecution
-    fun success(result: Any)
+    fun success(result: Any, extra: Any? = null)
     @OneExecution
     fun error(message: String)
     @OneExecution

@@ -11,8 +11,10 @@
         layout="@layout/toolbar" />
 
     <ScrollView
+        android:id="@+id/allBlocks"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +59,7 @@
                     android:layout_height="72dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="46dp"
-                    android:src="@drawable/item_product_photo" />
+                    tools:src="@drawable/item_product_photo" />
 
                 <TextView
                     android:id="@+id/productNameTextView"
@@ -601,5 +603,17 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:indeterminateTint="@color/green"
+        android:visibility="gone"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
