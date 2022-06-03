@@ -144,6 +144,10 @@ class OrdersActiveFragment
         binding.toolbar.toolbarBack.setOnClickListener {
             toolbarPresenter.onBackClick();
         }
+
+        binding.toolbar.toolbarLike.setOnClickListener{
+            findNavController().navigate(R.id.favoritesFragment)
+        }
     }
 
     private fun showLoading(isLoading: Boolean){

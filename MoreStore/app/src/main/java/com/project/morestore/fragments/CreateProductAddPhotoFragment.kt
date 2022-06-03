@@ -267,6 +267,10 @@ class CreateProductAddPhotoFragment :
 
     }
 
+    override fun loginFailed() {
+
+    }
+
     override fun success() {
         findNavController().popBackStack()
 

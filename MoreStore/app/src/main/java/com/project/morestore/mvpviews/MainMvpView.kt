@@ -22,6 +22,9 @@ interface MainMvpView: MvpView {
     fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>)
 
     @OneExecution
+    fun loginFailed()
+
+    @OneExecution
     fun success()
 
 }

@@ -161,6 +161,10 @@ class CreateProductSizesClothFragment :
 
     }
 
+    override fun loginFailed() {
+
+    }
+
     override fun success() {
 
     }

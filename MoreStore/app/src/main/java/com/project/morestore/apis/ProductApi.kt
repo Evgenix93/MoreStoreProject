@@ -10,7 +10,7 @@ interface ProductApi {
     @GET("product")
     suspend fun getProducts(
         @Query("limit") limit: Int?,
-        @Query("optionally") options: String,
+        @Query("optionally") options: String?,
         @Query("filter") filter: String,
         @Query("user") userId: Long?,
     @Query("sort") sort: String?): Response<List<Product>>

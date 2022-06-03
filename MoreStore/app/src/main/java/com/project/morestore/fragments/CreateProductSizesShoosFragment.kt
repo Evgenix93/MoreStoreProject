@@ -158,6 +158,10 @@ class CreateProductSizesShoosFragment :
 
     }
 
+    override fun loginFailed() {
+        TODO("Not yet implemented")
+    }
+
     override fun success() {
 
     }

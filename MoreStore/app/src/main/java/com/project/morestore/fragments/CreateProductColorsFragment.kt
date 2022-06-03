@@ -91,6 +91,10 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
         TODO("Not yet implemented")
     }
 
+    override fun loginFailed() {
+
+    }
+
     override fun success() {
         TODO("Not yet implemented")
     }

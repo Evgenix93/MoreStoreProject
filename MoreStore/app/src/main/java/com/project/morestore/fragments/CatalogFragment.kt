@@ -351,6 +351,10 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         binding.toolbarMain.searchEditText.showDropDown()
     }
 
+    override fun loginFailed() {
+
+    }
+
     override fun success() {
         TODO("Not yet implemented")
     }

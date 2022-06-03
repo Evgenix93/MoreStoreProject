@@ -144,6 +144,10 @@ class MediaFragment() : FullscreenMvpFragment(), MainMvpView {
 
     }
 
+    override fun loginFailed() {
+        TODO("Not yet implemented")
+    }
+
     override fun success() {
 
     }

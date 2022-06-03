@@ -341,6 +341,10 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
 
     }
 
+    override fun loginFailed() {
+
+    }
+
     override fun success() {
 
     }

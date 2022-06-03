@@ -96,6 +96,10 @@ class CreateProductStep3Fragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     }
 
+    override fun loginFailed() {
+        TODO("Not yet implemented")
+    }
+
     override fun success() {
 
     }

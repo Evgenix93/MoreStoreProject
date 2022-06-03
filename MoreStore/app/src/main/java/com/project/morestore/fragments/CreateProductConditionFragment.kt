@@ -123,6 +123,10 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
 
     }
 
+    override fun loginFailed() {
+
+    }
+
     override fun success() {
 
     }

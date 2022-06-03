@@ -210,7 +210,7 @@ class AuthRepository(private val context: Context) {
         return Token.userId
     }
 
-
+    fun getToken(): String = Token.token
 
 
 

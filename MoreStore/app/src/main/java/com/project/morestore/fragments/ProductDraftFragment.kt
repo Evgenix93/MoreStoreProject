@@ -119,6 +119,10 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
 
     }
 
+    override fun loginFailed() {
+        TODO("Not yet implemented")
+    }
+
     override fun success() {
 
     }

@@ -147,6 +147,10 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
         binding.toolbar.toolbarBack.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.toolbar.toolbarLike.setOnClickListener{
+            findNavController().navigate(R.id.favoritesFragment)
+        }
     }
 
     private fun updateSalesList(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>, dialogs: List<DialogWrapper>){

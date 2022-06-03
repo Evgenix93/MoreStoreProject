@@ -46,6 +46,7 @@ class OrdersCartFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tokenCheck()
         showBottomNav()
         initToolbar()
         mainPresenter.getUserId()
@@ -119,6 +120,10 @@ class OrdersCartFragment
                     mainPresenter.removeProductFromCart(it.product.id, userId)
                 }
             }
+            is Boolean -> {
+                if(result)
+                findNavController().navigate(R.id.cabinetGuestFragment)
+            }
         }
     }
 
@@ -143,6 +148,10 @@ class OrdersCartFragment
     override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
     }
 
+    override fun loginFailed() {
+        TODO("Not yet implemented")
+    }
+
     override fun success() {
     }
 
@@ -156,8 +165,15 @@ class OrdersCartFragment
 
     private fun initToolbar() {
         binding.toolbar.toolbarBack.setOnClickListener {
-            toolbarPresenter.onBackClick();
+            toolbarPresenter.onBackClick()
         }
+        binding.toolbar.toolbarLike.setOnClickListener{
+            findNavController().navigate(R.id.favoritesFragment)
+        }
+    }
+
+    private fun tokenCheck(){
+        mainPresenter.tokenCheck()
     }
 
     private fun showLoading(isLoading: Boolean){

@@ -127,6 +127,10 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
         TODO("Not yet implemented")
     }
 
+    override fun loginFailed() {
+        TODO("Not yet implemented")
+    }
+
     override fun success() {
         TODO("Not yet implemented")
     }

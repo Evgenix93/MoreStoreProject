@@ -37,11 +37,17 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //indicateTabAt(-1)
+        tokenCheck()
         with(views){
             toolbar.title.setText(R.string.favorites_container_title)
             toolbar.root.also{
                 it.setNavigationOnClickListener { findNavController().popBackStack() }
                 it.inflateMenu(R.menu.menu_favorites)
+                it.setOnMenuItemClickListener {item ->
+                   if(item.itemId == R.id.cart)
+                       findNavController().navigate(R.id.ordersCartFragment)
+                    true
+                }
             }
             tabs.addTab(tabs.newTab().fill(R.drawable.sel_tshirt, "Товары", 0))
             tabs.addTab(tabs.newTab().fill(R.drawable.sel_tag, "Бренды", 0))
@@ -100,6 +106,10 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
         presenter.getFavoriteSearches()
     }
 
+    private fun tokenCheck(){
+        presenter.tokenCheck()
+    }
+
     override fun loading() {
 
     }
@@ -134,6 +144,10 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
 
     override fun error(message: String) {
 
+    }
+
+    override fun isGuest() {
+        findNavController().navigate(R.id.cabinetGuestFragment)
     }
 
     override fun emptyList() {

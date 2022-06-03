@@ -398,6 +398,10 @@ class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
 
     }
 
+    override fun isGuest() {
+        TODO("Not yet implemented")
+    }
+
     override fun emptyList() {
 
     }

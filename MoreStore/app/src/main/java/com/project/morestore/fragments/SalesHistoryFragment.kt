@@ -126,6 +126,10 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
         binding.toolbar.toolbarBack.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.toolbar.toolbarLike.setOnClickListener{
+            findNavController().navigate(R.id.favoritesFragment)
+        }
     }
 
     override fun onSalesLoaded(
