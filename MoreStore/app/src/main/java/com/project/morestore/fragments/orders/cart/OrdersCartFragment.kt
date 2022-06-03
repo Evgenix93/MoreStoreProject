@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,7 @@ import com.project.morestore.adapters.SliderMenuAdapter
 import com.project.morestore.adapters.cart.CartAdapter
 import com.project.morestore.databinding.FragmentOrdersCartBinding
 import com.project.morestore.dialogs.DeleteDialog
+import com.project.morestore.fragments.CabinetGuestFragment
 import com.project.morestore.models.Product
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.models.User
@@ -43,6 +45,7 @@ class OrdersCartFragment
     ///////////////////////////////////////////////////////////////////////////
     //                      view
     ///////////////////////////////////////////////////////////////////////////
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,6 +78,8 @@ class OrdersCartFragment
             R.id.salesHistoryFragment -> {
                 findNavController().navigate(R.id.salesHistoryFragment, null, navOptions)
             }
+
+            R.id.cabinetGuestFragment -> findNavController().navigate(R.id.cabinetGuestFragment, bundleOf(CabinetGuestFragment.FRAGMENT_ID to R.id.ordersCartFragment), navOptions)
         }
     }
 
@@ -122,7 +127,7 @@ class OrdersCartFragment
             }
             is Boolean -> {
                 if(result)
-                findNavController().navigate(R.id.cabinetGuestFragment)
+                navigate(R.id.cabinetGuestFragment)
             }
         }
     }

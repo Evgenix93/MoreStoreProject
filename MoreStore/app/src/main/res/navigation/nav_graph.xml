@@ -406,6 +406,9 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_ordersCartFragment"
             app:destination="@id/ordersCartFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_cabinetGuestFragment"
+            app:destination="@id/cabinetGuestFragment" />
     </fragment>
     <fragment
         android:id="@+id/changeRegionFragment"
@@ -525,10 +528,6 @@
         <action
             android:id="@+id/action_cabinetGuestFragment_to_loginDialog"
             app:destination="@id/loginDialog" />
-        <argument
-            android:name="fromCreateProduct"
-            app:argType="boolean"
-            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"

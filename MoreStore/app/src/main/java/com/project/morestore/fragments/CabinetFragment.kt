@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -229,7 +230,8 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
         if(result is Boolean) {
             val tokenIsEmpty = result as Boolean
             if (tokenIsEmpty) {
-                findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToCabinetGuestFragment())
+                val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
+                findNavController().navigate(R.id.cabinetGuestFragment, null , navOptions)
             } else {
                 getUserInfo()
             }

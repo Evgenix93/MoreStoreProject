@@ -754,6 +754,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     fun getUserData() {
         presenterScope.launch {
             viewState.loading()
+            Log.d("MyToken", "token = ${getToken()}")
             if(getToken().isEmpty()) {
                 getProducts(isFiltered = false)
                 return@launch
