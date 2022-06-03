@@ -111,6 +111,10 @@ class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
 
     }
 
+    override fun isGuest() {
+        TODO("Not yet implemented")
+    }
+
     override fun emptyList() {
         showEmptyList {findNavController().navigate(R.id.catalogFragment) }
     }

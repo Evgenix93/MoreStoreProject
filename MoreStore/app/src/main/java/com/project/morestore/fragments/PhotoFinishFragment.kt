@@ -192,6 +192,10 @@ class PhotoFinishFragment : MvpAppCompatFragment(R.layout.fragment_photo_finish)
 
     }
 
+    override fun loginFailed() {
+        TODO("Not yet implemented")
+    }
+
     override fun success() {
         showLoading(false)
         val isFromCreateProduct = findNavController().backQueue[findNavController().backQueue.size - 3].destination.id == R.id.createProductAddPhotoFragment

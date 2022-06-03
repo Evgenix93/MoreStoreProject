@@ -16,6 +16,9 @@ interface FavoritesMvpView: MvpView {
     fun error(message: String)
 
     @OneExecution
+    fun isGuest()
+
+    @OneExecution
     fun emptyList()
 
     @OneExecution

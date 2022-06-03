@@ -91,6 +91,10 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
 
     }
 
+    override fun loginFailed() {
+
+    }
+
     override fun success() {
 
     }

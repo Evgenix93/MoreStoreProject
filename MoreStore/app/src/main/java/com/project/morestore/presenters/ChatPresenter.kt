@@ -237,16 +237,10 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                     viewState.error("ошибка")
                     return emptyList()
                 }
-
             }
-
-
-       // }
-
     }
 
     private suspend fun getLotDialogs(companionUserId: Long): List<Chat>{
-       // presenterScope.launch {
             viewState.loading()
             val userId = authRepository.getUserId()
             val response = chatRepository.getDialogs()
@@ -263,8 +257,6 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                         response.body()?.filter { dialogWrapper ->
                             dialogWrapper.product == product
                         }.orEmpty()
-
-
                     }
                     val chats =  lots?.map { lot ->  //response.body()?.filter {it.product.idUser == userId }?.map { dialogWrapper ->
                         val isUnread = lot.find { it.dialog.lastMessage?.idSender != userId && it.dialog.lastMessage?.is_read == 0 } != null
@@ -302,9 +294,6 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                 }
 
             }
-
-
-        //}
     }
 
     private suspend fun getDialogsByProductId(id: Long): List<Chat>{
@@ -323,10 +312,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                         it.dialog.lastMessage?.idSender != userId && it.dialog.lastMessage?.is_read == 0,
                         it.dialog.user.avatar?.photo.toString(),
                         it.product?.priceNew ?: 0f
-
-
                     )
-
                 }
                 return chats.orEmpty()
             }

@@ -83,6 +83,10 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
+    override fun isGuest() {
+        TODO("Not yet implemented")
+    }
+
     override fun emptyList() {
         loader.isVisible = false
         showEmptyList { findNavController().navigate(R.id.catalogFragment) }

@@ -499,6 +499,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     }
 
+    override fun loginFailed() {
+        TODO("Not yet implemented")
+    }
+
     override fun success() {
         findNavController().navigate(R.id.catalogFragment)
     }

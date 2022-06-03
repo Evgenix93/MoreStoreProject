@@ -7,6 +7,7 @@ import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
 import com.project.morestore.models.ProductBrand
 import com.project.morestore.mvpviews.FavoritesMvpView
+import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,7 @@ import okhttp3.ResponseBody
 class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
     private val userRepository = UserRepository(context)
     private val productRepository = ProductRepository(context)
-
+    private val authRepository = AuthRepository(context)
 
     fun getProductWishList() {
         presenterScope.launch {
@@ -37,6 +38,11 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
 
             }
         }
+    }
+
+    fun tokenCheck() {
+        if(authRepository.isTokenEmpty())
+        viewState.isGuest()
     }
 
     fun getSellersWishList(){

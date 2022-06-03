@@ -21,6 +21,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.location.LocationRequest
@@ -64,26 +65,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         setClickListeners()
         initPermissionLauncher()
         getCurrentUserAddress()
-
-        binding.toolbarMain.materialToolbar.setOnMenuItemClickListener {
-            when(it.itemId){
-                R.id.favorite -> {
-                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToFavoritesFragment())
-                    true
-                }
-                R.id.cart -> {
-                    findNavController().navigate(
-                        MainFragmentDirections.actionMainFragmentToOrdersCartFragment()
-                    )
-                    true
-                }
-                else -> true
-            }
-        }
-
-
-
-
 
     }
 
@@ -186,6 +167,27 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 ResourcesCompat.getDrawable(resources, R.drawable.ic_logo_more_store, null)
         }
 
+        binding.toolbarMain.materialToolbar.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.favorite -> {
+                    if(presenter.getToken().isEmpty())
+                        findNavController().navigate(R.id.favoritesFragment)
+                    else
+                        findNavController().navigate(MainFragmentDirections.actionMainFragmentToFavoritesFragment())
+                    true
+                }
+                R.id.cart -> {
+                    if(presenter.getToken().isEmpty())
+                        findNavController().navigate(R.id.ordersCartFragment)
+                    else
+                        findNavController().navigate(
+                        MainFragmentDirections.actionMainFragmentToOrdersCartFragment()
+                    )
+                    true
+                }
+                else -> true
+            }
+        }
 
         val searchEditText = binding.toolbarMain.searchEditText
         searchEditText.dropDownAnchor = R.id.anchor
@@ -538,6 +540,10 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             }
         )
         binding.toolbarMain.searchEditText.showDropDown()
+    }
+
+    override fun loginFailed() {
+        findNavController().navigate(R.id.firstLaunchFragment)
     }
 
     override fun success() {

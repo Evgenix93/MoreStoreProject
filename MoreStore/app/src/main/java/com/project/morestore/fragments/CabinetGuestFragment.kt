@@ -36,6 +36,7 @@ class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
 
     private fun initLoginTextView(){
       if(args.fromCreateProduct){
+
           binding.needLoginTextView.text = getString(R.string.need_login2)
       }
         if(findNavController().previousBackStackEntry?.destination?.id == R.id.productDetailsFragment)
@@ -44,6 +45,11 @@ class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
         if(findNavController().previousBackStackEntry?.destination?.id == R.id.messagesFragment)
             binding.needLoginTextView.text = "Для входа в сообщения\nнеобходимо зарегистрироваться"
 
+        if(findNavController().previousBackStackEntry?.destination?.id == R.id.ordersCartFragment)
+            binding.needLoginTextView.text = "Для входа в корзину\nнеобходимо зарегистрироваться"
+
+        if(findNavController().previousBackStackEntry?.destination?.id == R.id.favoritesFragment)
+            binding.needLoginTextView.text = "Для входа в избранное\nнеобходимо зарегистрироваться"
     }
 
     private fun initToolbar(){

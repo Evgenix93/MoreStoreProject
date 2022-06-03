@@ -70,6 +70,10 @@ class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen
 
     }
 
+    override fun loginFailed() {
+        TODO("Not yet implemented")
+    }
+
     override fun success() {
 
     }

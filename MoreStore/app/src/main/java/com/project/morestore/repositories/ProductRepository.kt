@@ -81,7 +81,8 @@ class ProductRepository(private val context: Context) {
         userId: Long? = null,
         productId: Long? = null,
         limit: Int? = null,
-        status: Int? = null
+        status: Int? = null,
+        isGuest: Boolean = false
     ): Response<List<Product>>? {
         return try {
             var categoryStr = listOf<String>()
@@ -206,7 +207,7 @@ class ProductRepository(private val context: Context) {
            // Log.d("MyDebug", "getProducts filter = $filter")
             productApi.getProducts(
                 limit,
-                PRODUCT_OPTIONS,
+                if(isGuest)null else PRODUCT_OPTIONS,
                 (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr + statusStr).joinToString(
                     ";"
                 ).also{Log.d("MyDebug", "getProducts filter = $it")},

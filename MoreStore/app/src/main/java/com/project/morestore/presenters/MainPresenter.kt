@@ -109,7 +109,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             productId: Long? = null,
             isFiltered: Boolean,
             productCategories: List<ProductCategory>? = null,
-            forWho: List<Boolean>? = null
+            forWho: List<Boolean>? = null,
+            isGuest: Boolean = false
     ) {
         Log.d("mylog", "getProducts")
         presenterScope.launch {
@@ -124,15 +125,16 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                         query = queryStr,
                         filter = filter,
                         productId = productId,
-                    limit = 500
-
+                    limit = 500,
+                    isGuest = isGuest
                 )
             } else
                 productRepository.getProducts(
                         query = queryStr,
                         filter = if (isFiltered) userRepository.getFilter() else null,
                         productId = productId,
-                    limit = 500
+                    limit = 500,
+                    isGuest = isGuest
                 )
 
             when (response?.code()) {
@@ -747,9 +749,15 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     }
 
+    fun getToken() = authRepository.getToken()
+
     fun getUserData() {
         presenterScope.launch {
             viewState.loading()
+            if(getToken().isEmpty()) {
+                getProducts(isFiltered = false)
+                return@launch
+            }
             val fireBaseToken = getFcmToken()
             fireBaseToken ?: return@launch
             val response = authRepository.getUserData(fireBaseToken)
@@ -766,6 +774,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
                 404 -> {
                     viewState.error("Вход не выполнен")
+                    viewState.loginFailed()
                 }
                 500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")

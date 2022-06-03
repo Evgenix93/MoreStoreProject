@@ -81,6 +81,10 @@ class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch),
 
     }
 
+    override fun loginFailed() {
+
+    }
+
     override fun success() {
 
     }
