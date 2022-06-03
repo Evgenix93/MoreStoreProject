@@ -12,7 +12,6 @@ import com.project.morestore.databinding.FragmentCabinetGuestBinding
 
 class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
     private val binding: FragmentCabinetGuestBinding by viewBinding()
-    private val args: CabinetGuestFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,7 +34,7 @@ class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
     }
 
     private fun initLoginTextView(){
-          when(requireArguments().getInt(FRAGMENT_ID)){
+          when(arguments?.getInt(FRAGMENT_ID)){
               R.id.createProductStep1Fragment -> {
                   binding.needLoginTextView.text = getString(R.string.need_login2)
                   binding.toolbar.titleTextView.text = getString(R.string.create_product)

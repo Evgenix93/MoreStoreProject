@@ -79,7 +79,7 @@ class OrdersCartFragment
                 findNavController().navigate(R.id.salesHistoryFragment, null, navOptions)
             }
 
-            R.id.cabinetGuestFragment -> findNavController().navigate(R.id.cabinetGuestFragment, bundleOf(CabinetGuestFragment.FRAGMENT_ID to R.id.cabinetGuestFragment), navOptions)
+            R.id.cabinetGuestFragment -> findNavController().navigate(R.id.cabinetGuestFragment, bundleOf(CabinetGuestFragment.FRAGMENT_ID to R.id.ordersCartFragment), navOptions)
         }
     }
 
