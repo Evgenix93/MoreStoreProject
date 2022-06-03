@@ -72,9 +72,9 @@ class CartAdapter(
                 cartProductUserName.setOnClickListener {
                     onProfileClickListener(cartItem.product.user!!)
                 }
-                cartProductPurchaseButton.isVisible = cartItem.product.statusUser?.order == null
-                orderItemDeliveryChangeIcon.isVisible = cartItem.product.statusUser?.order != null
-                orderItemDeliveryChangeTitle.isVisible = cartItem.product.statusUser?.order != null
+                cartProductPurchaseButton.isVisible =    (cartItem.product.statusUser?.buy?.status == 0 || cartItem.product.statusUser?.buy?.status == 1).not()
+                orderItemDeliveryChangeIcon.isVisible =  cartItem.product.statusUser?.buy?.status == 0 || cartItem.product.statusUser?.buy?.status == 1
+                orderItemDeliveryChangeTitle.isVisible = cartItem.product.statusUser?.buy?.status == 0 || cartItem.product.statusUser?.buy?.status == 1
             }
         }
     }

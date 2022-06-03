@@ -7,6 +7,7 @@ import com.project.morestore.adapters.cart.CartAdapter
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.repositories.OrdersRepository
+import com.project.morestore.repositories.ProductRepository
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -16,6 +17,7 @@ class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>()
 
     private lateinit var adapter: CartAdapter
     private val ordersRepository = OrdersRepository(context)
+    private val productRepository = ProductRepository(context)
 
     ///////////////////////////////////////////////////////////////////////////
     //                      private
@@ -42,10 +44,20 @@ class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>()
         }
     }
 
-    private fun initContent(items: List<CartItem>?, onDelete: (CartItem) -> Unit) {
+    private suspend fun initContent(items: List<CartItem>?, onDelete: (CartItem) -> Unit) {
         if (items != null) {
+
             adapter = CartAdapter(items.toMutableList(), {
-                viewState.navigate(it.product, it.id);
+                   presenterScope.launch {
+                       val product =
+                           productRepository.getProducts(productId = it.product.id)?.body()?.first()
+                       if (product?.statusUser?.buy?.status == 0 || product?.statusUser?.buy?.status == 1)
+                           viewState.error("Товар уже забронирован")
+                       else if(product != null)
+                           viewState.navigate(it.product, it.id)
+                       else
+                           viewState.error("Ошибка")
+                   }
             }, {}, {
                 val deleteDialog = DeleteDialog(
                     title = context.getString(R.string.cart_delete_title),

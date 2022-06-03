@@ -139,6 +139,8 @@ class OrdersCartFragment
     override fun error(message: String) {
         showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        if(message.contains("Товар уже забронирован"))
+            mainPresenter.getUserId()
     }
 
     override fun showDeleteDialog(deleteDialog: DeleteDialog) {
