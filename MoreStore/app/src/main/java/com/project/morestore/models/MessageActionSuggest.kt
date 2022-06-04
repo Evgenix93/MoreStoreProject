@@ -13,6 +13,8 @@ data class MessageActionSuggest(
     @Json(name = "val")
     val value: String?,
     @Json(name = "id_canceled")
-    val idCanceled: Long?
+    val idCanceled: Long?,
+    @Json(name = "id_user")
+    val idUser: Long?
 
 ): Parcelable

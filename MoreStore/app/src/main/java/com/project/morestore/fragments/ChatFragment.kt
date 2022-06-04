@@ -216,6 +216,11 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         user = dialog.dialog.user
         //adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
+            product.setOnClickListener {
+                findNavController()
+                    .navigate(ChatFragmentDirections
+                        .actionChatFragmentToProductDetailsFragment(
+                            product = null, productId = dialog.product?.id.toString(), isSeller = true)) }
             toolbar.title.text = dialog.dialog.user.name
             toolbar.subtitle.text = "В сети 2 ч. назад"
             toolbar.title.setCompoundDrawablesWithIntrinsicBounds(
@@ -345,6 +350,11 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         user = dialog.dialog.user
         adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
         with(views) {
+            product.setOnClickListener {
+                findNavController()
+                    .navigate(ChatFragmentDirections
+                        .actionChatFragmentToProductDetailsFragment(
+                            product = null, productId = dialog.product?.id.toString(), isSeller = false)) }
             toolbar.title.text = dialog.dialog.user.name
             toolbar.subtitle.text = "В сети 2 ч. назад"
             toolbar.title.setCompoundDrawablesWithIntrinsicBounds(
@@ -355,7 +365,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             )
             toolbar.title.setOnClickListener {
                 MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE, avatar =
-                dialog.dialog.user.avatar?.photo.toString())
+                dialog.dialog.user.avatar?.photo.toString(),
+                    showReviewBtn = dialog.product?.statusUser?.order?.status == 1 &&
+                dialog.product.statusUser.order.idUser == currentUserId)
                     .show(childFragmentManager, null)
             }
             name.text = dialog.product?.name

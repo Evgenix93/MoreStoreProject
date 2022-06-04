@@ -101,6 +101,7 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
         val monthDiff = dayDiff/30
         //binding.timeFromRegistrationTextView.text = if(monthDiff > 0)"зарегистрирован(а) $monthDiff месяца назад"
         //else "зарегистрирован(а) $dayDiff дня назад"
+        Log.d("mylog", "current time ${System.currentTimeMillis()}")
         val calendar = Calendar.getInstance().apply { timeInMillis = user.createdAt.toLong() * 1000 }
         binding.timeFromRegistrationTextView.text =
             "зарегистрирован(а) ${calendar.get(Calendar.DAY_OF_MONTH)}.${calendar.get(Calendar.MONTH) + 1}.${calendar.get(

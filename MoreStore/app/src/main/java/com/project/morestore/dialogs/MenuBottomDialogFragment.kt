@@ -25,8 +25,8 @@ import com.project.morestore.util.setEndDrawable
 import com.project.morestore.util.setStartDrawable
 import com.tbuonomo.viewpagerdotsindicator.setPaddingVertical
 
-class MenuBottomDialogFragment(val avatar: String?) :BottomSheetDialogFragment(){
-    constructor(type :Type, isMediaLoaded: Boolean? = null, avatar: String? = null): this(avatar){
+class MenuBottomDialogFragment(val avatar: String?, private val showReviewBtn: Boolean) :BottomSheetDialogFragment(){
+    constructor(type :Type, isMediaLoaded: Boolean? = null, avatar: String? = null, showReviewBtn: Boolean = false): this(avatar, showReviewBtn){
         arguments = bundleOf("type" to type.ordinal, "media" to isMediaLoaded)
     }
     private lateinit var views :BottomdialogMenuBinding
@@ -145,14 +145,19 @@ class MenuBottomDialogFragment(val avatar: String?) :BottomSheetDialogFragment()
         MenuItem(drb(R.drawable.ic_camera), R.string.chat_menu_addMedia, arguments?.getBoolean("media"), drb(R.drawable.ic_ellipse))
     )}
 
-    private val profile :List<MenuItem> by lazy { listOf(
-        MenuItem(drb(R.drawable.ic_arrow_geo), R.string.chat_menu_profile),
-        //MenuItem(drb(R.drawable.ic_phone), R.string.chat_menu_call),
-        MenuItem(drb(R.drawable.ic_star_bubble), R.string.chat_menu_feedback),
-        MenuItem(drb(R.drawable.ic_circle_crossed), R.string.chat_menu_block),
-        MenuItem(drb(R.drawable.ic_exclamation_round), R.string.chat_menu_report),
-        MenuItem(drb(R.drawable.ic_trash), R.string.chat_menu_delete)
-    )}
+    private val profile :List<MenuItem> by lazy {
+        listOfNotNull(
+            MenuItem(drb(R.drawable.ic_arrow_geo), R.string.chat_menu_profile),
+            //MenuItem(drb(R.drawable.ic_phone), R.string.chat_menu_call),
+            if (showReviewBtn) MenuItem(
+                drb(R.drawable.ic_star_bubble),
+                R.string.chat_menu_feedback
+            ) else null,
+            MenuItem(drb(R.drawable.ic_circle_crossed), R.string.chat_menu_block),
+            MenuItem(drb(R.drawable.ic_exclamation_round), R.string.chat_menu_report),
+            MenuItem(drb(R.drawable.ic_trash), R.string.chat_menu_delete)
+        )
+    }
 
     private val payment: List<MenuItemCard> by lazy { listOf(
         MenuItemCard(drb(R.drawable.ic_google_pay), "Google Pay", true),

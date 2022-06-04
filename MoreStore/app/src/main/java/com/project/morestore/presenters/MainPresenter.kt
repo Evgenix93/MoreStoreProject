@@ -146,7 +146,10 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                             else if(it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
                             else if(it.statusUser.buy?.status != 2) 7 else 1
                             1 -> 8
-                            else -> 1
+                            else -> if((it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) &&
+                                (it.idUser == currentUserId || it.statusUser.buy.idUser == currentUserId )) 6
+                            else if(it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) 7
+                            else 1
                         }
                         it.status = status
                     }
