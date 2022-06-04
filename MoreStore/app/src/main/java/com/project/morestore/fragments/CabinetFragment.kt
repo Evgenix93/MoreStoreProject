@@ -8,7 +8,6 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -39,13 +38,13 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkToken()
         setClickListeners()
         showBottomNav()
         initToolbar()
         initProductsButtons()
         initList()
         getFilter()
-        checkToken()
     }
 
     private fun checkToken(){
@@ -228,36 +227,38 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             return
         }
         if(result is Boolean) {
-            val tokenIsEmpty = result as Boolean
-            if (tokenIsEmpty) {
-                val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
-                findNavController().navigate(R.id.cabinetGuestFragment, null , navOptions)
+            if (result) {
+                val navOptions = NavOptions.Builder()
+                    .setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false)
+                    .build()
+                findNavController().navigate(R.id.cabinetGuestFragment, null, navOptions)
             } else {
                 getUserInfo()
             }
         }
 
-        if(result is List<*>){
-            Log.d("MyDebug", "list is loaded ${result as List<Product>}")
-            showLoading(false)
-            binding.noProductsTextView.isVisible = result.isEmpty()
-            binding.glassesImageView.isVisible = result.isEmpty()
-            binding.createNewProductBtn.isVisible = result.isEmpty()
-            binding.createNewProductBtn2.isVisible = result.isNotEmpty()
-            binding.emptyScrollView.isVisible = false
-            binding.productList.isVisible = result.isNotEmpty()
-            productAdapter.updateList(result as List<Product>)
-            when{
-                result.firstOrNull()?.status == 1 || result.firstOrNull()?.status == 6 ->
-                    binding.activeCountTextView.text = result.size.toString()
-                result.firstOrNull()?.status == 8 -> binding.archivedCountTextView.text = result.size.toString()
+        if(result is List<*>) {
+            if (result.first() is Product) {
+                Log.d("MyDebug", "list is loaded ${result as List<Product>}")
+                showLoading(false)
+                binding.noProductsTextView.isVisible = result.isEmpty()
+                binding.glassesImageView.isVisible = result.isEmpty()
+                binding.createNewProductBtn.isVisible = result.isEmpty()
+                binding.createNewProductBtn2.isVisible = result.isNotEmpty()
+                binding.emptyScrollView.isVisible = false
+                binding.productList.isVisible = result.isNotEmpty()
+                productAdapter.updateList(result)
+            } else {
+                val sizes = result as List<Int>
+                binding.activeCountTextView.text = sizes[0].toString()
+                binding.archivedCountTextView.text = sizes[1].toString()
             }
-
         }
 
         if(result is Filter){
             bindFilter(result)
         }
+
     }
 
     override fun successNewCode() {

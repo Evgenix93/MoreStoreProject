@@ -165,7 +165,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     fun getUser() = user
 
-    fun setUser(user: User){
+    fun setUser(user: User) {
         this.user = user
     }
 
@@ -223,19 +223,25 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             when (response?.code()) {
                 200 -> {
                     response.body()?.forEach {
-                        val status = when{
+                        val status = when {
                             it.statusUser?.order?.status == 1 -> 8
                             it.statusUser?.order?.status == 0 -> 6
                             else -> it.status
                         }
                         it.status = status
                     }
-                    if(isActive) {
+                    if (isActive) {
                         viewState.loaded(
-                            response.body()!!.filter { it.status == 1 || it.status == 6 })
+                            response.body()!!
+                                .filter { it.status == 1 || it.status == 6 })
+                    } else {
+                        viewState.loaded(
+                            response.body()!!.filter { it.status == 8 }
+                        )
                     }
-                    else
-                        viewState.loaded(response.body()!!.filter{it.status == 8})
+                    viewState.loaded(listOf(response.body()!!
+                        .filter { it.status == 1 || it.status == 6 }.size,
+                        response.body()!!.filter { it.status == 8 }.size))
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -258,10 +264,10 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 200 -> {
                     val currentUserId = authRepository.getUserId()
                     response.body()?.forEach {
-                        val status = when(it.statusUser?.order?.status) {
+                        val status = when (it.statusUser?.order?.status) {
                             0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
-                            else if(it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
-                            else if(it.statusUser.buy?.status != 2) 7 else 1
+                            else if (it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
+                            else if (it.statusUser.buy?.status != 2) 7 else 1
                             1 -> 8
                             else -> 1
                         }
@@ -556,7 +562,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getSellersWishList(){
+    fun getSellersWishList() {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.getSellersWishList()
@@ -576,7 +582,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     }
 
 
-    fun addDeleteSellersInWishList(sellersIds: List<Long>){
+    fun addDeleteSellersInWishList(sellersIds: List<Long>) {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.addDeleteSellerInWishList(BrandWishList(sellersIds))
@@ -674,41 +680,42 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun saveFilter() {
         presenterScope.launch {
             val filter = userRepository.getFilter()
-            val brandsId = filter.brands.map{it.id}
-            val forWhoId =  filter.chosenForWho.mapIndexedNotNull{index, checked ->
-                if(checked){
-                    when(index){
+            val brandsId = filter.brands.map { it.id }
+            val forWhoId = filter.chosenForWho.mapIndexedNotNull { index, checked ->
+                if (checked) {
+                    when (index) {
                         0 -> 140L
                         1 -> 141L
                         2 -> 142L
                         else -> null
                     }
-                }
-                else
+                } else
                     null
             }
-            val stylesId = filter.chosenStyles.map{it.id}
-            val sizesId = filter.chosenTopSizesWomen.map{it.id.toLong()} + filter.chosenBottomSizesWomen.map{it.id.toLong()} +
-                    filter.chosenShoosSizesWomen.map{it.id.toLong()} + filter.chosenTopSizesMen.map{it.id.toLong()} +
-                    filter.chosenBottomSizesMen.map{it.id.toLong()} + filter.chosenShoosSizesMen.map{it.id.toLong()} +
-                    filter.chosenTopSizesKids.map{it.id.toLong()} + filter.chosenBottomSizesKids.map{it.id.toLong()} +
-                    filter.chosenShoosSizesKids.map{it.id.toLong()}
-            val colorsId = filter.colors.map{it.id}
-            val materials = filter.chosenMaterials.map{it.id}
-                if (userRepository.saveFilter())
-                    viewState.success("Фильтр сохранен")
-                else
-                    viewState.error("Ошибка сохранения")}
-            }
+            val stylesId = filter.chosenStyles.map { it.id }
+            val sizesId =
+                filter.chosenTopSizesWomen.map { it.id.toLong() } + filter.chosenBottomSizesWomen.map { it.id.toLong() } +
+                        filter.chosenShoosSizesWomen.map { it.id.toLong() } + filter.chosenTopSizesMen.map { it.id.toLong() } +
+                        filter.chosenBottomSizesMen.map { it.id.toLong() } + filter.chosenShoosSizesMen.map { it.id.toLong() } +
+                        filter.chosenTopSizesKids.map { it.id.toLong() } + filter.chosenBottomSizesKids.map { it.id.toLong() } +
+                        filter.chosenShoosSizesKids.map { it.id.toLong() }
+            val colorsId = filter.colors.map { it.id }
+            val materials = filter.chosenMaterials.map { it.id }
+            if (userRepository.saveFilter())
+                viewState.success("Фильтр сохранен")
+            else
+                viewState.error("Ошибка сохранения")
+        }
+    }
 
 
     fun saveFavoriteSearch() {
         presenterScope.launch {
             viewState.loading()
-            val response = userRepository.saveFavoriteSearch(FavoriteSearchValue(value = userRepository.getFilter()))
+            val response =
+                userRepository.saveFavoriteSearch(FavoriteSearchValue(value = userRepository.getFilter()))
             when (response?.code()) {
                 200 -> {
-
 
 
                 }
@@ -744,8 +751,8 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                                 }
                                 1 -> {
                                     viewState.loaded(response.body()!!.filterNot {
-                                          it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
-                                                  it.id == 18 || it.id == 21 || it.id == 22
+                                        it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
+                                                it.id == 18 || it.id == 21 || it.id == 22
                                     })
                                 }
                                 2 -> {
@@ -793,7 +800,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         viewState.loaded(userRepository.getFilter())
     }
 
-    fun saveRegions(regions: List<Region>){
+    fun saveRegions(regions: List<Region>) {
         val filter = userRepository.getFilter()
         filter.regions = regions
         userRepository.updateFilter(filter)
@@ -957,15 +964,15 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
     fun saveStyles(styles: List<Boolean>) {
         val filter = userRepository.getFilter()
-        val propertyStyles = styles.mapIndexedNotNull{index, isChecked ->
+        val propertyStyles = styles.mapIndexedNotNull { index, isChecked ->
 
-                when(index){
-                    0 -> Property(143, "Вечерний", null, null, isChecked)
-                    1 -> Property(108, "Деловой", null, null, isChecked)
-                    2 -> Property(109, "Повседневный", null, null, isChecked)
-                    3 -> Property(110, "Спортивный", null, null, isChecked)
-                    else -> null
-                }
+            when (index) {
+                0 -> Property(143, "Вечерний", null, null, isChecked)
+                1 -> Property(108, "Деловой", null, null, isChecked)
+                2 -> Property(109, "Повседневный", null, null, isChecked)
+                3 -> Property(110, "Спортивный", null, null, isChecked)
+                else -> null
+            }
 
         }
         filter.chosenStyles = propertyStyles
@@ -987,13 +994,13 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getCurrentUserAddress(){
+    fun getCurrentUserAddress() {
         val currentAddress = userRepository.getCurrentUserAddress()
-        if(currentAddress != null)
+        if (currentAddress != null)
             viewState.loaded(currentAddress)
     }
 
-    fun changeCurrentUserAddress(address: Address){
+    fun changeCurrentUserAddress(address: Address) {
         userRepository.changeCurrentUserAddress(address)
         viewState.success(Unit)
     }
@@ -1016,10 +1023,10 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         getProperties(12)
     }
 
-    fun loadOnboardingData(){
+    fun loadOnboardingData() {
         presenterScope.launch {
             val response = userRepository.loadBrandsProperties()
-            when(response?.code()){
+            when (response?.code()) {
                 200 -> {
                     Log.d("MyDebug", "load brandsPropert success")
                     viewState.loaded(response.body()!!)
@@ -1032,7 +1039,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun changeSortingType(sort: String){
+    fun changeSortingType(sort: String) {
         val filter = userRepository.getFilter().apply { sortingType = sort }
         userRepository.updateFilter(filter)
     }
