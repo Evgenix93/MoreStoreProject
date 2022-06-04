@@ -110,7 +110,7 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             .load(user.avatar?.photo.toString())
             .into(binding.avatarImageView)
 
-        binding.userRatingTextView.text = user.rating?.value.toString()
+        binding.userRatingTextView.text = String.format("%.1f", user.rating?.value).replace(",", ".")
 
     }
 
@@ -238,8 +238,8 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             }
         }
 
-        if(result is List<*>) {
-            if (result.first() is Product) {
+        if(result is List<*> && result.isNotEmpty()) {
+            if (result.firstOrNull() is Product) {
                 Log.d("MyDebug", "list is loaded ${result as List<Product>}")
                 showLoading(false)
                 binding.noProductsTextView.isVisible = result.isEmpty()
@@ -254,6 +254,10 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
                 binding.activeCountTextView.text = sizes[0].toString()
                 binding.archivedCountTextView.text = sizes[1].toString()
             }
+        }
+
+        if(result is List<*> && result.isEmpty()){
+            showLoading(false)
         }
 
         if(result is Filter){
