@@ -9,6 +9,7 @@ import com.project.morestore.models.*
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
+import com.project.morestore.repositories.ReviewRepository
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.isEmailValid
 import com.project.morestore.util.isPhoneValid
@@ -25,6 +26,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     private val userRepository = UserRepository(context)
     private val authRepository = AuthRepository(context)
     private val productRepository = ProductRepository(context)
+    private val reviewsRepository = ReviewRepository()
     private lateinit var user: User
     private var photoUri: Uri? = null
     private var searchJob: Job? = null
@@ -239,9 +241,11 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                             response.body()!!.filter { it.status == 8 }
                         )
                     }
+                    val reviews = reviewsRepository.getReviews(authRepository.getUserId())
                     viewState.loaded(listOf(response.body()!!
                         .filter { it.status == 1 || it.status == 6 }.size,
-                        response.body()!!.filter { it.status == 8 }.size))
+                        response.body()!!.filter { it.status == 8 }.size,
+                    reviews.size))
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -1042,5 +1046,13 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     fun changeSortingType(sort: String) {
         val filter = userRepository.getFilter().apply { sortingType = sort }
         userRepository.updateFilter(filter)
+    }
+
+    fun getCurrentUserReviews(){
+        presenterScope.launch {
+            viewState.loading()
+            val reviews = reviewsRepository.getReviews(authRepository.getUserId()).map { ReviewItem(it) }
+            viewState.loaded(reviews)
+        }
     }
 }

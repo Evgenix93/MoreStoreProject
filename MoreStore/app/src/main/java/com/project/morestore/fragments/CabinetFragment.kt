@@ -8,23 +8,29 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
+import com.project.morestore.adapters.ReviewsAdapter
 import com.project.morestore.databinding.FragmentCabinetBinding
 import com.project.morestore.fragments.base.BottomNavigationMvpFragment
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
+import com.project.morestore.models.ReviewItem
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
+import com.project.morestore.util.dp
+import com.project.morestore.util.setSpace
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.ktx.moxyPresenter
 import java.util.*
@@ -33,6 +39,7 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private val binding: FragmentCabinetBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
+    private var reviewsAdapter: ReviewsAdapter by autoCleared()
     private var emptyActiveListImageRes = R.drawable.glasses_women
     private var emptyOnModerationImageRes = R.drawable.shoe_women
 
@@ -130,6 +137,10 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             getProducts(false)
             setUpActiveButton(binding.archivedProductsBtn, binding.archivedCountTextView, binding.archiveTextView)
         }
+        binding.reviewsBtn.setOnClickListener {
+            presenter.getCurrentUserReviews()
+            setUpActiveButton(binding.reviewsBtn, binding.reviewsCountTextView, binding.reviewsTextView)
+        }
     }
 
     private fun setUpActiveButton(btn: FrameLayout, countTextView: TextView, listNameTextView: TextView){
@@ -149,6 +160,12 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
         binding.archivedCountTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
         binding.archiveTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
         binding.archivedCountTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
+
+
+        binding.reviewsBtn.background.setTint(ResourcesCompat.getColor(resources, R.color.white, null))
+        binding.reviewsCountTextView.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
+        binding.reviewsTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.black, null))
+        binding.reviewsCountTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
 
 
         btn.background.setTint(ResourcesCompat.getColor(resources, R.color.gray3, null))
@@ -184,6 +201,12 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
     }
 
     private fun initList(){
+        reviewsAdapter = ReviewsAdapter({}, {
+            val photosArray = it.photo?.map { it.photo }?.toTypedArray()!!
+            findNavController().navigate(
+                R.id.mediaFragment, bundleOf(MediaFragment.PHOTOS to photosArray )
+            )
+        })
         productAdapter = ProductAdapter(null) {
             Log.d("MyDebug", "onProduct Click")
             findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToProductDetailsFragment(it, null, true))
@@ -240,6 +263,9 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
 
         if(result is List<*> && result.isNotEmpty()) {
             if (result.firstOrNull() is Product) {
+                binding.productList.setSpace(0.dp)
+                binding.productList.adapter = productAdapter
+                binding.productList.layoutManager = GridLayoutManager(requireContext(), 2)
                 Log.d("MyDebug", "list is loaded ${result as List<Product>}")
                 showLoading(false)
                 binding.noProductsTextView.isVisible = result.isEmpty()
@@ -249,15 +275,24 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
                 binding.emptyScrollView.isVisible = false
                 binding.productList.isVisible = result.isNotEmpty()
                 productAdapter.updateList(result)
-            } else {
+            } else if(result.firstOrNull() is Int) {
                 val sizes = result as List<Int>
                 binding.activeCountTextView.text = sizes[0].toString()
                 binding.archivedCountTextView.text = sizes[1].toString()
+                binding.reviewsCountTextView.text = sizes[2].toString()
+            }else {
+                showLoading(false)
+                binding.productList.setSpace(8.dp)
+                binding.productList.adapter = reviewsAdapter
+                binding.productList.layoutManager = LinearLayoutManager(requireContext())
+                reviewsAdapter.setItems(result as List<ReviewItem>)
             }
         }
 
         if(result is List<*> && result.isEmpty()){
             showLoading(false)
+            productAdapter.updateList(emptyList())
+            reviewsAdapter.setItems(emptyList())
         }
 
         if(result is Filter){

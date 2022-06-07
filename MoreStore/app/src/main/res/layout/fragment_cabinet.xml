@@ -147,6 +147,46 @@
 
                 </FrameLayout>
 
+                <FrameLayout
+                    android:id="@+id/reviewsBtn"
+                    android:layout_width="114dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@drawable/product_status_btn_shape"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardElevation="0dp"
+                    android:backgroundTint="@color/white">
+
+                    <TextView
+                        android:id="@+id/reviewsTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="12dp"
+                        android:text="Отзывы"
+                        android:textAppearance="@font/manrope_medium"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/reviewsCountTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_semibold"
+                        android:textColor="@color/gray2"
+                        android:textSize="10sp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="76dp"
+                        android:background="@drawable/circle_background"
+                        android:gravity="center"
+                        android:text="0"
+                        android:backgroundTint="@color/gray3"/>
+
+                </FrameLayout>
+
+
 
             </LinearLayout>
 
@@ -318,6 +358,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="4dp"
+        android:layout_marginBottom="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

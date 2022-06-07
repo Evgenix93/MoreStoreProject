@@ -105,13 +105,24 @@
             android:layout_marginEnd="10dp"
             android:src="@drawable/ic_sharenetwork" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            >
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/profileBtn"
+            android:layout_weight="1"
+            android:layout_marginEnd="16dp"
             android:layout_width="162dp"
             android:layout_height="46dp"
             android:layout_gravity="bottom"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginStart="5dp"
+
             app:cardBackgroundColor="@color/black4"
             app:cardCornerRadius="7dp"
             app:strokeColor="@color/gray10"
@@ -137,15 +148,17 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/subscribeBtn"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+
             style="@style/buttonStyle"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="5dp"
+
             android:text="Подписаться"
             app:icon="@drawable/ic_plus">
         </com.google.android.material.button.MaterialButton>
+        </LinearLayout>
     </FrameLayout>
 
     <com.google.android.material.tabs.TabLayout
