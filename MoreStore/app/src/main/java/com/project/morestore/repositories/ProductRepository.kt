@@ -8,6 +8,8 @@ import android.net.Uri
 import android.util.Base64
 import android.util.Log
 import androidx.core.content.FileProvider
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.project.morestore.models.*
 import com.project.morestore.singletones.CreateProductData
 
@@ -1117,6 +1119,19 @@ class ProductRepository(private val context: Context) {
             null
         }
     }
+
+    /*class ProductPagingSource: PagingSource<Int, Product>(){
+        override fun getRefreshKey(state: PagingState<Int, Product>): Int? {
+
+        }
+
+        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
+            val currentKey = params.key ?: 0
+
+
+        }
+
+    }*/
 
     companion object {
         const val USER_PREFS = "user_prefs"
