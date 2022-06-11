@@ -25,6 +25,7 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
         Option("Местоположение", true),
         Option("Цвет", false),
         Option("Материал", false),
+        Option("Вес, длина, ширина, высота", false)
     )
 
     class OptionViewHolder(view: View, onClick: (Int) -> Unit) : RecyclerView.ViewHolder(view) {
