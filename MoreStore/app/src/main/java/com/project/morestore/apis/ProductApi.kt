@@ -10,6 +10,7 @@ interface ProductApi {
     @GET("product")
     suspend fun getProducts(
         @Query("limit") limit: Int?,
+        @Query("offset") offset: Int?,
         @Query("optionally") options: String?,
         @Query("filter") filter: String,
         @Query("user") userId: Long?,

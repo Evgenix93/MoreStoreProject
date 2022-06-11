@@ -28,6 +28,13 @@ class ProductRepository(private val context: Context) {
     private val onBoardingApi = Network.onBoardingApi
     private val productApi = Network.productApi
 
+    fun productPagingSource(query: String? = null,
+                            filter: Filter? = null,
+                            userId: Long? = null,
+                            productId: Long? = null,
+                            status: Int? = null,
+                            isGuest: Boolean = false) = ProductPagingSource(query, filter, userId, productId, status, isGuest)
+
     suspend fun getAllSizes(): Response<List<Size>>? {
         return try {
             onBoardingApi.getAllSizes()
@@ -84,7 +91,8 @@ class ProductRepository(private val context: Context) {
         productId: Long? = null,
         limit: Int? = null,
         status: Int? = null,
-        isGuest: Boolean = false
+        isGuest: Boolean = false,
+        offset: Int? = null
     ): Response<List<Product>>? {
         return try {
             var categoryStr = listOf<String>()
@@ -209,6 +217,7 @@ class ProductRepository(private val context: Context) {
            // Log.d("MyDebug", "getProducts filter = $filter")
             productApi.getProducts(
                 limit,
+                offset,
                 if(isGuest)null else PRODUCT_OPTIONS,
                 (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr + statusStr).joinToString(
                     ";"
@@ -719,7 +728,8 @@ class ProductRepository(private val context: Context) {
         id: Long? = null,
         newPrice: String? = null,
         name: String? = null,
-        status: Int? = null
+        status: Int? = null,
+        dimensions: ProductDimensions? = null
     ) {
 
         val property = when (forWho) {
@@ -777,6 +787,9 @@ class ProductRepository(private val context: Context) {
 
         if (status != null)
             CreateProductData.createProductData.status = status
+
+        if(dimensions != null)
+            CreateProductData.createProductData.packageDimensions = dimensions
 
         Log.d("Debug", "createProductData = ${CreateProductData.createProductData}")
     }
@@ -1120,18 +1133,50 @@ class ProductRepository(private val context: Context) {
         }
     }
 
-    /*class ProductPagingSource: PagingSource<Int, Product>(){
+    inner class ProductPagingSource(val query: String? = null,
+                                    val filter: Filter? = null,
+                                    val userId: Long? = null,
+                                    val productId: Long? = null,
+                                    val status: Int? = null,
+                                    val isGuest: Boolean = false): PagingSource<Int, Product>(){
         override fun getRefreshKey(state: PagingState<Int, Product>): Int? {
+            val anchorPosition = state.anchorPosition ?: return null
+            return anchorPosition - state.config.pageSize/2
+
 
         }
 
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
             val currentKey = params.key ?: 0
+            val response = getProducts(query, filter, userId, productId, params.loadSize, status, isGuest, currentKey)
+
+            return LoadResult.Page(
+                data = if(response?.code() == 200) response.body()!!.onEach {
+                    val currentUserId = Token.userId
+                    val status = when (it.statusUser?.order?.status) {
+                        0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
+                        else if (it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
+                        else if (it.statusUser.buy?.status != 2) 7 else 1
+                        1 -> 8
+                        else -> if ((it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) &&
+                            (it.idUser == currentUserId || it.statusUser.buy.idUser == currentUserId)
+                        ) 6
+                        else if (it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) 7
+                        else 1
+                    }
+                    it.status = status
+                } else emptyList(),
+                prevKey = if(currentKey == 0) null else currentKey - params.loadSize,
+                nextKey = currentKey + params.loadSize + 1
+
+            )
+
+
 
 
         }
 
-    }*/
+    }
 
     companion object {
         const val USER_PREFS = "user_prefs"

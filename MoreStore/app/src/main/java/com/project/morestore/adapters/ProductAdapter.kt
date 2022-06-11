@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -16,7 +18,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductBinding
 import com.project.morestore.models.Product
 
-class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>(){ //PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
     private var list = listOf<Product>()
     private var wishedList = listOf<Product>()
 
@@ -122,6 +124,18 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
     fun updateWishedList(newList: List<Product>){
         wishedList = newList
         notifyDataSetChanged()
+    }
+
+     class ProductDiffCallback: DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem == newItem
+        }
+
+
     }
 
 }

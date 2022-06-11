@@ -22,5 +22,7 @@ data class CreateProductData(
     var about: String? = null,
     var phone: String? = null,
     var property: MutableList<Property2>? = null,
-    var id: Long? = null
+    var id: Long? = null,
+    @Json(name = "package")
+    var packageDimensions: ProductDimensions? = null
 )

@@ -18,8 +18,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -37,6 +39,7 @@ import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.launch
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -298,6 +301,9 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
         }
         if(result is List<*>)
         productAdapter.updateList(result as List<Product>)
+            //lifecycleScope.launch {
+              //  productAdapter.submitData(result as PagingData<Product>)
+            //}
 
         if(result is Filter)
             binding.changeRegionCard.isVisible = !result.isCurrentLocationChosen

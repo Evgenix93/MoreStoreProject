@@ -5,6 +5,9 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.google.firebase.messaging.FirebaseMessaging
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
@@ -34,6 +37,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val chatRepository = ChatRepository(context)
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
+    private val ITEMS_PER_PAGE = 50
 
 
     fun addProductToWishList(id: Long) {
@@ -115,7 +119,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         Log.d("mylog", "getProducts")
         presenterScope.launch {
             viewState.loading()
-            val response = if (productCategories != null || forWho != null) {
+            val response =/*val flow =*/  if (productCategories != null || forWho != null) {
                 val filter = Filter(
                         chosenForWho = forWho.orEmpty(),
                         categories = productCategories.orEmpty(),
@@ -128,6 +132,18 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     limit = 500,
                     isGuest = isGuest
                 )
+            /*Pager(
+                config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
+                pagingSourceFactory = {
+                    productRepository.productPagingSource(
+                        query = queryStr,
+                        filter = filter,
+                        productId = productId,
+                        isGuest = isGuest
+
+                    )
+                }
+            ).flow.cachedIn(presenterScope)*/
             } else
                 productRepository.getProducts(
                         query = queryStr,
@@ -136,37 +152,53 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     limit = 500,
                     isGuest = isGuest
                 )
+            /*Pager(
+                config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
+                pagingSourceFactory = {
+                    productRepository.productPagingSource(
+                        query = queryStr,
+                        filter = if (isFiltered) userRepository.getFilter() else null,
+                        productId = productId,
+                        isGuest = isGuest
 
-            when (response?.code()) {
-                200 -> {
-                    val currentUserId = authRepository.getUserId()
-                    response.body()?.forEach {
-                        val status = when(it.statusUser?.order?.status) {
-                            0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
-                            else if(it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
-                            else if(it.statusUser.buy?.status != 2) 7 else 1
-                            1 -> 8
-                            else -> if((it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) &&
-                                (it.idUser == currentUserId || it.statusUser.buy.idUser == currentUserId )) 6
-                            else if(it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) 7
-                            else 1
-                        }
-                        it.status = status
-                    }
-
-                    if (productId == null) viewState.loaded(response.body()!!) else viewState.loaded(
-                        response.body()?.first()!!
                     )
                 }
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
-                404 -> {
-                    viewState.loaded(emptyList<Product>())
-                    viewState.error(getStringFromResponse(response.errorBody()!!))
+            ).flow.cachedIn(presenterScope)*/
+            //flow.collectLatest {
+              //  viewState.loaded(it)
 
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
+                when (response?.code()) {
+                    200 -> {
+                        val currentUserId = authRepository.getUserId()
+                        response.body()?.forEach {
+                            val status = when (it.statusUser?.order?.status) {
+                                0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
+                                else if (it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
+                                else if (it.statusUser.buy?.status != 2) 7 else 1
+                                1 -> 8
+                                else -> if ((it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) &&
+                                    (it.idUser == currentUserId || it.statusUser.buy.idUser == currentUserId)
+                                ) 6
+                                else if (it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) 7
+                                else 1
+                            }
+                            it.status = status
+                        }
 
+                        if (productId == null) viewState.loaded(response.body()!!) else viewState.loaded(
+                            response.body()?.first()!!
+                        )
+                    }
+                    400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                    404 -> {
+                        viewState.loaded(emptyList<Product>())
+                        viewState.error(getStringFromResponse(response.errorBody()!!))
+
+                    }
+                    500 -> viewState.error("500 Internal Server Error")
+                    null -> viewState.error("нет интернета")
+
+                //}
             }
         }
     }
@@ -839,7 +871,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             id: Long? = null,
             newPrice: String? = null,
             name: String? = null,
-            status: Int? = null
+            status: Int? = null,
+            dimensions: ProductDimensions? = null
     ) {
         productRepository.updateCreateProductData(
                 forWho,
@@ -855,7 +888,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 id,
                 newPrice,
                 name,
-                status
+                status,
+                dimensions
 
         )
     }

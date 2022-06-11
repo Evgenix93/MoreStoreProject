@@ -23,7 +23,7 @@ object Network {
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://morestore.app-rest.ru/api/v1/")
+        .baseUrl("https://vm-f0c61e3b.na4u.ru/api/v1/")
         .client(client)
         .addConverterFactory(MoshiConverterFactory.create(
             Moshi.Builder().add(CalendarAdapter).build()
