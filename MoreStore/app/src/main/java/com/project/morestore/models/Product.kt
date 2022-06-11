@@ -34,4 +34,6 @@ data class Product(
     val wishlist: Boolean?,
     @Json(name = "status_user")
     val statusUser: ProductUserStatus?,
+    @Json(name = "package")
+    val packageDimensions: ProductDimensions
 ): Parcelable

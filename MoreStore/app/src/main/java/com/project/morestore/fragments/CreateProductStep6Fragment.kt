@@ -106,7 +106,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                 }
                 6 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
                 7 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
-                8 -> {}
+                8 -> {findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCreateProductPackageFragment())}
             }
 
         }
@@ -198,7 +198,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                     phone = args.product!!.phone,
                     extProperties = property,
                     id = args.product!!.id,
-                    name = args.product!!.name
+                    name = args.product!!.name,
+                    dimensions = args.product!!.packageDimensions
                 )
                 presenter.loadCreateProductData()
                 val map = mutableMapOf<Int, File>()

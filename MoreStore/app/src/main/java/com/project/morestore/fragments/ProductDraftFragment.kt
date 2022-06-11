@@ -66,7 +66,8 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
                 it.priceNew?.toDouble().toString(),
                 it.sale,
                 it.category,
-                it.property?.toTypedArray() ?: emptyArray()
+                it.property?.toTypedArray() ?: emptyArray(),
+                it.packageDimensions
             )
         }
         productAdapter.setItems(feedBackProducts)
@@ -94,7 +95,8 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
             feedbackProduct.property?.toList(),
             null,
             null,
-            null
+            null,
+            feedbackProduct.packageDimensions
         )
         findNavController().navigate(ProductDraftFragmentDirections.actionProductDraftFragmentToCreateProductStep6Fragment(product = product))
     }

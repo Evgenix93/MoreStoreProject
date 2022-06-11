@@ -172,6 +172,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/saveButton"
+        android:enabled="false"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/buttonStyle"

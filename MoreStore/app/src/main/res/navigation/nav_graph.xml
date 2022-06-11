@@ -870,6 +870,9 @@
         <action
             android:id="@+id/action_createProductStep6Fragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_createProductStep6Fragment_to_createProductPackageFragment"
+            app:destination="@id/createProductPackageFragment" />
     </fragment>
     <fragment
         android:id="@+id/photoFinishFragment"
@@ -1283,5 +1286,9 @@
         android:id="@+id/blackListFragment"
         android:name="com.project.morestore.fragments.BlackListFragment"
         android:label="BlackListFragment" />
+    <fragment
+        android:id="@+id/createProductPackageFragment"
+        android:name="com.project.morestore.fragments.CreateProductPackageFragment"
+        android:label="CreateProductPackageFragment" />
 
 </navigation>
