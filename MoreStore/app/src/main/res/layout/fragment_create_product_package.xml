@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/priceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Вес, длина, ширина, высота"
+        android:textAppearance="@style/bold_24"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13"
+        app:layout_constraintBottom_toTopOf="@+id/saveButton"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        />
+
+    <TextView
+        android:id="@+id/setPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Укажите вес и размеры товара"
+        app:layout_constraintTop_toBottomOf="@id/priceTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textAppearance="@style/regular_14"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/weightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Вес (кг)"
+        app:layout_constraintTop_toBottomOf="@id/setPriceTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="28dp"
+        android:textAppearance="@style/bold_16"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/weightInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/widthTextView"
+        app:layout_constraintTop_toBottomOf="@+id/setPriceTextView"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        app:boxStrokeColor="@color/gray1"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/weightEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:singleLine="true"
+            android:padding="0dp"
+            android:textAppearance="@style/regular_16"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/lengthTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Длина (см)"
+        app:layout_constraintTop_toBottomOf="@id/weightTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:textAppearance="@style/bold_16"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lengthInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/weightInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/widthTextView"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        app:boxStrokeColor="@color/gray1"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lengthEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:singleLine="true"
+            android:padding="0dp"
+            android:textAppearance="@style/regular_16"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/widthTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ширина (см)"
+        app:layout_constraintTop_toBottomOf="@id/lengthTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:textAppearance="@style/bold_16"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/widthInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/lengthInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/widthTextView"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        app:boxStrokeColor="@color/gray1"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/widthEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:singleLine="true"
+            android:padding="0dp"
+            android:textAppearance="@style/regular_16"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/heightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Высота (см)"
+        app:layout_constraintTop_toBottomOf="@id/widthTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:textAppearance="@style/bold_16"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/heightInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/widthInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/widthTextView"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        app:boxStrokeColor="@color/gray1"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/heightEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:singleLine="true"
+            android:padding="0dp"
+            android:textAppearance="@style/regular_16"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/buttonStyle"
+        android:text="@string/save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="28dp"
+        android:layout_marginHorizontal="10dp"
+        app:backgroundTint="@color/gray1"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <include layout="@layout/toolbar_create_product"
+        android:id="@+id/toolbar"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
