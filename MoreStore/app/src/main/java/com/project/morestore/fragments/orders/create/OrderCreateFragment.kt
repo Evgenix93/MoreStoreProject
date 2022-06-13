@@ -54,6 +54,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         initRadioPlaceButtons()
         initRadioDeliveryButtons()
         initViews()
+        getSupportDialog()
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -118,6 +119,16 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
 
     override fun showMessage(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun supportDialogLoaded(chat: Chat) {
+        binding.toolbar.actionIcon.setOnClickListener{
+            findNavController().navigate(
+                R.id.chatFragment,
+                bundleOf(Chat::class.java.simpleName to Chat.Support::class.java.simpleName,
+                    ChatFragment.DIALOG_ID_KEY to chat.id)
+            )
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -300,6 +311,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.toolbar.backIcon.setOnClickListener {
             presenter.onBackClick()
         }
+    }
+
+    private fun getSupportDialog(){
+        presenter.getSupportDialog()
     }
 
     companion object{

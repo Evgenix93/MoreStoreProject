@@ -1,5 +1,6 @@
 package com.project.morestore.mvpviews
 
+import com.project.morestore.models.Chat
 import com.project.morestore.models.Product
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
@@ -20,4 +21,7 @@ interface OrderDetailsView: MvpView {
     fun orderItemLoaded(orderItem: OrderItem)
     @OneExecution
     fun setProfileInfo(avatar: String, name: String)
+
+    @OneExecution
+    fun supportDialogLoaded(chat: Chat)
 }

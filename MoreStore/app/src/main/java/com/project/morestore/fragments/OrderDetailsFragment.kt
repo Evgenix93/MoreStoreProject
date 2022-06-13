@@ -45,13 +45,13 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             presenter.getProductById(args.orderItem!!.productId)
         }
         else presenter.getOrderItem(args.orderId)
-
+        getSupportDialog()
     }
 
     private fun initToolbar(){
         binding.toolbar.titleTextView.text = "Статус заказа"
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.actionIcon.isVisible = false
+        binding.toolbar.actionIcon.setImageResource(R.drawable.ic_support_black)
     }
 
 
@@ -97,6 +97,10 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 }
             ).show()
         }
+    }
+
+    private fun getSupportDialog(){
+        presenter.getSupportDialog()
     }
 
     private fun setProductInfo(product: Product) {
@@ -301,6 +305,16 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             .into(binding.sellerAvatarImageView)
         binding.sellerNameTextView.text = name
         binding.name.text = name
+    }
+
+    override fun supportDialogLoaded(chat: Chat) {
+        binding.toolbar.actionIcon.setOnClickListener{
+            findNavController().navigate(
+                R.id.chatFragment,
+                bundleOf(Chat::class.java.simpleName to Chat.Support::class.java.simpleName,
+                    ChatFragment.DIALOG_ID_KEY to chat.id)
+            )
+        }
     }
 
 
