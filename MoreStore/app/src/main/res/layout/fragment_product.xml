@@ -710,7 +710,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
-                android:text="Город"
+                android:text="Адрес"
                 android:textAppearance="@style/regular_16"
                 android:textColor="@color/gray2"
                 app:layout_constraintStart_toStartOf="parent"

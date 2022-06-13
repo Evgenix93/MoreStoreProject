@@ -853,8 +853,22 @@ class ProductRepository(private val context: Context) {
                     400,
                     e.message?.toResponseBody(null) ?: "сетевая ошибка".toResponseBody(null)
                 )
-            else
-                Response.error(400, "".toResponseBody(null))
+            else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = productApi.createProductGetError(CreateProductData.createProductData)
+                    if (response.code() == 500) {
+                        Response.error(500, "500 internal sever error".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: "ошибка".toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, "ошибка".toResponseBody(null))
+                }
+            }
         }
     }
 

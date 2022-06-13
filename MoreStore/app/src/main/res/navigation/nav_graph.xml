@@ -873,6 +873,9 @@
         <action
             android:id="@+id/action_createProductStep6Fragment_to_createProductPackageFragment"
             app:destination="@id/createProductPackageFragment" />
+        <action
+            android:id="@+id/action_createProductStep6Fragment_to_myAddressesFragment"
+            app:destination="@id/myAddressesFragment" />
     </fragment>
     <fragment
         android:id="@+id/photoFinishFragment"

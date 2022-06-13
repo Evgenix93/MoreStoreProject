@@ -24,6 +24,8 @@ import com.project.morestore.fragments.CitiesFragment.Companion.REQUEST_KEY
 import com.project.morestore.fragments.CitiesFragment.Companion.SELECTED
 import com.project.morestore.fragments.CitiesFragment.Companion.SINGLE
 import com.project.morestore.fragments.CitiesFragment.Companion.TYPE
+import com.project.morestore.fragments.orders.create.OrderCreateFragment
+import com.project.morestore.fragments.orders.create.OrderCreateFragmentDirections
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -97,12 +99,38 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                 }
                 4 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductDescriptionFragment())
                 5 -> {
-                    setFragmentResultListener(CitiesFragment.REQUEST_KEY){_ , bundle ->
+                    /*setFragmentResultListener(CitiesFragment.REQUEST_KEY){_ , bundle ->
                         val regionName = bundle.getParcelable<ParcelRegion>(SINGLE)!!.entity.name
                         presenter.updateCreateProductData(address = regionName)
                         loadCreateProductData()
                     }
-                    findNavController().navigate(R.id.citiesFragment, bundleOf(TYPE to 0))
+                    findNavController().navigate(R.id.citiesFragment, bundleOf(TYPE to 0))*/
+
+                    setFragmentResultListener(MyAddressesFragment.ADDRESS_REQUEST){_, bundle ->
+                        val address = bundle.getParcelable<MyAddress>(MyAddressesFragment.ADDRESS_KEY)
+                        Log.d("mylog", "address $address")
+                        //chosenAddress = address
+                        val cityStr = address?.address?.city
+                        val streetStr = "ул. ${address?.address?.street}"
+                        val houseStr = if(address?.address?.house != null) "дом ${address.address.house}" else null
+                        //val housingStr = if(address?.address?.housing != null) "кп.${address.address.housing}" else null
+                        //val buildingStr = if(address?.address?.building != null) "стр.${address.address.building}" else null
+                        //val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
+                        val strings =
+                            arrayOf(cityStr, streetStr, houseStr).filterNotNull()
+                        //binding.chosenAddressTextView.text = strings.joinToString(", ")
+                        val chosenAddressStr = strings.joinToString(", ")
+                        //binding.chosenAddressTextView.isVisible = true
+                        //binding.chooseOnMapTextView.text = "Изменить"
+                        presenter.updateCreateProductData(address = chosenAddressStr)
+                        loadCreateProductData()
+
+
+                    }
+                    findNavController().navigate(
+                        CreateProductStep6FragmentDirections
+                        .actionCreateProductStep6FragmentToMyAddressesFragment(true,
+                             MyAddressesFragment.ADDRESSES_HOME))
                 }
                 6 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
                 7 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())

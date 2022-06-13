@@ -41,11 +41,15 @@
 
     <TextView
         android:id="@+id/regionTextView"
-        android:layout_width="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Санкт-Петербург"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/starTextView"
+        app:layout_constraintEnd_toStartOf="@id/arrowIcon"
         android:layout_marginTop="16dp"
         android:layout_marginStart="10dp"
         android:textAppearance="@style/semibold_12"
@@ -53,6 +57,7 @@
         android:visibility="visible"/>
 
     <ImageView
+        android:id="@+id/arrowIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_polygon"

@@ -57,6 +57,9 @@ interface ProductApi {
     @POST("product")
     suspend fun createProduct(@Body createProductData: CreateProductData): Response<List<CreatedProductId>>
 
+    @POST("product")
+    suspend fun createProductGetError(@Body createProductData: CreateProductData): Response<String>
+
 
     @POST("brand")
     suspend fun addBrand(@Body brand: NewProductBrand): Response<NewProductBrand>

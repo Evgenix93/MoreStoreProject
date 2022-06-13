@@ -51,7 +51,7 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
 
             binding.regionTextView.isVisible = option.name == "Местоположение"
             if (option.name == "Местоположение")
-                binding.regionTextView.text = option.address
+                binding.regionTextView.text = option.address?.substringBefore(", кв.")
 
         }
     }
