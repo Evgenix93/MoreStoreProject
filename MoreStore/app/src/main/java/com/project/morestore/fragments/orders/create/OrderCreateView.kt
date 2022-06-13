@@ -1,5 +1,6 @@
 package com.project.morestore.fragments.orders.create
 
+import com.project.morestore.models.Chat
 import com.project.morestore.models.Product
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
@@ -18,4 +19,7 @@ interface OrderCreateView : MvpView {
 
     @OneExecution
     fun showMessage(message: String)
+
+    @OneExecution
+    fun supportDialogLoaded(chat: Chat)
 }

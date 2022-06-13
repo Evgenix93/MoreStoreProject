@@ -167,4 +167,26 @@ class OrderCreatePresenter(context: Context)
 
     }
 
+    fun getSupportDialog() {
+        presenterScope.launch {
+            val response = chatRepository.getDialogs()
+            when (response?.code()) {
+                200 -> {
+                    val chats = response.body()?.filter { dialogWrapper ->
+                        dialogWrapper.dialog.user.id == 1L
+
+                    }?.map {
+                        Chat.Support(
+                            it.dialog.id,
+                            "Служба поддержки",
+                            "Помощь с товаром"
+                        )
+                    }
+                    if(chats != null)
+                        viewState.supportDialogLoaded(chats.first())
+                }
+            }
+        }
+    }
+
 }
