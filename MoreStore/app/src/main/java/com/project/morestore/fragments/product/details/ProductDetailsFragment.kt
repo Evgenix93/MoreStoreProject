@@ -223,7 +223,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
         binding.productCityTextView.text = product.address?.fullAddress
         binding.productBrandTextView.text =
-            if (product.brand == null || product.status == 1) "Другое" else product.brand.name
+            if (product.brand == null || product.brand.status == 1) "Другое" else product.brand.name
         binding.productSizeTextView.text =
             product.property?.find { Range.create(1, 9).contains(it.id.toInt()) }?.value
         binding.sizeChar.isVisible = false
