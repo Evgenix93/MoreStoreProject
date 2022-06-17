@@ -123,18 +123,18 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
 
     private fun initProductsButtons(){
         binding.activeProductsBtn.setOnClickListener {
-            getProducts(true)
+            getProducts(true, false)
             setUpActiveButton(binding.activeProductsBtn, binding.activeCountTextView, binding.activeProductsTextView)
             binding.glassesImageView.setImageResource(emptyActiveListImageRes)
 
         }
         binding.onModerationBtn.setOnClickListener {
-            productAdapter.updateList(emptyList())
+            getProducts(true, true)
             setUpActiveButton(binding.onModerationBtn, binding.onModerationCountTextView, binding.onModerationTextView)
             binding.glassesImageView.setImageResource(emptyOnModerationImageRes)
         }
         binding.archivedProductsBtn.setOnClickListener {
-            getProducts(false)
+            getProducts(false, false)
             setUpActiveButton(binding.archivedProductsBtn, binding.archivedCountTextView, binding.archiveTextView)
         }
         binding.reviewsBtn.setOnClickListener {
@@ -174,9 +174,9 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
         listNameTextView.setTextColor(ResourcesCompat.getColor(resources, R.color.green, null))
     }
 
-    private fun getProducts(isActive: Boolean){
+    private fun getProducts(isActive: Boolean, isOnModeration: Boolean){
         Log.d("MyDebug", "getActiveProducts")
-        presenter.getUserProducts(isActive)
+        presenter.getUserProducts(isActive, isOnModeration)
     }
 
     private fun getFilter(){
@@ -247,7 +247,7 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             binding.profileBtn.setOnClickListener {
                 findNavController().navigate(CabinetFragmentDirections.actionCabinetFragmentToProfileFragment(result))
             }
-            getProducts(true)
+            getProducts(true, false)
             return
         }
         if(result is Boolean) {
@@ -278,8 +278,9 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             } else if(result.firstOrNull() is Int) {
                 val sizes = result as List<Int>
                 binding.activeCountTextView.text = sizes[0].toString()
-                binding.archivedCountTextView.text = sizes[1].toString()
-                binding.reviewsCountTextView.text = sizes[2].toString()
+                binding.onModerationCountTextView.text = sizes[1].toString()
+                binding.archivedCountTextView.text = sizes[2].toString()
+                binding.reviewsCountTextView.text = sizes[3].toString()
             }else {
                 showLoading(false)
                 binding.productList.setSpace(8.dp)

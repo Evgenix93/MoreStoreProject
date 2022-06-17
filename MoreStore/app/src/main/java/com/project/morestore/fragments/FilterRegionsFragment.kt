@@ -153,7 +153,7 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
     override fun loaded(result: Any) {
         showLoading(false)
         if(result is Address){
-            if(result.fullAddress.isNotEmpty()) {
+            if(result.fullAddress?.isNotEmpty() == true) {
                 binding.imageView25.isVisible = true
                 binding.textView42.isVisible = true
                 binding.textView42.text = result.fullAddress.substringBefore(",")

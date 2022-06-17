@@ -309,7 +309,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
             binding.changeRegionCard.isVisible = !result.isCurrentLocationChosen
 
         if (result is Address)
-            if(result.fullAddress.isNotEmpty()) {
+            if(result.fullAddress?.isNotEmpty() == true) {
                 binding.regionInfoTextView.text =
                     "Хотите искать объявления в ${result.fullAddress.substringBefore(",")}?"
                 binding.yesTextView.isVisible = true

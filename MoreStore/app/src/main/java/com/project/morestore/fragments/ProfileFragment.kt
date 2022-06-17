@@ -102,7 +102,7 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
             }
         else {
                 val currentAddress = result as Address
-                binding.currentRegionTextView.text = currentAddress.fullAddress.substringBefore(",")
+                binding.currentRegionTextView.text = currentAddress.fullAddress?.substringBefore(",")
             }
     }
 

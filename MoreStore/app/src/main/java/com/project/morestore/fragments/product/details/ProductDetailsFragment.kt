@@ -219,7 +219,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             }
         }
 
-        binding.productCityTextView.text = product.address?.fullAddress
+        binding.productCityTextView.text = product.address?.fullAddress ?: "-"
         binding.productBrandTextView.text =
             if (product.brand == null) "Другое" else product.brand.name
         binding.productSizeTextView.text =

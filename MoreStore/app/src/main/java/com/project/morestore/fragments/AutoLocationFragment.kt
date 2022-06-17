@@ -135,12 +135,12 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
     override fun loaded(result: Any) {
         showLoading(false)
         if(result is Address) {
-            binding.autoLocationResultTextView.text = "Ваш город ${result.fullAddress.substringBefore(',')}?"
+            binding.autoLocationResultTextView.text = "Ваш город ${result.fullAddress?.substringBefore(',')}?"
             binding.yesBtn.isVisible = true
             binding.noBtn.isVisible = true
             binding.yesBtn.setOnClickListener {
                 if(args.isForFilter)
-                presenter.changeUserCity(result.fullAddress.substringBefore(","))
+                presenter.changeUserCity(result.fullAddress?.substringBefore(","))
                 else
                     presenter.changeCurrentUserAddress(result)
             }

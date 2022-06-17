@@ -87,10 +87,10 @@ class NewAddressPresenter(
                 viewState.notFoundCity()
                 return@launch
             }
-            address.fullAddress.substringBefore(',')
+            address.fullAddress?.substringBefore(',')
                 .also {
-                    city = it
-                    viewState.showCity(it)
+                    city = it.orEmpty()
+                    viewState.showCity(it.orEmpty())
                     validateForm()
                 }
         }

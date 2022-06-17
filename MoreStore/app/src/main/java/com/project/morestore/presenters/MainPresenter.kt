@@ -825,7 +825,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             viewState.loading()
             val productAddress = productRepository.loadCreateProductData().address
             val productStatus = productRepository.loadCreateProductData().status
-            updateCreateProductData(address = productAddress ?: "Москва", status = productStatus ?: 1)
+            updateCreateProductData(address = productAddress?.replace("ул. ", "")
+                ?.replace("дом ", "") ?: "Москва", status = productStatus ?: 1)
 
             val response = productRepository.createProduct()
             when (response?.code()) {

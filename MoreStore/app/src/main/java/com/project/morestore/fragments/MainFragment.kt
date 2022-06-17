@@ -489,7 +489,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         //        findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegistration3Fragment(phoneOrEmail = result.email.orEmpty(), userId = result.id.toInt(), fromMainFragment = true))
 
         if(result is Address){
-            if(result.fullAddress.isNotEmpty())
+            if(result.fullAddress?.isNotEmpty() == true)
                 presenter.changeCurrentUserAddress(result)
             else
                 requestPermissions()

@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -22,6 +23,7 @@ class AddBrandFragment : MvpAppCompatFragment(R.layout.fragment_brand_not_found)
     companion object {
         const val REQUEST_BRAND = "request_brand"
         const val BRAND = "brand"
+        const val BRAND_ID= "brand_id"
     }
     private val binding: FragmentBrandNotFoundBinding by viewBinding()
     private val presenter by moxyPresenter { NewBrandPresenter(Network.brandApi) }
@@ -57,9 +59,13 @@ class AddBrandFragment : MvpAppCompatFragment(R.layout.fragment_brand_not_found)
         binding.loader.isVisible = show
     }
 
-    override fun finish(brand :String) {
-        setFragmentResult(REQUEST_BRAND, bundleOf(BRAND to brand))
+    override fun finish(brand :String, brandId: Long) {
+        setFragmentResult(REQUEST_BRAND, bundleOf(BRAND to brand, BRAND_ID to brandId ))
         findNavController().navigateUp()
+    }
+
+    override fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
     //endregion View implementation
 }

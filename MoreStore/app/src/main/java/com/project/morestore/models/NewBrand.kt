@@ -7,7 +7,8 @@ import com.squareup.moshi.JsonClass
 data class NewBrand(
     val name :String,
     @Json(name = "id_category")
-    val category :Int = 3
+    val category :Int = 3,
+    val status: Int
 )
 /*
 {

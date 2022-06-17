@@ -218,10 +218,10 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    fun getUserProducts(isActive: Boolean) {
+    fun getUserProducts(isActive: Boolean, isOnModeration: Boolean) {
         presenterScope.launch {
             viewState.loading()
-            val response = productRepository.getCurrentUserProducts()
+            val response =  productRepository.getCurrentUserProducts()
             when (response?.code()) {
                 200 -> {
                     response.body()?.forEach {
@@ -233,9 +233,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                         it.status = status
                     }
                     if (isActive) {
+                        Log.d("mydebug", response.body().toString())
+                        if(isOnModeration.not())
                         viewState.loaded(
                             response.body()!!
                                 .filter { it.status == 1 || it.status == 6 })
+                        else viewState.loaded(response.body()!!.filter { it.status == 0 })
                     } else {
                         viewState.loaded(
                             response.body()!!.filter { it.status == 8 }
@@ -244,6 +247,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                     val reviews = reviewsRepository.getReviews(authRepository.getUserId())
                     viewState.loaded(listOf(response.body()!!
                         .filter { it.status == 1 || it.status == 6 }.size,
+                        response.body()!!.filter { it.status == 0 }.size,
                         response.body()!!.filter { it.status == 8 }.size,
                     reviews.size))
                 }

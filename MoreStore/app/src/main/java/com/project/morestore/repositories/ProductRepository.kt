@@ -90,7 +90,7 @@ class ProductRepository(private val context: Context) {
         userId: Long? = null,
         productId: Long? = null,
         limit: Int? = null,
-        status: Int? = null,
+        status: Int? = 1,
         isGuest: Boolean = false,
         offset: Int? = null
     ): Response<List<Product>>? {
@@ -136,7 +136,7 @@ class ProductRepository(private val context: Context) {
                 productIdStr = listOf("id=$it")
             }
 
-            val statusStr = "status= ${status ?: 1}"
+            val statusStr = if(status != null) "status= ${status ?: 1}" else ""
 
             productPropertyStr =
                 filter?.chosenTopSizesWomen?.filter { it.isSelected }
@@ -251,7 +251,7 @@ class ProductRepository(private val context: Context) {
     }
 
     suspend fun getCurrentUserProducts(): Response<List<Product>>? {
-        return getProducts(userId = Token.userId.toLong())
+        return getProducts(userId = Token.userId.toLong(), status = null, limit = 500)
     }
 
     suspend fun getCurrentUserProductsWithStatus(status: Int): Response<List<Product>>? {
