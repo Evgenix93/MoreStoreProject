@@ -13,6 +13,7 @@ data class ProductBrand(
     @Json(name = "id_category")
     val idCategory: Long?,
     var isChecked: Boolean?,
-    var isWished: Boolean?
+    var isWished: Boolean?,
+    val status: Int?
 
 ): Parcelable

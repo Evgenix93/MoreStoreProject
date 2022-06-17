@@ -140,7 +140,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                         Chat.Support(
                             it.dialog.id,
                             "Служба поддержки",
-                            "Помощь с товаром"
+                            it.dialog.lastMessage?.text ?: "Помощь с товаром"
                         )
                     }
                     return chats.orEmpty()

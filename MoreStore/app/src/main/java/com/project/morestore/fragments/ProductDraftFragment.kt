@@ -81,6 +81,7 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
             "",
             "",
             5,
+            null,
             feedbackProduct.price.toFloatOrNull() ?: 0f,
             feedbackProduct.newPrice?.toFloatOrNull() ?: 0f,
             feedbackProduct.sale,

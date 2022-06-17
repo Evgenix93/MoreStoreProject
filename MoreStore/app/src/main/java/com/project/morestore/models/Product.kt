@@ -16,6 +16,8 @@ data class Product(
     @Json(name = "phone_show")
     val phoneShow: String?,
     var status: Int,
+    @Json(name = "comment_moderation")
+    val commentModeration: String?,
     val price: Float,
     @Json(name = "price_new")
     val priceNew: Float?,
