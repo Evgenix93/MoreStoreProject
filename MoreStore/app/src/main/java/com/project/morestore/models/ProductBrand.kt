@@ -14,6 +14,6 @@ data class ProductBrand(
     val idCategory: Long?,
     var isChecked: Boolean?,
     var isWished: Boolean?,
-    val status: Int?
+    val status: Int? = null
 
 ): Parcelable

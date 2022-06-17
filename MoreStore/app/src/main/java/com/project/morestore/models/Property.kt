@@ -17,6 +17,6 @@ data class Property(
     @Json(name = "id_property")
     val idProperty: Long? = null,
     val value: String? = null,
-    val comment: String?
+    val comment: String? = null
 
 ): Parcelable
