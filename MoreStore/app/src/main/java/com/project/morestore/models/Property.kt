@@ -16,6 +16,7 @@ data class Property(
     var isChecked: Boolean?,
     @Json(name = "id_property")
     val idProperty: Long? = null,
-    val value: String? = null
+    val value: String? = null,
+    val comment: String?
 
 ): Parcelable

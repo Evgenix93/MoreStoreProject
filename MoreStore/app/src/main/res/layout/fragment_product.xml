@@ -49,6 +49,7 @@
                 />
 
             <View
+                android:id="@+id/moderationBackgroundView"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:visibility="gone"
@@ -56,6 +57,7 @@
                 android:background="@color/orange2"/>
 
             <TextView
+                android:id="@+id/moderationTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="На модерации"
@@ -750,7 +752,7 @@
                 android:textAppearance="@style/regular_16"
                 android:textColor="@color/gray2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+                app:layout_constraintTop_toBottomOf="@+id/sizeErrorImageView" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -762,7 +764,7 @@
                 android:textAppearance="@style/regular_16"
                 android:textColor="@color/gray2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+                app:layout_constraintTop_toBottomOf="@+id/conditionErrorImageView" />
 
             <TextView
                 android:id="@+id/productNumberTextView"
@@ -911,7 +913,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:src="@drawable/ic_chat_circle_text"
-                app:layout_constraintTop_toBottomOf="@id/colorCircle4"
+                app:layout_constraintTop_toBottomOf="@id/textView14"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"/>
@@ -924,8 +926,56 @@
                 android:text="Проверьте цвет товара. Он не чёрный"
                 android:textAppearance="@style/regular_16"
                 android:textColor="@color/red"
-                app:layout_constraintTop_toBottomOf="@id/colorCircle4"
+                app:layout_constraintTop_toBottomOf="@id/textView14"
                 app:layout_constraintStart_toEndOf="@id/errorImageView"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"/>
+
+            <ImageView
+                android:id="@+id/sizeErrorImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:src="@drawable/ic_chat_circle_text"
+                app:layout_constraintTop_toBottomOf="@id/textView12"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/sizeErrorTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Проверьте размер"
+                android:textAppearance="@style/regular_16"
+                android:textColor="@color/red"
+                app:layout_constraintTop_toBottomOf="@id/textView12"
+                app:layout_constraintStart_toEndOf="@id/sizeErrorImageView"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"/>
+
+            <ImageView
+                android:id="@+id/conditionErrorImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:src="@drawable/ic_chat_circle_text"
+                app:layout_constraintTop_toBottomOf="@id/textView13"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/conditionErrorTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Проверьте состояние"
+                android:textAppearance="@style/regular_16"
+                android:textColor="@color/red"
+                app:layout_constraintTop_toBottomOf="@id/textView13"
+                app:layout_constraintStart_toEndOf="@id/sizeErrorImageView"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="8dp"/>
 

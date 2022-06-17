@@ -3,7 +3,9 @@ package com.project.morestore.fragments.product.details
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.util.Range
@@ -221,7 +223,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
         binding.productCityTextView.text = product.address?.fullAddress
         binding.productBrandTextView.text =
-            if (product.brand == null) "Другое" else product.brand.name
+            if (product.brand == null || product.status == 1) "Другое" else product.brand.name
         binding.productSizeTextView.text =
             product.property?.find { Range.create(1, 9).contains(it.id.toInt()) }?.value
         binding.sizeChar.isVisible = false
@@ -241,7 +243,11 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.likesCountTextView.text = product.statistic?.wishlist?.total.toString()
         binding.discountTextView.text = "-${product.sale}%"
         binding.sellerNameTextView.text = product.user?.name
-        binding.productDescriptionTextView.text = product.about
+        binding.productDescriptionTextView.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(product.about, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            Html.fromHtml(product.about)
+        }
         binding.productNumberTextView.text = product.id.toString()
         binding.productUpLoadDateTextView.text =
             "${(System.currentTimeMillis() / 1000 - product.date) / 86400} дня назад"
@@ -273,6 +279,43 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             binding.heartIcon.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.red, null))
         else binding.heartIcon.imageTintList = null
        when(product.status){
+           0 -> {
+             if(product.commentModeration != null || product.property?.any{
+                   it.comment != null
+                 } == true){
+               binding.moderationBackgroundView.isVisible = true
+               binding.moderationTextView.isVisible = true
+               binding.moderationBackgroundView.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
+               binding.moderationTextView.text = "Отклонено модератором"
+               binding.error2ImageView.isVisible = true
+               binding.error2TextView.isVisible = true
+               binding.error2TextView.text = product.commentModeration
+               product.property?.filter{it.comment != null}?.forEach{ property ->
+                   property.idCategory?.let{
+                       when{
+                           it < 10 -> {
+                               binding.sizeErrorImageView.isVisible = true
+                               binding.sizeErrorTextView.isVisible = true
+                               binding.sizeErrorTextView.text = property.comment
+                           }
+                           it == 11L -> {
+                               binding.conditionErrorImageView.isVisible = true
+                               binding.conditionErrorTextView.isVisible = true
+                               binding.conditionErrorTextView.text = property.comment
+                           }
+                           it == 12L -> {
+                               binding.errorImageView.isVisible = true
+                               binding.errorTextView.isVisible = true
+                               binding.errorTextView.text = property.comment
+                           }
+                       }
+                   }
+               }
+             }else{
+                 binding.moderationBackgroundView.isVisible = true
+                 binding.moderationTextView.isVisible = true
+             }
+           }
            8 -> {
                binding.productSoldCardView.isVisible = true
                binding.addToCartBtn.isVisible = false
