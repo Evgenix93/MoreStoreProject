@@ -177,7 +177,7 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
             SortingType.NEW.value -> "Новое"
             SortingType.CHEAP.value -> "Дешевле"
             SortingType.EXPENSIVE.value -> "Дороже"
-            else -> "Новое"
+            else -> "Популярные"
         }
         )
     }
@@ -262,7 +262,7 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
                 0 -> SortingType.NEW.value
                 1 -> SortingType.CHEAP.value
                 2 -> SortingType.EXPENSIVE.value
-                else -> SortingType.NEW.value
+                else -> SortingType.POPULAR.value
             })
         }
     }
