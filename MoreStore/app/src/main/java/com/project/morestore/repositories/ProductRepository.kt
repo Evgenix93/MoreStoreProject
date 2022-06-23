@@ -101,6 +101,8 @@ class ProductRepository(private val context: Context) {
             var queryStr = listOf<String>()
             var productIdStr = listOf<String>()
             var productPropertyStr = listOf<String>()
+            val pricesFromStr = "price_start=${filter?.fromPrice ?: 0}"
+            val pricesEndStr = "price_end=${filter?.untilPrice ?: 0}"
 
             if (filter?.categories?.isNotEmpty() == true) {
                 categoryStr =
@@ -219,7 +221,7 @@ class ProductRepository(private val context: Context) {
                 limit,
                 offset,
                 if(isGuest)null else PRODUCT_OPTIONS,
-                (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr + statusStr).joinToString(
+                (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr + statusStr + pricesFromStr + pricesEndStr).joinToString(
                     ";"
                 ).also{Log.d("MyDebug", "getProducts filter = $it")},
                 userId,
