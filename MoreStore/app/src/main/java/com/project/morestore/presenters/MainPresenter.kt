@@ -144,14 +144,15 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     )
                 }
             ).flow.cachedIn(presenterScope)*/
-            } else
+            } else {
                 productRepository.getProducts(
-                        query = queryStr,
-                        filter = if (isFiltered) userRepository.getFilter() else null,
-                        productId = productId,
+                    query = queryStr,
+                    filter = if (isFiltered) userRepository.getFilter() else null,
+                    productId = productId,
                     limit = 500,
                     isGuest = isGuest
                 )
+            }
             /*Pager(
                 config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
                 pagingSourceFactory = {
@@ -169,6 +170,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
                 when (response?.code()) {
                     200 -> {
+                        val filter = userRepository.getFilter()
                         val currentUserId = authRepository.getUserId()
                         response.body()?.forEach {
                             val status = when (it.statusUser?.order?.status) {
@@ -184,10 +186,28 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                             }
                             it.status = status
                         }
-
-                        if (productId == null) viewState.loaded(response.body()!!) else viewState.loaded(
-                            response.body()?.first()!!
-                        )
+                        if(isFiltered) {
+                            val products = response.body()!!.toMutableList()
+                            filter.chosenProductStatus.forEachIndexed { index, chosen ->
+                                if (chosen.not())
+                                    when (index) {
+                                        0 -> products.removeAll(
+                                            response.body()!!.filter { it.status == 1 })
+                                        1 -> products.removeAll(
+                                            response.body()!!
+                                                .filter { it.status == 6 || it.status == 7 })
+                                        2 -> products.removeAll(
+                                            response.body()!!.filter { it.status == 8 })
+                                    }
+                            }
+                            if (productId == null) viewState.loaded(products.toList()) else viewState.loaded(
+                                products.toList().first()
+                            )
+                        }else{
+                            if (productId == null) viewState.loaded(response.body()!!) else viewState.loaded(
+                                response.body()!!.first()
+                            )
+                        }
                     }
                     400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                     404 -> {
