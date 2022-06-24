@@ -567,6 +567,18 @@ class UserRepository(val context: Context) {
             val filterJsonString = sharedPrefs.getString(ProductRepository.FILTER_KEY, null)
             if (filterJsonString != null){
                 FilterState.filter = Moshi.Builder().build().adapter(Filter::class.java).fromJson(filterJsonString)!!
+            }else{
+                try{
+                    val propertiesId = Network.userApi.loadBrandsProperties(Token.userId).body()?.last()?.data
+                        ?.property?.split(';')?.mapNotNull{it.toLongOrNull()}
+                    when{
+                        propertiesId?.any{it == 140L} == true -> FilterState.filter.chosenForWho = listOf(true, false, false)
+                        propertiesId?.any{it == 141L} == true -> FilterState.filter.chosenForWho = listOf(false, true, false)
+                        propertiesId?.any{it == 142L} == true -> FilterState.filter.chosenForWho = listOf(false, false, true)
+                    }
+                }catch(e: Throwable){
+
+                }
             }
             FilterState.isLoadedFilter = true
         }
@@ -580,8 +592,19 @@ class UserRepository(val context: Context) {
         FilterState.filter = filter
     }
 
-    fun clearFilter(){
-        FilterState.filter = Filter()
+   suspend fun clearFilter(){
+       FilterState.filter = Filter()
+        try{
+            val propertiesId = Network.userApi.loadBrandsProperties(Token.userId).body()?.last()?.data
+                ?.property?.split(';')?.mapNotNull{it.toLongOrNull()}
+            when{
+                propertiesId?.any{it == 140L} == true -> FilterState.filter.chosenForWho = listOf(true, false, false)
+                propertiesId?.any{it == 141L} == true -> FilterState.filter.chosenForWho = listOf(false, true, false)
+                propertiesId?.any{it == 142L} == true -> FilterState.filter.chosenForWho = listOf(false, false, true)
+            }
+        }catch(e: Throwable){
+
+        }
     }
 
     fun reserveFilter(){

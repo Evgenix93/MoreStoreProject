@@ -270,7 +270,9 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
     }
 
     fun clearFilter(){
-        userRepository.clearFilter()
+        presenterScope.launch{
+            userRepository.clearFilter()
+        }
     }
 
 
