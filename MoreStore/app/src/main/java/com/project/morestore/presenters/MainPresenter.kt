@@ -812,6 +812,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             Log.d("MyToken", "token = ${getToken()}")
             if(getToken().isEmpty()) {
                 getProducts(isFiltered = false)
+                getBanners(1)
                 return@launch
             }
             val fireBaseToken = getFcmToken()
@@ -1125,7 +1126,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = userRepository.loadBrandsProperties()
             when (response?.code()) {
                 200 -> {
-                    viewState.loaded(Unit)
+                    //viewState.loaded(Unit)
+                    viewState.loaded(response.body()!!)
                 }
                 null -> viewState.loaded(Unit)
                 else -> {
@@ -1242,4 +1244,19 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
            }
        }
    }
+
+    fun getBanners(sex: Int){
+        Log.d("mytest", "getBanners")
+        presenterScope.launch {
+            val response = productRepository.getBanners()
+            response?.let {
+                if(it.body()!!.isEmpty()) return@launch
+                when(sex){
+                    1 -> viewState.loaded(it.body()!!.filter { banner -> banner.sex == "1"  })
+                    2 -> viewState.loaded(it.body()!!.filter {banner -> banner.sex == "2"   })
+                    3 -> viewState.loaded(it.body()!!.filter { banner -> banner.sex == "3" })
+                }
+            }
+        }
+    }
 }

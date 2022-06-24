@@ -53,6 +53,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     private var isMainLoaded = false
     private var currentSuggestionModels: SuggestionModels? = null
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
+    private var viewPagerAdapter: MainFragmenViewPagerAdapter by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -131,7 +132,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     private fun initViewPager() {
-        binding.viewPager2.adapter = MainFragmenViewPagerAdapter(this)
+        viewPagerAdapter = MainFragmenViewPagerAdapter(this)
+        binding.viewPager2.adapter = viewPagerAdapter
         binding.dots.setViewPager2(binding.viewPager2)
     }
 
@@ -456,7 +458,30 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     override fun loaded(result: Any) {
+        Log.d("mytest", result.toString())
         if (result is List<*>) {
+            if(result.firstOrNull() is Banner){
+                viewPagerAdapter.updateList(result as List<Banner>)
+                return
+            }
+            if(result.firstOrNull() is BrandsPropertiesDataWrapper){
+                Log.d("mytest", "onBoardingLoaded")
+                val properties = (result.last() as BrandsPropertiesDataWrapper).data.property
+                if(properties?.contains("140") == true && !properties.contains("141"))
+                    presenter.getBanners(3)
+                if(properties?.contains("141") == true && !properties.contains("140"))
+                    presenter.getBanners(2)
+                if(properties?.contains("142") == true)
+                    presenter.getBanners(1)
+                if(properties?.contains("140") == true && properties.contains("141"))
+                    presenter.getBanners(1)
+
+                loadFilter()
+
+                return
+
+
+            }
             if (!isMainLoaded) {
                 productAdapter.updateList(result as List<Product>)
                 isMainLoaded = true
@@ -481,8 +506,10 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             bindFilter(result)
         }
 
-        if (result is Unit)
+        if (result is Unit) {
             loadFilter()
+            presenter.getBanners(1)
+        }
 
         //if(result is User)
           //  if(result.phone == null)

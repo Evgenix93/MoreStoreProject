@@ -110,4 +110,7 @@ interface ProductApi {
     @POST("statistic/view")
     suspend fun viewProduct(@Body viewProductData: ViewProductData): Response<Boolean>
 
+    @GET("banner")
+    suspend fun getBanners(): Response<List<Banner>>
+
 }

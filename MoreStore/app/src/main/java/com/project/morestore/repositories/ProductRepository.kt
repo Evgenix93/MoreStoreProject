@@ -1149,6 +1149,15 @@ class ProductRepository(private val context: Context) {
         }
     }
 
+    suspend  fun getBanners(): Response<List<Banner>>?{
+        return try{
+            productApi.getBanners()
+        }catch (e: Throwable){
+            Log.e("MyDebug", "error = ${e.message}")
+            null
+        }
+    }
+
     inner class ProductPagingSource(val query: String? = null,
                                     val filter: Filter? = null,
                                     val userId: Long? = null,
