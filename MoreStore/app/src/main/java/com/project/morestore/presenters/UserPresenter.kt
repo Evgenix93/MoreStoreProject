@@ -739,8 +739,10 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
 
 
     fun clearFilter() {
-        userRepository.clearFilter()
-        viewState.success("Фильтр очищен")
+        presenterScope.launch {
+            userRepository.clearFilter()
+            viewState.success("Фильтр очищен")
+        }
     }
 
     fun getProductCategories() {
