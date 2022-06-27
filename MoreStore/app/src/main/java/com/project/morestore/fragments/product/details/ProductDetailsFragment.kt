@@ -287,11 +287,13 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                binding.moderationTextView.isVisible = true
                binding.moderationBackgroundView.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
                binding.moderationTextView.text = "Отклонено модератором"
-               binding.error2ImageView.isVisible = true
-               binding.error2TextView.isVisible = true
-               binding.error2TextView.text = product.commentModeration
+                if(product.commentModeration != null) {
+                    binding.error2ImageView.isVisible = true
+                    binding.error2TextView.isVisible = true
+                    binding.error2TextView.text = product.commentModeration
+                }
                product.property?.filter{it.comment != null}?.forEach{ property ->
-                   property.idCategory?.let{
+                   property.id.let{
                        when{
                            it < 10 -> {
                                binding.sizeErrorImageView.isVisible = true
