@@ -216,6 +216,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
                 val property = args.product!!.property?.map { Property2(it.idProperty!!, it.id) }
                     ?.toMutableList()
+                presenter.clearCreateProductData()
 
                 presenter.updateCreateProductData(
                     idCategory = args.product!!.category?.id,
