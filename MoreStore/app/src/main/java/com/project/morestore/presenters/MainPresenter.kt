@@ -895,6 +895,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                         arrayOf(cityStr, streetStr, houseStr)
                     val chosenAddressStr = strings.joinToString(", ")
                     updateCreateProductData(address = chosenAddressStr, status = 5)
+                    Log.d("mydebug", chosenAddressStr)
                     if (currentProductData.id == null)
                         createProduct()
                     else

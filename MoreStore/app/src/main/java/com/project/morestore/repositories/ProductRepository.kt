@@ -101,8 +101,8 @@ class ProductRepository(private val context: Context) {
             var queryStr = listOf<String>()
             var productIdStr = listOf<String>()
             var productPropertyStr = listOf<String>()
-            val pricesFromStr = "price_start=${filter?.fromPrice ?: 0}"
-            val pricesEndStr = "price_end=${filter?.untilPrice ?: 0}"
+            val pricesFromStr = if(filter?.fromPrice != null) "price_start=${filter.fromPrice}" else ""
+            val pricesEndStr = if(filter?.untilPrice != null) "price_end=${filter.untilPrice}" else ""
 
             if (filter?.categories?.isNotEmpty() == true) {
                 categoryStr =
