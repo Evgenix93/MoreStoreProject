@@ -34,7 +34,7 @@ class CreateProductPackageFragment: MvpAppCompatFragment(R.layout.fragment_creat
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
+       // binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
 
     }
 
@@ -107,7 +107,12 @@ class CreateProductPackageFragment: MvpAppCompatFragment(R.layout.fragment_creat
             binding.weightEditText.setText(productData.packageDimensions!!.weight)
             initSaveButton(true)
         }
-
+        binding.toolbar.actionIcon.setOnClickListener {
+            if(result.id == null)
+                SaveProductDialog { presenter.createDraftProduct() }.show(childFragmentManager, null)
+            else
+                findNavController().popBackStack(findNavController().previousBackStackEntry!!.destination.id, true)
+        }
     }
 
     override fun loading() {

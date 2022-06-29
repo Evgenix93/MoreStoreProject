@@ -34,7 +34,7 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     private fun initToolbar(){
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
+       // binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
 
     }
 
@@ -114,6 +114,12 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
       val createProductData = result as com.project.morestore.models.CreateProductData
       binding.originalPriceEditText.setText("${createProductData.price?.toFloat()?.toInt() ?: ""}")
       binding.salePriceEditText.setText("${createProductData.priceNew?.toFloat()?.toInt() ?: ""}")
+        binding.toolbar.actionIcon.setOnClickListener {
+            if(result.id == null)
+                SaveProductDialog { presenter.createDraftProduct() }.show(childFragmentManager, null)
+            else
+                findNavController().popBackStack(findNavController().previousBackStackEntry!!.destination.id, true)
+        }
     }
 
     override fun loading() {

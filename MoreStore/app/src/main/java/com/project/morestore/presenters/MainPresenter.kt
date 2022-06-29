@@ -18,6 +18,7 @@ import com.project.morestore.repositories.UserRepository
 import com.project.morestore.singletones.Token
 import kotlinx.coroutines.*
 import com.project.morestore.repositories.*
+import com.project.morestore.singletones.Network
 import com.project.morestore.util.SortingType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -35,6 +36,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val ordersRepository = OrdersRepository(context)
     private val userRepository = UserRepository(context)
     private val chatRepository = ChatRepository(context)
+    private val addressesRepository = AddressesRepository.apply { init(Network.addresses) }
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
     private val ITEMS_PER_PAGE = 50
@@ -847,15 +849,18 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val productAddress = productRepository.loadCreateProductData().address
             val productStatus = productRepository.loadCreateProductData().status
             updateCreateProductData(address = productAddress?.replace("ул. ", "")
-                ?.replace("дом ", "") ?: "Москва", status = productStatus ?: 1)
+                ?.replace("дом ", ""), status = productStatus ?: 1)
 
             val response = productRepository.createProduct()
             when (response?.code()) {
                 200 -> {
                     val photosUploaded = uploadProductPhotos(response.body()?.first()?.id!!)
                     val videosUploaded = uploadProductVideos(response.body()?.first()?.id!!)
-                    if (photosUploaded && videosUploaded)
-                        viewState.loaded(response.body()!!.first())
+                    if(productStatus == 5)
+                        changeProductStatus(response.body()!!.first().id, 5)
+                    else
+                        if (photosUploaded && videosUploaded)
+                           viewState.loaded(response.body()!!.first())
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -872,11 +877,33 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     fun createDraftProduct() {
         val currentProductData = productRepository.loadCreateProductData()
-        updateCreateProductData(status = 5)
-        if (currentProductData.id == null)
-            createProduct()
-        else
-            changeProduct()
+       // updateCreateProductData(status = 5)
+        if(currentProductData.address != null) {
+            if (currentProductData.id == null)
+                createProduct()
+            else
+                changeProduct()
+        }else{
+            presenterScope.launch{
+                val addresses = addressesRepository.getAllAddresses()
+                if(addresses.isNotEmpty()){
+                    val address = addresses.first()
+                    val cityStr = address.address.city
+                    val streetStr = "ул. ${address.address.street}"
+                    val houseStr = "дом ${address.address.house}"
+                    val strings =
+                        arrayOf(cityStr, streetStr, houseStr)
+                    val chosenAddressStr = strings.joinToString(", ")
+                    updateCreateProductData(address = chosenAddressStr, status = 5)
+                    if (currentProductData.id == null)
+                        createProduct()
+                    else
+                        changeProduct()
+                }else
+                    viewState.error("Для сохранения в черновики пожалуйста укажите хотя-бы один адрес")
+            }
+
+        }
     }
 
     fun updateCreateProductData(

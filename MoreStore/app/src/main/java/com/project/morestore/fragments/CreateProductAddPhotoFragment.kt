@@ -131,10 +131,10 @@ class CreateProductAddPhotoFragment :
             findNavController().popBackStack()
         }
         binding.toolbar.actionIcon.setOnClickListener {
-            SaveProductDialog { presenter.createDraftProduct() }.show(
-                childFragmentManager,
-                null
-            )
+            if(args.product == null)
+                SaveProductDialog { presenter.createDraftProduct() }.show(childFragmentManager, null)
+            else
+                findNavController().popBackStack(findNavController().previousBackStackEntry!!.destination.id, true)
         }
 
     }
