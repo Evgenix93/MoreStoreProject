@@ -67,7 +67,8 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
                 it.sale,
                 it.category,
                 it.property?.toTypedArray() ?: emptyArray(),
-                it.packageDimensions
+                it.packageDimensions,
+                it.address
             )
         }
         productAdapter.setItems(feedBackProducts)
@@ -86,7 +87,7 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
             feedbackProduct.newPrice?.toFloatOrNull() ?: 0f,
             feedbackProduct.sale,
             0L,
-            null,
+            feedbackProduct.address,
             feedbackProduct.photos?.toList() ?: emptyList(),
             null,
             null,

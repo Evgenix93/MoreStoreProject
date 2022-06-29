@@ -75,7 +75,7 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
         options[6].isChecked = colors.isNotEmpty()
         options[7].isChecked = materials.isNotEmpty()
         options[5].address = region
-        options[8].isChecked = dimensions != null
+        options[8].isChecked = dimensions?.length != null
         notifyDataSetChanged()
     }
 

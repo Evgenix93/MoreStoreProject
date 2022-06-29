@@ -18,7 +18,8 @@ class FeedbackProduct(
     val category: Category?,
     val property: Array<Property>?,
     @Json(name = "package")
-    val packageDimensions: ProductDimensions
+    val packageDimensions: ProductDimensions,
+    val address: Address?
 ){
    // val newPrice get() = price.toFloat()
    // val oldPrice = newPrice / (sale/100)
