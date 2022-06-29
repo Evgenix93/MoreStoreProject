@@ -38,8 +38,10 @@ class ProductCategoriesAdapter: RecyclerView.Adapter<ProductCategoriesAdapter.Pr
                 }
                 notifyDataSetChanged()
             },{isChecked, position ->
+                productCategories.forEach { it.isChecked = false }
                 productCategories[position].isChecked = isChecked
-                if(!isChecked){
+                notifyDataSetChanged()
+                /*if(!isChecked){
                     productCategories[0].isChecked = false
                     notifyItemChanged(0)
                 }else{
@@ -47,7 +49,7 @@ class ProductCategoriesAdapter: RecyclerView.Adapter<ProductCategoriesAdapter.Pr
                         productCategories[0].isChecked = true
                         notifyItemChanged(0)
                     }
-                }
+                }*/
             })
 
     }

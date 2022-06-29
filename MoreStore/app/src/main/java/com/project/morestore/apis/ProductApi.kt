@@ -14,7 +14,8 @@ interface ProductApi {
         @Query("optionally") options: String?,
         @Query("filter") filter: String,
         @Query("user") userId: Long?,
-    @Query("sort") sort: String?): Response<List<Product>>
+    @Query("sort") sort: String?,
+    @Query("status") status: Int?): Response<List<Product>>
 
 
     @GET("product")

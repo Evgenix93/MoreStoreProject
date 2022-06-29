@@ -85,7 +85,7 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
         when(result){
             is List<*> -> {
                val productCategories = result as List<ProductCategory>
-                productCategoriesAdapter.updateList(listOf(ProductCategory(0, "Все категории", null)) + productCategories)
+                productCategoriesAdapter.updateList(listOf(ProductCategory(0, "Любая категория", null)) + productCategories)
               presenter.getFilter()
             }
             is Filter -> {

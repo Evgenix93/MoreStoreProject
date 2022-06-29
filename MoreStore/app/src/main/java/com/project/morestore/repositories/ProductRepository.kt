@@ -106,7 +106,7 @@ class ProductRepository(private val context: Context) {
 
             if (filter?.categories?.isNotEmpty() == true) {
                 categoryStr =
-                    filter.categories.filter { it.isChecked == true }.map { "id_category=${it.id}" }
+                    filter.categories.filter { it.isChecked == true && it.name != "Любая категория" }.map { "id_category=${it.id}" }
             }
             if (filter?.brands?.isNotEmpty() == true) {
                 val brandsIds =
@@ -138,7 +138,7 @@ class ProductRepository(private val context: Context) {
                 productIdStr = listOf("id=$it")
             }
 
-            val statusStr = if(status != null) "status= ${status ?: 1}" else ""
+            //val statusStr = if(status != null) "status= ${status ?: 1}" else ""
 
             productPropertyStr =
                 filter?.chosenTopSizesWomen?.filter { it.isSelected }
@@ -221,11 +221,12 @@ class ProductRepository(private val context: Context) {
                 limit,
                 offset,
                 if(isGuest)null else PRODUCT_OPTIONS,
-                (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr + statusStr + pricesFromStr + pricesEndStr).joinToString(
+                (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr  + pricesFromStr + pricesEndStr).joinToString(
                     ";"
                 ).also{Log.d("MyDebug", "getProducts filter = $it")},
                 userId,
-                filter?.sortingType
+                filter?.sortingType,
+                status
             )
 
         } catch (e: Exception) {
