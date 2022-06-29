@@ -857,7 +857,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     val photosUploaded = uploadProductPhotos(response.body()?.first()?.id!!)
                     val videosUploaded = uploadProductVideos(response.body()?.first()?.id!!)
                     if(productStatus == 5)
-                        changeProduct()
+                        changeProductStatus(response.body()!!.first().id, 5)
                     else
                         if (photosUploaded && videosUploaded)
                            viewState.loaded(response.body()!!.first())
