@@ -857,7 +857,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     val photosUploaded = uploadProductPhotos(response.body()?.first()?.id!!)
                     val videosUploaded = uploadProductVideos(response.body()?.first()?.id!!)
                     if(productStatus == 5)
-                        changeProductStatus(response.body()!!.first().id, 5)
+                        changeProduct()
                     else
                         if (photosUploaded && videosUploaded)
                            viewState.loaded(response.body()!!.first())
@@ -894,6 +894,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     val strings =
                         arrayOf(cityStr, streetStr, houseStr)
                     val chosenAddressStr = strings.joinToString(", ")
+                    Log.d("MyTag", "address = $chosenAddressStr")
                     updateCreateProductData(address = chosenAddressStr, status = 5)
                     Log.d("mydebug", chosenAddressStr)
                     if (currentProductData.id == null)
