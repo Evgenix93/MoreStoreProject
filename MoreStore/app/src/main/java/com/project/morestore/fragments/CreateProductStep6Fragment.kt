@@ -197,7 +197,10 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         }
         //binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.saveProductDialog) }
         binding.toolbar.actionIcon.setOnClickListener {
+            if(args.product == null)
             SaveProductDialog { createDraftProduct() }.show(childFragmentManager, null)
+            else
+                findNavController().popBackStack()
         }
 
     }
@@ -380,7 +383,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     }
 
     override fun success() {
-
+        findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToMainFragment())
     }
 
 }

@@ -15,6 +15,7 @@ import com.project.morestore.dialogs.SaveProductDialog
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import com.project.morestore.util.args
 import com.project.morestore.util.autoCleared
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -47,7 +48,7 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
+
 
     }
 
@@ -126,6 +127,12 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
                     }
                 }
                 getColors()
+                binding.toolbar.actionIcon.setOnClickListener {
+                    if(result.id == null)
+                    SaveProductDialog { presenter.createDraftProduct() }.show(childFragmentManager, null)
+                    else
+                    findNavController().popBackStack(findNavController().previousBackStackEntry!!.destination.id, true)
+                }
             }
         }
     }
