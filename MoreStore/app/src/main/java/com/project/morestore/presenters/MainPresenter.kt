@@ -1280,8 +1280,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 if(it.body()!!.isEmpty()) return@launch
                 when(sex){
                     1 -> viewState.loaded(it.body()!!.filter { banner -> banner.sex == "1"  })
-                    2 -> viewState.loaded(it.body()!!.filter {banner -> banner.sex == "2"   })
-                    3 -> viewState.loaded(it.body()!!.filter { banner -> banner.sex == "3" })
+                    2 -> viewState.loaded(it.body()!!.filter {banner -> banner.sex == "2" || banner.sex == "1"   })
+                    3 -> viewState.loaded(it.body()!!.filter { banner -> banner.sex == "3" || banner.sex == "1" })
                 }
             }
         }
