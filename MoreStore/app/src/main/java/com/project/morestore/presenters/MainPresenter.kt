@@ -116,7 +116,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             isFiltered: Boolean,
             productCategories: List<ProductCategory>? = null,
             forWho: List<Boolean>? = null,
-            isGuest: Boolean = false
+            isGuest: Boolean = false,
+            status: Int? = 1
     ) {
         Log.d("mylog", "getProducts")
         presenterScope.launch {
@@ -132,7 +133,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                         filter = filter,
                         productId = productId,
                     limit = 500,
-                    isGuest = isGuest
+                    isGuest = isGuest,
+                    status = status
                 )
             /*Pager(
                 config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
@@ -152,7 +154,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     filter = if (isFiltered) userRepository.getFilter() else null,
                     productId = productId,
                     limit = 500,
-                    isGuest = isGuest
+                    isGuest = isGuest,
+                    status = status
                 )
             }
             /*Pager(

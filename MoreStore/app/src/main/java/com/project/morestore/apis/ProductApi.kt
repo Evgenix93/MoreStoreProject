@@ -17,6 +17,9 @@ interface ProductApi {
     @Query("sort") sort: String?,
     @Query("status") status: Int?): Response<List<Product>>
 
+    @GET("product/{id}")
+    suspend fun getProductById(@Path("id") id: Long, @Query("optionally") options: String?): Response<List<Product>>
+
 
     @GET("product")
     suspend fun getProductsGetError(

@@ -146,7 +146,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     private fun getProduct(id: Long?) {
         id ?: return
-        presenter.getProducts(productId = id, isFiltered = false, productCategories = null)
+        presenter.getProducts(productId = id, isFiltered = false, productCategories = null, status = null)
     }
 
     private fun initShare(id: Long) {
@@ -458,6 +458,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     override fun loaded(result: Any) {
         when (result) {
             is List<*> -> {
+                if(result.isEmpty()) return
                 //if (result.isNotEmpty() && result[0] is Long) {
                 // messageLike(result as List<Long>)
                 if (result[0] is Product) {

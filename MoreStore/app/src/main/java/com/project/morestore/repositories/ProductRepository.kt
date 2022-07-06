@@ -90,7 +90,7 @@ class ProductRepository(private val context: Context) {
         userId: Long? = null,
         productId: Long? = null,
         limit: Int? = null,
-        status: Int? = 1,
+        status: Int? = null,
         isGuest: Boolean = false,
         offset: Int? = null
     ): Response<List<Product>>? {
@@ -134,9 +134,9 @@ class ProductRepository(private val context: Context) {
                 queryStr = listOf("text=${query.orEmpty()}")
             }
 
-            productId?.let {
-                productIdStr = listOf("id=$it")
-            }
+            //productId?.let {
+              //  productIdStr = listOf("id=$it")
+            //}
 
             //val statusStr = if(status != null) "status= ${status ?: 1}" else ""
 
@@ -217,17 +217,19 @@ class ProductRepository(private val context: Context) {
 
             productPropertyStr = productPropertyStr + conditionList + forWhoList + stylesList
            // Log.d("MyDebug", "getProducts filter = $filter")
+            if(productId == null)
             productApi.getProducts(
                 limit,
                 offset,
                 if(isGuest)null else PRODUCT_OPTIONS,
-                (categoryStr + brandsStr + citiesStr + queryStr + productIdStr + productPropertyStr  + pricesFromStr + pricesEndStr).joinToString(
+                (categoryStr + brandsStr + citiesStr + queryStr  + productPropertyStr  + pricesFromStr + pricesEndStr).joinToString(
                     ";"
                 ).also{Log.d("MyDebug", "getProducts filter = $it")},
                 userId,
                 filter?.sortingType,
                 status
             )
+            else productApi.getProductById(productId, PRODUCT_OPTIONS)
 
         } catch (e: Exception) {
             if (e is IOException) {
