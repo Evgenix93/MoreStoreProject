@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android developing/MoreStore/MoreStore/app/src/main/res/drawable/ic_field.xml" value="0.3115" />
+        <entry key="..\:/Android developing/MoreStore/MoreStore/app/src/main/res/layout/fragment_delivery_create.xml" value="0.4570411794611083" />
+        <entry key="..\:/Android developing/MoreStore/MoreStore/app/src/main/res/layout/fragment_order_create.xml" value="0.46822916666666664" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.4981481481481482" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/drawable/arrow_back.xml" value="0.4981481481481482" />
         <entry key="..\:/android apps/MoreStoreProject/MoreStoreProject/MoreStore/app/src/main/res/drawable/badge_background.xml" value="0.39351851851851855" />
@@ -355,7 +358,7 @@
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

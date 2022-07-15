@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+   <androidx.cardview.widget.CardView
+       android:id="@+id/deliveryCardView"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       app:layout_constraintTop_toBottomOf="@+id/toolbar"
+       android:layout_marginTop="16dp"
+       app:cardCornerRadius="12dp">
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="10dp"
+           android:layout_marginTop="11dp"
+           android:text="Передача товара"
+           android:textAppearance="@style/ManropeReg_16_gray2"/>
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="50dp"
+           android:layout_marginStart="10dp"
+           android:text="Доставка:"
+           android:textAppearance="@style/bold_14"
+           />
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="85dp"
+           android:layout_marginTop="50dp"
+           android:text="курьером СДЭК в пункт выдачи"
+           android:textAppearance="@style/regular_14"/>
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="10dp"
+           android:layout_marginTop="80dp"
+           android:text="Оплата:"
+           android:textAppearance="@style/bold_14"/>
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="70dp"
+           android:layout_marginTop="80dp"
+           android:text="Полная предоплата"
+           android:textAppearance="@style/regular_14"/>
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="10dp"
+           android:layout_marginTop="110dp"
+           android:layout_marginBottom="24dp"
+           android:text="Мы отправим деньги как только покупатель получит товар. Доставку оплачивает покупатель."
+           android:textAppearance="@style/regular_14"
+           android:textSize="12sp"
+           android:textColor="@color/gray2"/>
+
+   </androidx.cardview.widget.CardView>
+
+   <androidx.cardview.widget.CardView
+       android:id="@+id/pickersCardView"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       app:layout_constraintTop_toBottomOf="@id/deliveryCardView"
+       app:cardCornerRadius="12dp"
+       android:layout_marginTop="16dp">
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="10dp"
+           android:layout_marginTop="11dp"
+           android:text="Когда забрать заказ"
+           android:textAppearance="@style/regular_16"
+           android:textColor="@color/gray2"/>
+
+       <LinearLayout
+           android:id="@+id/pickersLinearLayout"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="50dp"
+           android:layout_marginHorizontal="10dp">
+
+           <com.google.android.material.textfield.MaterialAutoCompleteTextView
+               android:id="@+id/dateEditText"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginEnd="4dp"
+               android:layout_weight="0.5"
+               android:background="@drawable/ic_field"
+               android:drawableEnd="@drawable/ic_arrow_dropdown"
+               android:editable="false"
+               android:focusable="false"
+               android:hint="Дата"
+               android:paddingStart="12dp"
+               android:paddingEnd="9dp"
+               android:textAppearance="@style/regular_14"
+               android:textColor="@color/black"
+               android:textColorHint="@color/gray2" />
+
+           <com.google.android.material.textfield.MaterialAutoCompleteTextView
+               android:id="@+id/timeEditText"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginStart="4dp"
+               android:layout_weight="0.5"
+               android:background="@drawable/ic_field"
+               android:drawableEnd="@drawable/ic_arrow_dropdown"
+               android:editable="false"
+               android:focusable="false"
+               android:hint="Время"
+               android:paddingStart="12dp"
+               android:paddingEnd="9dp"
+               android:textAppearance="@style/regular_14"
+               android:textColor="@color/black"
+               android:textColorHint="@color/gray2" />
+
+       </LinearLayout>
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="10dp"
+           android:layout_marginTop="106dp"
+           android:layout_marginBottom="24dp"
+           android:text="Курьер приедет за доставкой в течение 3 часов. \nЕсли заявка сформирована после 15:00, \nто курьер приедет на следующий день"
+           android:textAppearance="@style/regular_14"
+           android:textSize="12sp"
+           android:textColor="@color/gray14" />
+
+   </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/infoTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/pickersCardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="10dp"
+        android:textAppearance="@style/regular_14"
+        android:text="Мы самостоятельно сообщим адрес покупателя курьеру"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/infoTextView"
+        android:layout_marginTop="40dp"
+        style="@style/buttonStyle"
+        android:layout_marginHorizontal="10dp"
+        android:text="Подтвердить"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
