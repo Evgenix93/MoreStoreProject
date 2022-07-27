@@ -51,7 +51,12 @@ class CartAdapter(
                         ResourcesCompat.getDrawable(itemView.resources, R.drawable.color2, null)
                 } else {
                     cartProductColorName.text = color.value
-                    cartProductColorDot.background.setTint(Color.parseColor(color.ico))
+                    if(color.ico != null) cartProductColorDot.background.setTint(Color.parseColor(color.ico))
+                    else {
+                        cartProductColorDot.background =
+                            ResourcesCompat.getDrawable(itemView.resources, R.drawable.color2, null)
+                        cartProductColorDot.backgroundTintList = null
+                    }
                 }
                 if (cartItem.product.priceNew != null) {
                     cartProductCostDiscount.apply {
