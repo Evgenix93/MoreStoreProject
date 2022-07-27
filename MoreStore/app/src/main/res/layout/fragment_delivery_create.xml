@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     android:background="@color/gray3"
     >
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
 
     <ScrollView
         android:layout_width="0dp"
@@ -172,7 +174,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/productWindow"
+        app:layout_constraintTop_toBottomOf="@id/deliveryCardView"
         android:textAppearance="@style/regular_14"
         android:textColor="@color/black"
         android:text="Выберите адрес для курьера, чтобы он смог\nзабрать товар. "/>
@@ -306,7 +308,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dealPlaceWindow"
+        app:layout_constraintTop_toBottomOf="@+id/pickersCardView"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp">
@@ -372,25 +374,19 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
 
 
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/toolbar"/>
+
+
+
 
    <androidx.cardview.widget.CardView
        android:id="@+id/deliveryCardView"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       app:layout_constraintTop_toBottomOf="@+id/toolbar"
+       app:layout_constraintTop_toBottomOf="@+id/productWindow"
        android:layout_marginTop="16dp"
        app:cardCornerRadius="12dp">
 
@@ -452,8 +448,9 @@
        android:id="@+id/pickersCardView"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       app:layout_constraintTop_toBottomOf="@id/deliveryCardView"
+       app:layout_constraintTop_toBottomOf="@id/dealPlaceWindow"
        app:cardCornerRadius="12dp"
+       app:cardElevation="0dp"
        android:layout_marginTop="16dp">
 
        <TextView
@@ -525,7 +522,7 @@
         android:id="@+id/infoTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/pickersCardView"
+        app:layout_constraintTop_toBottomOf="@id/commentWindow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
@@ -538,9 +535,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/infoTextView"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="40dp"
+        android:layout_marginBottom="10dp"
         style="@style/buttonStyle"
         android:layout_marginHorizontal="10dp"
         android:text="Подтвердить"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

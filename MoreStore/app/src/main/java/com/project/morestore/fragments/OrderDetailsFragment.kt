@@ -266,6 +266,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     cancelTextView.isVisible = false
                     orderItemAcceptBlock.isVisible = false
                 }
+                else -> {}
             }
         }
 
@@ -337,6 +338,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
           OrderStatus.CHANGE_MEETING_SELLER -> setChangeMeetingSellerStatus(order)
           OrderStatus.RECEIVED_SELLER -> setReceivedSellerStatus()
           OrderStatus.ADD_MEETING ->  setAddMeetingStatus(order)
+            else -> {}
         }
     }
 

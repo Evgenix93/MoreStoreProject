@@ -122,6 +122,7 @@ class OrdersAdapter(
                         orderItemChangeDeliveryDeclineButton.isVisible = false
                         orderItemDeliveryChangeTitle.text = "К сожалению покупатель отклонил сделку"
                     }
+                    else -> {}
                 }
             }
         }
