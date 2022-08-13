@@ -70,6 +70,9 @@
         app:layout_constraintTop_toBottomOf="@id/daysTabLayout"
         app:layout_constraintBottom_toTopOf="@id/raiseProductButton"/>
 
+
+
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/raiseProductButton"
         style="@style/buttonStyle"
@@ -83,5 +86,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"/>
+
+
+    <WebView
+        android:id="@+id/paymentWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

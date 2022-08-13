@@ -117,4 +117,7 @@ interface ProductApi {
     @GET("banner")
     suspend fun getBanners(): Response<List<Banner>>
 
+    @POST("sber/registration")
+    suspend fun raiseProduct(@Body tariff: Tariff): Response<PaymentUrl>
+
 }

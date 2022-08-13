@@ -44,12 +44,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="Тперь он окажется в верхних строчках каталога.\nДанная услуга закончится 23.10.2021"
+        tools:text="Теперь он окажется в верхних строчках каталога.\nДанная услуга закончится"
         android:textAppearance="@style/regular_14"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/successInfoTextView" />
+
 
     <ImageView
         android:layout_width="wrap_content"
