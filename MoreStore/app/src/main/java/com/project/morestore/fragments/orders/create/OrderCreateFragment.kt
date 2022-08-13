@@ -53,6 +53,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         setClickListeners()
         initRadioPlaceButtons()
         initRadioDeliveryButtons()
+        initRadioDeliveryVariantButtons()
         initViews()
         getSupportDialog()
     }
@@ -110,6 +111,8 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             )
         }
         binding.oldPriceTextView.text = crossedStr
+        binding.oldPrice2TextView.text = crossedStr
+        binding.oldPrice2WithDeliveryTextView.text = crossedStr
         binding.newPriceTextView.text = product.priceNew.toString()
     }
 
@@ -248,7 +251,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         }
 
         binding.chooseOnMapTextView.setOnClickListener {
-            val deliveryId = when (binding.deliveryVariantRadioGroup.checkedRadioButtonId) {
+            /*val deliveryId = when (binding.deliveryVariantRadioGroup.checkedRadioButtonId) {
                 R.id.yandexRadioBtn -> YANDEX_GO
                 R.id.anotherCityRadioBtn -> ANOTHER_CITY
                 R.id.takeFromSellerRadioBtn -> TAKE_FROM_SELLER
@@ -274,8 +277,61 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             }
             findNavController().navigate(OrderCreateFragmentDirections
                 .actionCreateOrderFragmentToMyAddressesFragment(true,
-                if(deliveryId == ANOTHER_CITY) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))
+                if(deliveryId == ANOTHER_CITY) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))*/
+
+            getChosenAddress { _, address, _ ->
+                binding.chosenAddressTextView.isVisible = true
+                binding.chooseOnMapTextView.text = "Изменить"
+                binding.chosenAddressTextView.text = address
+            }
         }
+
+        binding.chooseAddressBtn.setOnClickListener {
+            getChosenAddress { name, address, type ->
+                binding.myAddressBlock.isVisible = true
+                binding.name.text = name
+                binding.address.text = address
+                if(type == 0){
+                    binding.title.setText(R.string.myAddress_pickup)
+                }else {
+                    binding.title.setText(R.string.myAddress_delivery)
+                }
+                binding.chooseAddressBtn.setText("Выбрать другой адрес")
+                binding.totalWithDeliveryCardView.isVisible = true
+
+            }
+        }
+
+    }
+
+    private fun getChosenAddress(onAddressReceived: (addressName: String, address: String, type: Int) -> Unit){
+        val deliveryId = when (binding.deliveryVariantRadioGroup.checkedRadioButtonId) {
+            R.id.yandexRadioBtn -> YANDEX_GO
+            R.id.anotherCityRadioBtn -> ANOTHER_CITY
+            R.id.takeFromSellerRadioBtn -> TAKE_FROM_SELLER
+            else -> -1
+        }
+        setFragmentResultListener(MyAddressesFragment.ADDRESS_REQUEST){_, bundle ->
+            val address = bundle.getParcelable<MyAddress>(MyAddressesFragment.ADDRESS_KEY)
+            Log.d("mylog", "address $address")
+            chosenAddress = address
+            val streetStr = address?.address?.street
+            val houseStr = if(address?.address?.house != null) "дом.${address.address.house}" else null
+            val housingStr = if(address?.address?.housing != null) "кп.${address.address.housing}" else null
+            val buildingStr = if(address?.address?.building != null) "стр.${address.address.building}" else null
+            val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
+            val strings =
+                arrayOf(streetStr, houseStr, housingStr, buildingStr, apartmentStr).filterNotNull()
+            binding.chosenAddressTextView.text = strings.joinToString(", ")
+            chosenAddressStr = strings.joinToString(", ")
+            onAddressReceived(address?.name.orEmpty(), chosenAddressStr, address?.type ?: 0)
+        }
+
+        findNavController().navigate(OrderCreateFragmentDirections
+            .actionCreateOrderFragmentToMyAddressesFragment(true,
+                if(deliveryId == ANOTHER_CITY && binding.toPickUpPointRadioButton.isChecked) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))
+
+
 
     }
 
@@ -293,6 +349,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         val oldPriceStr = binding.oldPriceTextView.text.toSpannable().apply { setSpan(StrikethroughSpan(), 0, length, 0) }
         binding.oldPriceTextView.text = oldPriceStr
         binding.oldPrice2TextView.text = oldPriceStr
+        binding.oldPrice2WithDeliveryTextView.text = oldPriceStr
     }
 
 
@@ -303,6 +360,29 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.payNowButton.isVisible = radioButton == R.id.prepaymentRadioButton
             binding.payButton.isVisible = radioButton != R.id.prepaymentRadioButton
         }
+    }
+
+    private fun initRadioDeliveryVariantButtons() {
+        binding.deliveryVariantRadioGroup.setOnCheckedChangeListener { _, radioButton ->
+            showScreenWithDelivery(radioButton != R.id.takeFromSellerRadioBtn)
+        }
+    }
+
+    private fun showScreenWithDelivery(show: Boolean ){
+        binding.chosenDeliveryPlaceWindow.isVisible = show
+        binding.commentWindow.isVisible = show
+        binding.deliveryPriceInfoTextView.isVisible = show
+        binding.totalWithDeliveryCardView.isVisible = show && binding.myAddressBlock.isVisible
+        binding.payNowWithDeliveryButton.isVisible = show
+        binding.dealPlaceWindow.isVisible = !show
+        binding.paymentCardView.isVisible = !show
+        binding.prepaymentInfoTextView.isVisible = !show
+        binding.totalCardView.isVisible = !show && binding.prepaymentRadioButton.isChecked
+        binding.payButton.isVisible = !show
+        binding.deliveryCdekVariantCardView.isVisible = binding.anotherCityRadioBtn.isChecked
+
+
+
     }
 
     private fun initToolbar() {

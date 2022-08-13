@@ -200,4 +200,41 @@ class OrdersRepository(private val context: Context) {
         }
     }
 
+    suspend fun getPromoInfo(code: String): Response<PromoCode>?{
+        return try {
+            ordersApi.getPromoCodeInfo(code)
+        }catch (e: Exception){
+            if (e is IOException){
+                null
+            }else{
+                Response.error(400, e.message.toString().toResponseBody(null))
+            }
+        }
+    }
+
+    suspend fun payForOrder(payInfo: PayOrderInfo): Response<PaymentUrl>?{
+        return try {
+            ordersApi.payOrder(payInfo)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.payOrderGetError(payInfo)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
 }

@@ -37,6 +37,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val userRepository = UserRepository(context)
     private val chatRepository = ChatRepository(context)
     private val addressesRepository = AddressesRepository.apply { init(Network.addresses) }
+    private val cardRepository = CardRepository()
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
     private val ITEMS_PER_PAGE = 50
@@ -1290,5 +1291,39 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 }
             }
         }
+    }
+
+    fun getActiveCard(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = cardRepository.getCards()
+            when(response?.code()){
+                200 -> viewState.loaded(response.body()!!.find { it.active == 1 } ?: emptyList<Card>())
+                404 -> {viewState.loaded(emptyList<Card>())}
+                null -> viewState.error("нет интернета")
+                400 -> viewState.error(response.errorBody()?.string().orEmpty())
+            }
+        }
+    }
+
+    fun addCard(cardNumber: String){
+        presenterScope.launch {
+            if (!checkCardNumber(cardNumber)) {
+                viewState.error("Введите правильный номер карты")
+                return@launch
+            }
+            viewState.loading()
+            val response = cardRepository.addCard(Card(id = null, number = cardNumber, active = 1))
+            when(response?.code()){
+                200 -> if(response.body()!!.contains("error")) viewState.error(response.body()!!)
+                        else viewState.success()
+                null -> viewState.error("нет интернета")
+            }
+        }
+    }
+
+    private fun checkCardNumber(cardNumber: String): Boolean{
+        return cardNumber.isNotEmpty() && cardNumber.filter { it != '-' }.length == 16
+
     }
 }

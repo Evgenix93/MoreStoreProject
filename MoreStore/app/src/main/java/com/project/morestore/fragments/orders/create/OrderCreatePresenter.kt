@@ -34,7 +34,15 @@ class OrderCreatePresenter(context: Context)
         viewState.navigate(null)
     }
 
-    fun onCreateOrder(cartId: Long, delivery: Int, place: OrderPlace, pay: Int, fromChat: Boolean, product: Product){
+    fun onCreateOrder(cartId: Long,
+                      delivery: Int,
+                      place: OrderPlace,
+                      pay: Int,
+                      fromChat: Boolean,
+                      product: Product,
+                      comment: String? = null,
+                      promo: String? = null,
+                      sum: Int? = null){
         presenterScope.launch {
             viewState.loading()
             if(place.id.toInt() == OrderCreateFragment.PLACE_FROM_ME && place.address == null){
@@ -45,18 +53,46 @@ class OrderCreatePresenter(context: Context)
                 viewState.showMessage("Укажите время сделки")
                 return@launch
             }
+            var promoInfo: PromoCode? = null
+
+            if(promo != null){
+                promoInfo = getPromoInfo(promo)
+                promoInfo ?: return@launch
+
+            }
 
             val newOrder = NewOrder(
                 cart = listOf(cartId),
                 delivery = delivery,
                 place = place,
-                pay = pay
+                pay = pay,
+                comment = comment
+
             )
             val response = orderRepository.createOrder(newOrder)
             when(response?.code()){
                 200 -> {
+                    val orders = getAllOrders()
+                    orders ?:  run {
+                        viewState.navigate(R.id.ordersActiveFragment)
+                        return@launch
+                    }
+                    val order = orders.find { it.idCart.find { cart -> cart == cartId } != null }
+
+                    if(pay == 2){
+                        var finalSum = sum!!
+                         if(promoInfo != null ){
+                             if(promoInfo.status == 1 && promoInfo.first_order == 1 && orders.size == 1)
+                                 finalSum -= promoInfo.sum
+                             if (promoInfo.status == 1 && promoInfo.first_order == 0)
+                                 finalSum -= promoInfo.sum
+
+                         }
+                        val payUrl = getPayUrl(PayOrderInfo(finalSum, order!!.id ))
+                    }
+
                     viewState.showMessage("Заказ оформлен")
-                    val order = getAllOrders()?.find { it.idCart.find { cart -> cart == cartId } != null }
+                    //val order = getAllOrders()?.find { it.idCart.find { cart -> cart == cartId } != null }
                     if(order != null && place.address != null)
                     addDealPlace(order.id, place.address )
                     if(fromChat)
@@ -100,6 +136,7 @@ class OrderCreatePresenter(context: Context)
                 viewState.showMessage("500 Internal Server Error")
                 null
             }
+            404 -> emptyList()
             else -> null
 
         }
@@ -187,6 +224,37 @@ class OrderCreatePresenter(context: Context)
                 }
             }
         }
+    }
+
+    private suspend fun getPromoInfo(code: String): PromoCode?{
+        val response = orderRepository.getPromoInfo(code)
+        return when(response?.code()){
+            200 -> response.body()
+            null -> {
+                viewState.showMessage("нет интернета")
+                null}
+            404 -> {
+                viewState.showMessage("промокод не найден")
+                null
+            }
+            else -> null
+        }
+    }
+
+    private suspend fun getPayUrl(payInfo: PayOrderInfo): String? {
+        val response = orderRepository.payForOrder(payInfo)
+        return when(response?.code()){
+            200 -> response.body()!!.formUrl
+            null -> {
+                viewState.showMessage("нет интернета")
+                null}
+            400 -> {
+                viewState.showMessage(response.errorBody()!!.string())
+                null
+            }
+            else -> null
+        }
+
     }
 
 }

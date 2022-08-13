@@ -243,7 +243,9 @@
     <string name="add_photo_description">Добавьте фото и описание</string>
     <string name="allow_buyers_bid">Разрешать покупателям предлагать\nсвою цену</string>
     <string name="pickup_only">Доступен только самовывоз</string>
+    <string name="card_added">Карта добавлена</string>
     <string name="warning_info">Добавьте номер карты, чтобы покупатели могли\nиспользовать курьерские службы доставки.\nСейчас вам доступна только продажа товара\nсамовывозом.</string>
+    <string name="card_added_info">Теперь покупатель может использовать\nкурьерские службы, а вы — принимать деньги\nна карту.</string>
     <string name="edit_cards_info">Чтобы редактировать добавленные карты,\nперейдите на страницу своего профиля.</string>
     <string name="_4colors">Вы можете указать до 4 цветов</string>
     <string name="place_product">Разместить объявление</string>
@@ -500,5 +502,6 @@
     <!--region city-->
     <string name="searchCity">Поиск города</string>
     <string name="product_is_reserved">К сожалению данный товар уже забронировали</string>
+    <string name="where_to_deliver">Куда доставить?</string>
     <!--endregion city-->
 </resources>

@@ -55,6 +55,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         if (args.product != null)
             binding.placeProductButton.text = "Сохранить изменения"
         getUserData()
+        getActiveCard()
     }
 
 
@@ -327,6 +328,10 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         presenter.changeProductAndPublish()
     }
 
+    private fun getActiveCard(){
+        presenter.getActiveCard()
+    }
+
 
     override fun loaded(result: Any) {
         showLoading(false)
@@ -357,6 +362,18 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         } else if (result is String) {
             Toast.makeText(requireContext(), result, Toast.LENGTH_SHORT).show()
             findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCabinetFragment())
+        }else if (result is Card){
+            binding.warningImageView.setImageResource(R.drawable.ic_check_round_fill)
+            binding.warningImageView.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.green, null))
+            binding.cardInfoTitleTextView.text = resources.getString(R.string.card_added)
+            binding.warningInfoTextView.text = resources.getString(R.string.card_added_info)
+            binding.addCardButton.isVisible = false
+            binding.creditCardImageView.isVisible = true
+            binding.starsTextView.isVisible = true
+            binding.cardLastNumbersTextView.isVisible = true
+            binding.cardLastNumbersTextView.text = result.number.takeLast(4)
+
+
         }
     }
 

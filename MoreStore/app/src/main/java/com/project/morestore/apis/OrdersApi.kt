@@ -51,4 +51,13 @@ interface OrdersApi {
     @POST("order/successfully")
     suspend fun submitReceiveOrderGetError(@Body orderId: OrderId): Response<String>
 
+    @GET("order/promo")
+    suspend fun getPromoCodeInfo(@Query("code") code: String): Response<PromoCode>
+
+    @POST("sber/registration")
+    suspend fun payOrder(@Body payInfo: PayOrderInfo): Response<PaymentUrl>
+
+    @POST("sber/registration")
+    suspend fun payOrderGetError(@Body payInfo: PayOrderInfo): Response<String>
+
 }

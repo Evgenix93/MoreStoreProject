@@ -164,6 +164,7 @@
                 app:layout_constraintTop_toBottomOf="@id/allowBuyersBidCheckBox" />
 
             <TextView
+                android:id="@+id/cardInfoTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -195,12 +196,13 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/warningInfoTextView" />
+                app:layout_constraintTop_toBottomOf="@id/creditCardImageView" />
 
             <ImageView
                 android:id="@+id/creditCardImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/ic_credit_card"
@@ -211,6 +213,7 @@
                 android:id="@+id/starsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:text="****"
@@ -220,8 +223,10 @@
                 app:layout_constraintTop_toBottomOf="@id/warningInfoTextView" />
 
             <TextView
+                android:id="@+id/cardLastNumbersTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginTop="16dp"
                 android:text="4014"
                 android:textAppearance="@style/regular_16"

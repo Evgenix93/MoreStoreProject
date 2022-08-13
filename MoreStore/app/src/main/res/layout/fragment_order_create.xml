@@ -416,6 +416,271 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/deliveryCdekVariantCardView"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/deliveryTypeCardView">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="11dp"
+                    android:text="@string/where_to_deliver"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+                <RadioGroup
+                    android:id="@+id/deliveryCdekVariantsRadioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="51dp"
+                    android:layout_marginBottom="25dp">
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/toPickUpPointRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/radiobutton"
+                        android:checked="true"
+                        android:minWidth="30dp"
+                        android:minHeight="30dp"
+                        android:paddingStart="12dp"
+                        android:text="В  пункт выдачи"
+                        android:textAppearance="@style/regular_14"
+                        android:textColor="@color/black"
+                        app:useMaterialThemeColors="false" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/toDoorRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:button="@drawable/radiobutton"
+                        android:minWidth="30dp"
+                        android:minHeight="30dp"
+                        android:paddingStart="12dp"
+                        android:text="До двери"
+                        android:textAppearance="@style/regular_14"
+                        android:textColor="@color/black"
+                        app:useMaterialThemeColors="false" />
+
+                </RadioGroup>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/chosenDeliveryPlaceWindow"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/deliveryCdekVariantCardView">
+
+                <TextView
+                    android:id="@+id/deliveryPlaceTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Адрес"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="50dp">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/myAddressBlock"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:padding="16dp"
+                        >
+
+                        <ImageView
+                            android:id="@+id/icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/circle_background"
+                            android:clickable="false"
+                            android:padding="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:backgroundTint="@color/blue4"
+                            android:src="@drawable/ic_package"
+                            app:tint="@color/white"/>
+
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:textAppearance="@style/ManropeBold_16_black"
+                            app:layout_constraintBottom_toBottomOf="@+id/icon"
+                            app:layout_constraintEnd_toStartOf="@+id/favorite"
+                            app:layout_constraintStart_toEndOf="@+id/icon"
+                            app:layout_constraintTop_toTopOf="@+id/icon"
+                            android:text="@string/myAddress_pickup" />
+
+                        <ImageView
+                            android:id="@+id/favorite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_star_favorite"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@+id/icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/icon" />
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:textAppearance="@style/ManropeBold_16_black"
+                            app:layout_constraintTop_toBottomOf="@+id/icon"
+                            tools:layout_editor_absoluteX="16dp"
+                            tools:text="Иванов Иван" />
+
+                        <TextView
+                            android:id="@+id/address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textAppearance="@style/ManropeReg_14_gray2"
+                            app:layout_constraintTop_toBottomOf="@+id/name"
+                            tools:layout_editor_absoluteX="16dp"
+                            tools:text="Казань, 420141, ул. Юлиуса Фучика, дом 49, квартира 75" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/chooseAddressBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/buttonStyle"
+                        android:text="Выбрать"
+                        app:backgroundTint="@color/black"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginBottom="24dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/myAddressBlock"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_gravity="bottom"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/commentWindow"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chosenDeliveryPlaceWindow"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/commentTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textAppearance="@style/regular_16"
+                        android:textColor="@color/gray2"
+                        android:text="Комментарий для курьера"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/commentInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/commentTextView"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_marginTop="17dp"
+                        android:layout_marginHorizontal="10dp"
+                        app:boxStrokeColor="@color/gray1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/commentEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textAppearance="@style/regular_14"
+                            tools:text="Новая вещь, никогда не бывшая в употреблении, с фирменными бирками и упаковкой"
+                            android:gravity="top"
+                            android:maxLength="250"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/symbolsTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0/250"
+                        app:layout_constraintTop_toBottomOf="@+id/commentInputLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textAppearance="@style/regular_14"
+                        android:textColor="@color/gray2"
+                        android:layout_marginBottom="24dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="8dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/deliveryPriceInfoTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="16dp"
+                android:text="Стоимость доставки отображается после ввода адреса\nотправки и получения. Время получения можно указать\nпосле подтверждения отправки продавцом."
+                android:textAppearance="@style/regular_14"
+                android:textSize="12dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/commentWindow" />
+
+
+
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/paymentCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -499,6 +764,9 @@
                 app:cardElevation="0dp"
                 app:layout_constraintTop_toBottomOf="@id/prepaymentInfoTextView">
 
+
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -570,6 +838,150 @@
 
 
             </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/totalWithDeliveryCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:layout_constraintTop_toBottomOf="@id/deliveryPriceInfoTextView">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:text="Промокод"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/edit_text"
+                    android:background="@drawable/ic_field"
+                    android:layout_marginTop="39dp"
+                    android:layout_marginHorizontal="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Срок доставки:"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2"
+                    android:layout_marginTop="95dp"
+                    android:layout_marginStart="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12-14 ноября"
+                    android:textAppearance="@style/medium_16"
+                    android:textColor="@color/green"
+                    android:layout_marginTop="95dp"
+                    android:layout_marginStart="135dp"/>
+
+
+
+
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="135dp"
+                    android:text="@string/product_price"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="165dp"
+                    android:layout_marginTop="135dp"
+                    android:text="500 ₽"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/black" />
+
+
+                <TextView
+                    android:id="@+id/oldPrice2WithDeliveryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="218dp"
+                    android:layout_marginTop="135dp"
+                    android:text="5 600 ₽ "
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="167dp"
+                    android:text="Доставка:"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="94dp"
+                    android:layout_marginTop="168dp"
+                    android:text="340 ₽"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="207dp"
+                    android:text="Итого:"
+                    android:textAppearance="@style/bold_24"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="94dp"
+                    android:layout_marginTop="207dp"
+                    android:text="500 ₽"
+                    android:textAppearance="@style/bold_24"
+                    android:textColor="@color/green" />
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="252dp"
+                    android:layout_marginBottom="40dp"
+                    android:text="@string/prepayment_info2"
+                    android:textAppearance="@style/regular_14"
+                    android:textColor="@color/black" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/payNowWithDeliveryButton"
+                    style="@style/buttonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="328dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Оплатить заказ" />
+
+
+            </com.google.android.material.card.MaterialCardView>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/payButton"
