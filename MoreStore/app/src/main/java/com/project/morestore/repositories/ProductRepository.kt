@@ -17,6 +17,7 @@ import com.project.morestore.singletones.FilterState
 
 import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
+import com.squareup.moshi.JsonDataException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -1204,6 +1205,14 @@ class ProductRepository(private val context: Context) {
 
         }
 
+    }
+
+   suspend fun raiseProduct(tariff: Tariff): Response<PaymentUrl>{
+      return try {
+          productApi.raiseProduct(tariff)
+      } catch(e: Throwable){
+          Response.error(400, e.message.toString().toResponseBody(null))
+      }
     }
 
     companion object {

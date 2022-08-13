@@ -98,7 +98,8 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
             null,
             null,
             null,
-            feedbackProduct.packageDimensions
+            feedbackProduct.packageDimensions,
+            null
         )
         findNavController().navigate(ProductDraftFragmentDirections.actionProductDraftFragmentToCreateProductStep6Fragment(product = product))
     }

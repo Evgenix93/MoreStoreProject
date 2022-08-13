@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
-import com.project.morestore.databinding.ItemOrderBinding
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
@@ -21,7 +20,7 @@ class OrdersAdapter(
 ) : RecyclerView.Adapter<OrdersAdapter.OrderItemHolder>() {
 
     inner class OrderItemHolder(menuItem: View) : RecyclerView.ViewHolder(menuItem) {
-        val binding: ItemOrderBinding by viewBinding()
+        val binding: com.project.morestore.databinding.ItemOrderBinding by viewBinding()
         init {
             itemView.setOnClickListener { onClick(items[adapterPosition]) }
         }

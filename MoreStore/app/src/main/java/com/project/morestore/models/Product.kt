@@ -37,5 +37,6 @@ data class Product(
     @Json(name = "status_user")
     val statusUser: ProductUserStatus?,
     @Json(name = "package")
-    val packageDimensions: ProductDimensions
+    val packageDimensions: ProductDimensions,
+    val tariff: TariffInfo?
 ): Parcelable

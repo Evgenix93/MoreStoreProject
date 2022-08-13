@@ -252,7 +252,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/chatBtn">
+                app:layout_constraintTop_toBottomOf="@+id/borderView">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -341,6 +341,48 @@
                     android:text="@string/raise_product"/>
 
             </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/promoteActiveFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/chatBtn"
+                android:background="@color/white"
+                android:visibility="gone"
+                >
+
+             <ImageView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/ic_fill_checkcircle"
+                 android:layout_marginStart="12dp"
+                 android:layout_marginTop="18dp"/>
+
+                <TextView
+                    android:id="@+id/promoteActiveTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Ваше объявление находится в верхних строчках поиска до 23.10.2021"
+                    android:layout_marginStart="42dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"/>
+
+            </FrameLayout>
+
+            <View
+                android:id="@+id/borderView"
+                android:layout_width="0dp"
+                android:layout_height="16dp"
+                android:background="@color/gray3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/promoteActiveFrameLayout"
+                android:visibility="gone"/>
+
+
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/productIsBookedCardView"

@@ -38,6 +38,7 @@ import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import java.util.*
 
 class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), MainMvpView {
 
@@ -126,7 +127,12 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
         binding.raiseProductButton.setOnClickListener {
 
-            findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToRaiseProductFragment())
+            findNavController().navigate(ProductDetailsFragmentDirections.actionProductDetailsFragmentToRaiseProductFragment(
+                if(args.productId != null)
+                    args.productId!!.toLong()
+                else
+                    args.product!!.id
+            ))
         }
 
         binding.addToCartBtn.setOnClickListener {
@@ -436,6 +442,18 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 binding.buyersCount.text =
                     dialogWrappers.filter { it.product?.id == product.id }.size.toString()
             }
+        }
+        if(product.tariff != null && System.currentTimeMillis() < product.tariff.dateEnd * 1000){
+           val calendar = Calendar.getInstance().apply { timeInMillis = product.tariff.dateEnd * 1000 }
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            val dayStr = if(day < 10) "0$day" else day.toString()
+            val month = calendar.get(Calendar.MONTH)
+            val monthStr = if (month < 10) "0$month" else month.toString()
+            val year = calendar.get(Calendar.YEAR)
+            val dateString = "$dayStr.$monthStr.$year"
+           binding.promoteActiveFrameLayout.isVisible = true
+           binding.borderView.isVisible = true
+           binding.promoteActiveTextView.text = "Ваше объявление находится в верхних строчках поиска до $dateString"
         }
     }
 

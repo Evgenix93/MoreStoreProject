@@ -1014,11 +1014,18 @@
         <action
             android:id="@+id/action_raiseProductFragment_to_successPromoteFragment"
             app:destination="@id/successPromoteFragment" />
+        <argument
+            android:name="productId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/successPromoteFragment"
         android:name="com.project.morestore.fragments.SuccessPromoteFragment"
-        android:label="SuccessPromoteFragment" />
+        android:label="SuccessPromoteFragment" >
+        <argument
+            android:name="tariff"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/createOrderFragment"
         android:name="com.project.morestore.fragments.orders.create.OrderCreateFragment"
