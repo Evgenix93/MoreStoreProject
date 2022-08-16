@@ -246,39 +246,42 @@
 
            <com.google.android.material.card.MaterialCardView
                android:layout_width="match_parent"
-               android:layout_height="136dp"
+               android:layout_height="wrap_content"
                app:cardBackgroundColor="@color/white"
                android:layout_marginTop="16dp"
                app:cardCornerRadius="12dp"
-               app:cardElevation="0dp"
-               >
+               app:cardElevation="0dp">
+
+               <androidx.constraintlayout.widget.ConstraintLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
 
                <TextView
+                   android:id="@+id/cardsTextView"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="@string/bank_cards"
                    android:textAppearance="@style/regular_16"
                    android:textColor="@color/gray2"
                    android:layout_marginStart="10dp"
-                   android:layout_marginTop="11dp"/>
+                   android:layout_marginTop="11dp"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toTopOf="parent"/>
 
-               <ImageView
-                   android:layout_width="wrap_content"
+
+               <androidx.recyclerview.widget.RecyclerView
+                   android:id="@+id/cardsRecyclerView"
+                   android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:src="@drawable/ic_radiobutton"
                    android:layout_marginStart="10dp"
-                   android:layout_marginTop="50dp"/>
+                   android:layout_marginEnd="10dp"
+                   android:layout_marginTop="17dp"
+                   app:layout_constraintTop_toBottomOf="@id/cardsTextView"/>
+
+
 
                <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="•••• 4014"
-                   android:textAppearance="@style/regular_16"
-                   android:layout_marginStart="42dp"
-                   android:layout_marginTop="51dp"
-                   android:textColor="@color/black"/>
-
-               <TextView
+                   android:id="@+id/addCardTextView"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="@string/add_card"
@@ -286,15 +289,24 @@
                    android:textColor="@color/green"
                    android:layout_gravity="bottom"
                    android:layout_marginStart="10dp"
-                   android:layout_marginBottom="24dp"/>
+                   android:layout_marginBottom="24dp"
+                   android:layout_marginTop="17dp"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/cardsRecyclerView"
+                   app:layout_constraintBottom_toBottomOf="parent"/>
 
-               <ImageView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:src="@drawable/ic_trash"
-                   android:layout_gravity="end"
-                   android:layout_marginEnd="10dp"
-                   android:layout_marginTop="50dp"/>
+                   <ProgressBar
+                       android:id="@+id/loaderProgressBar"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:visibility="gone"
+                       android:indeterminateTint="@color/green"
+                       app:layout_constraintBottom_toBottomOf="parent"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintStart_toStartOf="parent"
+                       app:layout_constraintTop_toTopOf="parent" />
+
+               </androidx.constraintlayout.widget.ConstraintLayout>
 
            </com.google.android.material.card.MaterialCardView>
 
@@ -349,7 +361,6 @@
                    android:textColor="@color/black"
                    android:layout_marginStart="46dp"
                    android:layout_marginTop="91dp"/>
-
 
            </com.google.android.material.card.MaterialCardView>
 

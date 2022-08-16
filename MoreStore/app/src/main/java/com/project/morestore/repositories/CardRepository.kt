@@ -2,6 +2,7 @@ package com.project.morestore.repositories
 
 import android.util.Log
 import com.project.morestore.models.Card
+import com.project.morestore.models.Id
 import com.project.morestore.singletones.Network
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
@@ -43,6 +44,18 @@ class CardRepository {
                 null
             } else {
                 Log.d("mylog", e.message.toString())
+                Response.error(400, e.message.toString().toResponseBody(null))
+            }
+        }
+    }
+
+    suspend fun deleteCard(card: Card): Response<Unit>? {
+        return try {
+            cardApi.deleteCard(Id(card.id!!))
+        } catch (e: Throwable) {
+            if (e is IOException) {
+                null
+            } else {
                 Response.error(400, e.message.toString().toResponseBody(null))
             }
         }

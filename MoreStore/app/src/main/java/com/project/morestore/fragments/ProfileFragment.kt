@@ -1,19 +1,26 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
+import com.project.morestore.adapters.CardsAdapter
 import com.project.morestore.databinding.FragmentProfileBinding
 import com.project.morestore.models.Address
 import com.project.morestore.models.BrandsPropertiesDataWrapper
+import com.project.morestore.models.Card
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
+import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -23,6 +30,8 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
     private val binding: FragmentProfileBinding by viewBinding()
     private val args: ProfileFragmentArgs by navArgs()
     private lateinit var brandsPropertiesDataWrapper: BrandsPropertiesDataWrapper
+    private var cardsAdapter: CardsAdapter by autoCleared()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,6 +39,10 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         getUser()
         setClickListeners()
         loadOnBoardingData()
+        initCardList()
+        getCards()
+        val a = 5 xor 3
+        Log.d("MyTag", "val a = $a")
     }
 
     private fun initToolbar(){
@@ -78,10 +91,34 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         binding.blackListTextView.setOnClickListener{
             findNavController().navigate(R.id.blackListFragment)
         }
+
+        binding.addCardTextView.setOnClickListener{
+            findNavController().navigate(R.id.addCardFragment)
+        }
+
     }
 
     private fun loadOnBoardingData(){
         presenter.loadOnboardingData()
+    }
+
+   private fun initCardList(){
+        cardsAdapter = CardsAdapter ({cards ->
+        presenter.chooseCard(cards)
+        }, {deleteCard(it)})
+        binding.cardsRecyclerView.apply {
+            adapter = cardsAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    private fun getCards(){
+        presenter.getCards()
+    }
+
+    private fun deleteCard(card: Card){
+        presenter.deleteCard(card)
+        cardsAdapter.loading(false)
     }
 
     override fun success(result: Any) {
@@ -89,16 +126,24 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
     }
 
     override fun error(message: String) {
+        binding.loaderProgressBar.isVisible = false
+        cardsAdapter.loading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     override fun loading() {
-        TODO("Not yet implemented")
+        binding.loaderProgressBar.isVisible = true
+        cardsAdapter.loading(true)
     }
 
     override fun loaded(result: Any) {
+        binding.loaderProgressBar.isVisible = false
+        cardsAdapter.loading(false)
             if(result is List<*>){
+              if(result.isNotEmpty() && result.first() is BrandsPropertiesDataWrapper)
               brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
+              else
+                  cardsAdapter.updateCards(result as List<Card>)
             }
         else {
                 val currentAddress = result as Address

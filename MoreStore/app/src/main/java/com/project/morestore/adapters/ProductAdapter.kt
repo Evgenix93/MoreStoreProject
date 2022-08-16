@@ -89,7 +89,12 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
                 binding.productImageView.alpha = 0.65f
             }
 
-
+            if(product.tariff != null && System.currentTimeMillis() < product.tariff.dateEnd * 1000){
+                binding.root.strokeWidth = 2
+                binding.root.strokeColor = ResourcesCompat.getColor(itemView.resources, R.color.orange, null)
+            }else{
+                binding.root.strokeWidth = 0
+            }
 
         }
 
