@@ -6,5 +6,5 @@ import com.squareup.moshi.JsonClass
 data class Card(
     val id: Long?,
     val number: String,
-    val active: Int
+    var active: Int
 )

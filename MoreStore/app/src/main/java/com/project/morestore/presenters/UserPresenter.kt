@@ -7,10 +7,7 @@ import com.project.morestore.models.ProductBrand
 import com.project.morestore.models.Region
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.UserMvpView
-import com.project.morestore.repositories.AuthRepository
-import com.project.morestore.repositories.ProductRepository
-import com.project.morestore.repositories.ReviewRepository
-import com.project.morestore.repositories.UserRepository
+import com.project.morestore.repositories.*
 import com.project.morestore.util.isEmailValid
 import com.project.morestore.util.isPhoneValid
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +24,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
     private val authRepository = AuthRepository(context)
     private val productRepository = ProductRepository(context)
     private val reviewsRepository = ReviewRepository()
+    private val cardRepository = CardRepository()
     private lateinit var user: User
     private var photoUri: Uri? = null
     private var searchJob: Job? = null
@@ -1059,6 +1057,63 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             viewState.loading()
             val reviews = reviewsRepository.getReviews(authRepository.getUserId()).map { ReviewItem(it) }
             viewState.loaded(reviews)
+        }
+    }
+
+    fun getCards(){
+        viewState.loading()
+        presenterScope.launch {
+            val response = cardRepository.getCards()
+            when(response?.code()){
+              200 -> {
+                  viewState.loaded(response.body()!!)
+              }
+              null -> viewState.error("Нет сети")
+              400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+            }
+        }
+    }
+
+    fun deleteCard(card: Card){
+        viewState.loading()
+        presenterScope.launch{
+            val response = cardRepository.deleteCard(card)
+            when(response?.code()){
+                200 -> {
+                    getCards()
+                }
+                null -> viewState.error("Нет сети")
+                else -> viewState.error(getStringFromResponse(response.errorBody()!!))
+            }
+        }
+    }
+
+    fun chooseCard(cards: List<Card>){
+        viewState.loading()
+        presenterScope.launch{
+            cards.forEach{
+                val deleteResponse = cardRepository.deleteCard(it)
+                when(deleteResponse?.code()){
+                    null -> {viewState.error("Нет сети")
+                        return@launch}
+                    400 -> {viewState.error(getStringFromResponse(deleteResponse.errorBody()!!))
+                        return@launch}
+                    404 -> {viewState.error(getStringFromResponse(deleteResponse.errorBody()!!))
+                        return@launch}
+                }
+            }
+            cards.forEach{
+                val addResponse = cardRepository.addCard(Card(null, it.number, it.active))
+                when(addResponse?.code()){
+                    null -> {viewState.error("Нет сети")
+                        return@launch}
+                    400 -> {viewState.error(getStringFromResponse(addResponse.errorBody()!!))
+                        return@launch}
+                    404 -> {viewState.error(getStringFromResponse(addResponse.errorBody()!!))
+                        return@launch}
+                }
+            }
+            getCards()
         }
     }
 }

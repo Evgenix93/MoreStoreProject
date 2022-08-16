@@ -1313,14 +1313,53 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 return@launch
             }
             viewState.loading()
+            val cardsResponse = cardRepository.getCards()
+            when(cardsResponse?.code()){
+                200 -> {
+                    val cards = cardsResponse.body()!!
+
+                    cards.forEach{
+                            val deleteResponse = cardRepository.deleteCard(it)
+                            when(deleteResponse?.code()){
+                                null -> {
+                                    viewState.error("Нет сети")
+                                    return@launch
+                                }
+                                400 -> {
+                                    viewState.error(getStringFromResponse(deleteResponse.errorBody()!!))
+                                    return@launch
+                                }
+                            }
+                            val addResponse = cardRepository.addCard(Card(id = null, number = it.number, active = 0))
+                            when(addResponse?.code()){
+                                null -> {
+                                    viewState.error("Нет сети")
+                                    return@launch
+                                }
+                                400 -> {
+                                    viewState.error(getStringFromResponse(addResponse.errorBody()!!))
+                                    return@launch
+                                }
+                            }
+                        }
+                    }
+                null -> {viewState.error("Нет сети")
+                    return@launch}
+                400 -> { viewState.error(getStringFromResponse(cardsResponse.errorBody()!!))
+                    return@launch}
+                500 -> { viewState.error("Ошибка")
+                    return@launch}
+            }
             val response = cardRepository.addCard(Card(id = null, number = cardNumber, active = 1))
             when(response?.code()){
                 200 -> if(response.body()!!.contains("error")) viewState.error(response.body()!!)
-                        else viewState.success()
+                else viewState.success()
+
                 null -> viewState.error("нет интернета")
+                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
             }
         }
-    }
+        }
 
     private fun checkCardNumber(cardNumber: String): Boolean{
         return cardNumber.isNotEmpty() && cardNumber.filter { it != '-' }.length == 16

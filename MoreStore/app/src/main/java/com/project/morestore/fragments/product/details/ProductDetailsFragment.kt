@@ -60,7 +60,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         setClickListeners()
         hideBottomNav()
         showDialog()
-        bind(args.product, userId, null)
+        //bind(args.product, userId, null)
+        getProduct(args.product?.id)
         getProduct(args.productId?.toLong())
         if (args.product != null)
             getCurrentUser()
@@ -447,13 +448,15 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
            val calendar = Calendar.getInstance().apply { timeInMillis = product.tariff.dateEnd * 1000 }
             val day = calendar.get(Calendar.DAY_OF_MONTH)
             val dayStr = if(day < 10) "0$day" else day.toString()
-            val month = calendar.get(Calendar.MONTH)
+            val month = calendar.get(Calendar.MONTH) + 1
             val monthStr = if (month < 10) "0$month" else month.toString()
             val year = calendar.get(Calendar.YEAR)
             val dateString = "$dayStr.$monthStr.$year"
            binding.promoteActiveFrameLayout.isVisible = true
            binding.borderView.isVisible = true
            binding.promoteActiveTextView.text = "Ваше объявление находится в верхних строчках поиска до $dateString"
+           binding.promoteInfoCard.isVisible = false
+
         }
     }
 
