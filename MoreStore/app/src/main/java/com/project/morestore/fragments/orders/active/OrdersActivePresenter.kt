@@ -121,7 +121,7 @@ class OrdersActivePresenter(val context: Context)
                     else null
 
                     val buySuggest = order.cart.first().statusUser?.buy
-                    val status = when(buySuggest?.status) {
+                    var status = when(buySuggest?.status) {
                         0 -> OrderStatus.NOT_SUBMITTED
                         1 -> {
                             if (address == null) OrderStatus.MEETING_NOT_ACCEPTED
@@ -141,6 +141,16 @@ class OrdersActivePresenter(val context: Context)
                         }
                         else -> OrderStatus.NOT_SUBMITTED
                     }
+                        if(order.pay == 2 && buySuggest?.status != 2){
+                            if(!order.isPayment)
+                                status = OrderStatus.NOT_PAYED
+                            else{
+                                if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1)
+                                    status = OrderStatus.MEETING_NOT_ACCEPTED
+                                if(buySuggest?.status == 0 || buySuggest?.status == null)
+                                    status = OrderStatus.NOT_SUBMITTED
+                            }
+                        }
 
                         val discountedPrice = when{
                             order.cart.first().statusUser?.price?.status == 1 -> order.cart.first().statusUser?.price?.value?.toIntOrNull()
@@ -167,7 +177,7 @@ class OrdersActivePresenter(val context: Context)
                             else -> ""
                         },
                         status = status,
-                        newAddress = address?.address,
+                        newAddress = address?.address ?: order.placeAddress,
                         newTime = if(time != null) "${time.get(Calendar.HOUR_OF_DAY)}:${time.get(Calendar.MINUTE)}"
                             else null,
                         sellerId = order.cart.first().idUser!!,

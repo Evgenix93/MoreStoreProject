@@ -42,7 +42,7 @@ class OrderCreatePresenter(context: Context)
                       product: Product,
                       comment: String? = null,
                       promo: String? = null,
-                      sum: Int? = null){
+                      sum: Float? = null){
         presenterScope.launch {
             viewState.loading()
             if(place.id.toInt() == OrderCreateFragment.PLACE_FROM_ME && place.address == null){
@@ -69,26 +69,55 @@ class OrderCreatePresenter(context: Context)
                 comment = comment
 
             )
+            val orders = getAllOrders()
+            orders ?: return@launch
+            if(promoInfo != null){
+                if(promoInfo.status == 0){
+                    viewState.showMessage("Промокод не активен")
+                    return@launch
+                }
+                if(promoInfo.first_order == 1 && orders.isNotEmpty()){
+                    viewState.showMessage("Этот промокод только для первого заказа")
+                    return@launch
+                }
+            }
+
             val response = orderRepository.createOrder(newOrder)
             when(response?.code()){
                 200 -> {
-                    val orders = getAllOrders()
-                    orders ?:  run {
+                    val updatedOrders = getAllOrders()
+
+                    updatedOrders ?:  run {
                         viewState.navigate(R.id.ordersActiveFragment)
                         return@launch
                     }
-                    val order = orders.find { it.idCart.find { cart -> cart == cartId } != null }
+                    val order = updatedOrders.find { it.idCart.find { cart -> cart == cartId } != null }
 
                     if(pay == 2){
                         var finalSum = sum!!
                          if(promoInfo != null ){
-                             if(promoInfo.status == 1 && promoInfo.first_order == 1 && orders.size == 1)
+                             if(promoInfo.status == 1 && promoInfo.first_order == 1 && orders.isEmpty())
                                  finalSum -= promoInfo.sum
                              if (promoInfo.status == 1 && promoInfo.first_order == 0)
                                  finalSum -= promoInfo.sum
 
                          }
+
+                        if(!fromChat)
+                           createBuyDialog(userId = product.idUser!!, productId = product.id)
                         val payUrl = getPayUrl(PayOrderInfo(finalSum, order!!.id ))
+                        payUrl ?: run {
+                            viewState.navigate(R.id.ordersActiveFragment)
+                            return@launch}
+
+                        if(delivery == 1){
+                            if(place.address != null)
+                                addDealPlace(order.id, place.address)
+                        }
+
+                        viewState.payForOrder(payUrl, order.id)
+                        return@launch
+
                     }
 
                     viewState.showMessage("Заказ оформлен")
@@ -241,10 +270,10 @@ class OrderCreatePresenter(context: Context)
         }
     }
 
-    private suspend fun getPayUrl(payInfo: PayOrderInfo): String? {
+    private suspend fun getPayUrl(payInfo: PayOrderInfo): PaymentUrl? {
         val response = orderRepository.payForOrder(payInfo)
         return when(response?.code()){
-            200 -> response.body()!!.formUrl
+            200 -> response.body()!!
             null -> {
                 viewState.showMessage("нет интернета")
                 null}
@@ -255,6 +284,24 @@ class OrderCreatePresenter(context: Context)
             else -> null
         }
 
+    }
+
+    fun getCdekPrice(){
+        presenterScope.launch {
+        viewState.loading()
+            val response = orderRepository.getCdekPrice()
+            when(response?.code()){
+                200 -> viewState.setDeliveryPrice(response.body()!!.price)
+                400 -> viewState.showMessage(response.errorBody()!!.string())
+                null -> viewState.showMessage("нет интернета")
+                500 -> viewState.showMessage("500 internal server error")
+                else -> {}
+            }
+        }
+    }
+
+    fun getYandexPrice(){
+        viewState.setDeliveryPrice(340f)
     }
 
 }

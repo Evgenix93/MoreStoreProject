@@ -262,6 +262,7 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             viewState.loading(true)
             val orders = getAllOrders()
             var order = orders?.find { it.id == orderId }
+            Log.d("Mylog", "order: ${order.toString()}")
             if(order == null){
                 val sales = getAllSales()
                 order = sales?.find { it.id == orderId }
@@ -336,6 +337,28 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
 
             if(order.status == 1) status = OrderStatus.RECEIVED_SUCCESSFULLY
 
+            if(order.pay == 2 && buySuggest?.status != 2){
+                if(!order.isPayment) {
+                    if(isBuyer)
+                       status = OrderStatus.NOT_PAYED
+                    if(!isBuyer && (buySuggest?.status == 0 || buySuggest?.status == null))
+                        status = OrderStatus.NOT_SUBMITTED_SELLER
+                    if(!isBuyer && buySuggest?.status == 1)
+                        status = OrderStatus.NOT_PAYED_SELLER
+                }
+                else{
+                    if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1 && isBuyer)
+                        status = OrderStatus.MEETING_NOT_ACCEPTED
+                    if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1 && !isBuyer)
+                        status = OrderStatus.CREATE_DELIVERY
+                    if((buySuggest?.status == 0 || buySuggest?.status == null) && isBuyer)
+                        status = OrderStatus.NOT_SUBMITTED
+                    if((buySuggest?.status == 0 || buySuggest?.status == null) && !isBuyer)
+                        status = OrderStatus.NOT_SUBMITTED_SELLER
+
+                }
+            }
+
 
 
             val orderItem = OrderItem(
@@ -355,7 +378,7 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                     else -> ""
                 },
                 status = status,
-                newAddress = address?.address,
+                newAddress = address?.address ?: order.placeAddress,
                 newTime = if(time != null) "${time.get(Calendar.HOUR_OF_DAY)}:${time.get(Calendar.MINUTE)}"
                 else null,
                 sellerId = order.cart?.first()?.idUser!!,
@@ -532,6 +555,59 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
 
         }
     }*/
+
+    fun getPaymentUrl(sum: Float, orderId: Long){
+        presenterScope.launch {
+            viewState.loading(true)
+            val response = ordersRepository.payForOrder(PayOrderInfo(sum, orderId))
+            when(response?.code()){
+                200 -> {
+                    viewState.loading(false)
+                    viewState.payment(response.body()!!, orderId)
+                }
+                400 -> {
+                    viewState.loading(false)
+                    viewState.showMessage(getError(response.errorBody()!!))
+                }
+                null -> {
+                    viewState.loading(false)
+                    viewState.showMessage("нет интернета")
+                }
+                500 -> {
+                    viewState.loading(false)
+                    viewState.showMessage("500 Internal Server Error")
+                }
+                else -> viewState.loading(false)
+            }
+        }
+
+    }
+
+    fun getCdekPrice(){
+        presenterScope.launch {
+            viewState.loading(true)
+            val response = ordersRepository.getCdekPrice()
+            when(response?.code()){
+                200 -> {
+                    viewState.setDeliveryPrice(response.body()!!.price)
+                    viewState.loading(false)
+                }
+                400 -> {
+                    viewState.loading(false)
+                    viewState.showMessage(response.errorBody()!!.string())
+                }
+                null -> {
+                    viewState.loading(false)
+                    viewState.showMessage("нет интернета")
+                }
+                500 -> {
+                    viewState.loading(false)
+                    viewState.showMessage("500 internal server error")
+                }
+                else -> {viewState.loading(false)}
+            }
+        }
+    }
 
 
 

@@ -1,5 +1,6 @@
 package com.project.morestore.adapters.cart
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,6 +121,15 @@ class OrdersAdapter(
                         orderItemChangeDeliveryAcceptButton.isVisible = false
                         orderItemChangeDeliveryDeclineButton.isVisible = false
                         orderItemDeliveryChangeTitle.text = "К сожалению покупатель отклонил сделку"
+                    }
+                    OrderStatus.NOT_PAYED -> {
+                        orderItemStatusBlock.isVisible = true
+                        orderItemAcceptBlock.isVisible = false
+                        orderItemDeliveryChangeBlock.isVisible = false
+                        orderItemStatusContent.text = "Не оплачено"
+                        orderItemStatusImage.setImageResource(R.drawable.ic_credit_card)
+                        orderItemStatusImage.imageTintList = ColorStateList.valueOf(context.resources.getColor(R.color.blue4, null))
+
                     }
                     else -> {}
                 }

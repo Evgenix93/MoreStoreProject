@@ -7,6 +7,9 @@ import android.util.Range
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
@@ -21,10 +24,8 @@ import com.project.morestore.databinding.FragmentOrderCreateBinding
 import com.project.morestore.dialogs.MenuBottomDialogDateFragment
 import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.fragments.MyAddressesFragment
-import com.project.morestore.models.Chat
-import com.project.morestore.models.MyAddress
-import com.project.morestore.models.OrderPlace
-import com.project.morestore.models.Product
+import com.project.morestore.fragments.RaiseProductFragmentDirections
+import com.project.morestore.models.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.util.*
@@ -37,6 +38,8 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     private var chosenAddress: MyAddress? = null
     private var chosenTime: Calendar? = null//Calendar.getInstance()
     private var chosenAddressStr = ""
+    private var productPrice: Float? = null
+    private var currentDeliveryPrice: Float? = null
 
     ///////////////////////////////////////////////////////////////////////////
     //                      View
@@ -63,6 +66,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     ///////////////////////////////////////////////////////////////////////////
 
     override fun navigate(pageId: Int?) {
+        binding.loader.isVisible = false
         when (pageId) {
             null -> {
                 if(findNavController().previousBackStackEntry?.destination?.id != R.id.chatFragment)
@@ -86,6 +90,8 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     }
 
     override fun setProductInfo(product: Product) {
+        productPrice = product.priceNew
+        binding.loader.isVisible = false
         Glide.with(this)
                 .load(product.user?.avatar?.photo.toString())
                 .into(binding.sellerAvatarImageView)
@@ -114,13 +120,22 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.oldPrice2TextView.text = crossedStr
         binding.oldPrice2WithDeliveryTextView.text = crossedStr
         binding.newPriceTextView.text = product.priceNew.toString()
+        binding.newPrice2TextView.text = product.priceNew.toString()
+        binding.price2WithDeliveryTextView.text = if(product.priceNew != null) product.priceNew.toString()
+                                                  else product.price.toString()
+        //val finalSum = getFinalSum(product.priceNew?.toInt() ?: product.price.toInt(), 3 )
+        binding.finalSumTextView.text =
+            getFinalSum(productPrice ?: 0f, currentDeliveryPrice ?: 0f).toString() //finalSum.toString()
+        binding.finalSumWithoutDelivery.text = product.priceNew.toString()
     }
 
     override fun loading() {
+        binding.loader.isVisible = true
 
     }
 
     override fun showMessage(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
@@ -132,6 +147,52 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                     ChatFragment.DIALOG_ID_KEY to chat.id)
             )
         }
+    }
+
+    override fun payForOrder(paymentUrl: PaymentUrl, orderId: Long) {
+        binding.loader.isVisible = false
+        binding.webView.isVisible = true
+        binding.webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return if (request?.url.toString().contains("success")) {
+                    view?.isVisible = false
+                    findNavController().navigate(
+                        OrderCreateFragmentDirections
+                            .actionCreateOrderFragmentToSuccessOrderPaymentFragment(orderId = orderId))
+                    true
+                }else if(request?.url.toString().contains("failed")) {
+                    findNavController().navigate(R.id.ordersActiveFragment)
+                    true
+                }else {
+                    false
+                }
+            }
+
+        }
+        binding.webView.settings.userAgentString = "Chrome/56.0.0.0 Mobile"
+        binding.webView.settings.javaScriptEnabled = true
+        binding.webView.loadUrl(paymentUrl.formUrl)
+    }
+
+    override fun setDeliveryPrice(price: Float?) {
+        binding.loader.isVisible = false
+        if(price == null){
+            binding.payNowWithDeliveryButton.isEnabled = false
+            binding.updateDeliveryPriceBtn.isVisible = true
+            binding.updateDeliveryPriceBtn.setOnClickListener {
+                if(binding.anotherCityRadioBtn.isChecked) getDeliveryPrice()
+            }
+        }else {
+            binding.payNowWithDeliveryButton.isEnabled = true
+            binding.updateDeliveryPriceBtn.isVisible = false
+        }
+        currentDeliveryPrice = price
+        binding.deliveryPriceTextView.text = if(price != null) price.toString() else "не удалось загрузить"
+        val finalSum = getFinalSum(productPrice ?: 0f, price ?: 0f)
+        binding.finalSumTextView.text = finalSum.toString()
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -302,6 +363,54 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             }
         }
 
+        binding.payNowWithDeliveryButton.setOnClickListener {
+            val place = OrderPlace(PLACE_FROM_ME.toLong(), chosenAddressStr, null)
+            val deliveryId = when(binding.deliveryVariantRadioGroup.checkedRadioButtonId){
+                R.id.yandexRadioBtn -> YANDEX_GO
+                R.id.anotherCityRadioBtn -> ANOTHER_CITY
+                R.id.takeFromSellerRadioBtn -> TAKE_FROM_SELLER
+                else -> -1
+            }
+            presenter.onCreateOrder(
+                cartId = args.cartId,
+                delivery = deliveryId,
+                place = place,
+                pay = PAY_PREPAYMENT,
+                fromChat =  findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
+                comment = if(binding.commentEditText.text?.isNotEmpty() == true) binding.commentEditText.text.toString()
+                          else null,
+                product = args.product,
+                promo =  if(binding.promoEditText.text?.isNotEmpty() == true) binding.promoEditText.text.toString()
+                         else null,
+                sum = binding.finalSumTextView.text.toString().toFloat()
+            )
+        }
+
+        binding.payNowButton.setOnClickListener {
+            val deliveryId = when(binding.deliveryVariantRadioGroup.checkedRadioButtonId){
+                R.id.yandexRadioBtn -> YANDEX_GO
+                R.id.anotherCityRadioBtn -> ANOTHER_CITY
+                R.id.takeFromSellerRadioBtn -> TAKE_FROM_SELLER
+                else -> -1
+            }
+            val placeId = when(binding.radioButtons.checkedRadioButtonId){
+                R.id.onSellerChoiceRadioBtn -> PLACE_FROM_SELLER
+                R.id.userVariantRadioBtn -> PLACE_FROM_ME
+                else -> -1
+            }
+            val payId = when(binding.deliveryTypeRadioGroup.checkedRadioButtonId){
+                R.id.onDealPlaceRadioButton -> PAY_ON_PLACE
+                R.id.prepaymentRadioButton -> PAY_PREPAYMENT
+                else -> -1
+            }
+            val place = if(placeId == PLACE_FROM_SELLER) OrderPlace(placeId.toLong(), null, null)
+            else OrderPlace(placeId.toLong(),
+                if(chosenAddressStr.isNotEmpty()) "$chosenAddressStr;${chosenTime?.timeInMillis}" else null,
+                chosenTime?.timeInMillis ?: 0/1000)
+            presenter.onCreateOrder(args.cartId, deliveryId, place, payId,
+                findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment, args.product)
+        }
+
     }
 
     private fun getChosenAddress(onAddressReceived: (addressName: String, address: String, type: Int) -> Unit){
@@ -345,6 +454,15 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         }
     }
 
+    private fun initCdekVariantButtons(){
+        binding.deliveryCdekVariantsRadioGroup.setOnCheckedChangeListener { _, _ ->
+            chosenAddress = null
+            chosenAddressStr = ""
+            binding.myAddressBlock.isVisible = false
+        }
+
+    }
+
     private fun initViews() {
         val oldPriceStr = binding.oldPriceTextView.text.toSpannable().apply { setSpan(StrikethroughSpan(), 0, length, 0) }
         binding.oldPriceTextView.text = oldPriceStr
@@ -369,6 +487,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     }
 
     private fun showScreenWithDelivery(show: Boolean ){
+        if(binding.anotherCityRadioBtn.isChecked)
+            presenter.getCdekPrice()
+        if(binding.yandexRadioBtn.isChecked)
+            presenter.getYandexPrice()
         binding.chosenDeliveryPlaceWindow.isVisible = show
         binding.commentWindow.isVisible = show
         binding.deliveryPriceInfoTextView.isVisible = show
@@ -378,8 +500,12 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.paymentCardView.isVisible = !show
         binding.prepaymentInfoTextView.isVisible = !show
         binding.totalCardView.isVisible = !show && binding.prepaymentRadioButton.isChecked
-        binding.payButton.isVisible = !show
+        binding.payButton.isVisible = !show && binding.onDealPlaceRadioButton.isChecked
         binding.deliveryCdekVariantCardView.isVisible = binding.anotherCityRadioBtn.isChecked
+        binding.deliveryPriceTextView.text = getDeliveryPrice().toString()
+
+
+
 
 
 
@@ -395,6 +521,14 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
 
     private fun getSupportDialog(){
         presenter.getSupportDialog()
+    }
+
+    private fun getDeliveryPrice() = 340
+
+    private fun getFinalSum(productPrice: Float, deliveryPrice: Float): Float{
+        val sumWithDelivery = productPrice + deliveryPrice
+        return sumWithDelivery + (sumWithDelivery * 0.05f)
+
     }
 
     companion object{

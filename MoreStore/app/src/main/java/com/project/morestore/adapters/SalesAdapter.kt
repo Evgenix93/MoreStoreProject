@@ -213,6 +213,24 @@ class SalesAdapter(
                     binding.orderItemChangeDeliveryDeclineButton.isVisible = false
 
                 }
+                if(order.pay == 2 && buySuggest?.status != 2){
+                    if(!order.isPayment && buySuggest?.status == 1 ){
+                        orderStatus = OrderStatus.NOT_PAYED_SELLER
+                        binding.orderItemDeliveryChangeBlock.isVisible = false
+                        binding.orderItemStatusBlock.isVisible = true
+                        binding.orderItemStatusContent.text = "Не оплачено"
+                    }
+                    if(order.isPayment && buySuggest?.status == 1){
+                        orderStatus = OrderStatus.CREATE_DELIVERY
+                        binding.orderItemDeliveryChangeBlock.isVisible = false
+                        binding.orderItemStatusBlock.isVisible = true
+                        binding.orderItemStatusContent.text = "Оплачено"
+                        binding.orderItemAcceptBlock.isVisible = true
+                        binding.orderItemAcceptButton.text = "Вызвать курьера"
+
+                    }
+                    //binding.orderItemDeliveryContent.text = when(order.delivery == 1) "Заберу у продавца" else "CDEK"
+                }
             }else{
               orderStatus = OrderStatus.RECEIVED_SUCCESSFULLY
             }

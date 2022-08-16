@@ -275,6 +275,9 @@
     <string name="pattern_dot_divider">%s • %s</string>
     <string name="continue_text">Продолжить</string>
     <string name="sale">Продажа</string>
+    <string name="success_order_payment">Поздравляем! Вы успешно\nоплатили заказ.</string>
+    <string name="success_order_payment_info">Следить за статусом вы можете в ваших заказах\nили в чате с продавцом</string>
+    <string name="show_order_status_btn">Посмотреть статус заказа</string>
 
     <!--chats-->
     <string name="chat_support_title">Служба поддержки</string>

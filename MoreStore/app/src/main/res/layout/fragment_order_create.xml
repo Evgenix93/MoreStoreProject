@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/gray3">
 
+
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
@@ -777,6 +779,7 @@
                     android:textColor="@color/gray2" />
 
                 <TextView
+                    android:id="@+id/newPrice2TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="165dp"
@@ -806,6 +809,7 @@
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/finalSumWithoutDelivery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="94dp"
@@ -860,6 +864,7 @@
                     android:layout_marginStart="10dp"/>
 
                 <EditText
+                    android:id="@+id/promoEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/edit_text"
@@ -901,11 +906,12 @@
                     android:textColor="@color/gray2" />
 
                 <TextView
+                    android:id="@+id/price2WithDeliveryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="165dp"
                     android:layout_marginTop="135dp"
-                    android:text="500 ₽"
+                    tools:text="500 ₽"
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/black" />
 
@@ -914,9 +920,9 @@
                     android:id="@+id/oldPrice2WithDeliveryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="218dp"
+                    android:layout_marginStart="230dp"
                     android:layout_marginTop="135dp"
-                    android:text="5 600 ₽ "
+                    tools:text="5 600 ₽ "
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/gray2" />
 
@@ -931,13 +937,25 @@
                     android:textColor="@color/gray2" />
 
                 <TextView
+                    android:id="@+id/deliveryPriceTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="94dp"
                     android:layout_marginTop="168dp"
-                    android:text="340 ₽"
+                    tools:text="340 ₽"
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/updateDeliveryPriceBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Обновить"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/green"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="168dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -949,11 +967,12 @@
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/finalSumTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="94dp"
                     android:layout_marginTop="207dp"
-                    android:text="500 ₽"
+                    tools:text="500 ₽"
                     android:textAppearance="@style/bold_24"
                     android:textColor="@color/green" />
 
@@ -999,5 +1018,27 @@
                 app:layout_constraintTop_toBottomOf="@id/totalCardView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <WebView
+        android:id="@+id/webView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

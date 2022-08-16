@@ -5,6 +5,9 @@ import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.util.Range
 import android.view.View
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
@@ -20,10 +23,8 @@ import com.project.morestore.databinding.FragmentOrderDetailsBinding
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.dialogs.YesNoDialog
 import com.project.morestore.fragments.orders.active.OrdersActiveFragmentDirections
-import com.project.morestore.models.Chat
-import com.project.morestore.models.OfferedOrderPlaceChange
-import com.project.morestore.models.Order
-import com.project.morestore.models.Product
+import com.project.morestore.fragments.orders.create.OrderCreateFragmentDirections
+import com.project.morestore.models.*
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
 import com.project.morestore.mvpviews.OrderDetailsView
@@ -35,6 +36,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     private val binding: FragmentOrderDetailsBinding by viewBinding()
     private val args: OrderDetailsFragmentArgs by navArgs()
     private var orderStatus: OrderStatus? = null
+    private lateinit var orderItem: OrderItem
+    private var currentDeliveryPrice: Float? = null
     private val presenter by moxyPresenter { OrderDetailsPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,13 +53,19 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     private fun initToolbar(){
         binding.toolbar.titleTextView.text = "Статус заказа"
-        binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.backIcon.setOnClickListener {
+        if(findNavController().previousBackStackEntry?.destination?.id == R.id.successOrderPaymentFragment)
+            findNavController().navigate(R.id.ordersActiveFragment)
+            else
+            findNavController().popBackStack() }
         binding.toolbar.actionIcon.setImageResource(R.drawable.ic_support_black)
     }
 
 
     private fun bind(order: OrderItem) {
         Log.d("mylog", "orderStatus ${order.status}")
+        orderItem = order
+        getDeliveryPrice(order)
         binding.allBlocks.isVisible = true
         orderStatus = order.status
         setAddress(order)
@@ -139,6 +148,13 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             else -> null
         }
         binding.newPriceTextView.text = discountedPrice ?: product.priceNew.toString()
+        if(orderItem.deliveryInfo != "Заберу у продавца"){
+            binding.priceTextView.text = "Цена с учётом доставки"
+            //val price = (discountedPrice?.toInt() ?: product.priceNew?.toInt() ?: 0) + getDeliveryPrice()
+            //val finalPrice = price + (price.toFloat() * 0.05)
+            //binding.newPriceTextView.text = finalPrice.toString()
+
+        }
     }
 
 
@@ -235,8 +251,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 }
                 OrderStatus.NOT_SUBMITTED -> {
                     orderItemStatusBlock.isVisible = true
-                    myAddressBlock.isVisible = false
-                    dealPlaceTextView.isVisible = false
+                    //myAddressBlock.isVisible = false
+                    //dealPlaceTextView.isVisible = false
                     orderItemStatusContent.text = "Ожидание подтверждения от продавца"
                 }
                 OrderStatus.DECLINED -> {
@@ -266,6 +282,16 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     cancelTextView.isVisible = false
                     orderItemAcceptBlock.isVisible = false
                 }
+                OrderStatus.NOT_PAYED -> {
+                    orderItemStatusBlock.isVisible = true
+                    orderItemStatusContent.text = "Не оплачено"
+                    binding.orderItemAcceptBlock.isVisible = true
+                    binding.orderItemAcceptDescription.isVisible = false
+                    binding.orderItemAcceptButton.text = "Оплатить"
+                    binding.orderItemAcceptButton.isEnabled = false
+                    binding.orderItemAcceptProblemsButton.isVisible = false
+
+                }
                 else -> {}
             }
         }
@@ -278,6 +304,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     override fun loading(loading: Boolean) {
         binding.loader.isVisible = loading
+        binding.orderItemAcceptButton.isEnabled = !loading
 
     }
 
@@ -318,8 +345,50 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         }
     }
 
+    override fun payment(paymentUrl: PaymentUrl, orderId: Long) {
+        binding.loader.isVisible = false
+        binding.webView.isVisible = true
+        binding.webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return if (request?.url.toString().contains("success")) {
+                    view?.isVisible = false
+                    findNavController().navigate(
+                        OrderDetailsFragmentDirections.actionOrderDetailsFragmentToSuccessOrderPaymentFragment(orderId = orderId))
+                    true
+                }else if(request?.url.toString().contains("failed")) {
+                    showMessage("Ошибка оплаты")
+                    true
+                }else {
+                    false
+                }
+            }
+
+        }
+        binding.webView.settings.userAgentString = "Chrome/56.0.0.0 Mobile"
+        binding.webView.settings.javaScriptEnabled = true
+        binding.webView.loadUrl(paymentUrl.formUrl)
+    }
+
+    override fun setDeliveryPrice(price: Float) {
+        if(orderItem.status == OrderStatus.NOT_PAYED){
+            binding.orderItemAcceptButton.isEnabled = true
+            binding.orderItemAcceptButton.setOnClickListener {
+                presenter.getPaymentUrl(binding.newPriceTextView.text.toString().toFloat(), orderItem.id)
+            }
+        }
+        currentDeliveryPrice = price
+        val sumWithDelivery = orderItem.price + price
+        val finalSum = sumWithDelivery + (sumWithDelivery * 0.05)
+        binding.priceTextView.text = finalSum.toString()
+
+    }
+
 
     private fun setAddress(order: OrderItem){
+        Log.d("Mylog", order.newAddress.orEmpty())
         binding.address.text = order.newAddress?.substringBefore(";")
         if(order.newAddress == null) {
             binding.myAddressBlock.isVisible = false
@@ -338,6 +407,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
           OrderStatus.CHANGE_MEETING_SELLER -> setChangeMeetingSellerStatus(order)
           OrderStatus.RECEIVED_SELLER -> setReceivedSellerStatus()
           OrderStatus.ADD_MEETING ->  setAddMeetingStatus(order)
+            OrderStatus.NOT_PAYED_SELLER -> setNotPayedSellerStatus()
             else -> {}
         }
     }
@@ -405,5 +475,16 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.orderItemAcceptButton.setOnClickListener{
             findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToDealPlaceFragment(order.id))
         }
+    }
+
+    private fun setNotPayedSellerStatus(){
+        binding.orderItemStatusBlock.isVisible = true
+        binding.orderItemStatusContent.text = "Не оплачено"
+
+    }
+
+    private fun getDeliveryPrice(order: OrderItem){
+        if(order.deliveryInfo == "СДЕК")
+            presenter.getCdekPrice()
     }
 }

@@ -1039,6 +1039,9 @@
         <action
             android:id="@+id/action_createOrderFragment_to_myAddressesFragment"
             app:destination="@id/myAddressesFragment" />
+        <action
+            android:id="@+id/action_createOrderFragment_to_successOrderPaymentFragment"
+            app:destination="@id/successOrderPaymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -1291,6 +1294,9 @@
         <action
             android:id="@+id/action_orderDetailsFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_successOrderPaymentFragment"
+            app:destination="@id/successOrderPaymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/blackListFragment"
@@ -1300,5 +1306,16 @@
         android:id="@+id/createProductPackageFragment"
         android:name="com.project.morestore.fragments.CreateProductPackageFragment"
         android:label="CreateProductPackageFragment" />
+    <fragment
+        android:id="@+id/successOrderPaymentFragment"
+        android:name="com.project.morestore.fragments.SuccessOrderPaymentFragment"
+        android:label="SuccessOrderPaymentFragment" >
+        <action
+            android:id="@+id/action_successOrderPaymentFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
+        <argument
+            android:name="orderId"
+            app:argType="long" />
+    </fragment>
 
 </navigation>

@@ -60,4 +60,10 @@ interface OrdersApi {
     @POST("sber/registration")
     suspend fun payOrderGetError(@Body payInfo: PayOrderInfo): Response<String>
 
+    @POST("cdek/price")
+    suspend fun getCdekPrice(): Response<DeliveryPrice>
+
+    @POST("cdek/price")
+    suspend fun getCdekPriceError(): Response<String>
+
 }
