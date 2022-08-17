@@ -287,6 +287,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         else binding.heartIcon.imageTintList = null
        when(product.status){
            0 -> {
+               binding.promoteInfoCard.isVisible = false
+               binding.promoteActiveFrameLayout.isVisible = false
              if(product.commentModeration != null || product.property?.any{
                    it.comment != null
                  } == true){
@@ -326,15 +328,21 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
              }
            }
            8 -> {
+               binding.promoteInfoCard.isVisible = false
+               binding.promoteActiveFrameLayout.isVisible = false
                binding.productSoldCardView.isVisible = true
                binding.addToCartBtn.isVisible = false
                binding.chatBtn.isVisible = false
            }
            7 -> {
+               binding.promoteInfoCard.isVisible = false
+               binding.promoteActiveFrameLayout.isVisible = false
                binding.productIsBookedCardView.isVisible = true
                binding.addToCartBtn.isVisible = false
            }
            6 -> {
+               binding.promoteInfoCard.isVisible = false
+               binding.promoteActiveFrameLayout.isVisible = false
                binding.dealIsSubmittedCardView.isVisible = true
                binding.addToCartBtn.isVisible = false
            }
@@ -437,7 +445,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.textView17.isVisible = false
         binding.productList.isVisible = false
         if (dialogWrappers != null) {
-            if (dialogWrappers.none { it.product?.id == product.id } && product.status == 1)
+            if (dialogWrappers.none { it.product?.id == product.id })
                 binding.promoteInfoCard.isVisible = true
             else if(dialogWrappers.find { it.product?.id == product.id } != null) {
                 binding.buyersCard.isVisible = true
@@ -447,7 +455,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 binding.promoteInfoTextView.text = "Вы можете получить больше просмотров"
             }
         }
-        if(product.tariff != null && System.currentTimeMillis() < product.tariff.dateEnd * 1000 && product.status == 1){
+        if(product.tariff != null && System.currentTimeMillis() < product.tariff.dateEnd * 1000){
            val calendar = Calendar.getInstance().apply { timeInMillis = product.tariff.dateEnd * 1000 }
             val day = calendar.get(Calendar.DAY_OF_MONTH)
             val dayStr = if(day < 10) "0$day" else day.toString()
