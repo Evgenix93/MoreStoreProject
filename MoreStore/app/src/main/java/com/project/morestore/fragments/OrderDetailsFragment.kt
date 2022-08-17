@@ -31,6 +31,8 @@ import com.project.morestore.mvpviews.OrderDetailsView
 import com.project.morestore.presenters.OrderDetailsPresenter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details), OrderDetailsView {
     private val binding: FragmentOrderDetailsBinding by viewBinding()
@@ -147,7 +149,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             product.statusUser?.sale?.status == 1 -> product.statusUser.sale.value
             else -> null
         }
-        binding.newPriceTextView.text = discountedPrice ?: product.priceNew.toString()
+        if(orderItem.deliveryInfo != "СДЕК")
+           binding.newPriceTextView.text = discountedPrice ?: product.priceNew.toString()
         if(orderItem.deliveryInfo != "Заберу у продавца"){
             binding.priceTextView.text = "Цена с учётом доставки"
             //val price = (discountedPrice?.toInt() ?: product.priceNew?.toInt() ?: 0) + getDeliveryPrice()
@@ -332,7 +335,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             .circleCrop()
             .into(binding.sellerAvatarImageView)
         binding.sellerNameTextView.text = name
-        binding.name.text = name
+        //binding.name.text = name
     }
 
     override fun supportDialogLoaded(chat: Chat) {
@@ -373,16 +376,19 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     }
 
     override fun setDeliveryPrice(price: Float) {
-        if(orderItem.status == OrderStatus.NOT_PAYED){
-            binding.orderItemAcceptButton.isEnabled = true
-            binding.orderItemAcceptButton.setOnClickListener {
-                presenter.getPaymentUrl(binding.newPriceTextView.text.toString().toFloat(), orderItem.id)
-            }
-        }
+
         currentDeliveryPrice = price
         val sumWithDelivery = orderItem.price + price
         val finalSum = sumWithDelivery + (sumWithDelivery * 0.05)
-        binding.priceTextView.text = finalSum.toString()
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.DOWN
+        binding.newPriceTextView.text = df.format(finalSum).replace(',', '.')
+        if(orderItem.status == OrderStatus.NOT_PAYED){
+            binding.orderItemAcceptButton.isEnabled = true
+            binding.orderItemAcceptButton.setOnClickListener {
+                presenter.getPaymentUrl(df.format(finalSum).replace(',', '.').toFloat(), orderItem.id)
+            }
+        }
 
     }
 

@@ -882,9 +882,10 @@
                     android:layout_marginStart="10dp"/>
 
                 <TextView
+                    android:id="@+id/deliveryDateTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12-14 ноября"
+                    tools:text="12-14 ноября"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/green"
                     android:layout_marginTop="95dp"

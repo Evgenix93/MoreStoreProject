@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class OrderCreatePresenter(context: Context)
     : MvpPresenter<OrderCreateView>() {
@@ -105,7 +107,9 @@ class OrderCreatePresenter(context: Context)
 
                         if(!fromChat)
                            createBuyDialog(userId = product.idUser!!, productId = product.id)
-                        val payUrl = getPayUrl(PayOrderInfo(finalSum, order!!.id ))
+                        val df = DecimalFormat("#.##")
+                        df.roundingMode = RoundingMode.DOWN
+                        val payUrl = getPayUrl(PayOrderInfo(df.format(finalSum).toFloat(), order!!.id ))
                         payUrl ?: run {
                             viewState.navigate(R.id.ordersActiveFragment)
                             return@launch}

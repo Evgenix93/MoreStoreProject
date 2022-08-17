@@ -294,6 +294,8 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             showLoading(false)
             productAdapter.updateList(emptyList())
             reviewsAdapter.setItems(emptyList())
+            binding.glassesImageView.isVisible = true
+
         }
 
         if(result is Filter){

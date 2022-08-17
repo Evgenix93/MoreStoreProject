@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductBinding
 import com.project.morestore.models.Product
+import com.project.morestore.singletones.Token
 
 class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>(){ //PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
     private var list = listOf<Product>()
@@ -84,7 +85,7 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
                 }
 
             }
-                if(product.statusUser?.read == true){
+                if(product.statusUser?.read == true && product.idUser != Token.userId){
                 binding.statusReadInfoCardView.isVisible = true
                 binding.productImageView.alpha = 0.65f
             }

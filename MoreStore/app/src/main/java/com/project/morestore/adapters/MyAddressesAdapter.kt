@@ -50,6 +50,7 @@ class MyAddressesAdapter(val callback :(MyAddress)->Unit) : RecyclerView.Adapter
                     AddressType.HOME.id -> {
                         icon.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(views.root.context, R.color.blue4))
                         icon.setImageResource(R.drawable.ic_package)
+                        icon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(views.root.context, R.color.white))
                         title.setText(R.string.myAddress_pickup)
                     }
                 }

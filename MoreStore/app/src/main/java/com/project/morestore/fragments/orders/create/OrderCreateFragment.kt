@@ -28,6 +28,8 @@ import com.project.morestore.fragments.RaiseProductFragmentDirections
 import com.project.morestore.models.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 
 class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create), OrderCreateView {
@@ -192,7 +194,27 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         currentDeliveryPrice = price
         binding.deliveryPriceTextView.text = if(price != null) price.toString() else "не удалось загрузить"
         val finalSum = getFinalSum(productPrice ?: 0f, price ?: 0f)
-        binding.finalSumTextView.text = finalSum.toString()
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.DOWN
+        binding.finalSumTextView.text = df.format(finalSum).replace(',', '.')
+
+        val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() + (172800 * 1000) }
+        val month = when(calendar.get(Calendar.MONTH)){
+            0 -> "Января"
+            1 -> "Февраля"
+            2 -> "Марта"
+            3 -> "Апреля"
+            4 -> "Мая"
+            5 -> "Июня"
+            6 -> "Июля"
+            7 -> "Августа"
+            8 -> "Сентября"
+            9 -> "Октября"
+            10 -> "Ноября"
+            11 -> "Декабря"
+            else -> ""
+        }
+        binding.deliveryDateTextView.text = "${calendar.get(Calendar.DAY_OF_MONTH)} $month"
     }
 
     ///////////////////////////////////////////////////////////////////////////
