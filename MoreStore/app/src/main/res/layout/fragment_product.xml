@@ -252,7 +252,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/borderView">
+                app:layout_constraintTop_toBottomOf="@+id/promoteInfoCard">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -296,9 +296,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="66dp"
+                    android:layout_marginBottom="32dp"
                     android:layout_marginHorizontal="10dp"
                     style="@style/buttonOutlinedStyle"
                     android:text="Открыть чаты"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@color/gray3"
+                    android:layout_gravity="bottom"/>
 
             </FrameLayout>
 
@@ -308,9 +315,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/buyersCard">
+                app:layout_constraintTop_toBottomOf="@+id/promoteActiveFrameLayout">
 
                 <TextView
+                    android:id="@+id/promoteInfoTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="42dp"
@@ -329,16 +337,21 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="16dp"/>
 
-
-
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/raiseProductButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="118dp"
+                    android:layout_marginBottom="32dp"
                     android:layout_marginHorizontal="10dp"
                     style="@style/buttonOutlinedStyle"
                     android:text="@string/raise_product"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@color/gray3"
+                    android:layout_gravity="bottom"/>
 
             </FrameLayout>
 
@@ -346,10 +359,9 @@
                 android:id="@+id/promoteActiveFrameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/chatBtn"
+                app:layout_constraintTop_toBottomOf="@+id/view4"
                 android:background="@color/white"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
              <ImageView
                  android:layout_width="wrap_content"
@@ -365,24 +377,18 @@
                     tools:text="Ваше объявление находится в верхних строчках поиска до 23.10.2021"
                     android:layout_marginStart="42dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="32dp"
                     android:layout_marginEnd="10dp"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@color/gray3"
+                    android:layout_gravity="bottom"/>
+
             </FrameLayout>
-
-            <View
-                android:id="@+id/borderView"
-                android:layout_width="0dp"
-                android:layout_height="16dp"
-                android:background="@color/gray3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/promoteActiveFrameLayout"
-                android:visibility="gone"/>
-
-
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/productIsBookedCardView"
@@ -638,6 +644,7 @@
                 android:layout_marginTop="19dp"
                 android:backgroundTint="@color/white"
                 android:src="@drawable/avatar"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view3"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
@@ -651,6 +658,7 @@
                 android:text="Елена Б."
                 android:textAppearance="@style/regular_16"
                 android:textColor="@color/black"
+                android:visibility="visible"
                 app:layout_constraintStart_toEndOf="@+id/avatarImageView"
                 app:layout_constraintTop_toBottomOf="@+id/view3" />
 
@@ -665,6 +673,7 @@
                 tools:text="+7 (919) 157-80-60"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/sellerNameTextView"
                 app:layout_constraintTop_toBottomOf="@+id/sellerNameTextView" />
 
@@ -698,6 +707,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/view3"
                 app:layout_constraintBottom_toTopOf="@+id/chatBtn"
                 android:clickable="true"
+                android:visibility="visible"
                 android:background="?attr/selectableItemBackground"/>
 
 
@@ -711,9 +721,11 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="10dp"
                 android:text="Написать в чате"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sellerPhoneTextView" />
+
 
             <View
                 android:id="@+id/view3"
@@ -732,9 +744,9 @@
                 android:layout_marginTop="16dp"
                 android:background="@color/gray3"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/promoteInfoCard" />
+                app:layout_constraintTop_toBottomOf="@+id/chatBtn"
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/textView"
@@ -746,7 +758,7 @@
                 android:textAppearance="@style/regular_16"
                 android:textColor="@color/gray2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view4" />
+                app:layout_constraintTop_toBottomOf="@+id/buyersCard" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -1029,7 +1041,7 @@
                 android:background="@color/gray8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/errorTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/productColor4TextView" />
 
             <TextView
                 android:id="@+id/textView15"
