@@ -433,18 +433,21 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         binding.starIcon.isVisible = false
         binding.ratingTextView.isVisible = false
         binding.userClickableView.isVisible = false
+        binding.view4.isVisible = false
         binding.textView17.isVisible = false
         binding.productList.isVisible = false
         if (dialogWrappers != null) {
-            if (dialogWrappers.none { it.product?.id == product.id } && product.status != 8)
+            if (dialogWrappers.none { it.product?.id == product.id } && product.status == 1)
                 binding.promoteInfoCard.isVisible = true
             else if(dialogWrappers.find { it.product?.id == product.id } != null) {
                 binding.buyersCard.isVisible = true
                 binding.buyersCount.text =
                     dialogWrappers.filter { it.product?.id == product.id }.size.toString()
+                binding.promoteInfoCard.isVisible = true
+                binding.promoteInfoTextView.text = "Вы можете получить больше просмотров"
             }
         }
-        if(product.tariff != null && System.currentTimeMillis() < product.tariff.dateEnd * 1000){
+        if(product.tariff != null && System.currentTimeMillis() < product.tariff.dateEnd * 1000 && product.status == 1){
            val calendar = Calendar.getInstance().apply { timeInMillis = product.tariff.dateEnd * 1000 }
             val day = calendar.get(Calendar.DAY_OF_MONTH)
             val dayStr = if(day < 10) "0$day" else day.toString()
@@ -453,10 +456,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             val year = calendar.get(Calendar.YEAR)
             val dateString = "$dayStr.$monthStr.$year"
            binding.promoteActiveFrameLayout.isVisible = true
-           binding.borderView.isVisible = true
            binding.promoteActiveTextView.text = "Ваше объявление находится в верхних строчках поиска до $dateString"
            binding.promoteInfoCard.isVisible = false
-
         }
     }
 
