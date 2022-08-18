@@ -126,8 +126,8 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.price2WithDeliveryTextView.text = if(product.priceNew != null) product.priceNew.toString()
                                                   else product.price.toString()
         //val finalSum = getFinalSum(product.priceNew?.toInt() ?: product.price.toInt(), 3 )
-        binding.finalSumTextView.text =
-            getFinalSum(productPrice ?: 0f, currentDeliveryPrice ?: 0f).toString() //finalSum.toString()
+        //binding.finalSumTextView.text =
+            //getFinalSum(productPrice ?: 0f, currentDeliveryPrice ?: 0f).toString() //finalSum.toString()
         binding.finalSumWithoutDelivery.text = product.priceNew.toString()
     }
 
@@ -404,7 +404,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                 product = args.product,
                 promo =  if(binding.promoEditText.text?.isNotEmpty() == true) binding.promoEditText.text.toString()
                          else null,
-                sum = binding.finalSumTextView.text.toString().toFloat()
+                sum = binding.finalSumTextView.text.toString().replace(',', '.').toFloat()
             )
         }
 

@@ -109,7 +109,7 @@ class OrderCreatePresenter(context: Context)
                            createBuyDialog(userId = product.idUser!!, productId = product.id)
                         val df = DecimalFormat("#.##")
                         df.roundingMode = RoundingMode.DOWN
-                        val payUrl = getPayUrl(PayOrderInfo(df.format(finalSum).toFloat(), order!!.id ))
+                        val payUrl = getPayUrl(PayOrderInfo(df.format(finalSum).replace(',', '.').toFloat(), order!!.id ))
                         payUrl ?: run {
                             viewState.navigate(R.id.ordersActiveFragment)
                             return@launch}

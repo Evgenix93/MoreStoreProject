@@ -386,7 +386,15 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         if(orderItem.status == OrderStatus.NOT_PAYED){
             binding.orderItemAcceptButton.isEnabled = true
             binding.orderItemAcceptButton.setOnClickListener {
-                presenter.getPaymentUrl(df.format(finalSum).replace(',', '.').toFloat(), orderItem.id)
+                try {
+                    val formattedSum = df.format(finalSum).replace(',', '.').toFloat()
+                    presenter.getPaymentUrl(
+                        formattedSum,
+                        orderItem.id
+                    )
+                }catch (e: Throwable){
+                    showMessage(e.message.toString())
+                }
             }
         }
 
