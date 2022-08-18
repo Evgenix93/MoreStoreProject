@@ -45,7 +45,6 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
             //showUnreadMessagesIcon(isMessagesUnread)
             presenter.showUnreadMessages()
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
