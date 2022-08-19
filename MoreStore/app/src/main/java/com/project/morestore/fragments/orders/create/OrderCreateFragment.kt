@@ -129,6 +129,12 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         //binding.finalSumTextView.text =
             //getFinalSum(productPrice ?: 0f, currentDeliveryPrice ?: 0f).toString() //finalSum.toString()
         binding.finalSumWithoutDelivery.text = product.priceNew.toString()
+
+        if(product.addressCdek == null){
+            binding.anotherCityRadioBtn.isEnabled = false
+            binding.anotherCityRadioBtn.buttonDrawable?.alpha = 125
+            binding.anotherCityRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
+        }
     }
 
     override fun loading() {
@@ -179,7 +185,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.webView.loadUrl(paymentUrl.formUrl)
     }
 
-    override fun setDeliveryPrice(price: Float?) {
+    override fun setDeliveryPrice(price: DeliveryPrice?) {
         binding.loader.isVisible = false
         if(price == null){
             binding.payNowWithDeliveryButton.isEnabled = false
@@ -191,9 +197,9 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.payNowWithDeliveryButton.isEnabled = true
             binding.updateDeliveryPriceBtn.isVisible = false
         }
-        currentDeliveryPrice = price
-        binding.deliveryPriceTextView.text = if(price != null) price.toString() else "не удалось загрузить"
-        val finalSum = getFinalSum(productPrice ?: 0f, price ?: 0f)
+        currentDeliveryPrice = price?.total_sum
+        binding.deliveryPriceTextView.text = if(price != null) price.total_sum.toString() else "не удалось загрузить"
+        val finalSum = getFinalSum(productPrice ?: 0f, price?.total_sum ?: 0f)
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.DOWN
         binding.finalSumTextView.text = df.format(finalSum).replace(',', '.')
@@ -381,6 +387,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                 }
                 binding.chooseAddressBtn.setText("Выбрать другой адрес")
                 binding.totalWithDeliveryCardView.isVisible = true
+                if(binding.anotherCityRadioBtn.isChecked)
+                    presenter.getCdekPrice(toAddress = address, product = args.product)
+                else presenter.getYandexPrice()
+
 
             }
         }
@@ -460,7 +470,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
 
         findNavController().navigate(OrderCreateFragmentDirections
             .actionCreateOrderFragmentToMyAddressesFragment(true,
-                if(deliveryId == ANOTHER_CITY && binding.toPickUpPointRadioButton.isChecked) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))
+                MyAddressesFragment.ADDRESSES_CDEK)) //if(deliveryId == ANOTHER_CITY && binding.toPickUpPointRadioButton.isChecked) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))
 
 
 
@@ -509,8 +519,8 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     }
 
     private fun showScreenWithDelivery(show: Boolean ){
-        if(binding.anotherCityRadioBtn.isChecked)
-            presenter.getCdekPrice()
+        if(binding.anotherCityRadioBtn.isChecked && chosenAddressStr.isNotEmpty())
+            presenter.getCdekPrice(toAddress = chosenAddressStr, args.product)
         if(binding.yandexRadioBtn.isChecked)
             presenter.getYandexPrice()
         binding.chosenDeliveryPlaceWindow.isVisible = show
@@ -523,7 +533,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.prepaymentInfoTextView.isVisible = !show
         binding.totalCardView.isVisible = !show && binding.prepaymentRadioButton.isChecked
         binding.payButton.isVisible = !show && binding.onDealPlaceRadioButton.isChecked
-        binding.deliveryCdekVariantCardView.isVisible = binding.anotherCityRadioBtn.isChecked
+        //binding.deliveryCdekVariantCardView.isVisible = binding.anotherCityRadioBtn.isChecked
         binding.deliveryPriceTextView.text = getDeliveryPrice().toString()
 
 

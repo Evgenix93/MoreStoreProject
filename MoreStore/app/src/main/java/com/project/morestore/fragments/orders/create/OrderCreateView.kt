@@ -1,6 +1,7 @@
 package com.project.morestore.fragments.orders.create
 
 import com.project.morestore.models.Chat
+import com.project.morestore.models.DeliveryPrice
 import com.project.morestore.models.PaymentUrl
 import com.project.morestore.models.Product
 import moxy.MvpView
@@ -28,5 +29,5 @@ interface OrderCreateView : MvpView {
     fun payForOrder(paymentUrl: PaymentUrl, orderId: Long)
 
     @OneExecution
-    fun setDeliveryPrice(price: Float?)
+    fun setDeliveryPrice(price: DeliveryPrice?)
 }

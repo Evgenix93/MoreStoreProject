@@ -499,6 +499,6 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     private fun getDeliveryPrice(order: OrderItem){
         if(order.deliveryInfo == "СДЕК")
-            presenter.getCdekPrice()
+            presenter.getCdekPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product)
     }
 }

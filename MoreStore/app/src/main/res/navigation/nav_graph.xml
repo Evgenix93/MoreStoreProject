@@ -1317,5 +1317,13 @@
             android:name="orderId"
             app:argType="long" />
     </fragment>
+    <fragment
+        android:id="@+id/createDeliveryFragment"
+        android:name="com.project.morestore.fragments.CreateDeliveryFragment"
+        android:label="CreateDeliveryFragment" >
+        <argument
+            android:name="order"
+            app:argType="com.project.morestore.models.cart.OrderItem" />
+    </fragment>
 
 </navigation>

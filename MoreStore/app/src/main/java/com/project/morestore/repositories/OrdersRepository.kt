@@ -237,16 +237,16 @@ class OrdersRepository(private val context: Context) {
         }
     }
 
-    suspend fun getCdekPrice(): Response<DeliveryPrice>?{
+    suspend fun getCdekPrice(info: CdekCalculatePriceInfo): Response<DeliveryPrice>?{
         return try {
-            ordersApi.getCdekPrice()
+            ordersApi.getCdekPrice(info)
         } catch (e: Exception) {
             if (e is IOException) {
                 null
             } else {
                 Log.d("mylog", e.message.toString())
                 try {
-                    val response = ordersApi.getCdekPriceError()
+                    val response = ordersApi.getCdekPriceError(info)
                     if (response.code() == 500) {
                         Response.error(500, "".toResponseBody(null))
                     } else {
@@ -261,5 +261,32 @@ class OrdersRepository(private val context: Context) {
             }
         }
     }
+
+    suspend fun createCdekOrder(order: CdekOrder): Response<Unit>? {
+        return try {
+            ordersApi.createCdekOrder(order)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.createCdekOrderGetError(order)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
+
 
 }

@@ -290,12 +290,17 @@ class OrderCreatePresenter(context: Context)
 
     }
 
-    fun getCdekPrice(){
+    fun getCdekPrice(toAddress: String, product: Product){
         presenterScope.launch {
         viewState.loading()
-            val response = orderRepository.getCdekPrice()
+            val info = CdekCalculatePriceInfo(
+                from_location = AddressString(product.addressCdek?.substringBefore("cdek code:") ?: ""),
+                to_location = AddressString(toAddress),
+                packages = product.packageDimensions
+            )
+            val response = orderRepository.getCdekPrice(info)
             when(response?.code()){
-                200 -> viewState.setDeliveryPrice(response.body()!!.price)
+                200 -> viewState.setDeliveryPrice(response.body()!!)
                 400 -> viewState.showMessage(response.errorBody()!!.string())
                 null -> viewState.showMessage("нет интернета")
                 500 -> viewState.showMessage("500 internal server error")
@@ -305,7 +310,7 @@ class OrderCreatePresenter(context: Context)
     }
 
     fun getYandexPrice(){
-        viewState.setDeliveryPrice(340f)
+        viewState.setDeliveryPrice(DeliveryPrice(500f, 1, 2, 1, 2, 553f))
     }
 
 }

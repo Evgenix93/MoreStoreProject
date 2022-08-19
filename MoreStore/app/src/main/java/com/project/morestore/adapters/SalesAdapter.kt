@@ -277,7 +277,9 @@ class SalesAdapter(
                       value = specialPrice
                   )else null,
                   offeredOrderPlace = address,
-                  product = order.cart.first()
+                  product = order.cart.first(),
+                  buyerId = order.idUser,
+                  cdekYandexAddress = order.placeAddress
               ))
             }
         }

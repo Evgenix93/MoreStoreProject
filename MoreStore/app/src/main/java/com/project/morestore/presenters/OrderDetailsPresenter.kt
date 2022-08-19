@@ -583,13 +583,18 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
 
     }
 
-    fun getCdekPrice(){
+    fun getCdekPrice(toAddress: String, product: Product){
         presenterScope.launch {
             viewState.loading(true)
-            val response = ordersRepository.getCdekPrice()
+            val info = CdekCalculatePriceInfo(
+                from_location = AddressString(product.addressCdek ?: ""),
+                to_location = AddressString(toAddress),
+                packages = product.packageDimensions
+            )
+            val response = ordersRepository.getCdekPrice(info)
             when(response?.code()){
                 200 -> {
-                    viewState.setDeliveryPrice(response.body()!!.price)
+                    viewState.setDeliveryPrice(response.body()!!.total_sum)
                     viewState.loading(false)
                 }
                 400 -> {

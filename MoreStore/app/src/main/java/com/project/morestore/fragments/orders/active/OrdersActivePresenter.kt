@@ -184,7 +184,8 @@ class OrdersActivePresenter(val context: Context)
                         productId = order.cart.first().id,
                         newAddressId = address?.id,
                         product = order.cart.first(),
-                        chatFunctionInfo
+                        chatFunctionInfo,
+                        buyerId = order.idUser
 
                                 )
 
