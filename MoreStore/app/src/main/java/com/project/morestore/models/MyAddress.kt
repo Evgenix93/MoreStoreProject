@@ -12,6 +12,8 @@ data class MyAddress(
     val id :Long,
     val phone :String,
     val address :DeliveryAddress,
+    @Json(name = "cdek_code")
+    val cdekCode: String? = null,
     val name :String,
     @Json(name = "is_default")
     val favorite :Boolean = false,
@@ -25,6 +27,8 @@ data class MyAddressData(
     val name :String,
     val phone :String,
     val address :DeliveryAddress,
+    @Json(name = "cdek_code")
+    val cdekCode: String? = null,
     @Json(name = "is_default")
     val favorite :Boolean = false,
     @Json(name = "type_save")

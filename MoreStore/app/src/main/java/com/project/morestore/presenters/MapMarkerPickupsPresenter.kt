@@ -88,7 +88,7 @@ class MapMarkerPickupsPresenter(
     }
 
     fun save(){
-        viewState.returnAddress(mapAddress(selected!!))
+        viewState.returnAddress(selected!!)
     }
 
     private fun showMarkers(){

@@ -10,6 +10,8 @@ data class CreateProductData(
     @Json(name = "id_brand")
     var idBrand: Long? = null,
     var address: String? = null,
+    @Json(name = "address_cdek")
+    var addressCdek: String? = null,
     var date: Long? = null,
     @Json(name = "date_end")
     var dateEnd: Long? = null,

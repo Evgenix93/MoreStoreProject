@@ -1,6 +1,7 @@
 package com.project.morestore.presenters
 
 import com.project.morestore.models.AddressType
+import com.project.morestore.models.CdekAddress
 import com.project.morestore.models.DeliveryAddress
 import com.project.morestore.models.MyAddressData
 import com.project.morestore.repositories.AddressesRepository
@@ -9,7 +10,7 @@ import kotlinx.coroutines.launch
 import moxy.presenterScope
 
 class CreateMyAddressPickupPresenter(
-    override val address :DeliveryAddress,
+     val cdekAddress : CdekAddress,
     private val userProvider :UserNetworkGateway,
     addressNetwork :AddressesRepository
 ) : MyAddressPickupPresenter(addressNetwork) {
@@ -31,7 +32,8 @@ class CreateMyAddressPickupPresenter(
                 MyAddressData(
                     fullname,
                     phoneNumber.replace("\\D", ""),
-                    address,
+                    mapAddress(cdekAddress),
+                    cdekAddress.code,
                     isDefault,
                     AddressType.CDEK.id
                 )
@@ -40,4 +42,6 @@ class CreateMyAddressPickupPresenter(
             viewState.back()
         }
     }
+
+
 }

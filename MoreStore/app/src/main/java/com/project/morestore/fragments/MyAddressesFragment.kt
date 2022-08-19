@@ -16,10 +16,7 @@ import com.project.morestore.databinding.FragmentMyaddressesBinding
 import com.project.morestore.dialogs.AddAddressDialog
 import com.project.morestore.fragments.MapMarkerPickupsFragment.Companion.PICKUP_ADDRESS
 import com.project.morestore.fragments.base.FullscreenMvpFragment
-import com.project.morestore.models.AddressType
-import com.project.morestore.models.DeliveryAddress
-import com.project.morestore.models.MyAddress
-import com.project.morestore.models.Region
+import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MyAddressesView
 import com.project.morestore.presenters.MyAddressesPresenter
 import com.project.morestore.repositories.AddressesRepository
@@ -118,8 +115,8 @@ class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
         findNavController().navigate(R.id.mapMarkerPickupsFragment, bundleOf(MapMarkerPickupsFragment.REGION to region.name))
     }
 
-    private fun showUserData(deliveryAddress :DeliveryAddress){
-        findNavController().navigate(R.id.myAddressPickupFragment, bundleOf(MyAddressPickupFragment.ADDRESS to deliveryAddress))
+    private fun showUserData(cdekAddress :CdekAddress){
+        findNavController().navigate(R.id.myAddressPickupFragment, bundleOf(MyAddressPickupFragment.ADDRESS to cdekAddress))
     }
 
     companion object{

@@ -178,7 +178,7 @@ class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, Camer
         views.save.isEnabled = enable
     }
 
-    override fun returnAddress(address: DeliveryAddress) {
+    override fun returnAddress(address: CdekAddress) {
         setFragmentResult(KEY_ADDRESS, bundleOf(PICKUP_ADDRESS to address))
         findNavController().navigateUp()
     }

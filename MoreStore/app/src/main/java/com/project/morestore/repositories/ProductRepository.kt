@@ -729,6 +729,7 @@ class ProductRepository(private val context: Context) {
         sale: Float? = null,
         about: String? = null,
         address: String? = null,
+        addressCdek: String? = null,
         extProperty: Property2? = null,
         extProperties: List<Property2>? = null,
         id: Long? = null,
@@ -761,6 +762,7 @@ class ProductRepository(private val context: Context) {
             CreateProductData.createProductData.about = about
         if (address != null)
             CreateProductData.createProductData.address = address
+        CreateProductData.createProductData.addressCdek = addressCdek
         if (property != null)
             if (CreateProductData.createProductData.property == null)
                 CreateProductData.createProductData.property = mutableListOf(property)

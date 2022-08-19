@@ -10,7 +10,6 @@ class EditMyAddressPickupPresenter(
     val myAddress :MyAddress,
     addressNetwork :AddressesRepository
 ) :MyAddressPickupPresenter(addressNetwork) {
-    override val address = myAddress.address
 
     init {
         isDefault = myAddress.favorite
@@ -30,6 +29,7 @@ class EditMyAddressPickupPresenter(
                     myAddress.id,
                     phoneNumber,
                     myAddress.address,
+                    myAddress.cdekCode,
                     fullname,
                     isDefault,
                     AddressType.CDEK.id

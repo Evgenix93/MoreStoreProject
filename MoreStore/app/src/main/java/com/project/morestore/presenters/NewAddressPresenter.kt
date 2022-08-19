@@ -112,6 +112,7 @@ class NewAddressPresenter(
                             building.takeIf { it.isFilled() },
                             apartment.takeIf { it.isFilled() }
                         ),
+                        null,
                         isDefault,
                         AddressType.HOME.id
                     )
@@ -130,6 +131,7 @@ class NewAddressPresenter(
                             building.takeIf { it.isFilled() },
                             apartment.takeIf { it.isFilled() }
                         ),
+                        null,
                         fullname,
                         isDefault,
                         AddressType.HOME.id

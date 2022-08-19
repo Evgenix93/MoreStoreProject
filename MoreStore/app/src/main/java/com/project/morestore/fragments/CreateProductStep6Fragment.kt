@@ -133,9 +133,14 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                         .actionCreateProductStep6FragmentToMyAddressesFragment(true,
                              MyAddressesFragment.ADDRESSES_HOME))
                 }
-                6 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
-                7 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
-                8 -> {findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCreateProductPackageFragment())}
+                6 -> {
+                    getChosenAddress { address ->
+                     presenter.updateCreateProductData(addressCdek = address)
+                    loadCreateProductData()}
+                }
+                7 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
+                8 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
+                9 -> {findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCreateProductPackageFragment())}
             }
 
         }
@@ -330,6 +335,33 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     private fun getActiveCard(){
         presenter.getActiveCard()
+    }
+
+    private fun getChosenAddress(onAddressReceived: (address: String) -> Unit){
+
+        setFragmentResultListener(MyAddressesFragment.ADDRESS_REQUEST){_, bundle ->
+            val address = bundle.getParcelable<MyAddress>(MyAddressesFragment.ADDRESS_KEY)
+            Log.d("mylog", "address $address")
+           // chosenAddress = address
+            val cityStr = address?.address?.city
+            val streetStr = address?.address?.street
+            val houseStr = if(address?.address?.house != null) "дом.${address.address.house}" else null
+            val housingStr = if(address?.address?.housing != null) "кп.${address.address.housing}" else null
+            val buildingStr = if(address?.address?.building != null) "стр.${address.address.building}" else null
+            val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
+            val cdekCode = "cdek code:${address?.cdekCode}"
+            val strings =
+                arrayOf(cityStr, streetStr, houseStr, housingStr, buildingStr, apartmentStr, cdekCode).filterNotNull()
+           // binding.chosenAddressTextView.text = strings.joinToString(", ")
+           val chosenAddressStr = strings.joinToString(", ")
+            Log.d("MyTestTag", chosenAddressStr)
+            onAddressReceived(chosenAddressStr)
+        }
+
+        findNavController().navigate(
+            CreateProductStep6FragmentDirections
+                .actionCreateProductStep6FragmentToMyAddressesFragment(true,
+                    MyAddressesFragment.ADDRESSES_CDEK))
     }
 
 
