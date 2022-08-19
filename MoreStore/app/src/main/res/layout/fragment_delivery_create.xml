@@ -216,7 +216,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="35dp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -226,7 +227,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="50dp"
         android:padding="16dp"
-        >
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/icon"
@@ -265,7 +266,7 @@
             app:layout_constraintTop_toTopOf="@+id/icon" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/nameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -275,21 +276,22 @@
             tools:text="Иванов Иван" />
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/addressTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textAppearance="@style/ManropeReg_14_gray2"
-            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:layout_constraintTop_toBottomOf="@+id/nameTextView"
             tools:layout_editor_absoluteX="16dp"
             tools:text="Казань, 420141, ул. Юлиуса Фучика, дом 49, квартира 75" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/chooseAddressButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/buttonStyle"
-            android:text="Выбрать другой адрес"
+            android:text="Выбрать адрес"
             app:backgroundTint="@color/black"
             android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="24dp"

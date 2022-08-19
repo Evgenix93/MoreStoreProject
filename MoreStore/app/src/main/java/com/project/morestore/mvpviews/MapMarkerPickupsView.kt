@@ -13,7 +13,7 @@ interface MapMarkerPickupsView :MvpView, LoadingView {
     fun showAddresses(addresses :Array<CdekAddress>)
     fun indicateSelected(selectAddress :CdekAddress)
     fun enableNext(enable :Boolean)
-    fun returnAddress(address :DeliveryAddress)
+    fun returnAddress(address :CdekAddress)
     fun showList()
 
     enum class NavigateType { USER, CITY, NONE }

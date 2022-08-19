@@ -1,11 +1,15 @@
 package com.project.morestore.models
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @JsonClass(generateAdapter = true)
-class CdekAddress(val location :Location) {
+class CdekAddress(val code: String, val location :Location): Parcelable {
 
+    @Parcelize
     @JsonClass(generateAdapter = true)
     class Location(
 
@@ -18,7 +22,7 @@ class CdekAddress(val location :Location) {
         @Json(name = "longitude")
         val lon :Double,
         val address :String
-    )
+    ): Parcelable
 
     /*
     {

@@ -23,6 +23,7 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
         Option("Размер", false),
         Option("Описание", false),
         Option("Местоположение", true),
+        Option("Пункт отправки CDEK", false),
         Option("Цвет", false),
         Option("Материал", false),
         Option("Размеры товара", false)
@@ -49,8 +50,8 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
                     ColorStateList.valueOf(context.resources.getColor(R.color.gray1))
 
 
-            binding.regionTextView.isVisible = option.name == "Местоположение"
-            if (option.name == "Местоположение")
+            binding.regionTextView.isVisible = option.name == "Местоположение" || option.name == "Пункт отправки CDEK"
+            if (option.name == "Местоположение" || option.name == "Пункт отправки CDEK")
                 binding.regionTextView.text = option.address?.substringBefore(", кв.")
 
         }
@@ -72,10 +73,12 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
         options[3].isChecked = size != null
         options[4].isChecked = about != null && about != ""
         options[5].isChecked = region != null
-        options[6].isChecked = colors.isNotEmpty()
-        options[7].isChecked = materials.isNotEmpty()
+        options[6].isChecked = createProductData.addressCdek != null
+        options[6].address = createProductData.addressCdek
+        options[7].isChecked = colors.isNotEmpty()
+        options[8].isChecked = materials.isNotEmpty()
         options[5].address = region
-        options[8].isChecked = dimensions?.length != null
+        options[9].isChecked = dimensions?.length != null
         notifyDataSetChanged()
     }
 
