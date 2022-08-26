@@ -1,5 +1,6 @@
 package com.project.morestore.fragments.orders.create
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.style.StrikethroughSpan
 import android.util.Log
@@ -96,6 +97,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.loader.isVisible = false
         Glide.with(this)
                 .load(product.user?.avatar?.photo.toString())
+                .circleCrop()
                 .into(binding.sellerAvatarImageView)
         binding.sellerNameTextView.text = product.user?.name
 
@@ -128,9 +130,9 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         //val finalSum = getFinalSum(product.priceNew?.toInt() ?: product.price.toInt(), 3 )
         //binding.finalSumTextView.text =
             //getFinalSum(productPrice ?: 0f, currentDeliveryPrice ?: 0f).toString() //finalSum.toString()
-        binding.finalSumWithoutDelivery.text = product.priceNew.toString()
+        binding.finalSumWithoutDelivery.text = ((product.priceNew ?: product.price) + ((product.priceNew ?: product.price) * 0.05f)).toString()
 
-        if(product.addressCdek == null){
+        if(product.addressCdek == null || product.packageDimensions.length == null){
             binding.anotherCityRadioBtn.isEnabled = false
             binding.anotherCityRadioBtn.buttonDrawable?.alpha = 125
             binding.anotherCityRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
@@ -385,8 +387,13 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                 binding.name.text = name
                 binding.address.text = address
                 if(type == 0){
+                    binding.icon.setImageResource(R.drawable.ic_package)
+                    binding.icon.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.white, null))
+                    binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.blue4, null))
                     binding.title.setText(R.string.myAddress_pickup)
                 }else {
+                    binding.icon.setImageResource(R.drawable.ic_envelope)
+                    binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.green, null))
                     binding.title.setText(R.string.myAddress_delivery)
                 }
                 binding.chooseAddressBtn.setText("Выбрать другой адрес")
@@ -446,7 +453,11 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             presenter.onCreateOrder(args.cartId, deliveryId, place, payId,
                 findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
                 args.product,
-            sum = binding.finalSumWithoutDelivery.text.toString().toFloat())
+            sum = binding.finalSumWithoutDelivery.text.toString().toFloat(),
+            promo = if(binding.promoWithoutDeliveryEditText.text.isNotEmpty())
+                       binding.promoWithoutDeliveryEditText.text.toString()
+                       else null)
+
         }
 
     }
@@ -462,6 +473,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             val address = bundle.getParcelable<MyAddress>(MyAddressesFragment.ADDRESS_KEY)
             Log.d("mylog", "address $address")
             chosenAddress = address
+            val cityStr = address?.address?.city
             val streetStr = address?.address?.street
             val houseStr = if(address?.address?.house != null) "дом.${address.address.house}" else null
             val housingStr = if(address?.address?.housing != null) "кп.${address.address.housing}" else null
@@ -469,7 +481,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
             val cdekCode = if(address?.cdekCode != null) "cdek code:${address.cdekCode}" else null
             val strings =
-                arrayOf(streetStr, houseStr, housingStr, buildingStr, apartmentStr, cdekCode).filterNotNull()
+                arrayOf(cityStr, streetStr, houseStr, housingStr, buildingStr, apartmentStr, cdekCode).filterNotNull()
             binding.chosenAddressTextView.text = strings.joinToString(", ")
             chosenAddressStr = strings.joinToString(", ")
             onAddressReceived(address?.name.orEmpty(), chosenAddressStr, address?.type ?: 0)
@@ -477,7 +489,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
 
         findNavController().navigate(OrderCreateFragmentDirections
             .actionCreateOrderFragmentToMyAddressesFragment(true,
-                MyAddressesFragment.ADDRESSES_CDEK)) //if(deliveryId == ANOTHER_CITY && binding.toPickUpPointRadioButton.isChecked) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))
+                 if(deliveryId == ANOTHER_CITY) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))
 
 
 
