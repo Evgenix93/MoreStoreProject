@@ -17,6 +17,7 @@ import com.project.morestore.adapters.RegionsAdapter
 import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentChangeRegionBinding
 import com.project.morestore.models.Address
+import com.project.morestore.models.Coords
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter

@@ -1,9 +1,12 @@
 package com.project.morestore.models
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class Order(
     val id: Long,
     val delivery: Int,
@@ -23,7 +26,8 @@ data class Order(
     @Json(name = "is_payment")
     val isPayment: Boolean,
     @Json(name = "id_cdek")
-    val idCdek: Long?,
+    val idCdek: String?,
     @Json(name = "id_yandex")
-    val idYandex: Long?
-)
+    val idYandex: Long?,
+    var deliveryStatus: String? = null
+): Parcelable

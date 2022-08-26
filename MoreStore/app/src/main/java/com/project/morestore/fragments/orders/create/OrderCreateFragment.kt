@@ -135,6 +135,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.anotherCityRadioBtn.buttonDrawable?.alpha = 125
             binding.anotherCityRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
         }
+
+        binding.yandexRadioBtn.isEnabled = false
+        binding.yandexRadioBtn.buttonDrawable?.alpha = 125
+        binding.yandexRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
     }
 
     override fun loading() {
@@ -389,7 +393,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                 binding.totalWithDeliveryCardView.isVisible = true
                 if(binding.anotherCityRadioBtn.isChecked)
                     presenter.getCdekPrice(toAddress = address, product = args.product)
-                else presenter.getYandexPrice()
+                else presenter.getYandexPrice(toAddress = address, product = args.product)
 
 
             }
@@ -440,7 +444,9 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                 if(chosenAddressStr.isNotEmpty()) "$chosenAddressStr;${chosenTime?.timeInMillis}" else null,
                 chosenTime?.timeInMillis ?: 0/1000)
             presenter.onCreateOrder(args.cartId, deliveryId, place, payId,
-                findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment, args.product)
+                findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
+                args.product,
+            sum = binding.finalSumWithoutDelivery.text.toString().toFloat())
         }
 
     }
@@ -461,8 +467,9 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             val housingStr = if(address?.address?.housing != null) "кп.${address.address.housing}" else null
             val buildingStr = if(address?.address?.building != null) "стр.${address.address.building}" else null
             val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
+            val cdekCode = if(address?.cdekCode != null) "cdek code:${address.cdekCode}" else null
             val strings =
-                arrayOf(streetStr, houseStr, housingStr, buildingStr, apartmentStr).filterNotNull()
+                arrayOf(streetStr, houseStr, housingStr, buildingStr, apartmentStr, cdekCode).filterNotNull()
             binding.chosenAddressTextView.text = strings.joinToString(", ")
             chosenAddressStr = strings.joinToString(", ")
             onAddressReceived(address?.name.orEmpty(), chosenAddressStr, address?.type ?: 0)
@@ -521,8 +528,8 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     private fun showScreenWithDelivery(show: Boolean ){
         if(binding.anotherCityRadioBtn.isChecked && chosenAddressStr.isNotEmpty())
             presenter.getCdekPrice(toAddress = chosenAddressStr, args.product)
-        if(binding.yandexRadioBtn.isChecked)
-            presenter.getYandexPrice()
+        if(binding.yandexRadioBtn.isChecked && chosenAddressStr.isNotEmpty())
+            presenter.getYandexPrice(toAddress = chosenAddressStr, args.product)
         binding.chosenDeliveryPlaceWindow.isVisible = show
         binding.commentWindow.isVisible = show
         binding.deliveryPriceInfoTextView.isVisible = show

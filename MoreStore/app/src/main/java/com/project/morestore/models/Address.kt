@@ -13,5 +13,13 @@ data class Address(
     val city: Int?,
    // @Json(name = "full_city")
     //val fullCity: ProductCity
+    val coords: Coords? = null
 
+): Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Coords(
+    val lat: Double,
+    val lon: Double
 ): Parcelable

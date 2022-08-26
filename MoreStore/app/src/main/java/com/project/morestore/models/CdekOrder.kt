@@ -9,7 +9,8 @@ data class CdekOrder(
     val delivery_point1: String,
     val sender: CdekSender,
     val recipient: CdekRecipient,
-    val packages: CdekPackages
+    val packages: CdekPackages,
+    val items: CdekItems
 
 )
 
@@ -18,15 +19,14 @@ data class CdekSender(
     val company: String,
     val name: String,
     val email: String,
-    val phones: List<String>,
-    val number: String
+    val phones: List<CdekPhone>,
+
 )
 
 @JsonClass(generateAdapter = true)
 data class CdekRecipient(
     val name: String,
-    val phones: List<String>,
-    val number: String
+    val phones: List<CdekPhone>
 )
 
 @JsonClass(generateAdapter = true)
@@ -37,4 +37,25 @@ data class CdekPackages(
     val width: String,
     val height: String
 
+)
+
+@JsonClass(generateAdapter = true)
+data class CdekItems(
+    val name: String,
+    val ware_key: String,
+    val marking: String = "",
+    val cost: String,
+    val weight: String,
+    val amount: String = "1",
+    val payment: CdekPayment
+)
+
+@JsonClass(generateAdapter = true)
+data class CdekPayment(
+            val value: Int = 0
+)
+
+@JsonClass(generateAdapter = true)
+data class CdekPhone(
+    val number: String
 )

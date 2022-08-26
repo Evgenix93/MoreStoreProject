@@ -2,6 +2,7 @@ package com.project.morestore.fragments.orders.active
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -145,10 +146,21 @@ class OrdersActivePresenter(val context: Context)
                             if(!order.isPayment)
                                 status = OrderStatus.NOT_PAYED
                             else{
-                                if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1)
-                                    status = OrderStatus.MEETING_NOT_ACCEPTED
+                                //if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1)
+                                  //  status = OrderStatus.MEETING_NOT_ACCEPTED
                                 if(buySuggest?.status == 0 || buySuggest?.status == null)
                                     status = OrderStatus.NOT_SUBMITTED
+                                if(order.idCdek != null){
+                                    Log.d("mylog", "cdek")
+                                    val info = ordersRepository.getCdekOrderInfo(order.idCdek)?.body()
+                                    if (info?.entity?.statuses?.first()?.code == CdekStatuses.INVALID)
+                                        status = OrderStatus.DELIVERY_STATUS_NOT_VALID
+                                     else if(info?.entity?.statuses?.first()?.code == CdekStatuses.CREATED)
+                                         status = OrderStatus.DELIVERY_STATUS_ACCEPTED
+                                    else if(info == null)
+                                        status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
+                                    else status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
+                                }
                             }
                         }
 
@@ -185,7 +197,8 @@ class OrdersActivePresenter(val context: Context)
                         newAddressId = address?.id,
                         product = order.cart.first(),
                         chatFunctionInfo,
-                        buyerId = order.idUser
+                        buyerId = order.idUser,
+                        cdekYandexAddress = order.placeAddress
 
                                 )
 
@@ -193,7 +206,9 @@ class OrdersActivePresenter(val context: Context)
 
                 val filteredOrderItems = orderItems.filter { orderItems.find { orderCheck -> orderCheck.id != it.id && orderCheck.productId == it.productId &&
                         orderCheck.id > it.id } == null &&
-                        cartItems.find { cartItem -> cartItem.product.id == it.productId  } == null}
+                        cartItems.find { cartItem -> cartItem.product.id == it.productId  } == null
+                        && orders.find { initialOrder -> initialOrder.id != it.id && initialOrder.cart?.first()?.id == it.productId &&
+                        initialOrder.status == 1} == null}
 
                 adapter = OrdersAdapter(filteredOrderItems, listener, {user -> viewState.navigate(user) }, {
                     viewState.navigate(it)

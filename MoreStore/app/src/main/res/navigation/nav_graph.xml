@@ -1246,6 +1246,9 @@
         <action
             android:id="@+id/action_salesActiveFragment_to_orderDetailsFragment"
             app:destination="@id/orderDetailsFragment" />
+        <action
+            android:id="@+id/action_salesActiveFragment_to_createDeliveryFragment"
+            app:destination="@id/createDeliveryFragment" />
     </fragment>
     <fragment
         android:id="@+id/dealPlaceFragment"
@@ -1323,7 +1326,7 @@
         android:label="CreateDeliveryFragment" >
         <argument
             android:name="order"
-            app:argType="com.project.morestore.models.cart.OrderItem" />
+            app:argType="com.project.morestore.models.Order" />
     </fragment>
 
 </navigation>

@@ -67,7 +67,9 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
                .navigate(SalesActiveFragmentDirections.actionSalesActiveFragmentToSellerProfileFragment(user = user, toReviews = false))},
                onClick = {
                    findNavController().navigate(SalesActiveFragmentDirections.actionSalesActiveFragmentToOrderDetailsFragment(it))
-               }).also{salesAdapter = it}
+               },
+           onDeliveryCreateClick = {order -> findNavController()
+               .navigate(SalesActiveFragmentDirections.actionSalesActiveFragmentToCreateDeliveryFragment(order))}).also{salesAdapter = it}
            layoutManager = LinearLayoutManager(requireContext())
        }
     }

@@ -1,5 +1,6 @@
 package com.project.morestore.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.style.StrikethroughSpan
 import android.util.Log
@@ -295,6 +296,26 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     binding.orderItemAcceptProblemsButton.isVisible = false
 
                 }
+                OrderStatus.DELIVERY_STATUS_NOT_VALID -> {
+                    orderItemStatusBlock.isVisible = true
+                    orderItemStatusContent.text = "Данные доставки некорректны"
+                    binding.orderItemAcceptBlock.isVisible = false
+
+
+                }
+                OrderStatus.DELIVERY_STATUS_ACCEPTED -> {
+                    orderItemStatusBlock.isVisible = true
+                    orderItemStatusContent.text = "Доставка создана"
+                    binding.orderItemAcceptBlock.isVisible = false
+
+
+                }
+                OrderStatus.DELIVERY_STATUS_NOT_DEFINED -> {
+                    orderItemStatusBlock.isVisible = true
+                    orderItemStatusContent.text = "Неизвестный статус доставки"
+                    binding.orderItemAcceptBlock.isVisible = false
+
+                }
                 else -> {}
             }
         }
@@ -412,6 +433,18 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             binding.dealPlaceTextView.isVisible = true
 
         }
+        if(order.deliveryInfo == "yandex"){
+            binding.icon.setImageResource(R.drawable.ic_package)
+            binding.icon.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.white, null))
+            binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.blue4, null))
+            binding.title.setText(R.string.myAddress_pickup)
+        }
+        if(order.deliveryInfo == "СДЕК"){
+            binding.icon.setImageResource(R.drawable.ic_envelope)
+            binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.green, null))
+            binding.title.setText(R.string.myAddress_delivery)
+        }
+
     }
 
     private fun setOrderStatus(order: OrderItem){
@@ -500,5 +533,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     private fun getDeliveryPrice(order: OrderItem){
         if(order.deliveryInfo == "СДЕК")
             presenter.getCdekPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product)
+        if(order.deliveryInfo == "yandex")
+            presenter.getYandexGoPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product)
     }
 }

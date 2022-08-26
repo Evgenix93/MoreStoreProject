@@ -72,4 +72,25 @@ interface OrdersApi {
     @POST("cdek/add_new")
     suspend fun createCdekOrderGetError(@Body order: CdekOrder): Response<String>
 
+    @GET("cdek/info_order")
+    suspend fun getCdekOrderInfo(@Query("id_order_cdek") id: String): Response<CdekOrderInfo>
+
+    @POST("yandexgo/add_new")
+    suspend fun createYandexGoOrder(@Body order: YandexGoOrder): Response<Unit>
+
+    @POST("yandexgo/add_new")
+    suspend fun createYandexGoOrderGetError(@Body order: YandexGoOrder): Response<String>
+
+    @GET("yandexgo/info_order")
+    suspend fun getYandexGoOrderInfo(@Query("claim_id") id: Long): Response<Unit>
+
+    @GET("yandexgo/info_order")
+    suspend fun getYandexGoOrderInfoGetError(@Query("claim_id") id: Long): Response<String>
+
+    @POST("yandexgo/accept")
+    suspend fun submitYandexGoOrder(@Body claimId: YandexClaimId): Response<Unit>
+
+    @POST("yandexgo/accept")
+    suspend fun submitYandexGoOrderGetError(@Body claimId: YandexClaimId): Response<String>
+
 }

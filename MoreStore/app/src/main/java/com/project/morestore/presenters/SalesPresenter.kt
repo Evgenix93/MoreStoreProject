@@ -66,7 +66,8 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                         val dialogs = getDialogs().reversed()
                        val activeSalesSorted = activeSales.filter { activeSales.find { saleCheck ->
                            saleCheck.id != it.id && saleCheck.cart?.first()?.id == it.cart?.first()?.id &&
-                                   saleCheck.idUser == it.idUser && saleCheck.id > it.id } == null }.sortedBy { sale ->
+                                   saleCheck.idUser == it.idUser && saleCheck.id > it.id } == null &&
+                       inactiveSales.find { inactiveSale -> it.cart?.first()?.id == inactiveSale.cart?.first()?.id && it.idUser == inactiveSale.idUser  } == null}.sortedBy { sale ->
                            val address = addresses.find { sale.id == it.idOrder }
                                 when{
                                     sale.cart?.first()?.statusUser?.buy == null -> 1
@@ -76,7 +77,18 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                                     address.type == OfferedPlaceType.APPLICATION.value && address.status == 0 -> 1
                                     else -> 2
                                 }
-                            }
+                            }.map {
+                                if(it.idCdek != null){
+                                    val info = ordersRepository.getCdekOrderInfo(it.idCdek)?.body()
+                                    if(info != null){
+                                        it.deliveryStatus = if(info.entity.statuses.first().code == CdekStatuses.INVALID) "Данные доставки некорректны"
+                                                            else if(info.entity.statuses.first().code == CdekStatuses.CREATED) "Доставка создана"
+                                                            else "Неизвестный статус доставки"
+                                    }else it.deliveryStatus = "Неизвестный статус доставки"
+
+                                }
+                           it
+                       }
                         viewState.onSalesLoaded(activeSalesSorted, addresses, avatars, dialogs)
                     }
                     val cartItems = getCartItems() ?: emptyList()

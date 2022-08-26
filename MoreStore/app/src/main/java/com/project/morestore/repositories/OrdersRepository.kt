@@ -287,6 +287,90 @@ class OrdersRepository(private val context: Context) {
         }
     }
 
+    suspend fun createYandexGoOrder(order: YandexGoOrder): Response<Unit>? {
+        return try {
+            ordersApi.createYandexGoOrder(order)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.createYandexGoOrderGetError(order)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getYandexGoOrderInfo(id: Long): Response<Unit>? {
+        return try {
+            ordersApi.getYandexGoOrderInfo(id)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.getYandexGoOrderInfoGetError(id)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun submitYandexGoOrder(claimId: YandexClaimId): Response<Unit>? {
+        return try {
+            ordersApi.submitYandexGoOrder(claimId)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.submitYandexGoOrderGetError(claimId)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
+        }
+    }
+
+    suspend fun getCdekOrderInfo(id: String): Response<CdekOrderInfo>? {
+        return try {
+            ordersApi.getCdekOrderInfo(id)
+        }catch (e: Throwable){
+            Log.d("mylog", e.message.toString())
+            null
+        }
+    }
+
 
 
 }

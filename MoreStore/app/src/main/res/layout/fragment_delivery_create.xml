@@ -168,6 +168,7 @@
 
     <TextView
         android:id="@+id/chooseAddressInfoTextView"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
@@ -181,6 +182,7 @@
 
     <TextView
         android:id="@+id/chooseAddressInfo2TextView"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
@@ -194,6 +196,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/dealPlaceWindow"
+        android:visibility="visible"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -210,7 +213,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
-            android:text="Откуда забрать заказ"
+            android:text="Куда принести заказ"
             android:textAppearance="@style/regular_16"
             android:textColor="@color/gray2" />
 
@@ -238,8 +241,8 @@
             android:padding="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:backgroundTint="@color/blue4"
-            android:src="@drawable/ic_package"
+            android:backgroundTint="@color/green"
+            android:src="@drawable/ic_envelope"
             app:tint="@color/white"/>
 
         <TextView
@@ -252,7 +255,7 @@
             app:layout_constraintEnd_toStartOf="@+id/favorite"
             app:layout_constraintStart_toEndOf="@+id/icon"
             app:layout_constraintTop_toTopOf="@+id/icon"
-            android:text="@string/myAddress_pickup" />
+            android:text="@string/myAddress_add_delivery" />
 
         <ImageView
             android:id="@+id/favorite"
@@ -288,6 +291,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/chooseAddressButton"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/buttonStyle"
@@ -306,6 +310,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/commentWindow"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -448,6 +453,7 @@
 
    <androidx.cardview.widget.CardView
        android:id="@+id/pickersCardView"
+       android:visibility="gone"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        app:layout_constraintTop_toBottomOf="@id/dealPlaceWindow"
@@ -548,5 +554,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:visibility="gone"
+        android:indeterminateTint="@color/green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

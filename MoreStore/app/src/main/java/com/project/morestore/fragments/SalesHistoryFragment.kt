@@ -108,7 +108,7 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
                 .navigate(SalesHistoryFragmentDirections
                     .actionSalesHistoryFragmentToSellerProfileFragment(user = user, toReviews = false))}, {
                         findNavController().navigate(SalesHistoryFragmentDirections.actionSalesHistoryFragmentToOrderDetailsFragment(it))
-            }).also{salesAdapter = it}
+            }, {}).also{salesAdapter = it}
             layoutManager = LinearLayoutManager(requireContext())
         }
     }

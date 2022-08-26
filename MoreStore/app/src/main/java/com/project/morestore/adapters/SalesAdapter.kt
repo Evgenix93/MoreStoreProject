@@ -25,7 +25,8 @@ class SalesAdapter(
     private val acceptDeal:(ChatFunctionInfo) -> Unit,
     private val cancelDeal:(ChatFunctionInfo) -> Unit,
     private val onProfileClick: (User) -> Unit,
-    private val onClick: (OrderItem) -> Unit
+    private val onClick: (OrderItem) -> Unit,
+    private val onDeliveryCreateClick: (Order) -> Unit
 ) : RecyclerView.Adapter<SalesAdapter.SaleViewHolder>() {
     private var sales = listOf<Order>()
     private var addresses = listOf<OfferedOrderPlace>()
@@ -221,12 +222,47 @@ class SalesAdapter(
                         binding.orderItemStatusContent.text = "Не оплачено"
                     }
                     if(order.isPayment && buySuggest?.status == 1){
-                        orderStatus = OrderStatus.CREATE_DELIVERY
-                        binding.orderItemDeliveryChangeBlock.isVisible = false
-                        binding.orderItemStatusBlock.isVisible = true
-                        binding.orderItemStatusContent.text = "Оплачено"
-                        binding.orderItemAcceptBlock.isVisible = true
-                        binding.orderItemAcceptButton.text = "Вызвать курьера"
+                        binding.orderItemDeliveryDateText.text = when (order.delivery) {
+                            1 -> "самовывоз"
+                            2 -> "yandex Go"
+                            3 -> "CDEK"
+                            else -> ""
+                        }
+                        if(order.delivery != 1) {
+                            if(order.deliveryStatus == null) {
+                                orderStatus = OrderStatus.CREATE_DELIVERY
+                                binding.orderItemDeliveryChangeBlock.isVisible = false
+                                binding.orderItemStatusBlock.isVisible = true
+                                binding.orderItemStatusContent.text = "Оплачено"
+                                binding.orderItemAcceptBlock.isVisible = true
+                                binding.orderItemAcceptButton.text = "Создать доставку"
+
+                                binding.orderItemAcceptButton.setOnClickListener {
+                                    onDeliveryCreateClick(order)
+                                }
+                            }else {
+                                //orderStatus = if(order.deliveryStatus == "данные доставки некорректны") OrderStatus.DELIVERY_STATUS_NOT_VALID
+                                  //            else if(order.deliveryStatus == )
+                                binding.orderItemDeliveryChangeBlock.isVisible = false
+                                binding.orderItemStatusBlock.isVisible = true
+                                binding.orderItemStatusContent.text = order.deliveryStatus
+                                binding.orderItemAcceptBlock.isVisible = false
+                                binding.orderItemDeliveryContent.text = order.placeAddress
+                                if(order.deliveryStatus == "Данные доставки некорректны")
+                                    orderStatus = OrderStatus.DELIVERY_STATUS_NOT_VALID
+                                else if(order.deliveryStatus == "Доставка создана")
+                                    orderStatus = OrderStatus.DELIVERY_STATUS_ACCEPTED
+                                else if(order.deliveryStatus == "Неизвестеый статус доставки")
+                                    orderStatus = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
+
+                            }
+                        }
+                        if(order.delivery == 1 && address?.status == 1) {
+                            binding.orderItemAcceptBlock.isVisible = false
+                            binding.orderItemStatusContent.text = "Оплачено, ожидание встречи с покупателем"
+                        }
+
+
 
                     }
                     //binding.orderItemDeliveryContent.text = when(order.delivery == 1) "Заберу у продавца" else "CDEK"

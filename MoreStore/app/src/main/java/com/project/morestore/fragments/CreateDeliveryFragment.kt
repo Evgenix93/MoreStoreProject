@@ -6,6 +6,7 @@ import android.util.Range
 import android.view.View
 import android.widget.Toast
 import androidx.core.text.toSpannable
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -13,6 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentDeliveryCreateBinding
+import com.project.morestore.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.models.Product
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.CreateDeliveryMvpView
@@ -27,20 +29,21 @@ class CreateDeliveryFragment: MvpAppCompatFragment(R.layout.fragment_delivery_cr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setProductInfo(args.order.product)
+        setProductInfo(args.order.cart?.first()!!)
         presenter.getUserInfo()
+        presenter.getProductInfoById(args.order.cart?.first()!!.id)
         setClickListeners()
     }
 
 
 
-    private fun setProductInfo(product: Product){
+    override fun setProductInfo(product: Product){
         Glide.with(this)
             .load(product.photo.first().photo)
             .into(binding.productImageView)
 
         binding.productNameTextView.text = product.name
-        binding.productConditionTextView.text = product.property?.find { it.id == 11L  }?.name
+        binding.productConditionTextView.text = product.property?.find { it.id == 11L  }?.value
         binding.sizeTextView.text = product.property?.find {
             Range.create(1, 9).contains(it.id.toInt())
         }?.value.orEmpty()
@@ -51,11 +54,15 @@ class CreateDeliveryFragment: MvpAppCompatFragment(R.layout.fragment_delivery_cr
             )
         }
         binding.oldPriceTextView.text = crossedStr
+        binding.addressTextView.text = product.addressCdek
     }
 
     private fun setClickListeners(){
         binding.createOrderBtn.setOnClickListener {
-            presenter.createCdekOrder(args.order)
+            if(args.order.delivery == OrderCreateFragment.ANOTHER_CITY)
+               presenter.createCdekOrder(args.order)
+            if(args.order.delivery == OrderCreateFragment.YANDEX_GO)
+                presenter.createAndSubmitYandexOrder(args.order)
         }
     }
 
@@ -67,6 +74,7 @@ class CreateDeliveryFragment: MvpAppCompatFragment(R.layout.fragment_delivery_cr
     }
 
     override fun loading(loading: Boolean) {
+        binding.loader.isVisible = loading
 
     }
 

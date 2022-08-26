@@ -762,7 +762,8 @@ class ProductRepository(private val context: Context) {
             CreateProductData.createProductData.about = about
         if (address != null)
             CreateProductData.createProductData.address = address
-        CreateProductData.createProductData.addressCdek = addressCdek
+        if(addressCdek != null)
+            CreateProductData.createProductData.addressCdek = addressCdek
         if (property != null)
             if (CreateProductData.createProductData.property == null)
                 CreateProductData.createProductData.property = mutableListOf(property)

@@ -4,6 +4,7 @@ import android.content.Context
 import com.project.morestore.R
 import com.project.morestore.models.*
 import com.project.morestore.repositories.ChatRepository
+import com.project.morestore.repositories.GeoRepository
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.SalesRepository
 import com.project.morestore.util.MessageActionType
@@ -19,6 +20,7 @@ class OrderCreatePresenter(context: Context)
     private val orderRepository = OrdersRepository(context)
     private val salesRepository = SalesRepository()
     private val chatRepository = ChatRepository(context)
+    private val geoRepository = GeoRepository()
 
     ///////////////////////////////////////////////////////////////////////////
     //                      public
@@ -83,6 +85,10 @@ class OrderCreatePresenter(context: Context)
                     return@launch
                 }
             }
+            if(!fromChat) {
+                val successBuyRequest = createBuyDialog(userId = product.idUser!!, productId = product.id)
+                if(!successBuyRequest) return@launch
+            }
 
             val response = orderRepository.createOrder(newOrder)
             when(response?.code()){
@@ -105,8 +111,7 @@ class OrderCreatePresenter(context: Context)
 
                          }
 
-                        if(!fromChat)
-                           createBuyDialog(userId = product.idUser!!, productId = product.id)
+
                         val df = DecimalFormat("#.##")
                         df.roundingMode = RoundingMode.DOWN
                         val payUrl = getPayUrl(PayOrderInfo(df.format(finalSum).replace(',', '.').toFloat(), order!!.id ))
@@ -199,38 +204,59 @@ class OrderCreatePresenter(context: Context)
 
     }
 
-    private suspend fun sendSuspendBuyRequest(dialogId: Long){
+    private suspend fun sendSuspendBuyRequest(dialogId: Long): Boolean{
         val response = chatRepository.sendBuyRequest(ChatFunctionInfo(dialogId = dialogId))
-        when (response?.code()) {
+        return when (response?.code()) {
             200 -> {
+                true
 
             }
             400 -> {
                 val bodyString = getStringFromResponse(response.errorBody()!!)
                 viewState.showMessage(bodyString)
+                false
             }
-            500 -> viewState.showMessage("500 Internal Server Error")
-            null -> viewState.showMessage("нет интернета")
-            else -> viewState.showMessage("ошибка")
+            500 -> {
+                viewState.showMessage("500 Internal Server Error")
+                false
+            }
+            null -> {
+                viewState.showMessage("нет интернета")
+                false
+            }
+            else -> {
+                viewState.showMessage("ошибка")
+                false
+            }
 
         }
 
 
     }
 
-    private suspend fun createBuyDialog(userId: Long, productId: Long) {
+    private suspend fun createBuyDialog(userId: Long, productId: Long): Boolean {
         val response = chatRepository.createDialog(userId, productId)
-            when (response?.code()) {
+            return when (response?.code()) {
                 200 -> {
                     sendSuspendBuyRequest(response.body()?.id!!)
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.showMessage(bodyString)
+                    false
                 }
-                500 -> viewState.showMessage("500 Internal Server Error")
-                null -> viewState.showMessage("нет интернета")
-                else -> viewState.showMessage("ошибка")
+                500 -> {
+                    viewState.showMessage("500 Internal Server Error")
+                    false
+                }
+                null -> {
+                    viewState.showMessage("нет интернета")
+                    false
+                }
+                else -> {
+                    viewState.showMessage("ошибка")
+                    false
+                }
 
             }
 
@@ -295,7 +321,7 @@ class OrderCreatePresenter(context: Context)
         viewState.loading()
             val info = CdekCalculatePriceInfo(
                 from_location = AddressString(product.addressCdek?.substringBefore("cdek code:") ?: ""),
-                to_location = AddressString(toAddress),
+                to_location = AddressString(toAddress.substringBefore("cdek code:")),
                 packages = product.packageDimensions
             )
             val response = orderRepository.getCdekPrice(info)
@@ -309,8 +335,84 @@ class OrderCreatePresenter(context: Context)
         }
     }
 
-    fun getYandexPrice(){
-        viewState.setDeliveryPrice(DeliveryPrice(500f, 1, 2, 1, 2, 553f))
+    fun getYandexPrice(toAddress: String, product: Product){
+        //viewState.setDeliveryPrice(DeliveryPrice(500f, 1, 2, 1, 2, 553f))
+        presenterScope.launch {
+            viewState.loading()
+            val fromCoords = geoRepository.getCoordsByAddress("dfd")?.body()?.coords
+            if(fromCoords == null){
+                viewState.showMessage("ошибка оценки стоимости")
+                return@launch
+            }
+            val toCoords = geoRepository.getCoordsByAddress(toAddress)?.body()?.coords
+            if(toCoords == null){
+                viewState.showMessage("ошибка оценки стоимости")
+                return@launch
+            }
+            val yandexOrderId = createYandexOrder(fromCoords, toCoords, product)
+            yandexOrderId ?: return@launch
+            val response = orderRepository.getYandexGoOrderInfo(yandexOrderId)
+            when(response?.code()){
+                200 -> viewState.setDeliveryPrice(
+                    DeliveryPrice(0f,
+                    0,
+                    0,
+                    0,
+                    0,
+                    300f)
+                )
+                400 -> {
+                    viewState.showMessage(response.errorBody()!!.string())
+                }
+                500 -> viewState.showMessage("500 internal server error")
+                null -> viewState.showMessage("нет интернета")
+
+            }
+
+
+
+        }
+    }
+
+    private suspend fun createYandexOrder(fromCoords: Coords, toCoords: Coords, product: Product): Long?{
+        val order = YandexGoOrder(
+            idOrder = 1,
+            comment = "comment",
+            emergencyContactName = "",
+            emergencyContactPhone = "",
+            itemQuantity = "1",
+            itemsProductName = product.name,
+            productPrice = product.priceNew.toString(),
+            pointAddressCoordinates = "${toCoords.lat}, ${toCoords.lon}",
+            pointContactEmail = "",
+            pointContactName = "",
+            pointContactPhone = "",
+            pointFullName = "",
+            takePointCoordinates = "${fromCoords.lat}, ${fromCoords.lon}",
+            takePointContactEmail = "",
+            takePointContactName = "",
+            takePointContactPhone = "",
+            takePointFullName = ""
+        )
+        val response = orderRepository.createYandexGoOrder(order)
+        return when(response?.code()){
+            200 -> 3
+            400 -> {
+                viewState.showMessage(response.errorBody()!!.string())
+                null
+            }
+            null -> {
+                viewState.showMessage("нет интернета")
+                null
+
+            }
+            500 -> {
+                viewState.showMessage("500 internal server error")
+                null
+            }
+            else -> null
+        }
+
     }
 
 }

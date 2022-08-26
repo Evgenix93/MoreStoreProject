@@ -131,6 +131,30 @@ class OrdersAdapter(
                         orderItemStatusImage.imageTintList = ColorStateList.valueOf(context.resources.getColor(R.color.blue4, null))
 
                     }
+                    OrderStatus.DELIVERY_STATUS_NOT_VALID -> {
+                        orderItemStatusBlock.isVisible = true
+                        orderItemAcceptBlock.isVisible = false
+                        orderItemDeliveryChangeBlock.isVisible = false
+                        orderItemStatusContent.text = "Данные доставки некорректны"
+                        orderItemStatusImage.setImageResource(R.drawable.ic_clock)
+
+                    }
+                    OrderStatus.DELIVERY_STATUS_ACCEPTED -> {
+                        orderItemStatusBlock.isVisible = true
+                        orderItemAcceptBlock.isVisible = false
+                        orderItemDeliveryChangeBlock.isVisible = false
+                        orderItemStatusContent.text = "Доставка создана"
+                        orderItemStatusImage.setImageResource(R.drawable.ic_clock)
+
+                    }
+                    OrderStatus.DELIVERY_STATUS_NOT_DEFINED -> {
+                        orderItemStatusBlock.isVisible = true
+                        orderItemAcceptBlock.isVisible = false
+                        orderItemDeliveryChangeBlock.isVisible = false
+                        orderItemStatusContent.text = "Неизвестный статус доставки"
+                        orderItemStatusImage.setImageResource(R.drawable.ic_clock)
+
+                    }
                     else -> {}
                 }
             }

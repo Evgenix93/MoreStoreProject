@@ -9,4 +9,9 @@ interface GeoApi {
 
     @GET("geo/geocoder")
     suspend fun decodeCity(@Query("coords") coords: String): Response<Address>
+
+    @GET("geo/geocoder")
+    suspend fun getCoordsForAddress(@Query("address") address: String): Response<Address>
+
+
 }

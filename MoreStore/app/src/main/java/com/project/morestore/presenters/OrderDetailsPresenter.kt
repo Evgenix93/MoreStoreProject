@@ -25,6 +25,7 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
     private val salesRepository = SalesRepository()
     private val productRepository = ProductRepository(context)
     private val userRepository = UserRepository(context)
+    private val geoRepository = GeoRepository()
 
      fun acceptOrderPlace(orderId: Long, addressId: Long, address: String, asBuyer: Boolean) {
          presenterScope.launch {
@@ -587,8 +588,8 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
         presenterScope.launch {
             viewState.loading(true)
             val info = CdekCalculatePriceInfo(
-                from_location = AddressString(product.addressCdek ?: ""),
-                to_location = AddressString(toAddress),
+                from_location = AddressString(product.addressCdek?.substringBefore("cdek code") ?: ""),
+                to_location = AddressString(toAddress.substringBefore("cdek code")),
                 packages = product.packageDimensions
             )
             val response = ordersRepository.getCdekPrice(info)
@@ -612,6 +613,96 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 else -> {viewState.loading(false)}
             }
         }
+    }
+
+    fun getYandexGoPrice(toAddress: String, product: Product){
+        presenterScope.launch {
+            viewState.loading(true)
+            val fromCoords = geoRepository.getCoordsByAddress("dfd")?.body()?.coords
+            if(fromCoords == null){
+                viewState.loading(false)
+                viewState.showMessage("ошибка оценки стоимости")
+                return@launch
+            }
+            val toCoords = geoRepository.getCoordsByAddress(toAddress)?.body()?.coords
+            if(toCoords == null){
+                viewState.loading(false)
+                viewState.showMessage("ошибка оценки стоимости")
+                return@launch
+            }
+            val yandexOrderId = createYandexOrder(fromCoords, toCoords, product)
+            yandexOrderId ?: return@launch
+            val response = ordersRepository.getYandexGoOrderInfo(yandexOrderId)
+            when(response?.code()){
+                200 -> {
+                    viewState.loading(false)
+                    viewState.setDeliveryPrice(300f)
+                }
+                400 -> {
+                    viewState.loading(false)
+                    viewState.showMessage(response.errorBody()!!.string())
+                }
+                500 -> {
+                    viewState.loading(false)
+                    viewState.showMessage("500 internal server error")
+                }
+                null -> {
+                    viewState.loading(false)
+                    viewState.showMessage("нет интернета")
+                }
+
+            }
+
+
+
+        }
+    }
+
+    private suspend fun createYandexOrder(fromCoords: Coords, toCoords: Coords, product: Product): Long?{
+        val order = YandexGoOrder(
+            idOrder = 1,
+            comment = "comment",
+            emergencyContactName = "",
+            emergencyContactPhone = "",
+            itemQuantity = "1",
+            itemsProductName = product.name,
+            productPrice = product.priceNew.toString(),
+            pointAddressCoordinates = "${toCoords.lat}, ${toCoords.lon}",
+            pointContactEmail = "",
+            pointContactName = "",
+            pointContactPhone = "",
+            pointFullName = "",
+            takePointCoordinates = "${fromCoords.lat}, ${fromCoords.lon}",
+            takePointContactEmail = "",
+            takePointContactName = "",
+            takePointContactPhone = "",
+            takePointFullName = ""
+        )
+        val response = ordersRepository.createYandexGoOrder(order)
+        return when(response?.code()){
+            200 -> 3
+            400 -> {
+                viewState.loading(false)
+                viewState.showMessage(response.errorBody()!!.string())
+                null
+            }
+            null -> {
+                viewState.loading(false)
+                viewState.showMessage("нет интернета")
+                null
+
+            }
+            500 -> {
+                viewState.loading(false)
+                viewState.showMessage("500 internal server error")
+                null
+            }
+            else -> {
+                viewState.loading(false)
+                null
+            }
+        }
+
     }
 
 
