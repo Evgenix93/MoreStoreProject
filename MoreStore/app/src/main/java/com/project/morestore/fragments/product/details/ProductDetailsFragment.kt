@@ -345,6 +345,8 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                binding.promoteActiveFrameLayout.isVisible = false
                binding.dealIsSubmittedCardView.isVisible = true
                binding.addToCartBtn.isVisible = false
+               if(product.idUser == userId)
+                   binding.submittedDealInfoTextView.text = "Перейдите в заказы для подробной информации"
            }
        }
        if(product.statusUser?.read == false)
@@ -426,11 +428,13 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private fun setSellerProduct(dialogWrappers: List<DialogWrapper>?, product: Product) {
         binding.chatBtn.isVisible = false
         binding.toolbar.actionIcon.setOnClickListener {
+            if(product.status < 6)
             findNavController().navigate(
                 ProductDetailsFragmentDirections.actionProductDetailsFragmentToCreateProductStep6Fragment(
                     product = args.product ?: product
                 )
-            )
+            )else
+                Toast.makeText(requireContext(), "Сейчас вы не можете редактировать объявление", Toast.LENGTH_LONG).show()
         }
         binding.toolbar.actionIcon.setImageResource(R.drawable.ic_edit)
         binding.firstPurchaseInfoCard.isVisible = false
