@@ -1131,7 +1131,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     }
 
     fun changeProductAndPublish() {
-        updateCreateProductData(status = 1)
+        updateCreateProductData(status = 0)
         changeProduct()
     }
 
