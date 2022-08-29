@@ -104,7 +104,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         phone: String? = null,
         email: String? = null,
         step: Int? = null,
-        code: Int? = null
+        code: String? = null
     ) {
         presenterScope.launch {
             viewState.loading()

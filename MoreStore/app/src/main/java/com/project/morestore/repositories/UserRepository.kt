@@ -73,15 +73,21 @@ class UserRepository(val context: Context) {
         phone: String? = null,
         email: String? = null,
         step: Int? = null,
-        code: Int? = null
+        code: String? = null
     ): Response<RegistrationResponse2>? {
         return try {
-            userApi.changeUserData2(
+           /* userApi.changeUserData2(
                 email = email,
                 phone = phone,
                 step = step,
                 code = code
-            )
+            )*/
+            Log.d("MyTestTag", "fun changeUserData2()")
+            userApi.changeUserData2(RegistrationData(
+                phone = phone,
+                step = step,
+                code = code
+            ))
         } catch (e: Throwable) {
             Log.d("mylog", e.message.toString())
             if (e is IOException) {

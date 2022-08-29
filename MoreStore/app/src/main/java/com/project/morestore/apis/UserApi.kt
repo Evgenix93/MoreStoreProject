@@ -30,20 +30,23 @@ interface UserApi {
 
 
 
-    @POST("user/put")
+   /* @POST("user/put")
     suspend fun changeUserData2(
         @Query("email") email: String?,
         @Query("phone") phone: String?,
         @Query("step") step: Int?,
         @Query("code") code: Int?
-    ): Response<RegistrationResponse2>
+    ): Response<RegistrationResponse2>*/
+
+    @POST("user/put")
+    suspend fun changeUserData2(@Body registrationData: RegistrationData): Response<RegistrationResponse2>
 
     @POST("user/put")
     suspend fun changeUserData2GetError(
         @Query("email") email: String?,
         @Query("phone") phone: String?,
         @Query("step") step: Int?,
-        @Query("code") code: Int?
+        @Query("code") code: String?
     ): Response<String>
 
     @POST("upload/photo")

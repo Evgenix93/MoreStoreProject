@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -33,7 +34,8 @@ class Onboarding5Fragment: MvpAppCompatFragment(R.layout.fragment_onboarding5), 
     }
 
     override fun loading() {
-        TODO("Not yet implemented")
+        binding.loader.isVisible = true
+        binding.continueBtn.isEnabled = false
     }
 
     override fun loaded(result: List<Any>) {
@@ -41,10 +43,14 @@ class Onboarding5Fragment: MvpAppCompatFragment(R.layout.fragment_onboarding5), 
     }
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
+        binding.continueBtn.isEnabled = true
         Log.e("MyDebug", "message = $message")
     }
 
     override fun success() {
+        binding.loader.isVisible = false
+        binding.continueBtn.isEnabled = true
             findNavController().navigate(
                 Onboarding5FragmentDirections.actionOnboarding5FragmentToMainFragment()
             )
