@@ -4,12 +4,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RegistrationData(
-    val step: Int,
-    val phone: String?,
-    val email: String?,
-    val type: Int,
-    val user: Int?,
-    val code: String?,
-    val name: String?,
-    val surname: String?
+    val step: Int? = null,
+    val phone: String? = null,
+    val email: String? = null,
+    val type: Int? = null,
+    val user: Int? = null,
+    val code: String? = null,
+    val name: String? = null,
+    val surname: String? = null
 )

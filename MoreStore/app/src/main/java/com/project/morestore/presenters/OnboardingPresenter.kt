@@ -174,6 +174,7 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
     }
 
     fun saveOnboardingData(isMale: Boolean) {
+        viewState.loading()
         presenterScope.launch {
             val filter = userRepository.getFilter()
             val forWho = if (isMale)
