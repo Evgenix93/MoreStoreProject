@@ -319,10 +319,16 @@ class OrderCreatePresenter(context: Context)
     fun getCdekPrice(toAddress: String, product: Product){
         presenterScope.launch {
         viewState.loading()
+            val dimensions = ProductDimensions(
+                length = product.packageDimensions.length,
+                width = product.packageDimensions.width,
+                height = product.packageDimensions.height,
+                weight = (product.packageDimensions.weight!!.toFloat() * 1000).toInt().toString()
+            )
             val info = CdekCalculatePriceInfo(
                 from_location = AddressString(product.addressCdek?.substringBefore("cdek code:") ?: ""),
                 to_location = AddressString(toAddress.substringBefore("cdek code:")),
-                packages = product.packageDimensions
+                packages = dimensions
             )
             val response = orderRepository.getCdekPrice(info)
             when(response?.code()){
@@ -330,7 +336,8 @@ class OrderCreatePresenter(context: Context)
                 400 -> viewState.showMessage(response.errorBody()!!.string())
                 null -> viewState.showMessage("нет интернета")
                 500 -> viewState.showMessage("500 internal server error")
-                else -> {}
+                404 -> viewState.showMessage("ошибка расчета цена")
+                else -> {viewState.showMessage("ошибка расчета цены")}
             }
         }
     }
