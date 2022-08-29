@@ -68,19 +68,19 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
             )
             val packages = CdekPackages(
                 number = "1",
-                weight = order.cart?.first()?.packageDimensions?.weight.toString(),
-                length = order.cart?.first()?.packageDimensions?.length.toString(),
-                width = order.cart?.first()?.packageDimensions?.width.toString(),
-                height = order.cart?.first()?.packageDimensions?.height.toString()
+                weight = (order.cart?.first()?.packageDimensions?.weight!!.toFloat() * 1000).toInt().toString(),
+                length = order.cart.first().packageDimensions.length.toString(),
+                width = order.cart.first().packageDimensions.width.toString(),
+                height = order.cart.first().packageDimensions.height.toString()
 
             )
-            val shipmenPoin1 = order.cart?.first()?.addressCdek?.substringAfter("cdek code:")
+            val shipmenPoin1 = order.cart.first().addressCdek?.substringAfter("cdek code:")
             val shipmentPoint2 = order.placeAddress?.substringAfter("cdek code:")
             val items = CdekItems(
-                name = order.cart?.first()?.name ?: "",
+                name = order.cart.first().name ?: "",
                 ware_key = order.id.toString(),
-                cost = order.cart?.first()?.priceNew.toString(),
-                weight = order.cart?.first()?.packageDimensions?.weight.toString(),
+                cost = order.cart.first().priceNew.toString(),
+                weight = (order.cart.first().packageDimensions.weight!!.toFloat() * 1000).toInt().toString(),
                 payment = CdekPayment()
             )
             val cdekOrder = CdekOrder(

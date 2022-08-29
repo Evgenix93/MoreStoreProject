@@ -57,13 +57,9 @@ class OrderCreatePresenter(context: Context)
                 viewState.showMessage("Укажите время сделки")
                 return@launch
             }
-            var promoInfo: PromoCode? = null
 
-            if(promo != null){
-                promoInfo = getPromoInfo(promo)
-                promoInfo ?: return@launch
 
-            }
+
 
             val newOrder = NewOrder(
                 cart = listOf(cartId),
@@ -73,18 +69,8 @@ class OrderCreatePresenter(context: Context)
                 comment = comment
 
             )
-            val orders = getAllOrders()
-            orders ?: return@launch
-            if(promoInfo != null){
-                if(promoInfo.status == 0){
-                    viewState.showMessage("Промокод не активен")
-                    return@launch
-                }
-                if(promoInfo.first_order == 1 && orders.isNotEmpty()){
-                    viewState.showMessage("Этот промокод только для первого заказа")
-                    return@launch
-                }
-            }
+
+
             if(!fromChat) {
                 val successBuyRequest = createBuyDialog(userId = product.idUser!!, productId = product.id)
                 if(!successBuyRequest) return@launch
@@ -102,19 +88,19 @@ class OrderCreatePresenter(context: Context)
                     val order = updatedOrders.find { it.idCart.find { cart -> cart == cartId } != null }
 
                     if(pay == 2){
-                        var finalSum = sum!!
+                        /*var finalSum = sum!!
                          if(promoInfo != null ){
                              if(promoInfo.status == 1 && promoInfo.first_order == 1 && orders.isEmpty())
                                  finalSum -= promoInfo.sum
                              if (promoInfo.status == 1 && promoInfo.first_order == 0)
                                  finalSum -= promoInfo.sum
 
-                         }
+                         }*/
 
 
                         val df = DecimalFormat("#.##")
                         df.roundingMode = RoundingMode.DOWN
-                        val payUrl = getPayUrl(PayOrderInfo(df.format(finalSum).replace(',', '.').toFloat(), order!!.id ))
+                        val payUrl = getPayUrl(PayOrderInfo(df.format(sum).replace(',', '.').toFloat(), order!!.id ))
                         payUrl ?: run {
                             viewState.navigate(R.id.ordersActiveFragment)
                             return@launch}
@@ -285,19 +271,47 @@ class OrderCreatePresenter(context: Context)
         }
     }
 
-    private suspend fun getPromoInfo(code: String): PromoCode?{
-        val response = orderRepository.getPromoInfo(code)
-        return when(response?.code()){
-            200 -> response.body()
-            null -> {
-                viewState.showMessage("нет интернета")
-                null}
-            404 -> {
-                viewState.showMessage("промокод не найден")
-                null
-            }
-            else -> null
-        }
+      fun getPromoInfo(code: String){
+          presenterScope.launch {
+              viewState.loading()
+              val response = orderRepository.getPromoInfo(code)
+               when (response?.code()) {
+                  200 -> {
+                      val orders = getAllOrders()
+                      orders ?: return@launch
+                      if(response.body()?.status == 0){
+                          viewState.showMessage("Промокод не активен")
+                          viewState.applyPromo(null)
+                          return@launch
+                      }
+                      if(response.body()?.first_order == 1 && orders.isNotEmpty()){
+                          viewState.showMessage("Этот промокод только для первого заказа")
+                          viewState.applyPromo(null)
+                          return@launch
+                      }
+                      viewState.applyPromo(response.body())
+                  }
+                  null -> {
+                      viewState.applyPromo(null)
+                      viewState.showMessage("нет интернета")
+
+                  }
+                  404 -> {
+                      viewState.applyPromo(null)
+                      viewState.showMessage("промокод не найден")
+
+                  }
+                   400 -> {
+                       viewState.applyPromo(null)
+                       viewState.showMessage(response.errorBody()!!.string())
+
+                   }
+                  else -> {
+                      viewState.applyPromo(null)
+
+                  }
+              }
+          }
     }
 
     private suspend fun getPayUrl(payInfo: PayOrderInfo): PaymentUrl? {
@@ -333,11 +347,25 @@ class OrderCreatePresenter(context: Context)
             val response = orderRepository.getCdekPrice(info)
             when(response?.code()){
                 200 -> viewState.setDeliveryPrice(response.body()!!)
-                400 -> viewState.showMessage(response.errorBody()!!.string())
-                null -> viewState.showMessage("нет интернета")
-                500 -> viewState.showMessage("500 internal server error")
-                404 -> viewState.showMessage("ошибка расчета цена")
-                else -> {viewState.showMessage("ошибка расчета цены")}
+                400 -> {
+                    viewState.setDeliveryPrice(null)
+                    viewState.showMessage(response.errorBody()!!.string())
+                }
+                null -> {
+                    viewState.setDeliveryPrice(null)
+                    viewState.showMessage("нет интернета")
+                }
+                500 -> {
+                    viewState.setDeliveryPrice(null)
+                    viewState.showMessage("500 internal server error")
+                }
+                404 -> {
+                    viewState.setDeliveryPrice(null)
+                    viewState.showMessage("ошибка расчета цена")
+                }
+                else -> {
+                    viewState.setDeliveryPrice(null)
+                    viewState.showMessage("ошибка расчета цены")}
             }
         }
     }

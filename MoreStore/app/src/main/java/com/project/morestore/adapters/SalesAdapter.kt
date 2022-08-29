@@ -165,7 +165,19 @@ class SalesAdapter(
                     }
                 }else if(buySuggest?.status == 0 || buySuggest == null){
                     orderStatus = OrderStatus.NOT_SUBMITTED_SELLER
-                    binding.orderItemDeliveryContent.text = "по желанию продавца"
+                    binding.orderItemDeliveryContent.text = when {
+                       order.delivery == 2 -> order.placeAddress
+                       order.delivery == 3 -> order.placeAddress
+                       order.place == 1 && order.delivery == 1 -> "по желанию продавца"
+                        order.place == 2 && order.delivery == 1 -> address?.address
+                        else -> ""
+                    }
+                    binding.orderItemDeliveryDateText.text = when (order.delivery) {
+                        1 -> "самовывоз"
+                        2 -> "yandex Go"
+                        3 -> "CDEK"
+                        else -> ""
+                    }
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
                     binding.orderItemDeliveryChangeTitle.text =
@@ -235,7 +247,7 @@ class SalesAdapter(
                                 binding.orderItemStatusBlock.isVisible = true
                                 binding.orderItemStatusContent.text = "Оплачено"
                                 binding.orderItemAcceptBlock.isVisible = true
-                                binding.orderItemAcceptButton.text = "Создать доставку"
+                                binding.orderItemAcceptButton.text = "Подтвердить доставку"
 
                                 binding.orderItemAcceptButton.setOnClickListener {
                                     onDeliveryCreateClick(order)

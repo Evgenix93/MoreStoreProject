@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -61,6 +62,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         initRadioDeliveryButtons()
         initRadioDeliveryVariantButtons()
         initViews()
+        initPromoFields()
         getSupportDialog()
     }
 
@@ -197,7 +199,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.payNowWithDeliveryButton.isEnabled = false
             binding.updateDeliveryPriceBtn.isVisible = true
             binding.updateDeliveryPriceBtn.setOnClickListener {
-                if(binding.anotherCityRadioBtn.isChecked) getDeliveryPrice()
+                if(binding.anotherCityRadioBtn.isChecked) presenter.getCdekPrice(chosenAddressStr, args.product)
             }
         }else {
             binding.payNowWithDeliveryButton.isEnabled = true
@@ -229,9 +231,61 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.deliveryDateTextView.text = "${calendar.get(Calendar.DAY_OF_MONTH)} $month"
     }
 
+    override fun applyPromo(promo: PromoCode?) {
+        binding.loader.isVisible = false
+        if(promo == null){
+            binding.payNowButton.text = "Оплатить"
+            binding.payNowWithDeliveryButton.text = "Оплатить"
+            binding.payNowButton.setOnClickListener {
+                onPayNowBtnClick()
+            }
+            binding.payNowWithDeliveryButton.setOnClickListener {
+                onPayNowWithDeliveryBtnClick()
+            }
+            return
+        }
+        val sum = if(binding.totalWithDeliveryCardView.isVisible) binding.finalSumTextView.text.toString().toFloatOrNull()
+                  else binding.finalSumWithoutDelivery.text.toString().toFloatOrNull()
+        sum ?: return
+        if(binding.totalWithDeliveryCardView.isVisible)
+           binding.finalSumTextView.text = (sum - promo.sum).toString()
+        else binding.finalSumWithoutDelivery.text = (sum - promo.sum).toString()
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     //                      Private
     ///////////////////////////////////////////////////////////////////////////
+
+    private fun initPromoFields(){
+        binding.promoEditText.doOnTextChanged { text, start, before, count ->
+            if(text?.isNotBlank() == true){
+                binding.payNowWithDeliveryButton.text = "Применить промокод"
+                binding.payNowWithDeliveryButton.setOnClickListener {
+                    presenter.getPromoInfo(text.toString())
+                }
+            }else{
+                binding.payNowWithDeliveryButton.text = "Оплатить"
+                binding.payNowWithDeliveryButton.setOnClickListener {
+                    onPayNowWithDeliveryBtnClick()
+                }
+
+            }
+        }
+        binding.promoWithoutDeliveryEditText.doOnTextChanged { text, start, before, count ->
+            if(text?.isNotBlank() == true){
+                binding.payNowButton.text = "Применить промокод"
+                binding.payNowButton.setOnClickListener {
+                    presenter.getPromoInfo(text.toString())
+                }
+            }else{
+                binding.payNowButton.text = "Оплатить"
+                binding.payNowButton.setOnClickListener {
+                    onPayNowBtnClick()
+                }
+
+            }
+        }
+    }
 
     private fun setClickListeners() {
         binding.dateEditText.setOnClickListener {
@@ -407,56 +461,13 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         }
 
         binding.payNowWithDeliveryButton.setOnClickListener {
-            val place = OrderPlace(PLACE_FROM_ME.toLong(), chosenAddressStr, null)
-            val deliveryId = when(binding.deliveryVariantRadioGroup.checkedRadioButtonId){
-                R.id.yandexRadioBtn -> YANDEX_GO
-                R.id.anotherCityRadioBtn -> ANOTHER_CITY
-                R.id.takeFromSellerRadioBtn -> TAKE_FROM_SELLER
-                else -> -1
-            }
-            presenter.onCreateOrder(
-                cartId = args.cartId,
-                delivery = deliveryId,
-                place = place,
-                pay = PAY_PREPAYMENT,
-                fromChat =  findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
-                comment = if(binding.commentEditText.text?.isNotEmpty() == true) binding.commentEditText.text.toString()
-                          else null,
-                product = args.product,
-                promo =  if(binding.promoEditText.text?.isNotEmpty() == true) binding.promoEditText.text.toString()
-                         else null,
-                sum = binding.finalSumTextView.text.toString().replace(',', '.').toFloat()
-            )
+            onPayNowWithDeliveryBtnClick()
+
         }
 
         binding.payNowButton.setOnClickListener {
-            val deliveryId = when(binding.deliveryVariantRadioGroup.checkedRadioButtonId){
-                R.id.yandexRadioBtn -> YANDEX_GO
-                R.id.anotherCityRadioBtn -> ANOTHER_CITY
-                R.id.takeFromSellerRadioBtn -> TAKE_FROM_SELLER
-                else -> -1
-            }
-            val placeId = when(binding.radioButtons.checkedRadioButtonId){
-                R.id.onSellerChoiceRadioBtn -> PLACE_FROM_SELLER
-                R.id.userVariantRadioBtn -> PLACE_FROM_ME
-                else -> -1
-            }
-            val payId = when(binding.deliveryTypeRadioGroup.checkedRadioButtonId){
-                R.id.onDealPlaceRadioButton -> PAY_ON_PLACE
-                R.id.prepaymentRadioButton -> PAY_PREPAYMENT
-                else -> -1
-            }
-            val place = if(placeId == PLACE_FROM_SELLER) OrderPlace(placeId.toLong(), null, null)
-            else OrderPlace(placeId.toLong(),
-                if(chosenAddressStr.isNotEmpty()) "$chosenAddressStr;${chosenTime?.timeInMillis}" else null,
-                chosenTime?.timeInMillis ?: 0/1000)
-            presenter.onCreateOrder(args.cartId, deliveryId, place, payId,
-                findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
-                args.product,
-            sum = binding.finalSumWithoutDelivery.text.toString().toFloat(),
-            promo = if(binding.promoWithoutDeliveryEditText.text.isNotEmpty())
-                       binding.promoWithoutDeliveryEditText.text.toString()
-                       else null)
+            onPayNowBtnClick()
+
 
         }
 
@@ -553,7 +564,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.totalCardView.isVisible = !show && binding.prepaymentRadioButton.isChecked
         binding.payButton.isVisible = !show && binding.onDealPlaceRadioButton.isChecked
         //binding.deliveryCdekVariantCardView.isVisible = binding.anotherCityRadioBtn.isChecked
-        binding.deliveryPriceTextView.text = getDeliveryPrice().toString()
+        //binding.deliveryPriceTextView.text = getDeliveryPrice().toString()
 
 
 
@@ -574,12 +585,65 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         presenter.getSupportDialog()
     }
 
-    private fun getDeliveryPrice() = 340
+    //private fun getDeliveryPrice() = 340
 
     private fun getFinalSum(productPrice: Float, deliveryPrice: Float): Float{
         val sumWithDelivery = productPrice + deliveryPrice
         return sumWithDelivery + (sumWithDelivery * 0.05f)
 
+    }
+
+    private fun onPayNowWithDeliveryBtnClick(){
+        val place = OrderPlace(PLACE_FROM_ME.toLong(), chosenAddressStr, null)
+        val deliveryId = when(binding.deliveryVariantRadioGroup.checkedRadioButtonId){
+            R.id.yandexRadioBtn -> YANDEX_GO
+            R.id.anotherCityRadioBtn -> ANOTHER_CITY
+            R.id.takeFromSellerRadioBtn -> TAKE_FROM_SELLER
+            else -> -1
+        }
+        presenter.onCreateOrder(
+            cartId = args.cartId,
+            delivery = deliveryId,
+            place = place,
+            pay = PAY_PREPAYMENT,
+            fromChat =  findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
+            comment = if(binding.commentEditText.text?.isNotEmpty() == true) binding.commentEditText.text.toString()
+            else null,
+            product = args.product,
+            promo =  if(binding.promoEditText.text?.isNotEmpty() == true) binding.promoEditText.text.toString()
+            else null,
+            sum = binding.finalSumTextView.text.toString().replace(',', '.').toFloat()
+        )
+    }
+
+    private fun onPayNowBtnClick(){
+        val deliveryId = when(binding.deliveryVariantRadioGroup.checkedRadioButtonId){
+            R.id.yandexRadioBtn -> YANDEX_GO
+            R.id.anotherCityRadioBtn -> ANOTHER_CITY
+            R.id.takeFromSellerRadioBtn -> TAKE_FROM_SELLER
+            else -> -1
+        }
+        val placeId = when(binding.radioButtons.checkedRadioButtonId){
+            R.id.onSellerChoiceRadioBtn -> PLACE_FROM_SELLER
+            R.id.userVariantRadioBtn -> PLACE_FROM_ME
+            else -> -1
+        }
+        val payId = when(binding.deliveryTypeRadioGroup.checkedRadioButtonId){
+            R.id.onDealPlaceRadioButton -> PAY_ON_PLACE
+            R.id.prepaymentRadioButton -> PAY_PREPAYMENT
+            else -> -1
+        }
+        val place = if(placeId == PLACE_FROM_SELLER) OrderPlace(placeId.toLong(), null, null)
+        else OrderPlace(placeId.toLong(),
+            if(chosenAddressStr.isNotEmpty()) "$chosenAddressStr;${chosenTime?.timeInMillis}" else null,
+            chosenTime?.timeInMillis ?: 0/1000)
+        presenter.onCreateOrder(args.cartId, deliveryId, place, payId,
+            findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
+            args.product,
+            sum = binding.finalSumWithoutDelivery.text.toString().toFloat(),
+            promo = if(binding.promoWithoutDeliveryEditText.text.isNotEmpty())
+                binding.promoWithoutDeliveryEditText.text.toString()
+            else null)
     }
 
     companion object{

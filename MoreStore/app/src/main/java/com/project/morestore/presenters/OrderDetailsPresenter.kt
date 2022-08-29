@@ -386,7 +386,8 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 productId = order.cart?.first()?.id!!,
                 newAddressId = address?.id,
                 product = order.cart?.first()!!,
-                chatFunctionInfo
+                chatFunctionInfo,
+                cdekYandexAddress = order.placeAddress
 
             )
 
