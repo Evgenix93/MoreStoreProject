@@ -1017,6 +1017,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/payNowWithDeliveryButton"
+                    android:enabled="false"
                     style="@style/buttonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
