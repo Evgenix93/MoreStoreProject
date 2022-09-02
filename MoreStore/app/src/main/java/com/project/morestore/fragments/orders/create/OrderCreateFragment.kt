@@ -125,14 +125,14 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.oldPriceTextView.text = crossedStr
         binding.oldPrice2TextView.text = crossedStr
         binding.oldPrice2WithDeliveryTextView.text = crossedStr
-        binding.newPriceTextView.text = product.priceNew.toString()
-        binding.newPrice2TextView.text = product.priceNew.toString()
-        binding.price2WithDeliveryTextView.text = if(product.priceNew != null) product.priceNew.toString()
-                                                  else product.price.toString()
+        binding.newPriceTextView.text = "${product.priceNew.toString()} ₽"
+        binding.newPrice2TextView.text = "${product.priceNew.toString()} ₽"
+        binding.price2WithDeliveryTextView.text = if(product.priceNew != null) "${product.priceNew} ₽"
+                                                  else "${product.price} ₽"
         //val finalSum = getFinalSum(product.priceNew?.toInt() ?: product.price.toInt(), 3 )
         //binding.finalSumTextView.text =
             //getFinalSum(productPrice ?: 0f, currentDeliveryPrice ?: 0f).toString() //finalSum.toString()
-        binding.finalSumWithoutDelivery.text = ((product.priceNew ?: product.price) + ((product.priceNew ?: product.price) * 0.05f)).toString()
+        binding.finalSumWithoutDelivery.text = "${((product.priceNew ?: product.price) + ((product.priceNew ?: product.price) * 0.05f))} ₽"
 
         if(product.addressCdek == null || product.packageDimensions.length == null){
             binding.anotherCityRadioBtn.isEnabled = false
@@ -206,11 +206,11 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.updateDeliveryPriceBtn.isVisible = false
         }
         currentDeliveryPrice = price?.total_sum
-        binding.deliveryPriceTextView.text = if(price != null) price.total_sum.toString() else "не удалось загрузить"
+        binding.deliveryPriceTextView.text = if(price != null) "${price.total_sum} ₽" else "не удалось загрузить"
         val finalSum = getFinalSum(productPrice ?: 0f, price?.total_sum ?: 0f)
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.DOWN
-        binding.finalSumTextView.text = df.format(finalSum).replace(',', '.')
+        binding.finalSumTextView.text = "${df.format(finalSum).replace(',', '.')} ₽"
 
         val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() + (172800 * 1000) }
         val month = when(calendar.get(Calendar.MONTH)){
@@ -612,7 +612,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             product = args.product,
             promo =  if(binding.promoEditText.text?.isNotEmpty() == true) binding.promoEditText.text.toString()
             else null,
-            sum = binding.finalSumTextView.text.toString().replace(',', '.').toFloat()
+            sum = binding.finalSumTextView.text.toString().removeSuffix(" ₽").replace(',', '.').toFloat()
         )
     }
 
@@ -640,7 +640,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         presenter.onCreateOrder(args.cartId, deliveryId, place, payId,
             findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
             args.product,
-            sum = binding.finalSumWithoutDelivery.text.toString().toFloat(),
+            sum = binding.finalSumWithoutDelivery.text.toString().removeSuffix(" ₽").toFloat(),
             promo = if(binding.promoWithoutDeliveryEditText.text.isNotEmpty())
                 binding.promoWithoutDeliveryEditText.text.toString()
             else null)

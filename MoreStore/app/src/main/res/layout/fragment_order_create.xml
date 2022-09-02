@@ -826,11 +826,16 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="125dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="125dp"
+                    android:layout_marginEnd="8dp"
                     android:text="Итого:"
                     android:textAppearance="@style/bold_24"
                     android:textColor="@color/black" />
@@ -839,11 +844,10 @@
                     android:id="@+id/finalSumWithoutDelivery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="94dp"
-                    android:layout_marginTop="125dp"
                     android:text="500 ₽"
                     android:textAppearance="@style/bold_24"
                     android:textColor="@color/green" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/prepaymentInfo2TextView"
@@ -899,14 +903,20 @@
                     android:layout_marginTop="39dp"
                     android:layout_marginHorizontal="10dp"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="95dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Срок доставки:"
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/gray2"
-                    android:layout_marginTop="95dp"
-                    android:layout_marginStart="10dp"/>
+                    android:layout_marginEnd="4dp"
+                    />
 
                 <TextView
                     android:id="@+id/deliveryDateTextView"
@@ -915,20 +925,24 @@
                     tools:text="12-14 ноября"
                     android:textAppearance="@style/medium_16"
                     android:textColor="@color/green"
-                    android:layout_marginTop="95dp"
-                    android:layout_marginStart="135dp"/>
+                    />
+
+                </LinearLayout>
 
 
 
 
 
 
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="135dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="135dp"
+                    android:layout_marginEnd="4dp"
                     android:text="@string/product_price"
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/gray2" />
@@ -937,8 +951,7 @@
                     android:id="@+id/price2WithDeliveryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="165dp"
-                    android:layout_marginTop="135dp"
+                    android:layout_marginEnd="4dp"
                     tools:text="500 ₽"
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/black" />
@@ -948,18 +961,23 @@
                     android:id="@+id/oldPrice2WithDeliveryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="230dp"
-                    android:layout_marginTop="135dp"
                     tools:text="5 600 ₽ "
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/gray2" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="167dp">
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="167dp"
+                    android:layout_marginEnd="4dp"
                     android:text="Доставка:"
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/gray2" />
@@ -968,11 +986,10 @@
                     android:id="@+id/deliveryPriceTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="94dp"
-                    android:layout_marginTop="168dp"
                     tools:text="340 ₽"
                     android:textAppearance="@style/regular_16"
                     android:textColor="@color/black" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/updateDeliveryPriceBtn"
@@ -985,11 +1002,16 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginTop="168dp"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="207dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="207dp"
+                    android:layout_marginEnd="8dp"
                     android:text="Итого:"
                     android:textAppearance="@style/bold_24"
                     android:textColor="@color/black" />
@@ -998,11 +1020,10 @@
                     android:id="@+id/finalSumTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="94dp"
-                    android:layout_marginTop="207dp"
                     tools:text="500 ₽"
                     android:textAppearance="@style/bold_24"
                     android:textColor="@color/green" />
+                </LinearLayout>
 
                 <TextView
 

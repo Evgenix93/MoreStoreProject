@@ -168,8 +168,8 @@ class SalesAdapter(
                     binding.orderItemDeliveryContent.text = when {
                        order.delivery == 2 -> order.placeAddress
                        order.delivery == 3 -> order.placeAddress
-                       order.place == 1 && order.delivery == 1 -> "по желанию продавца"
-                        order.place == 2 && order.delivery == 1 -> address?.address
+                       order.place == 1 && order.delivery == 1 -> address?.address?.substringBefore(";") ?: "по желанию продавца"
+                        order.place == 2 && order.delivery == 1 -> address?.address?.substringBefore(";")
                         else -> ""
                     }
                     binding.orderItemDeliveryDateText.text = when (order.delivery) {
@@ -208,7 +208,19 @@ class SalesAdapter(
                             )
                     }
                 }else{
-                    binding.orderItemDeliveryContent.text = "по желанию продавца"
+                    binding.orderItemDeliveryContent.text = when {
+                        order.delivery == 2 -> order.placeAddress
+                        order.delivery == 3 -> order.placeAddress
+                        order.place == 1 && order.delivery == 1 -> address?.address?.substringBefore(";") ?: "по желанию продавца"
+                        order.place == 2 && order.delivery == 1 -> address?.address?.substringBefore(";")
+                        else -> ""
+                    }
+                    binding.orderItemDeliveryDateText.text = when (order.delivery) {
+                        1 -> "самовывоз"
+                        2 -> "yandex Go"
+                        3 -> "CDEK"
+                        else -> ""
+                    }
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
                     if(order.cart.first().statusUser?.buy?.idCanceled != order.idSeller) {

@@ -179,18 +179,20 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                         val filter = userRepository.getFilter()
                         val currentUserId = authRepository.getUserId()
                         response.body()?.forEach {
-                            val status = when (it.statusUser?.order?.status) {
+                            val productStatus = when (it.statusUser?.order?.status) {
                                 0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
                                 else if (it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
-                                else if (it.statusUser.buy?.status != 2) 7 else 1
+                                else if (it.statusUser.buy?.status != 2) 7 else it.status
                                 1 -> 8
-                                else -> if ((it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) &&
+                                null -> it.status
+                                else -> it.status
+                                /*else -> if ((it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) &&
                                     (it.idUser == currentUserId || it.statusUser.buy.idUser == currentUserId)
                                 ) 6
                                 else if (it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) 7
-                                else 1
+                                else 1*/
                             }
-                            it.status = status
+                            it.status = productStatus
                         }
                         if(isFiltered) {
                             val products = response.body()!!.toMutableList()

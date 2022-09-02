@@ -30,16 +30,16 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     private var tabPosition: Int = 0
 
 
-    fun createDialog(userId: Long, productId: Long, withBuySuggest: Boolean = false) {
+    fun createDialog(userId: Long, productId: Long){ //withBuySuggest: Boolean = false) {
         presenterScope.launch {
             viewState.currentUserIdLoaded(authRepository.getUserId())
             viewState.loading()
             val response = chatRepository.createDialog(userId, productId)
             when (response?.code()) {
                 200 -> {
-                    if(withBuySuggest){
-                        sendSuspendBuyRequest(response.body()?.id!!)
-                    }
+                    //if(withBuySuggest){
+                      //  sendSuspendBuyRequest(response.body()?.id!!)
+                    //}
                     getDialogById(response.body()?.id!!)
                 }
                 400 -> {

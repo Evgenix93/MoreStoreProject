@@ -71,10 +71,10 @@ class OrderCreatePresenter(context: Context)
             )
 
 
-            if(!fromChat) {
+            //if(!fromChat) {
                 val successBuyRequest = createBuyDialog(userId = product.idUser!!, productId = product.id)
                 if(!successBuyRequest) return@launch
-            }
+           // }
 
             val response = orderRepository.createOrder(newOrder)
             when(response?.code()){
@@ -122,7 +122,7 @@ class OrderCreatePresenter(context: Context)
                     if(fromChat)
                         viewState.navigate(R.id.chatFragment)
                     else {
-                        createBuyDialog(userId = product.idUser!!, productId = product.id)
+                        //createBuyDialog(userId = product.idUser!!, productId = product.id)
                         viewState.navigate(R.id.ordersActiveFragment)
                     }
                 }

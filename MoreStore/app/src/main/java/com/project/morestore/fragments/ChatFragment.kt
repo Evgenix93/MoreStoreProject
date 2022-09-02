@@ -146,7 +146,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 val productId = requireArguments().getLong(PRODUCT_ID_KEY, 0)
                 val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
                 if (userId != 0L && productId != 0L)
-                    createDealChat(userId, productId, findNavController().previousBackStackEntry?.destination?.id == R.id.createOrderFragment)
+                    createDealChat(userId, productId) //findNavController().previousBackStackEntry?.destination?.id == R.id.createOrderFragment)
                 else getDialog(dialogId)
             }
             else -> throw IllegalArgumentException("Undefined chat type: $chatType")
@@ -421,8 +421,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
 
-    private fun createDealChat(userId: Long, productId: Long, withBuySuggest: Boolean) {
-        presenter.createDialog(userId, productId, withBuySuggest)
+    private fun createDealChat(userId: Long, productId: Long){ //withBuySuggest: Boolean) {
+        presenter.createDialog(userId, productId) //withBuySuggest)
 
     }
 

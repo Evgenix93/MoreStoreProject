@@ -589,10 +589,10 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
         presenterScope.launch {
             viewState.loading(true)
             val dimensions = ProductDimensions(
-                length = product.packageDimensions.length,
-                width = product.packageDimensions.width,
-                height = product.packageDimensions.height,
-                weight = (product.packageDimensions.weight!!.toFloat() * 1000).toInt().toString()
+                length = product.packageDimensions.length ?: "10",
+                width = product.packageDimensions.width ?: "10",
+                height = product.packageDimensions.height ?: "10",
+                weight = ((product.packageDimensions.weight ?: "0.3").toFloat() * 1000).toInt().toString()
             )
             val info = CdekCalculatePriceInfo(
                 from_location = AddressString(product.addressCdek?.substringBefore("cdek code") ?: ""),

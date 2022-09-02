@@ -83,16 +83,7 @@
                     android:textColor="@color/gray2"
                     android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/priceTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="90dp"
-                    android:layout_marginTop="94dp"
-                    android:fontFamily="@font/manrope_regular"
-                    android:text="Цена"
-                    android:textColor="@color/gray2"
-                    android:textSize="12sp" />
+
 
                 <TextView
                     android:id="@+id/cancelTextView"
@@ -117,21 +108,42 @@
                     android:textColor="@color/gray2"
                     android:textSize="12sp" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="94dp">
+
+                <TextView
+                    android:id="@+id/priceTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="90dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/pricesBlockTopLinearLayout"
+                    android:fontFamily="@font/manrope_regular"
+                    android:text="Цена"
+                    android:textColor="@color/gray2"
+                    android:textSize="12sp" />
+
                 <LinearLayout
+                    android:id="@+id/pricesBlockTopLinearLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="94dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginEnd="10dp">
 
                     <TextView
                         android:id="@+id/oldPriceTextView"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/manrope_regular"
                         android:textColor="@color/gray2"
                         android:textSize="12sp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_gravity="center"
                         tools:text="5 600 ₽ " />
 
@@ -144,6 +156,7 @@
                         android:textSize="16sp"
                         tools:text="500 ₽" />
                 </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
 

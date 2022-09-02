@@ -403,7 +403,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         val finalSum = sumWithDelivery + (sumWithDelivery * 0.05)
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.DOWN
-        binding.newPriceTextView.text = df.format(finalSum).replace(',', '.')
+        binding.newPriceTextView.text = "${df.format(finalSum).replace(',', '.')} ₽"
         if(orderItem.status == OrderStatus.NOT_PAYED){
             binding.orderItemAcceptButton.isEnabled = true
             binding.orderItemAcceptButton.setOnClickListener {
