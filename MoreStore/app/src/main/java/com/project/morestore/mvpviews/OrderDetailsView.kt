@@ -1,6 +1,7 @@
 package com.project.morestore.mvpviews
 
 import com.project.morestore.models.Chat
+import com.project.morestore.models.Order
 import com.project.morestore.models.PaymentUrl
 import com.project.morestore.models.Product
 import com.project.morestore.models.cart.OrderItem
@@ -28,5 +29,7 @@ interface OrderDetailsView: MvpView {
     @OneExecution
     fun payment(paymentUrl: PaymentUrl, orderId: Long)
     @OneExecution
-    fun setDeliveryPrice(price: Float)
+    fun setFinalPrice(price: Float)
+    @OneExecution
+    fun navigateToCreateDelivery(order: Order)
 }

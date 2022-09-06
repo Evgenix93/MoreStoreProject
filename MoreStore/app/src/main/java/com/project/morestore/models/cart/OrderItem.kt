@@ -34,5 +34,6 @@ data class OrderItem(
     val chatFunctionInfo: ChatFunctionInfo? = null,
     val offeredOrderPlace: OfferedOrderPlace? = null,
     val buyerId: Long? = null,
-    val cdekYandexAddress: String? = null
+    val cdekYandexAddress: String? = null,
+    val promo: String? = null
 ): Parcelable

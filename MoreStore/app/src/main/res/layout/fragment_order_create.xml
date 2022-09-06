@@ -685,6 +685,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/paymentCardView"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -1046,7 +1047,7 @@
                     android:layout_marginTop="328dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
-                    android:text="Оплатить заказ" />
+                    android:text="Оформить заказ" />
 
 
             </com.google.android.material.card.MaterialCardView>

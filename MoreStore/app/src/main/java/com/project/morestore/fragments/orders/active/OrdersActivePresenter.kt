@@ -143,14 +143,14 @@ class OrdersActivePresenter(val context: Context)
                         else -> OrderStatus.NOT_SUBMITTED
                     }
                         if(order.pay == 2 && buySuggest?.status != 2){
-                            if(!order.isPayment)
+                            if(!order.isPayment && buySuggest?.status == 1)
                                 status = OrderStatus.NOT_PAYED
-                            else{
+                            //else{
                                 //if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1)
                                   //  status = OrderStatus.MEETING_NOT_ACCEPTED
                                 if(buySuggest?.status == 0 || buySuggest?.status == null)
                                     status = OrderStatus.NOT_SUBMITTED
-                                if(order.idCdek != null){
+                                if(order.idCdek != null && order.isPayment){
                                     Log.d("mylog", "cdek")
                                     val info = ordersRepository.getCdekOrderInfo(order.idCdek)?.body()
                                     if (info?.entity?.statuses?.first()?.code == CdekStatuses.INVALID)
@@ -161,7 +161,10 @@ class OrdersActivePresenter(val context: Context)
                                         status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
                                     else status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
                                 }
-                            }
+                                if(order.idCdek == null && order.isPayment){
+                                    status = OrderStatus.MEETING_NOT_ACCEPTED
+                                }
+                            //}
                         }
 
                         val discountedPrice = when{

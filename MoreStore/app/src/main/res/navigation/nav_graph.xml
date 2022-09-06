@@ -1042,6 +1042,9 @@
         <action
             android:id="@+id/action_createOrderFragment_to_successOrderPaymentFragment"
             app:destination="@id/successOrderPaymentFragment" />
+        <action
+            android:id="@+id/action_createOrderFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -1300,6 +1303,9 @@
         <action
             android:id="@+id/action_orderDetailsFragment_to_successOrderPaymentFragment"
             app:destination="@id/successOrderPaymentFragment" />
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_createDeliveryFragment"
+            app:destination="@id/createDeliveryFragment" />
     </fragment>
     <fragment
         android:id="@+id/blackListFragment"

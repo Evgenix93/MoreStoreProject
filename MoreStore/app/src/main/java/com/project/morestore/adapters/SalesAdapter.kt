@@ -75,6 +75,19 @@ class SalesAdapter(
             user: User?,
             dialog: DialogWrapper?
         ) {
+            binding.orderItemDeliveryDateText.text = when (order.delivery) {
+                1 -> "самовывоз"
+                2 -> "yandex Go"
+                3 -> "CDEK"
+                else -> ""
+            }
+            binding.orderItemDeliveryContent.text = when {
+                order.delivery == 2 -> order.placeAddress
+                order.delivery == 3 -> order.placeAddress
+                order.place == 1 && order.delivery == 1 -> address?.address?.substringBefore(";") ?: "по желанию продавца"
+                order.place == 2 && order.delivery == 1 -> address?.address?.substringBefore(";")
+                else -> ""
+            }
             var orderStatus = OrderStatus.NOT_SUBMITTED
             binding.orderItemName.text = order.cart?.get(0)?.name
             //val specialPrice = dialog?.messages?.map{it.priceSuggest ?: it.saleSuggest}?.findLast{it?.status == 1}?.value?.toIntOrNull()
@@ -161,23 +174,10 @@ class SalesAdapter(
                         }
                     } else {
                         orderStatus = OrderStatus.ADD_MEETING
-                        binding.orderItemDeliveryContent.text = "по желанию продавца"
+
                     }
                 }else if(buySuggest?.status == 0 || buySuggest == null){
                     orderStatus = OrderStatus.NOT_SUBMITTED_SELLER
-                    binding.orderItemDeliveryContent.text = when {
-                       order.delivery == 2 -> order.placeAddress
-                       order.delivery == 3 -> order.placeAddress
-                       order.place == 1 && order.delivery == 1 -> address?.address?.substringBefore(";") ?: "по желанию продавца"
-                        order.place == 2 && order.delivery == 1 -> address?.address?.substringBefore(";")
-                        else -> ""
-                    }
-                    binding.orderItemDeliveryDateText.text = when (order.delivery) {
-                        1 -> "самовывоз"
-                        2 -> "yandex Go"
-                        3 -> "CDEK"
-                        else -> ""
-                    }
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
                     binding.orderItemDeliveryChangeTitle.text =
@@ -208,19 +208,6 @@ class SalesAdapter(
                             )
                     }
                 }else{
-                    binding.orderItemDeliveryContent.text = when {
-                        order.delivery == 2 -> order.placeAddress
-                        order.delivery == 3 -> order.placeAddress
-                        order.place == 1 && order.delivery == 1 -> address?.address?.substringBefore(";") ?: "по желанию продавца"
-                        order.place == 2 && order.delivery == 1 -> address?.address?.substringBefore(";")
-                        else -> ""
-                    }
-                    binding.orderItemDeliveryDateText.text = when (order.delivery) {
-                        1 -> "самовывоз"
-                        2 -> "yandex Go"
-                        3 -> "CDEK"
-                        else -> ""
-                    }
                     binding.orderItemAcceptBlock.isVisible = false
                     binding.orderItemDeliveryChangeBlock.isVisible = true
                     if(order.cart.first().statusUser?.buy?.idCanceled != order.idSeller) {
@@ -244,14 +231,9 @@ class SalesAdapter(
                         binding.orderItemDeliveryChangeBlock.isVisible = false
                         binding.orderItemStatusBlock.isVisible = true
                         binding.orderItemStatusContent.text = "Не оплачено"
+                        binding.orderItemAcceptBlock.isVisible = false
                     }
                     if(order.isPayment && buySuggest?.status == 1){
-                        binding.orderItemDeliveryDateText.text = when (order.delivery) {
-                            1 -> "самовывоз"
-                            2 -> "yandex Go"
-                            3 -> "CDEK"
-                            else -> ""
-                        }
                         if(order.delivery != 1) {
                             if(order.deliveryStatus == null) {
                                 orderStatus = OrderStatus.CREATE_DELIVERY
@@ -265,8 +247,6 @@ class SalesAdapter(
                                     onDeliveryCreateClick(order)
                                 }
                             }else {
-                                //orderStatus = if(order.deliveryStatus == "данные доставки некорректны") OrderStatus.DELIVERY_STATUS_NOT_VALID
-                                  //            else if(order.deliveryStatus == )
                                 binding.orderItemDeliveryChangeBlock.isVisible = false
                                 binding.orderItemStatusBlock.isVisible = true
                                 binding.orderItemStatusContent.text = order.deliveryStatus
@@ -281,15 +261,15 @@ class SalesAdapter(
 
                             }
                         }
-                        if(order.delivery == 1 && address?.status == 1) {
+                        /*if(order.delivery == 1 && address?.status == 1) {
                             binding.orderItemAcceptBlock.isVisible = false
                             binding.orderItemStatusContent.text = "Оплачено, ожидание встречи с покупателем"
-                        }
+                        }*/
 
 
 
                     }
-                    //binding.orderItemDeliveryContent.text = when(order.delivery == 1) "Заберу у продавца" else "CDEK"
+
                 }
             }else{
               orderStatus = OrderStatus.RECEIVED_SUCCESSFULLY

@@ -10,6 +10,9 @@ interface OrderCreateView : MvpView {
     @OneExecution
     fun navigate(pageId: Int?)
 
+    @OneExecution
+    fun orderCreated(orderId: Long)
+
     @AddToEndSingle
     fun setProductInfo(product: Product)
 

@@ -12,7 +12,7 @@ class SuccessPromotePresenter: MvpPresenter<SuccessPromoteView>() {
         val calendar = Calendar.getInstance().apply { set(Calendar.DAY_OF_MONTH, promoEndDay) }
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         val dayStr = if(day < 10) "0$day" else day.toString()
-        val month = calendar.get(Calendar.MONTH)
+        val month = calendar.get(Calendar.MONTH) + 1
         val monthStr = if (month < 10) "0$month" else month.toString()
         val year = calendar.get(Calendar.YEAR)
         val dateString = "$dayStr.$monthStr.$year"

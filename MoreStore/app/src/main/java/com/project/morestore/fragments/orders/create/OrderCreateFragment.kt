@@ -94,6 +94,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         }
     }
 
+    override fun orderCreated(orderId: Long) {
+        findNavController().navigate(OrderCreateFragmentDirections.actionCreateOrderFragmentToOrderDetailsFragment(orderId = orderId))
+    }
+
     override fun setProductInfo(product: Product) {
         productPrice = product.priceNew
         binding.loader.isVisible = false
@@ -235,7 +239,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.loader.isVisible = false
         if(promo == null){
             binding.payNowButton.text = "Оплатить"
-            binding.payNowWithDeliveryButton.text = "Оплатить"
+            binding.payNowWithDeliveryButton.text = "Оформить заказ"
             binding.payNowButton.setOnClickListener {
                 onPayNowBtnClick()
             }
@@ -244,11 +248,11 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             }
             return
         }
-        val sum = if(binding.totalWithDeliveryCardView.isVisible) binding.finalSumTextView.text.toString().toFloatOrNull()
-                  else binding.finalSumWithoutDelivery.text.toString().toFloatOrNull()
+        val sum = if(binding.totalWithDeliveryCardView.isVisible) binding.finalSumTextView.text.toString().removeSuffix(" ₽").toFloatOrNull()
+                  else binding.finalSumWithoutDelivery.text.toString().removeSuffix(" ₽").toFloatOrNull()
         sum ?: return
         if(binding.totalWithDeliveryCardView.isVisible)
-           binding.finalSumTextView.text = (sum - promo.sum).toString()
+           binding.finalSumTextView.text = "${(sum - promo.sum)} ₽"
         else binding.finalSumWithoutDelivery.text = (sum - promo.sum).toString()
     }
 
@@ -264,7 +268,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                     presenter.getPromoInfo(text.toString())
                 }
             }else{
-                binding.payNowWithDeliveryButton.text = "Оплатить"
+                binding.payNowWithDeliveryButton.text = "Оформить заказ"
                 binding.payNowWithDeliveryButton.setOnClickListener {
                     onPayNowWithDeliveryBtnClick()
                 }
@@ -278,7 +282,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                     presenter.getPromoInfo(text.toString())
                 }
             }else{
-                binding.payNowButton.text = "Оплатить"
+                binding.payNowButton.text = "Оформить заказ"
                 binding.payNowButton.setOnClickListener {
                     onPayNowBtnClick()
                 }
@@ -610,9 +614,9 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             comment = if(binding.commentEditText.text?.isNotEmpty() == true) binding.commentEditText.text.toString()
             else null,
             product = args.product,
-            promo =  if(binding.promoEditText.text?.isNotEmpty() == true) binding.promoEditText.text.toString()
-            else null,
-            sum = binding.finalSumTextView.text.toString().removeSuffix(" ₽").replace(',', '.').toFloat()
+            //promo =  if(binding.promoEditText.text?.isNotEmpty() == true) binding.promoEditText.text.toString()
+            //else null,
+            //sum = binding.finalSumTextView.text.toString().removeSuffix(" ₽").replace(',', '.').toFloat()
         )
     }
 
@@ -640,10 +644,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         presenter.onCreateOrder(args.cartId, deliveryId, place, payId,
             findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
             args.product,
-            sum = binding.finalSumWithoutDelivery.text.toString().removeSuffix(" ₽").toFloat(),
-            promo = if(binding.promoWithoutDeliveryEditText.text.isNotEmpty())
-                binding.promoWithoutDeliveryEditText.text.toString()
-            else null)
+            //sum = binding.finalSumWithoutDelivery.text.toString().removeSuffix(" ₽").toFloat(),
+            //promo = if(binding.promoWithoutDeliveryEditText.text.isNotEmpty())
+              //  binding.promoWithoutDeliveryEditText.text.toString()
+        )//else null)
     }
 
     companion object{

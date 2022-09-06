@@ -466,7 +466,9 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             val month = calendar.get(Calendar.MONTH) + 1
             val monthStr = if (month < 10) "0$month" else month.toString()
             val year = calendar.get(Calendar.YEAR)
-            val dateString = "$dayStr.$monthStr.$year"
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val minute = calendar.get(Calendar.MINUTE)
+            val dateString = "$hour:$minute $dayStr.$monthStr.$year"
            binding.promoteActiveFrameLayout.isVisible = true
            binding.promoteActiveTextView.text = "Ваше объявление находится в верхних строчках поиска до $dateString"
            binding.promoteInfoCard.isVisible = false

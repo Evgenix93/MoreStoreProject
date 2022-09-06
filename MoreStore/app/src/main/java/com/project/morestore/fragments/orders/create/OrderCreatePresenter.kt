@@ -21,6 +21,7 @@ class OrderCreatePresenter(context: Context)
     private val salesRepository = SalesRepository()
     private val chatRepository = ChatRepository(context)
     private val geoRepository = GeoRepository()
+    private var currentPromo: String? = null
 
     ///////////////////////////////////////////////////////////////////////////
     //                      public
@@ -45,8 +46,7 @@ class OrderCreatePresenter(context: Context)
                       fromChat: Boolean,
                       product: Product,
                       comment: String? = null,
-                      promo: String? = null,
-                      sum: Float? = null){
+                      ){
         presenterScope.launch {
             viewState.loading()
             if(place.id.toInt() == OrderCreateFragment.PLACE_FROM_ME && place.address == null){
@@ -58,23 +58,18 @@ class OrderCreatePresenter(context: Context)
                 return@launch
             }
 
-
-
-
             val newOrder = NewOrder(
                 cart = listOf(cartId),
                 delivery = delivery,
                 place = place,
                 pay = pay,
-                comment = comment
-
+                comment = comment,
+                promocode = currentPromo
             )
 
+            val successBuyRequest = createBuyDialog(userId = product.idUser!!, productId = product.id)
+            if(!successBuyRequest) return@launch
 
-            //if(!fromChat) {
-                val successBuyRequest = createBuyDialog(userId = product.idUser!!, productId = product.id)
-                if(!successBuyRequest) return@launch
-           // }
 
             val response = orderRepository.createOrder(newOrder)
             when(response?.code()){
@@ -87,7 +82,7 @@ class OrderCreatePresenter(context: Context)
                     }
                     val order = updatedOrders.find { it.idCart.find { cart -> cart == cartId } != null }
 
-                    if(pay == 2){
+                    //if(pay == 2){
                         /*var finalSum = sum!!
                          if(promoInfo != null ){
                              if(promoInfo.status == 1 && promoInfo.first_order == 1 && orders.isEmpty())
@@ -98,32 +93,30 @@ class OrderCreatePresenter(context: Context)
                          }*/
 
 
-                        val df = DecimalFormat("#.##")
+                        /*val df = DecimalFormat("#.##")
                         df.roundingMode = RoundingMode.DOWN
                         val payUrl = getPayUrl(PayOrderInfo(df.format(sum).replace(',', '.').toFloat(), order!!.id ))
                         payUrl ?: run {
                             viewState.navigate(R.id.ordersActiveFragment)
-                            return@launch}
+                            return@launch}*/
 
-                        if(delivery == 1){
+                        /*if(delivery == 1){
                             if(place.address != null)
-                                addDealPlace(order.id, place.address)
-                        }
+                                addDealPlace(order!!.id, place.address)
+                        }*/
 
-                        viewState.payForOrder(payUrl, order.id)
-                        return@launch
+                        //viewState.payForOrder(payUrl, order.id)
+                        //return@launch
 
-                    }
+                    //}
 
                     viewState.showMessage("Заказ оформлен")
-                    //val order = getAllOrders()?.find { it.idCart.find { cart -> cart == cartId } != null }
-                    if(order != null && place.address != null)
-                    addDealPlace(order.id, place.address )
+                    if(order != null && place.address != null && delivery == 1)
+                       addDealPlace(order.id, place.address )
                     if(fromChat)
                         viewState.navigate(R.id.chatFragment)
                     else {
-                        //createBuyDialog(userId = product.idUser!!, productId = product.id)
-                        viewState.navigate(R.id.ordersActiveFragment)
+                        viewState.orderCreated(orderId = order?.id!!)
                     }
                 }
                 400 -> viewState.showMessage(getStringFromResponse(response.errorBody()!!))
@@ -290,24 +283,29 @@ class OrderCreatePresenter(context: Context)
                           return@launch
                       }
                       viewState.applyPromo(response.body())
+                      currentPromo = code
                   }
                   null -> {
                       viewState.applyPromo(null)
                       viewState.showMessage("нет интернета")
+                      currentPromo = null
 
                   }
                   404 -> {
                       viewState.applyPromo(null)
                       viewState.showMessage("промокод не найден")
+                      currentPromo = null
 
                   }
                    400 -> {
                        viewState.applyPromo(null)
                        viewState.showMessage(response.errorBody()!!.string())
+                       currentPromo = null
 
                    }
                   else -> {
                       viewState.applyPromo(null)
+                      currentPromo = null
 
                   }
               }

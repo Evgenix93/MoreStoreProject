@@ -208,11 +208,12 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             val response = chatRepository.submitBuy(orderItem.chatFunctionInfo!!)
             when(response?.code()){
                 200 -> {
-                   when {
+                    getOrderItem(orderItem.id)
+                   /*when {
                        orderItem.newAddress == null -> viewState.orderStatusChanged(OrderStatus.ADD_MEETING)
                        orderItem.offeredOrderPlace?.type == OfferedPlaceType.PROPOSED.value -> viewState.orderStatusChanged(OrderStatus.MEETING_NOT_ACCEPTED_SELLER)
                        orderItem.offeredOrderPlace?.type == OfferedPlaceType.APPLICATION.value -> viewState.orderStatusChanged(OrderStatus.CHANGE_MEETING_SELLER)
-                   }
+                   }*/
                 }
                 400 -> {
                     val bodyString = getError(response.errorBody()!!)
@@ -340,8 +341,10 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
 
             if(order.pay == 2 && buySuggest?.status != 2){
                 if(!order.isPayment) {
-                    if(isBuyer)
+                    if(isBuyer && buySuggest?.status == 1)
                        status = OrderStatus.NOT_PAYED
+                    if(isBuyer && (buySuggest?.status == 0 || buySuggest?.status == null))
+                        status = OrderStatus.NOT_SUBMITTED
                     if(!isBuyer && (buySuggest?.status == 0 || buySuggest?.status == null))
                         status = OrderStatus.NOT_SUBMITTED_SELLER
                     if(!isBuyer && buySuggest?.status == 1)
@@ -419,21 +422,33 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
     private suspend fun getAllOrders(): List<Order>?{
         val response = ordersRepository.getAllOrders()
         return when(response?.code()){
-            200 -> response.body()
+            200 -> {
+                viewState.loading(false)
+                response.body()
+            }
             null -> {
                 viewState.showMessage("нет интернета")
+                viewState.loading(false)
                 null
             }
             400 -> {
+                viewState.loading(false)
                 viewState.showMessage(response.errorBody()!!.string())
                 null
             }
             500 -> {
+                viewState.loading(false)
                 viewState.showMessage("500 Internal Server Error")
                 null
             }
-            404 -> emptyList()
-            else -> null
+            404 -> {
+                viewState.loading(false)
+                emptyList()
+            }
+            else -> {
+                viewState.loading(false)
+                null
+            }
 
         }
 
@@ -585,7 +600,7 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
 
     }
 
-    fun getCdekPrice(toAddress: String, product: Product){
+    fun getFinalCdekPrice(toAddress: String, product: Product, promo: String? = null){
         presenterScope.launch {
             viewState.loading(true)
             val dimensions = ProductDimensions(
@@ -602,7 +617,15 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             val response = ordersRepository.getCdekPrice(info)
             when(response?.code()){
                 200 -> {
-                    viewState.setDeliveryPrice(response.body()!!.total_sum)
+                    val discountedPrice = when{
+                        product.statusUser?.price?.status == 1 -> product.statusUser.price.value
+                        product.statusUser?.sale?.status == 1 -> product.statusUser.sale.value
+                        else -> null
+                    }
+                    val promoInfo = if(promo != null) getPromoInfo(promo) else null
+                    val priceWithDelivery = (discountedPrice?.toFloatOrNull() ?: product.priceNew ?: product.price) + response.body()!!.total_sum
+                    val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.05)) - (promoInfo?.sum ?: 0)
+                    viewState.setFinalPrice(finalPrice.toFloat())
                     viewState.loading(false)
                 }
                 400 -> {
@@ -643,7 +666,7 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             when(response?.code()){
                 200 -> {
                     viewState.loading(false)
-                    viewState.setDeliveryPrice(300f)
+                    //viewState.setDeliveryPrice(300f)
                 }
                 400 -> {
                     viewState.loading(false)
@@ -660,6 +683,17 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
 
             }
 
+
+
+        }
+    }
+
+    fun getOrderForDelivery(orderId: Long){
+        presenterScope.launch {
+            viewState.loading(true)
+            val order = getAllSales()?.find { it.id == orderId }
+            order ?: return@launch
+            viewState.navigateToCreateDelivery(order)
 
 
         }
@@ -709,6 +743,34 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 null
             }
         }
+
+    }
+
+    private suspend fun getPromoInfo(code: String): PromoCode?{
+        val response = ordersRepository.getPromoInfo(code)
+            return when (response?.code()) {
+                200 -> {
+                     response.body()
+                }
+                null -> {
+                    viewState.showMessage("нет интернета")
+                    null
+
+                }
+                404 -> {
+                    viewState.showMessage("промокод не найден")
+                    null
+
+                }
+                400 -> {
+                    viewState.showMessage(response.errorBody()!!.string())
+                    null
+                }
+                else -> {
+                    null
+
+                }
+            }
 
     }
 

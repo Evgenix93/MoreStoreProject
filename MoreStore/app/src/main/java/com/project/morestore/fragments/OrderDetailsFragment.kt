@@ -40,7 +40,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     private val args: OrderDetailsFragmentArgs by navArgs()
     private var orderStatus: OrderStatus? = null
     private lateinit var orderItem: OrderItem
-    private var currentDeliveryPrice: Float? = null
+    //private var currentDeliveryPrice: Float? = null
     private val presenter by moxyPresenter { OrderDetailsPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +57,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     private fun initToolbar(){
         binding.toolbar.titleTextView.text = "Статус заказа"
         binding.toolbar.backIcon.setOnClickListener {
-        if(findNavController().previousBackStackEntry?.destination?.id == R.id.successOrderPaymentFragment)
+        if(findNavController().previousBackStackEntry?.destination?.id == R.id.successOrderPaymentFragment
+            || findNavController().previousBackStackEntry?.destination?.id == R.id.createOrderFragment)
             findNavController().navigate(R.id.ordersActiveFragment)
             else
             findNavController().popBackStack() }
@@ -67,6 +68,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     private fun bind(order: OrderItem) {
         Log.d("mylog", "orderStatus ${order.status}")
+        Log.d("mylog", "order address ${order.cdekYandexAddress}")
         orderItem = order
         getDeliveryPrice(order)
         binding.allBlocks.isVisible = true
@@ -154,10 +156,6 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
            binding.newPriceTextView.text = discountedPrice ?: product.priceNew.toString()
         if(orderItem.deliveryInfo != "Заберу у продавца"){
             binding.priceTextView.text = "Цена с учётом доставки"
-            //val price = (discountedPrice?.toInt() ?: product.priceNew?.toInt() ?: 0) + getDeliveryPrice()
-            //val finalPrice = price + (price.toFloat() * 0.05)
-            //binding.newPriceTextView.text = finalPrice.toString()
-
         }
     }
 
@@ -214,9 +212,6 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemStatusImage.setImageResource(R.drawable.ic_clock)
                     orderItemStatusContent.text =
                         requireContext().getString(R.string.active_order_meeting_not_accepted)
-                    myAddressBlock.isVisible = false
-                    dealPlaceTextView.isVisible = false
-
 
                 }
                 OrderStatus.CHANGE_MEETING -> {
@@ -255,8 +250,6 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 }
                 OrderStatus.NOT_SUBMITTED -> {
                     orderItemStatusBlock.isVisible = true
-                    //myAddressBlock.isVisible = false
-                    //dealPlaceTextView.isVisible = false
                     orderItemStatusContent.text = "Ожидание подтверждения от продавца"
                 }
                 OrderStatus.DECLINED -> {
@@ -356,7 +349,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             .circleCrop()
             .into(binding.sellerAvatarImageView)
         binding.sellerNameTextView.text = name
-        //binding.name.text = name
+
     }
 
     override fun supportDialogLoaded(chat: Chat) {
@@ -396,19 +389,19 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         binding.webView.loadUrl(paymentUrl.formUrl)
     }
 
-    override fun setDeliveryPrice(price: Float) {
+    override fun setFinalPrice(price: Float) {
 
-        currentDeliveryPrice = price
-        val sumWithDelivery = orderItem.price + price
-        val finalSum = sumWithDelivery + (sumWithDelivery * 0.05)
+        //currentDeliveryPrice = price
+        //val sumWithDelivery = orderItem.price + price
+        //val finalSum = sumWithDelivery + (sumWithDelivery * 0.05)
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.DOWN
-        binding.newPriceTextView.text = "${df.format(finalSum).replace(',', '.')} ₽"
+        binding.newPriceTextView.text = "${df.format(price).replace(',', '.')} ₽"
         if(orderItem.status == OrderStatus.NOT_PAYED){
             binding.orderItemAcceptButton.isEnabled = true
             binding.orderItemAcceptButton.setOnClickListener {
                 try {
-                    val formattedSum = df.format(finalSum).replace(',', '.').toFloat()
+                    val formattedSum = df.format(price).replace(',', '.').toFloat()
                     presenter.getPaymentUrl(
                         formattedSum,
                         orderItem.id
@@ -421,11 +414,17 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     }
 
+    override fun navigateToCreateDelivery(order: Order) {
+        findNavController().navigate(OrderDetailsFragmentDirections
+            .actionOrderDetailsFragmentToCreateDeliveryFragment(order))
+    }
+
 
     private fun setAddress(order: OrderItem){
         Log.d("Mylog", order.newAddress.orEmpty())
-        binding.address.text = order.newAddress?.substringBefore(";")
-        if(order.newAddress == null) {
+        binding.address.text = if(order.newAddress != null) order.newAddress?.substringBefore(";")
+                               else order.cdekYandexAddress
+        if(order.newAddress == null && order.cdekYandexAddress == null) {
             binding.myAddressBlock.isVisible = false
             binding.dealPlaceTextView.isVisible = false
         }else{
@@ -455,6 +454,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
           OrderStatus.RECEIVED_SELLER -> setReceivedSellerStatus()
           OrderStatus.ADD_MEETING ->  setAddMeetingStatus(order)
             OrderStatus.NOT_PAYED_SELLER -> setNotPayedSellerStatus()
+            OrderStatus.CREATE_DELIVERY -> setCreateDeliverySellerStatus()
             else -> {}
         }
     }
@@ -530,9 +530,21 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     }
 
+    private fun setCreateDeliverySellerStatus(){
+        binding.orderItemStatusBlock.isVisible = true
+        binding.orderItemStatusContent.text = "Оплачено"
+        binding.orderItemAcceptBlock.isVisible = true
+        binding.orderItemAcceptDescription.isVisible = false
+        binding.orderItemAcceptButton.text = "Подтвердить доставку"
+        binding.orderItemAcceptProblemsButton.isVisible = false
+        binding.orderItemAcceptButton.setOnClickListener {
+           presenter.getOrderForDelivery(orderItem.id)
+        }
+    }
+
     private fun getDeliveryPrice(order: OrderItem){
         if(order.deliveryInfo == "СДЕК")
-            presenter.getCdekPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product)
+            presenter.getFinalCdekPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product, promo = order.promo)
         if(order.deliveryInfo == "yandex")
             presenter.getYandexGoPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product)
     }
