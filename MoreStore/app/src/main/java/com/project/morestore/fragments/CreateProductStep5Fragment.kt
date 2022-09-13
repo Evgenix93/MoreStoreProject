@@ -108,9 +108,9 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
 
         binding.addBrandTextView.setOnClickListener {
             setFragmentResultListener(AddBrandFragment.REQUEST_BRAND){_, bundle ->
-                brandName = bundle.getString(AddBrandFragment.BRAND)!!
                 val brandId = bundle.getLong(AddBrandFragment.BRAND_ID)
-                val brand = ProductBrand(brandId, brandName, 3, null, null, null)
+                val brandName = bundle.getString(AddBrandFragment.BRAND)
+                val brand = ProductBrand(brandId, brandName ?: "Другое", 3, null, null, null)
                 findNavController().navigate(CreateProductStep5FragmentDirections.actionCreateProductStep5FragmentToCreateProductNameFragment(category = args.category, forWho = args.forWho, brand = brand))
 
 

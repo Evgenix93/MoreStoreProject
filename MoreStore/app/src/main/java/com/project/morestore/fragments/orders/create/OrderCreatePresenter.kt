@@ -328,7 +328,7 @@ class OrderCreatePresenter(context: Context)
 
     }
 
-    fun getCdekPrice(toAddress: String, product: Product){
+    fun getCdekPrice(toAddress: String, product: Product, toPickUpPoint: Boolean){
         presenterScope.launch {
         viewState.loading()
             val dimensions = ProductDimensions(
@@ -338,6 +338,7 @@ class OrderCreatePresenter(context: Context)
                 weight = (product.packageDimensions.weight!!.toFloat() * 1000).toInt().toString()
             )
             val info = CdekCalculatePriceInfo(
+                tariff_code = if(toPickUpPoint) 136 else 137,
                 from_location = AddressString(product.addressCdek?.substringBefore("cdek code:") ?: ""),
                 to_location = AddressString(toAddress.substringBefore("cdek code:")),
                 packages = dimensions

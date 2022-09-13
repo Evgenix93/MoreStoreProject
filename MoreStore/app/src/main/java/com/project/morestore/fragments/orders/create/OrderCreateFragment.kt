@@ -203,7 +203,8 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.payNowWithDeliveryButton.isEnabled = false
             binding.updateDeliveryPriceBtn.isVisible = true
             binding.updateDeliveryPriceBtn.setOnClickListener {
-                if(binding.anotherCityRadioBtn.isChecked) presenter.getCdekPrice(chosenAddressStr, args.product)
+                if(binding.anotherCityRadioBtn.isChecked) presenter.getCdekPrice(
+                    chosenAddressStr, args.product, binding.toPickUpPointRadioButton.isChecked)
             }
         }else {
             binding.payNowWithDeliveryButton.isEnabled = true
@@ -457,7 +458,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                 binding.chooseAddressBtn.setText("Выбрать другой адрес")
                 binding.totalWithDeliveryCardView.isVisible = true
                 if(binding.anotherCityRadioBtn.isChecked)
-                    presenter.getCdekPrice(toAddress = address, product = args.product)
+                    presenter.getCdekPrice(toAddress = address, product = args.product, binding.toPickUpPointRadioButton.isChecked)
                 else presenter.getYandexPrice(toAddress = address, product = args.product)
 
 
@@ -504,7 +505,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
 
         findNavController().navigate(OrderCreateFragmentDirections
             .actionCreateOrderFragmentToMyAddressesFragment(true,
-                 if(deliveryId == ANOTHER_CITY) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))
+                 if(deliveryId == ANOTHER_CITY && binding.toPickUpPointRadioButton.isChecked) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))
 
 
 
@@ -554,7 +555,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
 
     private fun showScreenWithDelivery(show: Boolean ){
         if(binding.anotherCityRadioBtn.isChecked && chosenAddressStr.isNotEmpty())
-            presenter.getCdekPrice(toAddress = chosenAddressStr, args.product)
+            presenter.getCdekPrice(toAddress = chosenAddressStr, args.product, binding.toPickUpPointRadioButton.isChecked)
         if(binding.yandexRadioBtn.isChecked && chosenAddressStr.isNotEmpty())
             presenter.getYandexPrice(toAddress = chosenAddressStr, args.product)
         binding.chosenDeliveryPlaceWindow.isVisible = show
@@ -567,7 +568,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.prepaymentInfoTextView.isVisible = !show
         binding.totalCardView.isVisible = !show && binding.prepaymentRadioButton.isChecked
         binding.payButton.isVisible = !show && binding.onDealPlaceRadioButton.isChecked
-        //binding.deliveryCdekVariantCardView.isVisible = binding.anotherCityRadioBtn.isChecked
+        binding.deliveryCdekVariantCardView.isVisible = binding.anotherCityRadioBtn.isChecked
         //binding.deliveryPriceTextView.text = getDeliveryPrice().toString()
 
 

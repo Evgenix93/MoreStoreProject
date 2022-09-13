@@ -8,5 +8,5 @@ import retrofit2.http.POST
 
 interface BrandApi {
     @POST("brand")
-    suspend fun addBrand(@Body newBrand: NewBrand): Response<NewProductBrand>
+    suspend fun addBrand(@Body newBrand: NewBrand): Response<String>
 }

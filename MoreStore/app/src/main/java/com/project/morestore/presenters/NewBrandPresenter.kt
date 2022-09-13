@@ -19,7 +19,7 @@ class NewBrandPresenter(
             viewState.loading()
             val response = try {
 
-                network.addBrand(NewBrand(name = name, status = 1))
+                network.addBrand(NewBrand(name = name))
             }catch (e: Throwable){
                 if(e is IOException)
                     null
@@ -27,7 +27,7 @@ class NewBrandPresenter(
             }
             viewState.loading(false)
             when(response?.code()){
-                200 -> viewState.finish(name, response.body()?.id!!)
+                200 -> viewState.finish(response.body()!!.toLong(), name)
                 400 -> viewState.showMessage("ошибка")
                 null -> viewState.showMessage("нет интернета")
             }

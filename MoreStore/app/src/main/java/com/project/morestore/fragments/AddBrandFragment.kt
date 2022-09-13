@@ -59,8 +59,8 @@ class AddBrandFragment : MvpAppCompatFragment(R.layout.fragment_brand_not_found)
         binding.loader.isVisible = show
     }
 
-    override fun finish(brand :String, brandId: Long) {
-        setFragmentResult(REQUEST_BRAND, bundleOf(BRAND to brand, BRAND_ID to brandId ))
+    override fun finish(brandId: Long, brandName: String) {
+        setFragmentResult(REQUEST_BRAND, bundleOf( BRAND_ID to brandId, BRAND to brandName ))
         findNavController().navigateUp()
     }
 

@@ -8,7 +8,7 @@ data class NewBrand(
     val name :String,
     @Json(name = "id_category")
     val category :Int = 3,
-    val status: Int
+
 )
 /*
 {

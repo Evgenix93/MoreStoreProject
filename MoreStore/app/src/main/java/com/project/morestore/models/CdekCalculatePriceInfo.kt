@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class CdekCalculatePriceInfo(
-    val tariff_code: Int = 136,
+    val tariff_code: Int,
     val from_location: AddressString ,
     val to_location: AddressString,
     val packages: ProductDimensions
