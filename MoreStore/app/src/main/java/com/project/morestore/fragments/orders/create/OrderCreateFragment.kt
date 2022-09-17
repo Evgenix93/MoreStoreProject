@@ -21,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentOrderCreateBinding
 import com.project.morestore.dialogs.MenuBottomDialogDateFragment
@@ -56,6 +57,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as MainActivity).showBottomNavBar(false)
         initToolbar()
         setClickListeners()
         initRadioPlaceButtons()
@@ -144,9 +146,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.anotherCityRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
         }
 
-        binding.yandexRadioBtn.isEnabled = false
-        binding.yandexRadioBtn.buttonDrawable?.alpha = 125
-        binding.yandexRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
+        //binding.yandexRadioBtn.isEnabled = false
+        //binding.yandexRadioBtn.buttonDrawable?.alpha = 125
+        //binding.yandexRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
+        binding.yandexRadioBtn.setText("По городу ${product.address?.fullAddress?.substringBefore(",")} (Яндекс Go)")
     }
 
     override fun loading() {
@@ -198,6 +201,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     }
 
     override fun setDeliveryPrice(price: DeliveryPrice?) {
+        //binding.deliveryPriceInfoTextView.isVisible = false
         binding.loader.isVisible = false
         if(price == null){
             binding.payNowWithDeliveryButton.isEnabled = false
@@ -205,6 +209,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.updateDeliveryPriceBtn.setOnClickListener {
                 if(binding.anotherCityRadioBtn.isChecked) presenter.getCdekPrice(
                     chosenAddressStr, args.product, binding.toPickUpPointRadioButton.isChecked)
+                else presenter.getYandexPrice(chosenAddressStr, args.product)
             }
         }else {
             binding.payNowWithDeliveryButton.isEnabled = true
@@ -255,6 +260,12 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         if(binding.totalWithDeliveryCardView.isVisible)
            binding.finalSumTextView.text = "${(sum - promo.sum)} ₽"
         else binding.finalSumWithoutDelivery.text = (sum - promo.sum).toString()
+    }
+
+    override fun showCdekError() {
+        binding.totalWithDeliveryCardView.isVisible = false
+        binding.deliveryPriceInfoTextView.isVisible = true
+        binding.deliveryPriceInfoTextView.text = "Внутренняя ошибка работы СДЭК"
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -459,7 +470,16 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                 binding.totalWithDeliveryCardView.isVisible = true
                 if(binding.anotherCityRadioBtn.isChecked)
                     presenter.getCdekPrice(toAddress = address, product = args.product, binding.toPickUpPointRadioButton.isChecked)
-                else presenter.getYandexPrice(toAddress = address, product = args.product)
+                else {
+                    val recipientCity = address.substringBefore(",")
+                    val senderCity = args.product.address?.fullAddress?.substringBefore(",")
+                    if( senderCity == recipientCity)
+                        presenter.getYandexPrice(toAddress = address, product = args.product)
+                    else {
+                        binding.totalWithDeliveryCardView.isVisible = false
+                        showMessage("Доставка yandex доступна только по городу $senderCity")
+                    }
+                }
 
 
             }

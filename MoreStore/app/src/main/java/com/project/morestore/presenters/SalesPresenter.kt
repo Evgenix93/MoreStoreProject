@@ -78,14 +78,20 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                                     else -> 2
                                 }
                             }.map {
-                                if(it.idCdek != null){
+                                if(it.idCdek != null && it.delivery == 3){
                                     val info = ordersRepository.getCdekOrderInfo(it.idCdek)?.body()
                                     if(info != null){
                                         it.deliveryStatus = if(info.entity.statuses.first().code == CdekStatuses.INVALID) "Данные доставки некорректны"
-                                                            else if(info.entity.statuses.first().code == CdekStatuses.CREATED) "Доставка создана"
-                                                            else "Неизвестный статус доставки"
+                                                            else  info.entity.statuses.first().name
+
                                     }else it.deliveryStatus = "Неизвестный статус доставки"
 
+                                }
+                                if(it.idYandex != null && it.delivery == 2){
+                                    val info = ordersRepository.getYandexGoOrderInfo(it.idYandex)?.body()
+                                    if(info != null){
+                                        it.deliveryStatus = if(info.status == "ready_for_approval") null else YandexDeliveryStatus.statuses[info.status]
+                                    }else it.deliveryStatus = "Неизвестный статус доставки"
                                 }
                            it
                        }

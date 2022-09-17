@@ -8,6 +8,7 @@ import com.project.morestore.repositories.GeoRepository
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -47,6 +48,7 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
     fun createCdekOrder(order: Order){
         presenterScope.launch {
             currentUser ?: return@launch
+            order.placeAddress ?: return@launch
             viewState.loading(true)
             val sender = CdekSender(
                 company = currentUser!!.name ?: "",
@@ -75,22 +77,32 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
 
             )
             val shipmenPoin1 = order.cart.first().addressCdek?.substringAfter("cdek code:")
-            val shipmentPoint2 = order.placeAddress?.substringAfter("cdek code:")
+            val isCdekPickupPoint = order.placeAddress.contains("cdek code:")
+            val shipmentPoint2 = if(isCdekPickupPoint)
+                                    order.placeAddress.substringAfter("cdek code:")
+                                 else null
+            val location = if(isCdekPickupPoint.not())
+                              CdekLocation(address = order.placeAddress)
+                           else null
+            val tariff = if(isCdekPickupPoint) 136 else 137
+
             val items = CdekItems(
-                name = order.cart.first().name ?: "",
+                name = order.cart.first().name,
                 ware_key = order.id.toString(),
                 cost = order.cart.first().priceNew.toString(),
                 weight = (order.cart.first().packageDimensions.weight!!.toFloat() * 1000).toInt().toString(),
                 payment = CdekPayment()
             )
             val cdekOrder = CdekOrder(
+                tariff_code = tariff,
                 id_order = order.id,
                 shipment_point1 = shipmenPoin1 ?: "",
-                delivery_point1 = shipmentPoint2 ?: "",
+                delivery_point1 = shipmentPoint2,
                 sender = sender,
                 recipient = cdekRecipient,
                 packages = packages,
-                items = items
+                items = items,
+                toLocation = location
             )
             val response = orderRepository.createCdekOrder(cdekOrder)
             when (response?.code()){
@@ -123,7 +135,7 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
     fun createAndSubmitYandexOrder(order: Order){
         presenterScope.launch {
             viewState.loading(true)
-            val fromCoords = geoRepository.getCoordsByAddress("dfd")?.body()?.coords
+            val fromCoords = geoRepository.getCoordsByAddress(order.cart?.first()?.address?.fullAddress!!)?.body()?.coords
             if(fromCoords == null){
                 viewState.loading(false)
                 viewState.showMessage("ошибка оценки стоимости")
@@ -135,9 +147,32 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
                 viewState.showMessage("ошибка оценки стоимости")
                 return@launch
             }
-            val yandexOrderId = createYandexOrder(fromCoords, toCoords, order.cart!!.first())
+            val yandexOrderId = createYandexOrder(fromCoords, toCoords, order)
             yandexOrderId ?: return@launch
+            delay(5000)
             val response = orderRepository.submitYandexGoOrder(YandexClaimId(yandexOrderId))
+            when(response?.code()){
+                200 ->{
+                    viewState.loading(false)
+                    if(response.body()?.code == null)
+                        viewState.success()
+                    else viewState.showMessage("произошла ошибка")
+                }
+                400 -> {
+                    viewState.loading(false)
+                    viewState.showMessage(response.errorBody()!!.string())
+                }
+                500 -> {
+                    viewState.loading(false)
+                    viewState.showMessage("500 internal server error")
+                }
+                null -> {
+                    viewState.loading(false)
+                    viewState.showMessage("нет интернета")
+                }
+                else -> viewState.loading(false)
+
+            }
 
         }
     }
@@ -181,29 +216,31 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
         }
     }
 
-    private suspend fun createYandexOrder(fromCoords: Coords, toCoords: Coords, product: Product): Long?{
-        val order = YandexGoOrder(
-            idOrder = 1,
-            comment = "comment",
-            emergencyContactName = "",
-            emergencyContactPhone = "",
+    private suspend fun createYandexOrder(fromCoords: Coords, toCoords: Coords, order: Order): String?{
+        val recipient = getUserById(order.idUser ?: -1)
+        val yandexOrder = YandexGoOrder(
+            idOrder = order.id,
+            comment = order.comment ?: "comment",
+            emergencyContactName = currentUser?.name.orEmpty(),
+            emergencyContactPhone = currentUser?.phone.orEmpty(),
             itemQuantity = "1",
-            itemsProductName = product.name,
-            productPrice = product.priceNew.toString(),
-            pointAddressCoordinates = "${toCoords.lat}, ${toCoords.lon}",
-            pointContactEmail = "",
-            pointContactName = "",
-            pointContactPhone = "",
-            pointFullName = "",
-            takePointCoordinates = "${fromCoords.lat}, ${fromCoords.lon}",
-            takePointContactEmail = "",
-            takePointContactName = "",
-            takePointContactPhone = "",
-            takePointFullName = ""
+            itemsProductName = order.cart?.first()?.name.orEmpty(),
+            productPrice = order.cart?.first()?.priceNew.toString(),
+            pointAddressCoordinates = listOf(toCoords.lon, toCoords.lat),
+            pointContactEmail = recipient?.email.orEmpty(),
+            pointContactName = recipient?.name.orEmpty(),
+            pointContactPhone = recipient?.phone.orEmpty(),
+            pointFullName = order.placeAddress!!,
+            takePointCoordinates = listOf(fromCoords.lon, fromCoords.lat),
+            takePointContactEmail = currentUser?.email.orEmpty(),
+            takePointContactName = currentUser?.name.orEmpty(),
+            takePointContactPhone = currentUser?.phone.orEmpty(),
+            takePointFullName = order.cart?.first()?.address?.fullAddress!!,
+            itemWeight = order.cart.first().packageDimensions.weight!!.toFloat()
         )
-        val response = orderRepository.createYandexGoOrder(order)
+        val response = orderRepository.createYandexGoOrder(yandexOrder)
         return when(response?.code()){
-            200 -> 3
+            200 -> response.body()!!.id
             400 -> {
                 viewState.loading(false)
                 viewState.showMessage(response.errorBody()!!.string())
@@ -223,6 +260,34 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
             else -> {
                 viewState.loading(false)
                 null
+            }
+        }
+
+    }
+
+    private suspend fun submitYandexGoOrder(id: String){
+        val response = orderRepository.submitYandexGoOrder(YandexClaimId(id))
+         when(response?.code()){
+            200 -> viewState.success()
+            400 -> {
+                viewState.loading(false)
+                viewState.showMessage(response.errorBody()!!.string())
+
+            }
+            null -> {
+                viewState.loading(false)
+                viewState.showMessage("нет интернета")
+
+
+            }
+            500 -> {
+                viewState.loading(false)
+                viewState.showMessage("500 internal server error")
+
+            }
+            else -> {
+                viewState.loading(false)
+
             }
         }
 

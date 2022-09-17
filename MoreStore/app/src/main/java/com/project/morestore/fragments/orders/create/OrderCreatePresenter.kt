@@ -3,10 +3,7 @@ package com.project.morestore.fragments.orders.create
 import android.content.Context
 import com.project.morestore.R
 import com.project.morestore.models.*
-import com.project.morestore.repositories.ChatRepository
-import com.project.morestore.repositories.GeoRepository
-import com.project.morestore.repositories.OrdersRepository
-import com.project.morestore.repositories.SalesRepository
+import com.project.morestore.repositories.*
 import com.project.morestore.util.MessageActionType
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
@@ -14,6 +11,7 @@ import moxy.presenterScope
 import okhttp3.ResponseBody
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.util.*
 
 class OrderCreatePresenter(context: Context)
     : MvpPresenter<OrderCreateView>() {
@@ -21,6 +19,7 @@ class OrderCreatePresenter(context: Context)
     private val salesRepository = SalesRepository()
     private val chatRepository = ChatRepository(context)
     private val geoRepository = GeoRepository()
+    private val userRepository = UserRepository(context)
     private var currentPromo: String? = null
 
     ///////////////////////////////////////////////////////////////////////////
@@ -347,33 +346,32 @@ class OrderCreatePresenter(context: Context)
             when(response?.code()){
                 200 -> viewState.setDeliveryPrice(response.body()!!)
                 400 -> {
-                    viewState.setDeliveryPrice(null)
-                    viewState.showMessage(response.errorBody()!!.string())
+                    viewState.showCdekError()
+                    viewState.showMessage("ошибка расчета цены")
                 }
                 null -> {
                     viewState.setDeliveryPrice(null)
                     viewState.showMessage("нет интернета")
                 }
                 500 -> {
-                    viewState.setDeliveryPrice(null)
-                    viewState.showMessage("500 internal server error")
+                    viewState.showCdekError()
+                    viewState.showMessage("ошибка расчета цены")
                 }
                 404 -> {
-                    viewState.setDeliveryPrice(null)
-                    viewState.showMessage("ошибка расчета цена")
+                    viewState.showCdekError()
+                    viewState.showMessage("ошибка расчета цены")
                 }
                 else -> {
-                    viewState.setDeliveryPrice(null)
+                    viewState.showCdekError()
                     viewState.showMessage("ошибка расчета цены")}
             }
         }
     }
 
     fun getYandexPrice(toAddress: String, product: Product){
-        //viewState.setDeliveryPrice(DeliveryPrice(500f, 1, 2, 1, 2, 553f))
         presenterScope.launch {
             viewState.loading()
-            val fromCoords = geoRepository.getCoordsByAddress("dfd")?.body()?.coords
+            val fromCoords = geoRepository.getCoordsByAddress(product.address?.fullAddress!!)?.body()?.coords
             if(fromCoords == null){
                 viewState.showMessage("ошибка оценки стоимости")
                 return@launch
@@ -383,54 +381,78 @@ class OrderCreatePresenter(context: Context)
                 viewState.showMessage("ошибка оценки стоимости")
                 return@launch
             }
-            val yandexOrderId = createYandexOrder(fromCoords, toCoords, product)
-            yandexOrderId ?: return@launch
-            val response = orderRepository.getYandexGoOrderInfo(yandexOrderId)
+
+            val items = listOf(YandexItem(
+                size = YandexItemSize(
+                             height = product.packageDimensions.height!!.toFloat() / 100,
+                             width = product.packageDimensions.width!!.toFloat() / 100,
+                             length = product.packageDimensions.length!!.toFloat() / 100),
+                weight = product.packageDimensions.weight!!.toFloat()))
+            val routePoints = listOf(
+                YandexPoint(listOf(fromCoords.lon, fromCoords.lat)),
+                YandexPoint(listOf(toCoords.lon, toCoords.lat))
+            )
+            val info = YandexPriceCalculateInfo(
+                items = items,
+                routePoints = routePoints
+            )
+            val response = orderRepository.getYandexGoPrice(info)
             when(response?.code()){
                 200 -> viewState.setDeliveryPrice(
                     DeliveryPrice(0f,
-                    0,
-                    0,
-                    0,
-                    0,
-                    300f)
-                )
+                        0,
+                        0,
+                        0,
+                        0,
+                        response.body()!!.price.toFloat()))
                 400 -> {
                     viewState.showMessage(response.errorBody()!!.string())
-                }
-                500 -> viewState.showMessage("500 internal server error")
-                null -> viewState.showMessage("нет интернета")
+                    viewState.setDeliveryPrice(null)
 
+                }
+                null -> {
+                    viewState.showMessage("нет интернета")
+                    viewState.setDeliveryPrice(null)
+                }
+                500 -> {
+                    viewState.showMessage("500 internal server error")
+                    viewState.setDeliveryPrice(null)
+
+                }
+                else -> viewState.setDeliveryPrice(null)
             }
+
+
 
 
 
         }
     }
 
-    private suspend fun createYandexOrder(fromCoords: Coords, toCoords: Coords, product: Product): Long?{
+    private suspend fun createYandexOrder(fromCoords: Coords, toCoords: Coords, toAddress: String, product: Product): YandexOrderInfoBody?{
         val order = YandexGoOrder(
-            idOrder = 1,
+            idOrder = Random().nextLong(),
             comment = "comment",
-            emergencyContactName = "",
-            emergencyContactPhone = "",
+            emergencyContactName = "name",
+            emergencyContactPhone = "+79998887766",
             itemQuantity = "1",
             itemsProductName = product.name,
             productPrice = product.priceNew.toString(),
-            pointAddressCoordinates = "${toCoords.lat}, ${toCoords.lon}",
-            pointContactEmail = "",
-            pointContactName = "",
-            pointContactPhone = "",
-            pointFullName = "",
-            takePointCoordinates = "${fromCoords.lat}, ${fromCoords.lon}",
-            takePointContactEmail = "",
-            takePointContactName = "",
-            takePointContactPhone = "",
-            takePointFullName = ""
+            pointAddressCoordinates = listOf(toCoords.lon, toCoords.lat),
+            pointContactEmail = "email@gmail.com",
+            pointContactName = "toName",
+            pointContactPhone = "+79998887766",
+            pointFullName = toAddress,
+            takePointCoordinates = listOf(fromCoords.lon, fromCoords.lat),
+            takePointContactEmail = "email@gmail.com",
+            takePointContactName = "takeName",
+            takePointContactPhone = "+79998887766",
+            takePointFullName = product.address?.fullAddress.orEmpty(),
+            itemWeight = product.packageDimensions.weight!!.toFloat()
         )
         val response = orderRepository.createYandexGoOrder(order)
         return when(response?.code()){
-            200 -> 3
+            200 -> response.body()
             400 -> {
                 viewState.showMessage(response.errorBody()!!.string())
                 null

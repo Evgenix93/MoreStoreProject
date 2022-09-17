@@ -188,8 +188,12 @@ class SalesAdapter(
                     binding.orderItemChangeDeliveryDeclineButton.isVisible = true
                     binding.orderItemChangeDeliveryAcceptButton.text = "Подтвердить"
                     binding.orderItemChangeDeliveryDeclineButton.text = "Отклонить"
+                    binding.orderItemChangeDeliveryAcceptButton.isEnabled = true
+                    binding.orderItemChangeDeliveryDeclineButton.isEnabled = true
                     binding.orderItemChangeDeliveryAcceptButton.setOnClickListener {
-                        if (buySuggest != null)
+                        if (buySuggest != null) {
+                            binding.orderItemChangeDeliveryAcceptButton.isEnabled = false
+                            binding.orderItemChangeDeliveryDeclineButton.isEnabled = false
                             acceptDeal(
                                 ChatFunctionInfo(
                                     dialogId = dialog!!.dialog.id,
@@ -197,6 +201,7 @@ class SalesAdapter(
                                     value = specialPrice
                                 )
                             )
+                        }
                     }
                     binding.orderItemChangeDeliveryDeclineButton.setOnClickListener {
                         if (buySuggest != null)
@@ -254,10 +259,10 @@ class SalesAdapter(
                                 binding.orderItemDeliveryContent.text = order.placeAddress
                                 if(order.deliveryStatus == "Данные доставки некорректны")
                                     orderStatus = OrderStatus.DELIVERY_STATUS_NOT_VALID
-                                else if(order.deliveryStatus == "Доставка создана")
-                                    orderStatus = OrderStatus.DELIVERY_STATUS_ACCEPTED
                                 else if(order.deliveryStatus == "Неизвестеый статус доставки")
                                     orderStatus = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
+                                else
+                                    orderStatus = OrderStatus.DELIVERY_STATUS_ACCEPTED
 
                             }
                         }
@@ -319,7 +324,8 @@ class SalesAdapter(
                   offeredOrderPlace = address,
                   product = order.cart.first(),
                   buyerId = order.idUser,
-                  cdekYandexAddress = order.placeAddress
+                  cdekYandexAddress = order.placeAddress,
+                  deliveryStatusInfo = order.deliveryStatus
               ))
             }
         }

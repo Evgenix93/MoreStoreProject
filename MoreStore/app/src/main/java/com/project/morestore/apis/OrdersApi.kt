@@ -76,21 +76,27 @@ interface OrdersApi {
     suspend fun getCdekOrderInfo(@Query("id_order_cdek") id: String): Response<CdekOrderInfo>
 
     @POST("yandexgo/add_new")
-    suspend fun createYandexGoOrder(@Body order: YandexGoOrder): Response<Unit>
+    suspend fun createYandexGoOrder(@Body order: YandexGoOrder): Response<YandexOrderInfoBody>
 
     @POST("yandexgo/add_new")
     suspend fun createYandexGoOrderGetError(@Body order: YandexGoOrder): Response<String>
 
     @GET("yandexgo/info_order")
-    suspend fun getYandexGoOrderInfo(@Query("claim_id") id: Long): Response<Unit>
+    suspend fun getYandexGoOrderInfo(@Query("claim_id") id: String): Response<YandexOrderInfoBody>
 
     @GET("yandexgo/info_order")
-    suspend fun getYandexGoOrderInfoGetError(@Query("claim_id") id: Long): Response<String>
+    suspend fun getYandexGoOrderInfoGetError(@Query("claim_id") id: String): Response<String>
 
     @POST("yandexgo/accept")
-    suspend fun submitYandexGoOrder(@Body claimId: YandexClaimId): Response<Unit>
+    suspend fun submitYandexGoOrder(@Body claimId: YandexClaimId): Response<YandexSubmitResult>
 
     @POST("yandexgo/accept")
     suspend fun submitYandexGoOrderGetError(@Body claimId: YandexClaimId): Response<String>
+
+    @POST("yandexgo/price")
+    suspend fun getYandexGoPrice(@Body info: YandexPriceCalculateInfo): Response<YandexPriceResult>
+
+    @POST("yandexgo/price")
+    suspend fun getYandexGoPriceGetError(@Body info: YandexPriceCalculateInfo): Response<String>
 
 }

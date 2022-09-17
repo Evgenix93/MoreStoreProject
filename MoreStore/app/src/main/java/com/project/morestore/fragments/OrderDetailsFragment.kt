@@ -298,7 +298,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 }
                 OrderStatus.DELIVERY_STATUS_ACCEPTED -> {
                     orderItemStatusBlock.isVisible = true
-                    orderItemStatusContent.text = "Доставка создана"
+                    orderItemStatusContent.text = order.deliveryStatusInfo
                     binding.orderItemAcceptBlock.isVisible = false
 
 
@@ -422,8 +422,9 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     private fun setAddress(order: OrderItem){
         Log.d("Mylog", order.newAddress.orEmpty())
-        binding.address.text = if(order.newAddress != null) order.newAddress?.substringBefore(";")
+        val address  = if(order.newAddress != null) order.newAddress?.substringBefore(";")
                                else order.cdekYandexAddress
+        binding.address.text = address
         if(order.newAddress == null && order.cdekYandexAddress == null) {
             binding.myAddressBlock.isVisible = false
             binding.dealPlaceTextView.isVisible = false
@@ -432,17 +433,25 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             binding.dealPlaceTextView.isVisible = true
 
         }
-        if(order.deliveryInfo == "yandex"){
+        /*if(order.deliveryInfo == "yandex"){
             binding.icon.setImageResource(R.drawable.ic_package)
             binding.icon.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.white, null))
             binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.blue4, null))
             binding.title.setText(R.string.myAddress_pickup)
-        }
-        if(order.deliveryInfo == "СДЕК"){
-            binding.icon.setImageResource(R.drawable.ic_envelope)
-            binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.green, null))
-            binding.title.setText(R.string.myAddress_delivery)
-        }
+        }*/
+        //if(order.deliveryInfo == "СДЕК"){
+            if(address?.contains("cdek code:") == true) {
+                binding.icon.setImageResource(R.drawable.ic_envelope)
+                binding.icon.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.green, null))
+                binding.title.setText(R.string.myAddress_delivery)
+            }else {
+                binding.icon.setImageResource(R.drawable.ic_package)
+                binding.icon.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.white, null))
+                binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.blue4, null))
+                binding.title.setText(R.string.myAddress_pickup)
+            }
+        //}
 
     }
 
@@ -546,6 +555,6 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         if(order.deliveryInfo == "СДЕК")
             presenter.getFinalCdekPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product, promo = order.promo)
         if(order.deliveryInfo == "yandex")
-            presenter.getYandexGoPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product)
+            presenter.getFinalYandexGoPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product, promo = order.promo)
     }
 }

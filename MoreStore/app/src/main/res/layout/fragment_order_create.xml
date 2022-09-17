@@ -672,13 +672,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
                 android:text="Стоимость доставки отображается после ввода адреса\nотправки и получения. Время получения можно указать\nпосле подтверждения отправки продавцом."
                 android:textAppearance="@style/regular_14"
                 android:textSize="12dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/commentWindow" />
+                app:layout_constraintTop_toBottomOf="@id/commentWindow"
+                app:layout_constraintBottom_toTopOf="@+id/totalWithDeliveryCardView"/>
 
 
 

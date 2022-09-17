@@ -341,6 +341,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     fun showDealDialogs(userId: Long){
         presenterScope.launch {
+            viewState.loading()
             tabPosition = 1
             val dialogs = getDealDialogs(userId)
             viewState.dialogsLoaded(dialogs)
@@ -353,6 +354,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     fun showLotDialogs(userId: Long){
         presenterScope.launch {
+            viewState.loading()
             tabPosition = 2
             val dialogs = getLotDialogs(userId)
             viewState.dialogsLoaded(dialogs)
@@ -365,6 +367,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     fun showAllDialogs(userId: Long){
         presenterScope.launch {
+            viewState.loading()
             tabPosition = 0
             val dealDialogs = getDealDialogs(userId)
             val lotDialogs = getLotDialogs(userId)
@@ -385,6 +388,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
     fun showProductDialogs(id: Long){
         presenterScope.launch {
+            viewState.loading()
             viewState.dialogsLoaded(getDialogsByProductId(id))
         }
     }

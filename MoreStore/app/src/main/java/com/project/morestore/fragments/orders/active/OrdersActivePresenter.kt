@@ -122,6 +122,7 @@ class OrdersActivePresenter(val context: Context)
                     else null
 
                     val buySuggest = order.cart.first().statusUser?.buy
+                    var deliveryInfo: String? = null
                     var status = when(buySuggest?.status) {
                         0 -> OrderStatus.NOT_SUBMITTED
                         1 -> {
@@ -150,18 +151,27 @@ class OrdersActivePresenter(val context: Context)
                                   //  status = OrderStatus.MEETING_NOT_ACCEPTED
                                 if(buySuggest?.status == 0 || buySuggest?.status == null)
                                     status = OrderStatus.NOT_SUBMITTED
-                                if(order.idCdek != null && order.isPayment){
+                                if(order.idCdek != null && order.delivery == 3 && order.isPayment){
                                     Log.d("mylog", "cdek")
                                     val info = ordersRepository.getCdekOrderInfo(order.idCdek)?.body()
                                     if (info?.entity?.statuses?.first()?.code == CdekStatuses.INVALID)
                                         status = OrderStatus.DELIVERY_STATUS_NOT_VALID
-                                     else if(info?.entity?.statuses?.first()?.code == CdekStatuses.CREATED)
-                                         status = OrderStatus.DELIVERY_STATUS_ACCEPTED
+                                     else if(info?.entity?.statuses?.first() != null) {
+                                        status = OrderStatus.DELIVERY_STATUS_ACCEPTED
+                                        deliveryInfo = info.entity.statuses.first().name
+                                    }
                                     else if(info == null)
                                         status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
                                     else status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
                                 }
-                                if(order.idCdek == null && order.isPayment){
+                                if(order.idYandex != null && order.delivery == 2 && order.isPayment){
+                                    val info = ordersRepository.getYandexGoOrderInfo(order.idYandex)?.body()
+                                    if(info != null){
+                                        status = OrderStatus.DELIVERY_STATUS_ACCEPTED
+                                        deliveryInfo = YandexDeliveryStatus.statuses[info.status]
+                                    }else status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
+                                }
+                                if(order.idCdek == null && order.idYandex == null && order.isPayment){
                                     status = OrderStatus.MEETING_NOT_ACCEPTED
                                 }
                             //}
@@ -201,7 +211,8 @@ class OrdersActivePresenter(val context: Context)
                         product = order.cart.first(),
                         chatFunctionInfo,
                         buyerId = order.idUser,
-                        cdekYandexAddress = order.placeAddress
+                        cdekYandexAddress = order.placeAddress,
+                        deliveryStatusInfo = deliveryInfo
 
                                 )
 

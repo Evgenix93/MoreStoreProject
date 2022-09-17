@@ -1,7 +1,9 @@
 package com.project.morestore.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.style.StrikethroughSpan
+import android.util.Log
 import android.util.Range
 import android.view.View
 import android.widget.Toast
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentDeliveryCreateBinding
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
+import com.project.morestore.models.Order
 import com.project.morestore.models.Product
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.CreateDeliveryMvpView
@@ -33,6 +36,26 @@ class CreateDeliveryFragment: MvpAppCompatFragment(R.layout.fragment_delivery_cr
         presenter.getUserInfo()
         presenter.getProductInfoById(args.order.cart?.first()!!.id)
         setClickListeners()
+        setDeliveryInfo(args.order)
+    }
+
+    private fun setDeliveryInfo(order: Order){
+        if(order.delivery == 2){
+            binding.deliveryInfoTextView.text = "Yandex Go"
+            binding.dealPlaceTextView.text = "Откуда забрать заказ"
+            binding.addressTextView.text = order.cart?.first()?.address?.fullAddress
+            Log.d("address", order.cart?.first()?.address?.fullAddress!!)
+            binding.icon.setImageResource(R.drawable.ic_package)
+            binding.icon.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.white, null))
+            binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.blue4, null))
+            binding.title.setText(R.string.myAddress_pickup)
+        }else {
+            binding.dealPlaceTextView.text = "Куда принести заказ"
+            binding.addressTextView.text = order.cart?.first()?.addressCdek
+            binding.icon.setImageResource(R.drawable.ic_envelope)
+            binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.green, null))
+            binding.title.setText(R.string.myAddress_delivery)
+        }
     }
 
 
@@ -54,7 +77,7 @@ class CreateDeliveryFragment: MvpAppCompatFragment(R.layout.fragment_delivery_cr
             )
         }
         binding.oldPriceTextView.text = crossedStr
-        binding.addressTextView.text = product.addressCdek
+        //binding.addressTextView.text = product.addressCdek
     }
 
     private fun setClickListeners(){

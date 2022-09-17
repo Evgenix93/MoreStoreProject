@@ -609,7 +609,10 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 height = product.packageDimensions.height ?: "10",
                 weight = ((product.packageDimensions.weight ?: "0.3").toFloat() * 1000).toInt().toString()
             )
+            val isCdekPickupPoint = toAddress.contains("cdek code:")
+            val tariff = if(isCdekPickupPoint) 136 else 137
             val info = CdekCalculatePriceInfo(
+                tariff_code = tariff,
                 from_location = AddressString(product.addressCdek?.substringBefore("cdek code") ?: ""),
                 to_location = AddressString(toAddress.substringBefore("cdek code")),
                 packages = dimensions
@@ -645,10 +648,10 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
         }
     }
 
-    fun getYandexGoPrice(toAddress: String, product: Product){
+    fun getFinalYandexGoPrice(toAddress: String, product: Product, promo: String? = null){
         presenterScope.launch {
             viewState.loading(true)
-            val fromCoords = geoRepository.getCoordsByAddress("dfd")?.body()?.coords
+            val fromCoords = geoRepository.getCoordsByAddress(product.address?.fullAddress!!)?.body()?.coords
             if(fromCoords == null){
                 viewState.loading(false)
                 viewState.showMessage("ошибка оценки стоимости")
@@ -660,28 +663,57 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 viewState.showMessage("ошибка оценки стоимости")
                 return@launch
             }
-            val yandexOrderId = createYandexOrder(fromCoords, toCoords, product)
-            yandexOrderId ?: return@launch
-            val response = ordersRepository.getYandexGoOrderInfo(yandexOrderId)
+            val items = listOf(YandexItem(
+                size = YandexItemSize(
+                    height = product.packageDimensions.height!!.toFloat() / 100,
+                    width = product.packageDimensions.width!!.toFloat() / 100,
+                    length = product.packageDimensions.length!!.toFloat() / 100),
+                weight = product.packageDimensions.weight!!.toFloat()))
+            val routePoints = listOf(
+                YandexPoint(listOf(fromCoords.lon, fromCoords.lat)),
+                YandexPoint(listOf(toCoords.lon, toCoords.lat))
+            )
+            val info = YandexPriceCalculateInfo(
+                items = items,
+                routePoints = routePoints
+            )
+            val response = ordersRepository.getYandexGoPrice(info)
             when(response?.code()){
                 200 -> {
+                    val discountedPrice = when{
+                        product.statusUser?.price?.status == 1 -> product.statusUser.price.value
+                        product.statusUser?.sale?.status == 1 -> product.statusUser.sale.value
+                        else -> null
+                    }
+                    val promoInfo = if(promo != null) getPromoInfo(promo) else null
+                    val priceWithDelivery = (discountedPrice?.toFloatOrNull() ?: product.priceNew ?: product.price) + response.body()?.price!!.toFloat()
+                    val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.05)) - (promoInfo?.sum ?: 0)
+                    viewState.setFinalPrice(finalPrice.toFloat())
                     viewState.loading(false)
-                    //viewState.setDeliveryPrice(300f)
                 }
                 400 -> {
-                    viewState.loading(false)
                     viewState.showMessage(response.errorBody()!!.string())
-                }
-                500 -> {
                     viewState.loading(false)
-                    viewState.showMessage("500 internal server error")
+
+
                 }
                 null -> {
-                    viewState.loading(false)
                     viewState.showMessage("нет интернета")
-                }
+                    viewState.loading(false)
 
+                }
+                500 -> {
+                    viewState.showMessage("500 internal server error")
+                    viewState.loading(false)
+
+
+                }
+                else -> viewState.loading(false)
             }
+
+
+
+
 
 
 
@@ -699,29 +731,30 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
         }
     }
 
-    private suspend fun createYandexOrder(fromCoords: Coords, toCoords: Coords, product: Product): Long?{
+    private suspend fun createYandexOrder(fromCoords: Coords, toCoords: Coords, product: Product): YandexOrderInfoBody?{
         val order = YandexGoOrder(
             idOrder = 1,
             comment = "comment",
-            emergencyContactName = "",
-            emergencyContactPhone = "",
+            emergencyContactName = "name",
+            emergencyContactPhone = "+798898",
             itemQuantity = "1",
             itemsProductName = product.name,
             productPrice = product.priceNew.toString(),
-            pointAddressCoordinates = "${toCoords.lat}, ${toCoords.lon}",
+            pointAddressCoordinates = listOf(toCoords.lon, toCoords.lat),
             pointContactEmail = "",
-            pointContactName = "",
-            pointContactPhone = "",
-            pointFullName = "",
-            takePointCoordinates = "${fromCoords.lat}, ${fromCoords.lon}",
+            pointContactName = "name2",
+            pointContactPhone = "+798989",
+            pointFullName = "ddfdf",
+            takePointCoordinates = listOf(fromCoords.lon, fromCoords.lat),
             takePointContactEmail = "",
-            takePointContactName = "",
-            takePointContactPhone = "",
-            takePointFullName = ""
+            takePointContactName = "name2",
+            takePointContactPhone = "+79898",
+            takePointFullName = product.address?.fullAddress.orEmpty(),
+            itemWeight = product.packageDimensions.weight!!.toFloat()
         )
         val response = ordersRepository.createYandexGoOrder(order)
         return when(response?.code()){
-            200 -> 3
+            200 -> response.body()
             400 -> {
                 viewState.loading(false)
                 viewState.showMessage(response.errorBody()!!.string())

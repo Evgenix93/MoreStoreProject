@@ -287,7 +287,7 @@ class OrdersRepository(private val context: Context) {
         }
     }
 
-    suspend fun createYandexGoOrder(order: YandexGoOrder): Response<Unit>? {
+    suspend fun createYandexGoOrder(order: YandexGoOrder): Response<YandexOrderInfoBody>? {
         return try {
             ordersApi.createYandexGoOrder(order)
         } catch (e: Exception) {
@@ -312,7 +312,7 @@ class OrdersRepository(private val context: Context) {
         }
     }
 
-    suspend fun getYandexGoOrderInfo(id: Long): Response<Unit>? {
+    suspend fun getYandexGoOrderInfo(id: String): Response<YandexOrderInfoBody>? {
         return try {
             ordersApi.getYandexGoOrderInfo(id)
         } catch (e: Exception) {
@@ -337,7 +337,7 @@ class OrdersRepository(private val context: Context) {
         }
     }
 
-    suspend fun submitYandexGoOrder(claimId: YandexClaimId): Response<Unit>? {
+    suspend fun submitYandexGoOrder(claimId: YandexClaimId): Response<YandexSubmitResult>? {
         return try {
             ordersApi.submitYandexGoOrder(claimId)
         } catch (e: Exception) {
@@ -368,6 +368,31 @@ class OrdersRepository(private val context: Context) {
         }catch (e: Throwable){
             Log.d("mylog", e.message.toString())
             null
+        }
+    }
+
+    suspend fun getYandexGoPrice(info: YandexPriceCalculateInfo): Response<YandexPriceResult>? {
+        return try {
+            ordersApi.getYandexGoPrice(info)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.getYandexGoPriceGetError(info)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
         }
     }
 

@@ -32,5 +32,8 @@ interface OrderCreateView : MvpView {
     fun setDeliveryPrice(price: DeliveryPrice?)
 
     @OneExecution
+    fun showCdekError()
+
+    @OneExecution
     fun applyPromo(promo: PromoCode?)
 }

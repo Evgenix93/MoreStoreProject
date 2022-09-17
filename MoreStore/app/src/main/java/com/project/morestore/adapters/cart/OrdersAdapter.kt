@@ -1,6 +1,7 @@
 package com.project.morestore.adapters.cart
 
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ class OrdersAdapter(
                 orderItemUserName.setOnClickListener { if(orderItem.user != null) onProfileClick(orderItem.user) }
 
                 val context = itemView.context;
+                Log.d("orderStatus", orderItem.status.name)
                 when (orderItem.status) {
                     OrderStatus.DELIVERY -> {
                         orderItemStatusBlock.isVisible = true
@@ -137,14 +139,16 @@ class OrdersAdapter(
                         orderItemDeliveryChangeBlock.isVisible = false
                         orderItemStatusContent.text = "Данные доставки некорректны"
                         orderItemStatusImage.setImageResource(R.drawable.ic_clock)
+                        Log.d("deliveryLog", "not valid")
 
                     }
                     OrderStatus.DELIVERY_STATUS_ACCEPTED -> {
                         orderItemStatusBlock.isVisible = true
                         orderItemAcceptBlock.isVisible = false
                         orderItemDeliveryChangeBlock.isVisible = false
-                        orderItemStatusContent.text = "Доставка создана"
+                        orderItemStatusContent.text = orderItem.deliveryStatusInfo
                         orderItemStatusImage.setImageResource(R.drawable.ic_clock)
+                        Log.d("deliveryLog", orderItem.deliveryStatusInfo.toString() )
 
                     }
                     OrderStatus.DELIVERY_STATUS_NOT_DEFINED -> {
@@ -153,6 +157,7 @@ class OrdersAdapter(
                         orderItemDeliveryChangeBlock.isVisible = false
                         orderItemStatusContent.text = "Неизвестный статус доставки"
                         orderItemStatusImage.setImageResource(R.drawable.ic_clock)
+                        Log.d("deliveryLog", "not defined")
 
                     }
                     else -> {}

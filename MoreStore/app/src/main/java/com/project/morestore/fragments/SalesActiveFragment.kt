@@ -59,6 +59,7 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
                    )
                )
            }, acceptDeal = {
+                binding.loader.isVisible = true
                 presenter.submitBuy(it)
            }, cancelDeal = {
                presenter.cancelBuyRequest(it)

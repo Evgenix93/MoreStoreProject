@@ -1,16 +1,20 @@
 package com.project.morestore.models
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class CdekOrder(
+    val tariff_code: Int,
     val id_order: Long,
     val shipment_point1: String,
-    val delivery_point1: String,
+    val delivery_point1: String? = null,
     val sender: CdekSender,
     val recipient: CdekRecipient,
     val packages: CdekPackages,
-    val items: CdekItems
+    val items: CdekItems,
+    @Json(name = "to_location")
+    val toLocation: CdekLocation? = null
 
 )
 
@@ -58,4 +62,9 @@ data class CdekPayment(
 @JsonClass(generateAdapter = true)
 data class CdekPhone(
     val number: String
+)
+
+@JsonClass(generateAdapter = true)
+data class CdekLocation(
+    val address: String
 )

@@ -159,6 +159,7 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
 
 
     override fun loading() {
+        views.loader.isVisible = true
 
     }
 
@@ -175,6 +176,7 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
                 price
             )
         }*/
+        views.loader.isVisible = false
         adapter.setItems(dialogs)
     }
 
