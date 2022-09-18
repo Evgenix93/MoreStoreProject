@@ -36,4 +36,7 @@ interface OrderCreateView : MvpView {
 
     @OneExecution
     fun applyPromo(promo: PromoCode?)
+
+    @OneExecution
+    fun geoPositionLoaded(address: Address)
 }

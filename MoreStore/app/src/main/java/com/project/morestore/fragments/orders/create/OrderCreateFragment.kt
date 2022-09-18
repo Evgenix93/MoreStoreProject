@@ -66,6 +66,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         initViews()
         initPromoFields()
         getSupportDialog()
+        getGeoPosition()
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -262,6 +263,16 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         else binding.finalSumWithoutDelivery.text = (sum - promo.sum).toString()
     }
 
+    override fun geoPositionLoaded(address: Address) {
+        val city = address.fullAddress?.substringBefore(",")
+        city ?: return
+        if(city != args.product.address?.fullAddress?.substringBefore(",")){
+            binding.yandexRadioBtn.isEnabled = false
+            binding.yandexRadioBtn.buttonDrawable?.alpha = 125
+            binding.yandexRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
+        }
+    }
+
     override fun showCdekError() {
         binding.totalWithDeliveryCardView.isVisible = false
         binding.deliveryPriceInfoTextView.isVisible = true
@@ -271,6 +282,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     ///////////////////////////////////////////////////////////////////////////
     //                      Private
     ///////////////////////////////////////////////////////////////////////////
+
+    private fun getGeoPosition(){
+        presenter.getCurrentUserGeoPosition()
+    }
 
     private fun initPromoFields(){
         binding.promoEditText.doOnTextChanged { text, start, before, count ->

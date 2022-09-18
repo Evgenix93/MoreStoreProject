@@ -26,6 +26,12 @@ class OrderCreatePresenter(context: Context)
     //                      public
     ///////////////////////////////////////////////////////////////////////////
 
+    fun getCurrentUserGeoPosition(){
+        val address = userRepository.getCurrentUserAddress()
+        address ?: return
+        viewState.geoPositionLoaded(address)
+    }
+
     fun onBackClick() {
         viewState.navigate(null)
     }
