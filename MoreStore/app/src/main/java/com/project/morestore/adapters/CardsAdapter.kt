@@ -30,7 +30,7 @@ class CardsAdapter(private val choose: (List<Card>) -> Unit, private val delete:
        fun bind(card: Card){
 
           binding.cardNumberTextView.text = "**** ${card.number.takeLast(4)}"
-          if(card.active == 1)
+          if(cards.find{ it.active == 1}?.id == card.id)
               binding.radioButtonImageView.setImageResource(R.drawable.ic_radiobutton)
            else
                binding.radioButtonImageView.setImageResource(R.drawable.ic_radiobutton_not_checked)
@@ -38,11 +38,10 @@ class CardsAdapter(private val choose: (List<Card>) -> Unit, private val delete:
           binding.radioButtonImageView.setOnClickListener{
               if(loading)
                   return@setOnClickListener
-              if(card.active == 0) {
-                  cards.find{it.active == 1}?.active = 0
-                  cards.first{it.id == card.id}.active = 1
+
+                  cards.filter{it.active == 1}.forEach { it.active = 0 }
+                  card.active = if(card.active == 0) 1 else 0
                   choose(cards)
-              }
           }
           binding.trashImageView.setOnClickListener{
               delete(card)
