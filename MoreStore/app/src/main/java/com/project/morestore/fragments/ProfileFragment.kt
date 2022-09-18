@@ -41,8 +41,6 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         loadOnBoardingData()
         initCardList()
         getCards()
-        val a = 5 xor 3
-        Log.d("MyTag", "val a = $a")
     }
 
     private fun initToolbar(){
