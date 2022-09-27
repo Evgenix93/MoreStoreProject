@@ -29,6 +29,9 @@ val onTimePicked: (hour: Int, minute: Int) -> Unit): BottomSheetDialogFragment()
         binding.timePicker.setIs24HourView(true)
         val calendar = Calendar.getInstance()
         binding.timePicker.currentHour = calendar.get(Calendar.HOUR_OF_DAY) + 1
+        binding.okButton.setOnClickListener{
+            dismiss()
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
