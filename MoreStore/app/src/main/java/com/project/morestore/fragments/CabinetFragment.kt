@@ -101,7 +101,7 @@ class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), U
             MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.userPhoneTextView)
         binding.userPhoneTextView.addTextChangedListener(listener)
 
-        binding.userPhoneTextView.setText(user.phone)
+        binding.userPhoneTextView.setText(user.phone?.replaceFirstChar {'7'})
         val diffSeconds = System.currentTimeMillis()/1000 - user.createdAt!!.toLong()
         val dayDiff = diffSeconds/86400
         val monthDiff = dayDiff/30

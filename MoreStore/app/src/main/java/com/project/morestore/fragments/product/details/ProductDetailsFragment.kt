@@ -276,7 +276,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             else brandClick(product.brand)
         }
 
-        binding.sellerPhoneTextView.setText(product.phoneShow)
+        binding.sellerPhoneTextView.setText(product.user?.phone?.replaceFirstChar { '7' })
         if (product.user?.id == userId)
             setSellerProduct(dialogWrappers, product)
 

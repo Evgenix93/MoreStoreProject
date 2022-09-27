@@ -260,10 +260,17 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                     }
                     val chats =  lots?.map { lot ->  //response.body()?.filter {it.product.idUser == userId }?.map { dialogWrapper ->
                         val isUnread = lot.find { it.dialog.lastMessage?.idSender != userId && it.dialog.lastMessage?.is_read == 0 } != null
+                        val buyersStr = when (lot.size){
+                            1 -> "покупатель"
+                            2 -> "покупателя"
+                            3 -> "покупателя"
+                            4 -> "покупателя"
+                            else -> "покупателей"
+                        }
                         Chat.Lot(
                             0,
                             lot.first().product?.name ?: "",
-                            "${lot.size.toString()} покупателей",
+                            "${lot.size} $buyersStr",
                             isUnread,
                             lot.first().product?.photo?.first()?.photo ?: "",
                             lot.first().product?.priceNew ?: 0f,
