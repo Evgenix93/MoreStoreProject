@@ -330,6 +330,16 @@
                 android:text="@string/active_order_accept_order"
                 app:layout_constraintTop_toBottomOf="@+id/orderItemAcceptDescription" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/orderItemPayButton"
+                style="@style/buttonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Оплатить"
+                app:layout_constraintTop_toBottomOf="@+id/orderItemAcceptDescription" />
+
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/orderItemAcceptProblemsButton"
                 style="@style/buttonStyle"

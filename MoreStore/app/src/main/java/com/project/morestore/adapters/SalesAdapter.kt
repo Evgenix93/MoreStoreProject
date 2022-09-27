@@ -39,6 +39,7 @@ class SalesAdapter(
         init {
             binding.orderItemAcceptDescription.isVisible = false
             binding.orderItemAcceptProblemsButton.isVisible = false
+            binding.orderItemPayButton.isVisible = false
             binding.orderItemAcceptButton.text = "Добавить место встречи"
             binding.orderItemDeliveryDateText.text = "Самовывоз"
             binding.orderItemDeliveryDateText.setTextColor(
@@ -50,6 +51,7 @@ class SalesAdapter(
             )
             binding.orderItemDeliveryDate.text = "Доставка"
             binding.orderItemStatusContent.text = "Необходимо добавить место встречи"
+            binding.orderItemStatusBlock.isVisible = true
             binding.orderItemDeliveryTitle.text = "Адрес:"
 
 
@@ -174,6 +176,8 @@ class SalesAdapter(
                         }
                     } else {
                         orderStatus = OrderStatus.ADD_MEETING
+                        binding.orderItemStatusContent.text = "Необходимо добавить место встречи"
+                        binding.orderItemStatusBlock.isVisible = true
 
                     }
                 }else if(buySuggest?.status == 0 || buySuggest == null){
@@ -246,6 +250,8 @@ class SalesAdapter(
                                 binding.orderItemStatusBlock.isVisible = true
                                 binding.orderItemStatusContent.text = "Оплачено"
                                 binding.orderItemAcceptBlock.isVisible = true
+                                binding.orderItemAcceptButton.isVisible = true
+                                binding.orderItemPayButton.isVisible = false
                                 binding.orderItemAcceptButton.text = "Подтвердить доставку"
 
                                 binding.orderItemAcceptButton.setOnClickListener {
@@ -325,7 +331,8 @@ class SalesAdapter(
                   product = order.cart.first(),
                   buyerId = order.idUser,
                   cdekYandexAddress = order.placeAddress,
-                  deliveryStatusInfo = order.deliveryStatus
+                  deliveryStatusInfo = order.deliveryStatus,
+                  yandexGoOrderId = order.idYandex
               ))
             }
         }

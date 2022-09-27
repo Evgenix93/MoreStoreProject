@@ -18,10 +18,7 @@ import com.project.morestore.models.cart.CartItem
 
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
-import com.project.morestore.repositories.AuthRepository
-import com.project.morestore.repositories.ChatRepository
-import com.project.morestore.repositories.OrdersRepository
-import com.project.morestore.repositories.UserRepository
+import com.project.morestore.repositories.*
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -35,6 +32,7 @@ class OrdersActivePresenter(val context: Context)
     private val userRepository = UserRepository(context)
     private val chatRepository = ChatRepository(context)
     private val authRepository = AuthRepository(context)
+    private val geoRepository = GeoRepository()
 
     override fun attachView(view: OrdersActiveView) {
         super.attachView(view)
@@ -86,6 +84,31 @@ class OrdersActivePresenter(val context: Context)
 
                 override fun reportProblem(orderItem: OrderItem) {
                     viewState.navigate(orderItem.id)
+                }
+
+                override fun payForOrder(orderItem: OrderItem) {
+                    presenterScope.launch {
+                        viewState.loading()
+                        val isYandex = orderItem.deliveryInfo == "yandex"
+                        if (isYandex) {
+                            val toAddress = orderItem.cdekYandexAddress
+                            val finalPrice = getFinalYandexGoPrice(
+                                toAddress = toAddress.orEmpty(),
+                                product = orderItem.product,
+                                promo = orderItem.promo)
+                            finalPrice ?: return@launch
+                            getPaymentUrl(sum = finalPrice, orderItem.id)
+                        }else{
+                            val toAddress = orderItem.cdekYandexAddress
+                            val finalPrice = getFinalCdekPrice(
+                                toAddress = toAddress.orEmpty(),
+                                product = orderItem.product,
+                                promo = orderItem.promo)
+                            finalPrice ?: return@launch
+                            getPaymentUrl(sum = finalPrice, orderId = orderItem.id)
+                        }
+                    }
+
                 }
             }
             presenterScope.launch {
@@ -212,7 +235,8 @@ class OrdersActivePresenter(val context: Context)
                         chatFunctionInfo,
                         buyerId = order.idUser,
                         cdekYandexAddress = order.placeAddress,
-                        deliveryStatusInfo = deliveryInfo
+                        deliveryStatusInfo = deliveryInfo,
+                        yandexGoOrderId = order.idYandex
 
                                 )
 
@@ -431,6 +455,171 @@ class OrdersActivePresenter(val context: Context)
 
         }
 
+
+    }
+
+    private suspend fun getFinalYandexGoPrice(toAddress: String, product: Product, promo: String? = null): Float?{
+        val fromCoords = geoRepository.getCoordsByAddress(product.address?.fullAddress!!)?.body()?.coords
+            if(fromCoords == null){
+                viewState.showMessage("ошибка оценки стоимости")
+                return null
+            }
+            val toCoords = geoRepository.getCoordsByAddress(toAddress)?.body()?.coords
+            if(toCoords == null){
+                viewState.showMessage("ошибка оценки стоимости")
+                return null
+            }
+            val items = listOf(YandexItem(
+                size = YandexItemSize(
+                    height = product.packageDimensions.height!!.toFloat() / 100,
+                    width = product.packageDimensions.width!!.toFloat() / 100,
+                    length = product.packageDimensions.length!!.toFloat() / 100),
+                weight = product.packageDimensions.weight!!.toFloat()))
+            val routePoints = listOf(
+                YandexPoint(listOf(fromCoords.lon, fromCoords.lat)),
+                YandexPoint(listOf(toCoords.lon, toCoords.lat))
+            )
+            val info = YandexPriceCalculateInfo(
+                items = items,
+                routePoints = routePoints
+            )
+            val response = ordersRepository.getYandexGoPrice(info)
+            return when(response?.code()){
+                200 -> {
+                    val discountedPrice = when{
+                        product.statusUser?.price?.status == 1 -> product.statusUser.price.value
+                        product.statusUser?.sale?.status == 1 -> product.statusUser.sale.value
+                        else -> null
+                    }
+                    val promoInfo = if(promo != null) getPromoInfo(promo) else null
+                    val priceWithDelivery = (discountedPrice?.toFloatOrNull() ?: product.priceNew ?: product.price) + response.body()?.price!!.toFloat()
+                    val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.05)) - (promoInfo?.sum ?: 0)
+                    finalPrice.toFloat()
+                }
+                400 -> {
+                    viewState.showMessage(response.errorBody()!!.string())
+                    null
+
+
+                }
+                null -> {
+                    viewState.showMessage("нет интернета")
+                    null
+
+                }
+                500 -> {
+                    viewState.showMessage("500 internal server error")
+                    null
+
+
+                }
+                else -> null
+            }
+
+
+
+
+
+
+
+
+    }
+
+    private suspend fun getPromoInfo(code: String): PromoCode?{
+        val response = ordersRepository.getPromoInfo(code)
+        return when (response?.code()) {
+            200 -> {
+                response.body()
+            }
+            null -> {
+                viewState.showMessage("нет интернета")
+                null
+
+            }
+            404 -> {
+                viewState.showMessage("промокод не найден")
+                null
+
+            }
+            400 -> {
+                viewState.showMessage(response.errorBody()!!.string())
+                null
+            }
+            else -> {
+                null
+
+            }
+        }
+
+    }
+
+    private fun getPaymentUrl(sum: Float, orderId: Long){
+        presenterScope.launch {
+            val response = ordersRepository.payForOrder(PayOrderInfo(sum, orderId))
+            when(response?.code()){
+                200 -> {
+                    viewState.payment(response.body()!!, orderId)
+                }
+                400 -> {
+                    viewState.showMessage(response.errorBody()!!.string())
+                }
+                null -> {
+                    viewState.showMessage("нет интернета")
+                }
+                500 -> {
+                    viewState.showMessage("500 Internal Server Error")
+                }
+                else -> viewState.showMessage("ошибка")
+            }
+        }
+
+    }
+
+    private suspend fun getFinalCdekPrice(toAddress: String, product: Product, promo: String? = null): Float?{
+        val dimensions = ProductDimensions(
+                length = product.packageDimensions.length ?: "10",
+                width = product.packageDimensions.width ?: "10",
+                height = product.packageDimensions.height ?: "10",
+                weight = ((product.packageDimensions.weight ?: "0.3").toFloat() * 1000).toInt().toString()
+            )
+            val isCdekPickupPoint = toAddress.contains("cdek code:")
+            val tariff = if(isCdekPickupPoint) 136 else 137
+            val info = CdekCalculatePriceInfo(
+                tariff_code = tariff,
+                from_location = AddressString(product.addressCdek?.substringBefore("cdek code") ?: ""),
+                to_location = AddressString(toAddress.substringBefore("cdek code")),
+                packages = dimensions
+            )
+            val response = ordersRepository.getCdekPrice(info)
+            return when(response?.code()){
+                200 -> {
+                    val discountedPrice = when{
+                        product.statusUser?.price?.status == 1 -> product.statusUser.price.value
+                        product.statusUser?.sale?.status == 1 -> product.statusUser.sale.value
+                        else -> null
+                    }
+                    val promoInfo = if(promo != null) getPromoInfo(promo) else null
+                    val priceWithDelivery = (discountedPrice?.toFloatOrNull() ?: product.priceNew ?: product.price) + response.body()!!.total_sum
+                    val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.05)) - (promoInfo?.sum ?: 0)
+                    finalPrice.toFloat()
+                }
+                400 -> {
+                    viewState.showMessage(response.errorBody()!!.string())
+                    null
+                }
+                null -> {
+                    viewState.showMessage("нет интернета")
+                    null
+                }
+                500 -> {
+                    viewState.showMessage("500 internal server error")
+                    null
+                }
+                else -> {
+                    viewState.showMessage("ошибка")
+                    null
+                }
+            }
 
     }
     /*private suspend fun initAdapter(): OrdersAdapter{

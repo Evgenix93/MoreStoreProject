@@ -9,4 +9,5 @@ interface OrderClickListener {
 
     fun acceptOrder(orderItem: OrderItem)
     fun reportProblem(orderItem: OrderItem)
+    fun payForOrder(orderItem: OrderItem)
 }

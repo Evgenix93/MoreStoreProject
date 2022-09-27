@@ -63,6 +63,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         initRadioPlaceButtons()
         initRadioDeliveryButtons()
         initRadioDeliveryVariantButtons()
+        initCdekVariantButtons()
         initViews()
         initPromoFields()
         getSupportDialog()
@@ -511,6 +512,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
 
         }
 
+        binding.sellerAvatarImageView.setOnClickListener {
+            findNavController().navigate(OrderCreateFragmentDirections.actionCreateOrderFragmentToSellerProfileFragment(args.product.user))
+        }
+
     }
 
     private fun getChosenAddress(onAddressReceived: (addressName: String, address: String, type: Int) -> Unit){
@@ -561,6 +566,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             chosenAddress = null
             chosenAddressStr = ""
             binding.myAddressBlock.isVisible = false
+            binding.totalWithDeliveryCardView.isVisible = false
         }
 
     }

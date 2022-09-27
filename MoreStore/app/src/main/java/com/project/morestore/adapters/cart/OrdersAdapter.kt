@@ -58,6 +58,10 @@ class OrdersAdapter(
                         orderItemStatusBlock.isVisible = true
                         orderItemStatusImage.setImageResource(R.drawable.ic_checkcircle)
                         orderItemAcceptBlock.visibility = View.VISIBLE
+                        orderItemPayButton.isVisible = false
+                        orderItemAcceptButton.isVisible = true
+                        orderItemAcceptProblemsButton.isVisible = true
+                        orderItemAcceptDescription.isVisible = true
                         orderItemStatusContent.text = context.getString(R.string.active_order_recivied)
                         orderItemDeliveryAddress.isVisible = false
                         orderItemDeliveryAddressContent.isVisible = false
@@ -126,8 +130,12 @@ class OrdersAdapter(
                     }
                     OrderStatus.NOT_PAYED -> {
                         orderItemStatusBlock.isVisible = true
-                        orderItemAcceptBlock.isVisible = false
                         orderItemDeliveryChangeBlock.isVisible = false
+                        orderItemAcceptBlock.isVisible = true
+                        orderItemPayButton.isVisible = true
+                        orderItemAcceptButton.isVisible = false
+                        orderItemAcceptProblemsButton.isVisible = false
+                        orderItemAcceptDescription.isVisible = false
                         orderItemStatusContent.text = "Не оплачено"
                         orderItemStatusImage.setImageResource(R.drawable.ic_credit_card)
                         orderItemStatusImage.imageTintList = ColorStateList.valueOf(context.resources.getColor(R.color.blue4, null))
@@ -190,6 +198,9 @@ class OrdersAdapter(
         }
         holder.binding.orderItemAcceptProblemsButton.setOnClickListener() {
             onClickListener.reportProblem(items[position])
+        }
+        holder.binding.orderItemPayButton.setOnClickListener {
+            onClickListener.payForOrder(items[position])
         }
     }
 

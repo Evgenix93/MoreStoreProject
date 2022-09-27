@@ -12,7 +12,7 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:src="@drawable/onboardint1_image"
         app:layout_constraintBottom_toTopOf="@+id/infoTextView"
         app:layout_constraintEnd_toEndOf="parent"

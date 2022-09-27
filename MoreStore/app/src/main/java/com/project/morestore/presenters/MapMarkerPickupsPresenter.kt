@@ -21,6 +21,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import java.io.IOException
 
 class MapMarkerPickupsPresenter(
     private val searchManager : SearchManager,
@@ -36,7 +37,7 @@ class MapMarkerPickupsPresenter(
         Point(0.0, 0.0)
     )
     private val searchRegionStub get() = VisibleRegionUtils.toPolygon(stubRegion)
-    private var allAddresses :Array<CdekAddress> = arrayOf()
+    private var allAddresses :Array<CdekAddress>? = arrayOf()
     private var visibleMap :VisibleRegion = stubRegion
     private var selected :CdekAddress? = null
 
@@ -56,9 +57,19 @@ class MapMarkerPickupsPresenter(
         searchManager.submit(region, searchRegionStub, SearchOptions(), searchListener)
         presenterScope.launch {
             loadingDelegate.show()
-            allAddresses = pickupNetwork.getCdekAddresses()
-            showMarkers()
+            allAddresses =
+                try {
+                    pickupNetwork.getCdekAddresses()
+                }catch (e: Throwable){
+                    if(e is IOException)
+                        viewState.showMessage("нет интернета")
+                    else viewState.showMessage("Сервисы СДЭК недоступны")
+                    null
+                }
             loadingDelegate.hide()
+            allAddresses ?: return@launch
+            showMarkers()
+
         }
     }
 
@@ -92,13 +103,14 @@ class MapMarkerPickupsPresenter(
     }
 
     private fun showMarkers(){
+        allAddresses ?: return
         presenterScope.launch {
             val filtered = async(Default){
-                allAddresses.filter {
+                allAddresses?.filter {
                     visibleMap.containsLocation(it.location.lat, it.location.lon)
-                }.toTypedArray()
+                }?.toTypedArray()
             }
-            viewState.showAddresses(filtered.await())
+            viewState.showAddresses(filtered.await()!!)
         }
     }
 

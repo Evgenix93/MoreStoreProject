@@ -2,6 +2,7 @@ package com.project.morestore.fragments.orders.active
 
 import com.project.morestore.adapters.cart.OrdersAdapter
 import com.project.morestore.dialogs.YesNoDialog
+import com.project.morestore.models.PaymentUrl
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.OrderItem
 import moxy.MvpView
@@ -27,4 +28,6 @@ interface OrdersActiveView : MvpView {
     fun navigate(user: User)
     @OneExecution
     fun navigate(order: OrderItem)
+    @OneExecution
+    fun payment(url: PaymentUrl, orderId: Long)
 }

@@ -36,5 +36,6 @@ data class OrderItem(
     val buyerId: Long? = null,
     val cdekYandexAddress: String? = null,
     val promo: String? = null,
-    val deliveryStatusInfo: String? = null
+    val deliveryStatusInfo: String? = null,
+    val yandexGoOrderId: String? = null
 ): Parcelable

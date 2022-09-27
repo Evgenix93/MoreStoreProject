@@ -15,6 +15,7 @@ interface MapMarkerPickupsView :MvpView, LoadingView {
     fun enableNext(enable :Boolean)
     fun returnAddress(address :CdekAddress)
     fun showList()
+    fun showMessage(message: String)
 
     enum class NavigateType { USER, CITY, NONE }
 }

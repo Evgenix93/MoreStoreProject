@@ -227,7 +227,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                 presenter.updateCreateProductData(
                     idCategory = args.product!!.category?.id,
                     //idBrand = args.product!!.brand.toString().split(" ")[0].removePrefix("{id=").removeSuffix(",").toFloat().toLong(),
-                    idBrand = args.product!!.brand!!.id,
+                    idBrand = args.product!!.brand?.id,
                     address = args.product!!.address?.fullAddress,
                     addressCdek = args.product!!.addressCdek,
                     price = args.product!!.price.toString(),

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
@@ -185,6 +186,10 @@ class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, Camer
 
     override fun showList() {
         behavior.state = STATE_EXPANDED
+    }
+
+    override fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     //endregion View implementation

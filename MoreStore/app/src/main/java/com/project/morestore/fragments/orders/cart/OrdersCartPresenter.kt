@@ -51,9 +51,7 @@ class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>()
                    presenterScope.launch {
                        val product =
                            productRepository.getProducts(productId = it.product.id)?.body()?.first()
-                       if (product?.statusUser?.buy?.status == 0 || product?.statusUser?.buy?.status == 1)
-                           viewState.error("Товар уже забронирован")
-                       else if(product != null)
+                        if(product != null)
                            viewState.navigate(it.product, it.id)
                        else
                            viewState.error("Ошибка")

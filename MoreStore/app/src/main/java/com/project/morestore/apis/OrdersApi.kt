@@ -99,4 +99,10 @@ interface OrdersApi {
     @POST("yandexgo/price")
     suspend fun getYandexGoPriceGetError(@Body info: YandexPriceCalculateInfo): Response<String>
 
+    @POST("yandexgo/cancel")
+    suspend fun cancelYandexGoOrder(@Body claimId: YandexCancelClaimId): Response<YandexCancelResult>
+
+    @POST("yandexgo/cancel")
+    suspend fun cancelYandexGoOrderGetError(@Body claimId: YandexCancelClaimId): Response<String>
+
 }

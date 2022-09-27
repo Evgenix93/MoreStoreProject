@@ -1045,6 +1045,9 @@
         <action
             android:id="@+id/action_createOrderFragment_to_orderDetailsFragment"
             app:destination="@id/orderDetailsFragment" />
+        <action
+            android:id="@+id/action_createOrderFragment_to_sellerProfileFragment"
+            app:destination="@id/sellerProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -1207,6 +1210,9 @@
         <action
             android:id="@+id/action_ordersActiveFragment_to_orderDetailsFragment"
             app:destination="@id/orderDetailsFragment" />
+        <action
+            android:id="@+id/action_ordersActiveFragment_to_successOrderPaymentFragment"
+            app:destination="@id/successOrderPaymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderProblemsFragment"

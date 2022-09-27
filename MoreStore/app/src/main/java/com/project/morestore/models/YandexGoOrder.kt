@@ -49,6 +49,15 @@ data class YandexClaimId(
     val version: Int = 1
 )
 
+@JsonClass(generateAdapter = true)
+data class YandexCancelClaimId(
+    @Json(name = "claim_id")
+    val claimId: String,
+    @Json(name = "cancel_state")
+    val cancelState: String = "free",
+    val version: Int = 1
+)
+
 object YandexDeliveryStatus{
      val statuses = mapOf(
          "new" to "Новая заявка",

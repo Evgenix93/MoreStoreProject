@@ -77,9 +77,9 @@ class CartAdapter(
                 cartProductUserName.setOnClickListener {
                     onProfileClickListener(cartItem.product.user!!)
                 }
-                cartProductPurchaseButton.isVisible =    (cartItem.product.statusUser?.buy?.status == 0 || cartItem.product.statusUser?.buy?.status == 1).not()
-                orderItemDeliveryChangeIcon.isVisible =  cartItem.product.statusUser?.buy?.status == 0 || cartItem.product.statusUser?.buy?.status == 1
-                orderItemDeliveryChangeTitle.isVisible = cartItem.product.statusUser?.buy?.status == 0 || cartItem.product.statusUser?.buy?.status == 1
+                cartProductPurchaseButton.isVisible =    cartItem.product.statusUser?.order == null || cartItem.product.statusUser.buy?.status == 2
+                orderItemDeliveryChangeIcon.isVisible =  cartItem.product.statusUser?.order != null && cartItem.product.statusUser.buy?.status != 2
+                orderItemDeliveryChangeTitle.isVisible = cartItem.product.statusUser?.order != null && cartItem.product.statusUser.buy?.status != 2
             }
         }
     }

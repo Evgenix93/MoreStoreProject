@@ -176,6 +176,8 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             val response = chatRepository.cancelBuyRequest(orderItem.chatFunctionInfo!!)
             when (response?.code()) {
                 200 -> {
+                    if(orderItem.yandexGoOrderId != null)
+                        cancelYandexGoOrder(orderItem.yandexGoOrderId)
                     viewState.loading(false)
                     viewState.orderStatusChanged(if (authRepository.getUserId() == orderItem.sellerId) OrderStatus.DECLINED else OrderStatus.DECLINED_BUYER)
                 }
@@ -390,7 +392,8 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 newAddressId = address?.id,
                 product = order.cart?.first()!!,
                 chatFunctionInfo,
-                cdekYandexAddress = order.placeAddress
+                cdekYandexAddress = order.placeAddress,
+                yandexGoOrderId = order.idYandex
 
             )
 
@@ -805,6 +808,35 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 }
             }
 
+    }
+
+    private suspend fun cancelYandexGoOrder(claimId: String): Boolean{
+        val response = ordersRepository.cancelYandexGoOrder(YandexCancelClaimId(claimId = claimId))
+        return when (response?.code()) {
+            200 -> {
+                response.body()?.code == null
+            }
+            null -> {
+                viewState.showMessage("нет интернета")
+                false
+
+            }
+            404 -> {
+                false
+            }
+            400 -> {
+                viewState.showMessage(response.errorBody()!!.string())
+                false
+            }
+            500 -> {
+                viewState.showMessage("500 internal server error")
+                false
+            }
+            else -> {
+                false
+
+            }
+        }
     }
 
 

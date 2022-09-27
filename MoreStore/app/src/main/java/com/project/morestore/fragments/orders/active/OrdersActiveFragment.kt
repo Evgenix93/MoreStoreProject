@@ -2,6 +2,9 @@ package com.project.morestore.fragments.orders.active
 
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -17,8 +20,10 @@ import com.project.morestore.adapters.cart.OrdersAdapter
 import com.project.morestore.databinding.FragmentOrdersBinding
 import com.project.morestore.dialogs.YesNoDialog
 import com.project.morestore.fragments.ChatFragment
+import com.project.morestore.fragments.OrderDetailsFragmentDirections
 import com.project.morestore.models.Chat
 import com.project.morestore.fragments.orders.cart.OrdersCartFragmentDirections
+import com.project.morestore.models.PaymentUrl
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
@@ -117,6 +122,7 @@ class OrdersActiveFragment
     }
 
     override fun loading() {
+        showLoading(true)
 
     }
 
@@ -130,6 +136,33 @@ class OrdersActiveFragment
                 Chat::class.java.simpleName to Chat.Deal::class.java.simpleName
             )
         )
+    }
+
+    override fun payment(url: PaymentUrl, orderId: Long) {
+        binding.loader.isVisible = false
+        binding.webView.isVisible = true
+        binding.webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return if (request?.url.toString().contains("success")) {
+                    view?.isVisible = false
+                    findNavController().navigate(
+                        OrdersActiveFragmentDirections.actionOrdersActiveFragmentToSuccessOrderPaymentFragment(orderId = orderId))
+                    true
+                }else if(request?.url.toString().contains("failed")) {
+                    showMessage("Ошибка оплаты")
+                    true
+                }else {
+                    false
+                }
+            }
+
+        }
+        binding.webView.settings.userAgentString = "Chrome/56.0.0.0 Mobile"
+        binding.webView.settings.javaScriptEnabled = true
+        binding.webView.loadUrl(url.formUrl)
     }
 
     ///////////////////////////////////////////////////////////////////////////
