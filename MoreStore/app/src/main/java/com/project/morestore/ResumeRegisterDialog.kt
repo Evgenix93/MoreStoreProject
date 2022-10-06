@@ -36,10 +36,7 @@ class ResumeRegisterDialog(): DialogFragment(){
     return AlertDialog.Builder(requireContext())
             .setTitle("")
             .setMessage("Пользователь с такими данными уже существует")//if(!args.isEmail)"?" else "Эт)
-            .setPositiveButton("Продолжить"){ _, _ ->
-                findNavController().navigate(ResumeRegisterDialogDirections.actionResumeRegisterDialogToRegistration3Fragment(args.phoneOrEmail, args.code, args.userId))
-            }
-            .setNegativeButton("Вход"){ _, _ ->
+            .setPositiveButton("Вход"){ _, _ ->
                 findNavController().navigate(ResumeRegisterDialogDirections.actionResumeRegisterDialogToMainFragment())
             }
             .create()

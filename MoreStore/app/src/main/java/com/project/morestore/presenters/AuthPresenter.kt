@@ -53,7 +53,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             val response = repository.register(
                 RegistrationData(
                     step = step,
-                    phone = phone?.trim()?.replaceFirstChar {'7'},
+                    phone = if(phone?.contains("+7") == true) phone.trim() else phone?.trim()?.replaceFirstChar {'7'},
                     email = email?.trim(),
                     type = type,
                     user = user,
@@ -128,7 +128,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             viewState.loading()
             val response = repository.login(
                 RegistrationData(
-                    phone = phone?.trim()?.replaceFirstChar {'7'},
+                    phone = if(phone?.contains("+7") == true) phone.trim() else phone?.trim()?.replaceFirstChar {'7'},
                     email = email?.trim(),
                     step = step,
                     type = type,
