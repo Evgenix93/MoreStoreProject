@@ -76,6 +76,7 @@
 
     <com.google.android.material.button.MaterialButton android:id="@+id/save"
         style="@style/App.Button.Main.Bottom"
+        android:enabled="false"
         />
 
 </LinearLayout>

@@ -695,7 +695,7 @@ class UserRepository(val context: Context) {
               val error = Network.userApi.getUserError(id)
               Response.error(400, error.toResponseBody())
           }catch (e: Throwable){
-              Response.error(0, "Ошибка".toResponseBody())
+              Response.error(400, "Ошибка".toResponseBody())
           }
       }
   }
@@ -719,7 +719,7 @@ class UserRepository(val context: Context) {
           if(e is IOException)
               null
           else
-             Response.error(0, e.message?.toResponseBody() ?: "".toResponseBody())
+             Response.error(400, e.message?.toResponseBody() ?: "".toResponseBody())
       }
   }
 }

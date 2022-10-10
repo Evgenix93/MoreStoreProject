@@ -34,7 +34,7 @@ class MapMarkerAddressesPresenter(
         }
 
         override fun onSearchError(p0: Error) {
-            //todo implement
+            viewState.showMessage(p0.toString())
         }
     }
 

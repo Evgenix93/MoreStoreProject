@@ -8,7 +8,7 @@ import com.project.morestore.databinding.ItemSuggestAddressBinding
 import com.project.morestore.models.SuggestAddress
 import com.project.morestore.util.inflater
 
-class SuggestsAddressesAdapter :RecyclerView.Adapter<SuggestsAddressesAdapter.SuggestsAddressHolder>() {
+class SuggestsAddressesAdapter(private val onSelectChange: (Boolean) -> Unit) :RecyclerView.Adapter<SuggestsAddressesAdapter.SuggestsAddressHolder>() {
     var selected :SuggestAddress? = null
     private var items = arrayOf<SuggestAddress>()
 
@@ -31,6 +31,7 @@ class SuggestsAddressesAdapter :RecyclerView.Adapter<SuggestsAddressesAdapter.Su
     fun setItems(newItems :Array<SuggestAddress>){
         items = newItems
         selected = null
+        onSelectChange(false)
         notifyDataSetChanged()
     }
 
@@ -42,6 +43,7 @@ class SuggestsAddressesAdapter :RecyclerView.Adapter<SuggestsAddressesAdapter.Su
                 val item = items[adapterPosition]
                 if(item !== selected){
                     selected = item
+                    onSelectChange(true)
                     notifyDataSetChanged()
                 }
             }

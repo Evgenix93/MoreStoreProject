@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
@@ -328,6 +329,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
     override fun error(message: String) {
         binding.loader.isVisible = false
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
     }
 

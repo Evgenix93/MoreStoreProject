@@ -2,12 +2,14 @@ package com.project.morestore.fragments
 
 import android.graphics.PointF
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -46,7 +48,7 @@ class MapMarkerAddressesFragment :MapMarkerFragment(), MapMarkerAddressesView {
         const val HOUSE = "house"
     }
 
-    private val listAdapter = SuggestsAddressesAdapter()
+    private val listAdapter = SuggestsAddressesAdapter {views.save.isEnabled = it}
     override val buttonText: String by lazy { requireContext().getString(R.string.save) }
     private lateinit var toolbar :ToolbarTitledCenterBinding
     private lateinit var inputField :EditText
@@ -132,6 +134,9 @@ class MapMarkerAddressesFragment :MapMarkerFragment(), MapMarkerAddressesView {
 
     //region View implementation
     override fun showAddresses(addresses: Array<SuggestAddress>) {
+        Log.d("maplog", "showAddresses")
+        if(addresses.isEmpty())
+            showMessage("Адрес не найден")
         listAdapter.setItems(addresses)
         if(addresses.size == 1) inputField.setText(addresses.first().address)
     }
@@ -144,6 +149,10 @@ class MapMarkerAddressesFragment :MapMarkerFragment(), MapMarkerAddressesView {
         CameraPosition(point, 16f, 0f, 0f)
             .also { views.map.map.move(it, Animation(SMOOTH, 0f), null) }
         searchMarker.geometry = point
+    }
+
+    override fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
     //endregion View implementation
 

@@ -10,4 +10,5 @@ interface MapMarkerAddressesView :MvpView {
     fun showAddresses(addresses :Array<SuggestAddress>)
     fun showList()
     fun navigateMap(point :Point)
+    fun showMessage(message: String)
 }

@@ -564,6 +564,12 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     fun updateProductCategories(productCategories: List<ProductCategory>) {
         val filter = userRepository.getFilter()
+        if(productCategories.first().id == 21){
+            filter.chosenForWho = listOf(false,false,true)
+        }else{
+            if(filter.chosenForWho.last())
+                filter.chosenForWho = listOf(true,false,false)
+        }
         filter.categories = listOf(ProductCategory(0, "Stub", false)) + productCategories
         userRepository.updateFilter(filter)
         viewState.success()

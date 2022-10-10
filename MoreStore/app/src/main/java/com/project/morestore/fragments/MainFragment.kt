@@ -332,19 +332,20 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         binding.clothesCardView.setOnClickListener {
             presenter.updateProductCategories(
                 listOf(
-                    ProductCategory(3, "Бельё", true),
-                    ProductCategory(4, "Брюки", true),
-                    ProductCategory(6, "Платья и Сарафаны", true),
-                    ProductCategory(7, "Юбки", true),
-                    ProductCategory(9, "Джинсы", true),
-                    ProductCategory(11, "Шорты", true),
-                    ProductCategory(12, "Топы и майки", true),
-                    ProductCategory(14, "Домашняя одежда", true),
-                    ProductCategory(15, "Джемперы и Свитеры", true),
-                    ProductCategory(17, "Пиджаки и костюмы", true),
-                    ProductCategory(18, "Блузки", true),
-                    ProductCategory(10, "Одежда для беременных", true),
-                    ProductCategory(13, "Одежда больших размеров", true)
+                    ProductCategory(2, "Верхняя одежда", true)
+                   // ProductCategory(3, "Бельё", true),
+                   // ProductCategory(4, "Брюки", true),
+                   // ProductCategory(6, "Платья и Сарафаны", true),
+                   // ProductCategory(7, "Юбки", true),
+                    //ProductCategory(9, "Джинсы", true),
+                    //ProductCategory(11, "Шорты", true),
+                    //ProductCategory(12, "Топы и майки", true),
+                    //ProductCategory(14, "Домашняя одежда", true),
+                    //ProductCategory(15, "Джемперы и Свитеры", true),
+                    //ProductCategory(17, "Пиджаки и костюмы", true),
+                    //ProductCategory(18, "Блузки", true),
+                    //ProductCategory(10, "Одежда для беременных", true),
+                    //ProductCategory(13, "Одежда больших размеров", true)
                 )
             )
         }
@@ -364,6 +365,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             )
         }
         binding.sportTourismCardView.setOnClickListener {
+
             presenter.updateProductCategories(
                 listOf(
                     ProductCategory(
@@ -379,7 +381,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             presenter.updateProductCategories(
                 listOf(
                     ProductCategory(21, "Школьная форма", true),
-                    ProductCategory(22, "Праздничные костюмы", true)
+                    //ProductCategory(22, "Праздничные костюмы", true)
                 )
             )
         }

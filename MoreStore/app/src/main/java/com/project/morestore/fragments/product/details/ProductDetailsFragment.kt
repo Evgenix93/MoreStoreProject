@@ -392,7 +392,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
 
     private fun initList() {
-        productAdapter = ProductAdapter(null) {}
+        productAdapter = ProductAdapter(null) {
+            bind(product = it, userId = userId, null)
+            binding.mainScrollView.scrollTo(0,0)
+        }
         with(binding.productList) {
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
