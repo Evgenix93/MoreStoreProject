@@ -40,6 +40,10 @@ class MapMarkerAddressesPresenter(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
+        moveToCurrentPosition()
+    }
+
+    fun moveToCurrentPosition(){
         presenterScope.launch {
             geolocator.getCurrentPosition()?.let {
                 viewState.navigateMap(Point(it.lat, it.lon))

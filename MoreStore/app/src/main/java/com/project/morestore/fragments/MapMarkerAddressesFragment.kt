@@ -118,7 +118,10 @@ class MapMarkerAddressesFragment :MapMarkerFragment(), MapMarkerAddressesView {
             false
         }
         //todo replace deleting by adding button
-        views.buttons.removeViewAt(1)//remove list button from parent view
+        views.buttons.removeViewAt(1) //remove list button from parent view
+        views.currentPositionButton.setOnClickListener{
+            presenter.moveToCurrentPosition()
+        }
         views.save.setOnClickListener {
             listAdapter.selected?.let {
                 setFragmentResult(KEY, bundleOf(
