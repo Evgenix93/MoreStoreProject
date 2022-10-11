@@ -220,7 +220,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                     404 -> {
                         viewState.loaded(emptyList<Product>())
-                        viewState.error(getStringFromResponse(response.errorBody()!!))
+
 
                     }
                     500 -> viewState.error("500 Internal Server Error")
@@ -564,7 +564,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     fun updateProductCategories(productCategories: List<ProductCategory>) {
         val filter = userRepository.getFilter()
-        if(productCategories.first().id == 21){
+        if(productCategories.firstOrNull()?.id == 21){
             filter.chosenForWho = listOf(false,false,true)
         }else{
             if(filter.chosenForWho.last())

@@ -30,6 +30,7 @@ import com.project.morestore.databinding.FragmentProductBinding
 import com.project.morestore.fragments.CabinetGuestFragment
 import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.fragments.LotChatsFragment
+import com.project.morestore.fragments.MediaFragment
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -358,8 +359,10 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     private fun initViewPager(filesUriList: List<String>, isSold: Boolean) {
         val photoAdapter = PhotoViewPagerAdapter(this, isSold) { fileUri ->
             Log.d("mylog", fileUri)
-            if (fileUri.contains("mp4"))
-                presenter.playVideo(fileUri = fileUri.toUri())
+            //if (fileUri.contains("mp4"))
+              //  presenter.playVideo(fileUri = fileUri.toUri())
+            val media: List<String> = product?.photo?.map { it.photo }.orEmpty() + product?.video?.map { it.video }.orEmpty()
+            findNavController().navigate(R.id.mediaFragment, bundleOf(MediaFragment.PHOTOS to media.toTypedArray() ))
 
         }
         photoAdapter.updateList(filesUriList)

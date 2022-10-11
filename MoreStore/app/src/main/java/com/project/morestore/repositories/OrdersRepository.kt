@@ -374,7 +374,7 @@ class OrdersRepository(private val context: Context) {
     suspend fun getYandexGoPrice(info: YandexPriceCalculateInfo): Response<YandexPriceResult>? {
         return try {
             ordersApi.getYandexGoPrice(info)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             if (e is IOException) {
                 null
             } else {
