@@ -300,8 +300,10 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
             binding.changeRegionCard.isVisible = false
             loadProducts(args?.query)
         }
-        if(result is List<*>)
-        productAdapter.updateList(result as List<Product>)
+        if(result is List<*>) {
+            productAdapter.updateList(result as List<Product>)
+            binding.noProductsFoundTextView.isVisible = result.isEmpty()
+        }
             //lifecycleScope.launch {
               //  productAdapter.submitData(result as PagingData<Product>)
             //}

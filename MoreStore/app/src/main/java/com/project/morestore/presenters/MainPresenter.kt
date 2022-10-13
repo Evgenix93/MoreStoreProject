@@ -563,13 +563,15 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     }
 
     fun updateProductCategories(productCategories: List<ProductCategory>) {
-        val filter = userRepository.getFilter()
+        var chosenForWho = userRepository.getFilter().chosenForWho
         if(productCategories.firstOrNull()?.id == 21){
-            filter.chosenForWho = listOf(false,false,true)
+            chosenForWho = listOf(false,false,true)
         }else{
-            if(filter.chosenForWho.last())
-                filter.chosenForWho = listOf(true,false,false)
+            if(chosenForWho.last())
+                chosenForWho = listOf(true,false,false)
         }
+        val filter = Filter()
+        filter.chosenForWho = chosenForWho
         filter.categories = listOf(ProductCategory(0, "Stub", false)) + productCategories
         userRepository.updateFilter(filter)
         viewState.success()
@@ -592,8 +594,10 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     }
 
     fun updateBrand(brand: ProductBrand) {
-        val filter = userRepository.getFilter()
-                .apply { brands = listOf(ProductBrand(0, "Stub", 0, null, null), brand.apply { isChecked = true }) }
+        val chosenForWho = userRepository.getFilter().chosenForWho
+        val filter = Filter()
+        filter.chosenForWho = chosenForWho
+        filter.brands = listOf(ProductBrand(0, "Stub", 0, null, null), brand.apply { isChecked = true })
         userRepository.updateFilter(filter)
         viewState.success()
     }
