@@ -30,8 +30,8 @@ class SuggestsAddressesAdapter(private val onSelectChange: (Boolean) -> Unit) :R
 
     fun setItems(newItems :Array<SuggestAddress>){
         items = newItems
-        selected = null
-        onSelectChange(false)
+        selected = newItems.firstOrNull()
+        onSelectChange(selected != null)
         notifyDataSetChanged()
     }
 

@@ -47,6 +47,7 @@ class MapMarkerAddressesPresenter(
         presenterScope.launch {
             geolocator.getCurrentPosition()?.let {
                 viewState.navigateMap(Point(it.lat, it.lon))
+                onMarkerMove(it.lat, it.lon)
             }
         }
     }
