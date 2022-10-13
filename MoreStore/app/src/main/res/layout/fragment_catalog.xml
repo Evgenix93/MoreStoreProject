@@ -126,6 +126,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/noProductsFoundTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Товаров не найдено"
+        app:layout_constraintTop_toTopOf="@id/productList"
+        app:layout_constraintBottom_toBottomOf="@id/productList"
+        app:layout_constraintStart_toStartOf="@id/productList"
+        app:layout_constraintEnd_toEndOf="@id/productList"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/loader"
         android:layout_width="wrap_content"
