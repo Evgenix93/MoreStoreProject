@@ -246,7 +246,7 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
         }
 
         binding.showOffersBtn.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.catalogFragment)
         }
     }
 

@@ -118,7 +118,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             productCategories: List<ProductCategory>? = null,
             forWho: List<Boolean>? = null,
             isGuest: Boolean = false,
-            status: Int? = 1
+            status: Int? = 1,
+            useDefaultFilter: Boolean = false
     ) {
         Log.d("mylog", "getProducts")
         presenterScope.launch {
@@ -152,7 +153,16 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             } else {
                 productRepository.getProducts(
                     query = queryStr,
-                    filter = if (isFiltered) userRepository.getFilter() else null,
+                    filter = if (isFiltered){
+                        if(!useDefaultFilter)
+                           userRepository.getFilter()
+                        else {
+                            val currentForWho = userRepository.getFilter().chosenForWho
+                            val filter = Filter()
+                            filter.chosenForWho = currentForWho
+                            filter
+                        }
+                    } else null,
                     productId = productId,
                     limit = 500,
                     isGuest = isGuest,

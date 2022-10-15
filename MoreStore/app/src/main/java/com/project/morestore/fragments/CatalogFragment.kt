@@ -286,7 +286,8 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
     private fun loadProducts(queryStr: String?) {
         if(args?.forWho != null)
             return
-        presenter.getProducts(queryStr = queryStr, isFiltered = true, productCategories = null)
+        val useDefaultFilter = arguments?.getBoolean(USE_FILTER, false) ?: false
+        presenter.getProducts(queryStr = queryStr, isFiltered = true, productCategories = null, useDefaultFilter = useDefaultFilter)
 
     }
 
@@ -367,6 +368,10 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
     override fun success() {
         TODO("Not yet implemented")
+    }
+
+    companion object {
+        const val USE_FILTER = "use_filter"
     }
 
 }

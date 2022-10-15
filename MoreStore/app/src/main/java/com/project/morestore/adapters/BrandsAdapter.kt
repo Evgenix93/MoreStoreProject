@@ -11,7 +11,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemBrandBinding
 import com.project.morestore.models.ProductBrand
 
-class BrandsAdapter(private val onWishClick: (id: Long) -> Unit) :
+class BrandsAdapter(private val onWishClick: (id: Long) -> Unit, private val onClick: () -> Unit) :
     RecyclerView.Adapter<BrandsAdapter.BrandViewHolder>() {
     private var list = listOf<ProductBrand>().toMutableList()
     private val brands9 = listOf(
@@ -81,6 +81,7 @@ class BrandsAdapter(private val onWishClick: (id: Long) -> Unit) :
             //brandsAChecked
             { isChecked, position ->
                 list[position].isChecked = isChecked
+                onClick()
 
             }, { position ->
                 list[position].isWished ?: run {

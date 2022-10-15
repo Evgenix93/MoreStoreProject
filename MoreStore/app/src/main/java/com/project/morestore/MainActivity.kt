@@ -24,6 +24,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.project.morestore.databinding.ActivityMainBinding
+import com.project.morestore.fragments.CatalogFragment
 import com.project.morestore.fragments.SellerProfileFragment
 import com.project.morestore.fragments.SplashScreenFragmentDirections
 import com.project.morestore.models.SuggestionModels
@@ -238,7 +239,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                 }
 
                 R.id.catalogFragment -> if (navController.currentDestination?.id != R.id.catalogFragment) {
-                    navController.navigate(R.id.catalogFragment, null)
+                    navController.navigate(R.id.catalogFragment, bundleOf(CatalogFragment.USE_FILTER to true))
                     true
                 } else {
                     true

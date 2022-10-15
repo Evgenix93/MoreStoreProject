@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,7 +66,20 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
     }
 
     private fun initSegmentsRecyclerView() {
-        segmentsAdapter = CategoryAdapter(false, requireContext()) { _, _ -> }
+        segmentsAdapter = CategoryAdapter(false, requireContext()) { position, checked ->
+            Log.d("segments", position.toString())
+             val updatedBrands = brandsAdapter.getCurrentList()
+                 updatedBrands.forEach  {
+                     it.isChecked = false
+                when(position){
+                    1 -> if(it.idCategory == 1L) it.isChecked = checked
+                    2 -> if(it.idCategory == 2L) it.isChecked = checked
+                    3 -> if(it.idCategory == 3L) it.isChecked = checked
+                    4 -> if(it.idCategory == 4L) it.isChecked = checked
+                }
+            }
+            brandsAdapter.updateList(updatedBrands)
+        }
         with(binding.segmentsRecyclerView) {
             adapter = segmentsAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -74,10 +88,10 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
     }
 
     private fun initBrandsRecyclerView() {
-        brandsAdapter = BrandsAdapter(){ brandId ->
+        brandsAdapter = BrandsAdapter({ brandId ->
             presenter.addBrandsToWishList(listOf(brandId))
 
-        }
+        }, {segmentsAdapter.clearCheckboxes()})
         with(binding.brandsRecyclerView) {
             adapter = brandsAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -170,6 +184,7 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
     }
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
@@ -188,6 +203,7 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
             is List<*> -> {
                 if (result.isNotEmpty()) {
                     if (result[0] is ProductBrand) {
+                        binding.loader.isVisible = false
                         if (brands.isEmpty()) {
                             brands = result as List<ProductBrand>
                             presenter.collectBrandsSearchFlow(searchFlow,  result as List<ProductBrand>)
