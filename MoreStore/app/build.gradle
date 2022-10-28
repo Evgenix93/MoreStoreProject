@@ -14,8 +14,8 @@ android {
         applicationId "com.project.morestore"
         minSdk 21
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "MAP_KEY", "\"58d995df-fec6-45dd-aeb9-f913994fd48f\"")
@@ -23,7 +23,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -38,6 +39,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    android.defaultConfig.ndk.debugSymbolLevel = 'FULL'
 }
 
 

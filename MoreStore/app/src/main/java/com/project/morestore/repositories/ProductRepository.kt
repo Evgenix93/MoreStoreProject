@@ -232,7 +232,7 @@ class ProductRepository(private val context: Context) {
             )
             else productApi.getProductById(productId, PRODUCT_OPTIONS)
 
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             if (e is IOException) {
                 null
             } else {
