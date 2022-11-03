@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -140,22 +141,45 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
                     null
             }.joinToString(", ")
 
-        binding.sizesGreenDotImageView.isVisible =
+       /* binding.sizesGreenDotImageView.isVisible =
             (filter.chosenTopSizesWomen.all { it.isSelected } || filter.chosenTopSizesWomen.all { !it.isSelected }).not() ||
                     (filter.chosenBottomSizesWomen.all { it.isSelected } || filter.chosenBottomSizesWomen.all { !it.isSelected }).not() ||
-                    (filter.chosenShoosSizesWomen.all { it.isSelected } || filter.chosenShoosSizesWomen.all { !it.isSelected }).not()
+                    (filter.chosenShoosSizesWomen.all { it.isSelected } || filter.chosenShoosSizesWomen.all { !it.isSelected }).not()*/
 
 
         val sizes = when(filter.chosenForWho.indexOf(true)) {
-            0 -> filter.chosenTopSizesWomen + filter.chosenBottomSizesWomen + filter.chosenShoosSizesWomen
-            1 -> filter.chosenTopSizesMen + filter.chosenBottomSizesMen + filter.chosenShoosSizesMen
-            2 -> filter.chosenTopSizesKids + filter.chosenBottomSizesKids + filter.chosenShoosSizesKids
+            0 -> {
+                val categoryId = filter.categories.find{it.isChecked == true}?.id ?: 0
+                when{
+                    categoryId == 0 -> filter.chosenTopSizesWomen + filter.chosenBottomSizesWomen + filter.chosenShoosSizesWomen
+                    categoryId == 5 -> filter.chosenShoosSizesWomen
+                    categoryId < 3 || categoryId == 10 || categoryId > 11 -> filter.chosenTopSizesWomen
+                    else -> filter.chosenBottomSizesWomen
+                }
+                }
+            1 -> {
+                val categoryId = filter.categories.find{it.isChecked == true}?.id ?: 0
+                when{
+                    categoryId == 0 -> filter.chosenTopSizesMen + filter.chosenBottomSizesMen + filter.chosenShoosSizesMen
+                    categoryId == 5 -> filter.chosenShoosSizesWomen
+                    categoryId < 3 || categoryId == 10 || categoryId > 11 -> filter.chosenTopSizesMen
+                    else -> filter.chosenBottomSizesWomen
+                }
+            }
+            2 -> {
+                filter.chosenTopSizesKids + filter.chosenBottomSizesKids + filter.chosenShoosSizesKids
+            }
             else -> emptyList()
         }
-        if(sizes.all{ it.isSelected } || sizes.all{!it.isSelected})
+        if(sizes.all{ it.isSelected } || sizes.all{!it.isSelected}) {
+            binding.sizesGreenDotImageView.isVisible = false
             binding.allSizes.text = getString(R.string.all_sizes)
-        else
-            binding.allSizes.text = sizes.filter{it.isSelected}.map { it.int }.toSet().joinToString(", ")
+        }
+        else {
+            binding.sizesGreenDotImageView.isVisible = true
+            binding.allSizes.text =
+                sizes.filter { it.isSelected }.map { it.int }.toSet().joinToString(", ")
+        }
 
         binding.materialsGreenDotImageView.isVisible =
             (filter.chosenMaterials.all { it.isSelected } || filter.chosenMaterials.all { !it.isSelected }).not()
@@ -218,10 +242,14 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
             val isShoos =
                 FilterState.filter.categories.any { it.name == "Обувь" && it.isChecked == true } && !FilterState.filter.categories.any { it.isChecked == true && it.name != "Обувь" }
             val isCloth =
-                !FilterState.filter.categories.any { it.name == "Обувь" && it.isChecked == true } && FilterState.filter.categories.any { it.isChecked == true }
+                !FilterState.filter.categories.any { (it.name == "Обувь" && it.isChecked == true) || (it.name == "Любая категория" && it.isChecked == true)} && FilterState.filter.categories.any { it.isChecked == true }
+
 
             if (isCloth && FilterState.filter.chosenForWho[2].not()) {
-                findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterSizesFragment())
+                Log.d("MyDebug", "category = ${FilterState.filter.categories.first()}")
+                findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterSizesFragment(
+                    FilterState.filter.categories.find{it.isChecked!!}!!.id
+                ))
             }
             if (isShoos && FilterState.filter.chosenForWho[2].not()) {
                 findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterShoosSizesFragment())

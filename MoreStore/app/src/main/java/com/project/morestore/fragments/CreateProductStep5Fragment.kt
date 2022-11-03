@@ -125,7 +125,7 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.toolbar.titleTextView.text = "Шаг 5 из 6"
+        binding.toolbar.titleTextView.text = "Шаг 3 из 5"
         binding.toolbar.actionIcon.setOnClickListener { findNavController().navigate(R.id.mainFragment) }
 
     }

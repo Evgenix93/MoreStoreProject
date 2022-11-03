@@ -14,7 +14,7 @@ class CardRepository {
     suspend fun getCards(): Response<List<Card>>? {
         return try {
             cardApi.getCards()
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             if (e is IOException) {
                 null
             } else {

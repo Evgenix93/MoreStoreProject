@@ -26,6 +26,7 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
         Option("Пункт отправки CDEK", false),
         Option("Цвет", false),
         Option("Материал", false),
+        Option("Стиль", false),
         Option("Размеры товара", false)
     )
 
@@ -59,6 +60,7 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
 
     fun updateList(createProductData: CreateProductData) {
         val conditions = createProductData.property?.filter { it.propertyCategory == 11L }.orEmpty()
+        val styles = createProductData.property?.filter { it.propertyCategory == 10L }.orEmpty()
         val price = createProductData.price
         val size = createProductData.property?.firstOrNull {
             it.propertyCategory < 10
@@ -77,8 +79,9 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
         options[6].address = createProductData.addressCdek
         options[7].isChecked = colors.isNotEmpty()
         options[8].isChecked = materials.isNotEmpty()
+        options[9].isChecked = styles.isNotEmpty()
         options[5].address = region
-        options[9].isChecked = dimensions?.length != null
+        options[10].isChecked = dimensions?.length != null
         notifyDataSetChanged()
     }
 

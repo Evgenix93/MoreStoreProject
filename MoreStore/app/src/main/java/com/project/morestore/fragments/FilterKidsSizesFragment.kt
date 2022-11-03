@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -31,6 +32,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
     private var isForMen = false
     private var isSizesLoaded = false
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
@@ -39,7 +41,7 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
         setClickListeners()
     }
 
-    private fun setClickListeners(){
+    private fun setClickListeners() {
         binding.showResultsBtn.setOnClickListener {
             findNavController().navigate(R.id.catalogFragment)
         }
@@ -58,9 +60,19 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
     }
 
     private fun initLists() {
-        topSizeCardAdapter = SizeCardsAdapter(false)
-        bottomSizeCardAdapter = SizeCardsAdapter(false)
-        shoesSizeCardAdapter = SizeCardsAdapter(false)
+        topSizeCardAdapter = SizeCardsAdapter(false){
+                bottomSizeCardAdapter.clear()
+                shoesSizeCardAdapter.clear()
+        }
+        bottomSizeCardAdapter = SizeCardsAdapter(false){
+                topSizeCardAdapter.clear()
+                shoesSizeCardAdapter.clear()
+        }
+        shoesSizeCardAdapter = SizeCardsAdapter(false){
+                bottomSizeCardAdapter.clear()
+                topSizeCardAdapter.clear()
+        }
+
         with(binding.topSizeCardsList) {
             adapter = topSizeCardAdapter
             layoutManager =
@@ -84,7 +96,6 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
         }
 
 
-
     }
 
     private fun showLoading(loading: Boolean) {
@@ -92,7 +103,16 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
     }
 
     private fun convertSizeToSizeLine(size: Size): SizeLine {
-        return SizeLine(size.id, size.name, size.w, size.fr, size.us, size.uk, size.chosen ?: false, idCategory = size.id_category ?: -1)
+        return SizeLine(
+            size.id,
+            size.name,
+            size.w,
+            size.fr,
+            size.us,
+            size.uk,
+            size.chosen ?: false,
+            idCategory = size.id_category ?: -1
+        )
 
 
     }
@@ -130,7 +150,17 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                             if (filter.chosenTopSizesWomen.size == topSizeCardAdapter.getSizes().size + 1) removeLast() else {
                             }
                         }.toList()
-                            .map { Size(it.id, it.int.orEmpty(), 4, it.isSelected, it.itRuFr, it.us, it.uk) })
+                            .map {
+                                Size(
+                                    it.id,
+                                    it.int.orEmpty(),
+                                    4,
+                                    it.isSelected,
+                                    it.itRuFr,
+                                    it.us,
+                                    it.uk
+                                )
+                            })
                 }
                 if (bottomSizeCardAdapter.getSizes().size == filter.chosenBottomSizesWomen.size || bottomSizeCardAdapter.getSizes().size + 1 == filter.chosenBottomSizesWomen.size) {
                     bottomSizeCardAdapter.updateList(
@@ -216,18 +246,13 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
         when {
             isForWomen -> {
                 presenter.getTopSizesWomen()
-                presenter.getBottomSizesWomen()
-                presenter.getShoosSizesWomen()
             }
             isForMen -> {
                 presenter.getTopSizesMen()
-                presenter.getBottomSizesMen()
-                presenter.getShoosSizesMen()
+
             }
             isForKids -> {
                 presenter.getTopSizesKids()
-                presenter.getBottomSizesKids()
-                presenter.getShoosSizesKids()
             }
         }
     }
@@ -293,7 +318,9 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                     it
                 })
 
-            if (sizes[0].idCategory?.toInt() == 1 || sizes[0].idCategory?.toInt() == 4 || sizes[0].idCategory?.toInt() == 7)
+            if (sizes[0].idCategory?.toInt() == 1 || sizes[0].idCategory?.toInt() == 4 || sizes[0].idCategory?.toInt() == 7 && bottomSizeCardAdapter.getSizes()
+                    .isNotEmpty() && shoesSizeCardAdapter.getSizes().isNotEmpty()
+            )
                 topSizeCardAdapter.updateList(sizes.map {
                     val list = it.ico?.split(';').orEmpty()
                     Size(
@@ -301,28 +328,36 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                         it.name,
                         it.idCategory?.toInt(),
                         false,
-                        w = if(list.isNotEmpty()) list[0].removePrefix("W").removeSurrounding("'") else "",
-                        fr = if(list.isNotEmpty()) list[1].removePrefix("IT/RU/FR").removeSurrounding("'") else "",
-                        us = if(list.isNotEmpty()) list[2].removePrefix("US").removeSurrounding("'")else "",
-                        uk = if(list.isNotEmpty()) list[3].removePrefix("UK").removeSurrounding("'") else ""
+                        w = if (list.isNotEmpty()) list[0].removePrefix("W")
+                            .removeSurrounding("'") else "",
+                        fr = if (list.isNotEmpty()) list[1].removePrefix("IT/RU/FR")
+                            .removeSurrounding("'") else "",
+                        us = if (list.isNotEmpty()) list[2].removePrefix("US")
+                            .removeSurrounding("'") else "",
+                        uk = if (list.isNotEmpty()) list[3].removePrefix("UK")
+                            .removeSurrounding("'") else ""
                     )
 
                 })
 
-            if(sizes[0].idCategory?.toInt() == 2 || sizes[0].idCategory?.toInt() == 5 || sizes[0].idCategory?.toInt() == 8)
-            bottomSizeCardAdapter.updateList(sizes.map {
-                val list = it.ico?.split(';').orEmpty()
-                Size(
-                    it.id.toInt(),
-                    it.name,
-                    it.idCategory?.toInt(),
-                    false,
-                    w = if(list.isNotEmpty()) list[0].removePrefix("W").removeSurrounding("'") else "",
-                    fr = if(list.isNotEmpty()) list[1].removePrefix("IT/RU/FR").removeSurrounding("'") else "",
-                    us = if(list.isNotEmpty()) list[2].removePrefix("US").removeSurrounding("'")else "",
-                    uk = if(list.isNotEmpty()) list[3].removePrefix("UK").removeSurrounding("'")else ""
-                )
-            })
+            if (sizes[0].idCategory?.toInt() == 2 || sizes[0].idCategory?.toInt() == 5 || sizes[0].idCategory?.toInt() == 8)
+                bottomSizeCardAdapter.updateList(sizes.map {
+                    val list = it.ico?.split(';').orEmpty()
+                    Size(
+                        it.id.toInt(),
+                        it.name,
+                        it.idCategory?.toInt(),
+                        false,
+                        w = if (list.isNotEmpty()) list[0].removePrefix("W")
+                            .removeSurrounding("'") else "",
+                        fr = if (list.isNotEmpty()) list[1].removePrefix("IT/RU/FR")
+                            .removeSurrounding("'") else "",
+                        us = if (list.isNotEmpty()) list[2].removePrefix("US")
+                            .removeSurrounding("'") else "",
+                        uk = if (list.isNotEmpty()) list[3].removePrefix("UK")
+                            .removeSurrounding("'") else ""
+                    )
+                })
 
             if (sizes[0].idCategory?.toInt() == 3 || sizes[0].idCategory?.toInt() == 6 || sizes[0].idCategory?.toInt() == 9)
                 shoesSizeCardAdapter.updateList(sizes.map {
@@ -332,9 +367,12 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
                         it.name,
                         it.idCategory?.toInt(),
                         false,
-                        fr = if(list.isNotEmpty()) list[0].removePrefix("FR").removeSurrounding("'") else "",
-                        us = if(list.isNotEmpty()) list[1].removePrefix("US").removeSurrounding("'") else "" ,
-                        uk = if(list.isNotEmpty()) list[2].removePrefix("UK").removeSurrounding("'") else ""
+                        fr = if (list.isNotEmpty()) list[0].removePrefix("FR")
+                            .removeSurrounding("'") else "",
+                        us = if (list.isNotEmpty()) list[1].removePrefix("US")
+                            .removeSurrounding("'") else "",
+                        uk = if (list.isNotEmpty()) list[2].removePrefix("UK")
+                            .removeSurrounding("'") else ""
                     )
 
                 })

@@ -34,10 +34,10 @@ class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style)
     private fun bind(list: List<Property>) {
 
            // val allNotSelected = FilterState.filter.chosenStyles.all { !it }
-            binding.newWithTagCheckBox.isChecked = list[0].isChecked == true
-            binding.newWithotuTagCheckBox.isChecked = list[1].isChecked == true
-            binding.ExcellentCheckBox.isChecked = list[2].isChecked == true
-            binding.goodCheckBox.isChecked = list[3].isChecked == true
+            binding.eveningCheckBox.isChecked = list[0].isChecked == true
+            binding.busynessCheckBox.isChecked = list[1].isChecked == true
+            binding.usualCheckBox.isChecked = list[2].isChecked == true
+            binding.sportCheckBox.isChecked = list[3].isChecked == true
 
     }
 
@@ -53,10 +53,10 @@ class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style)
 
     private fun saveFilterStyles(){
         presenter.saveStyles(listOf(
-            binding.newWithTagCheckBox.isChecked,
-            binding.newWithotuTagCheckBox.isChecked,
-            binding.ExcellentCheckBox.isChecked,
-            binding.goodCheckBox.isChecked
+            binding.eveningCheckBox.isChecked,
+            binding.busynessCheckBox.isChecked,
+            binding.usualCheckBox.isChecked,
+            binding.sportCheckBox.isChecked
         ))
     }
 

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/toolbar_filter"
+    <include layout="@layout/toolbar_create_product"
         android:id="@+id/toolbar"/>
 
     <TextView
@@ -148,17 +148,18 @@
         app:layout_constraintTop_toBottomOf="@+id/sportCheckBox" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/showProductsBtn"
+        android:id="@+id/saveButton"
         style="@style/buttonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="14dp"
-        android:text="Показать предложения"
-        app:backgroundTint="@color/black"
+        android:text="Сохранить"
+        app:backgroundTint="@color/gray1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:enabled="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

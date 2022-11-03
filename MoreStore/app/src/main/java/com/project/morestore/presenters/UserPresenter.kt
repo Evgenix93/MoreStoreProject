@@ -422,7 +422,35 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
             viewState.loading()
             val response = productRepository.getProperties()
             when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
+                200 -> {
+                    when(propertyId){
+                        1L -> {
+                            val topSizes = response.body()!!.filter { it.idCategory == 1L }
+                            val bottomSizes = response.body()!!.filter { it.idCategory == 2L }
+                            val shoesSizes = response.body()!!.filter { it.idCategory == 3L }
+                            viewState.loaded(topSizes)
+                            viewState.loaded(bottomSizes)
+                            viewState.loaded(shoesSizes)
+                        }
+                        4L ->{
+                            val topSizes = response.body()!!.filter { it.idCategory == 4L }
+                            val bottomSizes = response.body()!!.filter { it.idCategory == 5L }
+                            val shoesSizes = response.body()!!.filter { it.idCategory == 6L }
+                            viewState.loaded(topSizes)
+                            viewState.loaded(bottomSizes)
+                            viewState.loaded(shoesSizes)
+                        }
+                        7L -> {
+                            val topSizes = response.body()!!.filter { it.idCategory == 7L }
+                            val bottomSizes = response.body()!!.filter { it.idCategory == 8L }
+                            val shoesSizes = response.body()!!.filter { it.idCategory == 9L }
+                            viewState.loaded(topSizes)
+                            viewState.loaded(bottomSizes)
+                            viewState.loaded(shoesSizes)
+                        }
+                        else -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
+                    }
+                }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
                     viewState.error(bodyString)
@@ -862,6 +890,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 if (sizes.size >= chosenTopSizesWomen.size) sizes else sizes + if (chosenTopSizesWomen.isNotEmpty()) listOf(
                     chosenTopSizesWomen.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1))
+            chosenBottomSizesWomen = emptyList()
         }
         userRepository.updateFilter(filter)
 
@@ -880,6 +909,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 if (sizes.size >= chosenTopSizesMen.size) sizes else sizes + if (chosenTopSizesMen.isNotEmpty()) listOf(
                     chosenTopSizesMen.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1))
+            chosenBottomSizesMen = emptyList()
         }
         userRepository.updateFilter(filter)
 
@@ -893,6 +923,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 ) else listOf(
                     SizeLine(0, "", "", "", "", "", false, idCategory = -1)
                 )
+            chosenTopSizesWomen = emptyList()
         }
         userRepository.updateFilter(filter)
     }
@@ -910,6 +941,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 if (sizes.size >= chosenBottomSizesMen.size) sizes else sizes + if (chosenBottomSizesMen.isNotEmpty()) listOf(
                     chosenBottomSizesMen.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false, -1))
+            chosenTopSizesMen = emptyList()
         }
         userRepository.updateFilter(filter)
 
@@ -1071,6 +1103,9 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
               }
               null -> viewState.error("Нет сети")
               400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+              404 -> viewState.loaded(listOf<Card>())
+              500 -> viewState.error("Ошибка 500 Internal Server Error")
+              else -> viewState.error("Неизвестная ошибка")
             }
         }
     }

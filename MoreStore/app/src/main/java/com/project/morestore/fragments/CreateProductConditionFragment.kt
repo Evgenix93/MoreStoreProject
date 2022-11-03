@@ -11,6 +11,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductConditionBinding
 import com.project.morestore.dialogs.SaveProductDialog
+import com.project.morestore.models.CreateProductData
 import com.project.morestore.models.CreatedProductId
 import com.project.morestore.models.Property2
 import com.project.morestore.models.SuggestionModels
@@ -96,7 +97,7 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
         }
 
 
-       val createProductData = result as com.project.morestore.models.CreateProductData
+       val createProductData = result as CreateProductData
         binding.toolbar.actionIcon.setOnClickListener {
             if(result.id == null)
                 SaveProductDialog { presenter.createDraftProduct() }.show(childFragmentManager, null)

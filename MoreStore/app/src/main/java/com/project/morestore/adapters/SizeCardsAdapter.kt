@@ -11,20 +11,20 @@ import com.project.morestore.databinding.ItemSizeCardBinding
 import com.project.morestore.models.Size
 import com.project.morestore.util.SizeCard
 
-class SizeCardsAdapter(val isLimit: Boolean) : RecyclerView.Adapter<SizeCardsAdapter.SizeCardViewHolder>() {
+class SizeCardsAdapter(val isLimit: Boolean, private val onItemClick:() -> Unit) : RecyclerView.Adapter<SizeCardsAdapter.SizeCardViewHolder>() {
     private var list = listOf<Size>()
     private val chosenSizes = mutableListOf<Size>()
 
 
-    class SizeCardViewHolder(view: View, private val list: List<Size>, onClick: (position: Int) -> Unit) :
+  inner  class SizeCardViewHolder(view: View, private val list: List<Size>, private val onClick: (position: Int) -> Unit) :
         RecyclerView.ViewHolder(view) {
         private val binding: ItemSizeCardBinding by viewBinding()
 
-        init {
+      /*  init {
             itemView.setOnClickListener {
                 onClick(adapterPosition)
             }
-        }
+        }*/
 
         fun bind(size: Size) {
             binding.sizeNameTextView.text = list[adapterPosition].name
@@ -37,8 +37,12 @@ class SizeCardsAdapter(val isLimit: Boolean) : RecyclerView.Adapter<SizeCardsAda
                     resources.getColor(R.color.gray1)
                 }
             }
-        }
 
+            itemView.setOnClickListener{
+                onClick(adapterPosition)
+                onItemClick()
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SizeCardViewHolder {
@@ -81,6 +85,11 @@ class SizeCardsAdapter(val isLimit: Boolean) : RecyclerView.Adapter<SizeCardsAda
         list = newList
         notifyDataSetChanged()
 
+    }
+
+    fun clear(){
+        list.forEach { it.chosen = false }
+        notifyDataSetChanged()
     }
 
     fun cleanChosenSizes(){

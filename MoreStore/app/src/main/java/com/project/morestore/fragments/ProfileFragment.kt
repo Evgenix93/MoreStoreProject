@@ -116,7 +116,7 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
 
     private fun deleteCard(card: Card){
         presenter.deleteCard(card)
-        cardsAdapter.loading(false)
+        //cardsAdapter.loading(false)
     }
 
     override fun success(result: Any) {

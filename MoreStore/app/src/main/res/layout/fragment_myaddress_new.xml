@@ -186,6 +186,7 @@
                             <EditText android:id="@+id/house"
                                 style="@style/App.EditText.Field"
                                 android:hint="@string/myAddress_new_address_house_hint"
+                                android:inputType="number"
                                 />
 
 
@@ -207,6 +208,7 @@
 
                             <EditText android:id="@+id/housing"
                                 style="@style/App.EditText.Field"
+                                android:inputType="number"
                                 />
 
                         </LinearLayout>
@@ -234,6 +236,7 @@
 
                             <EditText android:id="@+id/building"
                                 style="@style/App.EditText.Field"
+                                android:inputType="number"
                                 />
 
                         </LinearLayout>
@@ -253,6 +256,7 @@
 
                             <EditText android:id="@+id/apartment"
                                 style="@style/App.EditText.Field"
+                                android:inputType="number"
                                 />
 
                         </LinearLayout>

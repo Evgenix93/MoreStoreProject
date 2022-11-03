@@ -368,7 +368,11 @@
     <fragment
         android:id="@+id/filterSizesFragment"
         android:name="com.project.morestore.fragments.FilterSizesFragment"
-        android:label="FilterSizesFragment" />
+        android:label="FilterSizesFragment" >
+        <argument
+            android:name="idCategory"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/filterMaterialsFragment"
         android:name="com.project.morestore.fragments.FilterMaterialsFragment"
@@ -1340,5 +1344,9 @@
             android:name="order"
             app:argType="com.project.morestore.models.Order" />
     </fragment>
+    <fragment
+        android:id="@+id/createProductStylesFragment"
+        android:name="com.project.morestore.fragments.CreateProductStylesFragment"
+        android:label="CreateProductStylesFragment" />
 
 </navigation>

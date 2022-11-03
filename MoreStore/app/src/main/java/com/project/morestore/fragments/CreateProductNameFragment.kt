@@ -58,7 +58,7 @@ class CreateProductNameFragment : MvpAppCompatFragment(R.layout.fragment_create_
     }
 
     private fun initToolbar(){
-        binding.toolbar.titleTextView.text = "шаг 6 из 7"
+        binding.toolbar.titleTextView.text = "шаг 4 из 5"
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }

@@ -70,6 +70,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                     )
                 )
                 1 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductConditionFragment())
+
                 2 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductPriceFragment())
                 3 -> {
                     if (args.product == null)
@@ -140,7 +141,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                 }
                 7 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
                 8 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
-                9 -> {findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCreateProductPackageFragment())}
+                9 -> findNavController().navigate(R.id.createProductStylesFragment)
+                10 -> {findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCreateProductPackageFragment())}
             }
 
         }
@@ -197,7 +199,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
     }
 
     private fun initToolbar() {
-        binding.toolbar.titleTextView.text = "Шаг 7 из 7"
+        binding.toolbar.titleTextView.text = "Шаг 5 из 5"
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
