@@ -260,12 +260,17 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
     private fun saveSizes() {
         when {
             isForWomen -> {
+                if(topSizeCardAdapter.getSizes().any{it.chosen == true})
                 presenter.saveTopSizes(
                     topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
-                presenter.saveBottomSizes(bottomSizeCardAdapter.getSizes()
-                    .map { convertSizeToSizeLine(it) })
-                presenter.saveShoosSizes(shoesSizeCardAdapter.getSizes()
-                    .map { convertShoeSizeToSizeLine(it) })
+                else {
+                    presenter.saveTopSizes(
+                        topSizeCardAdapter.getSizes().map { convertSizeToSizeLine(it) })
+                    presenter.saveBottomSizes(bottomSizeCardAdapter.getSizes()
+                        .map { convertSizeToSizeLine(it) })
+                    presenter.saveShoosSizes(shoesSizeCardAdapter.getSizes()
+                        .map { convertShoeSizeToSizeLine(it) })
+                }
             }
 
             isForMen -> {

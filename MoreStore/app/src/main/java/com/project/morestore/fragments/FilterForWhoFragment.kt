@@ -17,6 +17,7 @@ import moxy.ktx.moxyPresenter
 class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_who), UserMvpView {
     private val binding: FragmentFilterForWhoBinding by viewBinding()
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    private var forWho = listOf<Boolean>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,6 +73,18 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
             binding.forMenCheckBox.isChecked,
             binding.forKidsCheckBox.isChecked
         ))
+        val newForWho = listOf(binding.forWomenCheckBox.isChecked, binding.forMenCheckBox.isChecked, binding.forKidsCheckBox.isChecked)
+        if(forWho != newForWho){
+            presenter.saveTopSizes(emptyList())
+            presenter.saveBottomSizes(emptyList())
+            presenter.saveShoosSizes(emptyList())
+            presenter.saveTopSizesMen(emptyList())
+            presenter.saveBottomSizesMen(emptyList())
+            presenter.saveShoosSizesMen(emptyList())
+            presenter.saveTopSizesKids(emptyList())
+            presenter.saveBottomSizesKids(emptyList())
+            presenter.saveShoosSizesKids(emptyList())
+        }
     }
 
     override fun onStop() {
@@ -96,7 +109,7 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
         binding.forWomenCheckBox.isChecked = filter.chosenForWho[0]
         binding.forMenCheckBox.isChecked = filter.chosenForWho[1]
         binding.forKidsCheckBox.isChecked = filter.chosenForWho[2]
-
+        forWho = filter.chosenForWho
     }
 
     override fun successNewCode() {
