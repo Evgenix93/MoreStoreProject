@@ -75,15 +75,7 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
         ))
         val newForWho = listOf(binding.forWomenCheckBox.isChecked, binding.forMenCheckBox.isChecked, binding.forKidsCheckBox.isChecked)
         if(forWho != newForWho){
-            presenter.saveTopSizes(emptyList())
-            presenter.saveBottomSizes(emptyList())
-            presenter.saveShoosSizes(emptyList())
-            presenter.saveTopSizesMen(emptyList())
-            presenter.saveBottomSizesMen(emptyList())
-            presenter.saveShoosSizesMen(emptyList())
-            presenter.saveTopSizesKids(emptyList())
-            presenter.saveBottomSizesKids(emptyList())
-            presenter.saveShoosSizesKids(emptyList())
+           presenter.clearSizes()
         }
     }
 

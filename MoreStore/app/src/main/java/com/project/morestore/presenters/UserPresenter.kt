@@ -417,22 +417,12 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
         }
     }
 
-    private fun getProperties(propertyId: Long) {
+    fun getAllSizesWomen(){
         presenterScope.launch {
             viewState.loading()
             val response = productRepository.getProperties()
             when (response?.code()) {
                 200 -> {
-                    when(propertyId){
-                        1L -> {
-                            val topSizes = response.body()!!.filter { it.idCategory == 1L }
-                            val bottomSizes = response.body()!!.filter { it.idCategory == 2L }
-                            val shoesSizes = response.body()!!.filter { it.idCategory == 3L }
-                            viewState.loaded(topSizes)
-                            viewState.loaded(bottomSizes)
-                            viewState.loaded(shoesSizes)
-                        }
-                        4L ->{
                             val topSizes = response.body()!!.filter { it.idCategory == 4L }
                             val bottomSizes = response.body()!!.filter { it.idCategory == 5L }
                             val shoesSizes = response.body()!!.filter { it.idCategory == 6L }
@@ -440,16 +430,29 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                             viewState.loaded(bottomSizes)
                             viewState.loaded(shoesSizes)
                         }
-                        7L -> {
-                            val topSizes = response.body()!!.filter { it.idCategory == 7L }
-                            val bottomSizes = response.body()!!.filter { it.idCategory == 8L }
-                            val shoesSizes = response.body()!!.filter { it.idCategory == 9L }
-                            viewState.loaded(topSizes)
-                            viewState.loaded(bottomSizes)
-                            viewState.loaded(shoesSizes)
-                        }
-                        else -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
-                    }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+            }
+        }
+    }
+
+    fun getAllSizesMen(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getProperties()
+            when (response?.code()) {
+                200 -> {
+                    val topSizes = response.body()!!.filter { it.idCategory == 1L }
+                    val bottomSizes = response.body()!!.filter { it.idCategory == 2L }
+                    val shoesSizes = response.body()!!.filter { it.idCategory == 3L }
+                    viewState.loaded(topSizes)
+                    viewState.loaded(bottomSizes)
+                    viewState.loaded(shoesSizes)
                 }
                 400 -> {
                     val bodyString = getStringFromResponse(response.errorBody()!!)
@@ -458,9 +461,50 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 500 -> viewState.error("500 Internal Server Error")
                 null -> viewState.error("нет интернета")
                 else -> viewState.error("ошибка")
-
             }
+        }
+    }
 
+    fun getAllSizesKids(){
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getProperties()
+            when (response?.code()) {
+                200 -> {
+                    val topSizes = response.body()!!.filter { it.idCategory == 7L }
+                    val bottomSizes = response.body()!!.filter { it.idCategory == 8L }
+                    val shoesSizes = response.body()!!.filter { it.idCategory == 9L }
+                    viewState.loaded(topSizes)
+                    viewState.loaded(bottomSizes)
+                    viewState.loaded(shoesSizes)
+                }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+            }
+        }
+    }
+
+    private fun getProperties(propertyId: Long) {
+        presenterScope.launch {
+            viewState.loading()
+            val response = productRepository.getProperties()
+            when (response?.code()) {
+                200 -> {
+                     viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
+                    }
+                400 -> {
+                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    viewState.error(bodyString)
+                }
+                500 -> viewState.error("500 Internal Server Error")
+                null -> viewState.error("нет интернета")
+                else -> viewState.error("ошибка")
+            }
         }
 
     }
@@ -890,10 +934,23 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 if (sizes.size >= chosenTopSizesWomen.size) sizes else sizes + if (chosenTopSizesWomen.isNotEmpty()) listOf(
                     chosenTopSizesWomen.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1))
-            chosenBottomSizesWomen = emptyList()
         }
         userRepository.updateFilter(filter)
 
+    }
+
+    fun clearSizes(){
+        val filter = userRepository.getFilter()
+        filter.chosenTopSizesWomen = emptyList()
+        filter.chosenBottomSizesWomen = emptyList()
+        filter.chosenShoosSizesWomen = emptyList()
+        filter.chosenTopSizesMen = emptyList()
+        filter.chosenBottomSizesMen = emptyList()
+        filter.chosenShoosSizesMen = emptyList()
+        filter.chosenTopSizesKids = emptyList()
+        filter.chosenBottomSizesKids = emptyList()
+        filter.chosenShoosSizesKids = emptyList()
+        userRepository.updateFilter(filter)
     }
 
     fun loadTopSizes() {
@@ -909,7 +966,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 if (sizes.size >= chosenTopSizesMen.size) sizes else sizes + if (chosenTopSizesMen.isNotEmpty()) listOf(
                     chosenTopSizesMen.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1))
-            chosenBottomSizesMen = emptyList()
+
         }
         userRepository.updateFilter(filter)
 
@@ -923,7 +980,7 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 ) else listOf(
                     SizeLine(0, "", "", "", "", "", false, idCategory = -1)
                 )
-            chosenTopSizesWomen = emptyList()
+
         }
         userRepository.updateFilter(filter)
     }
@@ -941,7 +998,6 @@ class UserPresenter(context: Context) : MvpPresenter<UserMvpView>() {
                 if (sizes.size >= chosenBottomSizesMen.size) sizes else sizes + if (chosenBottomSizesMen.isNotEmpty()) listOf(
                     chosenBottomSizesMen.last()
                 ) else listOf(SizeLine(0, "", "", "", "", "", false, -1))
-            chosenTopSizesMen = emptyList()
         }
         userRepository.updateFilter(filter)
 

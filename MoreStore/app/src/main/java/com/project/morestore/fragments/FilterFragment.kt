@@ -148,27 +148,9 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
 
 
         val sizes = when(filter.chosenForWho.indexOf(true)) {
-            0 -> {
-                val categoryId = filter.categories.find{it.isChecked == true}?.id ?: 0
-                when{
-                    categoryId == 0 -> filter.chosenTopSizesWomen + filter.chosenBottomSizesWomen + filter.chosenShoosSizesWomen
-                    categoryId == 5 -> filter.chosenShoosSizesWomen
-                    categoryId < 3 || categoryId == 10 || categoryId > 11 -> filter.chosenTopSizesWomen
-                    else -> filter.chosenBottomSizesWomen
-                }
-                }
-            1 -> {
-                val categoryId = filter.categories.find{it.isChecked == true}?.id ?: 0
-                when{
-                    categoryId == 0 -> filter.chosenTopSizesMen + filter.chosenBottomSizesMen + filter.chosenShoosSizesMen
-                    categoryId == 5 -> filter.chosenShoosSizesWomen
-                    categoryId < 3 || categoryId == 10 || categoryId > 11 -> filter.chosenTopSizesMen
-                    else -> filter.chosenBottomSizesWomen
-                }
-            }
-            2 -> {
-                filter.chosenTopSizesKids + filter.chosenBottomSizesKids + filter.chosenShoosSizesKids
-            }
+            0 -> filter.chosenTopSizesWomen + filter.chosenBottomSizesWomen + filter.chosenShoosSizesWomen
+            1 -> filter.chosenTopSizesMen + filter.chosenBottomSizesMen + filter.chosenShoosSizesMen
+            2 -> filter.chosenTopSizesKids + filter.chosenBottomSizesKids + filter.chosenShoosSizesKids
             else -> emptyList()
         }
         if(sizes.all{ it.isSelected } || sizes.all{!it.isSelected}) {
@@ -246,7 +228,6 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
 
 
             if (isCloth && FilterState.filter.chosenForWho[2].not()) {
-                Log.d("MyDebug", "category = ${FilterState.filter.categories.first()}")
                 findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterSizesFragment(
                     FilterState.filter.categories.find{it.isChecked!!}!!.id
                 ))

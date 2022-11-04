@@ -245,14 +245,14 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
     private fun getSizes() {
         when {
             isForWomen -> {
-                presenter.getTopSizesWomen()
+                presenter.getAllSizesWomen()
             }
             isForMen -> {
-                presenter.getTopSizesMen()
+                presenter.getAllSizesMen()
 
             }
             isForKids -> {
-                presenter.getTopSizesKids()
+                presenter.getAllSizesKids()
             }
         }
     }

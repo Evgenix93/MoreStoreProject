@@ -123,7 +123,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
                     }
                 }else{
                     if (sizeAdapter.getChosenSizes().size == filter.chosenBottomSizesMen.size) {
-                        sizeAdapter.updateList(filter.chosenTopSizesMen, null)
+                        sizeAdapter.updateList(filter.chosenBottomSizesMen, null)
                 }
             }
         }
@@ -176,7 +176,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         if(result is List<*>) {
             Log.d("MyDebug", "idCategory = ${args.idCategory}")
             val sizes = (result as List<Property>)
-             if(sizes.firstOrNull()?.idCategory == 3L || sizes.firstOrNull()?.idCategory == 6L)
+        /*     if(sizes.firstOrNull()?.idCategory == 3L || sizes.firstOrNull()?.idCategory == 6L)
                  return
             if(args.idCategory < 3 || args.idCategory == 10 || args.idCategory > 11){
                 if(sizes.firstOrNull()?.idCategory != 1L && sizes.firstOrNull()?.idCategory != 4L)
@@ -184,7 +184,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
             }else{
                 if(sizes.firstOrNull()?.idCategory != 2L && sizes.firstOrNull()?.idCategory != 5L)
                     return
-            }
+            }*/
 
 
             val sizeLines = sizes.map {

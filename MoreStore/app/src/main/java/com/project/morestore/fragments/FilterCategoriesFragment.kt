@@ -1,6 +1,7 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.Toast
@@ -26,6 +27,7 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
     private lateinit var checkBoxes: List<CheckBox>
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private var productCategoriesAdapter: ProductCategoriesAdapter by autoCleared()
+    private var categories = listOf<Boolean>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,7 +35,6 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
         initList()
         getProductCategories()
         setClickListeners()
-
     }
 
     private fun setClickListeners(){
@@ -54,6 +55,11 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
     }
 
     private fun saveCategories() {
+        Log.d("MyDebug", "saveCategories")
+        if(categories != productCategoriesAdapter.getProductCategories().map{it.isChecked}) {
+            presenter.clearSizes()
+            Log.d("MyDebug", "clearSizes")
+        }
         presenter.saveCategories(productCategoriesAdapter.getProductCategories())
     }
 
@@ -94,6 +100,7 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
                 else
                     productCategoriesAdapter.updateList2(result.categories)
 
+               categories = result.categories.map{it.isChecked!!}
             }
         }
     }
