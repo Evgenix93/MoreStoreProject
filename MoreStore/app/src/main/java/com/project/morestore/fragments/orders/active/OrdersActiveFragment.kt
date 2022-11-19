@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.NavOptions
-import androidx.navigation.NavOptionsBuilder
-import androidx.navigation.Navigator
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -20,16 +18,13 @@ import com.project.morestore.adapters.cart.OrdersAdapter
 import com.project.morestore.databinding.FragmentOrdersBinding
 import com.project.morestore.dialogs.YesNoDialog
 import com.project.morestore.fragments.ChatFragment
-import com.project.morestore.fragments.OrderDetailsFragmentDirections
 import com.project.morestore.models.Chat
-import com.project.morestore.fragments.orders.cart.OrdersCartFragmentDirections
 import com.project.morestore.models.PaymentUrl
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
-import com.project.morestore.models.slidermenu.SliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
-import com.project.morestore.presenters.toolbar.cart.ToolbarCartView
+import com.project.morestore.mvpviews.ToolbarCartView
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 

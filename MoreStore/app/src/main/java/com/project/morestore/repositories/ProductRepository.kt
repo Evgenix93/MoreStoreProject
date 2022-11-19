@@ -401,165 +401,6 @@ class ProductRepository(private val context: Context) {
         shoesSizesList: List<Size>,
         isMale: Boolean
     ) {
-        val sizeList = listOf(
-            SizeLine(
-                0,
-                "XXS",
-                "26-27",
-                "42",
-                "32",
-                "32",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XS",
-                "28-29",
-                "44",
-                "34",
-                "34",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "S",
-                "30-31",
-                "46",
-                "36",
-                "36",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "M",
-                "32-33",
-                "48",
-                "38",
-                "38",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "L",
-                "34-35",
-                "50",
-                "40",
-                "40",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                false,
-                -1
-            ),
-            SizeLine(
-                0,
-                "XL",
-                "36-37",
-                "52",
-                "42",
-                "42",
-                false,
-                -1
-            ),
-            com.project.morestore.models.SizeLine(
-                0,
-                "",
-                "",
-                "",
-                "",
-                "",
-                false,
-                -1
-            )
-        )
-        /*topSizesList.forEachIndexed { index, size ->
-            if (sizeList[index].int == size.name)
-                sizeList[index].isSelected = size.chosen ?: false
-            sizeList[index].id = size.id
-            sizeList[index].idCategory = size.id_category ?: -1
-        }
-        FilterState.filter.chosenTopSizes = sizeList*/
         if(isMale.not()) {
             FilterState.filter.chosenTopSizesWomen = topSizesList.map {
                 SizeLine(
@@ -751,7 +592,6 @@ class ProductRepository(private val context: Context) {
             CreateProductData.createProductData.idBrand = idBrand
         CreateProductData.createProductData.date = System.currentTimeMillis() / 1000
         CreateProductData.createProductData.dateEnd = (System.currentTimeMillis() + 3000000) / 1000
-        //CreateProductData.createProductData.status = 1
         if (phone != null)
             CreateProductData.createProductData.phone = phone
         if (price != null)
@@ -768,21 +608,21 @@ class ProductRepository(private val context: Context) {
             if (CreateProductData.createProductData.property == null)
                 CreateProductData.createProductData.property = mutableListOf(property)
             else {
-                CreateProductData.createProductData.property!!.remove(property)
-                CreateProductData.createProductData.property!!.add(property)
+                CreateProductData.createProductData.property?.remove(property)
+                CreateProductData.createProductData.property?.add(property)
             }
         if (extProperty != null)
             if (CreateProductData.createProductData.property == null)
                 CreateProductData.createProductData.property = mutableListOf(extProperty)
             else
-                CreateProductData.createProductData.property!!.add(extProperty)
+                CreateProductData.createProductData.property?.add(extProperty)
 
         if (extProperties != null)
             if (CreateProductData.createProductData.property == null)
                 CreateProductData.createProductData.property = extProperties.toMutableList()
             else {
-                CreateProductData.createProductData.property!!.removeAll(extProperties)
-                CreateProductData.createProductData.property!!.addAll(extProperties)
+                CreateProductData.createProductData.property?.removeAll(extProperties)
+                CreateProductData.createProductData.property?.addAll(extProperties)
             }
 
         if (id != null)

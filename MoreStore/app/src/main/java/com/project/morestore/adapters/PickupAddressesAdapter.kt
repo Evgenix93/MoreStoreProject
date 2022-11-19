@@ -18,11 +18,10 @@ class PickupAddressesAdapter(val callback :(CdekAddress) -> Unit) :RecyclerView.
             radioButton.setOnClickListener { view ->
                 if(viewSelected == view) return@setOnClickListener
                 viewSelected?.isChecked = false
-                (view as RadioButton).also {
-                    viewSelected = it
-                    it.isChecked = true
-                }
-                callback.invoke(items[it.adapterPosition])
+                viewSelected = radioButton
+                radioButton.isChecked = true
+
+                callback(items[it.adapterPosition])
             }
         }
     }

@@ -15,29 +15,15 @@ class DateAdapter(val isDay: Boolean): RecyclerView.Adapter<DateAdapter.DateView
 
     class DateViewHolder(view: View, val isDay: Boolean): RecyclerView.ViewHolder(view){
         private val binding: ItemDateBinding by viewBinding()
-        private val months = listOf(
-            "Январь",
-            "Февраль",
-            "Март",
-            "Апрель",
-            "Май",
-            "Июнь",
-            "Июль",
-            "Август",
-            "Сентябрь",
-            "Октябрь",
-            "Ноябрь",
-            "Декабрь"
-        )
+        private val months = MONTHS
 
 
         fun bind(selectedPosition: Int){
             binding.dayTextView.text = if(isDay) (adapterPosition + 1).toString() else months[adapterPosition]
             binding.dayTextView.typeface = Typeface.DEFAULT
-            //binding.dayTextView.setTextColor(itemView.context.resources.getColor(R.color.gray2))
             if(selectedPosition == adapterPosition){
                 binding.dayTextView.typeface = Typeface.DEFAULT_BOLD
-                //binding.dayTextView.setTextColor(itemView.context.resources.getColor(R.color.black))
+
             }
 
 
@@ -62,5 +48,22 @@ class DateAdapter(val isDay: Boolean): RecyclerView.Adapter<DateAdapter.DateView
         notifyDataSetChanged()
 
 
+    }
+
+    companion object {
+         val MONTHS = listOf(
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"
+        )
     }
 }

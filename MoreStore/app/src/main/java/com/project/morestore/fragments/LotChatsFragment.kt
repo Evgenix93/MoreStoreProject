@@ -17,7 +17,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.ChatsAdapter
 import com.project.morestore.databinding.FragmentLotchatsBinding
 import com.project.morestore.fragments.base.BottomNavigationFragment
-import com.project.morestore.fragments.base.BottomNavigationMvpFragment
+
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
@@ -25,19 +25,13 @@ import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.MessagingService
 import com.project.morestore.util.MiddleDivider
 import moxy.ktx.moxyPresenter
-import kotlin.reflect.KClass
 
-class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
+
+class LotChatsFragment : BottomNavigationFragment(), ChatMvpView {
     private lateinit var views :FragmentLotchatsBinding
     private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
     private val adapter = ChatsAdapter {
-        if(it is Chat.Personal && it.name == "Влада Т."){
-            findNavController().navigate(R.id.action_chatLotsFragment_to_chatFragment,
-                bundleOf(createTypeBundle(Chat.Personal::class))
-            )
-        }
-        else{
-            findNavController().navigate(
+        findNavController().navigate(
                 R.id.chatFragment,
                 bundleOf(
                     ChatFragment.DIALOG_ID_KEY to it.id,
@@ -45,7 +39,7 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
                 )
 
             )
-        }
+
     }
     private val messageReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, intent: Intent?) {
@@ -92,7 +86,7 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
                 .circleCrop()
                 .into(toolbar.icon)
         }
-        //adapter.setItems(stubs)
+
     }
 
     override fun onDestroyView() {
@@ -110,37 +104,7 @@ class LotChatsFragment : BottomNavigationMvpFragment(), ChatMvpView {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(messageReceiver)
     }
 
-    private fun createTypeBundle(value : KClass<*>) :Pair<String, String>{
-        return Chat::class.java.simpleName to value.java.simpleName
-    }
 
-    //todo delete stubs
-   /* private val stubs = listOf(
-        Chat.Personal(0,"Екатерина М.", "Здравствуйте! Еще продаете? ",
-            R.drawable.user1,
-            0f,
-            1,
-            true
-        ),
-        Chat.Personal(0,"Влада Т.", "Здравствуйте! Хотела спросить ...",
-            R.drawable.user2,
-            0f,
-            2
-        ),
-        Chat.Personal(0,"Богдан В.", "Интересно, какую скидку вы ...",
-            R.drawable.user3,
-            0f,
-            online = true
-        ),
-        Chat.Personal(0,"Иван И.", "Здравствуйте! Еще продаете?",
-            R.drawable.user4,
-            0f
-        ),
-        Chat.Personal(0,"Сергей С.", "Здравствуйте! Интересно ваше ...",
-            R.drawable.user5,
-            0f
-        )
-    )*/
 
 
     companion object{

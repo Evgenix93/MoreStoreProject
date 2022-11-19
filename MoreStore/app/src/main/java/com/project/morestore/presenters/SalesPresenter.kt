@@ -22,6 +22,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
     private val ordersRepository = OrdersRepository(context)
     private val authRepository  = AuthRepository(context)
     private val chatRepository = ChatRepository(context)
+    private val cartRepository = CartRepository()
 
 
     fun getSales(isHistory: Boolean){
@@ -182,7 +183,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
     }
 
     private suspend fun getCartItems(): List<CartItem>?{
-        val response = ordersRepository.getCartItems(authRepository.getUserId())
+        val response = cartRepository.getCartItems(authRepository.getUserId())
         return if(response?.code() == 200 ) response.body() else null
 
     }

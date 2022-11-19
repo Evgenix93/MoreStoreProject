@@ -9,10 +9,7 @@ import com.project.morestore.models.Id
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.mvpviews.ChatMvpView
-import com.project.morestore.repositories.AuthRepository
-import com.project.morestore.repositories.ChatRepository
-import com.project.morestore.repositories.OrdersRepository
-import com.project.morestore.repositories.UserRepository
+import com.project.morestore.repositories.*
 import com.project.morestore.util.MessageActionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,8 +21,8 @@ import okhttp3.ResponseBody
 class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     private val chatRepository = ChatRepository(context)
     private val authRepository = AuthRepository(context)
-    private val ordersRepository = OrdersRepository(context)
     private val userRepository = UserRepository(context)
+    private val cartRepository = CartRepository()
     private var dialogId: Long? = null
     private var tabPosition: Int = 0
 
@@ -37,9 +34,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             val response = chatRepository.createDialog(userId, productId)
             when (response?.code()) {
                 200 -> {
-                    //if(withBuySuggest){
-                      //  sendSuspendBuyRequest(response.body()?.id!!)
-                    //}
+
                     getDialogById(response.body()?.id!!)
                 }
                 400 -> {
@@ -122,17 +117,12 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     }
 
     private suspend fun getSupportDialog(): List<Chat>{
-       // presenterScope.launch {
-            viewState.loading()
-           // val userId = authRepository.getUserId()
+        viewState.loading()
+
             val response = chatRepository.getDialogs()
             when (response?.code()) {
                 200 -> {
-                    //val chats = response.body()?.map { dialogWrapper ->
-                       // if(dialogWrapper.product.idUser == userId )
-                            //Chat.Lot()
-                    //}
-                    //viewState.dialogsLoaded(response.body()!!)
+
                     val chats = response.body()?.filter { dialogWrapper ->
                         dialogWrapper.dialog.user.id == 1L
 
@@ -166,7 +156,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
             }
 
 
-        //}
+
     }
 
     fun deleteDialog(dialogId: Long){
@@ -193,7 +183,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
 
 
     private suspend fun getDealDialogs(userId: Long): List<Chat>{
-       // presenterScope.launch {
+
             viewState.loading()
             val currentUserId = authRepository.getUserId()
             val response = chatRepository.getDialogs()
@@ -218,7 +208,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                             )
 
                     }
-                    //viewState.dialogsLoaded(chats.orEmpty())
+
                     return chats.orEmpty()
                 }
                 400 -> {
@@ -262,9 +252,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                         val isUnread = lot.find { it.dialog.lastMessage?.idSender != userId && it.dialog.lastMessage?.is_read == 0 } != null
                         val buyersStr = when (lot.size){
                             1 -> "покупатель"
-                            2 -> "покупателя"
-                            3 -> "покупателя"
-                            4 -> "покупателя"
+                            2,3,4 -> "покупателя"
                             else -> "покупателей"
                         }
                         Chat.Lot(
@@ -442,7 +430,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
                 return false
             }
             null -> {
-              //  viewState.error("нет интернета")
+
                 return false
             }
             else -> {
@@ -716,7 +704,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
     ): List<CartItem>? {
         Log.d("mylog", "addProductToCart")
 
-            val response = ordersRepository.getCartItems(
+            val response = cartRepository.getCartItems(
                 userId = userId
             )
 
@@ -749,7 +737,7 @@ class ChatPresenter(context: Context) : MvpPresenter<ChatMvpView>() {
         userId: Long? = null,
     ): Boolean {
         Log.d("mylog", "addProductToCart")
-        val response = ordersRepository.addCartItem(
+        val response = cartRepository.addCartItem(
                 productId = productId,
                 userId = userId
             )

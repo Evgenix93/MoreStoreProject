@@ -6,10 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.morestore.R
-import com.project.morestore.adapters.MyAdapter
+import com.project.morestore.adapters.SellBuyInfoPagerAdapter
 import com.project.morestore.databinding.FragmentOnboarding4Binding
 
 class Onboarding4Fragment: Fragment(R.layout.fragment_onboarding4) {
@@ -18,7 +17,7 @@ class Onboarding4Fragment: Fragment(R.layout.fragment_onboarding4) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.infoViewPager.adapter = MyAdapter(this)
+        binding.infoViewPager.adapter = SellBuyInfoPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.infoViewPager){tab,position ->
             when (position){
                 0 -> tab.text = getString(R.string.to_buyers)

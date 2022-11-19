@@ -33,7 +33,7 @@ class FilterProductStatusFragment: MvpAppCompatFragment(R.layout.fragment_filter
     private fun bind(list: List<Boolean>){
         binding.newWithTagCheckBox.isChecked =  list[0]
         binding.newWithotuTagCheckBox.isChecked = list[1]
-        binding.ExcellentCheckBox.isChecked = list[2]
+        binding.excellentCheckBox.isChecked = list[2]
 
     }
     private fun initToolBar(){
@@ -48,7 +48,7 @@ class FilterProductStatusFragment: MvpAppCompatFragment(R.layout.fragment_filter
 
     private fun saveStatuses(){
         presenter.saveStatuses(listOf(binding.newWithTagCheckBox.isChecked, binding.newWithotuTagCheckBox.isChecked,
-            binding.ExcellentCheckBox.isChecked))
+            binding.excellentCheckBox.isChecked))
     }
 
     override fun onStop() {

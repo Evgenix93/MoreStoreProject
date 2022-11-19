@@ -7,7 +7,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.project.morestore.fragments.BuyersFragment
 import com.project.morestore.fragments.SellersFragment
 
-class MyAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
+class SellBuyInfoPagerAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
         return 2
     }

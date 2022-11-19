@@ -110,7 +110,7 @@ class OrdersAdapter(
                         orderItemStatusBlock.isVisible = true
                         orderItemAcceptBlock.isVisible = false
                         orderItemDeliveryChangeBlock.isVisible = false
-                        orderItemStatusContent.text = "Ожидание подтверждения от продавца"
+                        orderItemStatusContent.text = itemView.context.getString(R.string.awaiting_seller_submition)
                     }
                     OrderStatus.DECLINED -> {
                         orderItemStatusBlock.isVisible = false
@@ -118,7 +118,7 @@ class OrdersAdapter(
                         orderItemDeliveryChangeBlock.isVisible = true
                         orderItemChangeDeliveryAcceptButton.isVisible = false
                         orderItemChangeDeliveryDeclineButton.isVisible = false
-                        orderItemDeliveryChangeTitle.text = "К сожалению продавец отклонил сделку"
+                        orderItemDeliveryChangeTitle.text = itemView.context.getString(R.string.seller_decline)
                     }
                     OrderStatus.DECLINED_BUYER -> {
                         orderItemStatusBlock.isVisible = false
@@ -126,7 +126,7 @@ class OrdersAdapter(
                         orderItemDeliveryChangeBlock.isVisible = true
                         orderItemChangeDeliveryAcceptButton.isVisible = false
                         orderItemChangeDeliveryDeclineButton.isVisible = false
-                        orderItemDeliveryChangeTitle.text = "К сожалению покупатель отклонил сделку"
+                        orderItemDeliveryChangeTitle.text = itemView.context.getString(R.string.buyer_cancel_deal)
                     }
                     OrderStatus.NOT_PAYED -> {
                         orderItemStatusBlock.isVisible = true
@@ -136,7 +136,7 @@ class OrdersAdapter(
                         orderItemAcceptButton.isVisible = false
                         orderItemAcceptProblemsButton.isVisible = false
                         orderItemAcceptDescription.isVisible = false
-                        orderItemStatusContent.text = "Не оплачено"
+                        orderItemStatusContent.text = itemView.context.getString(R.string.not_paid)
                         orderItemStatusImage.setImageResource(R.drawable.ic_credit_card)
                         orderItemStatusImage.imageTintList = ColorStateList.valueOf(context.resources.getColor(R.color.blue4, null))
 
@@ -145,7 +145,7 @@ class OrdersAdapter(
                         orderItemStatusBlock.isVisible = true
                         orderItemAcceptBlock.isVisible = false
                         orderItemDeliveryChangeBlock.isVisible = false
-                        orderItemStatusContent.text = "Данные доставки некорректны"
+                        orderItemStatusContent.text = itemView.context.getString(R.string.delivery_data_not_correct)
                         orderItemStatusImage.setImageResource(R.drawable.ic_clock)
                         Log.d("deliveryLog", "not valid")
 
@@ -163,7 +163,7 @@ class OrdersAdapter(
                         orderItemStatusBlock.isVisible = true
                         orderItemAcceptBlock.isVisible = false
                         orderItemDeliveryChangeBlock.isVisible = false
-                        orderItemStatusContent.text = "Неизвестный статус доставки"
+                        orderItemStatusContent.text = itemView.context.getString(R.string.uknown_delivery_status)
                         orderItemStatusImage.setImageResource(R.drawable.ic_clock)
                         Log.d("deliveryLog", "not defined")
 

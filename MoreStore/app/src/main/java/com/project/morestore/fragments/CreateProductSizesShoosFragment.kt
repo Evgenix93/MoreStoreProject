@@ -37,7 +37,7 @@ class CreateProductSizesShoosFragment :
 
     private fun initToolBar() {
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
-       // binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
+
     }
 
     private fun initList() {

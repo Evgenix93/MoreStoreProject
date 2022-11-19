@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="RatingBar">
+        <attr name="totalPoints" format="integer"/>
+        <attr name="android:isIndicator" format="boolean"/>
+    </declare-styleable>
     <declare-styleable name="TitledTextField">
         <attr name="title" format="string"/>
         <attr name="android:hint" format="string"/>

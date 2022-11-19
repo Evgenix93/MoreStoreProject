@@ -17,7 +17,6 @@ import com.project.morestore.R
 import com.project.morestore.adapters.BrandsAdapter
 import com.project.morestore.adapters.CategoryAdapter
 import com.project.morestore.databinding.FragmentBrandsBinding
-import com.project.morestore.models.Category
 import com.project.morestore.models.Filter
 import com.project.morestore.models.ProductBrand
 import com.project.morestore.mvpviews.UserMvpView
@@ -66,7 +65,7 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
     }
 
     private fun initSegmentsRecyclerView() {
-        segmentsAdapter = CategoryAdapter(false, requireContext()) { position, checked ->
+        segmentsAdapter = CategoryAdapter(false) { position, checked ->
             Log.d("segments", position.toString())
              val updatedBrands = brandsAdapter.getCurrentList()
                  updatedBrands.forEach  {

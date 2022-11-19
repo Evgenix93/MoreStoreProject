@@ -18,6 +18,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductBinding
 import com.project.morestore.models.Product
 import com.project.morestore.singletones.Token
+import com.project.morestore.util.ProductStatus
 
 class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>(){ //PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
     private var list = listOf<Product>()
@@ -57,26 +58,26 @@ class ProductAdapter(val count: Int?, val onClick: (product: Product) -> Unit) :
             binding.statusReadInfoCardView.isVisible = false
 
             when(product.status){
-                1 -> {
+                ProductStatus.IN_STOCK.value -> {
                     binding.statusReadInfoCardView.isVisible = false
                     binding.statusInfoCardView.isVisible = false
                     binding.productImageView.alpha = 1f
                 }
-                6 -> {
+                ProductStatus.APPROVED.value -> {
                     binding.statusReadInfoCardView.isVisible = false
                     binding.statusInfoCardView.isVisible = true
                     binding.statusInfoCardView.setCardBackgroundColor(ResourcesCompat.getColor(itemView.resources, R.color.green, null))
                     binding.statusTextView.text = "Одобрено"
                     binding.productImageView.alpha = 1f
                 }
-                7 -> {
+                ProductStatus.BOOKED.value -> {
                     binding.statusReadInfoCardView.isVisible = false
                     binding.statusInfoCardView.isVisible = true
                     binding.statusInfoCardView.setCardBackgroundColor(ResourcesCompat.getColor(itemView.resources, R.color.orange, null))
                     binding.statusTextView.text = "Забронировано"
                     binding.productImageView.alpha = 1f
                 }
-                8 -> {
+                ProductStatus.SOLD.value -> {
                     binding.statusReadInfoCardView.isVisible = false
                     binding.statusInfoCardView.isVisible = true
                     binding.statusInfoCardView.setCardBackgroundColor(ResourcesCompat.getColor(itemView.resources, R.color.black, null))

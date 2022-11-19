@@ -19,7 +19,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.project.morestore.R
 import com.project.morestore.adapters.MediaAdapter
 import com.project.morestore.databinding.FragmentMediaBinding
-import com.project.morestore.fragments.base.FullscreenMvpFragment
+import com.project.morestore.fragments.base.FullscreenFragment
+
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
@@ -28,7 +29,7 @@ import com.project.morestore.util.dp
 import moxy.ktx.moxyPresenter
 
 
-class MediaFragment() : FullscreenMvpFragment(), MainMvpView {
+class MediaFragment() : FullscreenFragment(), MainMvpView {
     private lateinit var views :FragmentMediaBinding
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private var currentPage :Int = 0

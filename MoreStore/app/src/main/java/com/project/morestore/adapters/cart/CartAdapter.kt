@@ -15,6 +15,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemCartProductBinding
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.CartItem
+import com.project.morestore.util.getDrawableRes
 
 class CartAdapter(
     private val items: MutableList<CartItem>,
@@ -41,20 +42,20 @@ class CartAdapter(
                     cartItem.product.property?.find { 11 == it.id.toInt() }?.value
                 cartProductSizeText.visibility = View.GONE
                 cartProductSizeSymbol.text = cartItem.product.property?.find {
-                    Range.create(1, 9).contains(it.id.toInt())
+                    it.id.toInt() in 1..9
                 }?.value
 
-                val color = cartItem.product.property?.filter { it.name == "Цвет" }?.firstOrNull()
+                val color = cartItem.product.property?.filter { it.name == COLOR_PROPERTY }?.firstOrNull()
                 if (color == null) {
                     cartProductColorName.visibility = View.INVISIBLE
                     cartProductColorDot.background =
-                        ResourcesCompat.getDrawable(itemView.resources, R.drawable.color2, null)
+                        itemView.resources.getDrawableRes(R.drawable.color2)
                 } else {
                     cartProductColorName.text = color.value
                     if(color.ico != null) cartProductColorDot.background.setTint(Color.parseColor(color.ico))
                     else {
                         cartProductColorDot.background =
-                            ResourcesCompat.getDrawable(itemView.resources, R.drawable.color2, null)
+                            itemView.resources.getDrawableRes(R.drawable.color2)
                         cartProductColorDot.backgroundTintList = null
                     }
                 }
@@ -77,9 +78,11 @@ class CartAdapter(
                 cartProductUserName.setOnClickListener {
                     onProfileClickListener(cartItem.product.user!!)
                 }
-                cartProductPurchaseButton.isVisible =    cartItem.product.statusUser?.order == null || cartItem.product.statusUser.buy?.status == 2
-                orderItemDeliveryChangeIcon.isVisible =  cartItem.product.statusUser?.order != null && cartItem.product.statusUser.buy?.status != 2
-                orderItemDeliveryChangeTitle.isVisible = cartItem.product.statusUser?.order != null && cartItem.product.statusUser.buy?.status != 2
+                val isOrderNull = cartItem.product.statusUser?.order == null
+                val isBuyStatusTwo = cartItem.product.statusUser?.buy?.status == 2
+                cartProductPurchaseButton.isVisible =    isOrderNull || isBuyStatusTwo
+                orderItemDeliveryChangeIcon.isVisible =  !isOrderNull && !isBuyStatusTwo
+                orderItemDeliveryChangeTitle.isVisible = !isOrderNull && !isBuyStatusTwo
             }
         }
     }
@@ -89,10 +92,8 @@ class CartAdapter(
     ///////////////////////////////////////////////////////////////////////////
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartItemHolder {
-        val itemView =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_cart_product, parent, false)
-        return CartItemHolder(itemView)
+        val binding = ItemCartProductBinding.inflate(LayoutInflater.from(parent.context)).root
+        return CartItemHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CartItemHolder, position: Int) {
@@ -119,5 +120,9 @@ class CartAdapter(
         val index = items.indexOf(item)
         items.removeAt(index)
         notifyItemRemoved(index)
+    }
+
+    companion object {
+        const val COLOR_PROPERTY = "Цвет"
     }
 }

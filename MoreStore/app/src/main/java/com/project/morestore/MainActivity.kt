@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -28,6 +30,7 @@ import com.project.morestore.fragments.CatalogFragment
 import com.project.morestore.fragments.SellerProfileFragment
 import com.project.morestore.fragments.SplashScreenFragmentDirections
 import com.project.morestore.models.SuggestionModels
+import com.project.morestore.mvpviews.LadingMvpView
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.MessagingService
@@ -36,20 +39,30 @@ import moxy.ktx.moxyPresenter
 import java.util.*
 
 
-class MainActivity : MvpAppCompatActivity(), MainMvpView {
+class MainActivity : MvpAppCompatActivity(), LadingMvpView {
     private val binding: ActivityMainBinding by viewBinding()
     private val presenter by moxyPresenter { MainPresenter(this) }
     private var isMessagesUnread = false
     private val messageReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
-            //isMessagesUnread = true
-            //showUnreadMessagesIcon(isMessagesUnread)
             presenter.showUnreadMessages()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback {
+            val navController = findNavController(R.id.fragmentContainerView)
+            when (navController.previousBackStackEntry?.destination?.id) {
+                R.id.mainFragment -> if(navController.currentDestination?.id
+                    == R.id.registration3Fragment) navController.navigate(R.id.firstLaunchFragment, null,
+                    NavOptions.Builder().setPopUpTo(R.id.splashScreenFragment, false).build())
+                else super.onBackPressed()
+                R.id.createProductStep6Fragment -> navController.navigate(R.id.catalogFragment, null,
+                    NavOptions.Builder().setPopUpTo(R.id.mainFragment, false).build())
+                else -> super.onBackPressed()
+            }
+        }
         setContentView(R.layout.activity_main)
         checkGooglePlayServices()
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver,
@@ -281,18 +294,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
             window.setSoftInputMode(mode)
     }
 
-    override fun onBackPressed() {
-        val navController = findNavController(R.id.fragmentContainerView)
-        when (navController.previousBackStackEntry?.destination?.id) {
-            R.id.mainFragment -> if(navController.currentDestination?.id
-                == R.id.registration3Fragment) navController.navigate(R.id.firstLaunchFragment, null,
-            NavOptions.Builder().setPopUpTo(R.id.splashScreenFragment, false).build())
-            else super.onBackPressed()
-            R.id.createProductStep6Fragment -> navController.navigate(R.id.catalogFragment, null,
-            NavOptions.Builder().setPopUpTo(R.id.mainFragment, false).build())
-            else -> super.onBackPressed()
-        }
-    }
+
 
     fun hideKeyboard() {
         val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -321,8 +323,9 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
     }
 
     override fun loaded(result: Any) {
-        val isUnread = result as Boolean
-        showUnreadMessagesIcon(isUnread)
+        if (result is Boolean) {
+            showUnreadMessagesIcon(result)
+        }
 
     }
 
@@ -331,23 +334,10 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
     }
 
     override fun error(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 
     }
 
-    override fun showOnBoarding() {
 
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-
-    }
-
-    override fun success() {
-
-    }
 }
 

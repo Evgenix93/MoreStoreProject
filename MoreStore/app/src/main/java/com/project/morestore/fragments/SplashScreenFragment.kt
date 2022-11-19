@@ -17,7 +17,7 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen), MainMvpView {
-    private var job: Job = Job()
+    private var job: Job? = null
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,7 +28,7 @@ class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen
 
     override fun onDestroyView() {
         super.onDestroyView()
-        job.cancel()
+        job?.cancel()
     }
 
 

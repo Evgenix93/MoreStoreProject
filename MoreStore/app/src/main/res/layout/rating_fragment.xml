@@ -39,7 +39,8 @@
         android:gravity="center"
         >
 
-        <dev.jorik.ratingbar.RatingBar android:id="@+id/rating"
+        <com.project.morestore.widgets.RatingBar
+            android:id="@+id/rating"
             android:layout_width="248dp"
             android:layout_height="40dp"
             />

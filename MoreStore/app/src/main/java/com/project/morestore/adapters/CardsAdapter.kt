@@ -15,13 +15,13 @@ class CardsAdapter(private val choose: (List<Card>) -> Unit, private val delete:
 
     fun updateCards(newCards: List<Card>){
        cards = newCards
-       notifyDataSetChanged()
+       notifyItemRangeChanged(0, cards.lastIndex)
 
     }
 
     fun loading(loading: Boolean){
         this.loading = loading
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, cards.lastIndex)
     }
 
    inner class CardViewHolder(view: View): RecyclerView.ViewHolder(view) {

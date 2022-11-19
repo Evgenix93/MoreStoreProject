@@ -18,17 +18,19 @@ data class Size(
         var counter = 0
         var coff = 1
         for(char in name){
-            if(char == 'X'){
-                coff++
-            }
-            if(char == 'S'){
-                counter = -1
-            }
-            if(char == 'M'){
-                counter = 1
-            }
-            if(char == 'L'){
-                counter = 2
+            when(char) {
+                'X' -> {
+                    coff++
+                }
+                'S' -> {
+                    counter = -1
+                }
+                'M' -> {
+                    counter = 1
+                }
+                'L' -> {
+                    counter = 2
+                }
             }
 
         }

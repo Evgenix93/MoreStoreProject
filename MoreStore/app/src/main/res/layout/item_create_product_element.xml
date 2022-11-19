@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <View
-        android:id="@+id/view36"
+        android:id="@+id/topLine"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@color/gray1"

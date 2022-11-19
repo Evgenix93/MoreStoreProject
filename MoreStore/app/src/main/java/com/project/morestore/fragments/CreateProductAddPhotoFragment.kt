@@ -43,80 +43,40 @@ class CreateProductAddPhotoFragment :
 
     private fun setClickListeners() {
         binding.addPhotoCardView.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakePhotoFragment(
-                    1
-                )
-            )
+           navigateToMakePhoto(1)
         }
         binding.addPhotoCardView2.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakePhotoFragment(
-                    2
-                )
-            )
+           navigateToMakePhoto(2)
         }
         binding.addPhotoCardView3.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakePhotoFragment(
-                    3
-                )
-            )
+           navigateToMakePhoto(3)
         }
         binding.addPhotoCardView4.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakeVideoFragment(
-                    4
-                )
-            )
+           navigateToMakeVideo(4)
         }
 
         binding.addPhotoCardView5.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakeVideoFragment(
-                    5
-                )
-            )
+           navigateToMakeVideo(5)
         }
 
         binding.addPhotoCardView6.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakeVideoFragment(
-                    6
-                )
-            )
+           navigateToMakeVideo(6)
         }
 
         binding.addPhotoCardView7.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakeVideoFragment(
-                    7
-                )
-            )
+           navigateToMakeVideo(7)
         }
 
         binding.addPhotoCardView8.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakeVideoFragment(
-                    8
-                )
-            )
+           navigateToMakeVideo(8)
         }
 
         binding.addPhotoCardView9.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakeVideoFragment(
-                    9
-                )
-            )
+           navigateToMakeVideo(9)
         }
 
         binding.addPhotoCardView10.setOnClickListener {
-            findNavController().navigate(
-                CreateProductAddPhotoFragmentDirections.actionCreateProductAddPhotoFragmentToMakeVideoFragment(
-                    10
-                )
-            )
+          navigateToMakeVideo(10)
         }
 
         binding.saveBtn.setOnClickListener {
@@ -164,6 +124,16 @@ class CreateProductAddPhotoFragment :
             presenter.updateCreateProductDataPhotosVideosFromWeb(uriMap)
         else
             findNavController().popBackStack()
+    }
+
+    private fun navigateToMakePhoto(photoPos: Int){
+        findNavController().navigate(CreateProductAddPhotoFragmentDirections
+            .actionCreateProductAddPhotoFragmentToMakePhotoFragment(photoPos))
+    }
+
+    private fun navigateToMakeVideo(videoPos: Int){
+        findNavController().navigate(CreateProductAddPhotoFragmentDirections
+            .actionCreateProductAddPhotoFragmentToMakeVideoFragment(videoPos))
     }
 
 

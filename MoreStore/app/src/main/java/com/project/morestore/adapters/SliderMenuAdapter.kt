@@ -15,7 +15,7 @@ class SliderMenuAdapter<T>(
         private val onItemClickListener: (T) -> Unit
 ) : RecyclerView.Adapter<SliderMenuAdapter.SliderViewHolder>() {
 
-    private lateinit var recyclerView: RecyclerView
+
     private lateinit var currentSelected: SliderViewHolder
 
 
@@ -51,10 +51,7 @@ class SliderMenuAdapter<T>(
     //                      Recycler impl
     ///////////////////////////////////////////////////////////////////////////
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        this.recyclerView = recyclerView
-    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
         val itemView =
@@ -65,10 +62,7 @@ class SliderMenuAdapter<T>(
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
 
-        if (items[position].isSelected) {
-           // currentSelected = holder
-           // recyclerView.scrollToPosition(position)
-        }
+
 
         holder.bind(items[position])
         holder.binding.sliderContainer.setOnClickListener() {
@@ -77,9 +71,6 @@ class SliderMenuAdapter<T>(
                 onItemClickListener(items[position].type)
                 return@setOnClickListener
             }
-
-           // items[currentSelected.adapterPosition].isSelected = false;
-          //  notifyItemChanged(currentSelected.adapterPosition)
 
             items[position].isSelected = true
             notifyItemChanged(position)
@@ -94,25 +85,25 @@ class SliderMenuAdapter<T>(
     override fun getItemCount() = items.size
 
     fun changeCartItemsSize(size: Int){
-        items[0].itemsCount = size.toUInt()
-        notifyItemChanged(0)
+        changeItemsCount(0, size)
     }
     fun changeOrdersItemsSize(size: Int){
-        items[1].itemsCount = size.toUInt()
-        notifyItemChanged(1)
+        changeItemsCount(1, size)
     }
     fun changeOrderHistorySize(size: Int){
-        items[3].itemsCount = size.toUInt()
-        notifyItemChanged(3)
+        changeItemsCount(3, size)
     }
 
     fun changeSalesItemsSize(size: Int){
-        items[2].itemsCount = size.toUInt()
-        notifyItemChanged(2)
+        changeItemsCount(2, size)
     }
 
     fun changeSalesHistorySize(size: Int){
-        items[4].itemsCount = size.toUInt()
-        notifyItemChanged(4)
+        changeItemsCount(4, size)
+    }
+
+    private fun changeItemsCount(position: Int, size: Int){
+        items[position].itemsCount = size.toUInt()
+        notifyItemChanged(position)
     }
 }

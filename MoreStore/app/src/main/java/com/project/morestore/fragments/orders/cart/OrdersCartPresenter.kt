@@ -6,6 +6,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.cart.CartAdapter
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.models.cart.CartItem
+import com.project.morestore.repositories.CartRepository
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.ProductRepository
 import kotlinx.coroutines.launch
@@ -16,8 +17,8 @@ import okhttp3.internal.toImmutableList
 class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>() {
 
     private lateinit var adapter: CartAdapter
-    private val ordersRepository = OrdersRepository(context)
     private val productRepository = ProductRepository(context)
+    private val cartRepository = CartRepository()
 
     ///////////////////////////////////////////////////////////////////////////
     //                      private
@@ -29,7 +30,7 @@ class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>()
     ) {
         Log.d("mylog", "addProductToCart")
         presenterScope.launch {
-            val response = ordersRepository.getCartItems(
+            val response = cartRepository.getCartItems(
                 userId = userId
             )
 

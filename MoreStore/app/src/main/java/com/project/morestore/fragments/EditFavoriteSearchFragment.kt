@@ -14,7 +14,8 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentEditFavoriteSearchBinding
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.dialogs.SuccessSaveSearchDialog
-import com.project.morestore.fragments.base.FullscreenMvpFragment
+import com.project.morestore.fragments.base.FullscreenFragment
+
 import com.project.morestore.models.FavoriteSearch
 import com.project.morestore.models.Filter
 import com.project.morestore.models.SizeLine
@@ -24,7 +25,7 @@ import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.NotificationType
 import moxy.ktx.moxyPresenter
 
-class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
+class EditFavoriteSearchFragment : FullscreenFragment(), FavoritesMvpView {
     private lateinit var binding: FragmentEditFavoriteSearchBinding
     private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
     private var filter = Filter()

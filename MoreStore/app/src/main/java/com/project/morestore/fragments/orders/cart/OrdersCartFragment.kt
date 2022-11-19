@@ -23,7 +23,7 @@ import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
-import com.project.morestore.presenters.toolbar.cart.ToolbarCartView
+import com.project.morestore.mvpviews.ToolbarCartView
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 

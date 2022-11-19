@@ -1,8 +1,12 @@
 package com.project.morestore.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -13,17 +17,21 @@ import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.redmadrobot.inputmask.MaskedTextChangedListener
+import io.card.payment.CardIOActivity
+import io.card.payment.CreditCard
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class AddCardFragment: MvpAppCompatFragment(R.layout.fragment_add_card), MainMvpView {
     private val binding: FragmentAddCardBinding by viewBinding()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    private lateinit var scanLauncher: ActivityResultLauncher<Intent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initEditTexts()
         initToolbar()
+        initLauncher()
         setClickListeners()
     }
 
@@ -48,7 +56,44 @@ class AddCardFragment: MvpAppCompatFragment(R.layout.fragment_add_card), MainMvp
         binding.payButton.setOnClickListener {
             presenter.addCard(binding.editText.text.toString())
         }
+        binding.scanCardBtn.setOnClickListener {
+            scanCard()
+        }
     }
+
+    private fun scanCard(){
+        val scanIntent = Intent(requireContext(), CardIOActivity::class.java)
+
+        // customize these values to suit your needs.
+
+        // customize these values to suit your needs.
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false) // default: false
+
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false) // default: false
+
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false) // default: false
+
+
+        // MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
+
+        // MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
+        //startActivityForResult(scanIntent, MY_SCAN_REQUEST_CODE)
+        scanLauncher.launch(scanIntent)
+    }
+
+    private fun initLauncher(){
+         scanLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { data ->
+            data.data ?: return@registerForActivityResult
+            if ( data!!.data!!.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)){
+                val scanResult = data.data!!.getParcelableExtra<CreditCard>(CardIOActivity.EXTRA_SCAN_RESULT)
+                binding.editText.setText(scanResult?.cardNumber)
+            }
+
+
+        }
+    }
+
+
 
     override fun loaded(result: Any) {
 
@@ -78,5 +123,9 @@ class AddCardFragment: MvpAppCompatFragment(R.layout.fragment_add_card), MainMvp
     override fun success() {
         findNavController().popBackStack()
 
+    }
+
+    companion object {
+        const val MY_SCAN_REQUEST_CODE = 7
     }
 }

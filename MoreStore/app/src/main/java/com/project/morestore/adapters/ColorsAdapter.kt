@@ -15,25 +15,6 @@ import com.project.morestore.models.Color
 import com.project.morestore.models.Property
 
 class ColorsAdapter(private val context: Context, private val isFilter: Boolean, private val  onClick:(Boolean) -> Unit): RecyclerView.Adapter<ColorsAdapter.ColorViewHolder>() {
-   /* private var colors = listOf(
-        Color("Все цвета", R.color.black, false),
-        Color("черный", R.color.black, false),
-        Color("синий", R.color.blue3, false),
-        Color("серый", R.color.gray9, false),
-        Color("белый", R.color.white, false),
-        Color("красный", R.color.red, false),
-        Color("зеленый", R.color.green10, false),
-        Color("коричневый", R.color.brown2, false),
-        Color("бежевый", R.color.brown3, false),
-        Color("оранжевый", R.color.orange, false),
-        Color("серебряный", R.color.silver, false),
-        Color("персиковый", R.color.peach, false),
-        Color("жёлтый", R.color.yellow3, false),
-        Color("фиолетовый", R.color.purple2, false),
-        Color("пурпурный", R.color.purple3, false),
-        Color("разноцветный", R.color.white, false)
-    )*/
-
     private var properties = listOf<Property>()
     private var checkedCount = 0
 
@@ -53,17 +34,17 @@ class ColorsAdapter(private val context: Context, private val isFilter: Boolean,
         fun bind(property: Property, position: Int, context: Context, isFilter: Boolean, checkedCount: Int){
             binding.colorTextView.text = property.name
             when (property.name) {
-                "Все цвета" -> {
+                ALL_COLORS -> {
                     binding.allColorsCheckBox.isVisible = true
                     binding.colorImageView.isVisible = false
                 }
-                "разноцветный" -> {
+                DIFFERENT_COLORS -> {
                     binding.allColorsCheckBox.isVisible = false
                     binding.colorImageView.isVisible = true
                     binding.colorImageView.imageTintList = null
                     binding.colorImageView.setImageResource(R.drawable.color2)
                 }
-                "белый" -> {
+                WHITE_COLOR -> {
                     binding.allColorsCheckBox.isVisible = false
                     binding.colorImageView.isVisible = true
                     binding.colorImageView.imageTintList = null
@@ -79,14 +60,14 @@ class ColorsAdapter(private val context: Context, private val isFilter: Boolean,
 
 
             if(property.isChecked == true)
-                if(property.name == "Все цвета")
+                if(property.name == ALL_COLORS)
                     binding.allColorsCheckBox.isChecked = true
                 else {
                 binding.colorImageView.strokeColor = ColorStateList.valueOf(context.resources.getColor(R.color.green))
                 binding.colorImageView.strokeWidth = 7f
             }
             else
-                if(property.name == "Все цвета")
+                if(property.name == ALL_COLORS)
                     binding.allColorsCheckBox.isChecked = false
             else{
                 binding.colorImageView.strokeColor = null
@@ -96,7 +77,7 @@ class ColorsAdapter(private val context: Context, private val isFilter: Boolean,
             itemView.setOnClickListener{
                 if(isFilter) {
                     property.isChecked = property.isChecked?.not() ?: true
-                    if (property.name == "Все цвета") {
+                    if (property.name == ALL_COLORS) {
                         onAllColors(property.isChecked ?: false)
                     } else {
                         onChecked(property.isChecked ?: false, position)
@@ -120,8 +101,8 @@ class ColorsAdapter(private val context: Context, private val isFilter: Boolean,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorViewHolder {
         return ColorViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_color, parent, false),
             { allColorsChecked ->
-                for (property in properties) {
-                    property.isChecked = allColorsChecked
+                properties.forEach {
+                    it.isChecked = allColorsChecked
                 }
                 notifyDataSetChanged()
             },{isChecked, position ->
@@ -129,7 +110,6 @@ class ColorsAdapter(private val context: Context, private val isFilter: Boolean,
                 onClick(properties.any{it.isChecked == true})
                 if(!isFilter)
                     checkedCount = properties.filter{it.isChecked == true}.size
-                //Log.d("Debug", "checkedCount = $checkedCount")
                 if(!isChecked){
                     if(isFilter) {
                         properties[0].isChecked = false
@@ -137,16 +117,16 @@ class ColorsAdapter(private val context: Context, private val isFilter: Boolean,
                     }else
                         notifyDataSetChanged()
                 }else{
-                    if(isFilter)
-                    if(properties.all { it.isChecked == true || it.name == "Все цвета" }){
+                    if(isFilter){
+                      if(properties.all { it.isChecked == true || it.name == ALL_COLORS }){
                         properties[0].isChecked = true
                         notifyDataSetChanged()
-                    }else{
+                       }else{
                        notifyItemChanged(position)
+                       }
                     }
                     else{
-
-                       notifyDataSetChanged()
+                        notifyDataSetChanged()
                     }
                 }
             })
@@ -157,7 +137,12 @@ class ColorsAdapter(private val context: Context, private val isFilter: Boolean,
         holder.bind(properties[position], position,  context, isFilter, checkedCount)
     }
 
-    override fun getItemCount(): Int {
-        return properties.size
+    override fun getItemCount() = properties.size
+
+
+    companion object {
+        const val ALL_COLORS = "Все цвета"
+        const val DIFFERENT_COLORS = "разноцветный"
+        const val WHITE_COLOR = "белый"
     }
 }

@@ -1,8 +1,11 @@
 package com.project.morestore.util
 
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.core.content.res.ResourcesCompat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -27,4 +30,8 @@ fun Calendar.diffInDays(after :Calendar) :Int{
 
 fun String.isFilled(minLength :Int = 1) :Boolean{
     return this.trim().length >= minLength
+}
+
+fun Resources.getDrawableRes(id: Int): Drawable?{
+    return ResourcesCompat.getDrawable(this, id, null)
 }

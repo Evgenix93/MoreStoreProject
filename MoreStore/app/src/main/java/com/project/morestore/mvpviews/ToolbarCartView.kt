@@ -1,4 +1,4 @@
-package com.project.morestore.presenters.toolbar.cart
+package com.project.morestore.mvpviews
 
 import com.project.morestore.adapters.SliderMenuAdapter
 import com.project.morestore.models.slidermenu.OrdersSliderMenu

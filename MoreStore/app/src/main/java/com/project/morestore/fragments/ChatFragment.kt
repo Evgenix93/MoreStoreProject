@@ -10,7 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
-import android.view.View.VISIBLE
+
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -31,7 +31,8 @@ import com.project.morestore.databinding.WidgetDealCancelBinding
 import com.project.morestore.databinding.WidgetSellBarBinding
 import com.project.morestore.dialogs.PriceDialog
 import com.project.morestore.dialogs.MenuBottomDialogFragment
-import com.project.morestore.fragments.base.FullscreenMvpFragment
+import com.project.morestore.fragments.base.FullscreenFragment
+
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
@@ -44,10 +45,9 @@ import kotlinx.coroutines.launch
 import moxy.ktx.moxyPresenter
 import java.util.*
 
-class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
+class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
     PriceDialog.Callback, ChatMvpView {
     private lateinit var views: FragmentChatBinding
-    private lateinit var cancelWidgetBinding: WidgetDealCancelBinding
     private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
     private var currentUserId: Long? = null
     private var currentDialogId: Long? = null
@@ -61,8 +61,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                    suggest = (it as Message.Special.DealRequest).suggestId,
                    value = it.price
               ))
-           // stubAcceptDealRunnable.run()
-           // views.bottomBar.visibility = GONE
+
         },
        cancelDealCallback =  {  presenter.cancelBuyRequest(currentDialogId ?: 0, (it as Message.Special.DealRequest).suggestId ) },
        submitPriceCallback =  {
@@ -89,7 +88,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             findNavController().navigate(ChatFragmentDirections.actionChatFragmentToOrderDetailsFragment(orderId = it))
         }
     )
-    private var listenGeo = false
     private lateinit var user: User
     private var mediaUris: List<Uri>? = null
     private val messageBroadCastReceiver = object : BroadcastReceiver(){
@@ -145,7 +143,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 val productId = requireArguments().getLong(PRODUCT_ID_KEY, 0)
                 val dialogId = requireArguments().getLong(DIALOG_ID_KEY, 0)
                 if (userId != 0L && productId != 0L)
-                    createDealChat(userId, productId) //findNavController().previousBackStackEntry?.destination?.id == R.id.createOrderFragment)
+                    createDealChat(userId, productId)
                 else getDialog(dialogId)
             }
             else -> throw IllegalArgumentException("Undefined chat type: $chatType")
@@ -166,38 +164,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         unregisterReceiver()
     }
 
-    /* private fun showSell(){
-        // adapter.avatarUri = R.drawable.user2
-         with(views){
-             toolbar.title.text = "Влада Т."
-             toolbar.subtitle.text = "В сети 2 ч. назад"
-             toolbar.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_dropdown, 0)
-             toolbar.title.setOnClickListener {
-                 MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE)
-                     .show(childFragmentManager, null)
-             }
-             name.text = "Adidas men's blue denim"
-             toolbar.icon.visibility = GONE
-             Glide.with(photo)
-                 .load(R.drawable.avatar8)
-                 .circleCrop()
-                 .into(photo)
-             WidgetSellBarBinding.inflate(layoutInflater)
-                 .also {
-                     bottomBar.visibility = VISIBLE
-                     bottomBar.addView(it.root)
-                     it.startPrice.text = getString(R.string.pattern_price, String.format("%,d", 2000))
-                     it.setDiscount.setOnClickListener {
-                         PriceDialog(1500, PriceDialog.Type.DISCOUNT).show(childFragmentManager, null)
-                     }
-                 }
-           /*  addMedia.setOnClickListener {
-                 MenuBottomDialogFragment(MenuBottomDialogFragment.Type.GEO)
-                     .show(childFragmentManager, null)
-             }*/
-         }
-         adapter.setItems(buyer)
-     }*/
+
 
     private fun registerReceiver(){
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(messageBroadCastReceiver,
@@ -211,9 +178,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun showSell(dialog: DialogWrapper) {
 
-        //currentDialogId = dialog.dialog.id
+
         user = dialog.dialog.user
-        //adapter.avatarUri = dialog.dialog.user.avatar?.photo.toString()
+
         with(views) {
             product.setOnClickListener {
                 findNavController()
@@ -221,7 +188,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                         .actionChatFragmentToProductDetailsFragment(
                             product = null, productId = dialog.product?.id.toString(), isSeller = true)) }
             toolbar.title.text = dialog.dialog.user.name
-            toolbar.subtitle.text = "В сети 2 ч. назад"
+            toolbar.subtitle.text = ""
             toolbar.title.setCompoundDrawablesWithIntrinsicBounds(
                 0,
                 0,
@@ -262,30 +229,12 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         }
 
         val messages = getMessages(dialog.messages.orEmpty(), dialog.product?.statusUser)
-        adapter.setItems(messages.orEmpty().reversed())
+        adapter.setItems(messages.reversed())
         views.list.scrollToPosition(adapter.itemCount - 1)
 
     }
 
-    /*private fun showSupport() {
-        //adapter.avatarUri = R.drawable.ic_headphones
-        with(views) {
-            toolbar.icon.setPadding(7.dp, 7.dp, 7.dp, 7.dp)
-            toolbar.title.setText(R.string.chat_support_title)
-            toolbar.subtitle.setText(R.string.chat_support_description)
-            Glide.with(toolbar.icon)
-                .load(R.drawable.ic_headphones)
-                .circleCrop()
-                .into(toolbar.icon)
-            product.visibility = GONE
-            productDivider.visibility = GONE
-            addMedia.setOnClickListener {
-                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.MEDIA)
-                    .show(childFragmentManager, null)
-            }
-        }
-        adapter.setItems(support)
-    }*/
+
 
     private fun showSupport(dialog: DialogWrapper) {
         with(views) {
@@ -308,42 +257,11 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
         val messages = getMessages(dialog.messages.orEmpty(), null)
 
-        adapter.setItems(messages.orEmpty().reversed())
+        adapter.setItems(messages.reversed())
         views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
-    /*private fun showDeal(){
-        adapter.avatarId = R.drawable.user3
-        with(views){
-            toolbar.title.text = "Елена Б."
-            toolbar.subtitle.text = "В сети 2 ч. назад"
-            toolbar.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_dropdown, 0)
-            toolbar.title.setOnClickListener {
-                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.PROFILE)
-                    .show(childFragmentManager, null)
-            }
-            name.text = "Сапоги salamander 35"
-            toolbar.icon.visibility = GONE
-            Glide.with(photo)
-                .load(R.drawable.avatar1)
-                .circleCrop()
-                .into(photo)
-            bottomBar.visibility = VISIBLE
-            WidgetBuyBarBinding.inflate(layoutInflater)
-                .also {
-                    bottomBar.addView(it.root)
-                    it.myPrice.setOnClickListener {
-                        PriceDialog(3890, PriceDialog.Type.PRICE).show(childFragmentManager, null)
-                    }
-                    it.buy.setOnClickListener { buy() }
-                }
-            addMedia.setOnClickListener {
-                MenuBottomDialogFragment(MenuBottomDialogFragment.Type.GEO)
-                    .show(childFragmentManager, null)
-            }
-        }
-        adapter.setItems(seller)
-    }*/
+
 
     private fun showDeal(dialog: DialogWrapper) {
         user = dialog.dialog.user
@@ -355,7 +273,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                         .actionChatFragmentToProductDetailsFragment(
                             product = null, productId = dialog.product?.id.toString(), isSeller = false)) }
             toolbar.title.text = dialog.dialog.user.name
-            toolbar.subtitle.text = "В сети 2 ч. назад"
+            toolbar.subtitle.text = ""
             toolbar.title.setCompoundDrawablesWithIntrinsicBounds(
                 0,
                 0,
@@ -397,7 +315,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         }
 
         val messages = getMessages(dialog.messages.orEmpty(), dialog.product?.statusUser)
-        adapter.setItems(messages.orEmpty().reversed())
+        adapter.setItems(messages.reversed())
         views.list.scrollToPosition(adapter.itemCount - 1)
         val buyMessage = dialog.messages?.find { it.buySuggest != null }
         if(buyMessage != null && buyMessage.buySuggest?.status != 2){
@@ -420,8 +338,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
 
-    private fun createDealChat(userId: Long, productId: Long){ //withBuySuggest: Boolean) {
-        presenter.createDialog(userId, productId) //withBuySuggest)
+    private fun createDealChat(userId: Long, productId: Long){
+        presenter.createDialog(userId, productId)
 
     }
 
@@ -505,9 +423,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 }
                 it.idSender == currentUserId && it.buySuggest != null -> {
                     val text = when(it.buySuggest.status){
-                        0 -> "Еще нет ответа"
-                        1 -> "Одобрено"
-                        2 -> "Отменено"
+                        0 -> getString(R.string.no_response_yet)
+                        1 -> getString(R.string.aproved)
+                        2 -> getString(R.string.canceled)
                         else -> ""
                     }
                     val color = if(it.buySuggest.status == 1)
@@ -526,9 +444,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 }
                 it.idSender == currentUserId && it.priceSuggest != null -> {
                     val text = when(it.priceSuggest.status){
-                        0 -> "Еще нет ответа"
-                        1 -> "Одобрено"
-                        2 -> "Отменено"
+                        0 -> getString(R.string.no_response_yet)
+                        1 -> getString(R.string.aproved)
+                        2 -> getString(R.string.canceled)
                         else -> ""
                     }
                     val color = if(it.priceSuggest.status == 1)
@@ -583,7 +501,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             else null
 
             val buyAccepted = if(buyDetailsIndexes.find { it == index } != null)
-                //Message.Special.BuyDetails
+
                     Message.Special.DealDetails(statusUser?.order?.id ?: -1)
             else null
 
@@ -624,77 +542,14 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         return datedMessages
     }
 
-    //todo remove stubs
-    /*private val support = listOf(
-        Message.Divider(R.string.today),
-        Message.My("13:18", R.drawable.ic_check_double, "Здравствуйте! Мне пришел порванный товар!"),
-        Message.Companion(listOf(Msg("13:19","Добрый день! Пожалуйста уточните детали"))),
-        Message.MyMedia("13:18", R.drawable.ic_check_double, arrayOf(
-            Media.Photo(R.drawable.user1),
-            Media.Video(R.drawable.user2),
-            Media.Photo(R.drawable.user4),
-            Media.Photo(R.drawable.ic_lacoste, 2)
-        )),
-        Message.MyMedia("13:18", R.drawable.ic_check_double, arrayOf(
-            Media.Photo(R.drawable.user1),
-            Media.Photo(R.drawable.user5)
-        ))
-    )*/
 
-    private val buyer = listOf(
-        //Message.Divider(R.string.today),
-        Message.Companion(
-            listOf(
-                Msg("13:16", "Ещё продаёте товар?"),
-                Msg("13:19", "Здравствуйте! Хотела спросить, какую скидку можете сделать?")
-            )
-        ),
-        Message.My(
-            "13:18",
-            R.drawable.ic_check_double,
-            "Добрый день! Для вас готова сделать скидку"
-        ),
-        Message.Special.DealRequest("13:19", 0, 0)
-    )
-    private val accepted = buyer
-        .map { if (it is Message.Special.DealRequest) Message.Special.DealAccept("13:19") else it }
-        .toMutableList()
-        .also { it.add(Message.Special.DealDetails(-1)) }
 
-    private val seller = listOf(
-        //Message.Divider(R.string.today),
-        Message.My("13:18", R.drawable.ic_check_double, "Здравствуйте! Еще продаете? "),
-        Message.Companion(listOf(Msg("13:18", "Добрый день! Для вас готова сделать скидку")))
-    )
 
-    private val seller2 = seller + Message.Special.BuyRequest("13:20", R.drawable.ic_check_single, "", 0, 0)
-
-    private val seller3 = seller2 + Message.Special.BuyDetails
-
-    private val seller4 = seller3 + Message.Special.GeoDetails
-
-    private val stubAcceptDealRunnable: Runnable get() = Runnable { adapter.setItems(accepted) }
 
     private fun buy() {
-        /*views.bottomBar.removeAllViews()
-        WidgetDealCancelBinding.inflate(layoutInflater)
-            .also {
-                views.bottomBar.addView(it.root)
-                //it.cancel.setOnClickListener { cancelBuy() }
-                cancelWidgetBinding = it
-            }
-        /*adapter.setItems(seller2)
-        views.send.setOnClickListener {
-            adapter.setItems(seller3)
-            listenGeo = true
-        }*/
 
-        presenter.sendBuyRequest(currentDialogId ?: 0)
-        val timeStr = "${Calendar.getInstance().get(Calendar.HOUR_OF_DAY)}:${Calendar.getInstance().get(Calendar.MINUTE)}"
-        adapter.addMessage(Message.Special.BuyRequest(timeStr, R.drawable.ic_check, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), R.drawable.ic_bag_filled_green ))
-        views.list.scrollToPosition(adapter.itemCount - 1)*/
         if(this::user.isInitialized && user.isBlackList == true){
-            error("Собеседник вас заблокировал")
+            error(getString(R.string.companion_blocked_you))
             return
         }
         presenter.buyProduct(currentProductId!!, currentUserId!!)
@@ -703,7 +558,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun cancelBuy(suggestId: Long) {
         views.bottomBar.removeAllViews()
-        //adapter.setItems(seller)
         WidgetBuyBarBinding.inflate(layoutInflater)
             .also {
                 views.bottomBar.addView(it.root)
@@ -712,8 +566,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 }
                 it.buy.setOnClickListener { buy() }
             }
-        //views.send.setOnClickListener { /* remove */ }
-        //listenGeo = false
+
         presenter.cancelBuyRequest(currentDialogId ?: 0, suggestId )
     }
 
@@ -735,19 +588,13 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         }
     }
 
-    private fun requestPrice(newPrice: String) = listOf<Message>(
-        *seller.toTypedArray(),
-        //Message.Special.PriceRequest("13:20", R.drawable.ic_check_double, newPrice),
-        //Message.Special.PriceAccepted("${getString(R.string.priceDownTo)} $newPrice")
-    )
-
     private fun loadMediaUris() {
         presenter.loadMediaUris()
     }
 
     private fun sendOnlyMedia() {
         if(this::user.isInitialized && user.isBlackList == true){
-            error("Собеседник вас заблокировал")
+            error(getString(R.string.companion_blocked_you))
             return
         }
 
@@ -785,7 +632,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun sendOnlyText() {
         if(this::user.isInitialized && user.isBlackList == true){
-            error("Собеседник вас заблокировал")
+            error(getString(R.string.companion_blocked_you))
             return
         }
         val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
@@ -807,7 +654,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun sendTextMedia(message: String) {
         if(this::user.isInitialized && user.isBlackList == true){
-            error("Собеседник вас заблокировал")
+            error(getString(R.string.companion_blocked_you))
             return
         }
         val mediaPhoto = mediaUris!!.filter {
@@ -847,8 +694,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     override fun selectAction(item: MenuBottomDialogFragment.MenuItem) {
-        //if(!listenGeo) return
-        if (item.titleId == R.string.chat_menu_setGeoDeal) adapter.setItems(seller4)
+        //if (item.titleId == R.string.chat_menu_setGeoDeal) adapter.setItems(seller4)
         if (item.titleId == R.string.chat_menu_delete) presenter.deleteDialog(currentDialogId ?: -1)
         if (item.titleId == R.string.chat_menu_profile)
             findNavController().navigate(
@@ -875,9 +721,9 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     override fun applyNewPrice(newPrice: String) {
-        //adapter.setItems(requestPrice(newPrice))
+
         if(this::user.isInitialized && user.isBlackList == true){
-            error("Собеседник вас заблокировал")
+            error(getString(R.string.companion_blocked_you))
             return
         }
         val calendar = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
@@ -886,13 +732,14 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         presenter.sendPriceSuggest(currentDialogId ?: 0, newPrice.toInt())
         if(adapter.isTodayMessages().not())
             adapter.addMessage(Message.Divider("сегодня"))
-        adapter.addMessage(Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check, newPrice, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), null))
+        adapter.addMessage(Message.Special.PriceRequest("$hour:$minute", R.drawable.ic_check, newPrice, getString(
+                    R.string.no_response_yet), ResourcesCompat.getColor(resources, R.color.gray2, null), null))
         views.list.scrollToPosition(adapter.itemCount - 1)
     }
 
     override fun applyDiscount(discount: String) {
         if(this::user.isInitialized && user.isBlackList == true){
-            error("Собеседник вас заблокировал")
+            error(getString(R.string.companion_blocked_you))
             return
         }
          adapter.addMessage(Message.Special.PriceAccepted(discount))
@@ -942,21 +789,20 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     override fun messageSent(message: MessageModel) {
         showLoading(false)
-        Toast.makeText(requireContext(), "Сообщение отправлено", Toast.LENGTH_SHORT).show()
-        //val messages = getMessages(listOf(message))
+        Toast.makeText(requireContext(), getString(R.string.message_sent), Toast.LENGTH_SHORT).show()
         adapter.updateMessage()
 
     }
 
     override fun dialogDeleted() {
         showLoading(false)
-        Toast.makeText(requireContext(), "Диалог удален", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.dialog_deleted), Toast.LENGTH_SHORT).show()
         findNavController().popBackStack()
     }
 
     override fun photoVideoLoaded() {
         showLoading(false)
-        Toast.makeText(requireContext(), "Медиа отпралено", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.media_sent), Toast.LENGTH_SHORT).show()
         adapter.updateMessage()
     }
 
@@ -973,22 +819,23 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         showLoading(false)
         when(type){
             MessageActionType.BUY_REQUEST_SUGGEST -> {
-                Toast.makeText(requireContext(), "Запрос на покупку отправлен", Toast.LENGTH_SHORT).show()
-                //cancelWidgetBinding.cancel.setOnClickListener { cancelBuy(info.suggestId!!) }
+                Toast.makeText(requireContext(), getString(R.string.buy_request_sent), Toast.LENGTH_SHORT).show()
+
 
             }
             MessageActionType.BUY_REQUEST_CANCEL -> {
-                Toast.makeText(requireContext(), "Сделка отменена", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.deal_canceled_chat), Toast.LENGTH_SHORT).show()
 
             }
-            MessageActionType.PRICE_SUGGEST -> Toast.makeText(requireContext(), "Предложение цены отправлено", Toast.LENGTH_SHORT).show()
-            MessageActionType.DISCOUNT_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Скидка сделана", Toast.LENGTH_LONG).show()
+            MessageActionType.PRICE_SUGGEST -> Toast.makeText(requireContext(), getString(R.string.price_offer_sent), Toast.LENGTH_SHORT).show()
+            MessageActionType.DISCOUNT_REQUEST_SUBMIT -> Toast.makeText(requireContext(), getString(
+                            R.string.discount_made), Toast.LENGTH_LONG).show()
             MessageActionType.BUY_REQUEST_SUBMIT -> {
-                Toast.makeText(requireContext(), "Покупка одобрена", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.buy_approved), Toast.LENGTH_LONG).show()
                 findNavController().navigate(R.id.salesActiveFragment)
             }
-            MessageActionType.PRICE_REQUEST_SUBMIT -> Toast.makeText(requireContext(), "Цена одобрена", Toast.LENGTH_LONG).show()
-            MessageActionType.PRICE_REQUEST_CANCEL -> Toast.makeText(requireContext(), "Цена отменена", Toast.LENGTH_LONG).show()
+            MessageActionType.PRICE_REQUEST_SUBMIT -> Toast.makeText(requireContext(), getString(R.string.price_approved), Toast.LENGTH_LONG).show()
+            MessageActionType.PRICE_REQUEST_CANCEL -> Toast.makeText(requireContext(), getString(R.string.price_declined), Toast.LENGTH_LONG).show()
         }
     }
 

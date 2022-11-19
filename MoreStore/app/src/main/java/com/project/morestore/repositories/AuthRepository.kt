@@ -155,7 +155,7 @@ class AuthRepository(private val context: Context) {
                     putString(TOKEN_KEY, token)
                     putString(TOKEN_GET_TIME_SAVE, System.currentTimeMillis().toString())
                     putString(TOKEN_EXPIRES, expires.toString())
-                }.commit()
+                }.apply()
 
 
             }

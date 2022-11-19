@@ -37,9 +37,8 @@ class ReviewsAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(getItemViewType(position) == ADD){
-            //skip
-        } else {//REVIEW
+        if(getItemViewType(position) != ADD){
+            //REVIEW
             (holder as ReviewViewHolder).bind((items[if(showReviewButton) position-1 else position] as ReviewItem).review)
         }
     }

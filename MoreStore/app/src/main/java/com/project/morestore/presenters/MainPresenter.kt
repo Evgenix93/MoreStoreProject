@@ -19,6 +19,7 @@ import com.project.morestore.singletones.Token
 import kotlinx.coroutines.*
 import com.project.morestore.repositories.*
 import com.project.morestore.singletones.Network
+import com.project.morestore.util.ProductStatus
 import com.project.morestore.util.SortingType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,6 +39,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private val chatRepository = ChatRepository(context)
     private val addressesRepository = AddressesRepository.apply { init(Network.addresses) }
     private val cardRepository = CardRepository()
+    private val cartRepository = CartRepository()
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
     private val ITEMS_PER_PAGE = 50
@@ -190,10 +192,10 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                         val currentUserId = authRepository.getUserId()
                         response.body()?.forEach {
                             val productStatus = when (it.statusUser?.order?.status) {
-                                0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
-                                else if (it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
-                                else if (it.statusUser.buy?.status != 2) 7 else it.status
-                                1 -> 8
+                                0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) ProductStatus.APPROVED.value
+                                else if (it.idUser == currentUserId && it.statusUser.buy?.status != 2) ProductStatus.APPROVED.value
+                                else if (it.statusUser.buy?.status != 2) ProductStatus.BOOKED.value else it.status
+                                1 -> ProductStatus.SOLD.value
                                 null -> it.status
                                 else -> it.status
                                 /*else -> if ((it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) &&

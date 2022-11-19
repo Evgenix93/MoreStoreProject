@@ -1,6 +1,5 @@
 package com.project.morestore.adapters
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import com.project.morestore.models.Category
 
 class CategoryAdapter(
     private val isOnboarding: Boolean,
-    private val context: Context,
     private val checkBoxClick: (Int, Boolean) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.Holder>() {
     private var segments1 = emptyList<Category>()
@@ -30,9 +28,7 @@ class CategoryAdapter(
 
     class Holder(
         view: View,
-        private val context: Context,
         private val segments1Checked: MutableList<Boolean>,
-        private val segments2Checked: MutableList<Boolean>,
         private val checkBoxClick: (Int, Boolean) -> Unit,
         private val checkBoxClick2: (Int, Boolean) -> Unit,
         private val allCheckCallback: (Boolean) -> Unit
@@ -43,23 +39,21 @@ class CategoryAdapter(
             binding.titleTextView.text = category.name
             when (category.id) {
                 1 -> binding.descriptionTextView.text =
-                    context.getString(R.string.louis_vuitton_gucci_prada_dolce_gabbana)
+                    itemView.context.getString(R.string.louis_vuitton_gucci_prada_dolce_gabbana)
                 2 -> binding.descriptionTextView.text =
-                    context.getString(R.string.tommy_hilfiger_michael_kors_furla_calvin_klein_n)
+                    itemView.context.getString(R.string.tommy_hilfiger_michael_kors_furla_calvin_klein_n)
                 3 -> binding.descriptionTextView.text =
-                    context.getString(R.string.zara_h_m_bershka_asos_mango_n)
-                4 -> binding.descriptionTextView.text = context.getString(R.string.economy_subtitle)
+                    itemView.context.getString(R.string.zara_h_m_bershka_asos_mango_n)
+                4 -> binding.descriptionTextView.text = itemView.context.getString(R.string.economy_subtitle)
             }
 
 
-            //if (isOnboarding)
-              //  binding.categoryCheckBox.isChecked = isAllChecked
-              //else
+
                 binding.categoryCheckBox.isChecked = isChecked
 
             binding.categoryCheckBox.setOnClickListener { _ ->
                 if(!isOnboarding)
-               // segments2Checked[position] = isChecked
+
                    checkBoxClick2(adapterPosition, binding.categoryCheckBox.isChecked)
                 else
                     segments1Checked[position] = binding.categoryCheckBox.isChecked
@@ -88,10 +82,6 @@ class CategoryAdapter(
         notifyDataSetChanged()
     }
 
-    fun loadSegments1Checked(): List<Boolean>{
-        return segments1Checked.apply { removeFirst() }
-    }
-
     fun loadSegments2Checked(): MutableList<Boolean>{
         return segments2Checked
     }
@@ -99,22 +89,20 @@ class CategoryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_category, parent, false),
-            context,
             segments1Checked,
-            segments2Checked,
             checkBoxClick,
             {position, isChecked ->
                 if(isOnboarding.not())
               segments2Checked[position] = isChecked
                 else
                     segments2Checked[position - 1] = isChecked
-            },
-         { allChecked ->
-            //isAllChecked = it
-             segments2Checked = mutableListOf(allChecked, allChecked, allChecked, allChecked)
-             segments1Checked = mutableListOf(allChecked, allChecked, allChecked, allChecked, allChecked)
+            }
+        ) { allChecked ->
+            segments2Checked = mutableListOf(allChecked, allChecked, allChecked, allChecked)
+            segments1Checked =
+                mutableListOf(allChecked, allChecked, allChecked, allChecked, allChecked)
             notifyDataSetChanged()
-        })
+        }
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {

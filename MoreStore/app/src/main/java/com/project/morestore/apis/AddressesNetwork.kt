@@ -10,7 +10,7 @@ import retrofit2.http.POST
 interface AddressesNetwork {
 
     @GET("save_address")
-    suspend fun getAddress() :Array<MyAddress>
+    suspend fun getAddress() :List<MyAddress>
 
     @POST("save_address")
     suspend fun createAddress(

@@ -4,13 +4,10 @@ import android.content.Context
 import com.project.morestore.R
 import com.project.morestore.models.*
 import com.project.morestore.repositories.*
-import com.project.morestore.util.MessageActionType
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
-import java.math.RoundingMode
-import java.text.DecimalFormat
 import java.util.*
 
 class OrderCreatePresenter(context: Context)
@@ -282,7 +279,7 @@ class OrderCreatePresenter(context: Context)
                           viewState.applyPromo(null)
                           return@launch
                       }
-                      if(response.body()?.first_order == 1 && orders.isNotEmpty()){
+                      if(response.body()?.firstOrder == 1 && orders.isNotEmpty()){
                           viewState.showMessage("Этот промокод только для первого заказа")
                           viewState.applyPromo(null)
                           return@launch

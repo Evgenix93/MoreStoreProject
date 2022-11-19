@@ -13,12 +13,12 @@
         android:text="Все материалы"
         android:textAppearance="@style/regular_16"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/ExcellentCheckBox"
-        app:layout_constraintStart_toEndOf="@+id/ExcellentCheckBox"
-        app:layout_constraintTop_toTopOf="@+id/ExcellentCheckBox" />
+        app:layout_constraintBottom_toBottomOf="@+id/excellentCheckBox"
+        app:layout_constraintStart_toEndOf="@+id/excellentCheckBox"
+        app:layout_constraintTop_toTopOf="@+id/excellentCheckBox" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/ExcellentCheckBox"
+        android:id="@+id/excellentCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"

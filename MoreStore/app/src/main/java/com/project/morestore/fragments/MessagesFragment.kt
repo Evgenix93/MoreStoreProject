@@ -26,7 +26,7 @@ import com.project.morestore.adapters.ChatsAdapter
 import com.project.morestore.databinding.FragmentMessagesBinding
 import com.project.morestore.databinding.TabCategoryBinding
 import com.project.morestore.fragments.base.BottomNavigationFragment
-import com.project.morestore.fragments.base.BottomNavigationMvpFragment
+
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
@@ -38,25 +38,18 @@ import com.project.morestore.util.setSelectListener
 import moxy.ktx.moxyPresenter
 import kotlin.reflect.KClass
 
-class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
+class MessagesFragment : BottomNavigationFragment(), ChatMvpView {
     private lateinit var views: FragmentMessagesBinding
     private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
     private val args: MessagesFragmentArgs by navArgs()
     private val adapter = ChatsAdapter {
-        if (it.name == "Adidas men's blue denim") {
-            findNavController().navigate(R.id.action_messagesFragment_to_chatLotsFragment)
-        } else if (it is Chat.Support) {
+         if (it is Chat.Support) {
             findNavController().navigate(
                 R.id.action_messagesFragment_to_chatFragment,
                 bundleOf(createTypeBundle(Chat.Support::class),
                 ChatFragment.DIALOG_ID_KEY to it.id)
             )
-        } else if (it.name == "Сапоги salamander 35") {
-            findNavController().navigate(
-                R.id.action_messagesFragment_to_chatFragment,
-                bundleOf(createTypeBundle(Chat.Deal::class))
-            )
-        } else if(it is Chat.Deal) {
+        }  else if(it is Chat.Deal) {
             findNavController().navigate(
                 R.id.action_messagesFragment_to_chatFragment,
                 bundleOf(
@@ -104,10 +97,10 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
         with(views) {
             list.adapter = adapter
             list.addItemDecoration(MiddleDivider(requireContext(), R.drawable.div_horline_gray_1))
-            tabs.addTab(tabs.newTab().apply { fill(0, "Все") })
-            tabs.addTab(tabs.newTab().apply { fill(R.drawable.sel_bag_icon, "Сделки") })
+            tabs.addTab(tabs.newTab().apply { fill(0, getString(R.string.all)) })
+            tabs.addTab(tabs.newTab().apply { fill(R.drawable.sel_bag_icon, getString(R.string.deals)) })
             tabs.addTab(
-                tabs.newTab().apply { fill(R.drawable.set_sticker_icon, "Мои объявления") })
+                tabs.newTab().apply { fill(R.drawable.set_sticker_icon, getString(R.string.my_listings)) })
             tabs.setSelectListener {
                     when (it.position) {
                         1 ->  presenter.showDealDialogs(args.userId)
@@ -164,18 +157,6 @@ class MessagesFragment : BottomNavigationMvpFragment(), ChatMvpView {
     }
 
     override fun dialogsLoaded(dialogs: List<Chat>) {
-        /*val dialogsToShow = dialogs.map {
-
-            val price = it.product.priceNew ?: 0f
-
-            Chat.Personal(
-                it.dialog.id,
-                it.product.name,
-                it.dialog.lastMessage?.text.orEmpty(),
-                R.drawable.avatar2,
-                price
-            )
-        }*/
         views.loader.isVisible = false
         adapter.setItems(dialogs)
     }

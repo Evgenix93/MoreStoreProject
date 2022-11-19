@@ -7,10 +7,10 @@ import com.project.morestore.models.Order
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.models.slidermenu.SliderMenu
+import com.project.morestore.mvpviews.ToolbarCartView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.SalesRepository
-import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope

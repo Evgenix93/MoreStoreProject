@@ -3,15 +3,10 @@ package com.project.morestore.fragments.orders.active
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.adapters.cart.OrderClickListener
 import com.project.morestore.adapters.cart.OrdersAdapter
 import com.project.morestore.dialogs.YesNoDialog
-import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.models.*
 import com.project.morestore.models.cart.CartItem
@@ -33,6 +28,7 @@ class OrdersActivePresenter(val context: Context)
     private val chatRepository = ChatRepository(context)
     private val authRepository = AuthRepository(context)
     private val geoRepository = GeoRepository()
+    private val cartRepository = CartRepository()
 
     override fun attachView(view: OrdersActiveView) {
         super.attachView(view)
@@ -47,83 +43,16 @@ class OrdersActivePresenter(val context: Context)
     ///////////////////////////////////////////////////////////////////////////
 
     private fun initContent() {
-
-        //if (!this::adapter.isInitialized) {
         if(adapter == null){
-
             val conf = Bitmap.Config.ARGB_8888 // see other conf types
-            val bmp = Bitmap.createBitmap(100, 100, conf)
-
-            val listener = object : OrderClickListener {
-                override fun acceptMeeting(orderItem: OrderItem) {
-                    acceptOrderPlace(orderItem.id, orderItem.newAddressId!!, orderItem.newAddress.orEmpty())
-
-                }
-                override fun declineMeeting(orderItem: OrderItem) {
-                    viewState.navigateToChat(orderItem.sellerId, orderItem.productId)
-
-                }
-
-                override fun acceptOrder(orderItem: OrderItem) {
-                    val acceptDialog = YesNoDialog(
-                        context.getString(R.string.active_order_accept_dialog_title),
-                        null,
-                        object : YesNoDialog.onClickListener {
-                            override fun onYesClick() {
-                                submitReceiveOrder(orderItem.id)
-                            }
-
-                            override fun onNoClick() {
-
-                            }
-
-                        })
-
-                    viewState.showAcceptOrderDialog(acceptDialog)
-                }
-
-                override fun reportProblem(orderItem: OrderItem) {
-                    viewState.navigate(orderItem.id)
-                }
-
-                override fun payForOrder(orderItem: OrderItem) {
-                    presenterScope.launch {
-                        viewState.loading()
-                        val isYandex = orderItem.deliveryInfo == "yandex"
-                        if (isYandex) {
-                            val toAddress = orderItem.cdekYandexAddress
-                            val finalPrice = getFinalYandexGoPrice(
-                                toAddress = toAddress.orEmpty(),
-                                product = orderItem.product,
-                                promo = orderItem.promo)
-                            finalPrice ?: return@launch
-                            getPaymentUrl(sum = finalPrice, orderItem.id)
-                        }else{
-                            val toAddress = orderItem.cdekYandexAddress
-                            val finalPrice = getFinalCdekPrice(
-                                toAddress = toAddress.orEmpty(),
-                                product = orderItem.product,
-                                promo = orderItem.promo)
-                            finalPrice ?: return@launch
-                            getPaymentUrl(sum = finalPrice, orderId = orderItem.id)
-                        }
-                    }
-
-                }
-            }
+            Bitmap.createBitmap(100, 100, conf)
             presenterScope.launch {
                 val orders = getAllOrders()?.reversed() ?: return@launch
                 val orderAddresses = getOrderAddresses() ?: return@launch
                 val cartItems = getCartItems() ?: return@launch
                 val dialogs = getDialogs()
                 val orderItems = orders.filter { it.cart != null && it.status == 0 }.sortedBy{order ->
-                  /*  val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
-                        ?.address?.substringAfter(';')?.toLongOrNull()
-                    if(timestamp != null)
-                        (timestamp - System.currentTimeMillis())
-                    else {
-                        null
-                    }*/
+
                     val address = orderAddresses.find { order.id == it.idOrder }
                     when{
                         order.cart?.first()?.statusUser?.buy == null -> 2
@@ -169,9 +98,7 @@ class OrdersActivePresenter(val context: Context)
                         if(order.pay == 2 && buySuggest?.status != 2){
                             if(!order.isPayment && buySuggest?.status == 1)
                                 status = OrderStatus.NOT_PAYED
-                            //else{
-                                //if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1)
-                                  //  status = OrderStatus.MEETING_NOT_ACCEPTED
+
                                 if(buySuggest?.status == 0 || buySuggest?.status == null)
                                     status = OrderStatus.NOT_SUBMITTED
                                 if(order.idCdek != null && order.delivery == 3 && order.isPayment){
@@ -197,7 +124,7 @@ class OrdersActivePresenter(val context: Context)
                                 if(order.idCdek == null && order.idYandex == null && order.isPayment){
                                     status = OrderStatus.MEETING_NOT_ACCEPTED
                                 }
-                            //}
+
                         }
 
                         val discountedPrice = when{
@@ -210,8 +137,6 @@ class OrdersActivePresenter(val context: Context)
 
                     OrderItem(
                         id = order.id,
-                        //userIcon = user?.avatar?.photo.toString(),
-                        //userName = user?.name.orEmpty(),
                         user = user,
                         photo = order.cart.first().photo.first().photo,
                         name = order.cart.first().name,
@@ -219,9 +144,9 @@ class OrdersActivePresenter(val context: Context)
                         deliveryDate = if(time == null || time.timeInMillis == 0L)"-" else
                             "${time.get(Calendar.DAY_OF_MONTH)}.${time.get(Calendar.MONTH) + 1}.${time.get(Calendar.YEAR)}",
                         deliveryInfo = when (order.delivery) {
-                            OrderCreateFragment.TAKE_FROM_SELLER -> "Заберу у продавца"
-                            OrderCreateFragment.YANDEX_GO -> "yandex"
-                            OrderCreateFragment.ANOTHER_CITY -> "СДЕК"
+                            OrderCreateFragment.TAKE_FROM_SELLER -> context.getString(R.string.take_from_seller)
+                            OrderCreateFragment.YANDEX_GO -> context.getString(R.string.yandex)
+                            OrderCreateFragment.ANOTHER_CITY -> context.getString(R.string.cdek_rus)
                             else -> ""
                         },
                         status = status,
@@ -248,55 +173,10 @@ class OrdersActivePresenter(val context: Context)
                         && orders.find { initialOrder -> initialOrder.id != it.id && initialOrder.cart?.first()?.id == it.productId &&
                         initialOrder.status == 1} == null}
 
-                adapter = OrdersAdapter(filteredOrderItems, listener, {user -> viewState.navigate(user) }, {
+                adapter = OrdersAdapter(filteredOrderItems, createOrderClickListener(), {user -> viewState.navigate(user) }, {
                     viewState.navigate(it)
                 })
 
-
-                /*adapter = OrdersAdapter(
-                    listOf(
-                        OrderItem(
-                            123123121,
-                            bmp,
-                            "Екатерина",
-                            bmp,
-                            "Кеды",
-                            100,
-                            "18 апреля",
-                            "CДЭK",
-                            OrderStatus.RECEIVED,
-                            null,
-                            null
-                        ),
-                        OrderItem(
-                            123123121,
-                            bmp,
-                            "Екатерина",
-                            bmp,
-                            "Кеды",
-                            100,
-                            "18 апреля",
-                            "CДЭK",
-                            OrderStatus.CHANGE_MEETING,
-                            null,
-                            null
-                        ),
-                        OrderItem(
-                            123123121,
-                            bmp,
-                            "Екатерина",
-                            bmp,
-                            "Кеды",
-                            100,
-                            "18 апреля",
-                            "CДЭK",
-                            OrderStatus.AT_COURIER,
-                            null,
-                            null
-                        )
-                    ),
-                    listener
-                )*/
                 viewState.initActiveOrders(adapter!!)
             }
         }
@@ -383,7 +263,7 @@ class OrdersActivePresenter(val context: Context)
             val response = ordersRepository.changeOrderPlaceStatus(change)
             when(response?.code()){
                 200 -> {
-                    viewState.showMessage("Место сделки принято")
+                    viewState.showMessage(context.getString(R.string.place_accepted))
                     adapter = null
                     initContent()
                 }
@@ -435,7 +315,7 @@ class OrdersActivePresenter(val context: Context)
     }
 
     private suspend fun getCartItems(): List<CartItem>?{
-        val response = ordersRepository.getCartItems(authRepository.getUserId())
+        val response = cartRepository.getCartItems(authRepository.getUserId())
         return when(response?.code()){
             200 -> response.body()
             null -> {
@@ -461,12 +341,12 @@ class OrdersActivePresenter(val context: Context)
     private suspend fun getFinalYandexGoPrice(toAddress: String, product: Product, promo: String? = null): Float?{
         val fromCoords = geoRepository.getCoordsByAddress(product.address?.fullAddress!!)?.body()?.coords
             if(fromCoords == null){
-                viewState.showMessage("ошибка оценки стоимости")
+                viewState.showMessage(context.getString(R.string.error_getting_price))
                 return null
             }
             val toCoords = geoRepository.getCoordsByAddress(toAddress)?.body()?.coords
             if(toCoords == null){
-                viewState.showMessage("ошибка оценки стоимости")
+                viewState.showMessage(context.getString(R.string.error_getting_price))
                 return null
             }
             val items = listOf(YandexItem(
@@ -622,26 +502,66 @@ class OrdersActivePresenter(val context: Context)
             }
 
     }
-    /*private suspend fun initAdapter(): OrdersAdapter{
-        val orders = getAllOrders()
-        if(orders == null){
-            adapter = OrdersAdapter(emptyList(), listener)
-            return@launch
+
+    private fun createOrderClickListener(): OrderClickListener{
+        return object : OrderClickListener {
+            override fun acceptMeeting(orderItem: OrderItem) {
+                acceptOrderPlace(orderItem.id, orderItem.newAddressId!!, orderItem.newAddress.orEmpty())
+
+            }
+            override fun declineMeeting(orderItem: OrderItem) {
+                viewState.navigateToChat(orderItem.sellerId, orderItem.productId)
+
+            }
+
+            override fun acceptOrder(orderItem: OrderItem) {
+                val acceptDialog = YesNoDialog(
+                    context.getString(R.string.active_order_accept_dialog_title),
+                    null,
+                    object : YesNoDialog.onClickListener {
+                        override fun onYesClick() {
+                            submitReceiveOrder(orderItem.id)
+                        }
+
+                        override fun onNoClick() {
+
+                        }
+
+                    })
+
+                viewState.showAcceptOrderDialog(acceptDialog)
+            }
+
+            override fun reportProblem(orderItem: OrderItem) {
+                viewState.navigate(orderItem.id)
+            }
+
+            override fun payForOrder(orderItem: OrderItem) {
+                presenterScope.launch {
+                    viewState.loading()
+                    val isYandex = orderItem.deliveryInfo == context.getString(R.string.yandex)
+                    if (isYandex) {
+                        val toAddress = orderItem.cdekYandexAddress
+                        val finalPrice = getFinalYandexGoPrice(
+                            toAddress = toAddress.orEmpty(),
+                            product = orderItem.product,
+                            promo = orderItem.promo)
+                        finalPrice ?: return@launch
+                        getPaymentUrl(sum = finalPrice, orderItem.id)
+                    }else{
+                        val toAddress = orderItem.cdekYandexAddress
+                        val finalPrice = getFinalCdekPrice(
+                            toAddress = toAddress.orEmpty(),
+                            product = orderItem.product,
+                            promo = orderItem.promo)
+                        finalPrice ?: return@launch
+                        getPaymentUrl(sum = finalPrice, orderId = orderItem.id)
+                    }
+                }
+
+            }
         }
 
-        val orderItems = orders.filter { it.cart != null }.map { order ->
-            OrderItem(
-                order.id,
-                Glide.with(context)
-                    .load(order.cart.first().photo.first().photo)
-                    .submit()
-                    .get()
-                    .toBitmap()
-            )
+    }
 
-
-        }
-
-
-    }*/
 }

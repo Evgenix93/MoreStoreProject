@@ -38,7 +38,7 @@ class CreateProductSizesClothFragment :
 
     private fun initToolbar(){
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
-       // binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
+
     }
 
 
@@ -136,9 +136,7 @@ class CreateProductSizesClothFragment :
         }
         if(result is com.project.morestore.models.CreateProductData){
             sizeProperty = result.property?.find{ property ->
-                listOf(1L, 2L, 4L, 5L, 7L, 8L).any {
-                           it == property.propertyCategory
-                }
+              property.propertyCategory in 1L..8L
             }
             getSizes()
             binding.toolbar.actionIcon.setOnClickListener {

@@ -1,10 +1,11 @@
-package dev.jorik.emptylistgallery
+package com.project.morestore.widgets
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.customviews.R
 
 class EmptyListGallery(context :Context,
                        @DrawableRes img1 :Int,

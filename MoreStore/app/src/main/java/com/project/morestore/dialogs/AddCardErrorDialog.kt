@@ -9,9 +9,10 @@ import com.project.morestore.R
 import com.project.morestore.databinding.WindowCardAddErrorBinding
 import com.project.morestore.util.inflater
 
-class AddCardErrorDialog(context: Context): DialogFragment() {
-    private val binding = WindowCardAddErrorBinding.inflate(context.inflater)
+class AddCardErrorDialog: DialogFragment() {
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val binding = WindowCardAddErrorBinding.inflate(requireContext().inflater)
         return AlertDialog.Builder(requireContext())
             .setView(binding.root)
             .create()

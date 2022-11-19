@@ -1,4 +1,4 @@
-package dev.jorik.ratingbar
+package com.project.morestore.widgets
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,6 +6,7 @@ import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.example.customviews.R
 
 class RatingBar :LinearLayout {
     //todo scaleType

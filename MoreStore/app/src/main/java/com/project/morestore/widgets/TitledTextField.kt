@@ -1,4 +1,4 @@
-package dev.jorik.titledtextfield
+package com.project.morestore.widgets
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
+import com.example.customviews.R
 
 //todo fix save state on multiply instances on layout
 class TitledTextField :LinearLayout {

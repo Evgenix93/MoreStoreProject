@@ -25,7 +25,7 @@ class CategoryCreateProductAdapter(val onClick: (ProductCategory) -> Unit): Recy
 
         fun bind(category: ProductCategory){
             binding.elementNameTextView.text = category.name
-            binding.view36.isVisible = adapterPosition == 0
+            binding.topLine.isVisible = adapterPosition == 0
         }
 
     }

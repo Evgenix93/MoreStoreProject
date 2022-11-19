@@ -21,7 +21,8 @@ import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.ReviewsAdapter
 import com.project.morestore.databinding.FragmentCabinetBinding
-import com.project.morestore.fragments.base.BottomNavigationMvpFragment
+import com.project.morestore.fragments.base.BottomNavigationFragment
+
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
 import com.project.morestore.models.ReviewItem
@@ -35,7 +36,7 @@ import com.redmadrobot.inputmask.MaskedTextChangedListener
 import moxy.ktx.moxyPresenter
 import java.util.*
 
-class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), UserMvpView {
+class CabinetFragment: BottomNavigationFragment(R.layout.fragment_cabinet), UserMvpView {
     private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private val binding: FragmentCabinetBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()

@@ -25,7 +25,7 @@ class CloathStyleCreateProductAdapter(val onClick: (Property) -> Unit): Recycler
             }
 
             fun bind(property: Property){
-                binding.view36.isVisible = adapterPosition == 0
+                binding.topLine.isVisible = adapterPosition == 0
                 binding.elementNameTextView.text = property.name
 
                 }

@@ -45,7 +45,7 @@ class FilterConditionFragment: MvpAppCompatFragment(R.layout.fragment_filter_con
     override fun onStop() {
         super.onStop()
         presenter.saveConditions(listOf(binding.newWithTagCheckBox.isChecked, binding.newWithotuTagCheckBox.isChecked,
-        binding.ExcellentCheckBox.isChecked, binding.goodCheckBox.isChecked))
+        binding.excellentCheckBox.isChecked, binding.goodCheckBox.isChecked))
     }
 
     override fun success(result: Any) {
@@ -64,7 +64,7 @@ class FilterConditionFragment: MvpAppCompatFragment(R.layout.fragment_filter_con
         val conditions = result as List<Boolean>
         binding.newWithTagCheckBox.isChecked = conditions[0]
         binding.newWithotuTagCheckBox.isChecked =  conditions[1]
-        binding.ExcellentCheckBox.isChecked =  conditions[2]
+        binding.excellentCheckBox.isChecked =  conditions[2]
         binding.goodCheckBox.isChecked =  conditions[3]
 
     }

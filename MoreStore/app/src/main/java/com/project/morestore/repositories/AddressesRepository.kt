@@ -17,13 +17,11 @@ object AddressesRepository{
         this.network = network
     }
 
-    suspend fun getAllAddresses() :Array<MyAddress>{
+    suspend fun getAllAddresses() :List<MyAddress>{
         return try {
             network.getAddress()
         } catch (ex :Throwable) {
-            arrayOf()
-        } catch (ex :HttpException){
-            arrayOf()
+            emptyList()
         }
     }
 

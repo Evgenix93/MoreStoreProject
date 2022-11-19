@@ -15,7 +15,7 @@ import com.project.morestore.models.MaterialLine
 
 class MaterialAdapter(private val context: Context, private val isFilter: Boolean, private val onClick: (Boolean) -> Unit) : RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder>() {
 
-    private var list = listOf<MaterialLine>()
+    private var list = emptyList<MaterialLine>()
     private var checkedCount = 0
 
     class MaterialViewHolder(view: View, val onAllMaterial: (isChecked: Boolean) -> Unit, val onChecked: (isChecked: Boolean, position: Int) -> Unit) :
@@ -24,17 +24,17 @@ class MaterialAdapter(private val context: Context, private val isFilter: Boolea
 
         fun bind(context: Context, material: MaterialLine, isFilter: Boolean, checkedCount: Int) {
             binding.materialNameTextView.text = material.name
-            binding.ExcellentCheckBox.isChecked = material.isSelected
+            binding.excellentCheckBox.isChecked = material.isSelected
             if(isFilter){
                 binding.checkImageView.isVisible = false
             }else
-                binding.ExcellentCheckBox.isVisible = false
+                binding.excellentCheckBox.isVisible = false
 
-            binding.ExcellentCheckBox.setOnClickListener {
-                if(material.name == "Все материалы"){
-                    onAllMaterial(binding.ExcellentCheckBox.isChecked)
+            binding.excellentCheckBox.setOnClickListener {
+                if(material.name == ALL_MATERIALS){
+                    onAllMaterial(binding.excellentCheckBox.isChecked)
                 }else {
-                    onChecked(binding.ExcellentCheckBox.isChecked, adapterPosition)
+                    onChecked(binding.excellentCheckBox.isChecked, adapterPosition)
                 }
             }
 
@@ -87,7 +87,7 @@ class MaterialAdapter(private val context: Context, private val isFilter: Boolea
                         notifyDataSetChanged()
                 }else{
                     if(isFilter) {
-                        if (list.all { it.isSelected || it.name == "Все материалы" }) {
+                        if (list.all { it.isSelected || it.name == ALL_MATERIALS }) {
                             list[0].isSelected = true
                             notifyDataSetChanged()
                         }
@@ -114,5 +114,9 @@ class MaterialAdapter(private val context: Context, private val isFilter: Boolea
         list = newList
         checkedCount = list.filter{it.isSelected}.size
         notifyDataSetChanged()
+    }
+
+    companion object {
+        const val ALL_MATERIALS =  "Все материалы"
     }
 }

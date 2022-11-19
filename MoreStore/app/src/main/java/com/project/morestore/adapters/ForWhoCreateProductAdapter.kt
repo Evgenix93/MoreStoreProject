@@ -21,7 +21,7 @@ class ForWhoCreateProductAdapter(val onClick: (Int) -> Unit): RecyclerView.Adapt
         }
 
         fun bind(){
-            binding.view36.isVisible = adapterPosition == 0
+            binding.topLine.isVisible = adapterPosition == 0
             when(adapterPosition){
                 0 -> binding.elementNameTextView.text = "Для неё"
                 1 -> binding.elementNameTextView.text = "Для него"

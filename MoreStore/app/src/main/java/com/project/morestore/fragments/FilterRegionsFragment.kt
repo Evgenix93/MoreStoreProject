@@ -42,10 +42,6 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
 
     }
 
-    private fun saveRegions(regions: List<Region>){
-        presenter.saveRegions(regions)
-    }
-
     private fun getCurrentUserAddress(){
         presenter.getCurrentUserAddress()
     }
@@ -77,12 +73,8 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
 
    private fun safeFilter(){
        Log.d("Debug", "safeFilter")
-       //Log.d("Debug", "${regionsAdapter.regionsChecked}")
-         val regions = regionsAdapter.getCurrentRegions()
-        //if (regions.all{ it.isChecked != true })
-            //regions.forEachIndexed{index,_->
-               // regions[index].isChecked = true
-           // }
+       val regions = regionsAdapter.getCurrentRegions()
+
         com.project.morestore.singletones.FilterState.filter.regions = regions
     }
 
@@ -160,10 +152,6 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
                 val region = regions.find { it.name == result.fullAddress.substringBefore(",") }
                 if(region != null)
                 binding.textView42.setOnClickListener {
-                    //regions.forEach { it.isChecked = false }
-                    //regions[regions.indexOf(region)].isChecked = true
-                        //saveRegions(regions)
-
                     regions.forEach { it.isChecked = false }
                     regions[regions.indexOf(region)].isChecked = true
                     regionsAdapter.updateList(listOf(Region(-1, "Все города", 1, false)) + regions)

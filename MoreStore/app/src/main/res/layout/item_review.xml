@@ -44,7 +44,7 @@
             android:textColor="@color/gray2"
             tools:text="1 неделю назад" />
 
-        <dev.jorik.ratingbar.RatingBar
+        <com.project.morestore.widgets.RatingBar
             android:id="@+id/rating"
             android:layout_width="120dp"
             android:layout_height="20dp"

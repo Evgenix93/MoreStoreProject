@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.project.morestore"
@@ -99,9 +99,10 @@ dependencies {
 
     //widgets
     implementation 'com.tbuonomo:dotsindicator:4.2'
-    implementation project(':widgets:ratingbar')
-    implementation project(':widgets:emptylistgallery')
-    implementation project(':widgets:titledtextfield')
+    //implementation project(':widgets:ratingbar')
+    //implementation project(':widgets:emptylistgallery')
+    //implementation project(':widgets:titledtextfield')
+    //implementation project(':customviews')
 
     //location
     implementation 'com.google.android.gms:play-services-location:19.0.1'
@@ -130,5 +131,8 @@ dependencies {
     def paging_version = "3.1.1"
 
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
+    //cardIO
+    implementation 'io.card:android-sdk:5.5.0'
 
 }

@@ -726,8 +726,7 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
     fun getOrderForDelivery(orderId: Long){
         presenterScope.launch {
             viewState.loading(true)
-            val order = getAllSales()?.find { it.id == orderId }
-            order ?: return@launch
+            val order = getAllSales()?.find { it.id == orderId } ?: return@launch
             viewState.navigateToCreateDelivery(order)
 
 

@@ -165,28 +165,6 @@
             app:destination="@id/mainFragment" />
     </fragment>
     <fragment
-        android:id="@+id/onboarding6FemaleFragment"
-        android:name="com.project.morestore.fragments.Onboarding6FemaleFragment"
-        android:label="Onboarding6FemaleFragment" >
-        <action
-            android:id="@+id/action_onboarding6FemaleFragment_to_loginDialog"
-            app:destination="@id/loginDialog" />
-        <action
-            android:id="@+id/action_onboarding6FemaleFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/onboarding6MaleFragment"
-        android:name="com.project.morestore.fragments.Onboarding6MaleFragment"
-        android:label="Onboarding6MaleFragment" >
-        <action
-            android:id="@+id/action_onboarding6MaleFragment_to_loginDialog"
-            app:destination="@id/loginDialog" />
-        <action
-            android:id="@+id/action_onboarding6MaleFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/splashScreenFragment"
         android:name="com.project.morestore.fragments.SplashScreenFragment"
         android:label="SplashScreenFragment" >
