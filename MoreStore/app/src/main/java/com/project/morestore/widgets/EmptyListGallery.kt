@@ -5,7 +5,8 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.customviews.R
+import com.project.morestore.R
+
 
 class EmptyListGallery(context :Context,
                        @DrawableRes img1 :Int,

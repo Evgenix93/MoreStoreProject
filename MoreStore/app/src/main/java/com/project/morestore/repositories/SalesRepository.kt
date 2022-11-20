@@ -1,6 +1,7 @@
 package com.project.morestore.repositories
 
 import android.util.Log
+import com.project.morestore.apis.SalesApi
 import com.project.morestore.models.DealPlace
 import com.project.morestore.models.Order
 import com.project.morestore.models.OrderPlace
@@ -10,12 +11,13 @@ import com.squareup.moshi.JsonDataException
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class SalesRepository {
+class SalesRepository @Inject constructor(private val salesApi: SalesApi) {
 
     suspend fun getSales(): Response<List<Order>>? {
        return try {
-           Network.salesApi.getSales()
+           salesApi.getSales()
        }catch(e: Throwable){
            Log.e("MyDebug", "error = ${e.message}")
            if(e is IOException)
@@ -23,7 +25,7 @@ class SalesRepository {
            else if(e is JsonDataException)
                Response.error(400, "Json ошибка".toResponseBody())
            else try{
-              val error = Network.salesApi.getSalesErrorString()
+              val error = salesApi.getSalesErrorString()
               Response.error(400, error.toResponseBody())
            }catch(e: Throwable){
                Response.error(400, "Ошибка".toResponseBody())
@@ -33,19 +35,11 @@ class SalesRepository {
 
    suspend fun addDealPlace(orderId: Long, address: String): Response<Boolean>?{
        return try{
-          Network.salesApi.addDealPlace(DealPlace(orderId, address))
+          salesApi.addDealPlace(DealPlace(orderId, address))
        }catch (e: Throwable){
            Log.e("MyDebug", "error = ${e.message}")
            null
        }
    }
 
-    suspend fun getAddresses(): Response<List<OrderPlace>>?{
-        return try{
-            Network.salesApi.getAddresses()
-        }catch (e: Throwable){
-            Log.e("MyDebug", "error = ${e.message}")
-            null
-        }
-    }
 }

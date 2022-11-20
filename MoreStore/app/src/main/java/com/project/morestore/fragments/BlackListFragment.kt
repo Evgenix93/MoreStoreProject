@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -21,7 +19,7 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class BlackListFragment: MvpAppCompatFragment(R.layout.fragment_wait_review), BlackListMvpView {
-    private val presenter by  moxyPresenter { BlackListPresenter(requireContext()) }
+    private val presenter by  moxyPresenter { BlackListPresenter() }
     private val binding: FragmentWaitReviewBinding by viewBinding()
     private var usersAdapter: UsersAdapter by autoCleared()
 

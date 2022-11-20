@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -28,7 +27,7 @@ import moxy.ktx.moxyPresenter
 class CreateDeliveryFragment: MvpAppCompatFragment(R.layout.fragment_delivery_create), CreateDeliveryMvpView {
     private val binding: FragmentDeliveryCreateBinding by viewBinding()
     private val args: CreateDeliveryFragmentArgs by navArgs()
-    private val presenter by moxyPresenter { CreateDeliveryPresenter(requireContext()) }
+    private val presenter by moxyPresenter { CreateDeliveryPresenter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

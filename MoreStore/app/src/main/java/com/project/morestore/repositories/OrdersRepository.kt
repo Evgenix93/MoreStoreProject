@@ -2,6 +2,7 @@ package com.project.morestore.repositories
 
 import android.content.Context
 import android.util.Log
+import com.project.morestore.apis.OrdersApi
 import com.project.morestore.models.*
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.singletones.Network
@@ -11,10 +12,11 @@ import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class OrdersRepository(private val context: Context) {
+class OrdersRepository @Inject constructor(private val ordersApi: OrdersApi) {
 
-    private val ordersApi = Network.ordersApi
+
 
 
 

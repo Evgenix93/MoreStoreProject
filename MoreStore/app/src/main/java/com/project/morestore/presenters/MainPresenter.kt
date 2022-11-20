@@ -15,12 +15,10 @@ import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
-import com.project.morestore.singletones.Token
 import kotlinx.coroutines.*
 import com.project.morestore.repositories.*
 import com.project.morestore.singletones.Network
 import com.project.morestore.util.ProductStatus
-import com.project.morestore.util.SortingType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -250,7 +248,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         Log.d("mylog", "addProductToCart")
         presenterScope.launch {
             viewState.loading()
-            val response = ordersRepository.addCartItem(
+            val response = cartRepository.addCartItem(
                     productId = productId,
                     userId = userId
             )
@@ -274,7 +272,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         Log.d("mylog", "removeProduct")
         presenterScope.launch {
             viewState.loading()
-            val response = ordersRepository.removeCartItem(
+            val response = cartRepository.removeCartItem(
                 productId = productId,
                 userId = userId
             )
@@ -1202,7 +1200,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
 
     fun loadCart(userId: Long?, productId: Long, callback: (hasValue: Boolean)->Unit) {
         presenterScope.launch {
-            val response = ordersRepository.getCartItems(
+            val response = cartRepository.getCartItems(
                 userId = userId
             )
 

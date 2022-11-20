@@ -1,15 +1,17 @@
 package com.project.morestore.repositories
 
 import android.util.Log
+import com.project.morestore.apis.CreditCardsApi
 import com.project.morestore.models.Card
 import com.project.morestore.models.Id
 import com.project.morestore.singletones.Network
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class CardRepository {
-    private val cardApi = Network.cardApi
+class CardRepository @Inject constructor(private val cardApi: CreditCardsApi) {
+
 
     suspend fun getCards(): Response<List<Card>>? {
         return try {

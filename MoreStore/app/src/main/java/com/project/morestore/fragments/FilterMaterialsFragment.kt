@@ -21,6 +21,7 @@ import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.autoCleared
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -79,7 +80,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
                         p2: Int,
                         p3: Int
                     ) {
-                        sendBlocking(newText.toString())
+                        trySendBlocking(newText.toString())
 
                     }
 

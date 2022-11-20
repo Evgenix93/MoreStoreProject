@@ -12,7 +12,7 @@ import java.util.*
 
 class OrderCreatePresenter(context: Context)
     : MvpPresenter<OrderCreateView>() {
-    private val orderRepository = OrdersRepository(context)
+    private val orderRepository = OrdersRepository()
     private val salesRepository = SalesRepository()
     private val chatRepository = ChatRepository(context)
     private val geoRepository = GeoRepository()

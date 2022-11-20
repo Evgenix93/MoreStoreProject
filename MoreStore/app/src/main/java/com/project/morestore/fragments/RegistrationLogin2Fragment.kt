@@ -14,7 +14,6 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration2Binding
-import com.project.morestore.models.RegistrationResponse
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.presenters.AuthPresenter
@@ -25,7 +24,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
     AuthMvpView {
     private val binding: FragmentRegistration2Binding by viewBinding()
     private val args: RegistrationLogin2FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
+    private val presenter by moxyPresenter { AuthPresenter() }
     private var isEmail = false
     private lateinit var timer: CountDownTimer
 

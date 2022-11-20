@@ -1,10 +1,10 @@
 package com.project.morestore.adapters
 
-import android.os.Bundle
+
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.project.morestore.fragments.PhotoFragment
-import com.project.morestore.models.ProductPhoto
+
 
 class PhotoViewPagerAdapter(fragment: Fragment, private val isSold: Boolean, val onClick: (String) -> Unit): FragmentStateAdapter(fragment) {
     private var list = listOf<String>()
@@ -14,12 +14,10 @@ class PhotoViewPagerAdapter(fragment: Fragment, private val isSold: Boolean, val
     }
 
     override fun createFragment(position: Int): Fragment {
-        return PhotoFragment{onClick(list[position])}.apply {
-            arguments = Bundle().apply { putString("photo", list[position])
-            putBoolean(PhotoFragment.IS_SOLD, isSold)}
+        return PhotoFragment.createInstance(photo = list[position], isSold = isSold) { onClick(list[position]) }
         }
 
-    }
+
 
     fun updateList(newList: List<String>){
         list = newList

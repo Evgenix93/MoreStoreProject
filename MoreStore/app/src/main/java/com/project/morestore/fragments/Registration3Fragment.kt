@@ -76,6 +76,7 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         filePickerLauncher = registerForActivityResult(
             ActivityResultContracts.OpenDocument()
         ) {uri ->
+            uri ?: return@registerForActivityResult
             Glide.with(binding.root)
                 .load(uri)
                 .into(binding.photoImageView)

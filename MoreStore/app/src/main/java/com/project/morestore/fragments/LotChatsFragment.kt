@@ -29,7 +29,7 @@ import moxy.ktx.moxyPresenter
 
 class LotChatsFragment : BottomNavigationFragment(), ChatMvpView {
     private lateinit var views :FragmentLotchatsBinding
-    private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
+    private val presenter by moxyPresenter { ChatPresenter() }
     private val adapter = ChatsAdapter {
         findNavController().navigate(
                 R.id.chatFragment,

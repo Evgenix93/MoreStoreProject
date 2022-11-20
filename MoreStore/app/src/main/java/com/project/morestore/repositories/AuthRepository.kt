@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import com.project.morestore.apis.AuthApi
 import com.project.morestore.models.*
 import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
@@ -14,10 +15,11 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
 
-class AuthRepository(private val context: Context) {
+class AuthRepository @Inject constructor(private val context: Context, private val authApi: AuthApi) {
 
-    private val authApi = Network.authApi
+
 
     suspend fun register(data: RegistrationData): Response<RegistrationResponse>? {
         return try {

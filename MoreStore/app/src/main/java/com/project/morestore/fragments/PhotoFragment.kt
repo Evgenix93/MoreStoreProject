@@ -1,23 +1,20 @@
 package com.project.morestore.fragments
 
-import android.content.res.ColorStateList
-import android.graphics.drawable.Drawable
+
 import android.os.Bundle
-import android.util.Log
+
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
+
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
+
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentPhotoBinding
+import com.project.morestore.util.ClickWrapper
 
-class PhotoFragment(val onClick: () -> Unit): Fragment(R.layout.fragment_photo) {
+class PhotoFragment: Fragment(R.layout.fragment_photo) {
     private val binding: FragmentPhotoBinding by viewBinding()
 
 
@@ -26,17 +23,18 @@ class PhotoFragment(val onClick: () -> Unit): Fragment(R.layout.fragment_photo) 
         loadPhoto()
 
         binding.root.setOnClickListener {
-            onClick()
+            val clickWrapper = arguments?.getParcelable<ClickWrapper>(ON_CLICK)
+            clickWrapper?.onClick?.invoke()
         }
 
-        if(arguments?.getString("photo")?.contains("mp4") == true)
+        if(arguments?.getString(PHOTO)?.contains("mp4") == true)
             binding.playVideoImageView.isVisible = true
 
     }
 
     private fun loadPhoto(){
         Glide.with(this)
-            .load(arguments?.getString("photo"))
+            .load(arguments?.getString(PHOTO))
             .into(binding.photoImageView)
 
         if(requireArguments().getBoolean(IS_SOLD, false))
@@ -46,5 +44,16 @@ class PhotoFragment(val onClick: () -> Unit): Fragment(R.layout.fragment_photo) 
 
    companion object {
        const val IS_SOLD = "is sold"
+       const val PHOTO = "photo"
+       private const val ON_CLICK = "on_click"
+       fun createInstance(photo: String, isSold: Boolean, onClick: () -> Unit): PhotoFragment {
+           return PhotoFragment().apply {
+               arguments = Bundle().apply {
+                   putParcelable(ON_CLICK, ClickWrapper(onClick))
+                   putString(PHOTO, photo)
+                   putBoolean(IS_SOLD, isSold)
+               }
+           }
+       }
    }
 }

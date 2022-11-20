@@ -104,6 +104,7 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
 
     private fun initFilePicker(){
         filePicker = registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri ->
+            uri ?: return@registerForActivityResult
            presenter.addPhoto(listOf(uri), true)
         }
     }

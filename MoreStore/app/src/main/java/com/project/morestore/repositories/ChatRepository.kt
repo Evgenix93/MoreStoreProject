@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import com.project.morestore.apis.MessageApi
 import com.project.morestore.models.*
 import com.project.morestore.singletones.ChatMedia
 import com.project.morestore.singletones.CreateProductData
@@ -13,9 +14,10 @@ import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class ChatRepository(val context: Context) {
-    private val chatApi = Network.chatApi
+class ChatRepository @Inject constructor(val context: Context, private val chatApi: MessageApi) {
+
 
 
     suspend fun createDialog(userId: Long, productId: Long): Response<CreatedDialogId>?{

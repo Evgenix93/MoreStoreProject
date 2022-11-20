@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
 class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpView>() {
     private val userRepository = UserRepository(context)

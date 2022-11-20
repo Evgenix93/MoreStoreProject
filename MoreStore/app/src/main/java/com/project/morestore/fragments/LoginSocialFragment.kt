@@ -1,13 +1,11 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -23,7 +21,7 @@ import moxy.ktx.moxyPresenter
 class LoginSocialFragment : MvpAppCompatFragment(R.layout.fragment_social_login), AuthMvpView {
     private val binding: FragmentSocialLoginBinding by viewBinding()
     private val args: LoginSocialFragmentArgs by navArgs()
-    private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
+    private val presenter by moxyPresenter { AuthPresenter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

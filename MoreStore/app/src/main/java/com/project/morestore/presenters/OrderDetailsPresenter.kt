@@ -2,8 +2,6 @@ package com.project.morestore.presenters
 
 import android.content.Context
 import android.util.Log
-import androidx.core.view.isVisible
-import com.project.morestore.R
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.models.*
 import com.project.morestore.models.cart.OrderItem

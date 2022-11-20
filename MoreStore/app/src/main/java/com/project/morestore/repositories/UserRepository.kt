@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import com.project.morestore.apis.UserApi
 import com.project.morestore.models.*
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.singletones.Network
@@ -16,9 +17,10 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
 
-class UserRepository(val context: Context) {
-    private val userApi = Network.userApi
+class UserRepository @Inject constructor(val context: Context, private val userApi: UserApi) {
+
 
     suspend fun changeUserData(
         phone: String? = null,

@@ -124,7 +124,7 @@ class ToolbarCartPresenter(val context: Context, val selectedMenu: OrdersSliderM
     }
 
     private suspend fun getCartItems(): List<CartItem>?{
-        val response = ordersRepository.getCartItems(authRepository.getUserId())
+        val response = cartRepository.getCartItems(authRepository.getUserId())
         return if(response?.code() == 200 ) response.body() else null
 
     }

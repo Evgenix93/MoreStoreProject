@@ -16,7 +16,7 @@ class MyAddressesPresenter(
             provider.getAllAddresses()
                 .also{
                     if(it.isEmpty()) viewState.showEmpty()
-                    else viewState.showAddresses(it)
+                    else viewState.showAddresses(it.toTypedArray())
                 }
         }
     }

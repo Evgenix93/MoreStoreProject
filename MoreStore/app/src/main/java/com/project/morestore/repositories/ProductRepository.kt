@@ -10,6 +10,8 @@ import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.project.morestore.apis.OnboardingApi
+import com.project.morestore.apis.ProductApi
 import com.project.morestore.models.*
 import com.project.morestore.singletones.CreateProductData
 
@@ -24,10 +26,12 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
 
-class ProductRepository(private val context: Context) {
-    private val onBoardingApi = Network.onBoardingApi
-    private val productApi = Network.productApi
+class ProductRepository @Inject constructor(private val context: Context,
+                                            private val onBoardingApi: OnboardingApi,
+                                            private val productApi: ProductApi) {
+
 
     fun productPagingSource(query: String? = null,
                             filter: Filter? = null,

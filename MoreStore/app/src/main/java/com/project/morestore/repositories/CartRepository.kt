@@ -1,15 +1,17 @@
 package com.project.morestore.repositories
 
 import android.util.Log
+import com.project.morestore.apis.OrdersApi
 import com.project.morestore.models.AddCartData
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.singletones.Network
 import com.project.morestore.util.DeviceUtils
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
+import javax.inject.Inject
 
-class CartRepository {
-    private val ordersApi = Network.ordersApi
+class CartRepository @Inject constructor(private val ordersApi: OrdersApi) {
+
 
     suspend fun getCartItems(userId: Long?): Response<List<CartItem>?>? {
 

@@ -1,18 +1,13 @@
 package com.project.morestore.fragments.orders.history
 
 import android.content.Context
-import android.graphics.Bitmap
-import com.project.morestore.adapters.cart.OrdersAdapter
 import com.project.morestore.adapters.cart.OrdersHistoryAdapter
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.models.OfferedOrderPlace
-import com.project.morestore.models.OfferedPlaceType
 import com.project.morestore.models.Order
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.OrderHistoryItem
 import com.project.morestore.models.cart.OrderHistoryStatus
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.cart.OrderStatus
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.launch
@@ -24,7 +19,7 @@ class OrdersHistoryPresenter(context: Context)
     : MvpPresenter<OrdersHistoryView>() {
 
     private var adapter: OrdersHistoryAdapter? = null
-    private val ordersRepository = OrdersRepository(context)
+    private val ordersRepository = OrdersRepository()
     private val userRepository = UserRepository(context)
 
 

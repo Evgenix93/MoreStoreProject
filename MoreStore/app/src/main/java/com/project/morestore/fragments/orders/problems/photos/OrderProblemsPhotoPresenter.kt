@@ -1,13 +1,9 @@
 package com.project.morestore.fragments.orders.problems.photos
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.util.Base64
 import com.project.morestore.R
 import com.project.morestore.dialogs.FeedbackCompleteDialog
-import com.project.morestore.models.FeedbackItem
 import com.project.morestore.models.PhotoVideo
 import com.project.morestore.models.ProductProblemsData
 import com.project.morestore.repositories.OrdersRepository
@@ -15,12 +11,11 @@ import com.project.morestore.repositories.ProductRepository
 import kotlinx.coroutines.*
 import moxy.MvpPresenter
 import moxy.presenterScope
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 class OrderProblemsPhotoPresenter(val context: Context) : MvpPresenter<OrderProblemsPhotosView>() {
 
-    private val ordersRepository = OrdersRepository(context)
+    private val ordersRepository = OrdersRepository()
     private val productRepository = ProductRepository(context)
     var photosList = listOf<File>()
 

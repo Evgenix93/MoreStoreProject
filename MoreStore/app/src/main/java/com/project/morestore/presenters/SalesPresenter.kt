@@ -6,15 +6,12 @@ import com.project.morestore.models.*
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.repositories.*
-import com.project.morestore.util.MessageActionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
-import java.util.*
-import kotlin.math.absoluteValue
 
 class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
     private val salesRepository = SalesRepository()

@@ -7,7 +7,7 @@ import com.project.morestore.fragments.MediaFragmentSmall
 class MediaAdapter(host :Fragment, val photos :Array<String>, val onClick: (String) -> Unit) :FragmentStateAdapter(host) {
     override fun getItemCount(): Int = photos.size
 
-    override fun createFragment(position: Int) = MediaFragmentSmall(photos[position]) {
+    override fun createFragment(position: Int) = MediaFragmentSmall.create(photos[position]) {
         onClick(photos[position])
     }
 

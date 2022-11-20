@@ -6,7 +6,8 @@ import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
 import android.widget.LinearLayout
-import com.example.customviews.R
+import com.project.morestore.R
+
 
 class RatingBar :LinearLayout {
     //todo scaleType

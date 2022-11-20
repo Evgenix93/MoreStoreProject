@@ -23,7 +23,7 @@ class OrdersActivePresenter(val context: Context)
     : MvpPresenter<OrdersActiveView>() {
 
     private var adapter: OrdersAdapter? = null
-    private val ordersRepository = OrdersRepository(context)
+    private val ordersRepository = OrdersRepository()
     private val userRepository = UserRepository(context)
     private val chatRepository = ChatRepository(context)
     private val authRepository = AuthRepository(context)

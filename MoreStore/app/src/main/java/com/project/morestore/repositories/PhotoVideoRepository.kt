@@ -5,8 +5,9 @@ import android.graphics.Bitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import javax.inject.Inject
 
-class PhotoVideoRepository(val context: Context) {
+class PhotoVideoRepository @Inject constructor(val context: Context) {
 
     fun createFileForPhoto(): File{
         val name = "${System.currentTimeMillis()/1000}_image.jpg"

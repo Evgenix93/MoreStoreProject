@@ -48,7 +48,7 @@ import java.util.*
 class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
     PriceDialog.Callback, ChatMvpView {
     private lateinit var views: FragmentChatBinding
-    private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
+    private val presenter by moxyPresenter { ChatPresenter() }
     private var currentUserId: Long? = null
     private var currentDialogId: Long? = null
     private var currentProductPrice: Float? = null

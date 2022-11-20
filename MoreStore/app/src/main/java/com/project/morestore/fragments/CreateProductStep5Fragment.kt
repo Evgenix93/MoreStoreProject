@@ -20,6 +20,7 @@ import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -82,7 +83,7 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
                         p2: Int,
                         p3: Int
                     ) {
-                        sendBlocking(newText.toString())
+                        trySendBlocking(newText.toString())
 
                     }
 

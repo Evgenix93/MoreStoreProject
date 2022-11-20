@@ -40,7 +40,7 @@ import kotlin.reflect.KClass
 
 class MessagesFragment : BottomNavigationFragment(), ChatMvpView {
     private lateinit var views: FragmentMessagesBinding
-    private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
+    private val presenter by moxyPresenter { ChatPresenter() }
     private val args: MessagesFragmentArgs by navArgs()
     private val adapter = ChatsAdapter {
          if (it is Chat.Support) {
