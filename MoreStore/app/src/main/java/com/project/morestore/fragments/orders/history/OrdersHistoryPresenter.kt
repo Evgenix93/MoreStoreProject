@@ -1,6 +1,7 @@
 package com.project.morestore.fragments.orders.history
 
 import android.content.Context
+import com.project.morestore.R
 import com.project.morestore.adapters.cart.OrdersHistoryAdapter
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.models.OfferedOrderPlace
@@ -15,13 +16,15 @@ import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import java.util.*
+import javax.inject.Inject
 
-class OrdersHistoryPresenter(context: Context)
+class OrdersHistoryPresenter @Inject constructor(private val context: Context,
+                             private val ordersRepository: OrdersRepository,
+                             private val userRepository: UserRepository)
     : MvpPresenter<OrdersHistoryView>() {
 
     private var adapter: OrdersHistoryAdapter? = null
-    private val ordersRepository = OrdersRepository()
-    private val userRepository = UserRepository(context)
+
 
 
     override fun attachView(view: OrdersHistoryView) {
@@ -76,9 +79,9 @@ class OrdersHistoryPresenter(context: Context)
                                     )
                                 }",
                             deliveryInfo = when (order.delivery) {
-                                OrderCreateFragment.TAKE_FROM_SELLER -> "Заберу у продавца"
-                                OrderCreateFragment.YANDEX_GO -> "yandex"
-                                OrderCreateFragment.ANOTHER_CITY -> "СДЕК"
+                                OrderCreateFragment.TAKE_FROM_SELLER -> context.getString(R.string.take_from_seller)
+                                OrderCreateFragment.YANDEX_GO -> context.getString(R.string.yandex)
+                                OrderCreateFragment.ANOTHER_CITY -> context.getString(R.string.cdek_rus)
                                 else -> ""
                             },
                             status = OrderHistoryStatus.COMPLETED,

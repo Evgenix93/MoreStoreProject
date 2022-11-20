@@ -12,17 +12,14 @@ import kotlinx.coroutines.*
 import moxy.MvpPresenter
 import moxy.presenterScope
 import java.io.File
+import javax.inject.Inject
 
-class OrderProblemsPhotoPresenter(val context: Context) : MvpPresenter<OrderProblemsPhotosView>() {
+class OrderProblemsPhotoPresenter @Inject constructor(val context: Context,
+                                  private val ordersRepository: OrdersRepository,
+                                  private val productRepository: ProductRepository) : MvpPresenter<OrderProblemsPhotosView>() {
 
-    private val ordersRepository = OrdersRepository()
-    private val productRepository = ProductRepository(context)
+
     var photosList = listOf<File>()
-
-    fun addPhoto(data: File) {
-        //photosList.add(data);
-        //viewState.showPhoto(data, photosList.size)
-    }
 
     fun onNextClick(problemData: ProductProblemsData) {
         presenterScope.launch {
@@ -46,17 +43,11 @@ class OrderProblemsPhotoPresenter(val context: Context) : MvpPresenter<OrderProb
     }
 
     private suspend fun getBase64photos(file: File): String = withContext(Dispatchers.IO) {
-        //val inStream = context.applicationContext.contentResolver.openInputStream(uri)
-        //val bitmap = BitmapFactory.decodeStream(inStream)
-        //val baos = ByteArrayOutputStream()
-        //bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        //val byteArray = baos.toByteArray()
         val photo64 = Base64.encodeToString(file.readBytes(), Base64.DEFAULT)
         photo64
     }
 
      fun getPhotos(){
-        //viewState.photosLoaded(productRepository.loadCreateProductPhotosVideos())
          photosList = productRepository.loadCreateProductPhotosVideos().values.toList()
          photosList.forEachIndexed { index, file -> viewState.showPhoto(file, index + 1)  }
 

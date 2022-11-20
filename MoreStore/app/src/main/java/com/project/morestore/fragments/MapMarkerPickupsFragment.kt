@@ -108,6 +108,7 @@ class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, Camer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.submitRegion(searchRegion)
         with(toolbar){
             title.text = searchRegion
             root.attachNavigation()

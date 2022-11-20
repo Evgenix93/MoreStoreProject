@@ -1,10 +1,14 @@
 package com.project.morestore.di
 
+import android.content.Context
 import com.project.morestore.apis.*
 import com.project.morestore.models.CalendarAdapter
 
 import com.project.morestore.util.TokenInterceptor
 import com.squareup.moshi.Moshi
+import com.yandex.mapkit.search.SearchFactory
+import com.yandex.mapkit.search.SearchManager
+import com.yandex.mapkit.search.SearchManagerType
 
 import dagger.Module
 import dagger.Provides
@@ -122,6 +126,12 @@ abstract class NetworkModule {
     @Provides
     fun getUserServerApi(retrofit: Retrofit): UserServerApi{
         return retrofit.create(UserServerApi::class.java)
+    }
+
+    @Provides
+    fun getSearchManager(context: Context): SearchManager {
+        SearchFactory.initialize(context);
+        return SearchFactory.getInstance().createSearchManager(SearchManagerType.ONLINE)
     }
 
 }

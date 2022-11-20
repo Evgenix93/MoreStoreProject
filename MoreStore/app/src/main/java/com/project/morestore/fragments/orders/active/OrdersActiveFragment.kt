@@ -25,7 +25,7 @@ import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.mvpviews.ToolbarCartView
-import com.project.morestore.presenters.toolbar.cart.ToolbarCartView
+
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -37,10 +37,13 @@ class OrdersActiveFragment
     : MvpAppCompatFragment(R.layout.fragment_orders), OrdersActiveView, ToolbarCartView {
 
     @Inject
-    lateinit var toolbarPresenter: ToolbarCartPresenter
-    private val presenter by moxyPresenter {
-        toolbarPresenter
+    lateinit var toolbarPresenterRef: ToolbarCartPresenter
+    @Inject
+    lateinit var orderActivePresenterRef: OrdersActivePresenter
+    private val toolBarCartPresenter by moxyPresenter {
+        toolbarPresenterRef
     }
+    private val orderActivePresenter by moxyPresenter { orderActivePresenterRef }
     private val binding: FragmentOrdersBinding by viewBinding()
 
     ///////////////////////////////////////////////////////////////////////////
@@ -173,7 +176,7 @@ class OrdersActiveFragment
 
     private fun initToolbar() {
         binding.toolbar.toolbarBack.setOnClickListener {
-            presenter.onBackClick();
+            toolBarCartPresenter.onBackClick();
         }
 
         binding.toolbar.toolbarLike.setOnClickListener{

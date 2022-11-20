@@ -19,17 +19,19 @@ import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import java.util.*
+import javax.inject.Inject
 
-class OrdersActivePresenter(val context: Context)
+class OrdersActivePresenter @Inject constructor(val context: Context,
+                            private val ordersRepository: OrdersRepository,
+                            private val userRepository: UserRepository,
+                            private val chatRepository: ChatRepository,
+                            private val authRepository: AuthRepository,
+                            private val geoRepository: GeoRepository,
+                            private val cartRepository: CartRepository)
     : MvpPresenter<OrdersActiveView>() {
 
     private var adapter: OrdersAdapter? = null
-    private val ordersRepository = OrdersRepository()
-    private val userRepository = UserRepository(context)
-    private val chatRepository = ChatRepository(context)
-    private val authRepository = AuthRepository(context)
-    private val geoRepository = GeoRepository()
-    private val cartRepository = CartRepository()
+
 
     override fun attachView(view: OrdersActiveView) {
         super.attachView(view)
@@ -283,14 +285,12 @@ class OrdersActivePresenter(val context: Context)
         val fromCoords = geoRepository.getCoordsByAddress(product.address?.fullAddress!!)?.body()?.coords
             if(fromCoords == null){
                 viewState.showMessage(context.getString(R.string.error_getting_price))
-                viewState.showMessage("ошибка оценки стоимости")
                 viewState.loading(false)
                 return null
             }
             val toCoords = geoRepository.getCoordsByAddress(toAddress)?.body()?.coords
             if(toCoords == null){
                 viewState.showMessage(context.getString(R.string.error_getting_price))
-                viewState.showMessage("ошибка оценки стоимости")
                 viewState.loading(false)
                 return null
             }
@@ -336,7 +336,7 @@ class OrdersActivePresenter(val context: Context)
                 response.body()
             }
             404 -> {
-                viewState.showMessage("промокод не найден")
+                viewState.showMessage(context.getString(R.string.promo_not_found))
                 viewState.loading(false)
                 null
             }
@@ -354,6 +354,7 @@ class OrdersActivePresenter(val context: Context)
             val response = ordersRepository.payForOrder(PayOrderInfo(sum, orderId))
             when(response?.code()){
                 200 -> {
+                    viewState.loading(false)
                     viewState.payment(response.body()!!, orderId)
                 }
                 else -> {
@@ -437,7 +438,7 @@ class OrdersActivePresenter(val context: Context)
 
             override fun payForOrder(orderItem: OrderItem) {
                 presenterScope.launch {
-                    viewState.loading()
+                    viewState.loading(true)
                     val isYandex = orderItem.deliveryInfo == context.getString(R.string.yandex)
                     if (isYandex) {
                         val toAddress = orderItem.cdekYandexAddress
@@ -445,6 +446,7 @@ class OrdersActivePresenter(val context: Context)
                             toAddress = toAddress.orEmpty(),
                             product = orderItem.product,
                             promo = orderItem.promo)
+                        finalPrice ?: viewState.loading(false)
                         finalPrice ?: return@launch
                         getPaymentUrl(sum = finalPrice, orderItem.id)
                     }else{
@@ -453,6 +455,7 @@ class OrdersActivePresenter(val context: Context)
                             toAddress = toAddress.orEmpty(),
                             product = orderItem.product,
                             promo = orderItem.promo)
+                        finalPrice ?: viewState.loading(false)
                         finalPrice ?: return@launch
                         getPaymentUrl(sum = finalPrice, orderId = orderItem.id)
                     }

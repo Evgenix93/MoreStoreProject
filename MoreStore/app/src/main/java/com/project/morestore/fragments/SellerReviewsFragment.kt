@@ -19,6 +19,7 @@ import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 
 class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
@@ -29,6 +30,8 @@ class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
         arguments = bundleOf(USER_ID to userId)
     }
     private lateinit var list :RecyclerView
+    @Inject lateinit var _presenter: ReviewsPresenter
+    private val presenter by moxyPresenter { _presenter }
     private val adapter = ReviewsAdapter({
         findNavController().navigate(
             R.id.feedbackProductFragment,
@@ -50,6 +53,7 @@ class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.initReviews(requireArguments().getLong(USER_ID))
         list.adapter = adapter
         list.setSpace(8.dp)
     }

@@ -31,7 +31,7 @@ import javax.inject.Inject
 import kotlin.reflect.KClass
 
 @AndroidEntryPoint
-class LotChatsFragment : BottomNavigationMvpFragment(), MainMvpView {
+class LotChatsFragment : BottomNavigationFragment(), MainMvpView {
     private lateinit var views :FragmentLotchatsBinding
     @Inject lateinit var chatPresenter: ChatPresenter
     private val presenter by moxyPresenter { chatPresenter }

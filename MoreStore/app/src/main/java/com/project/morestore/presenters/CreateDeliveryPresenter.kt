@@ -18,9 +18,10 @@ import javax.inject.Inject
 class CreateDeliveryPresenter @Inject constructor(
 private val userRepository: UserRepository,
 private val orderRepository: OrdersRepository,
-private val productRepository: ProductRepository): MvpPresenter<CreateDeliveryMvpView>() {
+private val productRepository: ProductRepository,
+private val geoRepository: GeoRepository): MvpPresenter<CreateDeliveryMvpView>() {
 
-    private val geoRepository = GeoRepository()
+
     private var currentUser: User? = null
 
     fun getUserInfo(){

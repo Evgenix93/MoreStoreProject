@@ -1,16 +1,17 @@
 package com.project.morestore.fragments.orders.problems
 
-import android.content.Context
+
 import com.project.morestore.dialogs.ProblemTypeDialog
 import com.project.morestore.models.ProductProblemsData
 import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class OrderProblemsPresenter(context: Context) : MvpPresenter<OrderProblemsView>() {
+class OrderProblemsPresenter @Inject constructor(private val userRepository: UserRepository) : MvpPresenter<OrderProblemsView>() {
 
-    private val userRepository = UserRepository(context)
+
     private var productProblemsData = ProductProblemsData();
 
 

@@ -42,7 +42,7 @@ import javax.inject.Inject
 import kotlin.reflect.KClass
 
 @AndroidEntryPoint
-class MessagesFragment : BottomNavigationMvpFragment(), MessagesMvpView {
+class MessagesFragment : BottomNavigationFragment(), MessagesMvpView {
     private lateinit var views: FragmentMessagesBinding
     @Inject
     lateinit var chatPresenter: ChatPresenter

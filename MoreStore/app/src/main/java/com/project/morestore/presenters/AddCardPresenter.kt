@@ -1,5 +1,7 @@
 package com.project.morestore.presenters
 
+import android.content.Context
+import com.project.morestore.R
 import com.project.morestore.models.Card
 import com.project.morestore.mvpviews.AddCardMvpView
 import com.project.morestore.mvpviews.MainFragmentMvpView
@@ -11,12 +13,13 @@ import moxy.MvpPresenter
 import moxy.presenterScope
 import javax.inject.Inject
 
-class AddCardPresenter @Inject constructor(private val cardRepository: CardRepository): MvpPresenter<AddCardMvpView>() {
+class AddCardPresenter @Inject constructor(private val context: Context,
+                                           private val cardRepository: CardRepository): MvpPresenter<AddCardMvpView>() {
 
     fun addCard(cardNumber: String){
         presenterScope.launch {
             if (!checkCardNumber(cardNumber)) {
-                viewState.error("Введите правильный номер карты")
+                viewState.error(context.getString(R.string.write_correct_card_number))
                 return@launch
             }
 

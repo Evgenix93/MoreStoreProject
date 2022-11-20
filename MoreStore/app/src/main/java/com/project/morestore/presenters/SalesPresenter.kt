@@ -25,7 +25,8 @@ class SalesPresenter @Inject constructor(
         private val userRepository: UserRepository,
         private val ordersRepository: OrdersRepository,
         private val authRepository: AuthRepository,
-        private val chatRepository: ChatRepository
+        private val chatRepository: ChatRepository,
+        private val cartRepository: CartRepository
 ): MvpPresenter<SalesDealPlaceMvpView>() {
 
     fun getSales(isHistory: Boolean){

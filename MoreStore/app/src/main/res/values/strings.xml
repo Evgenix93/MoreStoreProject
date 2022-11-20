@@ -547,5 +547,14 @@
     <string name="all">Все</string>
     <string name="deals">Сделки</string>
     <string name="my_listings">Мои объявления</string>
+    <string name="promo_not_found">промокод не найден</string>
+    <string name="write_deal_address">Укажите адрес сделки</string>
+    <string name="write_deal_time">Укажите время сделки</string>
+    <string name="order_created">Заказ оформлен</string>
+    <string name="support">Служба поддержки</string>
+    <string name="product_support">Помощь с товаром</string>
+    <string name="promo_not_active">Промокод не активен</string>
+    <string name="promo_for_first_order">Этот промокод только для первого заказа</string>
+    <string name="write_correct_card_number">Введите правильный номер карты</string>
     <!--endregion city-->
 </resources>

@@ -11,27 +11,23 @@ import moxy.presenterScope
 import javax.inject.Inject
 
 class ReviewsPresenter @Inject constructor(
-    private val userId :Long,
     private val data :ReviewRepository,
     private val orderRepository: OrdersRepository
 ) :MvpPresenter<ReviewView>() {
 
-    override fun attachView(view: ReviewView?) {
-        super.attachView(view)
+
+
+     fun initReviews(userId: Long){
         presenterScope.launch {
-            initReviewButton(userId)
-            viewState.showReviews(data.getReviews(userId).map { ReviewItem(it) })
-
-        }
-    }
-
-    private suspend fun initReviewButton(userId: Long){
-        val response = orderRepository.getAllOrders()
-            if(response?.code() == 200)
-                viewState.showReviewButton(response.body()!!.filter { it.status == 1 && it.cart != null }.find {
-                    it.cart?.first()?.idUser == userId
-                } != null)
+            val response = orderRepository.getAllOrders()
+            if (response?.code() == 200)
+                viewState.showReviewButton(
+                    response.body()!!.filter { it.status == 1 && it.cart != null }.find {
+                        it.cart?.first()?.idUser == userId
+                    } != null)
             else viewState.showReviewButton(false)
+            viewState.showReviews(data.getReviews(userId).map { ReviewItem(it) })
+        }
 
     }
 }

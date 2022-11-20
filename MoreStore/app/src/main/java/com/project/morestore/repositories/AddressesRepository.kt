@@ -7,15 +7,13 @@ import com.project.morestore.models.MyAddress
 import com.project.morestore.models.MyAddressData
 import com.squareup.moshi.JsonDataException
 import retrofit2.HttpException
+import javax.inject.Inject
 
-//todo add DI
-object AddressesRepository{
-    private lateinit var network :AddressesNetwork
 
-    fun init(network: AddressesNetwork){
-        if(this::network.isInitialized) return
-        this.network = network
-    }
+class AddressesRepository @Inject constructor(private val network :AddressesNetwork){
+
+
+
 
     suspend fun getAllAddresses() :List<MyAddress>{
         return try {

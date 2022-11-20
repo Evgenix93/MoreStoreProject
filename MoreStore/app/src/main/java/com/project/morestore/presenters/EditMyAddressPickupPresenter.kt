@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import moxy.presenterScope
 import javax.inject.Inject
 
-class EditMyAddressPickupPresenter (
+class EditMyAddressPickupPresenter @Inject constructor (
     addressNetwork :AddressesRepository
 ) :MyAddressPickupPresenter(addressNetwork) {
 

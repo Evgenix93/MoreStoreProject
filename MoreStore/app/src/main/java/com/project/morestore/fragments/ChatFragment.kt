@@ -48,7 +48,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
+class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
     PriceDialog.Callback, ChatMvpView {
     private lateinit var views: FragmentChatBinding
     @Inject lateinit var chatPresenter: ChatPresenter

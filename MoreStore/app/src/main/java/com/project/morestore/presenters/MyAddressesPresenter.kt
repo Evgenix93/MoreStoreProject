@@ -5,8 +5,9 @@ import com.project.morestore.repositories.AddressesRepository
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class MyAddressesPresenter(
+class MyAddressesPresenter @Inject constructor(
     private val provider :AddressesRepository
 ) :MvpPresenter<MyAddressesView>() {
 

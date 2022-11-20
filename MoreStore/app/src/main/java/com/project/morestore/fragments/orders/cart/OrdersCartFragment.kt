@@ -17,14 +17,14 @@ import com.project.morestore.databinding.FragmentOrdersCartBinding
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.fragments.CabinetGuestFragment
 import com.project.morestore.models.Product
-import com.project.morestore.models.SuggestionModels
+
 import com.project.morestore.models.User
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.mvpviews.ToolbarCartView
-import com.project.morestore.presenters.toolbar.cart.ToolbarCartView
+
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -42,8 +42,10 @@ class OrdersCartFragment
     lateinit var _mainPresenter: MainPresenter
     private val mainPresenter by moxyPresenter { _mainPresenter }
 
+    @Inject
+    lateinit var _toolbarPresenter: ToolbarCartPresenter
     private val toolbarPresenter by moxyPresenter {
-        ToolbarCartPresenter(requireContext(), OrdersSliderMenu.CART)
+        _toolbarPresenter
     }
 
     private val binding: FragmentOrdersCartBinding by viewBinding()

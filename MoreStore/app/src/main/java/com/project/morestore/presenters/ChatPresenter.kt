@@ -1,6 +1,6 @@
 package com.project.morestore.presenters
 
-import android.content.Context
+
 import android.net.Uri
 import android.util.Log
 import com.project.morestore.models.Chat
@@ -14,7 +14,7 @@ import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.mvpviews.MessagesMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
-import com.project.morestore.repositories.OrdersRepository
+
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.errorMessage
@@ -29,8 +29,9 @@ import javax.inject.Inject
 class ChatPresenter @Inject constructor(
     private val chatRepository: ChatRepository,
     private val authRepository: AuthRepository,
-     private val ordersRepository: OrdersRepository,
-    private val userRepository: UserRepository) : MvpPresenter<MainMvpView>() {
+    private val userRepository: UserRepository,
+    private val cartRepository: CartRepository
+) : MvpPresenter<MainMvpView>() {
 
     private var dialogId: Long? = null
     private var tabPosition: Int = 0
@@ -544,7 +545,7 @@ class ChatPresenter @Inject constructor(
     private suspend fun loadCartData(
         userId: Long? = null
     ): List<CartItem>? {
-            val response = ordersRepository.getCartItems(
+            val response = cartRepository.getCartItems(
                 userId = userId
             )
 
@@ -568,7 +569,7 @@ class ChatPresenter @Inject constructor(
         productId: Long,
         userId: Long? = null,
     ): Boolean {
-        val response = ordersRepository.addCartItem(
+        val response = cartRepository.addCartItem(
                 productId = productId,
                 userId = userId
             )

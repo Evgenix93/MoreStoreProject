@@ -39,7 +39,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), UserMvpView {
+class CabinetFragment: BottomNavigationFragment(R.layout.fragment_cabinet), UserMvpView {
     @Inject lateinit var userPresenter: UserPresenter
     private val presenter by moxyPresenter { userPresenter }
     private val binding: FragmentCabinetBinding by viewBinding()

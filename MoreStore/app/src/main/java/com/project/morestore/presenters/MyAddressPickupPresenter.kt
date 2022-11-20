@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import moxy.MvpPresenter
 import javax.inject.Inject
 
-abstract class MyAddressPickupPresenter @Inject constructor(
+abstract class MyAddressPickupPresenter (
     protected val addressNetwork :AddressesRepository
 ) : MvpPresenter<MyAddressPickupView>() {
 

@@ -9,6 +9,7 @@ import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.models.slidermenu.SliderMenu
 import com.project.morestore.mvpviews.ToolbarCartView
 import com.project.morestore.repositories.AuthRepository
+import com.project.morestore.repositories.CartRepository
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.SalesRepository
 import kotlinx.coroutines.launch
@@ -16,13 +17,15 @@ import moxy.MvpPresenter
 import moxy.presenterScope
 import javax.inject.Inject
 
-class ToolbarCartPresenter @Inject constructor(val context: Context, val selectedMenu: OrdersSliderMenu)
+class ToolbarCartPresenter @Inject constructor(val context: Context, val selectedMenu: OrdersSliderMenu,
+                                               private val ordersRepository: OrdersRepository,
+                                               private val authRepository: AuthRepository,
+                                               private val saleRepository: SalesRepository,
+                                               private val cartRepository: CartRepository)
     : MvpPresenter<ToolbarCartView>() {
 
     private lateinit var adapter: SliderMenuAdapter<OrdersSliderMenu>
-    private val ordersRepository = OrdersRepository(context)
-    private val authRepository = AuthRepository(context)
-    private val saleRepository = SalesRepository()
+
 
     override fun attachView(view: ToolbarCartView) {
         super.attachView(view)

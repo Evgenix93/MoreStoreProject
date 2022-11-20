@@ -5,13 +5,13 @@ import com.project.morestore.repositories.ReviewRepository
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class FeedbackProductPresenter(
-    private val userId :Long,
-    private val data :ReviewRepository
+class FeedbackProductPresenter @Inject constructor(
+    private val data: ReviewRepository
 ) :MvpPresenter<FeedbackProductView>(){
 
-    init {
+    fun getProducts(userId: Long) {
         presenterScope.launch {
             viewState.showProducts(data.getUserProducts(userId).toList())
         }

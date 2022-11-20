@@ -25,10 +25,9 @@ import java.io.IOException
 import javax.inject.Inject
 
 class MapMarkerPickupsPresenter @Inject constructor(
-    private val searchManager : SearchManager,
+    private val searchManager: SearchManager,
     private val geolocator: Geolocator,
-    private val region : String,
-    private val pickupNetwork :CdekAddressApi
+    private val pickupNetwork: CdekAddressApi
 ) :MvpPresenter<MapMarkerPickupsView>(){
     private val loadingDelegate = LoadingPresenter()
     private val stubRegion = VisibleRegion(
@@ -55,7 +54,6 @@ class MapMarkerPickupsPresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        searchManager.submit(region, searchRegionStub, SearchOptions(), searchListener)
         presenterScope.launch {
             loadingDelegate.show()
             allAddresses =
@@ -101,6 +99,10 @@ class MapMarkerPickupsPresenter @Inject constructor(
 
     fun save(){
         viewState.returnAddress(selected!!)
+    }
+
+    fun submitRegion(region: String){
+        searchManager.submit(region, searchRegionStub, SearchOptions(), searchListener)
     }
 
     private fun showMarkers(){

@@ -1,24 +1,29 @@
 package com.project.morestore.fragments.orders.create
 
+
 import android.content.Context
 import com.project.morestore.R
 import com.project.morestore.models.*
 import com.project.morestore.repositories.*
-import com.project.morestore.util.MessageActionType
+
 import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
-import okhttp3.ResponseBody
-import java.util.*
 
-class OrderCreatePresenter(context: Context)
+import java.util.*
+import javax.inject.Inject
+
+class OrderCreatePresenter @Inject constructor(
+    private val context: Context,
+    private val orderRepository: OrdersRepository,
+    private val salesRepository: SalesRepository,
+    private val chatRepository: ChatRepository,
+    private val geoRepository: GeoRepository,
+    private val userRepository: UserRepository
+)
     : MvpPresenter<OrderCreateView>() {
-    private val orderRepository = OrdersRepository()
-    private val salesRepository = SalesRepository()
-    private val chatRepository = ChatRepository(context)
-    private val geoRepository = GeoRepository()
-    private val userRepository = UserRepository(context)
+
     private var currentPromo: String? = null
 
     fun getCurrentUserGeoPosition(){
@@ -50,11 +55,11 @@ class OrderCreatePresenter(context: Context)
         presenterScope.launch {
             viewState.loading()
             if(place.id.toInt() == OrderCreateFragment.PLACE_FROM_ME && place.address == null){
-                viewState.showMessage("Укажите адрес сделки")
+                viewState.showMessage(context.getString(R.string.write_deal_address))
                 return@launch
             }
             if(place.id.toInt() == OrderCreateFragment.PLACE_FROM_ME && place.date == 0L){
-                viewState.showMessage("Укажите время сделки")
+                viewState.showMessage(context.getString(R.string.write_deal_time))
                 return@launch
             }
 
@@ -82,7 +87,7 @@ class OrderCreatePresenter(context: Context)
                     }
                     val order = updatedOrders.find { it.idCart.find { cart -> cart == cartId } != null }
 
-                    viewState.showMessage("Заказ оформлен")
+                    viewState.showMessage(context.getString(R.string.order_created))
                     if(order != null && place.address != null && delivery == 1)
                        addDealPlace(order.id, place.address )
                     if(fromChat)
@@ -164,8 +169,8 @@ class OrderCreatePresenter(context: Context)
                     }?.map {
                         Chat.Support(
                             it.dialog.id,
-                            "Служба поддержки",
-                            "Помощь с товаром"
+                            context.getString(R.string.support),
+                            context.getString(R.string.product_support)
                         )
                     }
                     if(chats != null)
@@ -184,12 +189,12 @@ class OrderCreatePresenter(context: Context)
                       val orders = getAllOrders()
                       orders ?: return@launch
                       if(response.body()?.status == 0){
-                          viewState.showMessage("Промокод не активен")
+                          viewState.showMessage(context.getString(R.string.promo_not_active))
                           viewState.applyPromo(null)
                           return@launch
                       }
                       if(response.body()?.firstOrder == 1 && orders.isNotEmpty()){
-                          viewState.showMessage("Этот промокод только для первого заказа")
+                          viewState.showMessage(context.getString(R.string.promo_for_first_order))
                           viewState.applyPromo(null)
                           return@launch
                       }
@@ -198,7 +203,7 @@ class OrderCreatePresenter(context: Context)
                   }
                   404 -> {
                       viewState.applyPromo(null)
-                      viewState.showMessage("промокод не найден")
+                      viewState.showMessage(context.getString(R.string.promo_not_found))
                       currentPromo = null
 
                   }
@@ -231,7 +236,7 @@ class OrderCreatePresenter(context: Context)
                 200 -> viewState.setDeliveryPrice(response.body()!!)
                 404 -> {
                     viewState.showCdekError()
-                    viewState.showMessage("ошибка расчета цены")
+                    viewState.showMessage(context.getString(R.string.error_getting_price))
                 }
                 else -> {
                     viewState.showCdekError()
@@ -245,12 +250,12 @@ class OrderCreatePresenter(context: Context)
             viewState.loading()
             val fromCoords = geoRepository.getCoordsByAddress(product.address?.fullAddress!!)?.body()?.coords
             if(fromCoords == null){
-                viewState.showMessage("ошибка оценки стоимости")
+                viewState.showMessage(context.getString(R.string.error_getting_price))
                 return@launch
             }
             val toCoords = geoRepository.getCoordsByAddress(toAddress)?.body()?.coords
             if(toCoords == null){
-                viewState.showMessage("ошибка оценки стоимости")
+                viewState.showMessage(context.getString(R.string.error_getting_price))
                 return@launch
             }
 

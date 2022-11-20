@@ -18,6 +18,7 @@ import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeedbackProductFragment() :FullscreenFragment(), FeedbackProductView {
@@ -33,6 +34,9 @@ class FeedbackProductFragment() :FullscreenFragment(), FeedbackProductView {
             .navigate(R.id.ratingFragment, bundleOf(PRODUCT_ID to it.id))
     }
     private lateinit var views :FragmentFeedbackProductsBinding
+
+    @Inject lateinit var _presenter: FeedbackProductPresenter
+    private val presenter by moxyPresenter { _presenter }
 
 
     override fun onCreateView(

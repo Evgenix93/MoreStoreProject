@@ -14,12 +14,14 @@ import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.internal.toImmutableList
+import javax.inject.Inject
 
-class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>() {
+class OrdersCartPresenter @Inject constructor(val context: Context,
+                          private val productRepository: ProductRepository,
+                          private val cartRepository: CartRepository) : MvpPresenter<OrdersCartView>() {
 
     private lateinit var adapter: CartAdapter
-    private val productRepository = ProductRepository(context)
-    private val cartRepository = CartRepository()
+
 
     fun loadCartData(
         userId: Long? = null,

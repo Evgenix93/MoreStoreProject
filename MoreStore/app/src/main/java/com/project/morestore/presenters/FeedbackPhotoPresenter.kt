@@ -21,9 +21,10 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 class FeedbackPhotoPresenter @Inject constructor(
-    @ApplicationContext private val applicationContext :Context
+    @ApplicationContext private val applicationContext :Context,
+    private val data: ReviewRepository
 ) :MvpPresenter<FeedbackPhotoView>() {
-    private val data = ReviewRepository()
+
     private var photos = mutableListOf(FeedbackItem.AddPhoto(), FeedbackItem.Description())
 
     fun addPhoto(uris :List<Uri>, isChat: Boolean){

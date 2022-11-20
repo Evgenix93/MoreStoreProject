@@ -27,9 +27,10 @@ import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 
-class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
+class MyAddressesFragment :FullscreenFragment(), MyAddressesView {
     private val args: MyAddressesFragmentArgs by navArgs()
     private val adapter = MyAddressesAdapter{
         if(args.isSelectAddress){
@@ -50,6 +51,8 @@ class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
         }
     }
     private lateinit var views : FragmentMyaddressesBinding
+    @Inject lateinit var _presenter: MyAddressesPresenter
+    private val presenter by moxyPresenter { _presenter }
 
     override fun onCreateView(
         inflater: LayoutInflater,

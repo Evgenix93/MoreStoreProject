@@ -29,7 +29,7 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EditFavoriteSearchFragment : FullscreenMvpFragment(), MainMvpView {
+class EditFavoriteSearchFragment : FullscreenFragment(), MainMvpView {
     private lateinit var binding: FragmentEditFavoriteSearchBinding
     @Inject lateinit var favoritesPresenter: FavoritesPresenter
     private val presenter by moxyPresenter { favoritesPresenter }

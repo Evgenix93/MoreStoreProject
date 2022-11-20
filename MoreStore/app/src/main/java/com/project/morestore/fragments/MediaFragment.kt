@@ -31,7 +31,7 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MediaFragment() : FullscreenMvpFragment(), MainMvpView {
+class MediaFragment() : FullscreenFragment(), MainMvpView {
     private lateinit var views :FragmentMediaBinding
     @Inject
     lateinit var mainPresenter: MainPresenter

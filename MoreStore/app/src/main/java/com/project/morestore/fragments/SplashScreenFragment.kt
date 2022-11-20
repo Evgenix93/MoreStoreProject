@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen), MainMvpView {
-    private var job: Job = Job()
+    private var job: Job? = null
     @Inject
     lateinit var mainPresenter: MainPresenter
     private val presenter by moxyPresenter { mainPresenter }

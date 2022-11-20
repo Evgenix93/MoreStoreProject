@@ -31,13 +31,14 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class MainPresenter  @Inject constructor(
-private val authRepository: AuthRepository,
-private val productRepository: ProductRepository,
-private val ordersRepository: OrdersRepository,
-private val userRepository: UserRepository,
-private val chatRepository: ChatRepository,
-private val addressesRepository: AddressesRepository,
-private val cardRepository: CardRepository) : MvpPresenter<MainMvpView>() {
+    private val authRepository: AuthRepository,
+    private val productRepository: ProductRepository,
+    private val userRepository: UserRepository,
+    private val chatRepository: ChatRepository,
+    private val addressesRepository: AddressesRepository,
+    private val cardRepository: CardRepository,
+    private val cartRepository: CartRepository
+) : MvpPresenter<MainMvpView>() {
 
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
