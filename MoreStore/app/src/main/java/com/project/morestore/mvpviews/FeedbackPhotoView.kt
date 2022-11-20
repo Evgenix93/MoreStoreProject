@@ -1,6 +1,6 @@
 package com.project.morestore.mvpviews
 
-import com.project.morestore.models.FeedbackItem
+import com.project.morestore.data.models.FeedbackItem
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
 

@@ -5,10 +5,6 @@ import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.project.morestore.MainActivity
-import com.project.morestore.models.*
-import com.squareup.moshi.Json
-import com.squareup.moshi.Moshi
 
 class MessagingService: FirebaseMessagingService() {
     private lateinit var broadcaster: LocalBroadcastManager

@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
@@ -19,14 +18,7 @@ import com.project.morestore.databinding.FragmentAddProductDetailsBinding
 import com.project.morestore.dialogs.ArchiveProductDialog
 import com.project.morestore.dialogs.DeleteProductDialog
 import com.project.morestore.dialogs.SaveProductDialog
-import com.project.morestore.fragments.CitiesFragment.Companion.MULTIPLY
-import com.project.morestore.fragments.CitiesFragment.Companion.REQUEST_KEY
-import com.project.morestore.fragments.CitiesFragment.Companion.SELECTED
-import com.project.morestore.fragments.CitiesFragment.Companion.SINGLE
-import com.project.morestore.fragments.CitiesFragment.Companion.TYPE
-import com.project.morestore.fragments.orders.create.OrderCreateFragment
-import com.project.morestore.fragments.orders.create.OrderCreateFragmentDirections
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared

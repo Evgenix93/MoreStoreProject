@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemSearchBinding
-import com.project.morestore.models.FavoriteSearch
+import com.project.morestore.data.models.FavoriteSearch
 import com.project.morestore.util.inflater
 
 class SearchesAdapter(

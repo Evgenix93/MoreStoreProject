@@ -3,11 +3,11 @@ package com.project.morestore.presenters
 
 import android.net.Uri
 import android.util.Log
-import com.project.morestore.models.Chat
-import com.project.morestore.models.ChatFunctionInfo
-import com.project.morestore.models.Id
-import com.project.morestore.models.User
-import com.project.morestore.models.cart.CartItem
+import com.project.morestore.data.models.Chat
+import com.project.morestore.data.models.ChatFunctionInfo
+import com.project.morestore.data.models.Id
+import com.project.morestore.data.models.User
+import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.repositories.*
 import com.project.morestore.mvpviews.MainMvpView

@@ -8,9 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.activity.ComponentActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -24,13 +22,10 @@ import com.project.morestore.databinding.ActivityMainBinding
 import com.project.morestore.fragments.CatalogFragment
 import com.project.morestore.fragments.SellerProfileFragment
 import com.project.morestore.fragments.SplashScreenFragmentDirections
-import com.project.morestore.models.SuggestionModels
-import com.project.morestore.mvpviews.LadingMvpView
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.MessagingService
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.components.ActivityComponent
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject

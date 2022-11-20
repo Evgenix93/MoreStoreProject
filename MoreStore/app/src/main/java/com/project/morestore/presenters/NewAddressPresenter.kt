@@ -1,8 +1,7 @@
 package com.project.morestore.presenters
 
-import android.util.Log
 import com.project.morestore.Geolocator
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.NewAddressView
 import com.project.morestore.repositories.AddressesRepository
 import com.project.morestore.repositories.GeoRepository

@@ -1,7 +1,7 @@
 package com.project.morestore.singletones
 
 import com.project.morestore.apis.*
-import com.project.morestore.models.CalendarAdapter
+import com.project.morestore.data.models.CalendarAdapter
 
 import com.project.morestore.util.TokenInterceptor
 import com.squareup.moshi.Moshi

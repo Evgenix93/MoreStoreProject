@@ -1,7 +1,6 @@
 package com.project.morestore.adapters.cart
 
-import com.project.morestore.models.User
-import com.project.morestore.models.cart.OrderItem
+import com.project.morestore.data.models.cart.OrderItem
 
 interface OrderClickListener {
     fun acceptMeeting(orderItem: OrderItem)

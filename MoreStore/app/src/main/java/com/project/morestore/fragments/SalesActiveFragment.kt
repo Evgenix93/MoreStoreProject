@@ -1,7 +1,6 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
@@ -15,17 +14,14 @@ import com.project.morestore.R
 import com.project.morestore.adapters.SalesAdapter
 import com.project.morestore.adapters.SliderMenuAdapter
 import com.project.morestore.databinding.FragmentOrdersBinding
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.CartItem
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.slidermenu.OrdersSliderMenu
-import com.project.morestore.models.slidermenu.SliderMenu
+import com.project.morestore.data.models.*
+import com.project.morestore.data.models.cart.CartItem
+import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
+import com.project.morestore.data.models.slidermenu.SliderMenu
 import com.project.morestore.mvpviews.SalesActiveMvpView
-import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.presenters.SalesPresenter
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject

@@ -9,14 +9,10 @@ import androidx.navigation.fragment.findNavController
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentAddressUserdataBinding
 import com.project.morestore.dialogs.AddressDeleteDialog
-import com.project.morestore.models.MyAddress
+import com.project.morestore.data.models.MyAddress
 import com.project.morestore.mvpviews.MyAddressPickupView
 import com.project.morestore.presenters.CreateMyAddressPickupPresenter
 import com.project.morestore.presenters.EditMyAddressPickupPresenter
-import com.project.morestore.presenters.MyAddressPickupPresenter
-import com.project.morestore.repositories.AddressesRepository
-import com.project.morestore.repositories.UserNetworkGateway
-import com.project.morestore.singletones.Network
 import com.project.morestore.util.*
 import com.project.morestore.widgets.loading.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint

@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
-import com.project.morestore.models.CdekAddress
+import com.project.morestore.data.models.CdekAddress
 import com.project.morestore.util.inflater
 
 class PickupAddressesAdapter(val callback :(CdekAddress) -> Unit) :RecyclerView.Adapter<PickupAddressesAdapter.PickupAddressHolder>() {

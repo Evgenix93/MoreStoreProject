@@ -1,8 +1,7 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.CartItem
-import org.json.JSONObject
+import com.project.morestore.data.models.*
+import com.project.morestore.data.models.cart.CartItem
 import retrofit2.Response
 import retrofit2.http.*
 

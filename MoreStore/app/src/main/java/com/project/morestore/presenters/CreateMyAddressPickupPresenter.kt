@@ -1,6 +1,6 @@
 package com.project.morestore.presenters
 
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.repositories.AddressesRepository
 import com.project.morestore.repositories.UserNetworkGateway
 import kotlinx.coroutines.launch

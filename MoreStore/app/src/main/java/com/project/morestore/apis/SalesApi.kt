@@ -1,8 +1,6 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.OrderItem
-import com.yandex.mapkit.search.PlaceInfo
+import com.project.morestore.data.models.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

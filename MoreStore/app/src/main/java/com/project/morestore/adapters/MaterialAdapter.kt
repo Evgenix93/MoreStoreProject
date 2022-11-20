@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemMaterialLineBinding
-import com.project.morestore.models.MaterialLine
+import com.project.morestore.data.models.MaterialLine
 
 class MaterialAdapter(private val context: Context, private val isFilter: Boolean, private val onClick: (Boolean) -> Unit) : RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder>() {
 

@@ -1,7 +1,7 @@
 package com.project.morestore.presenters
 
 import com.project.morestore.apis.BrandApi
-import com.project.morestore.models.NewBrand
+import com.project.morestore.data.models.NewBrand
 import com.project.morestore.mvpviews.NewBrandView
 import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch

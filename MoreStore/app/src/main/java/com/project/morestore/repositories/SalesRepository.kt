@@ -2,11 +2,8 @@ package com.project.morestore.repositories
 
 import android.util.Log
 import com.project.morestore.apis.SalesApi
-import com.project.morestore.models.DealPlace
-import com.project.morestore.models.Order
-import com.project.morestore.models.OrderPlace
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.singletones.Network
+import com.project.morestore.data.models.DealPlace
+import com.project.morestore.data.models.Order
 import com.squareup.moshi.JsonDataException
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response

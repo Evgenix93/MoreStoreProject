@@ -13,10 +13,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.SizeLineAdapter
 import com.project.morestore.databinding.FragmentFilterSizesColthesBinding
-import com.project.morestore.models.Filter
-import com.project.morestore.models.Property
+import com.project.morestore.data.models.Filter
+import com.project.morestore.data.models.Property
 
-import com.project.morestore.models.SizeLine
+import com.project.morestore.data.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 

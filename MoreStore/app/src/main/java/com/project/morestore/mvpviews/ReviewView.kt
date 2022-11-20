@@ -1,7 +1,6 @@
 package com.project.morestore.mvpviews
 
-import com.project.morestore.models.ReviewItem
-import com.project.morestore.models.ReviewListItem
+import com.project.morestore.data.models.ReviewListItem
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
 

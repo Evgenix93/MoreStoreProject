@@ -1,8 +1,8 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.Id
-import com.project.morestore.models.MyAddress
-import com.project.morestore.models.MyAddressData
+import com.project.morestore.data.models.Id
+import com.project.morestore.data.models.MyAddress
+import com.project.morestore.data.models.MyAddressData
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

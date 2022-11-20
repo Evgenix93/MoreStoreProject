@@ -8,7 +8,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemPhotoAddBinding
 import com.project.morestore.databinding.ItemPhotoBinding
 import com.project.morestore.databinding.ItemPhotoDescriptionBinding
-import com.project.morestore.models.FeedbackItem
+import com.project.morestore.data.models.FeedbackItem
 import com.project.morestore.util.inflater
 
 class FeedbackPhotosAdapter(

@@ -3,10 +3,11 @@ package com.project.morestore.fragments.orders.create
 
 import android.content.Context
 import com.project.morestore.R
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.repositories.*
 
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -15,7 +16,7 @@ import java.util.*
 import javax.inject.Inject
 
 class OrderCreatePresenter @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val orderRepository: OrdersRepository,
     private val salesRepository: SalesRepository,
     private val chatRepository: ChatRepository,

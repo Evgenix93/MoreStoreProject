@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.LinearLayout.*
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -15,14 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.*
-import com.project.morestore.models.Media
-import com.project.morestore.models.Message
+import com.project.morestore.data.models.Media
+import com.project.morestore.data.models.Message
 import com.project.morestore.util.createRect
 import com.project.morestore.util.dp
 import com.project.morestore.util.inflater
 import com.project.morestore.util.setStartDrawable
 import com.project.morestore.widgets.ChatMedia
-import java.util.*
 
 class MessagesAdapter(
     private val acceptDealCallback :(Message) -> Unit,

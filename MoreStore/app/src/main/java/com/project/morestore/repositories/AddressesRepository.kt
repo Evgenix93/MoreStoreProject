@@ -2,11 +2,9 @@ package com.project.morestore.repositories
 
 import com.project.morestore.AppException
 import com.project.morestore.apis.AddressesNetwork
-import com.project.morestore.models.Id
-import com.project.morestore.models.MyAddress
-import com.project.morestore.models.MyAddressData
-import com.squareup.moshi.JsonDataException
-import retrofit2.HttpException
+import com.project.morestore.data.models.Id
+import com.project.morestore.data.models.MyAddress
+import com.project.morestore.data.models.MyAddressData
 import javax.inject.Inject
 
 

@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -23,13 +22,10 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentOrderDetailsBinding
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.dialogs.YesNoDialog
-import com.project.morestore.fragments.orders.active.OrdersActiveFragmentDirections
-import com.project.morestore.fragments.orders.create.OrderCreateFragmentDirections
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.cart.OrderStatus
+import com.project.morestore.data.models.*
+import com.project.morestore.data.models.cart.OrderItem
+import com.project.morestore.data.models.cart.OrderStatus
 import com.project.morestore.mvpviews.OrderDetailsView
-import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.presenters.OrderDetailsPresenter
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment

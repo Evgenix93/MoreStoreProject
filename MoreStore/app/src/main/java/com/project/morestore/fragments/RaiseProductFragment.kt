@@ -8,7 +8,6 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
@@ -17,10 +16,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.project.morestore.R
 import com.project.morestore.adapters.PriceViewPagerAdapter
 import com.project.morestore.databinding.FragmentRaiseProductBinding
-import com.project.morestore.dialogs.MenuBottomDialogFragment
-import com.project.morestore.models.PaymentUrl
+import com.project.morestore.data.models.PaymentUrl
 import com.project.morestore.mvpviews.RaiseProductView
-import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.presenters.RaiseProductPresenter
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint

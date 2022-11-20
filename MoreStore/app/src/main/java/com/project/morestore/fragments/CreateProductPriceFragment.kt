@@ -12,8 +12,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductPriceBinding
 import com.project.morestore.dialogs.SaveProductDialog
-import com.project.morestore.models.CreatedProductId
-import com.project.morestore.models.SuggestionModels
+import com.project.morestore.data.models.CreatedProductId
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import dagger.hilt.android.AndroidEntryPoint
@@ -110,7 +109,7 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
         }
 
 
-      val createProductData = result as com.project.morestore.models.CreateProductData
+      val createProductData = result as com.project.morestore.data.models.CreateProductData
       binding.originalPriceEditText.setText("${createProductData.price?.toFloat()?.toInt() ?: ""}")
       binding.salePriceEditText.setText("${createProductData.priceNew?.toFloat()?.toInt() ?: ""}")
         binding.toolbar.actionIcon.setOnClickListener {

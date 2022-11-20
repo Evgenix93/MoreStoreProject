@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.WidgetChatMediaBinding
-import com.project.morestore.models.Media
+import com.project.morestore.data.models.Media
 import com.project.morestore.util.dp
 import com.project.morestore.util.inflater
 

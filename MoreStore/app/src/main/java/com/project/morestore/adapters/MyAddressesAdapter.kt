@@ -7,9 +7,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemMyaddressBinding
-import com.project.morestore.models.AddressType
-import com.project.morestore.models.DeliveryAddress
-import com.project.morestore.models.MyAddress
+import com.project.morestore.data.models.AddressType
+import com.project.morestore.data.models.DeliveryAddress
+import com.project.morestore.data.models.MyAddress
 import com.project.morestore.util.inflater
 import java.lang.StringBuilder
 

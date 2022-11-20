@@ -5,21 +5,21 @@ import android.net.Uri
 import android.util.Base64
 import android.util.Log
 import com.project.morestore.apis.UserApi
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
 import com.squareup.moshi.Moshi
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-class UserRepository @Inject constructor(val context: Context, private val userApi: UserApi) {
+class UserRepository @Inject constructor(@ApplicationContext val context: Context, private val userApi: UserApi) {
 
 
     suspend fun changeUserData(

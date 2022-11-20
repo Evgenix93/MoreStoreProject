@@ -1,8 +1,6 @@
 package com.project.morestore.presenters
 
-import android.content.Context
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.OrderItem
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.CreateDeliveryMvpView
 import com.project.morestore.repositories.GeoRepository
 import com.project.morestore.repositories.OrdersRepository

@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.adapters.FavoriteSellersAdapter
-import com.project.morestore.models.FavoriteSeller
-import com.project.morestore.models.User
+import com.project.morestore.data.models.User
 import com.project.morestore.mvpviews.FavoritesMvpView
 import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.util.autoCleared

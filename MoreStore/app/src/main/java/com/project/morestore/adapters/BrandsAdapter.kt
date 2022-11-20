@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemBrandBinding
-import com.project.morestore.models.ProductBrand
+import com.project.morestore.data.models.ProductBrand
 
 class BrandsAdapter(private val onWishClick: (id: Long) -> Unit, private val onClick: () -> Unit) :
     RecyclerView.Adapter<BrandsAdapter.BrandViewHolder>() {

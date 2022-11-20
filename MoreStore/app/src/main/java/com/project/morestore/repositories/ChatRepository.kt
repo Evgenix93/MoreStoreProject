@@ -5,10 +5,9 @@ import android.net.Uri
 import android.util.Base64
 import android.util.Log
 import com.project.morestore.apis.MessageApi
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.singletones.ChatMedia
-import com.project.morestore.singletones.CreateProductData
-import com.project.morestore.singletones.Network
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -16,7 +15,7 @@ import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
-class ChatRepository @Inject constructor(val context: Context, private val chatApi: MessageApi) {
+class ChatRepository @Inject constructor(@ApplicationContext val context: Context, private val chatApi: MessageApi) {
 
 
 

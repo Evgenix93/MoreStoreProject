@@ -1,11 +1,11 @@
 package com.project.morestore.mvpviews
 
-import com.project.morestore.models.Chat
-import com.project.morestore.models.Order
-import com.project.morestore.models.PaymentUrl
-import com.project.morestore.models.Product
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.cart.OrderStatus
+import com.project.morestore.data.models.Chat
+import com.project.morestore.data.models.Order
+import com.project.morestore.data.models.PaymentUrl
+import com.project.morestore.data.models.Product
+import com.project.morestore.data.models.cart.OrderItem
+import com.project.morestore.data.models.cart.OrderStatus
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 

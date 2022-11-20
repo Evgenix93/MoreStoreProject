@@ -1,11 +1,10 @@
 package com.project.morestore.presenters
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.project.morestore.models.ProductBrand
-import com.project.morestore.models.Region
-import com.project.morestore.models.*
+import com.project.morestore.data.models.ProductBrand
+import com.project.morestore.data.models.Region
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.RegistrationMvpView
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.repositories.*

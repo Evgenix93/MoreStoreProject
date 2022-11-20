@@ -1,6 +1,6 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.User
+import com.project.morestore.data.models.User
 import retrofit2.Response
 import retrofit2.http.GET
 

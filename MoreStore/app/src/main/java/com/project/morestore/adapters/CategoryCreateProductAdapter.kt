@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemCreateProductElementBinding
-import com.project.morestore.models.Category
-import com.project.morestore.models.ProductCategory
+import com.project.morestore.data.models.ProductCategory
 
 class CategoryCreateProductAdapter(val onClick: (ProductCategory) -> Unit): RecyclerView.Adapter<CategoryCreateProductAdapter.CategoryViewHolder>() {
     private var list = listOf<ProductCategory>()

@@ -18,11 +18,9 @@ import com.project.morestore.adapters.CitiesAdapter
 import com.project.morestore.adapters.MultiplyCityAdapter
 import com.project.morestore.adapters.SingleCityAdapter
 import com.project.morestore.databinding.FragmentCitiesBinding
-import com.project.morestore.models.Region
+import com.project.morestore.data.models.Region
 import com.project.morestore.mvpviews.CitiesView
-import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.presenters.CitiesPresenter
-import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
 import com.project.morestore.util.addTextChangeListener
 import com.project.morestore.util.args
@@ -59,6 +57,9 @@ class CitiesFragment :MvpAppCompatFragment(), CitiesView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val type = if(args.getInt(TYPE) == 0) CitiesPresenter.Type.SINGLE
+        else CitiesPresenter.Type.MULTIPLY
+        presenter.getCities(type, args.getLongArray(SELECTED) ?: longArrayOf())
         if(args.getInt(TYPE) == 0){
             adapter = SingleCityAdapter{
                 setFragmentResult(REQUEST_KEY, bundleOf(SINGLE to ParcelRegion(it)))

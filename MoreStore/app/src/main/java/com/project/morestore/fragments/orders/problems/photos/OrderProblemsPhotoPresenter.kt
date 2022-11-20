@@ -4,19 +4,20 @@ import android.content.Context
 import android.util.Base64
 import com.project.morestore.R
 import com.project.morestore.dialogs.FeedbackCompleteDialog
-import com.project.morestore.models.PhotoVideo
-import com.project.morestore.models.ProductProblemsData
+import com.project.morestore.data.models.PhotoVideo
+import com.project.morestore.data.models.ProductProblemsData
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.ProductRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import moxy.MvpPresenter
 import moxy.presenterScope
 import java.io.File
 import javax.inject.Inject
 
-class OrderProblemsPhotoPresenter @Inject constructor(val context: Context,
-                                  private val ordersRepository: OrdersRepository,
-                                  private val productRepository: ProductRepository) : MvpPresenter<OrderProblemsPhotosView>() {
+class OrderProblemsPhotoPresenter @Inject constructor(@ApplicationContext val context: Context,
+                                                      private val ordersRepository: OrdersRepository,
+                                                      private val productRepository: ProductRepository) : MvpPresenter<OrderProblemsPhotosView>() {
 
 
     var photosList = listOf<File>()

@@ -16,10 +16,10 @@ import com.project.morestore.adapters.cart.CartAdapter
 import com.project.morestore.databinding.FragmentOrdersCartBinding
 import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.fragments.CabinetGuestFragment
-import com.project.morestore.models.Product
+import com.project.morestore.data.models.Product
 
-import com.project.morestore.models.User
-import com.project.morestore.models.slidermenu.OrdersSliderMenu
+import com.project.morestore.data.models.User
+import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
@@ -59,6 +59,7 @@ class OrdersCartFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolbarPresenter.initMenu(OrdersSliderMenu.CART)
         tokenCheck()
         showBottomNav()
         initToolbar()

@@ -16,13 +16,11 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFavoritesBinding
 import com.project.morestore.databinding.TabCategoryBinding
 import com.project.morestore.fragments.base.BottomNavigationFragment
-import com.project.morestore.models.FavoriteSearch
-import com.project.morestore.models.Product
-import com.project.morestore.models.ProductBrand
-import com.project.morestore.models.User
+import com.project.morestore.data.models.FavoriteSearch
+import com.project.morestore.data.models.Product
+import com.project.morestore.data.models.ProductBrand
+import com.project.morestore.data.models.User
 import com.project.morestore.mvpviews.FavoritesMainMvpView
-import com.project.morestore.mvpviews.FavoritesMvpView
-import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.util.setSelectListener
 import dagger.hilt.android.AndroidEntryPoint

@@ -2,19 +2,17 @@ package com.project.morestore.adapters.cart
 
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.Range
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemCartProductBinding
-import com.project.morestore.models.User
-import com.project.morestore.models.cart.CartItem
+import com.project.morestore.data.models.User
+import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.util.getDrawableRes
 
 class CartAdapter(

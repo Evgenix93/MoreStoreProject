@@ -17,14 +17,13 @@ import com.project.morestore.R
 import com.project.morestore.adapters.BrandsAdapter
 import com.project.morestore.adapters.CategoryAdapter
 import com.project.morestore.databinding.FragmentBrandsBinding
-import com.project.morestore.models.Filter
-import com.project.morestore.models.ProductBrand
+import com.project.morestore.data.models.Filter
+import com.project.morestore.data.models.ProductBrand
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import moxy.MvpAppCompatFragment

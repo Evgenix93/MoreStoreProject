@@ -2,7 +2,7 @@ package com.project.morestore.fragments.orders.problems
 
 
 import com.project.morestore.dialogs.ProblemTypeDialog
-import com.project.morestore.models.ProductProblemsData
+import com.project.morestore.data.models.ProductProblemsData
 import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter

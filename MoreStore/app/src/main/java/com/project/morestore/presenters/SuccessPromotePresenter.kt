@@ -3,8 +3,9 @@ package com.project.morestore.presenters
 import com.project.morestore.mvpviews.SuccessPromoteView
 import moxy.MvpPresenter
 import java.util.*
+import javax.inject.Inject
 
-class SuccessPromotePresenter: MvpPresenter<SuccessPromoteView>() {
+class SuccessPromotePresenter @Inject constructor(): MvpPresenter<SuccessPromoteView>() {
 
     fun getPromoEndDate(tariff: Int){
         val promoDays = if(tariff == 1) 1 else 7

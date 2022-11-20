@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
-import com.project.morestore.models.Feedback
-import com.project.morestore.models.FeedbackItem
+import com.project.morestore.data.models.Feedback
+import com.project.morestore.data.models.FeedbackItem
 import com.project.morestore.mvpviews.FeedbackPhotoView
 import com.project.morestore.repositories.ReviewRepository
 import dagger.hilt.android.qualifiers.ApplicationContext

@@ -1,7 +1,6 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -10,10 +9,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.SizeCardsAdapter
 import com.project.morestore.databinding.FragmentFilterSizesKidsBinding
-import com.project.morestore.models.Filter
-import com.project.morestore.models.Property
-import com.project.morestore.models.Size
-import com.project.morestore.models.SizeLine
+import com.project.morestore.data.models.Filter
+import com.project.morestore.data.models.Property
+import com.project.morestore.data.models.Size
+import com.project.morestore.data.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared

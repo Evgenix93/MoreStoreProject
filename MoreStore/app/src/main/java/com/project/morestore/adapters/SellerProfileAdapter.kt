@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.project.morestore.fragments.SellerProductsFragment
 import com.project.morestore.fragments.SellerReviewsFragment
-import com.project.morestore.models.Product
-import com.project.morestore.models.User
+import com.project.morestore.data.models.Product
+import com.project.morestore.data.models.User
 
 class SellerProfileAdapter(
     fragment: Fragment,

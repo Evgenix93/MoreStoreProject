@@ -11,7 +11,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.UsersAdapter
 import com.project.morestore.databinding.FragmentWaitReviewBinding
 import com.project.morestore.dialogs.DeleteDialog
-import com.project.morestore.models.User
+import com.project.morestore.data.models.User
 import com.project.morestore.mvpviews.BlackListMvpView
 import com.project.morestore.presenters.BlackListPresenter
 import com.project.morestore.util.autoCleared

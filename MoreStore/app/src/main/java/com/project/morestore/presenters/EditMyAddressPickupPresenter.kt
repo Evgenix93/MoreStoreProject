@@ -1,8 +1,8 @@
 package com.project.morestore.presenters
 
-import com.project.morestore.models.AddressType
-import com.project.morestore.models.CdekAddress
-import com.project.morestore.models.MyAddress
+import com.project.morestore.data.models.AddressType
+import com.project.morestore.data.models.CdekAddress
+import com.project.morestore.data.models.MyAddress
 import com.project.morestore.repositories.AddressesRepository
 import kotlinx.coroutines.launch
 import moxy.presenterScope

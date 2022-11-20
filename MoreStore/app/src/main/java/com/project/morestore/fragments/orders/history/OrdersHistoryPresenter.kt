@@ -4,23 +4,24 @@ import android.content.Context
 import com.project.morestore.R
 import com.project.morestore.adapters.cart.OrdersHistoryAdapter
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
-import com.project.morestore.models.OfferedOrderPlace
-import com.project.morestore.models.Order
-import com.project.morestore.models.User
-import com.project.morestore.models.cart.OrderHistoryItem
-import com.project.morestore.models.cart.OrderHistoryStatus
+import com.project.morestore.data.models.OfferedOrderPlace
+import com.project.morestore.data.models.Order
+import com.project.morestore.data.models.User
+import com.project.morestore.data.models.cart.OrderHistoryItem
+import com.project.morestore.data.models.cart.OrderHistoryStatus
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import java.util.*
 import javax.inject.Inject
 
-class OrdersHistoryPresenter @Inject constructor(private val context: Context,
-                             private val ordersRepository: OrdersRepository,
-                             private val userRepository: UserRepository)
+class OrdersHistoryPresenter @Inject constructor(@ApplicationContext private val context: Context,
+                                                 private val ordersRepository: OrdersRepository,
+                                                 private val userRepository: UserRepository)
     : MvpPresenter<OrdersHistoryView>() {
 
     private var adapter: OrdersHistoryAdapter? = null

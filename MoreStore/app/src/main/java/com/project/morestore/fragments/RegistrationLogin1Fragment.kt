@@ -1,7 +1,6 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -11,12 +10,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration1Binding
-import com.project.morestore.models.RegistrationResponse
-import com.project.morestore.models.User
-import com.project.morestore.mvpviews.AuthMvpView
+import com.project.morestore.data.models.RegistrationResponse
+import com.project.morestore.data.models.User
 import com.project.morestore.mvpviews.AuthPhoneMvpView
 import com.project.morestore.presenters.AuthPresenter
-import com.project.morestore.presenters.UserPresenter
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter

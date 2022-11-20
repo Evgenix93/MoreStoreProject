@@ -1,11 +1,10 @@
 package com.project.morestore.presenters
 
-import android.content.Context
 import android.util.Log
-import com.project.morestore.models.ProductBrand
+import com.project.morestore.data.models.ProductBrand
 
 
-import com.project.morestore.models.Size
+import com.project.morestore.data.models.Size
 import com.project.morestore.mvpviews.OnBoardingMvpView
 import com.project.morestore.repositories.AuthRepository
 
@@ -13,12 +12,9 @@ import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
 import com.project.morestore.util.errorMessage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
-import okhttp3.ResponseBody
 import javax.inject.Inject
 
 

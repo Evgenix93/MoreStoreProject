@@ -1,6 +1,6 @@
 package com.project.morestore.mvpviews
 
-import com.project.morestore.models.PaymentUrl
+import com.project.morestore.data.models.PaymentUrl
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 

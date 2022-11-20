@@ -1,6 +1,6 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.Region
+import com.project.morestore.data.models.Region
 import retrofit2.http.GET
 
 interface FilterApi {

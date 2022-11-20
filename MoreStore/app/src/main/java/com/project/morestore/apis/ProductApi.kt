@@ -1,6 +1,6 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*

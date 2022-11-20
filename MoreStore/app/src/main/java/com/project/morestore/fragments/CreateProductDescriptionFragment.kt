@@ -11,8 +11,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductDescriptionBinding
 import com.project.morestore.dialogs.SaveProductDialog
-import com.project.morestore.models.CreatedProductId
-import com.project.morestore.models.SuggestionModels
+import com.project.morestore.data.models.CreatedProductId
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,7 +72,7 @@ class CreateProductDescriptionFragment: MvpAppCompatFragment(R.layout.fragment_c
             return
         }
 
-        val createProductData = result as com.project.morestore.models.CreateProductData
+        val createProductData = result as com.project.morestore.data.models.CreateProductData
         binding.descriptionEditText.setText(createProductData.about)
         binding.toolbar.actionIcon.setOnClickListener {
             if(result.id == null)

@@ -5,7 +5,7 @@ import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.project.morestore.R
-import com.project.morestore.models.Region
+import com.project.morestore.data.models.Region
 import com.project.morestore.util.createView
 
 abstract class CitiesAdapter :RecyclerView.Adapter<CitiesAdapter.CityHolder>() {

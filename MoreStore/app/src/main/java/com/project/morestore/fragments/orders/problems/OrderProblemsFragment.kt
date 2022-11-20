@@ -10,7 +10,7 @@ import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentProblemGoodsBinding
 import com.project.morestore.dialogs.ProblemTypeDialog
-import com.project.morestore.models.ProductProblemsData
+import com.project.morestore.data.models.ProductProblemsData
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.redmadrobot.inputmask.MaskedTextChangedListener.Companion.installOn
 import dagger.hilt.android.AndroidEntryPoint

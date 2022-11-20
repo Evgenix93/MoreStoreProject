@@ -1,21 +1,17 @@
 package com.project.morestore.presenters
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import com.google.firebase.messaging.FirebaseMessaging
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.MainFragmentMvpView
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
-import kotlinx.coroutines.*
 import com.project.morestore.repositories.*
-import com.project.morestore.singletones.Network
 import com.project.morestore.util.errorMessage
-import dagger.hilt.android.qualifiers.ActivityContext
 import com.project.morestore.util.ProductStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

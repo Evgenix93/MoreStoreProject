@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,17 +17,14 @@ import com.project.morestore.adapters.ChatsAdapter
 import com.project.morestore.databinding.FragmentLotchatsBinding
 import com.project.morestore.fragments.base.BottomNavigationFragment
 
-import com.project.morestore.models.*
-import com.project.morestore.mvpviews.ChatMvpView
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.ChatPresenter
-import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.MessagingService
 import com.project.morestore.util.MiddleDivider
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 @AndroidEntryPoint
 class LotChatsFragment : BottomNavigationFragment(), MainMvpView {

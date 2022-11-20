@@ -5,7 +5,7 @@ import android.graphics.Color.TRANSPARENT
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.databinding.ItemSuggestAddressBinding
-import com.project.morestore.models.SuggestAddress
+import com.project.morestore.data.models.SuggestAddress
 import com.project.morestore.util.inflater
 
 class SuggestsAddressesAdapter(private val onSelectChange: (Boolean) -> Unit) :RecyclerView.Adapter<SuggestsAddressesAdapter.SuggestsAddressHolder>() {

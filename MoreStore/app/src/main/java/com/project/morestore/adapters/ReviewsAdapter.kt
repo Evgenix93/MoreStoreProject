@@ -9,10 +9,10 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemReviewAddBinding
 import com.project.morestore.databinding.ItemReviewBinding
-import com.project.morestore.models.PreviewPhoto
-import com.project.morestore.models.Review
-import com.project.morestore.models.ReviewItem
-import com.project.morestore.models.ReviewListItem
+import com.project.morestore.data.models.PreviewPhoto
+import com.project.morestore.data.models.Review
+import com.project.morestore.data.models.ReviewItem
+import com.project.morestore.data.models.ReviewListItem
 import com.project.morestore.util.createRect
 import com.project.morestore.util.diffInDays
 import com.project.morestore.util.dp

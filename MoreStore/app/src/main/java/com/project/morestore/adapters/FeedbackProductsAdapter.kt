@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemFeedbackProductBinding
-import com.project.morestore.models.FeedbackProduct
+import com.project.morestore.data.models.FeedbackProduct
 import com.project.morestore.util.inflater
 
 class FeedbackProductsAdapter(

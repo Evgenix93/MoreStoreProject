@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
-import com.project.morestore.Geolocator
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentMyaddressNewBinding
 import com.project.morestore.dialogs.AddressDeleteDialog
@@ -23,12 +22,9 @@ import com.project.morestore.fragments.MapMarkerAddressesFragment.Companion.CITY
 import com.project.morestore.fragments.MapMarkerAddressesFragment.Companion.HOUSE
 import com.project.morestore.fragments.MapMarkerAddressesFragment.Companion.INDEX
 import com.project.morestore.fragments.MapMarkerAddressesFragment.Companion.STREET
-import com.project.morestore.models.MyAddress
+import com.project.morestore.data.models.MyAddress
 import com.project.morestore.mvpviews.NewAddressView
 import com.project.morestore.presenters.NewAddressPresenter
-import com.project.morestore.repositories.AddressesRepository
-import com.project.morestore.repositories.GeoRepository
-import com.project.morestore.repositories.UserNetworkGateway
 import com.project.morestore.util.addTextChangeListener
 import com.project.morestore.util.attachNavigation
 import com.project.morestore.util.setPhoneField

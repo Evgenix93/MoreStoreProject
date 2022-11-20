@@ -10,10 +10,9 @@ import com.project.morestore.R
 import com.project.morestore.adapters.FeedbackProductsAdapter
 import com.project.morestore.databinding.FragmentFeedbackProductsBinding
 import com.project.morestore.fragments.base.FullscreenFragment
-import com.project.morestore.models.FeedbackProduct
+import com.project.morestore.data.models.FeedbackProduct
 import com.project.morestore.mvpviews.FeedbackProductView
 import com.project.morestore.presenters.FeedbackProductPresenter
-import com.project.morestore.repositories.ReviewRepository
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import dagger.hilt.android.AndroidEntryPoint

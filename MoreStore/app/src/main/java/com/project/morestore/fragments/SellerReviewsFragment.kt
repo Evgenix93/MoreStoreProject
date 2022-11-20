@@ -10,11 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.adapters.ReviewsAdapter
 import com.project.morestore.fragments.MediaFragment.Companion.PHOTOS
-import com.project.morestore.models.ReviewItem
-import com.project.morestore.models.ReviewListItem
+import com.project.morestore.data.models.ReviewListItem
 import com.project.morestore.mvpviews.ReviewView
 import com.project.morestore.presenters.ReviewsPresenter
-import com.project.morestore.repositories.ReviewRepository
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import moxy.MvpAppCompatFragment

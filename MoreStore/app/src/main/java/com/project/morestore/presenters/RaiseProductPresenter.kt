@@ -1,8 +1,6 @@
 package com.project.morestore.presenters
 
-import android.content.Context
-import com.project.morestore.models.PaymentUrl
-import com.project.morestore.models.Tariff
+import com.project.morestore.data.models.Tariff
 import com.project.morestore.mvpviews.RaiseProductView
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.util.errorMessage

@@ -18,11 +18,11 @@ import com.project.morestore.adapters.cart.OrdersAdapter
 import com.project.morestore.databinding.FragmentOrdersBinding
 import com.project.morestore.dialogs.YesNoDialog
 import com.project.morestore.fragments.ChatFragment
-import com.project.morestore.models.Chat
-import com.project.morestore.models.PaymentUrl
-import com.project.morestore.models.User
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.slidermenu.OrdersSliderMenu
+import com.project.morestore.data.models.Chat
+import com.project.morestore.data.models.PaymentUrl
+import com.project.morestore.data.models.User
+import com.project.morestore.data.models.cart.OrderItem
+import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.mvpviews.ToolbarCartView
 
@@ -52,6 +52,7 @@ class OrdersActiveFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolBarCartPresenter.initMenu(OrdersSliderMenu.ORDERS)
         showBottomNav()
         initToolbar()
         showLoading(true)

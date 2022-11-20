@@ -1,8 +1,7 @@
 package com.project.morestore.presenters
 
 import com.project.morestore.Geolocator
-import com.project.morestore.fragments.MapMarkerAddressesFragment.Companion.INDEX
-import com.project.morestore.models.SuggestAddress
+import com.project.morestore.data.models.SuggestAddress
 import com.project.morestore.mvpviews.MapMarkerAddressesView
 import com.project.morestore.util.SimpleSearchListener
 import com.yandex.mapkit.GeoObjectCollection

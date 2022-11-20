@@ -16,10 +16,9 @@ import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.dialogs.SuccessSaveSearchDialog
 import com.project.morestore.fragments.base.FullscreenFragment
 
-import com.project.morestore.models.FavoriteSearch
-import com.project.morestore.models.Filter
-import com.project.morestore.models.SizeLine
-import com.project.morestore.mvpviews.FavoritesMvpView
+import com.project.morestore.data.models.FavoriteSearch
+import com.project.morestore.data.models.Filter
+import com.project.morestore.data.models.SizeLine
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.singletones.FilterState

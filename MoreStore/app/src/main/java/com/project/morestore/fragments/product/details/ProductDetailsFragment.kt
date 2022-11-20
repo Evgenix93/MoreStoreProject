@@ -12,7 +12,6 @@ import android.util.Range
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
@@ -31,7 +30,7 @@ import com.project.morestore.fragments.CabinetGuestFragment
 import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.fragments.LotChatsFragment
 import com.project.morestore.fragments.MediaFragment
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.Token

@@ -1,14 +1,13 @@
 package com.project.morestore.presenters
 
-import android.content.Context
 import com.project.morestore.util.isEmailValid
 
 
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
-import com.project.morestore.models.RegistrationData
-import com.project.morestore.models.SocialType
-import com.project.morestore.models.User
+import com.project.morestore.data.models.RegistrationData
+import com.project.morestore.data.models.SocialType
+import com.project.morestore.data.models.User
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.mvpviews.AuthPhoneMvpView
 import com.project.morestore.repositories.AuthRepository

@@ -11,9 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.project.morestore.R
 import com.project.morestore.adapters.SearchesAdapter
-import com.project.morestore.dialogs.DeleteDialog
-import com.project.morestore.models.FavoriteSearch
-import com.project.morestore.models.Search
+import com.project.morestore.data.models.FavoriteSearch
 import com.project.morestore.mvpviews.FavoritesMvpView
 import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.util.autoCleared

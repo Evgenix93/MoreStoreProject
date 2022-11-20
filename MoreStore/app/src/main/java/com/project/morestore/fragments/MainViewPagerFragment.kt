@@ -9,7 +9,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemBannerBinding
-import com.project.morestore.models.Banner
+import com.project.morestore.data.models.Banner
 
 class MainViewPagerFragment(private val banner: Banner): Fragment(R.layout.item_banner) {
     private val binding: ItemBannerBinding by viewBinding()

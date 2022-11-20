@@ -7,11 +7,12 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_A
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.OnTokenCanceledListener
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class Geolocator @Inject constructor(val context :Context){
+class Geolocator @Inject constructor(@ApplicationContext val context :Context){
 
     suspend fun getCurrentPosition() :GeoPosition? = suspendCoroutine { coroutine ->
         getCurrentPosition { position -> coroutine.resume(position) }

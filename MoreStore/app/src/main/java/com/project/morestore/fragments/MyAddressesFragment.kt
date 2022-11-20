@@ -17,15 +17,12 @@ import com.project.morestore.dialogs.AddAddressDialog
 import com.project.morestore.fragments.MapMarkerPickupsFragment.Companion.PICKUP_ADDRESS
 import com.project.morestore.fragments.base.FullscreenFragment
 
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.MyAddressesView
 import com.project.morestore.presenters.MyAddressesPresenter
-import com.project.morestore.repositories.AddressesRepository
-import com.project.morestore.singletones.Network
 import com.project.morestore.util.attachNavigation
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
-import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 

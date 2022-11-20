@@ -1,24 +1,22 @@
 package com.project.morestore.fragments.orders.cart
 
 import android.content.Context
-import android.util.Log
 import com.project.morestore.R
 import com.project.morestore.adapters.cart.CartAdapter
 import com.project.morestore.dialogs.DeleteDialog
-import com.project.morestore.models.cart.CartItem
+import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.repositories.CartRepository
-import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
-import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 
-class OrdersCartPresenter @Inject constructor(val context: Context,
-                          private val productRepository: ProductRepository,
-                          private val cartRepository: CartRepository) : MvpPresenter<OrdersCartView>() {
+class OrdersCartPresenter @Inject constructor(@ApplicationContext val context: Context,
+                                              private val productRepository: ProductRepository,
+                                              private val cartRepository: CartRepository) : MvpPresenter<OrdersCartView>() {
 
     private lateinit var adapter: CartAdapter
 

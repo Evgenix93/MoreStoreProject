@@ -2,8 +2,7 @@ package com.project.morestore.repositories
 
 import com.project.morestore.GeoPosition
 import com.project.morestore.apis.GeoApi
-import com.project.morestore.models.Address
-import com.project.morestore.singletones.Network
+import com.project.morestore.data.models.Address
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException

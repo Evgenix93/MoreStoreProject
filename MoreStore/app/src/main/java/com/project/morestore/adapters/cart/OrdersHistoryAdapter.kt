@@ -8,10 +8,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemOrderHistoryBinding
-import com.project.morestore.models.User
-import com.project.morestore.models.cart.OrderHistoryItem
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.cart.OrderStatus
+import com.project.morestore.data.models.User
+import com.project.morestore.data.models.cart.OrderHistoryItem
+import com.project.morestore.data.models.cart.OrderItem
+import com.project.morestore.data.models.cart.OrderStatus
 
 class OrdersHistoryAdapter(
     private val items: List<OrderHistoryItem>,

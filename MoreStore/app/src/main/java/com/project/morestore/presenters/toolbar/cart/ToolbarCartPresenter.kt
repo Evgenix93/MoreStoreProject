@@ -3,21 +3,22 @@ package com.project.morestore.presenters.toolbar.cart
 import android.content.Context
 import com.project.morestore.R
 import com.project.morestore.adapters.SliderMenuAdapter
-import com.project.morestore.models.Order
-import com.project.morestore.models.cart.CartItem
-import com.project.morestore.models.slidermenu.OrdersSliderMenu
-import com.project.morestore.models.slidermenu.SliderMenu
+import com.project.morestore.data.models.Order
+import com.project.morestore.data.models.cart.CartItem
+import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
+import com.project.morestore.data.models.slidermenu.SliderMenu
 import com.project.morestore.mvpviews.ToolbarCartView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.CartRepository
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.SalesRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import javax.inject.Inject
 
-class ToolbarCartPresenter @Inject constructor(val context: Context, val selectedMenu: OrdersSliderMenu,
+class ToolbarCartPresenter @Inject constructor(@ApplicationContext val context: Context,
                                                private val ordersRepository: OrdersRepository,
                                                private val authRepository: AuthRepository,
                                                private val saleRepository: SalesRepository,
@@ -27,10 +28,7 @@ class ToolbarCartPresenter @Inject constructor(val context: Context, val selecte
     private lateinit var adapter: SliderMenuAdapter<OrdersSliderMenu>
 
 
-    override fun attachView(view: ToolbarCartView) {
-        super.attachView(view)
-        initMenu()
-    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     //                      public
@@ -46,7 +44,7 @@ class ToolbarCartPresenter @Inject constructor(val context: Context, val selecte
     //                      private
     ///////////////////////////////////////////////////////////////////////////
 
-    private fun initMenu() {
+     fun initMenu(selectedMenu: OrdersSliderMenu) {
         presenterScope.launch {
             //val cartItems = getCartItems()
             //val orderItems = getOrderItems()

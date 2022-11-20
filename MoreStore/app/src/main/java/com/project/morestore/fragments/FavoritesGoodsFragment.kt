@@ -1,26 +1,18 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
-import com.project.morestore.models.Product
+import com.project.morestore.data.models.Product
 import com.project.morestore.mvpviews.FavoritesMvpView
 import com.project.morestore.presenters.FavoritesPresenter
-import com.project.morestore.presenters.MainPresenter
-import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 @AndroidEntryPoint
 class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {

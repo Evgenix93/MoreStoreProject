@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemOptionBinding
-import com.project.morestore.models.CreateProductData
-import com.project.morestore.models.Option
+import com.project.morestore.data.models.CreateProductData
+import com.project.morestore.data.models.Option
 import java.io.File
 
 class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :

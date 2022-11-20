@@ -1,14 +1,13 @@
 package com.project.morestore.presenters
 
-import com.project.morestore.models.CdekAddress
-import com.project.morestore.models.DeliveryAddress
-import com.project.morestore.models.MyAddress
+import com.project.morestore.data.models.CdekAddress
+import com.project.morestore.data.models.DeliveryAddress
+import com.project.morestore.data.models.MyAddress
 import com.project.morestore.mvpviews.MyAddressPickupView
 import com.project.morestore.repositories.AddressesRepository
 import com.project.morestore.widgets.loading.LoadingPresenter
 import kotlinx.coroutines.CoroutineExceptionHandler
 import moxy.MvpPresenter
-import javax.inject.Inject
 
 abstract class MyAddressPickupPresenter (
     protected val addressNetwork :AddressesRepository

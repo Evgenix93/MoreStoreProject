@@ -1,20 +1,15 @@
 package com.project.morestore.presenters
 
-import android.content.Context
-import android.util.Log
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.cart.OrderStatus
+import com.project.morestore.data.models.*
+import com.project.morestore.data.models.cart.OrderItem
+import com.project.morestore.data.models.cart.OrderStatus
 import com.project.morestore.mvpviews.OrderDetailsView
 import com.project.morestore.repositories.*
 import com.project.morestore.util.errorMessage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
-import okhttp3.ResponseBody
 import java.util.*
 import javax.inject.Inject
 

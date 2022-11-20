@@ -1,7 +1,7 @@
 package com.project.morestore.mvpviews
 
 import com.project.morestore.adapters.SliderMenuAdapter
-import com.project.morestore.models.slidermenu.OrdersSliderMenu
+import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
 import moxy.viewstate.strategy.alias.OneExecution

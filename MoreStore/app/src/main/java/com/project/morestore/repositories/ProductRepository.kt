@@ -12,14 +12,14 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.project.morestore.apis.OnboardingApi
 import com.project.morestore.apis.ProductApi
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.singletones.CreateProductData
 
 import com.project.morestore.singletones.FilterState
 
 import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
-import com.squareup.moshi.JsonDataException
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -28,7 +28,7 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-class ProductRepository @Inject constructor(private val context: Context,
+class ProductRepository @Inject constructor(@ApplicationContext private val context: Context,
                                             private val onBoardingApi: OnboardingApi,
                                             private val productApi: ProductApi) {
 
@@ -722,7 +722,7 @@ class ProductRepository @Inject constructor(private val context: Context,
         }
     }
 
-    fun loadCreateProductData(): com.project.morestore.models.CreateProductData {
+    fun loadCreateProductData(): com.project.morestore.data.models.CreateProductData {
         return CreateProductData.createProductData
     }
 

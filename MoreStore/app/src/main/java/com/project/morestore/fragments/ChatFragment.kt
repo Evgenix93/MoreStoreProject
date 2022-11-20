@@ -33,7 +33,7 @@ import com.project.morestore.dialogs.PriceDialog
 import com.project.morestore.dialogs.MenuBottomDialogFragment
 import com.project.morestore.fragments.base.FullscreenFragment
 
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.ChatMvpView
 import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.util.MessageActionType

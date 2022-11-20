@@ -16,9 +16,9 @@ import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentDeliveryCreateBinding
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
-import com.project.morestore.models.Order
-import com.project.morestore.models.Product
-import com.project.morestore.models.User
+import com.project.morestore.data.models.Order
+import com.project.morestore.data.models.Product
+import com.project.morestore.data.models.User
 import com.project.morestore.mvpviews.CreateDeliveryMvpView
 import com.project.morestore.presenters.CreateDeliveryPresenter
 import dagger.hilt.android.AndroidEntryPoint

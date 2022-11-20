@@ -14,8 +14,7 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration2Binding
-import com.project.morestore.models.User
-import com.project.morestore.mvpviews.AuthMvpView
+import com.project.morestore.data.models.User
 import com.project.morestore.mvpviews.AuthPhoneMvpView
 import com.project.morestore.presenters.AuthPresenter
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,15 +1,14 @@
 package com.project.morestore.presenters
 
 import com.project.morestore.apis.CitiesApi
-import com.project.morestore.models.Region
+import com.project.morestore.data.models.Region
 import com.project.morestore.mvpviews.CitiesView
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class CitiesPresenter(
-    private val type :Type,
-    private val selectedIds :LongArray,
+class CitiesPresenter @Inject constructor(
     private val network :CitiesApi
 ) : MvpPresenter<CitiesView>() {
     private var cities = listOf<Region>()
@@ -19,9 +18,8 @@ class CitiesPresenter(
             viewState.showCities(field.toTypedArray())
         }
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-        viewState.loading(true)
+     fun getCities(type: Type, selectedIds: LongArray) {
+         viewState.loading(true)
         presenterScope.launch {
             val networkCities = network.getCities()
             viewState.loading(false)

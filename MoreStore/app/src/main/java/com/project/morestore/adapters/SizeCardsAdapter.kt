@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemSizeCardBinding
-import com.project.morestore.models.Size
-import com.project.morestore.util.SizeCard
+import com.project.morestore.data.models.Size
 
 class SizeCardsAdapter(val isLimit: Boolean, private val onItemClick:() -> Unit) : RecyclerView.Adapter<SizeCardsAdapter.SizeCardViewHolder>() {
     private var list = listOf<Size>()

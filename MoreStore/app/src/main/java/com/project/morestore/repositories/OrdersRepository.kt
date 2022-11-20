@@ -1,14 +1,8 @@
 package com.project.morestore.repositories
 
-import android.content.Context
 import android.util.Log
 import com.project.morestore.apis.OrdersApi
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.CartItem
-import com.project.morestore.singletones.Network
-import com.project.morestore.util.DeviceUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.project.morestore.data.models.*
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException

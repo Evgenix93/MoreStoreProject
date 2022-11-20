@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemRegionBinding
-import com.project.morestore.models.Region
+import com.project.morestore.data.models.Region
 
 class RegionsAdapter(
     private val isForChangeRegion: Boolean,

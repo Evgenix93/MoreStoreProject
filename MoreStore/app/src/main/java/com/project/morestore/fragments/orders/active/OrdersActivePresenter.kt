@@ -8,26 +8,27 @@ import com.project.morestore.adapters.cart.OrderClickListener
 import com.project.morestore.adapters.cart.OrdersAdapter
 import com.project.morestore.dialogs.YesNoDialog
 import com.project.morestore.fragments.orders.create.OrderCreateFragment
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.CartItem
+import com.project.morestore.data.models.*
+import com.project.morestore.data.models.cart.CartItem
 
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.cart.OrderStatus
+import com.project.morestore.data.models.cart.OrderItem
+import com.project.morestore.data.models.cart.OrderStatus
 import com.project.morestore.repositories.*
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import java.util.*
 import javax.inject.Inject
 
-class OrdersActivePresenter @Inject constructor(val context: Context,
-                            private val ordersRepository: OrdersRepository,
-                            private val userRepository: UserRepository,
-                            private val chatRepository: ChatRepository,
-                            private val authRepository: AuthRepository,
-                            private val geoRepository: GeoRepository,
-                            private val cartRepository: CartRepository)
+class OrdersActivePresenter @Inject constructor(@ApplicationContext val context: Context,
+                                                private val ordersRepository: OrdersRepository,
+                                                private val userRepository: UserRepository,
+                                                private val chatRepository: ChatRepository,
+                                                private val authRepository: AuthRepository,
+                                                private val geoRepository: GeoRepository,
+                                                private val cartRepository: CartRepository)
     : MvpPresenter<OrdersActiveView>() {
 
     private var adapter: OrdersAdapter? = null

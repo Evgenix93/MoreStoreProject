@@ -11,10 +11,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductPackageBinding
 import com.project.morestore.dialogs.SaveProductDialog
-import com.project.morestore.models.CreateProductData
-import com.project.morestore.models.CreatedProductId
-import com.project.morestore.models.ProductDimensions
-import com.project.morestore.models.SuggestionModels
+import com.project.morestore.data.models.CreateProductData
+import com.project.morestore.data.models.CreatedProductId
+import com.project.morestore.data.models.ProductDimensions
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import dagger.hilt.android.AndroidEntryPoint

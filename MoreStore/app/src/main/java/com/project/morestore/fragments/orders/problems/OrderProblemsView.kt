@@ -1,7 +1,7 @@
 package com.project.morestore.fragments.orders.problems
 
 import com.project.morestore.dialogs.ProblemTypeDialog
-import com.project.morestore.models.ProductProblemsData
+import com.project.morestore.data.models.ProductProblemsData
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
 import moxy.viewstate.strategy.alias.OneExecution

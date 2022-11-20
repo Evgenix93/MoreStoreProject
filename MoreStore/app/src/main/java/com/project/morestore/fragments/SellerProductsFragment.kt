@@ -1,7 +1,6 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -11,14 +10,8 @@ import com.project.morestore.R
 import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.adapters.SellerProfileAdapter
 import com.project.morestore.databinding.PageProductsBinding
-import com.project.morestore.models.Product
-import com.project.morestore.models.User
-import com.project.morestore.mvpviews.UserMvpView
-import com.project.morestore.presenters.UserPresenter
+import com.project.morestore.data.models.Product
 import com.project.morestore.util.autoCleared
-import dagger.hilt.android.AndroidEntryPoint
-import moxy.MvpAppCompatFragment
-import moxy.ktx.moxyPresenter
 
 
 class SellerProductsFragment : Fragment(R.layout.page_products) {

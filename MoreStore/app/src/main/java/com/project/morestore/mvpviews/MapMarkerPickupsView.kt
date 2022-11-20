@@ -1,7 +1,6 @@
 package com.project.morestore.mvpviews
 
-import com.project.morestore.models.CdekAddress
-import com.project.morestore.models.DeliveryAddress
+import com.project.morestore.data.models.CdekAddress
 import com.project.morestore.widgets.loading.LoadingView
 import com.yandex.mapkit.geometry.Point
 import moxy.MvpView

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemMenuSliderBinding
-import com.project.morestore.models.slidermenu.SliderMenu
+import com.project.morestore.data.models.slidermenu.SliderMenu
 
 class SliderMenuAdapter<T>(
         private val items: List<SliderMenu<T>>,

@@ -18,12 +18,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
-import com.project.morestore.Geolocator
 import com.project.morestore.R
 import com.project.morestore.adapters.SuggestsAddressesAdapter
 import com.project.morestore.databinding.ToolbarTitledCenterBinding
 import com.project.morestore.fragments.base.MapMarkerFragment
-import com.project.morestore.models.SuggestAddress
+import com.project.morestore.data.models.SuggestAddress
 import com.project.morestore.mvpviews.MapMarkerAddressesView
 import com.project.morestore.presenters.MapMarkerAddressesPresenter
 import com.project.morestore.util.attachNavigation
@@ -33,8 +32,6 @@ import com.yandex.mapkit.Animation
 import com.yandex.mapkit.Animation.Type.SMOOTH
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.*
-import com.yandex.mapkit.search.SearchFactory
-import com.yandex.mapkit.search.SearchManagerType
 import com.yandex.runtime.ui_view.ViewProvider
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter

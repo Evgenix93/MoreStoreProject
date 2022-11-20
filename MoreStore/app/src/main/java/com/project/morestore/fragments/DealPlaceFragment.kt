@@ -1,12 +1,10 @@
 package com.project.morestore.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
@@ -15,14 +13,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentDealPlaceBinding
 import com.project.morestore.dialogs.MenuBottomDialogDateFragment
-import com.project.morestore.fragments.orders.create.OrderCreateFragment
-import com.project.morestore.fragments.orders.create.OrderCreateFragmentDirections
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 
-import com.project.morestore.models.cart.CartItem
-import com.project.morestore.mvpviews.SalesActiveMvpView
 import com.project.morestore.mvpviews.SalesDealPlaceMvpView
-import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.presenters.SalesPresenter
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment

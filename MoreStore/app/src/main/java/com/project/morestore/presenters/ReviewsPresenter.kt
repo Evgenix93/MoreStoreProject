@@ -1,7 +1,6 @@
 package com.project.morestore.presenters
 
-import android.content.Context
-import com.project.morestore.models.ReviewItem
+import com.project.morestore.data.models.ReviewItem
 import com.project.morestore.mvpviews.ReviewView
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.ReviewRepository

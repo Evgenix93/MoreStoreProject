@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemCreateProductElementBinding
-import com.project.morestore.models.Property
+import com.project.morestore.data.models.Property
 
 class CloathStyleCreateProductAdapter(val onClick: (Property) -> Unit): RecyclerView.Adapter<CloathStyleCreateProductAdapter.StyleViewHolder>() {
     private var list = listOf<Property>()

@@ -1,6 +1,6 @@
 package com.project.morestore.mvpviews
 
-import com.project.morestore.models.Region
+import com.project.morestore.data.models.Region
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
 

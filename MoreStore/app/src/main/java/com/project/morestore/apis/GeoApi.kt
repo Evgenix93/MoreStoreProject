@@ -1,6 +1,6 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.Address
+import com.project.morestore.data.models.Address
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

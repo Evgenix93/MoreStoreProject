@@ -2,12 +2,11 @@ package com.project.morestore.repositories
 
 import android.net.Uri
 import com.project.morestore.apis.ReviewApi
-import com.project.morestore.models.Feedback
-import com.project.morestore.models.FeedbackProduct
-import com.project.morestore.models.PhotoVideo
-import com.project.morestore.models.PhotoData
+import com.project.morestore.data.models.Feedback
+import com.project.morestore.data.models.FeedbackProduct
+import com.project.morestore.data.models.PhotoVideo
+import com.project.morestore.data.models.PhotoData
 import com.project.morestore.singletones.ChatMedia
-import com.project.morestore.singletones.Network
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException

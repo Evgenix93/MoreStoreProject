@@ -2,18 +2,18 @@ package com.project.morestore.presenters
 
 import android.content.Context
 import com.project.morestore.R
-import com.project.morestore.models.Card
+import com.project.morestore.data.models.Card
 import com.project.morestore.mvpviews.AddCardMvpView
 import com.project.morestore.mvpviews.MainFragmentMvpView
-import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.CardRepository
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import javax.inject.Inject
 
-class AddCardPresenter @Inject constructor(private val context: Context,
+class AddCardPresenter @Inject constructor(@ApplicationContext private val context: Context,
                                            private val cardRepository: CardRepository): MvpPresenter<AddCardMvpView>() {
 
     fun addCard(cardNumber: String){

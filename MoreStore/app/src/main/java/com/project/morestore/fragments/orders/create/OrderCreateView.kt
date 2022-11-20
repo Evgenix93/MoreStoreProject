@@ -1,6 +1,6 @@
 package com.project.morestore.fragments.orders.create
 
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
 import moxy.viewstate.strategy.alias.OneExecution

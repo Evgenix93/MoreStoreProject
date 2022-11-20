@@ -1,8 +1,8 @@
 package com.project.morestore.fragments.orders.history
 
 import com.project.morestore.adapters.cart.OrdersHistoryAdapter
-import com.project.morestore.models.User
-import com.project.morestore.models.cart.OrderItem
+import com.project.morestore.data.models.User
+import com.project.morestore.data.models.cart.OrderItem
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
 import moxy.viewstate.strategy.alias.OneExecution

@@ -1,7 +1,7 @@
 package com.project.morestore.apis
 
-import com.project.morestore.models.Card
-import com.project.morestore.models.Id
+import com.project.morestore.data.models.Card
+import com.project.morestore.data.models.Id
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

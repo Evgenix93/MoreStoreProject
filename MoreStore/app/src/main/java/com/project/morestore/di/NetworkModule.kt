@@ -1,14 +1,10 @@
 package com.project.morestore.di
 
-import android.content.Context
 import com.project.morestore.apis.*
-import com.project.morestore.models.CalendarAdapter
+import com.project.morestore.data.models.CalendarAdapter
 
 import com.project.morestore.util.TokenInterceptor
 import com.squareup.moshi.Moshi
-import com.yandex.mapkit.search.SearchFactory
-import com.yandex.mapkit.search.SearchManager
-import com.yandex.mapkit.search.SearchManagerType
 
 import dagger.Module
 import dagger.Provides
@@ -22,7 +18,7 @@ import java.util.concurrent.TimeUnit
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class NetworkModule {
+class NetworkModule {
 
     @Provides
     fun getClient(): OkHttpClient{
@@ -128,10 +124,6 @@ abstract class NetworkModule {
         return retrofit.create(UserServerApi::class.java)
     }
 
-    @Provides
-    fun getSearchManager(context: Context): SearchManager {
-        SearchFactory.initialize(context);
-        return SearchFactory.getInstance().createSearchManager(SearchManagerType.ONLINE)
-    }
+
 
 }

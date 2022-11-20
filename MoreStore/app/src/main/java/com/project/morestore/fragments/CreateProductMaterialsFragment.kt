@@ -15,13 +15,12 @@ import com.project.morestore.R
 import com.project.morestore.adapters.MaterialAdapter
 import com.project.morestore.databinding.FragmentCreateProductMaterialsBinding
 import com.project.morestore.dialogs.SaveProductDialog
-import com.project.morestore.models.*
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.channels.trySendBlocking
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter

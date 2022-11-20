@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductCategoryBinding
-import com.project.morestore.models.ProductCategory
+import com.project.morestore.data.models.ProductCategory
 
 class ProductCategoriesAdapter: RecyclerView.Adapter<ProductCategoriesAdapter.ProductCategoryViewHolder>() {
     private var productCategories = mutableListOf<ProductCategory>()

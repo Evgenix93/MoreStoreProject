@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,12 +26,10 @@ import com.project.morestore.databinding.FragmentMessagesBinding
 import com.project.morestore.databinding.TabCategoryBinding
 import com.project.morestore.fragments.base.BottomNavigationFragment
 
-import com.project.morestore.models.*
-import com.project.morestore.mvpviews.ChatMvpView
+import com.project.morestore.data.models.*
 import com.project.morestore.mvpviews.MessagesMvpView
 import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.singletones.Token
-import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.MessagingService
 import com.project.morestore.util.MiddleDivider
 import com.project.morestore.util.setSelectListener

@@ -1,6 +1,5 @@
 package com.project.morestore.adapters
 
-import android.graphics.Paint
 import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,14 +8,13 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemProductBinding
-import com.project.morestore.models.Product
+import com.project.morestore.data.models.Product
 import com.project.morestore.singletones.Token
 import com.project.morestore.util.ProductStatus
 

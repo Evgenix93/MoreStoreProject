@@ -3,7 +3,6 @@ package com.project.morestore.fragments
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
@@ -16,8 +15,7 @@ import com.bumptech.glide.Glide
 import com.ortiz.touchview.OnTouchImageViewListener
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentPhotoFinishBinding
-import com.project.morestore.models.ProductPhoto
-import com.project.morestore.models.SuggestionModels
+import com.project.morestore.data.models.ProductPhoto
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import dagger.hilt.android.AndroidEntryPoint

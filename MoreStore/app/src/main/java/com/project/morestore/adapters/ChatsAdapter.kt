@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemChatBinding
-import com.project.morestore.models.Chat
+import com.project.morestore.data.models.Chat
 import com.project.morestore.util.inflater
 
 class ChatsAdapter(val callback :(Chat) -> Unit) :RecyclerView.Adapter<ChatsAdapter.ChatViewHolder>() {

@@ -2,9 +2,8 @@ package com.project.morestore.repositories
 
 import android.util.Log
 import com.project.morestore.apis.CreditCardsApi
-import com.project.morestore.models.Card
-import com.project.morestore.models.Id
-import com.project.morestore.singletones.Network
+import com.project.morestore.data.models.Card
+import com.project.morestore.data.models.Id
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException

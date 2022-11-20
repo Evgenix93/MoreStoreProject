@@ -4,8 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.morestore.databinding.ItemFavoritesellerBinding
-import com.project.morestore.models.FavoriteSeller
-import com.project.morestore.models.User
+import com.project.morestore.data.models.User
 import com.project.morestore.util.inflater
 
 class FavoriteSellersAdapter(val onClick: (User) -> Unit) :RecyclerView.Adapter<FavoriteSellersAdapter.FavoriteSellerHolder>() {

@@ -11,9 +11,9 @@ import com.project.morestore.R
 import com.project.morestore.adapters.SliderMenuAdapter
 import com.project.morestore.adapters.cart.OrdersHistoryAdapter
 import com.project.morestore.databinding.FragmentOrdersHistoryBinding
-import com.project.morestore.models.User
-import com.project.morestore.models.cart.OrderItem
-import com.project.morestore.models.slidermenu.OrdersSliderMenu
+import com.project.morestore.data.models.User
+import com.project.morestore.data.models.cart.OrderItem
+import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.mvpviews.ToolbarCartView
 
@@ -42,6 +42,7 @@ class OrdersHistoryFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolbarPresenter.initMenu(OrdersSliderMenu.ORDERS_HISTORY)
         showBottomNav()
         initToolbar()
         showLoading(true)

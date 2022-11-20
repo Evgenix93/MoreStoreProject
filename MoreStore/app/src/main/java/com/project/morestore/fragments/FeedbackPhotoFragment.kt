@@ -16,7 +16,7 @@ import com.project.morestore.R
 import com.project.morestore.adapters.FeedbackPhotosAdapter
 import com.project.morestore.databinding.FragmentFeedbackPhotosBinding
 import com.project.morestore.dialogs.FeedbackCompleteDialog
-import com.project.morestore.models.FeedbackItem
+import com.project.morestore.data.models.FeedbackItem
 import com.project.morestore.mvpviews.FeedbackPhotoView
 import com.project.morestore.presenters.FeedbackPhotoPresenter
 import com.project.morestore.singletones.ChatMedia

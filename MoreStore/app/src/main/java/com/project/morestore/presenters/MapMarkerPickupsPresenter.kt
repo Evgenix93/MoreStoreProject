@@ -2,8 +2,7 @@ package com.project.morestore.presenters
 
 import com.project.morestore.Geolocator
 import com.project.morestore.apis.CdekAddressApi
-import com.project.morestore.models.CdekAddress
-import com.project.morestore.models.DeliveryAddress
+import com.project.morestore.data.models.CdekAddress
 import com.project.morestore.mvpviews.MapMarkerPickupsView
 import com.project.morestore.mvpviews.MapMarkerPickupsView.NavigateType.*
 import com.project.morestore.util.SimpleSearchListener

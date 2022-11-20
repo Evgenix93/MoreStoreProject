@@ -1,7 +1,6 @@
 package com.project.morestore.fragments
 
 import android.Manifest
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -20,8 +18,7 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentAutoregionBinding
-import com.project.morestore.models.Address
-import com.project.morestore.models.Filter
+import com.project.morestore.data.models.Address
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import dagger.hilt.android.AndroidEntryPoint

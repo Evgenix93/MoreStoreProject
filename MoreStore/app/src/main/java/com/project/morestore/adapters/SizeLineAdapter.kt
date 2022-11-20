@@ -12,7 +12,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemShoesSizeLineBinding
 import com.project.morestore.databinding.ItemSizeLineBinding
-import com.project.morestore.models.SizeLine
+import com.project.morestore.data.models.SizeLine
 
 class SizeLineAdapter(private val isShoos: Boolean, private val isCreateProduct: Boolean = false, val context: Context? = null, private val onClick:(Boolean) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

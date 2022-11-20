@@ -11,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemColorBinding
-import com.project.morestore.models.Color
-import com.project.morestore.models.Property
+import com.project.morestore.data.models.Property
 
 class ColorsAdapter(private val context: Context, private val isFilter: Boolean, private val  onClick:(Boolean) -> Unit): RecyclerView.Adapter<ColorsAdapter.ColorViewHolder>() {
     private var properties = listOf<Property>()

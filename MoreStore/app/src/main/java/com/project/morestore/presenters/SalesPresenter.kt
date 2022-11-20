@@ -1,24 +1,17 @@
 package com.project.morestore.presenters
 
-import android.content.Context
 import android.util.Log
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.CartItem
+import com.project.morestore.data.models.*
+import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.mvpviews.SalesActiveMvpView
 import com.project.morestore.mvpviews.SalesDealPlaceMvpView
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.repositories.*
-import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.errorMessage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
-import okhttp3.ResponseBody
-import java.util.*
 import javax.inject.Inject
-import kotlin.math.absoluteValue
 
 class SalesPresenter @Inject constructor(
     private val salesRepository: SalesRepository,

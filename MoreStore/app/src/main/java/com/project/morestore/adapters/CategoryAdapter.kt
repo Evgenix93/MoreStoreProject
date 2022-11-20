@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.ItemCategoryBinding
-import com.project.morestore.models.Category
+import com.project.morestore.data.models.Category
 
 class CategoryAdapter(
     private val isOnboarding: Boolean,

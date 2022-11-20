@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.project.morestore.R
 import com.project.morestore.databinding.ScreenEmptylistBinding
-import com.project.morestore.models.ProductBrand
+import com.project.morestore.data.models.ProductBrand
 import com.project.morestore.widgets.EmptyListGallery
 import moxy.MvpAppCompatFragment
 

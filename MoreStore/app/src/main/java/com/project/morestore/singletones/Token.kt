@@ -1,6 +1,6 @@
 package com.project.morestore.singletones
 
-import com.project.morestore.models.Address
+import com.project.morestore.data.models.Address
 
 object Token {
     var token = ""

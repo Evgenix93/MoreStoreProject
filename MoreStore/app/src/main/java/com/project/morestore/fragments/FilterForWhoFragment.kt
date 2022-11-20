@@ -8,7 +8,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFilterForWhoBinding
-import com.project.morestore.models.Filter
+import com.project.morestore.data.models.Filter
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import dagger.hilt.android.AndroidEntryPoint

@@ -7,11 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.adapters.FeedbackProductsAdapter
-import com.project.morestore.adapters.ProductAdapter
 import com.project.morestore.databinding.FragmentProductDraftBinding
-import com.project.morestore.models.FeedbackProduct
-import com.project.morestore.models.Product
-import com.project.morestore.models.SuggestionModels
+import com.project.morestore.data.models.FeedbackProduct
+import com.project.morestore.data.models.Product
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared

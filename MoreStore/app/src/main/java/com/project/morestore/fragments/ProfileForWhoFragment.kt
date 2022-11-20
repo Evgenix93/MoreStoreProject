@@ -5,13 +5,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentProfileForWhoBinding
-import com.project.morestore.models.BrandsPropertiesDataWrapper
+import com.project.morestore.data.models.BrandsPropertiesDataWrapper
 import com.project.morestore.mvpviews.OnBoardingMvpView
 import com.project.morestore.presenters.OnboardingPresenter
 import dagger.hilt.android.AndroidEntryPoint

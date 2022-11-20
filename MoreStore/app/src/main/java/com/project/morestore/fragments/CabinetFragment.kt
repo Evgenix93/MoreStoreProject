@@ -23,10 +23,10 @@ import com.project.morestore.adapters.ReviewsAdapter
 import com.project.morestore.databinding.FragmentCabinetBinding
 import com.project.morestore.fragments.base.BottomNavigationFragment
 
-import com.project.morestore.models.Filter
-import com.project.morestore.models.Product
-import com.project.morestore.models.ReviewItem
-import com.project.morestore.models.User
+import com.project.morestore.data.models.Filter
+import com.project.morestore.data.models.Product
+import com.project.morestore.data.models.ReviewItem
+import com.project.morestore.data.models.User
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared

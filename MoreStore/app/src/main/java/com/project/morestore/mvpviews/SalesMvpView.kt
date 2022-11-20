@@ -1,9 +1,7 @@
 package com.project.morestore.mvpviews
 
-import com.project.morestore.models.*
-import com.project.morestore.models.cart.CartItem
-import com.project.morestore.models.cart.OrderItem
-import moxy.MvpView
+import com.project.morestore.data.models.*
+import com.project.morestore.data.models.cart.CartItem
 import moxy.viewstate.strategy.alias.OneExecution
 
 interface SalesMvpView: SalesDealPlaceMvpView {
