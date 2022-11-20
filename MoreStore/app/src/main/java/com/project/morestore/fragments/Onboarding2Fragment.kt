@@ -16,13 +16,18 @@ import com.project.morestore.models.*
 import com.project.morestore.mvpviews.OnBoardingMvpView
 import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class Onboarding2Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding2), OnBoardingMvpView {
     private val binding: FragmentOnboarding2Binding by viewBinding()
     private val args: Onboarding2FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { OnboardingPresenter(requireContext()) }
+    @Inject
+    lateinit var onboardingPresenter: OnboardingPresenter
+    private val presenter by moxyPresenter { onboardingPresenter }
     private var topSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var bottomSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var shoesSizeCardAdapter: SizeCardsAdapter by autoCleared()

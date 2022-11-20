@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface CitiesApi {
     @GET("geo/city")
-    suspend fun getCities(): Array<Region>
+    suspend fun getCities(): List<Region>
 }

@@ -13,76 +13,80 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class NewAddressPresenter(
+class NewAddressPresenter @Inject constructor(
     private val geolocator :Geolocator,
     private val geoRepository :GeoRepository,
     private val userProvider :UserNetworkGateway,
     private val addressRepository :AddressesRepository,
-    private val address : MyAddress? = null
 ) :MvpPresenter<NewAddressView>() {
     private val displayError = CoroutineExceptionHandler { _, ex ->
         viewState.showMessage(ex.message ?: "неизвестная ошибка")
     }
-    var fullname = address?.name ?: ""
-        set(value){
-            field = value
-            viewState.validForm(validateForm())
-        }
-    var phone = address?.phone ?: ""
-        set(value){
-            field = value
-            viewState.validForm(validateForm())
-        }
-    var city = address?.address?.city ?: ""
-        set(value){
-            field = value
-            searchUserCity?.cancel()
-            viewState.validForm(validateForm())
-        }
-    var street = address?.address?.street ?: ""
-        set(value){
-            field = value
-            viewState.validForm(validateForm())
-        }
-    var index = address?.address?.index ?: ""
-        set(value){
-            field = value
-            viewState.validForm(validateForm())
-        }
-    var house = address?.address?.house ?: ""
-        set(value){
-            field = value
-            viewState.validForm(validateForm())
-        }
-    var housing = ""
-    var building = ""
-    var apartment = ""
-    private var searchUserCity :Job? = null
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
+
+    fun setInfo(address: MyAddress?){
+        fullname = address?.name ?: ""
+         phone = address?.phone ?: ""
+         city = address?.address?.city ?: ""
+         street = address?.address?.street ?: ""
+         index =  address?.address?.index ?: ""
+         house = address?.address?.house ?: ""
         address?.favorite?.let { viewState.showFavorite(it) }
         if(address == null) {
             viewState.requestCity()
             presenterScope.launch { requestUser() }
         }
     }
+    var fullname =  ""
+        set(value){
+            field = value
+            viewState.validForm(validateForm())
+        }
+
+    var phone =  ""
+        set(value){
+            field = value
+            viewState.validForm(validateForm())
+        }
+    var city =  ""
+        set(value){
+            field = value
+            searchUserCity?.cancel()
+            viewState.validForm(validateForm())
+        }
+    var street =  ""
+        set(value){
+            field = value
+            viewState.validForm(validateForm())
+        }
+    var index =  ""
+        set(value){
+            field = value
+            viewState.validForm(validateForm())
+        }
+    var house =  ""
+        set(value){
+            field = value
+            viewState.validForm(validateForm())
+        }
+
+    var housing = ""
+    var building = ""
+    var apartment = ""
+    private var searchUserCity :Job? = null
+
 
     fun findCity(){
         searchUserCity = presenterScope.launch(displayError) {
-            val TAG = "FindCity"
-            Log.d(TAG, "begin")
             val geoPosition = geolocator.getCurrentPosition()
-
-            Log.d(TAG, geoPosition.toString())
             if(geoPosition == null){
                 viewState.notFoundCity()
                 return@launch
             }
             val address : Address? = geoRepository.getCity(geoPosition)
 
-            Log.d(TAG, address?.toString() ?: "address is null")
             if(address == null){
                 viewState.notFoundCity()
                 return@launch
@@ -96,7 +100,7 @@ class NewAddressPresenter(
         }
     }
 
-    fun save(isDefault :Boolean){
+    fun save(isDefault :Boolean, address: MyAddress?){
         presenterScope.launch(displayError) {
             if(address == null) {
                 addressRepository.createAddress(
@@ -146,7 +150,7 @@ class NewAddressPresenter(
         viewState.confirmDelete()
     }
 
-    fun confirmDelete(){
+    fun confirmDelete(address: MyAddress?){
         presenterScope.launch {
             addressRepository.deleteAddress(address!!)
             viewState.back()

@@ -15,13 +15,18 @@ import com.project.morestore.models.RegistrationResponse
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.presenters.AuthPresenter
+import com.project.morestore.presenters.MainPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginSocialFragment : MvpAppCompatFragment(R.layout.fragment_social_login), AuthMvpView {
     private val binding: FragmentSocialLoginBinding by viewBinding()
     private val args: LoginSocialFragmentArgs by navArgs()
-    private val presenter by moxyPresenter { AuthPresenter() }
+    @Inject lateinit var authPresenter: AuthPresenter
+    private val presenter by moxyPresenter { authPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,12 +64,6 @@ class LoginSocialFragment : MvpAppCompatFragment(R.layout.fragment_social_login)
     }
 
     override fun loading() {
-
-    }
-
-
-
-    override fun successNewCode(result: Any) {
 
     }
 

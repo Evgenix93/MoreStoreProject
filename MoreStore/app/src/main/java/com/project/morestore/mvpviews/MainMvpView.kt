@@ -16,15 +16,5 @@ interface MainMvpView: MvpView {
     fun error(message: String)
 
     @OneExecution
-    fun showOnBoarding()
-
-    @OneExecution
-    fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>)
-
-    @OneExecution
-    fun loginFailed()
-
-    @OneExecution
     fun success()
-
 }

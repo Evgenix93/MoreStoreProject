@@ -21,16 +21,21 @@ import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_colthes),
     UserMvpView {
     private val binding: FragmentFilterSizesColthesBinding by viewBinding()
     private var sizeAdapter: SizeLineAdapter by autoCleared()
     private var isForWomen = true
     private var isSizesLoaded = false
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private val args: FilterSizesFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,9 +60,6 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
-
-
-
     }
 
     private fun initToolBar() {
@@ -99,11 +101,6 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
         if(!isSizesLoaded)
         getSizes()
-
-        Log.d("mytest", filter.chosenTopSizesWomen.size.toString())
-
-
-
         when {
          filter.chosenForWho[0] ->{
              if(args.idCategory < 3 || args.idCategory == 10 || args.idCategory > 11) {
@@ -132,9 +129,6 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
     private fun saveSizes(){
         val chosenSizes = sizeAdapter.getChosenSizes()
-        //val chosenBottomSizes = sizeAdapter.getChosenBottomSizes()
-
-
         if(isForWomen) {
             if(args.idCategory < 3 || args.idCategory == 10 || args.idCategory > 11)
             presenter.saveTopSizes(chosenSizes)
@@ -146,11 +140,7 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
             else
             presenter.saveBottomSizesMen(chosenSizes)
         }
-
     }
-
-
-
     override fun onStop() {
         super.onStop()
         saveSizes()
@@ -176,27 +166,13 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         if(result is List<*>) {
             Log.d("MyDebug", "idCategory = ${args.idCategory}")
             val sizes = (result as List<Property>)
-        /*     if(sizes.firstOrNull()?.idCategory == 3L || sizes.firstOrNull()?.idCategory == 6L)
-                 return
-            if(args.idCategory < 3 || args.idCategory == 10 || args.idCategory > 11){
-                if(sizes.firstOrNull()?.idCategory != 1L && sizes.firstOrNull()?.idCategory != 4L)
-                    return
-            }else{
-                if(sizes.firstOrNull()?.idCategory != 2L && sizes.firstOrNull()?.idCategory != 5L)
-                    return
-            }*/
-
 
             val sizeLines = sizes.map {
                         val list = it.ico?.split(';').orEmpty()
                         SizeLine(it.id.toInt(), it.name, list[0].removePrefix("W").removeSurrounding("'"), list[1].removePrefix("IT/RU/FR").removeSurrounding("'"), list[2].removePrefix("US").removeSurrounding("'"), list[3].removePrefix("UK").removeSurrounding("'"), false, idCategory = it.idCategory?.toInt()!!)
                     }
 
-           // if(result[0].idCategory?.toInt() == 1 || result[0].idCategory?.toInt() == 4){
                 sizeAdapter.updateList(sizeLines + listOf(SizeLine(0, "", "", "", "", "", false, -1)), null)
-           // }else{
-             //   sizeAdapter.updateList( sizeAdapter.getChosenSizes(), sizeLines + listOf(SizeLine(0, "", "", "", "", "", false, -1)) )
-           // }
             isSizesLoaded = true
             loadFilter()
         }
@@ -204,9 +180,5 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
         if(result is Filter){
             bindFilter(result)
         }
-    }
-
-    override fun successNewCode() {
-
     }
 }

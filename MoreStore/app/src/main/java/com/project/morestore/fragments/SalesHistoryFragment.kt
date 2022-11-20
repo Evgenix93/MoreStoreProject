@@ -23,14 +23,19 @@ import com.project.morestore.models.slidermenu.SliderMenu
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.presenters.SalesPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesMvpView {
     private val binding: FragmentOrdersBinding by viewBinding()
     private var salesAdapter: SalesAdapter by autoCleared()
     private var menuAdapter: SliderMenuAdapter<OrdersSliderMenu> by autoCleared()
-    private val presenter by moxyPresenter { SalesPresenter(requireContext()) }
+    @Inject
+    lateinit var salesPresenter: SalesPresenter
+    private val presenter by moxyPresenter { salesPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -148,14 +153,6 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
         showToast(message)
     }
 
-    override fun onDealPlaceAdded() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onDealPlaceAccepted() {
-        TODO("Not yet implemented")
-    }
-
     override fun onItemsLoaded(
         cartItems: List<CartItem>,
         activeOrders: List<Order>,
@@ -170,7 +167,8 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
         menuAdapter.changeSalesHistorySize(inactiveSales.size)
     }
 
-    override fun onDealStatusChanged() {
-        TODO("Not yet implemented")
+    override fun onDealPlaceAdded() {
+
     }
+
 }

@@ -16,18 +16,18 @@ import com.project.morestore.models.User
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
+
 class SellerProductsFragment : Fragment(R.layout.page_products) {
-    // private val presenter by moxyPresenter { UserPresenter(requireContext()) }
     private val binding: PageProductsBinding by viewBinding()
     private var productsAdapter: ProductAdapter by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-
     }
 
     private fun initRecyclerView() {
@@ -43,10 +43,7 @@ class SellerProductsFragment : Fragment(R.layout.page_products) {
         binding.productsRecyclerView.adapter = productsAdapter
         binding.productsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         val products = arguments?.getParcelableArray(SellerProfileAdapter.PRODUCTS)
-        Log.d("Debug", "products = ${products?.toList()}")
         if (products != null)
             productsAdapter.updateList(products.toList() as List<Product>)
     }
-
-
 }

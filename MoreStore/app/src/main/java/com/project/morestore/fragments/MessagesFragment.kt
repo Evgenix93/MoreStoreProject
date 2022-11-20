@@ -29,18 +29,24 @@ import com.project.morestore.fragments.base.BottomNavigationFragment
 
 import com.project.morestore.models.*
 import com.project.morestore.mvpviews.ChatMvpView
+import com.project.morestore.mvpviews.MessagesMvpView
 import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.singletones.Token
 import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.MessagingService
 import com.project.morestore.util.MiddleDivider
 import com.project.morestore.util.setSelectListener
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 import kotlin.reflect.KClass
 
-class MessagesFragment : BottomNavigationFragment(), ChatMvpView {
+@AndroidEntryPoint
+class MessagesFragment : BottomNavigationMvpFragment(), MessagesMvpView {
     private lateinit var views: FragmentMessagesBinding
-    private val presenter by moxyPresenter { ChatPresenter() }
+    @Inject
+    lateinit var chatPresenter: ChatPresenter
+    private val presenter by moxyPresenter { chatPresenter }
     private val args: MessagesFragmentArgs by navArgs()
     private val adapter = ChatsAdapter {
          if (it is Chat.Support) {
@@ -150,22 +156,15 @@ class MessagesFragment : BottomNavigationFragment(), ChatMvpView {
         }
     }
 
-
-    override fun loading() {
-        views.loader.isVisible = true
-
-    }
-
-    override fun dialogsLoaded(dialogs: List<Chat>) {
+    override fun loaded(result: Any) {
+        val dialogs = result as List<Chat>
         views.loader.isVisible = false
         adapter.setItems(dialogs)
     }
 
-    override fun dialogLoaded(dialog: DialogWrapper) {
 
-    }
-
-    override fun dialogCreated(dialogId: CreatedDialogId) {
+    override fun loading() {
+        views.loader.isVisible = true
 
     }
 
@@ -173,19 +172,7 @@ class MessagesFragment : BottomNavigationFragment(), ChatMvpView {
 
     }
 
-    override fun currentUserIdLoaded(id: Long) {
-
-    }
-
-    override fun messageSent(message: MessageModel) {
-
-    }
-
-    override fun dialogDeleted() {
-
-    }
-
-    override fun photoVideoLoaded() {
+    override fun success() {
 
     }
 
@@ -201,32 +188,13 @@ class MessagesFragment : BottomNavigationFragment(), ChatMvpView {
         }
     }
 
-    override fun mediaUrisLoaded(mediaUris: List<Uri>?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun actionMessageSent(info: ChatFunctionInfo, type: MessageActionType) {
-
-    }
-
-    override fun showUnreadMessagesStatus(show: Boolean) {
-
-    }
-
     override fun showUnreadTab(tab: Int, unread: Boolean) {
         when(tab){
             0 -> views.tabs.getTabAt(0)?.view?.findViewById<ImageView>(R.id.unreadIcon)?.isVisible = unread//?.fill(0, "Все", count)
             1 -> views.tabs.getTabAt(1)?.view?.findViewById<ImageView>(R.id.unreadIcon)?.isVisible = unread//?.fill(0, "Все", count)
             2 -> views.tabs.getTabAt(2)?.view?.findViewById<ImageView>(R.id.unreadIcon)?.isVisible = unread//?.fill(0, "Все", count)
 
-
-
         }
-
-    }
-
-    override fun productAddedToCart(product: Product, cartId: Long) {
-
     }
 
 }

@@ -221,7 +221,6 @@ class ProductRepository @Inject constructor(private val context: Context,
             }
 
             productPropertyStr = productPropertyStr + conditionList + forWhoList + stylesList
-           // Log.d("MyDebug", "getProducts filter = $filter")
             if(productId == null)
             productApi.getProducts(
                 limit,
@@ -240,7 +239,6 @@ class ProductRepository @Inject constructor(private val context: Context,
             if (e is IOException) {
                 null
             } else {
-                Log.d("mylog", e.message.toString())
                 try {
                     val response = productApi.getProductsGetError(
                         PRODUCT_OPTIONS,
@@ -279,7 +277,6 @@ class ProductRepository @Inject constructor(private val context: Context,
             if (e is IOException) {
                 null
             } else {
-                Log.d("mylog", e.message.toString())
                 try {
                     val response = productApi.getYouMayLikeProductsGetError(limit, userId)
                     if (response.code() == 500) {
@@ -355,7 +352,7 @@ class ProductRepository @Inject constructor(private val context: Context,
             if (e is IOException) {
                 null
             } else {
-                Log.d("mylog", e.message.toString())
+
                 try {
                     val response = productApi.getAllBrandsGetError()
                     if (response.code() == 500) {

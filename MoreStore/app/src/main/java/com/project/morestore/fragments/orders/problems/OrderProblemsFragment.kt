@@ -13,18 +13,21 @@ import com.project.morestore.dialogs.ProblemTypeDialog
 import com.project.morestore.models.ProductProblemsData
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.redmadrobot.inputmask.MaskedTextChangedListener.Companion.installOn
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class OrderProblemsFragment
     : MvpAppCompatFragment(R.layout.fragment_problem_goods), OrderProblemsView {
 
-    private val presenter by moxyPresenter { OrderProblemsPresenter(requireContext()) }
+    @Inject
+    lateinit var orderProblemsPresenter: OrderProblemsPresenter
+    private val presenter by moxyPresenter { orderProblemsPresenter }
     private val binding: FragmentProblemGoodsBinding by viewBinding()
-
     private val args: OrderProblemsFragmentArgs by navArgs()
-
     private lateinit var listener: MaskedTextChangedListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

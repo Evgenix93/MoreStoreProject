@@ -20,15 +20,21 @@ import com.project.morestore.databinding.FragmentRaiseProductBinding
 import com.project.morestore.dialogs.MenuBottomDialogFragment
 import com.project.morestore.models.PaymentUrl
 import com.project.morestore.mvpviews.RaiseProductView
+import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.presenters.RaiseProductPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RaiseProductFragment: MvpAppCompatFragment(R.layout.fragment_raise_product), RaiseProductView {
     private val binding: FragmentRaiseProductBinding by viewBinding()
     private var pricesViewPagerAdapter: PriceViewPagerAdapter by autoCleared()
-    private val presenter by moxyPresenter { RaiseProductPresenter(requireContext()) }
+    @Inject
+    lateinit var raiseProductPresenter: RaiseProductPresenter
+    private val presenter by moxyPresenter { raiseProductPresenter}
     private val args: RaiseProductFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

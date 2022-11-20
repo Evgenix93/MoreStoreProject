@@ -37,16 +37,21 @@ import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.Token
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
+import dagger.hilt.android.AndroidEntryPoint
+
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), MainMvpView {
 
     private val binding: FragmentProductBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
     private val args: ProductDetailsFragmentArgs by navArgs()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var isLiked = false
     private var product: Product? = null
     private var userId: Long = 0
@@ -61,7 +66,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         setClickListeners()
         hideBottomNav()
         showDialog()
-        //bind(args.product, userId, null)
         getProduct(args.product?.id)
         getProduct(args.productId?.toLong())
         if (args.product != null)
@@ -86,10 +90,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     private fun messageLike() {
-        /*if (ids.contains(args.product?.id ?: args.productId)) {
-            isLiked = !isLiked
-        }
-        binding.heartIcon.setImageResource(if (isLiked) R.drawable.ic_wished else R.drawable.ic_heart)*/
         val messageStr = if (isLiked) "Добавлено в избранное" else "Удалено из избранного"
         Toast.makeText(requireContext(), messageStr, Toast.LENGTH_SHORT).show()
     }
@@ -358,9 +358,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     private fun initViewPager(filesUriList: List<String>, isSold: Boolean) {
         val photoAdapter = PhotoViewPagerAdapter(this, isSold) { fileUri ->
-            Log.d("mylog", fileUri)
-            //if (fileUri.contains("mp4"))
-              //  presenter.playVideo(fileUri = fileUri.toUri())
             val media: List<String> = product?.photo?.map { it.photo }.orEmpty() + product?.video?.map { it.video }.orEmpty()
             findNavController().navigate(R.id.mediaFragment, bundleOf(MediaFragment.PHOTOS to media.toTypedArray() ))
 
@@ -368,7 +365,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         photoAdapter.updateList(filesUriList)
         binding.productPhotoViewPager.adapter = photoAdapter
         binding.viewPagerDots.setViewPager2(binding.productPhotoViewPager)
-
     }
 
     private fun initToolBar() {
@@ -382,17 +378,9 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                 findNavController().popBackStack()
         }
         binding.toolbar.actionIcon.setOnClickListener {
-           /* if (product != null) {
-                if (!currentState) {
-                    presenter.addProductToCart(productId = product!!.id, userId)
-                }else{
-                    presenter.removeProductFromCart(productId = product!!.id, userId)
-                }
-            }*/
             findNavController().navigate(R.id.ordersCartFragment)
         }
     }
-
 
     private fun initList() {
         productAdapter = ProductAdapter(null) {
@@ -404,11 +392,9 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             layoutManager = GridLayoutManager(requireContext(), 2)
             setHasFixedSize(true)
         }
-
     }
 
     private fun loadYouMayLikeProducts(category: Category?) {
-        Log.d("MyDebug", "category = ${category?.name}")
         presenter.getYouMayLikeProducts(category)
     }
 
@@ -416,7 +402,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         if (intent.resolveActivity(requireContext().packageManager) != null) {
             startActivity(intent)
         }
-
     }
 
     private fun getCurrentUser() {
@@ -427,7 +412,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         val listener =
             MaskedTextChangedListener("+7([000]) [000]-[00]-[00]", binding.sellerPhoneTextView)
         binding.sellerPhoneTextView.addTextChangedListener(listener)
-
 
     }
 
@@ -501,8 +485,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         when (result) {
             is List<*> -> {
                 if(result.isEmpty()) return
-                //if (result.isNotEmpty() && result[0] is Long) {
-                // messageLike(result as List<Long>)
                 if (result[0] is Product) {
                     productAdapter.updateList(result as List<Product>)
                 }
@@ -517,16 +499,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                     messageLike()
 
                 }
-                //}
-                /*if (!suggestedProductsLoaded) {
-                    productAdapter.updateList(result as List<Product>)
-                    suggestedProductsLoaded = true
-                }
-                if (!wishListLoaded) {
-                    getProductWishList()
-                    wishListLoaded = true
-                }
-                showLikeInfo(result as List<Product>)*/
             }
             is Product -> {
                 bind(result, userId, dialogs)
@@ -534,7 +506,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
             }
 
             is Intent -> {
-                Log.d("MyDebug", "startIntent")
                 startActivity(result)
             }
 
@@ -548,7 +519,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
                         }
                     }
                 }
-                Log.d("MyDebug", "userId = $result")
                 if (result == 0) {
                     loadYouMayLikeProducts(args.product?.category)
                     bind(product, userId, null)
@@ -579,18 +549,6 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
     }
 
     override fun success() {

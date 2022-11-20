@@ -19,10 +19,15 @@ import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.util.autoCleared
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
-    private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
+    @Inject
+    lateinit var favoritesPresenter: FavoritesPresenter
+    private val presenter by moxyPresenter { favoritesPresenter }
     private var adapter: SearchesAdapter by autoCleared()
 
     override val emptyList by lazy {
@@ -43,7 +48,7 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
             setSpace(vp)
             setPadding(0, vp, 0, vp)
             layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            //adapter = this@FavoritesSearchFragment.adapter
+
         }
     }
 
@@ -53,59 +58,6 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
         super.onViewCreated(view, savedInstanceState)
         getFavoriteSearches()
         setClickListeners()
-       /* showEmptyList {
-            adapter.setItems(listOf(
-                Search(
-                    "Светлая зимняя одежда",
-                    arrayOf(
-                        "Женщинам",
-                        "Верхняя одежда",
-                        "Джинсы",
-                        "Asos",
-                        "Adidas",
-                        "Абсолютно новое",
-                        "Почти новое",
-                        "38 (XXS)",
-                        "42 (S)",
-                        "Черный"
-                    ),
-                    Search.Notification.DISABLE
-                ),
-                Search(
-                    "Для спорта (Adidas)",
-                    arrayOf(
-                        "Женщинам",
-                        "Верхняя одежда",
-                        "Джинсы",
-                        "Asos",
-                        "Adidas",
-                        "Абсолютно новое",
-                        "Почти новое",
-                        "38 (XXS)",
-                        "42 (S)",
-                        "Черный"
-                    ),
-                    Search.Notification.WEEKLY
-                ),
-                Search(
-                    "Красивое",
-                    arrayOf(
-                        "Женщинам",
-                        "Верхняя одежда",
-                        "Джинсы",
-                        "Asos",
-                        "Adidas",
-                        "Абсолютно новое",
-                        "Почти новое",
-                        "38 (XXS)",
-                        "42 (S)",
-                        "Черный"
-                    ),
-                    Search.Notification.DAYLY
-                )
-            ))
-            showList()
-        }*/
 
         view.setBackgroundResource(R.color.white)
         this.adapter = SearchesAdapter { favoriteSearch ->
@@ -133,7 +85,8 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
 
     }
 
-    override fun favoritesLoaded(list: List<*>) {
+    override fun loaded(result: Any) {
+        val list = result as List<*>
         adapter.setItems(list as List<FavoriteSearch>)
         showList()
         showBtn(true)
@@ -145,9 +98,6 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
 
     }
 
-    override fun isGuest() {
-        TODO("Not yet implemented")
-    }
 
     override fun emptyList() {
         showEmptyList { findNavController().navigate(R.id.catalogFragment) }

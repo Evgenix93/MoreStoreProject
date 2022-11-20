@@ -15,11 +15,15 @@ import com.project.morestore.models.User
 import com.project.morestore.mvpviews.BlackListMvpView
 import com.project.morestore.presenters.BlackListPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class BlackListFragment: MvpAppCompatFragment(R.layout.fragment_wait_review), BlackListMvpView {
-    private val presenter by  moxyPresenter { BlackListPresenter() }
+    @Inject lateinit var blackListPresenter: BlackListPresenter
+    private val presenter by  moxyPresenter { blackListPresenter }
     private val binding: FragmentWaitReviewBinding by viewBinding()
     private var usersAdapter: UsersAdapter by autoCleared()
 

@@ -16,9 +16,12 @@ import com.project.morestore.databinding.FragmentBrandNotFoundBinding
 import com.project.morestore.mvpviews.NewBrandView
 import com.project.morestore.presenters.NewBrandPresenter
 import com.project.morestore.singletones.Network
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AddBrandFragment : MvpAppCompatFragment(R.layout.fragment_brand_not_found), NewBrandView {
     companion object {
         const val REQUEST_BRAND = "request_brand"
@@ -26,7 +29,8 @@ class AddBrandFragment : MvpAppCompatFragment(R.layout.fragment_brand_not_found)
         const val BRAND_ID= "brand_id"
     }
     private val binding: FragmentBrandNotFoundBinding by viewBinding()
-    private val presenter by moxyPresenter { NewBrandPresenter(Network.brandApi) }
+    @Inject lateinit var newBrandPresenter: NewBrandPresenter
+    private val presenter by moxyPresenter { newBrandPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

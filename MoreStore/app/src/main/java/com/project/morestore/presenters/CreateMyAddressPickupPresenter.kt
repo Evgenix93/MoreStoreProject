@@ -1,16 +1,13 @@
 package com.project.morestore.presenters
 
-import com.project.morestore.models.AddressType
-import com.project.morestore.models.CdekAddress
-import com.project.morestore.models.DeliveryAddress
-import com.project.morestore.models.MyAddressData
+import com.project.morestore.models.*
 import com.project.morestore.repositories.AddressesRepository
 import com.project.morestore.repositories.UserNetworkGateway
 import kotlinx.coroutines.launch
 import moxy.presenterScope
+import javax.inject.Inject
 
-class CreateMyAddressPickupPresenter(
-     val cdekAddress : CdekAddress,
+class CreateMyAddressPickupPresenter @Inject constructor(
     private val userProvider :UserNetworkGateway,
     addressNetwork :AddressesRepository
 ) : MyAddressPickupPresenter(addressNetwork) {
@@ -25,7 +22,7 @@ class CreateMyAddressPickupPresenter(
         }
     }
 
-    override fun save(fullname :String, phoneNumber :String){
+    override fun save(fullname :String, phoneNumber :String, myAddress: MyAddress, cdekAddress: CdekAddress){
         presenterScope.launch(displayError) {
             waitingDelegate.show()
             addressNetwork.createAddress(
@@ -42,6 +39,4 @@ class CreateMyAddressPickupPresenter(
             viewState.back()
         }
     }
-
-
 }

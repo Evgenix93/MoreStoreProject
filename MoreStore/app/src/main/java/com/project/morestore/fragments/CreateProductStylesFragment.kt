@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -17,12 +18,17 @@ import com.project.morestore.models.Property2
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductStylesFragment: MvpAppCompatFragment(R.layout.fragment_create_product_styles), MainMvpView {
     private val binding: FragmentCreateProductStylesBinding by viewBinding()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -133,26 +139,14 @@ class CreateProductStylesFragment: MvpAppCompatFragment(R.layout.fragment_create
     }
 
     override fun loading() {
-        TODO("Not yet implemented")
+
     }
 
     override fun error(message: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun showOnBoarding() {
-        TODO("Not yet implemented")
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-        TODO("Not yet implemented")
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     override fun success() {
-        TODO("Not yet implemented")
+
     }
 }

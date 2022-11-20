@@ -18,23 +18,26 @@ import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), MainMvpView {
     private val binding: FragmentRegionsBinding by viewBinding()
     private var regionsAdapter: RegionsAdapter by autoCleared()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var regions = listOf<Region>()
     private lateinit var searchFlow: Flow<String>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //initToolbar()
         initRegionsRecyclerView()
         initEditText()
         initViews()
@@ -57,17 +60,6 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
         binding.regionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         presenter.getAllCities()
     }
-
-
-    /*private fun initToolbar() {
-        binding.toolbarCreateProduct.titleTextView.text = "Поиск города"
-        binding.toolbarCreateProduct.actionIcon.isVisible = false
-        binding.toolbarCreateProduct.backIcon.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.toolbarFilter.root.isVisible = false
-
-    }*/
 
     private fun saveRegion(region: String){
         presenter.updateCreateProductData(address = region)
@@ -120,20 +112,8 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
 
     }
 
-    override fun showOnBoarding() {
-        TODO("Not yet implemented")
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-        TODO("Not yet implemented")
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
-    }
-
     override fun success() {
-        TODO("Not yet implemented")
+
     }
 
     override fun loading() {

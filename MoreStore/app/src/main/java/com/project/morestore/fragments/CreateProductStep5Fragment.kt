@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
@@ -14,25 +15,28 @@ import com.project.morestore.R
 import com.project.morestore.adapters.BrandCreateProductAdapter
 import com.project.morestore.databinding.FragmentCreateProductStep5Binding
 import com.project.morestore.models.ProductBrand
-import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_product_step5), MainMvpView {
     private val binding: FragmentCreateProductStep5Binding by viewBinding()
     private var brandAdapter: BrandCreateProductAdapter by autoCleared()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private lateinit var searchFlow: Flow<String>
     private var brands = listOf<ProductBrand>()
     private val args: CreateProductStep5FragmentArgs by navArgs()
-    private var brandName = ""
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,9 +47,6 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
         setClickListeners()
         getBrands()
     }
-
-
-
 
     private fun initList(){
         brandAdapter = BrandCreateProductAdapter{
@@ -131,12 +132,6 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     }
 
-
-
-
-
-
-
     override fun loaded(result: Any) {
         binding.loader.isVisible = false
         if(brands.isEmpty()){
@@ -152,24 +147,11 @@ class CreateProductStep5Fragment: MvpAppCompatFragment(R.layout.fragment_create_
     }
 
     override fun error(message: String) {
-
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     override fun success() {
 
     }
-
 
 }

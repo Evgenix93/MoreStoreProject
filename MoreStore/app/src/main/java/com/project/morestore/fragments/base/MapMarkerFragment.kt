@@ -15,7 +15,7 @@ import com.yandex.mapkit.logo.HorizontalAlignment.LEFT
 import com.yandex.mapkit.logo.VerticalAlignment.TOP
 import moxy.MvpAppCompatFragment
 
-abstract class MapMarkerFragment :MvpAppCompatFragment() {//todo create child fragment
+abstract class MapMarkerFragment :MvpAppCompatFragment() {
     protected abstract val buttonText :String
     protected lateinit var views :FragmentMapMarkerBinding
 

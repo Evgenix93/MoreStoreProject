@@ -16,14 +16,20 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentProblemGoodsPhotosBinding
 import com.project.morestore.dialogs.FeedbackCompleteDialog
 import com.project.morestore.fragments.orders.problems.OrderProblemsFragmentDirections
+import com.project.morestore.fragments.orders.problems.OrderProblemsPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OrderProblemsPhotoFragment
     : MvpAppCompatFragment(R.layout.fragment_problem_goods_photos), OrderProblemsPhotosView {
 
-    private val presenter by moxyPresenter { OrderProblemsPhotoPresenter(requireContext()) }
+    @Inject
+    lateinit var orderProblemsPhotoPresenter: OrderProblemsPhotoPresenter
+    private val presenter by moxyPresenter { orderProblemsPhotoPresenter }
     private val binding: FragmentProblemGoodsPhotosBinding by viewBinding()
     private val args: OrderProblemsPhotoFragmentArgs by navArgs()
 
@@ -32,7 +38,7 @@ class OrderProblemsPhotoFragment
             if (it.resultCode != Activity.RESULT_OK || it.data == null) {
                 return@registerForActivityResult
             }
-           // presenter.addPhoto(it.data!!.data!!)
+
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -5,16 +5,18 @@ import com.project.morestore.models.PaymentUrl
 import com.project.morestore.models.Tariff
 import com.project.morestore.mvpviews.RaiseProductView
 import com.project.morestore.repositories.ProductRepository
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class RaiseProductPresenter(context: Context): MvpPresenter<RaiseProductView>() {
-    private val productRepository = ProductRepository(context)
+class RaiseProductPresenter @Inject constructor(private val productRepository: ProductRepository): MvpPresenter<RaiseProductView>() {
+
 
     fun raiseProduct(page: Int, idProduct: Long){
       presenterScope.launch{
-         // viewState.loading(true)
+
           val response = productRepository.raiseProduct(
               if (page == 0)
                   Tariff("buyTariff", idProduct, 1)
@@ -26,7 +28,7 @@ class RaiseProductPresenter(context: Context): MvpPresenter<RaiseProductView>() 
                   viewState.payment(response.body()!!)
               }
 
-              else -> {viewState.error(response.errorBody()?.string().toString())}
+              else -> viewState.error(errorMessage(response))
           }
       }
     }

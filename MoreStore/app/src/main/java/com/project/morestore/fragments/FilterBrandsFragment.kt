@@ -22,19 +22,22 @@ import com.project.morestore.models.ProductBrand
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), UserMvpView {
     private val binding: FragmentBrandsBinding by viewBinding()
     private var segmentsAdapter: CategoryAdapter by autoCleared()
     private var brandsAdapter: BrandsAdapter by autoCleared()
-    //private var brandsAAdapter: BrandsAdapter by autoCleared()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private lateinit var searchFlow: Flow<String>
     private var brands = listOf<ProductBrand>()
     private val args: FilterBrandsFragmentArgs by navArgs()
@@ -136,12 +139,6 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
     private fun saveFilter() {
         com.project.morestore.singletones.FilterState.filter.brands = brandsAdapter.getCurrentList()
         com.project.morestore.singletones.FilterState.filter.segments = segmentsAdapter.loadSegments2Checked()
-        //FilterState.segments = segmentsAdapter.loadSegmentsChecked()
-       // FilterState.brands9 = brands9Adapter.loadBrands9Checked()
-       // FilterState.brandsA = brandsAAdapter.loadBrandsAChecked()
-        //FilterState.isAllBrands = (segmentsAdapter.loadSegmentsChecked()
-           // .all { !it } && brands9Adapter.loadBrands9Checked().all { !it } && brandsAAdapter.loadBrandsAChecked().all { !it }) || (segmentsAdapter.loadSegmentsChecked()
-           // .all { it } && brands9Adapter.loadBrands9Checked().all { it } && brandsAAdapter.loadBrandsAChecked().all { it })
     }
 
     private fun initToolbar() {
@@ -217,7 +214,6 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
                     }
 
                     if (result[0] is Long) {
-                        //getBrandWishList()
                         brandsAdapter.updateWishedInfo(result as List<Long>, true)
                     }
                 }
@@ -231,9 +227,5 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
                     brandsAdapter.updateList2(result.brands)
             }
         }
-    }
-
-    override fun successNewCode() {
-
     }
 }

@@ -24,13 +24,17 @@ import com.project.morestore.models.Address
 import com.project.morestore.models.Filter
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), UserMvpView {
     private val binding: FragmentAutoregionBinding by viewBinding()
     private lateinit var permissionsLauncher: ActivityResultLauncher<String>
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private val args: AutoLocationFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -128,8 +132,6 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
 
     override fun loading() {
         showLoading(true)
-
-
     }
 
     override fun loaded(result: Any) {
@@ -151,12 +153,5 @@ class AutoLocationFragment: MvpAppCompatFragment(R.layout.fragment_autoregion), 
                     findNavController().popBackStack(R.id.profileFragment, false)
             }
         }
-
-
     }
-
-    override fun successNewCode() {
-
-    }
-
 }

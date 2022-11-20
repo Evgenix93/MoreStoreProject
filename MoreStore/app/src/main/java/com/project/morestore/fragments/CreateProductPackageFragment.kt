@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
@@ -16,12 +17,16 @@ import com.project.morestore.models.ProductDimensions
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductPackageFragment: MvpAppCompatFragment(R.layout.fragment_create_product_package), MainMvpView {
     private val binding: FragmentCreateProductPackageBinding by viewBinding()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,8 +39,6 @@ class CreateProductPackageFragment: MvpAppCompatFragment(R.layout.fragment_creat
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
-       // binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
-
     }
 
 
@@ -120,24 +123,11 @@ class CreateProductPackageFragment: MvpAppCompatFragment(R.layout.fragment_creat
     }
 
     override fun error(message: String) {
-
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     override fun success() {
 
     }
-
 
 }

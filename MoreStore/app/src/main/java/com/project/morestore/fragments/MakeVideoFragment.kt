@@ -27,16 +27,21 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentMakePhotoBinding
 import com.project.morestore.mvpviews.PhotoVideoMvpView
 import com.project.morestore.presenters.PhotoVideoPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), PhotoVideoMvpView {
     private val binding: FragmentMakePhotoBinding by viewBinding()
-    private val presenter by moxyPresenter { PhotoVideoPresenter(requireContext()) }
+    @Inject
+    lateinit var photoVideoPresenter: PhotoVideoPresenter
+    private val presenter by moxyPresenter { photoVideoPresenter }
     private val args: MakeVideoFragmentArgs by navArgs()
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
@@ -192,11 +197,6 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                 .also {
                     it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                 }
-
-
-
-
-            // Bind use cases to camera
             currentCameraProvider
                 ?.bindToLifecycle(this, cameraSelector, preview, case)
         } catch (exc: Exception) {
@@ -205,18 +205,10 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
 
     }
 
-
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         counterJob?.cancel()
     }
-
-
-
-
-
 
     override fun onPhotoCaptured(file: File) {
         Toast.makeText(requireContext(), "фото сделано", Toast.LENGTH_SHORT).show()
@@ -260,6 +252,4 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
 
 
     }
-
-
 }

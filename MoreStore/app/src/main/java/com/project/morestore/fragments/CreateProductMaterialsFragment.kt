@@ -19,16 +19,20 @@ import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.channels.trySendBlocking
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_create_product_materials), MainMvpView {
     private val binding: FragmentCreateProductMaterialsBinding by viewBinding()
     private var materialAdapter: MaterialAdapter by autoCleared()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var searchInitiated = false
     private var materialProperties: List<Property2>? = null
 
@@ -125,32 +129,15 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
         }
-       // binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
-
     }
-
-
-
 
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
-    override fun showOnBoarding() {
-        TODO("Not yet implemented")
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-        TODO("Not yet implemented")
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
-    }
-
     override fun success() {
-        TODO("Not yet implemented")
+
     }
 
     override fun loading() {
@@ -164,7 +151,7 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
             is List<*> -> {
 
                 materialAdapter.updateList((result as List<Property>).map { MaterialLine(it.id, it.name, false, idCategory = it.idCategory?.toInt()!!) } )
-                val properties = result as List<Property>
+                val properties = result
                 materialProperties?.let{
                     it.forEach {materialProperty ->
                         properties.find{property ->
@@ -180,11 +167,10 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
                 }
                 initSaveButton(properties.any{it.isChecked == true})
             }
-            is com.project.morestore.models.CreateProductData -> {
+            is CreateProductData -> {
                 materialProperties = result.property?.filter{ property ->
                         13L == property.propertyCategory
                 }
-                Log.d("MyDebug", "material properties = $materialProperties")
                 loadMaterials()
                 binding.toolbar.actionIcon.setOnClickListener {
                     if(result.id == null)
@@ -194,7 +180,6 @@ class CreateProductMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_cre
                 }
             }
         }
-
     }
 
 }

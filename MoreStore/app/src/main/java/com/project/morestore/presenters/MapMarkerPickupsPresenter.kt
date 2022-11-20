@@ -22,8 +22,9 @@ import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import java.io.IOException
+import javax.inject.Inject
 
-class MapMarkerPickupsPresenter(
+class MapMarkerPickupsPresenter @Inject constructor(
     private val searchManager : SearchManager,
     private val geolocator: Geolocator,
     private val region : String,
@@ -118,19 +119,5 @@ class MapMarkerPickupsPresenter(
         points.mapNotNull { it.obj?.geometry?.firstOrNull()?.point }
             .toTypedArray()
             .also { pts -> pts.firstOrNull()?.also { viewState.moveMap(it, CITY) } }
-    }
-
-    private fun mapAddress(cdek :CdekAddress) :DeliveryAddress{
-        val address = cdek.location
-        val addressParts = address.address.split(", ")
-        return DeliveryAddress(
-            address.city ?: "",
-            addressParts[0],
-            address.index ?: "",
-            addressParts[1],
-            addressParts.find { it.startsWith("корп.") }?.substringAfter('.'),
-            addressParts.find { it.startsWith("стр.") }?.substringAfter('.'),
-            null
-        )
     }
 }

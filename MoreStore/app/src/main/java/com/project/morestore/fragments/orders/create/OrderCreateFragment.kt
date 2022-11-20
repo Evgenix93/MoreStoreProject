@@ -29,19 +29,24 @@ import com.project.morestore.fragments.ChatFragment
 import com.project.morestore.fragments.MyAddressesFragment
 import com.project.morestore.fragments.RaiseProductFragmentDirections
 import com.project.morestore.models.*
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create), OrderCreateView {
     private val binding: FragmentOrderCreateBinding by viewBinding()
 
-    private val presenter by moxyPresenter { OrderCreatePresenter(requireContext()) }
+    @Inject
+    lateinit var orderCreatePresenter: OrderCreatePresenter
+    private val presenter by moxyPresenter { orderCreatePresenter }
     private val args: OrderCreateFragmentArgs by navArgs()
     private var chosenAddress: MyAddress? = null
-    private var chosenTime: Calendar? = null//Calendar.getInstance()
+    private var chosenTime: Calendar? = null
     private var chosenAddressStr = ""
     private var productPrice: Float? = null
     private var currentDeliveryPrice: Float? = null
@@ -137,9 +142,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.newPrice2TextView.text = "${product.priceNew.toString()} ₽"
         binding.price2WithDeliveryTextView.text = if(product.priceNew != null) "${product.priceNew} ₽"
                                                   else "${product.price} ₽"
-        //val finalSum = getFinalSum(product.priceNew?.toInt() ?: product.price.toInt(), 3 )
-        //binding.finalSumTextView.text =
-            //getFinalSum(productPrice ?: 0f, currentDeliveryPrice ?: 0f).toString() //finalSum.toString()
+
         binding.finalSumWithoutDelivery.text = "${((product.priceNew ?: product.price) + ((product.priceNew ?: product.price) * 0.05f))} ₽"
 
         if(product.addressCdek == null || product.packageDimensions.length == null){
@@ -148,9 +151,6 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.anotherCityRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
         }
 
-        //binding.yandexRadioBtn.isEnabled = false
-        //binding.yandexRadioBtn.buttonDrawable?.alpha = 125
-        //binding.yandexRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
         binding.yandexRadioBtn.setText("По городу ${product.address?.fullAddress?.substringBefore(",")} (Яндекс Go)")
     }
 
@@ -203,7 +203,6 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     }
 
     override fun setDeliveryPrice(price: DeliveryPrice?) {
-        //binding.deliveryPriceInfoTextView.isVisible = false
         binding.loader.isVisible = false
         if(price == null){
             binding.payNowWithDeliveryButton.isEnabled = false
@@ -279,10 +278,6 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.deliveryPriceInfoTextView.isVisible = true
         binding.deliveryPriceInfoTextView.text = "Внутренняя ошибка работы СДЭК"
     }
-
-    ///////////////////////////////////////////////////////////////////////////
-    //                      Private
-    ///////////////////////////////////////////////////////////////////////////
 
     private fun getGeoPosition(){
         presenter.getCurrentUserGeoPosition()
@@ -432,33 +427,6 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         }
 
         binding.chooseOnMapTextView.setOnClickListener {
-            /*val deliveryId = when (binding.deliveryVariantRadioGroup.checkedRadioButtonId) {
-                R.id.yandexRadioBtn -> YANDEX_GO
-                R.id.anotherCityRadioBtn -> ANOTHER_CITY
-                R.id.takeFromSellerRadioBtn -> TAKE_FROM_SELLER
-                else -> -1
-            }
-            setFragmentResultListener(MyAddressesFragment.ADDRESS_REQUEST){_, bundle ->
-                val address = bundle.getParcelable<MyAddress>(MyAddressesFragment.ADDRESS_KEY)
-                Log.d("mylog", "address $address")
-                chosenAddress = address
-                val streetStr = address?.address?.street
-                val houseStr = if(address?.address?.house != null) "дом.${address.address.house}" else null
-                val housingStr = if(address?.address?.housing != null) "кп.${address.address.housing}" else null
-                val buildingStr = if(address?.address?.building != null) "стр.${address.address.building}" else null
-                val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
-                val strings =
-                    arrayOf(streetStr, houseStr, housingStr, buildingStr, apartmentStr).filterNotNull()
-                binding.chosenAddressTextView.text = strings.joinToString(", ")
-                chosenAddressStr = strings.joinToString(", ")
-                binding.chosenAddressTextView.isVisible = true
-                binding.chooseOnMapTextView.text = "Изменить"
-
-
-            }
-            findNavController().navigate(OrderCreateFragmentDirections
-                .actionCreateOrderFragmentToMyAddressesFragment(true,
-                if(deliveryId == ANOTHER_CITY) MyAddressesFragment.ADDRESSES_CDEK else MyAddressesFragment.ADDRESSES_HOME))*/
 
             getChosenAddress { _, address, _ ->
                 binding.chosenAddressTextView.isVisible = true
@@ -610,13 +578,6 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         binding.totalCardView.isVisible = !show && binding.prepaymentRadioButton.isChecked
         binding.payButton.isVisible = !show && binding.onDealPlaceRadioButton.isChecked
         binding.deliveryCdekVariantCardView.isVisible = binding.anotherCityRadioBtn.isChecked
-        //binding.deliveryPriceTextView.text = getDeliveryPrice().toString()
-
-
-
-
-
-
     }
 
     private fun initToolbar() {
@@ -630,8 +591,6 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     private fun getSupportDialog(){
         presenter.getSupportDialog()
     }
-
-    //private fun getDeliveryPrice() = 340
 
     private fun getFinalSum(productPrice: Float, deliveryPrice: Float): Float{
         val sumWithDelivery = productPrice + deliveryPrice
@@ -656,9 +615,6 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             comment = if(binding.commentEditText.text?.isNotEmpty() == true) binding.commentEditText.text.toString()
             else null,
             product = args.product,
-            //promo =  if(binding.promoEditText.text?.isNotEmpty() == true) binding.promoEditText.text.toString()
-            //else null,
-            //sum = binding.finalSumTextView.text.toString().removeSuffix(" ₽").replace(',', '.').toFloat()
         )
     }
 
@@ -686,10 +642,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
         presenter.onCreateOrder(args.cartId, deliveryId, place, payId,
             findNavController().previousBackStackEntry?.destination?.id == R.id.chatFragment,
             args.product,
-            //sum = binding.finalSumWithoutDelivery.text.toString().removeSuffix(" ₽").toFloat(),
-            //promo = if(binding.promoWithoutDeliveryEditText.text.isNotEmpty())
-              //  binding.promoWithoutDeliveryEditText.text.toString()
-        )//else null)
+            )
     }
 
     companion object{

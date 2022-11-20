@@ -35,20 +35,25 @@ import com.project.morestore.models.Address
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
 import com.project.morestore.models.SuggestionModels
+import com.project.morestore.mvpviews.CatalogMvpView
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.launch
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvpView {
+@AndroidEntryPoint
+class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), CatalogMvpView {
     private val binding: FragmentCatalogBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private val args: CatalogFragmentArgs? by navArgs()
     private var currentSuggestionModels: SuggestionModels? = null
     private var queryStr: String? = null
@@ -306,9 +311,6 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
             productAdapter.updateList(result as List<Product>)
             binding.noProductsFoundTextView.isVisible = result.isEmpty()
         }
-            //lifecycleScope.launch {
-              //  productAdapter.submitData(result as PagingData<Product>)
-            //}
 
         if(result is Filter)
             binding.changeRegionCard.isVisible = !result.isCurrentLocationChosen
@@ -321,9 +323,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
                 binding.yesTextView.setOnClickListener {
                     presenter.changeUserCity(result.fullAddress.substringBefore(","))
                 }
-
             }
-
     }
 
     override fun loading() {
@@ -337,9 +337,10 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
 
     }
 
-    override fun showOnBoarding() {
+    override fun success() {
 
     }
+
 
     override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
         binding.loader.isVisible = false
@@ -349,7 +350,6 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
                 R.layout.item_suggestion_textview,
                 list
             ){ position, string ->
-                Log.d("mylog", "click position $position")
                 binding.toolbarMain.searchEditText.dismissDropDown()
                 presenter.cancelSearchJob()
                 binding.toolbarMain.searchEditText.setAdapter(null)
@@ -361,14 +361,6 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), MainMvp
             }
         )
         binding.toolbarMain.searchEditText.showDropDown()
-    }
-
-    override fun loginFailed() {
-
-    }
-
-    override fun success() {
-        TODO("Not yet implemented")
     }
 
     companion object {

@@ -1,27 +1,19 @@
 package com.project.morestore.presenters
 
 import com.project.morestore.models.AddressType
+import com.project.morestore.models.CdekAddress
 import com.project.morestore.models.MyAddress
 import com.project.morestore.repositories.AddressesRepository
 import kotlinx.coroutines.launch
 import moxy.presenterScope
+import javax.inject.Inject
 
-class EditMyAddressPickupPresenter(
-    val myAddress :MyAddress,
+class EditMyAddressPickupPresenter (
     addressNetwork :AddressesRepository
 ) :MyAddressPickupPresenter(addressNetwork) {
 
-    init {
-        isDefault = myAddress.favorite
-    }
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-        viewState.showFullname(myAddress.name)
-        viewState.showPhone(myAddress.phone)
-    }
-
-    override fun save(fullname :String, phoneNumber :String){
+    override fun save(fullname :String, phoneNumber :String, myAddress: MyAddress, cdekAddress: CdekAddress){
         presenterScope.launch(displayError) {
             waitingDelegate.show()
             addressNetwork.editAddress(
@@ -44,7 +36,8 @@ class EditMyAddressPickupPresenter(
         viewState.showConfirmDelete()
     }
 
-    fun confirmDelete(){
+
+    fun confirmDelete(myAddress: MyAddress){
         presenterScope.launch(displayError) {
             waitingDelegate.show()
             addressNetwork.deleteAddress(myAddress)

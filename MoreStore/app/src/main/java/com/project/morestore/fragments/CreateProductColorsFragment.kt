@@ -17,13 +17,17 @@ import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.args
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create_product_colors), MainMvpView {
     private val binding:FragmentCreateProductColorsBinding by viewBinding()
     private var colorsAdapter: ColorsAdapter by autoCleared()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var colorProperties: List<Property2>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,20 +88,8 @@ class CreateProductColorsFragment: MvpAppCompatFragment(R.layout.fragment_create
 
     }
 
-    override fun showOnBoarding() {
-        TODO("Not yet implemented")
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-        TODO("Not yet implemented")
-    }
-
-    override fun loginFailed() {
-
-    }
-
     override fun success() {
-        TODO("Not yet implemented")
+
     }
 
     override fun loading() {

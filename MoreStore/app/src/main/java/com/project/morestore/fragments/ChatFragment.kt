@@ -40,15 +40,19 @@ import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.MessagingService
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moxy.ktx.moxyPresenter
 import java.util.*
+import javax.inject.Inject
 
-class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
+@AndroidEntryPoint
+class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     PriceDialog.Callback, ChatMvpView {
     private lateinit var views: FragmentChatBinding
-    private val presenter by moxyPresenter { ChatPresenter() }
+    @Inject lateinit var chatPresenter: ChatPresenter
+    private val presenter by moxyPresenter { chatPresenter }
     private var currentUserId: Long? = null
     private var currentDialogId: Long? = null
     private var currentProductPrice: Float? = null
@@ -106,7 +110,6 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
         }
 
     }
-
 
 
     override fun onCreateView(
@@ -356,7 +359,6 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
     }
 
     private fun getMessages(list: List<MessageModel>, statusUser: ProductUserStatus?): List<Message> {
-        Log.d("mylog", list.toString())
         val dates = list.filter { it.saleSuggest?.status != 0 }.mapNotNull {
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = it.date * 1000
@@ -537,8 +539,6 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
 
 
         }
-        Log.d("mylog", datedMessages.toString())
-
         return datedMessages
     }
 
@@ -758,10 +758,6 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
         showLoading(true)
     }
 
-    override fun dialogsLoaded(dialogs: List<Chat>) {
-
-    }
-
     override fun dialogLoaded(dialog: DialogWrapper) {
         showLoading(false)
         currentDialogId = dialog.dialog.id
@@ -773,13 +769,14 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
         presenter.readMessages(dialog.dialog.id)
     }
 
-    override fun dialogCreated(dialogId: CreatedDialogId) {
-
-    }
 
     override fun error(message: String) {
         showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun success() {
+
     }
 
     override fun currentUserIdLoaded(id: Long) {
@@ -804,10 +801,6 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
         showLoading(false)
         Toast.makeText(requireContext(), getString(R.string.media_sent), Toast.LENGTH_SHORT).show()
         adapter.updateMessage()
-    }
-
-    override fun showDialogCount(type: String, count: Int) {
-
     }
 
     override fun mediaUrisLoaded(mediaUris: List<Uri>?) {
@@ -843,11 +836,12 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
         (activity as MainActivity).showUnreadMessagesIcon(show)
     }
 
-    override fun showUnreadTab(tab: Int, unread: Boolean) {
-
-    }
 
     override fun productAddedToCart(product: Product, cartId: Long) {
         findNavController().navigate(ChatFragmentDirections.actionChatFragmentToCreateOrderFragment(product, cartId))
+    }
+
+    override fun loaded(result: Any) {
+
     }
 }

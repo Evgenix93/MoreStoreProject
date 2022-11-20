@@ -3,13 +3,9 @@ package com.project.morestore.presenters
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.util.Log
-import androidx.core.content.FileProvider
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.cachedIn
 import com.google.firebase.messaging.FirebaseMessaging
 import com.project.morestore.models.*
+import com.project.morestore.mvpviews.MainFragmentMvpView
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ChatRepository
@@ -18,30 +14,33 @@ import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.*
 import com.project.morestore.repositories.*
 import com.project.morestore.singletones.Network
+import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ActivityContext
 import com.project.morestore.util.ProductStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
 import java.io.File
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
-    private val authRepository = AuthRepository(context)
-    private val productRepository = ProductRepository(context)
-    private val ordersRepository = OrdersRepository(context)
-    private val userRepository = UserRepository(context)
-    private val chatRepository = ChatRepository(context)
-    private val addressesRepository = AddressesRepository.apply { init(Network.addresses) }
-    private val cardRepository = CardRepository()
-    private val cartRepository = CartRepository()
+class MainPresenter  @Inject constructor(
+private val authRepository: AuthRepository,
+private val productRepository: ProductRepository,
+private val ordersRepository: OrdersRepository,
+private val userRepository: UserRepository,
+private val chatRepository: ChatRepository,
+private val addressesRepository: AddressesRepository,
+private val cardRepository: CardRepository) : MvpPresenter<MainMvpView>() {
+
     private var searchJob: Job? = null
     private var searchJob2: Job? = null
-    private val ITEMS_PER_PAGE = 50
-
 
     fun addProductToWishList(id: Long) {
         presenterScope.launch {
@@ -49,18 +48,13 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = userRepository.addProductToWishList(BrandWishList(listOf(id)))
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
                     viewState.loaded(emptyList<Product>())
                     viewState.error(getStringFromResponse(response.errorBody()!!))
 
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
-
-
         }
     }
 
@@ -70,15 +64,12 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = userRepository.getProductWishList()
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
                     viewState.loaded(emptyList<Product>())
                     viewState.error(getStringFromResponse(response.errorBody()!!))
 
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -90,11 +81,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val tokenExpiresTime = authRepository.loadTokenExpires()
 
             if (token == null || tokenSaveTime == null || tokenExpiresTime == null) {
-                Log.d("error", token.orEmpty())
-                Log.d("error", tokenSaveTime.toString())
-                Log.d("error", tokenExpiresTime.toString())
-
-
                 viewState.loaded(false)
                 return@launch
             }
@@ -121,10 +107,9 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             status: Int? = 1,
             useDefaultFilter: Boolean = false
     ) {
-        Log.d("mylog", "getProducts")
         presenterScope.launch {
             viewState.loading()
-            val response =/*val flow =*/  if (productCategories != null || forWho != null) {
+            val response = if (productCategories != null || forWho != null) {
                 val filter = Filter(
                         chosenForWho = forWho.orEmpty(),
                         categories = productCategories.orEmpty(),
@@ -138,18 +123,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     isGuest = isGuest,
                     status = status
                 )
-            /*Pager(
-                config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
-                pagingSourceFactory = {
-                    productRepository.productPagingSource(
-                        query = queryStr,
-                        filter = filter,
-                        productId = productId,
-                        isGuest = isGuest
-
-                    )
-                }
-            ).flow.cachedIn(presenterScope)*/
             } else {
                 productRepository.getProducts(
                     query = queryStr,
@@ -169,21 +142,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     status = status
                 )
             }
-            /*Pager(
-                config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
-                pagingSourceFactory = {
-                    productRepository.productPagingSource(
-                        query = queryStr,
-                        filter = if (isFiltered) userRepository.getFilter() else null,
-                        productId = productId,
-                        isGuest = isGuest
-
-                    )
-                }
-            ).flow.cachedIn(presenterScope)*/
-            //flow.collectLatest {
-              //  viewState.loaded(it)
-
                 when (response?.code()) {
                     200 -> {
                         val filter = userRepository.getFilter()
@@ -196,11 +154,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                                 1 -> ProductStatus.SOLD.value
                                 null -> it.status
                                 else -> it.status
-                                /*else -> if ((it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) &&
-                                    (it.idUser == currentUserId || it.statusUser.buy.idUser == currentUserId)
-                                ) 6
-                                else if (it.statusUser?.buy?.status == 0 || it.statusUser?.buy?.status == 1) 7
-                                else 1*/
                             }
                             it.status = productStatus
                         }
@@ -227,16 +180,12 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                             )
                         }
                     }
-                    400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                     404 -> {
                         viewState.loaded(emptyList<Product>())
 
 
                     }
-                    500 -> viewState.error("500 Internal Server Error")
-                    null -> viewState.error("нет интернета")
-
-                //}
+                    else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -245,7 +194,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             productId: Long,
             userId: Long? = null,
     ) {
-        Log.d("mylog", "addProductToCart")
         presenterScope.launch {
             viewState.loading()
             val response = cartRepository.addCartItem(
@@ -257,10 +205,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 200 -> {
                     viewState.loaded("")
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                400 -> viewState.error("Товар находится в ваших покупках")
-
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -269,7 +214,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         productId: Long,
         userId: Long? = null,
     ) {
-        Log.d("mylog", "removeProduct")
         presenterScope.launch {
             viewState.loading()
             val response = cartRepository.removeCartItem(
@@ -281,10 +225,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 200 -> {
                     viewState.loaded("")
                 }
-                400 -> viewState.error(response.message())
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -296,15 +237,12 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
 
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
                     viewState.loaded(emptyList<Product>())
                     viewState.error(getStringFromResponse(response.errorBody()!!))
 
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
         }
 
@@ -373,34 +311,24 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                         else
                             filter.brands = response.body()!!
                                     .apply { find { it.id == brand.brand }?.apply { isChecked = true } }
-
                     }
                 }
             }
 
             val queryStr = product?.text ?: ""
             userRepository.updateFilter(filter)
-
             getProducts(queryStr, isFiltered = true)
-
-
         }
     }
 
     fun getYouMayLikeProducts(category: Category?) {
-        Log.d("MyDebug", "getYouMayLikeProducts")
-        Log.d("MyDebug", "category name = ${category?.name}")
         presenterScope.launch {
             viewState.loading()
             val response = if (category == null) productRepository.getYouMayLikeProducts(4, authRepository.getUserId())
             else productRepository.getProducts(limit = 4, filter = Filter(categories = listOf(ProductCategory(category.id, category.name, true)), chosenForWho = listOf()))
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
-                500 -> viewState.error("500 Internal Server Error")
-                null -> {
-                    viewState.error("нет интернета")
-                }
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -438,11 +366,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             filter.isCurrentLocationFirstLoaded = false
             filter.isCurrentLocationChosen = true
             userRepository.updateFilter(filter)
-            Log.d("mylog", filter.currentLocation?.name.orEmpty())
             viewState.loaded(Unit)
         }
-
-
     }
 
     fun changeCurrentUserAddress(address: Address){
@@ -470,8 +395,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 .onEach { result ->
                     result?.let {
                         if (result.code() == 200) {
-                            //viewState.loadedSuggestions(result.body()!!)
-                            Log.d("mylog", result.body()?.get(0)?.brand.toString())
                             val categoryList =
                                     result.body()?.filter { it.category != null }.orEmpty().toSet()
                             val brandList = result.body()?.filter { it.brand != null }.orEmpty().toSet()
@@ -545,14 +468,11 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                                 suggestionObjects.add(SuggestionModels(listOf(product)))
                             }
 
-                            viewState.loadedSuggestions(suggestionsList, suggestionObjects)
-                            Log.d("mylog", suggestionsList.toString())
+                            (viewState as MainFragmentMvpView).loadedSuggestions(suggestionsList, suggestionObjects)
                         }
 
                     }
                     result ?: viewState.error("нет интернета")
-
-
                 }.launchIn(presenterScope)
 
     }
@@ -565,11 +485,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     private suspend fun getStringFromResponse(body: ResponseBody): String {
         return withContext(Dispatchers.IO) {
             val str = body.string()
-            Log.d("mylog", str)
             str
         }
-
-
     }
 
     fun updateProductCategories(productCategories: List<ProductCategory>) {
@@ -584,16 +501,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         filter.chosenForWho = chosenForWho
         filter.categories = listOf(ProductCategory(0, "Stub", false)) + productCategories
         userRepository.updateFilter(filter)
-        viewState.success()
-    }
-
-    fun addProductCategory(productCategoryId: Long) {
-        val filter = userRepository.getFilter()
-        if (filter.categories.all { it.isChecked == false || it.isChecked == null }.not())
-            filter.categories.find { it.id == productCategoryId.toInt() }
-                    ?.apply { isChecked = true }
-        userRepository.updateFilter(filter)
-
+        (viewState as MainFragmentMvpView).success()
     }
 
     fun loadFilter() {
@@ -609,7 +517,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         filter.chosenForWho = chosenForWho
         filter.brands = listOf(ProductBrand(0, "Stub", 0, null, null), brand.apply { isChecked = true })
         userRepository.updateFilter(filter)
-        viewState.success()
+        (viewState as MainFragmentMvpView).success()
     }
 
     fun getCategories(forWho: Int) {
@@ -640,11 +548,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     }
 
                 }
-
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -655,16 +559,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = productRepository.getBrands()
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-
+                else -> viewState.error(errorMessage(response))
             }
-
         }
     }
 
@@ -691,18 +587,9 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = productRepository.getProperties()
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-
+                else -> viewState.error(errorMessage(response))
             }
-
         }
-
     }
 
     fun getSizes(forWho: Int, idCategory: Int) {
@@ -716,10 +603,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     else -> false
                 }
                 if (isBottomSizes) {
-                    //  removeProperty(5)
                     getProperties(5)
                 } else {
-                    //  removeProperty(4)
                     getProperties(4)
                 }
             }
@@ -731,10 +616,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     else -> false
                 }
                 if (isBottomSizes) {
-                    //  removeProperty(2)
                     getProperties(2)
                 } else {
-                    //  removeProperty(1)
                     getProperties(1)
                 }
             }
@@ -746,10 +629,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     else -> false
                 }
                 if (isBottomSizes) {
-                    // removeProperty(8)
                     getProperties(8)
                 } else {
-                    // removeProperty(7)
                     getProperties(7)
                 }
             }
@@ -759,15 +640,12 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     fun getSizesShoos(forWho: Int) {
         when (forWho) {
             0 -> {
-                //removeProperty(6)
                 getProperties(6)
             }
             1 -> {
-                //removeProperty(3)
                 getProperties(3)
             }
             2 -> {
-                // removeProperty(9)
                 getProperties(9)
             }
         }
@@ -804,14 +682,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = productRepository.getCities()
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -837,7 +708,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
     fun getUserData() {
         presenterScope.launch {
             viewState.loading()
-            Log.d("MyToken", "token = ${getToken()}")
             if(getToken().isEmpty()) {
                 getProducts(isFiltered = false)
                 getBanners(1)
@@ -852,19 +722,11 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     viewState.loaded(response.body()!!)
                     authRepository.setupUserId(response.body()!!.id)
                 }
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-
                 404 -> {
                     viewState.error("Вход не выполнен")
-                    viewState.loginFailed()
+                    (viewState as MainFragmentMvpView).loginFailed()
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -888,22 +750,13 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                         if (photosUploaded && videosUploaded)
                            viewState.loaded(response.body()!!.first())
                 }
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> {
-                    viewState.error("нет интернета")
-                }
-                else -> viewState.error("ошибка")
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
 
     fun createDraftProduct() {
         val currentProductData = productRepository.loadCreateProductData()
-       // updateCreateProductData(status = 5)
         if(currentProductData.address != null) {
             if (currentProductData.id == null)
                 createProduct()
@@ -920,9 +773,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     val strings =
                         arrayOf(cityStr, streetStr, houseStr)
                     val chosenAddressStr = strings.joinToString(", ")
-                    Log.d("MyTag", "address = $chosenAddressStr")
                     updateCreateProductData(address = chosenAddressStr, status = 5)
-                    Log.d("mydebug", chosenAddressStr)
                     if (currentProductData.id == null)
                         createProduct()
                     else
@@ -969,8 +820,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 name,
                 status,
                 dimensions
-
         )
+        viewState.loaded(Unit)
     }
 
     fun updateCreateProductDataPhotosVideos(photoVideo: File, position: Int) {
@@ -992,7 +843,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         presenterScope.launch {
             val success = productRepository.updateCreateProductPhotoVideo(bitmap, position)
             if (success)
-                viewState.success()
+                (viewState as MainFragmentMvpView).success()
             else viewState.error("ошибка")
         }
     }
@@ -1009,7 +860,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                 productRepository.updateCreateProductDataPhotoVideoFromWeb(entry.value, entry.key)
             }
             if (success.all { it })
-                viewState.success()
+                (viewState as MainFragmentMvpView).success()
             else viewState.error("ошибка")
         }
     }
@@ -1046,26 +897,11 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             200 -> {
                 return true
             }
-            400 -> {
-                val bodyString = getStringFromResponse(response.errorBody()!!)
-                viewState.error(bodyString)
-                return false
-            }
-            500 -> {
-                viewState.error("500 Internal Server Error")
-                return false
-            }
-            null -> {
-                viewState.error("нет интернета")
-                return false
-            }
             else -> {
-                viewState.error("ошибка")
-                return false
+                viewState.error(errorMessage(response))
+               return false
             }
-
         }
-
     }
 
     private suspend fun uploadProductVideos(productId: Long): Boolean {
@@ -1078,30 +914,15 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
 
         val response = productRepository.uploadProductVideos(videos, productId)
-        when (response?.code()) {
+        return when (response?.code()) {
             200 -> {
-                return true
-            }
-            400 -> {
-                val bodyString = getStringFromResponse(response.errorBody()!!)
-                viewState.error(bodyString)
-                return false
-            }
-            500 -> {
-                viewState.error("500 Internal Server Error")
-                return false
-            }
-            null -> {
-                viewState.error("нет интернета")
-                return false
+                true
             }
             else -> {
-                viewState.error("ошибка")
-                return false
+                viewState.error(errorMessage(response))
+                false
             }
-
         }
-
     }
 
     fun getShoosTypes() {
@@ -1121,8 +942,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = productRepository.changeProductStatus(productId, status)
             when (response?.code()) {
                 200 -> viewState.loaded("Success")
-                null -> {
-                }
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -1138,17 +958,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     if (photosUploaded && videosUploaded)
                         viewState.loaded(response.body()!!.first())
                 }
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-
+                else -> viewState.error(errorMessage(response))
             }
-
-
         }
     }
 
@@ -1166,14 +977,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     viewState.loaded(response.body()!!.first())
 
                 }
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -1183,13 +987,9 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = userRepository.loadBrandsProperties()
             when (response?.code()) {
                 200 -> {
-                    //viewState.loaded(Unit)
                     viewState.loaded(response.body()!!)
                 }
-                null -> viewState.loaded(Unit)
-                else -> {
-                    viewState.showOnBoarding()
-                }
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -1209,8 +1009,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
                     val inCart = response.body()?.find { it.product.id == productId }
                     callback(inCart != null)
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
+               else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -1246,13 +1045,7 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             val response = userRepository.getCityByCoordinates(coordinates)
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
-                400 -> {}
-                500 -> {}
-                null -> {}
-                else -> {}
-
             }
-
         }
     }
 
@@ -1260,15 +1053,11 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         return suspendCoroutine {
             FirebaseMessaging.getInstance().token
                 .addOnSuccessListener { token ->
-                    Log.d("mylog", "token $token")
                     it.resume(token)
-
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("mylog", exception.message.toString())
                     viewState.error(exception.message.orEmpty())
                     it.resume(null)
-
                 }
         }
     }
@@ -1286,13 +1075,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
         }
     }
 
-    private suspend fun getAllOrders(): List<Order>?{
-        val response = ordersRepository.getAllOrders()
-        return if(response?.code() == 200) response.body()
-        else null
-    }
-
-
    fun viewProduct(idProduct: Long){
        presenterScope.launch{
           val response = productRepository.viewProduct(authRepository.getUserId(), idProduct)
@@ -1303,7 +1085,6 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
    }
 
     fun getBanners(sex: Int){
-        Log.d("mytest", "getBanners")
         presenterScope.launch {
             val response = productRepository.getBanners()
             response?.let {
@@ -1324,69 +1105,8 @@ class MainPresenter(context: Context) : MvpPresenter<MainMvpView>() {
             when(response?.code()){
                 200 -> viewState.loaded(response.body()!!.find { it.active == 1 } ?: emptyList<Card>())
                 404 -> {viewState.loaded(emptyList<Card>())}
-                null -> viewState.error("нет интернета")
-                400 -> viewState.error(response.errorBody()?.string().orEmpty())
+                else -> viewState.error(errorMessage(response))
             }
         }
-    }
-
-    fun addCard(cardNumber: String){
-        presenterScope.launch {
-            if (!checkCardNumber(cardNumber)) {
-                viewState.error("Введите правильный номер карты")
-                return@launch
-            }
-            viewState.loading()
-            val cardsResponse = cardRepository.getCards()
-            when(cardsResponse?.code()){
-                200 -> {
-                    val cards = cardsResponse.body()!!
-
-                    cards.forEach{
-                            val deleteResponse = cardRepository.deleteCard(it)
-                            when(deleteResponse?.code()){
-                                null -> {
-                                    viewState.error("Нет сети")
-                                    return@launch
-                                }
-                                400 -> {
-                                    viewState.error(getStringFromResponse(deleteResponse.errorBody()!!))
-                                    return@launch
-                                }
-                            }
-                            val addResponse = cardRepository.addCard(Card(id = null, number = it.number, active = 0))
-                            when(addResponse?.code()){
-                                null -> {
-                                    viewState.error("Нет сети")
-                                    return@launch
-                                }
-                                400 -> {
-                                    viewState.error(getStringFromResponse(addResponse.errorBody()!!))
-                                    return@launch
-                                }
-                            }
-                        }
-                    }
-                null -> {viewState.error("Нет сети")
-                    return@launch}
-                400 -> { viewState.error(getStringFromResponse(cardsResponse.errorBody()!!))
-                    return@launch}
-                500 -> { viewState.error("Ошибка")
-                    return@launch}
-            }
-            val response = cardRepository.addCard(Card(id = null, number = cardNumber, active = 1))
-            when(response?.code()){
-                200 -> if(response.body()!!.contains("error")) viewState.error(response.body()!!)
-                else viewState.success()
-
-                null -> viewState.error("нет интернета")
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
-            }
-        }
-        }
-
-    private fun checkCardNumber(cardNumber: String): Boolean{
-        return cardNumber.isNotEmpty() && cardNumber.filter { it != '-' }.length == 16
-
     }
 }

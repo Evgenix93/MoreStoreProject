@@ -22,11 +22,16 @@ import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpView {
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private val binding: FragmentProfileBinding by viewBinding()
     private val args: ProfileFragmentArgs by navArgs()
     private lateinit var brandsPropertiesDataWrapper: BrandsPropertiesDataWrapper
@@ -49,7 +54,6 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
     }
 
     private fun getUser(){
-        //presenter.getCurrentRegion()
         presenter.getCurrentUserAddress()
         val listener =
             MaskedTextChangedListener("+7([000])-[000]-[00]-[00]", binding.phoneEditText)
@@ -116,11 +120,9 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
 
     private fun deleteCard(card: Card){
         presenter.deleteCard(card)
-        //cardsAdapter.loading(false)
     }
 
     override fun success(result: Any) {
-        TODO("Not yet implemented")
     }
 
     override fun error(message: String) {
@@ -147,9 +149,5 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
                 val currentAddress = result as Address
                 binding.currentRegionTextView.text = currentAddress.fullAddress?.substringBefore(",")
             }
-    }
-
-    override fun successNewCode() {
-        TODO("Not yet implemented")
     }
 }

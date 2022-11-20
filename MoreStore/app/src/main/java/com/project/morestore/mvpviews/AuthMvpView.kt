@@ -14,8 +14,7 @@ interface AuthMvpView: MvpView {
     fun error(message: String)
     @OneExecution
     fun loading()
-    @OneExecution
-    fun successNewCode(result: Any)
+
     @OneExecution
     fun registrationComplete(complete: Boolean, user: User)
 }

@@ -26,20 +26,20 @@ import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.createRect
 import com.project.morestore.util.dp
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-
-class MediaFragment() : FullscreenFragment(), MainMvpView {
+@AndroidEntryPoint
+class MediaFragment() : FullscreenMvpFragment(), MainMvpView {
     private lateinit var views :FragmentMediaBinding
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var currentPage :Int = 0
 
     companion object{
         const val PHOTOS = "photos"
-    }
-
-    constructor(photos :Array<String>) :this(){
-        arguments = bundleOf(PHOTOS to photos)
     }
 
     override fun onCreateView(
@@ -137,31 +137,7 @@ class MediaFragment() : FullscreenFragment(), MainMvpView {
 
     }
 
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
-    }
-
     override fun success() {
 
     }
-
-    //todo use this approach on whole app
-    /*
-//        requireActivity().window?.apply {
-//            WindowInsetsControllerCompat(this, views.root).apply {
-//                isAppearanceLightStatusBars = true
-//                isAppearanceLightNavigationBars = true
-//            }
-//            statusBarColor = Color.BLACK
-//            navigationBarColor = Color.BLACK
-//        }
-     */
 }

@@ -19,7 +19,4 @@ interface UserMvpView: MvpView {
     @OneExecution
     fun loaded(result: Any)
 
-    @OneExecution
-    fun successNewCode()
-
 }

@@ -5,10 +5,7 @@ import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 import java.io.File
 
-interface PhotoVideoMvpView: MvpView {
-
-    @OneExecution
-    fun onPhotoCaptured(file: File)
+interface PhotoVideoMvpView: PhotoMvpView {
 
     @OneExecution
     fun videoStarted(recording: Recording)

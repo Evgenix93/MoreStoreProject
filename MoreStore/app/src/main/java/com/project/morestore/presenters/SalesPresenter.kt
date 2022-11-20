@@ -4,23 +4,29 @@ import android.content.Context
 import android.util.Log
 import com.project.morestore.models.*
 import com.project.morestore.models.cart.CartItem
+import com.project.morestore.mvpviews.SalesActiveMvpView
+import com.project.morestore.mvpviews.SalesDealPlaceMvpView
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.repositories.*
+import com.project.morestore.util.MessageActionType
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
+import java.util.*
+import javax.inject.Inject
+import kotlin.math.absoluteValue
 
-class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
-    private val salesRepository = SalesRepository()
-    private val userRepository = UserRepository(context)
-    private val ordersRepository = OrdersRepository(context)
-    private val authRepository  = AuthRepository(context)
-    private val chatRepository = ChatRepository(context)
-    private val cartRepository = CartRepository()
-
+class SalesPresenter @Inject constructor(
+    private val salesRepository: SalesRepository,
+        private val userRepository: UserRepository,
+        private val ordersRepository: OrdersRepository,
+        private val authRepository: AuthRepository,
+        private val chatRepository: ChatRepository
+): MvpPresenter<SalesDealPlaceMvpView>() {
 
     fun getSales(isHistory: Boolean){
         presenterScope.launch {
@@ -38,29 +44,9 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                     val activeSales = sales.filter{it.status == 0}
                     val inactiveSales = sales.filter{it.status == 1}
                     if(isHistory) {
-                     /*   val inactiveSalesSorted = inactiveSales
-                            .sortedBy {sale ->
-                             val timestamp = addresses.find{address -> address.idOrder == sale.id}
-                                    ?.address?.substringAfter(';')?.toLongOrNull()
-                                if(timestamp != null)
-                                    timestamp - System.currentTimeMillis()
-                                else
-                                    null
-                            }*/
-
-                        viewState.onSalesLoaded(inactiveSales, addresses, avatars, emptyList())
+                        (viewState as SalesMvpView).onSalesLoaded(inactiveSales, addresses, avatars, emptyList())
                     }
                     else {
-                       /* val activeSalesSorted = activeSales
-                            .sortedBy {sale ->
-                              val timestamp = addresses.find{address -> address.idOrder == sale.id}
-                                    ?.address?.substringAfter(';')?.toLongOrNull()
-                                if(timestamp != null)
-                                    (timestamp - System.currentTimeMillis())
-                                else {
-                                    null
-                                }
-                            }*/
                         val dialogs = getDialogs().reversed()
                        val activeSalesSorted = activeSales.filter { activeSales.find { saleCheck ->
                            saleCheck.id != it.id && saleCheck.cart?.first()?.id == it.cart?.first()?.id &&
@@ -93,7 +79,7 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                                 }
                            it
                        }
-                        viewState.onSalesLoaded(activeSalesSorted, addresses, avatars, dialogs)
+                        (viewState as SalesMvpView).onSalesLoaded(activeSalesSorted, addresses, avatars, dialogs)
                     }
                     val cartItems = getCartItems() ?: emptyList()
                     val orderItems = getOrderItems()?.filter{it.cart != null}
@@ -105,19 +91,17 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
                     val activeSalesFiltered = activeSales.filter { activeSales.find { saleCheck ->
                         saleCheck.id != it.id && saleCheck.cart?.first()?.id == it.cart?.first()?.id &&
                                 saleCheck.idUser == it.idUser && saleCheck.id > it.id } == null }
-                    viewState.onItemsLoaded(cartItems, filteredOrderItems, activeSalesFiltered, inactiveOrders, inactiveSales)
+                    (viewState as SalesMvpView).onItemsLoaded(cartItems, filteredOrderItems, activeSalesFiltered, inactiveOrders, inactiveSales)
                 }
-                400 -> {viewState.onError(getError(response.errorBody()!!))}
                 404 -> {
-                    viewState.onSalesLoaded(emptyList(), emptyList(), emptyList(), emptyList())
+                    (viewState as SalesMvpView).onSalesLoaded(emptyList(), emptyList(), emptyList(), emptyList())
                     val cartItems = getCartItems() ?: emptyList()
                     val orderItems = getOrderItems()?.filter{it.cart != null}
                     val activeOrders = orderItems?.filter { it.status == 0 } ?: emptyList()
                     val inactiveOrders = orderItems?.filter{it.status == 1}.also{Log.d("Sales", "inactiveOrders = $it")} ?: emptyList()
-                    viewState.onItemsLoaded(cartItems, activeOrders, emptyList(), inactiveOrders, emptyList())
+                    (viewState as SalesMvpView).onItemsLoaded(cartItems, activeOrders, emptyList(), inactiveOrders, emptyList())
                 }
-                0 -> {viewState.onError(getError(response.errorBody()!!))}
-                null -> {viewState.onError("Нет интернета")}
+               else -> viewState.onError(errorMessage(response))
             }
         }
     }
@@ -128,12 +112,11 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
             when(response?.code()){
                 200 -> {
                     if(response.body()!!)
-                    viewState.onDealPlaceAdded()
+                        (viewState as SalesActiveMvpView).onDealPlaceAdded()
                     else
                         viewState.onError("Ошибка при добавлении адреса")
                 }
-                400 -> {viewState.onError(getError(response.errorBody()!!))}
-                null -> {viewState.onError("Нет интернета")}
+                else -> viewState.onError(errorMessage(response))
             }
         }
         }
@@ -142,7 +125,10 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
        val response = userRepository.getUser(id)
       return when(response?.code()){
            200 -> response.body()!!
-           else -> null
+           else -> {
+               viewState.onError(errorMessage(response))
+               null
+           }
        }
    }
 
@@ -159,22 +145,9 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
             val response = ordersRepository.changeOrderPlaceStatus(offeredOrderPlaceChange)
             when(response?.code()){
                 200 -> {
-                    viewState.onDealPlaceAccepted()
+                    (viewState as SalesActiveMvpView).onDealPlaceAccepted()
                 }
-                null -> {
-                    viewState.onError("нет интернета")
-
-                }
-                400 -> {
-                    viewState.onError(response.errorBody()!!.string())
-
-                }
-                500 -> {
-                    viewState.onError("500 Internal Server Error")
-
-                }
-                else -> {}
-
+                else -> viewState.onError(errorMessage(response))
             }
         }
     }
@@ -200,13 +173,8 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
         presenterScope.launch {
             val response = chatRepository.submitBuy(info)
             when(response?.code()){
-                200 -> viewState.onDealStatusChanged()
-                400 -> {
-                    val bodyString = getError(response.errorBody()!!)
-                    viewState.onError(bodyString)
-                }
-                500 -> viewState.onError("500 Internal Server Error")
-                null -> viewState.onError("Ошибка")
+                200 -> (viewState as SalesActiveMvpView).onDealStatusChanged()
+                else -> viewState.onError(errorMessage(response))
             }
         }
     }
@@ -216,25 +184,11 @@ class SalesPresenter(context: Context): MvpPresenter<SalesMvpView>() {
             val response = chatRepository.cancelBuyRequest(info)
             when (response?.code()) {
                 200 -> {
-                    viewState.onDealStatusChanged()
+                    (viewState as SalesActiveMvpView).onDealStatusChanged()
                 }
-                400 -> {
-                    val bodyString = getError(response.errorBody()!!)
-                    viewState.onError(bodyString)
-                }
-                500 -> viewState.onError("500 Internal Server Error")
-                null -> viewState.onError("нет интернета")
                 404 -> viewState.onError("ошибка 404 not found")
-                else -> viewState.onError("ошибка")
-
+                else -> viewState.onError(errorMessage(response))
             }
-
-        }
-    }
-
-  private suspend fun getError(errorBody: ResponseBody): String{
-      return  withContext(Dispatchers.IO){
-            errorBody.string()
         }
     }
 }

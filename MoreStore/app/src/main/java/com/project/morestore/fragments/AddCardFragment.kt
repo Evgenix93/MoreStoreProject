@@ -14,18 +14,25 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentAddCardBinding
 import com.project.morestore.models.SuggestionModels
+import com.project.morestore.mvpviews.AddCardMvpView
 import com.project.morestore.mvpviews.MainMvpView
+import com.project.morestore.presenters.AddCardPresenter
 import com.project.morestore.presenters.MainPresenter
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import io.card.payment.CardIOActivity
 import io.card.payment.CreditCard
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class AddCardFragment: MvpAppCompatFragment(R.layout.fragment_add_card), MainMvpView {
+@AndroidEntryPoint
+class AddCardFragment: MvpAppCompatFragment(R.layout.fragment_add_card), AddCardMvpView {
     private val binding: FragmentAddCardBinding by viewBinding()
     private val presenter by moxyPresenter { MainPresenter(requireContext()) }
     private lateinit var scanLauncher: ActivityResultLauncher<Intent>
+    @Inject private lateinit var addCardPresenter: AddCardPresenter
+    private val presenter by moxyPresenter { addCardPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -95,28 +102,8 @@ class AddCardFragment: MvpAppCompatFragment(R.layout.fragment_add_card), MainMvp
 
 
 
-    override fun loaded(result: Any) {
-
-    }
-
-    override fun loading() {
-
-    }
-
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
 
     }
 

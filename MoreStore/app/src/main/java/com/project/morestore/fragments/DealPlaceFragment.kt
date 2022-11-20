@@ -20,15 +20,22 @@ import com.project.morestore.fragments.orders.create.OrderCreateFragmentDirectio
 import com.project.morestore.models.*
 
 import com.project.morestore.models.cart.CartItem
+import com.project.morestore.mvpviews.SalesActiveMvpView
+import com.project.morestore.mvpviews.SalesDealPlaceMvpView
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.presenters.SalesPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.util.*
+import javax.inject.Inject
 
-class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), SalesMvpView {
+@AndroidEntryPoint
+class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), SalesDealPlaceMvpView {
     private val binding: FragmentDealPlaceBinding by viewBinding()
-    private val presenter by moxyPresenter{SalesPresenter(requireContext())}
+    @Inject
+    lateinit var salesPresenter: SalesPresenter
+    private val presenter by moxyPresenter{salesPresenter}
     private val args: DealPlaceFragmentArgs by navArgs()
     private var chosenAddress: MyAddress? = null
     private var chosenTime: Calendar? = null
@@ -105,11 +112,9 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
                         chosenTime = Calendar.getInstance().apply { set(currYear, currMonth - 1, currDay) }
                 }
 
-
             }, { _, _ ->
 
             }).show(childFragmentManager, null)
-
         }
 
         binding.timeEditText.setOnClickListener {
@@ -144,49 +149,12 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
                 }
 
             }).show(childFragmentManager, null)
-
         }
 
-        //binding.cancelTextView.setOnClickListener {
-          //  presenter.onCancelOrderCreateClick()
-        //}
-
-        /*binding.payButton.setOnClickListener {
-            val deliveryId = when(binding.deliveryVariantRadioGroup.checkedRadioButtonId){
-                R.id.yandexRadioBtn -> OrderCreateFragment.YANDEX_GO
-                R.id.anotherCityRadioBtn -> OrderCreateFragment.ANOTHER_CITY
-                R.id.takeFromSellerRadioBtn -> OrderCreateFragment.TAKE_FROM_SELLER
-                else -> -1
-            }
-            val placeId = when(binding.radioButtons.checkedRadioButtonId){
-                R.id.onSellerChoiceRadioBtn -> OrderCreateFragment.PLACE_FROM_SELLER
-                R.id.userVariantRadioBtn -> OrderCreateFragment.PLACE_FROM_ME
-                else -> -1
-            }
-            val payId = when(binding.deliveryTypeRadioGroup.checkedRadioButtonId){
-                R.id.onDealPlaceRadioButton -> OrderCreateFragment.PAY_ON_PLACE
-                R.id.prepaymentRadioButton -> OrderCreateFragment.PAY_PREPAYMENT
-                else -> -1
-            }
-            val place = if(placeId == OrderCreateFragment.PLACE_FROM_SELLER) OrderPlace(placeId.toLong(), null, null)
-            else OrderPlace(placeId.toLong(),
-                "${chosenAddress?.address?.street}, ${chosenAddress?.address?.building}",
-                chosenTime?.timeInMillis ?: 0/1000)
-            presenter.onCreateOrder(args.cartId, deliveryId, place, payId)
-
-
-        }*/
-
         binding.chooseOnMapTextView.setOnClickListener {
-            /*val deliveryId = when (binding.deliveryVariantRadioGroup.checkedRadioButtonId) {
-                R.id.yandexRadioBtn -> OrderCreateFragment.YANDEX_GO
-                R.id.anotherCityRadioBtn -> OrderCreateFragment.ANOTHER_CITY
-                R.id.takeFromSellerRadioBtn -> OrderCreateFragment.TAKE_FROM_SELLER
-                else -> -1
-            }*/
+
             setFragmentResultListener(MyAddressesFragment.ADDRESS_REQUEST){_, bundle ->
                 val address = bundle.getParcelable<MyAddress>(MyAddressesFragment.ADDRESS_KEY)
-                Log.d("mylog", "address $address")
                 chosenAddress = address
                 val streetStr = address?.address?.street
                 val houseStr = if(address?.address?.house != null) "дом.${address.address.house}" else null
@@ -194,30 +162,17 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
                 val buildingStr = if(address?.address?.building != null) "стр.${address.address.building}" else null
                 val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
                 val strings =
-                    arrayOf(streetStr, houseStr, housingStr, buildingStr, apartmentStr).filterNotNull()
+                    listOfNotNull(streetStr, houseStr, housingStr, buildingStr, apartmentStr)
                 binding.chosenAddressTextView.text = strings.joinToString(", ")
                 chosenAddressStr = strings.joinToString(", ")
                 binding.chosenAddressTextView.isVisible = true
                 binding.chooseOnMapTextView.text = "Изменить"
-
-
-
             }
             findNavController().navigate(
                 DealPlaceFragmentDirections
                 .actionDealPlaceFragmentToMyAddressesFragment(true,
                     MyAddressesFragment.ADDRESSES_HOME))
         }
-
-    }
-
-    override fun onSalesLoaded(
-        sales: List<Order>,
-        addresses: List<OfferedOrderPlace>,
-        users: List<User?>,
-        dialogs: List<DialogWrapper>
-    ) {
-        TODO("Not yet implemented")
     }
 
     override fun onError(message: String) {
@@ -229,23 +184,6 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
         findNavController().popBackStack()
     }
 
-    override fun onDealPlaceAccepted() {
-
-    }
-
-    override fun onItemsLoaded(
-        cartItems: List<CartItem>,
-        activeOrders: List<Order>,
-        activeSales: List<Order>,
-        inactiveOrders: List<Order>,
-        inactiveSales: List<Order>
-    ) {
-
-    }
-
-    override fun onDealStatusChanged() {
-        TODO("Not yet implemented")
-    }
 
     companion object{
         const val ADDRESS_REQUEST = "address key"

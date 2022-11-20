@@ -3,14 +3,16 @@ package com.project.morestore.presenters
 import com.project.morestore.apis.BrandApi
 import com.project.morestore.models.NewBrand
 import com.project.morestore.mvpviews.NewBrandView
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class NewBrandPresenter(
+class NewBrandPresenter @Inject constructor(
     private val network :BrandApi
 ) : MvpPresenter<NewBrandView>(){
 
@@ -28,12 +30,8 @@ class NewBrandPresenter(
             viewState.loading(false)
             when(response?.code()){
                 200 -> viewState.finish(response.body()!!.toLong(), name)
-                400 -> viewState.showMessage("ошибка")
-                null -> viewState.showMessage("нет интернета")
+                else -> viewState.showMessage(errorMessage(response))
             }
-
-
         }
     }
-
 }

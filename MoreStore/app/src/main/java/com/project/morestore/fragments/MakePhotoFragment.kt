@@ -20,18 +20,25 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentMakePhotoBinding
+import com.project.morestore.mvpviews.MainMvpView
+import com.project.morestore.mvpviews.PhotoMvpView
 import com.project.morestore.mvpviews.PhotoVideoMvpView
 import com.project.morestore.presenters.PhotoVideoPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.io.File
 import java.text.SimpleDateFormat
+import javax.inject.Inject
 
-class MakePhotoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), PhotoVideoMvpView {
+@AndroidEntryPoint
+class MakePhotoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), PhotoMvpView {
     private val binding: FragmentMakePhotoBinding by viewBinding()
-    private val presenter by moxyPresenter { PhotoVideoPresenter(requireContext()) }
+    @Inject
+    lateinit var photoVideoPresenter: PhotoVideoPresenter
+    private val presenter by moxyPresenter { photoVideoPresenter }
     private val args: MakePhotoFragmentArgs by navArgs()
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var filePickerLauncher: ActivityResultLauncher<Array<String>>
@@ -133,8 +140,7 @@ class MakePhotoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
     }
 
     override fun onPhotoCaptured(file: File) {
-      //  Toast.makeText(requireContext(), "фото сделано ${file.absolutePath}", Toast.LENGTH_SHORT)
-        //    .show()
+
         findNavController().navigate(
             MakePhotoFragmentDirections.actionMakePhotoFragmentToPhotoFinishFragment(
                 file.path,
@@ -144,22 +150,4 @@ class MakePhotoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
         )
 
     }
-
-    override fun videoStarted(recording: Recording) {
-
-    }
-
-    override fun videoEnded(file: File) {
-
-    }
-
-    override fun error() {
-
-    }
-
-    override fun videoError() {
-
-    }
-
-
 }

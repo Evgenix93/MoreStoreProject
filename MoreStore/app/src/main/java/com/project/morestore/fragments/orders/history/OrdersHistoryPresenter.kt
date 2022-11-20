@@ -10,6 +10,7 @@ import com.project.morestore.models.cart.OrderHistoryItem
 import com.project.morestore.models.cart.OrderHistoryStatus
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.UserRepository
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -25,65 +26,15 @@ class OrdersHistoryPresenter(context: Context)
 
     override fun attachView(view: OrdersHistoryView) {
         super.attachView(view)
-
         initContent();
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                      private
-    ///////////////////////////////////////////////////////////////////////////
-
     private fun initContent() {
-
-        //if (!this::adapter.isInitialized) {
         if(adapter == null) {
-            //val conf = Bitmap.Config.ARGB_8888 // see other conf types
-            //val bmp = Bitmap.createBitmap(100, 100, conf)
-
-           /* adapter = OrdersHistoryAdapter(
-                listOf(
-                    OrderHistoryItem(
-                        "123123121",
-                        bmp,
-                        "Екатерина",
-                        bmp,
-                        "Кеды",
-                        3000,
-                        "19 февраля",
-                        "Lorem ipsum",
-                        OrderHistoryStatus.COMPLETED
-                    ),
-                    OrderHistoryItem(
-                        "123123121",
-                        bmp,
-                        "Екатерина",
-                        bmp,
-                        "Кеды",
-                        3000,
-                        "19 февраля",
-                        "Lorem ipsum",
-                        OrderHistoryStatus.COMPLETED
-                    ),
-                    OrderHistoryItem(
-                        "123123121",
-                        bmp,
-                        "Екатерина",
-                        bmp,
-                        "Кеды",
-                        3000,
-                        "19 февраля",
-                        "Lorem ipsum",
-                        OrderHistoryStatus.COMPLETED
-                    )
-                )
-            ) {
-
-            }*/
 
                 presenterScope.launch {
                     val orders = getCompletedOrders() ?: return@launch
                     val orderAddresses = getOrderAddresses() ?: return@launch
-
 
                     val orderItems = orders.filter { it.cart != null }.sortedBy{order ->
                         val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
@@ -114,8 +65,6 @@ class OrdersHistoryPresenter(context: Context)
 
                         OrderHistoryItem(
                             id = order.id.toString(),
-                            //userIcon = user?.avatar?.photo.toString(),
-                            //userName = user?.name.orEmpty(),
                             user = user,
                             photo = order.cart.first().photo.first().photo,
                             name = order.cart.first().name,
@@ -140,10 +89,7 @@ class OrdersHistoryPresenter(context: Context)
                             productId = order.cart.first().id,
                             newAddressId = address?.id,
                             product = order.cart.first()
-
-
                         )
-
                     }
 
                     adapter = OrdersHistoryAdapter(orderItems,{}, {user ->
@@ -152,55 +98,6 @@ class OrdersHistoryPresenter(context: Context)
                         viewState.navigate(it)
 
                     })
-
-
-                    /*adapter = OrdersAdapter(
-                listOf(
-                    OrderItem(
-                        123123121,
-                        bmp,
-                        "Екатерина",
-                        bmp,
-                        "Кеды",
-                        100,
-                        "18 апреля",
-                        "CДЭK",
-                        OrderStatus.RECEIVED,
-                        null,
-                        null
-                    ),
-                    OrderItem(
-                        123123121,
-                        bmp,
-                        "Екатерина",
-                        bmp,
-                        "Кеды",
-                        100,
-                        "18 апреля",
-                        "CДЭK",
-                        OrderStatus.CHANGE_MEETING,
-                        null,
-                        null
-                    ),
-                    OrderItem(
-                        123123121,
-                        bmp,
-                        "Екатерина",
-                        bmp,
-                        "Кеды",
-                        100,
-                        "18 апреля",
-                        "CДЭK",
-                        OrderStatus.AT_COURIER,
-                        null,
-                        null
-                    )
-                ),
-                listener
-            )*/
-
-
-
                     viewState.initOrdersHistory(adapter!!)
                 }
         }
@@ -210,68 +107,34 @@ class OrdersHistoryPresenter(context: Context)
         val response = ordersRepository.getAllOrders()
         return when(response?.code()){
             200 -> response.body()?.filter { it.status == 1 }
-            null -> {
-                viewState.showMessage("нет интернета")
-                null
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
             404 -> emptyList()
-            else -> null
-
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                null
+            }
         }
-
-
     }
 
     private suspend fun getSellerUser(userId: Long): User?{
         val response = userRepository.getSellerInfo(userId)
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("нет интернета")
+            else -> {
+                viewState.showMessage(errorMessage(response))
                 null
             }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
-            else -> null
-
         }
-
-
     }
 
     private suspend fun getOrderAddresses(): List<OfferedOrderPlace>?{
         val response = ordersRepository.getOrderAddresses()
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("Нет интернета")
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()?.string().orEmpty())
-                null
-            }
             404 -> emptyList()
-            else -> null
-
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                null
+            }
         }
     }
 }

@@ -33,11 +33,15 @@ import com.project.morestore.util.autoCleared
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
 import com.redmadrobot.inputmask.MaskedTextChangedListener
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
 import java.util.*
+import javax.inject.Inject
 
-class CabinetFragment: BottomNavigationFragment(R.layout.fragment_cabinet), UserMvpView {
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+@AndroidEntryPoint
+class CabinetFragment: BottomNavigationMvpFragment(R.layout.fragment_cabinet), UserMvpView {
+    @Inject lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private val binding: FragmentCabinetBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
     private var reviewsAdapter: ReviewsAdapter by autoCleared()
@@ -106,8 +110,6 @@ class CabinetFragment: BottomNavigationFragment(R.layout.fragment_cabinet), User
         val diffSeconds = System.currentTimeMillis()/1000 - user.createdAt!!.toLong()
         val dayDiff = diffSeconds/86400
         val monthDiff = dayDiff/30
-        //binding.timeFromRegistrationTextView.text = if(monthDiff > 0)"зарегистрирован(а) $monthDiff месяца назад"
-        //else "зарегистрирован(а) $dayDiff дня назад"
         Log.d("mylog", "current time ${System.currentTimeMillis()}")
         val calendar = Calendar.getInstance().apply { timeInMillis = user.createdAt.toLong() * 1000 }
         binding.timeFromRegistrationTextView.text =
@@ -302,10 +304,6 @@ class CabinetFragment: BottomNavigationFragment(R.layout.fragment_cabinet), User
         if(result is Filter){
             bindFilter(result)
         }
-
-    }
-
-    override fun successNewCode() {
 
     }
 }

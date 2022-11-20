@@ -14,8 +14,9 @@ import com.yandex.runtime.Error
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class MapMarkerAddressesPresenter(
+class MapMarkerAddressesPresenter @Inject constructor(
     private val searchManager :SearchManager,
     private val geolocator: Geolocator
 ) :MvpPresenter<MapMarkerAddressesView>() {

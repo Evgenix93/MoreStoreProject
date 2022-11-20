@@ -4,24 +4,19 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Insets
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.activity.ComponentActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -34,14 +29,18 @@ import com.project.morestore.mvpviews.LadingMvpView
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.MessagingService
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.components.ActivityComponent
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
-import java.util.*
+import javax.inject.Inject
 
 
-class MainActivity : MvpAppCompatActivity(), LadingMvpView {
+@AndroidEntryPoint
+class MainActivity : MvpAppCompatActivity(), MainMvpView {
     private val binding: ActivityMainBinding by viewBinding()
-    private val presenter by moxyPresenter { MainPresenter(this) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var isMessagesUnread = false
     private val messageReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
@@ -92,11 +91,7 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
     private fun changeStatusBarColor(colorRes: Int) {
         window?.apply {
             clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
             setStatusBarColor(resources.getColor(colorRes))
         }
     }
@@ -156,9 +151,6 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
                             R.drawable.ic_user_circle,
                             null
                         )
-
-                   // window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
                 }
 
                 R.id.mainFragment -> {
@@ -173,13 +165,10 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
-
-                  //  window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
                 }
 
                 R.id.createProductStep1Fragment -> {
-                    bottomNavBar.selectedItemId = R.id.createFragment
+                    bottomNavBar.selectedItemId = R.id.createProductStep1Fragment
                     bottomNavBar.menu.findItem(R.id.mainFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
                     bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
@@ -190,9 +179,6 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
-
-                 //   window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-
                 }
 
                 R.id.messagesFragment -> {
@@ -207,8 +193,6 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat2, null)
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
-
-                //    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
                 }
 
@@ -225,7 +209,6 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
                     bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle2, null)
 
-                 //   window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                 }
 
             }
@@ -237,7 +220,7 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
         val navController = findNavController(R.id.fragmentContainerView)
         bottomNavBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.createProductStep1Fragment -> if (navController.currentDestination?.id != R.id.createFragment) {
+                R.id.createProductStep1Fragment -> if (navController.currentDestination?.id != R.id.createProductStep1Fragment) {
                     navController.navigate(R.id.createProductStep1Fragment)
                     true
                 } else {
@@ -273,11 +256,8 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
                 }
                 else -> true
 
-
             }
         }
-
-
     }
 
     fun hideBottomIndication(){
@@ -302,9 +282,7 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
     }
 
     private fun checkGooglePlayServices(): Boolean {
-        // 1
         val status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
-        // 2
         return if (status != ConnectionResult.SUCCESS) {
             Log.e("googlePlay", "Error")
             // ask user to update google play services and manage the error.
@@ -334,10 +312,11 @@ class MainActivity : MvpAppCompatActivity(), LadingMvpView {
     }
 
     override fun error(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 
     }
 
+    override fun success() {
 
+    }
 }
 

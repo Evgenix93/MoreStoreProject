@@ -6,22 +6,11 @@ import com.project.morestore.util.MessageActionType
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 
-interface ChatMvpView: MvpView {
-
-    @OneExecution
-    fun loading()
-
-    @OneExecution
-    fun dialogsLoaded(dialogs: List<Chat>)
+interface ChatMvpView: MainMvpView {
 
     @OneExecution
     fun dialogLoaded(dialog: DialogWrapper)
 
-    @OneExecution
-    fun dialogCreated(dialogId: CreatedDialogId)
-
-    @OneExecution
-    fun error(message: String)
 
     @OneExecution
     fun currentUserIdLoaded(id: Long)
@@ -36,9 +25,6 @@ interface ChatMvpView: MvpView {
     fun photoVideoLoaded()
 
     @OneExecution
-    fun showDialogCount(type: String, count: Int)
-
-    @OneExecution
     fun mediaUrisLoaded(mediaUris: List<Uri>?)
 
     @OneExecution
@@ -48,13 +34,6 @@ interface ChatMvpView: MvpView {
     fun showUnreadMessagesStatus(show: Boolean)
 
     @OneExecution
-    fun showUnreadTab(tab: Int, unread: Boolean)
-
-    @OneExecution
     fun productAddedToCart(product: Product, cartId: Long)
-
-    //@OneExecution
-    //fun productInfoLoaded(product: Product)
-
 
 }

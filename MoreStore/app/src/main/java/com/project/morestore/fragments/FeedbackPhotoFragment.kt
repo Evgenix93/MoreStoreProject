@@ -20,19 +20,18 @@ import com.project.morestore.models.FeedbackItem
 import com.project.morestore.mvpviews.FeedbackPhotoView
 import com.project.morestore.presenters.FeedbackPhotoPresenter
 import com.project.morestore.singletones.ChatMedia
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
     private lateinit var views :FragmentFeedbackPhotosBinding
+    @Inject lateinit var feedbackPhotoPresenter: FeedbackPhotoPresenter
+
     private val presenter by moxyPresenter {
-        val args = requireArguments()
-        FeedbackPhotoPresenter(
-            requireActivity().applicationContext,
-            args.getLong(FeedbackProductFragment.PRODUCT_ID),
-            args.getByte(RatingFragment.RATE, 5),
-            args.getString(FeedbackFragment.FEEDBACK, "")
-        )
+       feedbackPhotoPresenter
     }
     private val adapter = FeedbackPhotosAdapter{
         if(it !is FeedbackItem.AddPhoto) return@FeedbackPhotosAdapter
@@ -66,7 +65,11 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
             if(args.isChat)
              saveMediaUris(adapter.getItems())
             else
-               presenter.createFeedback()
+               presenter.createFeedback(
+                   requireArguments().getLong(FeedbackProductFragment.PRODUCT_ID),
+                   requireArguments().getByte(RatingFragment.RATE, 5),
+                   requireArguments().getString(FeedbackFragment.FEEDBACK, "")
+               )
         }
         initFilePicker()
         initActionButton()

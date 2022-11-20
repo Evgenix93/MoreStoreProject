@@ -17,16 +17,21 @@ import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_kids),
     UserMvpView {
     private val binding: FragmentFilterSizesKidsBinding by viewBinding()
     private var topSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var bottomSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var shoesSizeCardAdapter: SizeCardsAdapter by autoCleared()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private var isForKids = false
     private var isForWomen = true
     private var isForMen = false
@@ -389,10 +394,6 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
         if (result is Filter) {
             bindFilter(result)
         }
-
-    }
-
-    override fun successNewCode() {
 
     }
 }
