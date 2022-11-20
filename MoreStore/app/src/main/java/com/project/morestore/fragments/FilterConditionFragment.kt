@@ -11,12 +11,17 @@ import com.project.morestore.databinding.FragmentFilterConditionBinding
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterConditionFragment: MvpAppCompatFragment(R.layout.fragment_filter_condition), UserMvpView {
     private val binding: FragmentFilterConditionBinding by viewBinding()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,10 +71,6 @@ class FilterConditionFragment: MvpAppCompatFragment(R.layout.fragment_filter_con
         binding.newWithotuTagCheckBox.isChecked =  conditions[1]
         binding.ExcellentCheckBox.isChecked =  conditions[2]
         binding.goodCheckBox.isChecked =  conditions[3]
-
-    }
-
-    override fun successNewCode() {
 
     }
 }

@@ -27,13 +27,18 @@ import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.Token
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profile), UserMvpView {
     private val binding: FragmentSellerProfileBinding by viewBinding()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private val args: SellerProfileFragmentArgs by navArgs()
     private lateinit var sellerProfileAdapter: SellerProfileAdapter
     private var isSellerFavorite = false
@@ -169,21 +174,15 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
             is List<*> -> {
                 if(result[0] is Product) {
                     val products = result as List<Product>
-                    Log.d("Debug", "loaded products = ${products}")
                     initViewPager(products)
                 }
                 if(result[0] is User){
                     isSellerFavorite = (result as List<User>).find { it.id == presenter.getUser().id } != null
                     initSubscribeBtn(isSellerFavorite)
-
                 }
             }
         }
 
-    }
-
-    override fun successNewCode() {
-        TODO("Not yet implemented")
     }
 
     companion object{

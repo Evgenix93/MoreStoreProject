@@ -18,15 +18,19 @@ import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartView
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OrdersHistoryFragment
     : MvpAppCompatFragment(R.layout.fragment_orders_history), OrdersHistoryView, ToolbarCartView {
 
-    private val presenter by moxyPresenter { OrdersHistoryPresenter(requireContext()) }
+    @Inject
+    lateinit var _toolbarPresenter: ToolbarCartPresenter
     private val toolbarPresenter by moxyPresenter {
-        ToolbarCartPresenter(requireContext(), OrdersSliderMenu.ORDERS_HISTORY)
+        _toolbarPresenter
     }
     private val binding: FragmentOrdersHistoryBinding by viewBinding()
 

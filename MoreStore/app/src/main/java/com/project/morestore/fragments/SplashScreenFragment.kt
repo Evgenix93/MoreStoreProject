@@ -10,15 +10,20 @@ import com.project.morestore.R
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen), MainMvpView {
     private var job: Job = Job()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,18 +65,6 @@ class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen
 
     override fun error(message: String) {
 
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
     }
 
     override fun success() {

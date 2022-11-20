@@ -10,13 +10,17 @@ import com.project.morestore.databinding.FragmentFilterProductStatusBinding
 import com.project.morestore.models.Filter
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class FilterProductStatusFragment: MvpAppCompatFragment(R.layout.fragment_filter_product_status), UserMvpView {
     private val binding: FragmentFilterProductStatusBinding by viewBinding()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getFilter()
@@ -71,10 +75,6 @@ class FilterProductStatusFragment: MvpAppCompatFragment(R.layout.fragment_filter
     override fun loaded(result: Any) {
         val filter = result as Filter
         bind(filter.chosenProductStatus)
-
-    }
-
-    override fun successNewCode() {
 
     }
 }

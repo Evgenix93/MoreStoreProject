@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.NavOptions
-import androidx.navigation.NavOptionsBuilder
-import androidx.navigation.Navigator
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
@@ -20,26 +18,27 @@ import com.project.morestore.adapters.cart.OrdersAdapter
 import com.project.morestore.databinding.FragmentOrdersBinding
 import com.project.morestore.dialogs.YesNoDialog
 import com.project.morestore.fragments.ChatFragment
-import com.project.morestore.fragments.OrderDetailsFragmentDirections
 import com.project.morestore.models.Chat
-import com.project.morestore.fragments.orders.cart.OrdersCartFragmentDirections
 import com.project.morestore.models.PaymentUrl
 import com.project.morestore.models.User
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
-import com.project.morestore.models.slidermenu.SliderMenu
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartView
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class OrdersActiveFragment
     : MvpAppCompatFragment(R.layout.fragment_orders), OrdersActiveView, ToolbarCartView {
 
-    private val presenter by moxyPresenter { OrdersActivePresenter(requireContext()) }
-    private val toolbarPresenter by moxyPresenter {
-        ToolbarCartPresenter(requireContext(), OrdersSliderMenu.ORDERS)
+    @Inject
+    lateinit var toolbarPresenter: ToolbarCartPresenter
+    private val presenter by moxyPresenter {
+        toolbarPresenter
     }
     private val binding: FragmentOrdersBinding by viewBinding()
 
@@ -105,9 +104,8 @@ class OrdersActiveFragment
     ///////////////////////////////////////////////////////////////////////////
 
     override fun initActiveOrders(adapter: OrdersAdapter) {
-        showLoading(false)
         binding.ordersRecyclerView.adapter = adapter
-        //(binding.toolbar.sliderMenu.adapter as SliderMenuAdapter<SliderMenu<*>>).changeOrdersItemsSize(adapter.itemCount)
+
     }
 
     override fun showAcceptOrderDialog(acceptDialog: YesNoDialog) {
@@ -117,13 +115,11 @@ class OrdersActiveFragment
     }
 
     override fun showMessage(message: String) {
-        showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun loading() {
-        showLoading(true)
-
+    override fun loading(isLoading: Boolean) {
+        showLoading(isLoading)
     }
 
     override fun navigateToChat(userId: Long, productId: Long) {
@@ -153,6 +149,7 @@ class OrdersActiveFragment
                     true
                 }else if(request?.url.toString().contains("failed")) {
                     showMessage("Ошибка оплаты")
+                    loading(false)
                     true
                 }else {
                     false
@@ -175,7 +172,7 @@ class OrdersActiveFragment
 
     private fun initToolbar() {
         binding.toolbar.toolbarBack.setOnClickListener {
-            toolbarPresenter.onBackClick();
+            presenter.onBackClick();
         }
 
         binding.toolbar.toolbarLike.setOnClickListener{

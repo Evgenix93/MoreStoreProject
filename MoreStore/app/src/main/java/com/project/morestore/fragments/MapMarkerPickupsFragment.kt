@@ -29,6 +29,7 @@ import com.project.morestore.models.DeliveryAddress
 import com.project.morestore.mvpviews.MapMarkerPickupsView
 import com.project.morestore.mvpviews.MapMarkerPickupsView.NavigateType.*
 import com.project.morestore.presenters.MapMarkerPickupsPresenter
+import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.Network
 import com.project.morestore.util.SimpleBottomSheetCallback
 import com.project.morestore.util.args
@@ -42,8 +43,11 @@ import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.search.SearchFactory
 import com.yandex.mapkit.search.SearchManagerType
 import com.yandex.runtime.ui_view.ViewProvider
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, CameraListener {
     companion object{
         const val REGION = "region"
@@ -66,10 +70,10 @@ class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, Camer
         }
     private lateinit var userMarker : PlacemarkMapObject
     private var loading :LoadingDialog? = null
+    @Inject
+    lateinit var mapMarkerPickupsPresenter: MapMarkerPickupsPresenter
     private val presenter :MapMarkerPickupsPresenter by moxyPresenter {
-        SearchFactory.initialize(requireContext());
-        val search = SearchFactory.getInstance().createSearchManager(SearchManagerType.ONLINE)
-        MapMarkerPickupsPresenter(search, Geolocator(requireContext()), searchRegion, Network.cdekAddresses)
+        mapMarkerPickupsPresenter
     }
 
     override fun onCreateView(

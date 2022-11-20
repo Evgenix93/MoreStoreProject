@@ -39,16 +39,19 @@ import com.project.morestore.util.MessageActionType
 import com.project.morestore.util.MessagingService
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moxy.ktx.moxyPresenter
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     PriceDialog.Callback, ChatMvpView {
     private lateinit var views: FragmentChatBinding
-    private lateinit var cancelWidgetBinding: WidgetDealCancelBinding
-    private val presenter by moxyPresenter { ChatPresenter(requireContext()) }
+    @Inject lateinit var chatPresenter: ChatPresenter
+    private val presenter by moxyPresenter { chatPresenter }
     private var currentUserId: Long? = null
     private var currentDialogId: Long? = null
     private var currentProductPrice: Float? = null
@@ -61,8 +64,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                    suggest = (it as Message.Special.DealRequest).suggestId,
                    value = it.price
               ))
-           // stubAcceptDealRunnable.run()
-           // views.bottomBar.visibility = GONE
         },
        cancelDealCallback =  {  presenter.cancelBuyRequest(currentDialogId ?: 0, (it as Message.Special.DealRequest).suggestId ) },
        submitPriceCallback =  {
@@ -108,7 +109,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         }
 
     }
-
 
 
     override fun onCreateView(
@@ -438,7 +438,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     }
 
     private fun getMessages(list: List<MessageModel>, statusUser: ProductUserStatus?): List<Message> {
-        Log.d("mylog", list.toString())
         val dates = list.filter { it.saleSuggest?.status != 0 }.mapNotNull {
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = it.date * 1000
@@ -583,7 +582,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
             else null
 
             val buyAccepted = if(buyDetailsIndexes.find { it == index } != null)
-                //Message.Special.BuyDetails
+
                     Message.Special.DealDetails(statusUser?.order?.id ?: -1)
             else null
 
@@ -619,30 +618,10 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
 
         }
-        Log.d("mylog", datedMessages.toString())
-
         return datedMessages
     }
 
-    //todo remove stubs
-    /*private val support = listOf(
-        Message.Divider(R.string.today),
-        Message.My("13:18", R.drawable.ic_check_double, "Здравствуйте! Мне пришел порванный товар!"),
-        Message.Companion(listOf(Msg("13:19","Добрый день! Пожалуйста уточните детали"))),
-        Message.MyMedia("13:18", R.drawable.ic_check_double, arrayOf(
-            Media.Photo(R.drawable.user1),
-            Media.Video(R.drawable.user2),
-            Media.Photo(R.drawable.user4),
-            Media.Photo(R.drawable.ic_lacoste, 2)
-        )),
-        Message.MyMedia("13:18", R.drawable.ic_check_double, arrayOf(
-            Media.Photo(R.drawable.user1),
-            Media.Photo(R.drawable.user5)
-        ))
-    )*/
-
     private val buyer = listOf(
-        //Message.Divider(R.string.today),
         Message.Companion(
             listOf(
                 Msg("13:16", "Ещё продаёте товар?"),
@@ -662,7 +641,7 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         .also { it.add(Message.Special.DealDetails(-1)) }
 
     private val seller = listOf(
-        //Message.Divider(R.string.today),
+
         Message.My("13:18", R.drawable.ic_check_double, "Здравствуйте! Еще продаете? "),
         Message.Companion(listOf(Msg("13:18", "Добрый день! Для вас готова сделать скидку")))
     )
@@ -673,26 +652,8 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private val seller4 = seller3 + Message.Special.GeoDetails
 
-    private val stubAcceptDealRunnable: Runnable get() = Runnable { adapter.setItems(accepted) }
-
     private fun buy() {
-        /*views.bottomBar.removeAllViews()
-        WidgetDealCancelBinding.inflate(layoutInflater)
-            .also {
-                views.bottomBar.addView(it.root)
-                //it.cancel.setOnClickListener { cancelBuy() }
-                cancelWidgetBinding = it
-            }
-        /*adapter.setItems(seller2)
-        views.send.setOnClickListener {
-            adapter.setItems(seller3)
-            listenGeo = true
-        }*/
 
-        presenter.sendBuyRequest(currentDialogId ?: 0)
-        val timeStr = "${Calendar.getInstance().get(Calendar.HOUR_OF_DAY)}:${Calendar.getInstance().get(Calendar.MINUTE)}"
-        adapter.addMessage(Message.Special.BuyRequest(timeStr, R.drawable.ic_check, "Еще нет ответа", ResourcesCompat.getColor(resources, R.color.gray2, null), R.drawable.ic_bag_filled_green ))
-        views.list.scrollToPosition(adapter.itemCount - 1)*/
         if(this::user.isInitialized && user.isBlackList == true){
             error("Собеседник вас заблокировал")
             return
@@ -703,7 +664,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
 
     private fun cancelBuy(suggestId: Long) {
         views.bottomBar.removeAllViews()
-        //adapter.setItems(seller)
         WidgetBuyBarBinding.inflate(layoutInflater)
             .also {
                 views.bottomBar.addView(it.root)
@@ -712,8 +672,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
                 }
                 it.buy.setOnClickListener { buy() }
             }
-        //views.send.setOnClickListener { /* remove */ }
-        //listenGeo = false
         presenter.cancelBuyRequest(currentDialogId ?: 0, suggestId )
     }
 
@@ -911,10 +869,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         showLoading(true)
     }
 
-    override fun dialogsLoaded(dialogs: List<Chat>) {
-
-    }
-
     override fun dialogLoaded(dialog: DialogWrapper) {
         showLoading(false)
         currentDialogId = dialog.dialog.id
@@ -926,13 +880,14 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         presenter.readMessages(dialog.dialog.id)
     }
 
-    override fun dialogCreated(dialogId: CreatedDialogId) {
-
-    }
 
     override fun error(message: String) {
         showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun success() {
+
     }
 
     override fun currentUserIdLoaded(id: Long) {
@@ -943,7 +898,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
     override fun messageSent(message: MessageModel) {
         showLoading(false)
         Toast.makeText(requireContext(), "Сообщение отправлено", Toast.LENGTH_SHORT).show()
-        //val messages = getMessages(listOf(message))
         adapter.updateMessage()
 
     }
@@ -960,10 +914,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         adapter.updateMessage()
     }
 
-    override fun showDialogCount(type: String, count: Int) {
-
-    }
-
     override fun mediaUrisLoaded(mediaUris: List<Uri>?) {
         showLoading(false)
         this.mediaUris = mediaUris
@@ -974,7 +924,6 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         when(type){
             MessageActionType.BUY_REQUEST_SUGGEST -> {
                 Toast.makeText(requireContext(), "Запрос на покупку отправлен", Toast.LENGTH_SHORT).show()
-                //cancelWidgetBinding.cancel.setOnClickListener { cancelBuy(info.suggestId!!) }
 
             }
             MessageActionType.BUY_REQUEST_CANCEL -> {
@@ -996,11 +945,12 @@ class ChatFragment : FullscreenMvpFragment(), MenuBottomDialogFragment.Callback,
         (activity as MainActivity).showUnreadMessagesIcon(show)
     }
 
-    override fun showUnreadTab(tab: Int, unread: Boolean) {
-
-    }
 
     override fun productAddedToCart(product: Product, cartId: Long) {
         findNavController().navigate(ChatFragmentDirections.actionChatFragmentToCreateOrderFragment(product, cartId))
+    }
+
+    override fun loaded(result: Any) {
+
     }
 }

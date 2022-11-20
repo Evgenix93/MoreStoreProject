@@ -16,8 +16,10 @@ import com.project.morestore.presenters.FeedbackProductPresenter
 import com.project.morestore.repositories.ReviewRepository
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
 
+@AndroidEntryPoint
 class FeedbackProductFragment() :FullscreenFragment(), FeedbackProductView {
     companion object{
         const val USER_ID = "user_id"
@@ -31,9 +33,7 @@ class FeedbackProductFragment() :FullscreenFragment(), FeedbackProductView {
             .navigate(R.id.ratingFragment, bundleOf(PRODUCT_ID to it.id))
     }
     private lateinit var views :FragmentFeedbackProductsBinding
-    private val presenter by moxyPresenter{
-        FeedbackProductPresenter(requireArguments().getLong(USER_ID), ReviewRepository())
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -20,35 +20,21 @@ import com.project.morestore.adapters.SingleCityAdapter
 import com.project.morestore.databinding.FragmentCitiesBinding
 import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.CitiesView
+import com.project.morestore.presenters.ChatPresenter
 import com.project.morestore.presenters.CitiesPresenter
 import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
 import com.project.morestore.util.addTextChangeListener
 import com.project.morestore.util.args
 import com.project.morestore.util.attachNavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.parcelize.Parcelize
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.util.ArrayList
+import javax.inject.Inject
 
-/* call to single select
-setFragmentResultListener(REQUEST_KEY) { _, bundle ->
-    val city :Region = bundle.getParcelable<ParcelRegion>(SINGLE)!!.entity
-}
-findNavController().navigate(R.id.citiesFragment, bundleOf(TYPE to 0)) //<-- 0 to single select
-*/
-
-/* call to multiply select
-setFragmentResultListener(REQUEST_KEY) { _, bundle ->
-    val cities :List<Region> = bundle.getParcelableArrayList<ParcelRegion>(MULTIPLY)!!.map { it.entity }
-}
-findNavController().navigate(R.id.citiesFragment,
-                        bundleOf(TYPE to 1,             //<-- 1 to multiply select
-                        SELECTED to longArrayOf())      //<-- optional: ids of selected cities
-                    )
- */
-
-//todo connect safeArgs
+@AndroidEntryPoint
 class CitiesFragment :MvpAppCompatFragment(), CitiesView {
     companion object {
         const val REQUEST_KEY = "city"
@@ -59,10 +45,9 @@ class CitiesFragment :MvpAppCompatFragment(), CitiesView {
     }
     private lateinit var views :FragmentCitiesBinding
     private lateinit var adapter :CitiesAdapter
+    @Inject lateinit var citiesPresenter: CitiesPresenter
     private val presenter by moxyPresenter {
-        val type = if(args.getInt(TYPE) == 0) CitiesPresenter.Type.SINGLE
-        else CitiesPresenter.Type.MULTIPLY
-        CitiesPresenter(type, args.getLongArray(SELECTED) ?: longArrayOf(), Network.cities)
+        citiesPresenter
     }
     private var isCitiesFirstLoaded = false
 

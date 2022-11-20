@@ -24,7 +24,9 @@ import com.project.morestore.singletones.Network
 import com.project.morestore.util.attachNavigation
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+
 
 class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
     private val args: MyAddressesFragmentArgs by navArgs()
@@ -47,9 +49,6 @@ class MyAddressesFragment :FullscreenMvpFragment(), MyAddressesView {
         }
     }
     private lateinit var views : FragmentMyaddressesBinding
-    private val presenter :MyAddressesPresenter by moxyPresenter {
-        MyAddressesPresenter(AddressesRepository.apply { init(Network.addresses) })
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

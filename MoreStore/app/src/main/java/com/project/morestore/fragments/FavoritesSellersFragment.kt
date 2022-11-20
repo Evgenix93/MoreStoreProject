@@ -12,11 +12,16 @@ import com.project.morestore.models.User
 import com.project.morestore.mvpviews.FavoritesMvpView
 import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FavoritesSellersFragment :ListFragment(), FavoritesMvpView {
     private var adapter: FavoriteSellersAdapter by autoCleared()
-    private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
+    @Inject
+    lateinit var favoritesPresenter: FavoritesPresenter
+    private val presenter by moxyPresenter { favoritesPresenter }
     override val emptyList by lazy {
         EmptyList(
             R.drawable.img_favoritessellers_empty1,
@@ -30,7 +35,6 @@ class FavoritesSellersFragment :ListFragment(), FavoritesMvpView {
         RecyclerView(requireContext())
             .apply {
                 layoutManager = GridLayoutManager(context, 2)
-                //adapter = this@FavoritesSellersFragment.adapter
             }
     }
 
@@ -67,16 +71,13 @@ class FavoritesSellersFragment :ListFragment(), FavoritesMvpView {
 
     }
 
-    override fun favoritesLoaded(list: List<*>) {
+    override fun loaded(result: Any) {
+        val list = result as List<*>
         adapter.setItems(list as List<User>)
 
     }
 
     override fun error(message: String) {
-
-    }
-
-    override fun isGuest() {
 
     }
 

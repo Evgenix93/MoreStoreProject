@@ -20,15 +20,19 @@ import com.project.morestore.models.Product
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductAddPhotoFragment :
     MvpAppCompatFragment(R.layout.fragment_create_product_add_photo), MainMvpView {
     private val binding: FragmentCreateProductAddPhotoBinding by viewBinding()
     private val args: CreateProductAddPhotoFragmentArgs by navArgs()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var uriMap = mutableMapOf<Int, String>()
 
 
@@ -259,20 +263,7 @@ class CreateProductAddPhotoFragment :
 
     }
 
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-
-    }
-
     override fun success() {
-        findNavController().popBackStack()
 
     }
 }

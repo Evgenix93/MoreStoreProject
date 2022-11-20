@@ -2,6 +2,7 @@ package com.project.morestore.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -17,14 +18,19 @@ import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductStep4Fragment: MvpAppCompatFragment(R.layout.fragment_create_product_step4), MainMvpView {
     private val binding: FragmentCreateProductStep4Binding by viewBinding()
     private var styleAdapter: CloathStyleCreateProductAdapter by autoCleared()
     private val args: CreateProductStep4FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -76,8 +82,6 @@ class CreateProductStep4Fragment: MvpAppCompatFragment(R.layout.fragment_create_
         }
     }
 
-
-
     override fun loaded(result: Any) {
         styleAdapter.updateList(result as List<Property>)
 
@@ -88,24 +92,10 @@ class CreateProductStep4Fragment: MvpAppCompatFragment(R.layout.fragment_create_
     }
 
     override fun error(message: String) {
-
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     override fun success() {
 
     }
-
-
 }

@@ -24,15 +24,22 @@ import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.presenters.toolbar.cart.ToolbarCartView
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OrdersCartFragment
     : MvpAppCompatFragment(R.layout.fragment_orders_cart), OrdersCartView, ToolbarCartView,
     MainMvpView {
 
-    private val presenter by moxyPresenter { OrdersCartPresenter(requireContext()) }
-    private val mainPresenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject
+    lateinit var ordersCartPresenter: OrdersCartPresenter
+    private val presenter by moxyPresenter { ordersCartPresenter }
+    @Inject
+    lateinit var _mainPresenter: MainPresenter
+    private val mainPresenter by moxyPresenter { _mainPresenter }
 
     private val toolbarPresenter by moxyPresenter {
         ToolbarCartPresenter(requireContext(), OrdersSliderMenu.CART)
@@ -147,16 +154,6 @@ class OrdersCartFragment
         if (isAdded) {
             deleteDialog.show()
         }
-    }
-
-    override fun showOnBoarding() {
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
     }
 
     override fun success() {

@@ -16,11 +16,15 @@ import com.project.morestore.models.ProductBrand
 import com.project.morestore.mvpviews.FavoritesMvpView
 import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
     private lateinit var productAdapter: ProductAdapter
-    private val presenter by moxyPresenter{ FavoritesPresenter(requireContext()) }
+    @Inject lateinit var favoritesPresenter: FavoritesPresenter
+    private val presenter by moxyPresenter{ favoritesPresenter }
 
     private fun getFavoriteBrands(){
         loader.isVisible = true
@@ -59,7 +63,8 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
 
     }
 
-    override fun favoritesLoaded(list: List<*>) {
+    override fun loaded(result: Any) {
+        val list = result as List<*>
            if(list.isNotEmpty()) {
                showList()
                when (list[0]) {
@@ -81,10 +86,6 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
     override fun error(message: String) {
         loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun isGuest() {
-        TODO("Not yet implemented")
     }
 
     override fun emptyList() {

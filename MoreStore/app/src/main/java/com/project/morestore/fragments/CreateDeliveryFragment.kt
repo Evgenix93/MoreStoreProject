@@ -22,13 +22,17 @@ import com.project.morestore.models.Product
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.CreateDeliveryMvpView
 import com.project.morestore.presenters.CreateDeliveryPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateDeliveryFragment: MvpAppCompatFragment(R.layout.fragment_delivery_create), CreateDeliveryMvpView {
     private val binding: FragmentDeliveryCreateBinding by viewBinding()
     private val args: CreateDeliveryFragmentArgs by navArgs()
-    private val presenter by moxyPresenter { CreateDeliveryPresenter(requireContext()) }
+    @Inject lateinit var createDeliveryPresenter: CreateDeliveryPresenter
+    private val presenter by moxyPresenter { createDeliveryPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,7 +81,7 @@ class CreateDeliveryFragment: MvpAppCompatFragment(R.layout.fragment_delivery_cr
             )
         }
         binding.oldPriceTextView.text = crossedStr
-        //binding.addressTextView.text = product.addressCdek
+
     }
 
     private fun setClickListeners(){

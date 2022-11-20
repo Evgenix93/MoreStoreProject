@@ -32,26 +32,25 @@ import com.project.morestore.repositories.UserNetworkGateway
 import com.project.morestore.util.addTextChangeListener
 import com.project.morestore.util.attachNavigation
 import com.project.morestore.util.setPhoneField
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
     companion object { const val EDIT_ADDRESS = "edit_address" }
     private lateinit var views : FragmentMyaddressNewBinding
+    @Inject
+    lateinit var newAddressPresenter: NewAddressPresenter
     private val presenter :NewAddressPresenter by moxyPresenter {
-        NewAddressPresenter(
-            Geolocator(requireContext()),
-            GeoRepository(),
-            UserNetworkGateway(),
-            AddressesRepository,
-            arguments?.getParcelable(EDIT_ADDRESS)
-        )
+       newAddressPresenter
     }
-    //todo create delegate
+
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()){ granted ->
             if(granted) presenter.findCity()
-            else notFoundCity()//todo call from presenter after delegate
+            else notFoundCity()
     }
 
     override fun onCreateView(
@@ -62,6 +61,8 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.setInfo(requireArguments().getParcelable(EDIT_ADDRESS))
+
         with(views.toolbar){
             root.attachNavigation()
             title.setText(R.string.myAddress_new_title)
@@ -76,7 +77,7 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
             housing.addTextChangeListener { presenter.housing = it }
             apartment.addTextChangeListener { presenter.apartment = it }
 
-            arrayOf(fullname, phoneNumber, street, index, house, housing, building, apartment)
+            listOf(fullname, phoneNumber, street, index, house, housing, building, apartment)
                 .forEach { field ->
                     field.addTextChangeListener {
                         field.setBackgroundResource(
@@ -111,7 +112,7 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
                 findNavController().navigate(R.id.citiesFragment, bundleOf(TYPE to 0))
             }
             save.setOnClickListener {
-                presenter.save(defaultAddress.isChecked)
+                presenter.save(defaultAddress.isChecked, requireArguments().getParcelable(EDIT_ADDRESS))
             }
             arguments?.getParcelable<MyAddress>(EDIT_ADDRESS)?.let {
                 showFullname(it.name)
@@ -129,7 +130,6 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
         }
     }
 
-    //region Implementation View
     override fun requestCity() {
         permissionLauncher.launch(ACCESS_FINE_LOCATION)
     }
@@ -166,7 +166,7 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
     }
 
     override fun confirmDelete() {
-        AddressDeleteDialog(requireContext()){ presenter.confirmDelete() }.show()
+        AddressDeleteDialog(requireContext()){ presenter.confirmDelete(requireArguments().getParcelable(EDIT_ADDRESS)) }.show()
     }
 
     override fun back() {
@@ -177,5 +177,4 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    //endregion Implementation View
 }

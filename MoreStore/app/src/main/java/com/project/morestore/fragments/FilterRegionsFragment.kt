@@ -18,16 +18,22 @@ import com.project.morestore.models.Region
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), UserMvpView {
    protected val binding: FragmentRegionsBinding by viewBinding()
    private var regionsAdapter: RegionsAdapter by autoCleared()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private var regions = listOf<Region>()
     private lateinit var searchFlow: Flow<String>
 
@@ -115,7 +121,7 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
                        p2: Int,
                        p3: Int
                    ) {
-                       sendBlocking(newText.toString())
+                       trySendBlocking(newText.toString())
 
                    }
 
@@ -160,12 +166,9 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
                 val region = regions.find { it.name == result.fullAddress.substringBefore(",") }
                 if(region != null)
                 binding.textView42.setOnClickListener {
-                    //regions.forEach { it.isChecked = false }
-                    //regions[regions.indexOf(region)].isChecked = true
-                        //saveRegions(regions)
 
                     regions.forEach { it.isChecked = false }
-                    regions[regions.indexOf(region)].isChecked = true
+                    regions.find{it == region}?.isChecked = true
                     regionsAdapter.updateList(listOf(Region(-1, "Все города", 1, false)) + regions)
                     findNavController().popBackStack()
                 }
@@ -194,12 +197,5 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
 
             regionsAdapter.updateList(listOf(Region(0, "Все города", 1, false)) + list)
         }
-
-
-
-    }
-
-    override fun successNewCode() {
-
     }
 }

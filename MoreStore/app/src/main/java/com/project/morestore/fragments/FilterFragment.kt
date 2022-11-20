@@ -15,13 +15,17 @@ import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.SortingType
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpView {
     private val binding: FragmentFilterBinding by viewBinding()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
-
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, null)
@@ -315,9 +319,5 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
 
     override fun loaded(result: Any) {
         configureFilterScreen(result as Filter)
-    }
-
-    override fun successNewCode() {
-        TODO("Not yet implemented")
     }
 }

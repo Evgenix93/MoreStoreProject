@@ -20,6 +20,7 @@ import com.project.morestore.util.setSpace
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
+
 class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
     companion object{
         const val USER_ID = "id"
@@ -39,13 +40,6 @@ class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
             R.id.mediaFragment, bundleOf(PHOTOS to photosArray )
         )
     })
-    private val presenter :ReviewsPresenter by moxyPresenter {
-        ReviewsPresenter(
-            requireArguments().getLong(USER_ID),
-            ReviewRepository(),
-            requireContext()
-        )
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -17,13 +17,18 @@ import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductSizesClothFragment :
     MvpAppCompatFragment(R.layout.fragment_create_product_sizes), MainMvpView {
     private val binding: FragmentCreateProductSizesBinding by viewBinding()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var sizeAdapter: SizeLineAdapter by autoCleared()
     private val args: CreateProductSizesClothFragmentArgs by navArgs()
     private var sizeProperty: Property2? = null
@@ -156,23 +161,9 @@ class CreateProductSizesClothFragment :
 
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-
     }
 
     override fun success() {
 
     }
-
 }

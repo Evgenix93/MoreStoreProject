@@ -13,36 +13,39 @@ import com.project.morestore.models.MyAddress
 import com.project.morestore.mvpviews.MyAddressPickupView
 import com.project.morestore.presenters.CreateMyAddressPickupPresenter
 import com.project.morestore.presenters.EditMyAddressPickupPresenter
+import com.project.morestore.presenters.MyAddressPickupPresenter
 import com.project.morestore.repositories.AddressesRepository
 import com.project.morestore.repositories.UserNetworkGateway
 import com.project.morestore.singletones.Network
 import com.project.morestore.util.*
 import com.project.morestore.widgets.loading.LoadingDialog
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class MyAddressPickupFragment :MvpAppCompatFragment(), MyAddressPickupView {
-    companion object{
+@AndroidEntryPoint
+class MyAddressPickupFragment : MvpAppCompatFragment(), MyAddressPickupView {
+    companion object {
         const val ADDRESS = "address"
         const val EDIT_ADDRESS = "edit_address"
     }
+
     private val views by lazy { FragmentAddressUserdataBinding.inflate(layoutInflater) }
+
+    @Inject
+    lateinit var editMyAddressPickupPresenter: EditMyAddressPickupPresenter
+    @Inject
+    lateinit var createMyAddressPickupPresenter: CreateMyAddressPickupPresenter
     private val presenter by moxyPresenter {
-        if(isEdit){
-            EditMyAddressPickupPresenter(
-                args.getParcelable(EDIT_ADDRESS)!!,
-                AddressesRepository.apply { init(Network.addresses) }
-            )
+        if (isEdit) {
+            editMyAddressPickupPresenter
         } else {
-            CreateMyAddressPickupPresenter(
-                args.getParcelable(ADDRESS)!!,
-                UserNetworkGateway(),
-                AddressesRepository.apply { init(Network.addresses) }
-            )
+            createMyAddressPickupPresenter
         }
     }
     private val isEdit by lazy { args.getParcelable<MyAddress>(EDIT_ADDRESS) != null }
-    private var waiting :LoadingDialog? = null
+    private var waiting: LoadingDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,8 +55,8 @@ class MyAddressPickupFragment :MvpAppCompatFragment(), MyAddressPickupView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(views.toolbar){
-            if(isEdit){
+        with(views.toolbar) {
+            if (isEdit) {
                 val address = args.getParcelable<MyAddress>(EDIT_ADDRESS)!!.address
                 title.text = "${address.city} ${address.street} ${address.house}"
                 views.delete.visibility = VISIBLE
@@ -63,19 +66,26 @@ class MyAddressPickupFragment :MvpAppCompatFragment(), MyAddressPickupView {
             }
             root.attachNavigation()
         }
-        views.save.setOnClickListener { presenter.save(views.fullname.string, views.phoneNumber.string) }
+        views.save.setOnClickListener {
+            presenter.save(
+                views.fullname.string,
+                views.phoneNumber.string,
+                requireArguments().getParcelable(EDIT_ADDRESS)!!,
+                requireArguments().getParcelable(ADDRESS)!!
+            )
+        }
         views.phoneNumber.setPhoneField()
         views.phoneNumber.setText("+7 (")
-        views.defaultAddress.setOnCheckedChangeListener { _, check -> presenter.changeDefault(check)}
+        views.defaultAddress.setOnCheckedChangeListener { _, check -> presenter.changeDefault(check) }
+        presenter.setInfo(requireArguments().getParcelable(EDIT_ADDRESS)!!)
     }
 
-    //region View implementation
     override fun showFullname(fullname: String) = views.fullname.setText(fullname)
 
     override fun showPhone(phoneNumber: String) = views.phoneNumber.setText(phoneNumber)
 
     override fun showIsDefault(isDefault: Boolean) {
-        views.defaultAddress.apply{
+        views.defaultAddress.apply {
             isChecked = isDefault
             jumpDrawablesToCurrentState()
         }
@@ -84,7 +94,7 @@ class MyAddressPickupFragment :MvpAppCompatFragment(), MyAddressPickupView {
     override fun showMessage(message: String) = defToast(message)
 
     override fun showLoading(show: Boolean) {
-        if(show){
+        if (show) {
             waiting = LoadingDialog(requireContext()).also { it.show() }
         } else {
             waiting?.dismiss()
@@ -93,14 +103,13 @@ class MyAddressPickupFragment :MvpAppCompatFragment(), MyAddressPickupView {
     }
 
     override fun showConfirmDelete() {
-        AddressDeleteDialog(requireContext()){
-            (presenter as EditMyAddressPickupPresenter).confirmDelete()
+        AddressDeleteDialog(requireContext()) {
+            (presenter as EditMyAddressPickupPresenter).confirmDelete(requireArguments().getParcelable(EDIT_ADDRESS)!!)
         }.show()
     }
 
     override fun back() {
         findNavController().popBackStack()
     }
-    //endregion View implementation
 
 }

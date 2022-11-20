@@ -16,12 +16,16 @@ import com.project.morestore.models.CreatedProductId
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_product_price), MainMvpView {
     private val binding: FragmentCreateProductPriceBinding by viewBinding()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,11 +35,8 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
     }
 
 
-
     private fun initToolbar(){
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
-       // binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
-
     }
 
     private fun initSaveButton(){
@@ -46,18 +47,16 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if(p0.isNullOrEmpty()){
-                   // binding.saveButton.isEnabled = false
+
                     binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.gray1, null))
                 }else{
                     if(binding.salePriceEditText.text.toString().isNotEmpty()){
-                     //   binding.saveButton.isEnabled = true
                         binding.saveButton.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black, null))
                     }
                 }
             }
 
             override fun afterTextChanged(p0: Editable?) {
-
             }
 
         })
@@ -128,24 +127,9 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
 
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-
-    }
-
 
     override fun success() {
 
     }
-
 }

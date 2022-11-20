@@ -2,17 +2,19 @@ package com.project.morestore.presenters
 
 import com.project.morestore.models.CdekAddress
 import com.project.morestore.models.DeliveryAddress
+import com.project.morestore.models.MyAddress
 import com.project.morestore.mvpviews.MyAddressPickupView
 import com.project.morestore.repositories.AddressesRepository
 import com.project.morestore.widgets.loading.LoadingPresenter
 import kotlinx.coroutines.CoroutineExceptionHandler
 import moxy.MvpPresenter
+import javax.inject.Inject
 
-abstract class MyAddressPickupPresenter(
+abstract class MyAddressPickupPresenter @Inject constructor(
     protected val addressNetwork :AddressesRepository
 ) : MvpPresenter<MyAddressPickupView>() {
 
-    abstract fun save(fullname :String, phoneNumber :String)
+    abstract fun save(fullname :String, phoneNumber :String, myAddress: MyAddress, cdekAddress: CdekAddress)
 
     protected val waitingDelegate = LoadingPresenter()
     protected val displayError = CoroutineExceptionHandler { _, ex ->
@@ -33,6 +35,12 @@ abstract class MyAddressPickupPresenter(
 
     fun changeDefault(isDefault :Boolean){
         this.isDefault = isDefault
+    }
+
+    fun setInfo(myAddress: MyAddress){
+        isDefault = myAddress.favorite
+        viewState.showFullname(myAddress.name)
+        viewState.showPhone(myAddress.phone)
     }
 
     protected fun mapAddress(cdek :CdekAddress) :DeliveryAddress{

@@ -23,36 +23,34 @@ import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import java.io.File
+import javax.inject.Inject
 
-class PhotoVideoPresenter(val context: Context): MvpPresenter<PhotoVideoMvpView>() {
-    private val repository = PhotoVideoRepository(context)
+class PhotoVideoPresenter @Inject constructor(
+    val context: Context,
+    private val repository: PhotoVideoRepository
+): MvpPresenter<PhotoVideoMvpView>() {
+
     private var pressedTime: Long = 0
     private var prepareVideoJob: Job? = null
 
-
     fun takePhoto(imageCapture: ImageCapture){
 
-        // Create output options object which contains file + metadata
         val file = repository.createFileForPhoto()
         val outputOptions = ImageCapture.OutputFileOptions
             .Builder(file)
             .build()
 
-        // Set up image capture listener, which is triggered after photo has
-        // been taken
+
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(context),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    Log.e("mylog", "Photo capture failed: ${exc.message}", exc)
                 }
 
                 override fun
                         onImageSaved(output: ImageCapture.OutputFileResults){
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
                     viewState.onPhotoCaptured(file)
-                    Log.d("mylog", msg)
                 }
             }
         )
@@ -73,27 +71,19 @@ class PhotoVideoPresenter(val context: Context): MvpPresenter<PhotoVideoMvpView>
                     PermissionChecker.PERMISSION_GRANTED) {
                     withAudioEnabled()
                 }
-
             }
             .start(ContextCompat.getMainExecutor(context)) { recordEvent ->
                 when(recordEvent) {
                     is VideoRecordEvent.Start -> {}
                     is VideoRecordEvent.Finalize -> {
                         if (!recordEvent.hasError()) {
-                            val msg = "Video capture succeeded: " +
-                                    "${recordEvent.outputResults.outputUri}"
-                            Log.d("mylog", msg)
                             viewState.videoEnded(file)
                         } else {
-                            Log.e("mylog", "Video capture ends with error: " +
-                                    "${recordEvent.error}")
                             viewState.videoError()
                         }
-
                         }
                     }
                 }
-
         viewState.videoStarted(recording)
             }
 
@@ -111,17 +101,12 @@ class PhotoVideoPresenter(val context: Context): MvpPresenter<PhotoVideoMvpView>
         val timeDiff = System.currentTimeMillis() - pressedTime
         if(timeDiff/1000 < 1){
             prepareVideoJob?.cancel()
-           // takePhoto(photoCapture)
             presenterScope.launch{
                val file = repository.createFileForPhoto(bitmap)
                if(file != null)
               viewState.onPhotoCaptured(file)
             }
         }
-    }
-
-    fun playVideo(videoUri: Uri){
-
     }
 
 }

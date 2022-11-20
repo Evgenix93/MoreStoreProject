@@ -11,12 +11,17 @@ import com.project.morestore.databinding.FragmentFilterForWhoBinding
 import com.project.morestore.models.Filter
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_who), UserMvpView {
     private val binding: FragmentFilterForWhoBinding by viewBinding()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private var forWho = listOf<Boolean>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -102,9 +107,5 @@ class FilterForWhoFragment : MvpAppCompatFragment(R.layout.fragment_filter_for_w
         binding.forMenCheckBox.isChecked = filter.chosenForWho[1]
         binding.forKidsCheckBox.isChecked = filter.chosenForWho[2]
         forWho = filter.chosenForWho
-    }
-
-    override fun successNewCode() {
-
     }
 }

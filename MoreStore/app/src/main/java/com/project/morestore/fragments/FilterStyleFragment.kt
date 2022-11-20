@@ -12,12 +12,17 @@ import com.project.morestore.models.Property
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style), UserMvpView {
     private val binding: FragmentFilterStyleBinding by viewBinding()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolBar()
@@ -33,7 +38,6 @@ class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style)
 
     private fun bind(list: List<Property>) {
 
-           // val allNotSelected = FilterState.filter.chosenStyles.all { !it }
             binding.eveningCheckBox.isChecked = list[0].isChecked == true
             binding.busynessCheckBox.isChecked = list[1].isChecked == true
             binding.usualCheckBox.isChecked = list[2].isChecked == true
@@ -79,9 +83,5 @@ class FilterStyleFragment : MvpAppCompatFragment(R.layout.fragment_filter_style)
 
     override fun loaded(result: Any) {
         bind(result as List<Property>)
-    }
-
-    override fun successNewCode() {
-
     }
 }

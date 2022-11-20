@@ -3,15 +3,16 @@ package com.project.morestore.presenters
 import android.content.Context
 import com.project.morestore.mvpviews.BlackListMvpView
 import com.project.morestore.repositories.UserRepository
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
+import javax.inject.Inject
 
-class BlackListPresenter(context: Context): MvpPresenter<BlackListMvpView>() {
-    private val userRepository = UserRepository(context)
+class BlackListPresenter @Inject constructor(private val userRepository: UserRepository): MvpPresenter<BlackListMvpView>() {
 
     fun getBlackList(){
         viewState.loading(true)
@@ -23,14 +24,14 @@ class BlackListPresenter(context: Context): MvpPresenter<BlackListMvpView>() {
                     viewState.onEmptyList(response.body()!!.isEmpty())
                     viewState.onBlackListLoaded(response.body()!!)
                 }
-                0 -> {
-                    viewState.onEmptyList(true)
-                    viewState.loading(false)
-                    viewState.onError(getErrorString(response.errorBody()!!))}
                 404 -> {
                     viewState.loading(false)
                     viewState.onEmptyList(true)
                 }
+                else -> {
+                    viewState.onEmptyList(true)
+                    viewState.loading(false)
+                    viewState.onError(errorMessage(response))}
             }
         }
     }
@@ -46,31 +47,11 @@ class BlackListPresenter(context: Context): MvpPresenter<BlackListMvpView>() {
                         viewState.onBlockUnblockUser()
                     else viewState.onError(response.body()!!)
                 }
-                400 -> {
-                    viewState.loading(false)
-                    viewState.onError(getErrorString(response.errorBody()!!))
-                }
-                null -> {
-                    viewState.loading(false)
-                    viewState.onError("Нет интернета")
-                }
-                500 -> {
-                    viewState.loading(false)
-                    viewState.onError("500 Internal Server Error")
-                }
                 else -> {
                     viewState.loading(false)
+                    viewState.onError(errorMessage(response))
                 }
-
             }
-
-
-        }
-    }
-
-    private suspend fun getErrorString(body: ResponseBody): String{
-        return withContext(Dispatchers.IO){
-            body.string()
         }
     }
 }

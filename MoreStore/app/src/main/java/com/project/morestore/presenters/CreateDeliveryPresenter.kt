@@ -8,15 +8,18 @@ import com.project.morestore.repositories.GeoRepository
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpView>() {
-    private val userRepository = UserRepository(context)
-    private val orderRepository = OrdersRepository(context)
-    private val productRepository = ProductRepository(context)
+class CreateDeliveryPresenter @Inject constructor(
+private val userRepository: UserRepository,
+private val orderRepository: OrdersRepository,
+private val productRepository: ProductRepository): MvpPresenter<CreateDeliveryMvpView>() {
+
     private val geoRepository = GeoRepository()
     private var currentUser: User? = null
 
@@ -30,19 +33,11 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
                     viewState.loading(false)
                     viewState.setProfileInfo(response.body()!!)
                 }
-                400 -> {
-                    viewState.loading(false)
-                    viewState.showMessage(response.errorBody()!!.string())
+                else -> {
+                    viewState.showMessage(errorMessage(response))
                 }
-                null -> {
-                    viewState.loading(false)
-                    viewState.showMessage("нет интернета")
-                }
-                else -> viewState.loading(false)
-
             }
         }
-
     }
 
     fun createCdekOrder(order: Order){
@@ -65,8 +60,6 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
             val cdekRecipient = CdekRecipient(
                 name = recipient.name ?: "",
                 phones = listOf(CdekPhone(recipient.phone ?: "")),
-
-
             )
             val packages = CdekPackages(
                 number = "1",
@@ -111,25 +104,12 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
                     viewState.success()
 
                 }
-                400 -> {
+                else -> {
                     viewState.loading(false)
-                    viewState.showMessage(response.errorBody()!!.string())
+                    viewState.showMessage(errorMessage(response))
                 }
-                null -> {
-                    viewState.loading(false)
-                    viewState.showMessage("нет интернета")
-                }
-                500 -> {
-                    viewState.loading(false)
-                    viewState.showMessage("500 internal server error")
-                }
-                else -> viewState.loading(false)
             }
-
-
         }
-
-
     }
 
     fun createAndSubmitYandexOrder(order: Order){
@@ -158,20 +138,10 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
                         viewState.success()
                     else viewState.showMessage("произошла ошибка")
                 }
-                400 -> {
+                else -> {
                     viewState.loading(false)
-                    viewState.showMessage(response.errorBody()!!.string())
+                    viewState.showMessage(errorMessage(response))
                 }
-                500 -> {
-                    viewState.loading(false)
-                    viewState.showMessage("500 internal server error")
-                }
-                null -> {
-                    viewState.loading(false)
-                    viewState.showMessage("нет интернета")
-                }
-                else -> viewState.loading(false)
-
             }
 
         }
@@ -186,19 +156,11 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
                     viewState.loading(false)
                     viewState.setProductInfo(response.body()!!.first())
                 }
-                400 -> {
+                else -> {
                     viewState.loading(false)
-                    viewState.showMessage(response.errorBody()!!.string())
+                    viewState.showMessage(errorMessage(response))
                 }
-                null -> {
-                    viewState.loading(false)
-                    viewState.showMessage("нет интернета")
-                }
-                else -> viewState.loading(false)
-
             }
-
-
         }
     }
 
@@ -206,13 +168,10 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
         val response = userRepository.getUser(id)
         return when(response?.code()){
             200 -> response.body()
-            null -> null
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
+            else -> {
+                viewState.showMessage(errorMessage(response))
                 null
             }
-            500 -> null
-            else -> null
         }
     }
 
@@ -241,58 +200,22 @@ class CreateDeliveryPresenter(context: Context): MvpPresenter<CreateDeliveryMvpV
         val response = orderRepository.createYandexGoOrder(yandexOrder)
         return when(response?.code()){
             200 -> response.body()!!.id
-            400 -> {
-                viewState.loading(false)
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            null -> {
-                viewState.loading(false)
-                viewState.showMessage("нет интернета")
-                null
-
-            }
-            500 -> {
-                viewState.loading(false)
-                viewState.showMessage("500 internal server error")
-                null
-            }
             else -> {
                 viewState.loading(false)
+                viewState.showMessage(errorMessage(response))
                 null
             }
         }
-
     }
 
     private suspend fun submitYandexGoOrder(id: String){
         val response = orderRepository.submitYandexGoOrder(YandexClaimId(id))
          when(response?.code()){
             200 -> viewState.success()
-            400 -> {
-                viewState.loading(false)
-                viewState.showMessage(response.errorBody()!!.string())
-
-            }
-            null -> {
-                viewState.loading(false)
-                viewState.showMessage("нет интернета")
-
-
-            }
-            500 -> {
-                viewState.loading(false)
-                viewState.showMessage("500 internal server error")
-
-            }
             else -> {
                 viewState.loading(false)
-
+                viewState.showMessage(errorMessage(response))
             }
         }
-
     }
-
-
-
 }

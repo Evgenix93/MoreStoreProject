@@ -9,12 +9,17 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentFirstLaunchBinding
 import com.project.morestore.mvpviews.OnBoardingMvpView
 import com.project.morestore.presenters.OnboardingPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class Onboarding6FemaleFragment : MvpAppCompatFragment(R.layout.fragment_first_launch), OnBoardingMvpView {
     private val binding: FragmentFirstLaunchBinding by viewBinding()
-    private val presenter by moxyPresenter { OnboardingPresenter(requireContext()) }
+    @Inject
+    lateinit var onboardingPresenter: OnboardingPresenter
+    private val presenter by moxyPresenter { onboardingPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

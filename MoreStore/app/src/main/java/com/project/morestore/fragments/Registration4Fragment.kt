@@ -26,14 +26,18 @@ import com.project.morestore.MainActivity
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.redmadrobot.inputmask.MaskedTextChangedListener
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registration1), UserMvpView {
     private val binding: FragmentRegistration1Binding by viewBinding()
     private val args: Registration4FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,30 +81,13 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
             binding.registerTextView.text = "Почта"
             binding.phoneEmailEditText.inputType =
                 android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            //val slots = ("___@___")
-            //val formatWatcher = MaskFormatWatcher(MaskImpl.createNonTerminated(slots))
-            //formatWatcher.installOn(binding.phoneEmailEditText)
-
-            //val listener = MaskedTextChangedListener("[…]@[AAA]", binding.phoneEmailEditText)
-            //binding.phoneEmailEditText.addTextChangedListener(listener)
-            //binding.phoneEmailEditText.onFocusChangeListener = listener
         } else {
             binding.registerTextView.text = "Телефон"
             binding.phoneEmailEditText.inputType = android.text.InputType.TYPE_CLASS_PHONE
             val listener =
                 MaskedTextChangedListener("+7([000])-[000]-[00]-[00]", binding.phoneEmailEditText)
             binding.phoneEmailEditText.addTextChangedListener(listener)
-            //val mask = MaskImpl.createTerminated(PredefinedSlots.RUS_PHONE_NUMBER);
-            //val watcher = MaskFormatWatcher(mask)
-            //watcher.installOn(binding.phoneEmailEditText)
         }
-
-        //binding.phoneEmailEditText.setOnFocusChangeListener { view, b ->
-        // binding.phoneEmailEditText.setMask("+7(###)-###-##-##")
-        // Log.d("mylog", "onFocusChange")
-
-        //}
-
     }
 
     private fun showLoading(loading: Boolean) {
@@ -130,10 +117,6 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     override fun loaded(result: Any) {
         TODO("Not yet implemented")
-    }
-
-    override fun successNewCode() {
-
     }
 
 }

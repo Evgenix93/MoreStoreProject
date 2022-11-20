@@ -26,13 +26,18 @@ import com.project.morestore.mvpviews.AuthMvpView
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.AuthPresenter
 import com.project.morestore.presenters.UserPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registration3), UserMvpView {
     private val args: Registration3FragmentArgs by navArgs()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private val binding: FragmentRegistration3Binding by viewBinding()
     private lateinit var filePickerLauncher: ActivityResultLauncher<Array<String>>
 
@@ -51,7 +56,6 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
     private fun setClickListeners() {
-        //val isEmail = args.phoneOrEmail.contains(Regex("[a-z]"))
         binding.nextBtn.setOnClickListener {
             presenter.changeUserData(name = binding.nameEditText.text.toString(), surname = binding.surnameEditText.text.toString())
         }
@@ -81,6 +85,7 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
                 .into(binding.photoImageView)
             binding.photoImageView.strokeColor = ColorStateList.valueOf(resources.getColor(R.color.green))
             binding.photoImageView.strokeWidth = 10f
+            if (uri != null)
             presenter.safePhotoUri(uri)
         }
     }
@@ -119,7 +124,4 @@ class Registration3Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     }
 
-    override fun successNewCode() {
-
-    }
 }

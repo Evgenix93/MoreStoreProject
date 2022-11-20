@@ -6,43 +6,44 @@ import com.project.morestore.models.*
 import com.project.morestore.models.Filter
 import com.project.morestore.models.Product
 import com.project.morestore.models.ProductBrand
+import com.project.morestore.mvpviews.FavoritesMainMvpView
 import com.project.morestore.mvpviews.FavoritesMvpView
+import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.repositories.AuthRepository
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
+import javax.inject.Inject
 
-class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
-    private val userRepository = UserRepository(context)
-    private val productRepository = ProductRepository(context)
-    private val authRepository = AuthRepository(context)
+class FavoritesPresenter @Inject constructor(
+    private val userRepository: UserRepository,
+private val productRepository: ProductRepository,
+private val authRepository: AuthRepository): MvpPresenter<MainMvpView>() {
 
     fun getProductWishList() {
         presenterScope.launch {
             viewState.loading()
             val response = userRepository.getProductWishList()
             when (response?.code()) {
-                200 -> viewState.favoritesLoaded(response.body()!!)
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                200 -> viewState.loaded(response.body()!!)
                 404 -> {
-                    viewState.emptyList()
+                    (viewState as FavoritesMvpView).emptyList()
 
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
 
     fun tokenCheck() {
         if(authRepository.isTokenEmpty())
-        viewState.isGuest()
+            (viewState as FavoritesMainMvpView).isGuest()
     }
 
     fun getSellersWishList(){
@@ -50,15 +51,12 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
             viewState.loading()
             val response = userRepository.getSellersWishList()
             when (response?.code()) {
-                200 -> viewState.favoritesLoaded(response.body()!!)
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                200 -> viewState.loaded(response.body()!!)
                 404 -> {
-                    viewState.emptyList()
+                    (viewState as FavoritesMvpView).emptyList()
 
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
 
         }
@@ -71,27 +69,14 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
             when (response?.code()) {
                 200 -> {
                     val searches = response.body()!!
-                    /*val properties = getProperties()
-                    searches.forEach { search ->
-                        search.propertyValues = search.value.property.map { favoriteSearchProperty ->
-                            properties.find { it.id == favoriteSearchProperty.idValue  }?.name.orEmpty()
-
-                        }
-                    }*/
-
-                    viewState.favoritesLoaded(searches)
-
+                    viewState.loaded(searches)
                 }
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
-                    viewState.emptyList()
+                    (viewState as FavoritesMvpView).emptyList()
 
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
-
         }
     }
 
@@ -101,19 +86,15 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
             val response = userRepository.getFavoriteSearchById(id)
             when (response?.code()) {
                 200 -> {
-                    viewState.favoritesLoaded(listOf(response.body()!!))
+                    viewState.loaded(listOf(response.body()!!))
 
                 }
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
-                    viewState.emptyList()
+                    (viewState as FavoritesMvpView).emptyList()
 
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
-
         }
     }
 
@@ -124,15 +105,11 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
             when (response?.code()) {
                 200 -> {
                     viewState.success()
-
-
                 }
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
-                    viewState.emptyList()
+                    (viewState as FavoritesMvpView).emptyList()
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -147,14 +124,11 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
 
 
                 }
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
-                    viewState.emptyList()
+                    (viewState as FavoritesMvpView).emptyList()
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
+                else -> viewState.error(errorMessage(response))
             }
-
         }
     }
 
@@ -168,36 +142,24 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
 
 
                 }
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
                 404 -> {
-                    viewState.emptyList()
+                    (viewState as FavoritesMvpView).emptyList()
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
+                else -> viewState.error(errorMessage(response))
             }
 
         }
     }
 
-
-
-
-
     fun getBrandWishList() {
         presenterScope.launch {
             val response = userRepository.getBrandWishList()
             when (response?.code()) {
-                200 -> viewState.favoritesLoaded(response.body()!!)
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
+                200 -> viewState.loaded(response.body()!!)
                 404 -> {
-                    viewState.emptyList()
+                    (viewState as FavoritesMvpView).emptyList()
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -211,50 +173,18 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
           val filter = userRepository.getFilter()
           val response = productRepository.getProducts(filter = Filter(chosenForWho = filter.chosenForWho, brands = brands, status = 1))
             when (response?.code()) {
-                200 -> viewState.favoritesLoaded(response.body()!!)
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
+                200 -> viewState.loaded(response.body()!!)
                 404 -> {
-                    viewState.favoritesLoaded(emptyList<Product>())
+                    viewState.loaded(emptyList<Product>())
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-
+                else -> viewState.error(errorMessage(response))
             }
-
         }
     }
 
-    private suspend fun getProperties(): List<Property> {
-        val response = productRepository.getProperties()
-            when (response?.code()) {
-                200 -> return response.body()!!
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                    return emptyList()
-                }
-                500 -> {
-                    viewState.error("500 Internal Server Error")
-                    return emptyList()
-                }
-                null -> {
-                    viewState.error("нет интернета")
-                    return emptyList()
-                }
-                else -> {
-                    viewState.error("ошибка")
-                    return emptyList()
-                }
-
-            }
-
-
-
-    }
 
     fun reserveFilter(){
         userRepository.reserveFilter()
-
     }
 
     fun restoreFilter(){
@@ -262,29 +192,10 @@ class FavoritesPresenter(context: Context): MvpPresenter<FavoritesMvpView>() {
     }
 
     fun getFilter(){
-        viewState.favoritesLoaded(listOf(userRepository.getFilter()))
+        viewState.loaded(listOf(userRepository.getFilter()))
     }
 
     fun updateFilter(filter: Filter){
         userRepository.updateFilter(filter)
     }
-
-    fun clearFilter(){
-        presenterScope.launch{
-            userRepository.clearFilter()
-        }
-    }
-
-
-    private suspend fun getStringFromResponse(body: ResponseBody): String {
-        return withContext(Dispatchers.IO) {
-            val str = body.string()
-            Log.d("mylog", str)
-            str
-        }
-
-
-    }
-
-
 }

@@ -17,12 +17,16 @@ import com.project.morestore.models.Property2
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_create_product_condition), MainMvpView {
     private val binding: FragmentCreateProductConditionBinding by viewBinding()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,8 +38,6 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
 
     private fun initToolbar(){
         binding.toolbar.backIcon.setOnClickListener { findNavController().popBackStack() }
-       // binding.toolbar.actionIcon.setOnClickListener { SaveProductDialog {presenter.createDraftProduct()}.show(childFragmentManager, null) }
-
     }
 
     private fun initChecking(){
@@ -119,18 +121,6 @@ class CreateProductConditionFragment: MvpAppCompatFragment(R.layout.fragment_cre
 
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
 
     }
 

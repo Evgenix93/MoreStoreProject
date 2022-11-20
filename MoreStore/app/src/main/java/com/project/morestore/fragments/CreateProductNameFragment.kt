@@ -3,6 +3,7 @@ package com.project.morestore.fragments
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
@@ -13,12 +14,16 @@ import com.project.morestore.databinding.FragmentCreateProductNameBinding
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductNameFragment : MvpAppCompatFragment(R.layout.fragment_create_product_name), MainMvpView {
     private val binding: FragmentCreateProductNameBinding by viewBinding()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private val args: CreateProductNameFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,13 +52,6 @@ class CreateProductNameFragment : MvpAppCompatFragment(R.layout.fragment_create_
     private fun setClickListeners() {
         binding.sendBtn.setOnClickListener {
             presenter.updateCreateProductData(name = binding.nameEditText.text.toString())
-            findNavController().navigate(
-                CreateProductNameFragmentDirections.actionCreateProductNameFragmentToCreateProductStep6Fragment(
-                    category = args.category,
-                    brand = args.brand,
-                    forWho = args.forWho
-                )
-            )
         }
     }
 
@@ -67,7 +65,13 @@ class CreateProductNameFragment : MvpAppCompatFragment(R.layout.fragment_create_
     }
 
     override fun loaded(result: Any) {
-
+        findNavController().navigate(
+            CreateProductNameFragmentDirections.actionCreateProductNameFragmentToCreateProductStep6Fragment(
+                category = args.category,
+                brand = args.brand,
+                forWho = args.forWho
+            )
+        )
     }
 
     override fun loading() {
@@ -75,19 +79,7 @@ class CreateProductNameFragment : MvpAppCompatFragment(R.layout.fragment_create_
     }
 
     override fun error(message: String) {
-
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     override fun success() {

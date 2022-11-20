@@ -10,14 +10,21 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration2Binding
+import com.project.morestore.mvpviews.RegistrationMvpView
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registration2), UserMvpView {
+@AndroidEntryPoint
+class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registration2),
+    RegistrationMvpView {
     private val binding: FragmentRegistration2Binding by viewBinding()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private val args: Registration5FragmentArgs by navArgs()
     private var isEmail = false
     private lateinit var timer: CountDownTimer

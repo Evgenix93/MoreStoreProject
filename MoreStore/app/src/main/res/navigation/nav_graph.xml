@@ -283,10 +283,7 @@
             android:id="@+id/action_catalogFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/createFragment"
-        android:name="com.project.morestore.fragments.CreateFragment"
-        android:label="CreateFragment" />
+
     <fragment
         android:id="@+id/messagesFragment"
         android:name="com.project.morestore.fragments.MessagesFragment"

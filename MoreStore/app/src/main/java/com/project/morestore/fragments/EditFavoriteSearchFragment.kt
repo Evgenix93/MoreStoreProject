@@ -19,14 +19,19 @@ import com.project.morestore.models.FavoriteSearch
 import com.project.morestore.models.Filter
 import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.FavoritesMvpView
+import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.NotificationType
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
+@AndroidEntryPoint
+class EditFavoriteSearchFragment : FullscreenMvpFragment(), MainMvpView {
     private lateinit var binding: FragmentEditFavoriteSearchBinding
-    private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
+    @Inject lateinit var favoritesPresenter: FavoritesPresenter
+    private val presenter by moxyPresenter { favoritesPresenter }
     private var filter = Filter()
     private val args: EditFavoriteSearchFragmentArgs by navArgs()
     private var firstTimeLoaded = false
@@ -36,7 +41,7 @@ class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return FragmentEditFavoriteSearchBinding.inflate(inflater).also { binding = it }.root
     }
 
@@ -87,9 +92,7 @@ class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
         binding.deleteTextView.isVisible = args.favoriteSearchId != 0L
         binding.notificationTypeAutoComplete.setAdapter(ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line,
         arrayOf(NotificationType.DAILY.value, NotificationType.WEEKLY.value, NotificationType.DISABLED.value)))
-        //binding.notificationTypeAutoComplete.setOnClickListener {
-           // binding.notificationTypeAutoComplete.showDropDown()
-        //}
+
     }
 
 
@@ -273,7 +276,6 @@ class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
         }
 
         binding.sizeClickView.setOnClickListener {
-            //findNavController().navigate(FilterFragmentDirections.actionFilterFragmentToFilterKidsSizesFragment())
             val isShoos =
                 filter.categories.any { it.name == "Обувь" && it.isChecked == true } && !filter.categories.any { it.isChecked == true && it.name != "Обувь" }
             val isCloth =
@@ -378,7 +380,8 @@ class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
 
     }
 
-    override fun favoritesLoaded(list: List<*>) {
+    override fun loaded(result: Any) {
+        val list = result as List<*>
         showLoading(false)
         if(list.first() is FavoriteSearch) {
             val filter = (list.first() as FavoriteSearch).value
@@ -395,14 +398,6 @@ class EditFavoriteSearchFragment : FullscreenMvpFragment(), FavoritesMvpView {
     override fun error(message: String) {
         showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun isGuest() {
-        TODO("Not yet implemented")
-    }
-
-    override fun emptyList() {
 
     }
 

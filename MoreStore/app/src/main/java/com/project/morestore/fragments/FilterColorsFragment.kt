@@ -14,20 +14,24 @@ import com.project.morestore.models.Property
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), UserMvpView {
     private val binding:FragmentColorsBinding by viewBinding()
     private var colorsAdapter: ColorsAdapter by autoCleared()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initColorsRecyclerView()
         getColors()
-        //loadColors()
         setClickListeners()
     }
 
@@ -93,9 +97,5 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), User
                     colorsAdapter.updateColors(result.colors)
             }
         }
-    }
-
-    override fun successNewCode() {
-
     }
 }

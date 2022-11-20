@@ -19,17 +19,22 @@ import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_materials), UserMvpView {
     private val binding: FragmentFilterMaterialsBinding by viewBinding()
     private var materialAdapter: MaterialAdapter by autoCleared()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private var searchInitiated = false
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,7 +84,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
                         p2: Int,
                         p3: Int
                     ) {
-                        sendBlocking(newText.toString())
+                        trySendBlocking(newText.toString())
 
                     }
 
@@ -154,10 +159,4 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
         }
 
     }
-
-    override fun successNewCode() {
-
-    }
-
-
 }

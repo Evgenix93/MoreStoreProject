@@ -8,6 +8,7 @@ import com.project.morestore.dialogs.DeleteDialog
 import com.project.morestore.models.cart.CartItem
 import com.project.morestore.repositories.OrdersRepository
 import com.project.morestore.repositories.ProductRepository
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -19,27 +20,23 @@ class OrdersCartPresenter(val context: Context) : MvpPresenter<OrdersCartView>()
     private val ordersRepository = OrdersRepository(context)
     private val productRepository = ProductRepository(context)
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                      private
-    ///////////////////////////////////////////////////////////////////////////
-
     fun loadCartData(
         userId: Long? = null,
         onDelete: (CartItem) -> Unit
     ) {
-        Log.d("mylog", "addProductToCart")
+
         presenterScope.launch {
             val response = ordersRepository.getCartItems(
                 userId = userId
             )
-
             when (response?.code()) {
                 200 -> {
                     initContent(response.body(), onDelete)
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
                 404 -> initContent(emptyList(), onDelete)
+                else -> {
+                    viewState.error(errorMessage(response))
+                }
             }
         }
     }

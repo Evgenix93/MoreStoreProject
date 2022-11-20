@@ -30,18 +30,22 @@ import com.project.morestore.models.*
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_product_details),
     MainMvpView {
     private val binding: FragmentAddProductDetailsBinding by viewBinding()
     private var optionsAdapter: OptionsAdapter by autoCleared()
     private val args: CreateProductStep6FragmentArgs by navArgs()
-    private val presenter: MainPresenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+    private val presenter: MainPresenter by moxyPresenter { mainPresenter }
     private var firstLaunch = true
-    private var isChangingProduct = false
     private var isSavingDraftProduct = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -412,10 +416,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         }
     }
 
-
     override fun loading() {
         showLoading(true)
-
     }
 
     override fun error(message: String) {
@@ -423,20 +425,8 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun showOnBoarding() {
-        TODO("Not yet implemented")
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-        TODO("Not yet implemented")
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
-    }
-
     override fun success() {
-        findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToMainFragment())
+
     }
 
 }

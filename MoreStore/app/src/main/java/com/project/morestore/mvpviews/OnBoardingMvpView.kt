@@ -15,5 +15,4 @@ interface OnBoardingMvpView: MvpView {
     @OneExecution
     fun success()
 
-
 }

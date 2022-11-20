@@ -17,19 +17,22 @@ import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.singletones.Network
 import com.project.morestore.singletones.Token
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch), MainMvpView {
     private val binding: FragmentFirstLaunchBinding by viewBinding()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hideBottomNavBar()
         setClickListeners()
-        //checkToken()
     }
 
     private fun checkToken(){
@@ -58,11 +61,6 @@ class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch),
 
     override fun loaded(result: Any) {
 
-        //if(result is Boolean){
-          //  if(result)
-           //     findNavController().navigate(FirstLaunchFragmentDirections.actionFirstLaunchFragmentToMainFragment())
-      //  }
-
     }
 
     override fun loading() {
@@ -70,18 +68,6 @@ class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch),
     }
 
     override fun error(message: String) {
-
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
 
     }
 

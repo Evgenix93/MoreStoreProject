@@ -23,15 +23,20 @@ import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.util.concurrent.Flow
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_region), UserMvpView {
     private val binding: FragmentChangeRegionBinding by viewBinding()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private var cities = listOf<Region>()
     private var cityAdapter: RegionsAdapter by autoCleared()
     private lateinit var searchFlow: kotlinx.coroutines.flow.Flow<String>
@@ -46,8 +51,6 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
         initList()
         initEditText()
     }
-
-
 
     private fun initEditText(){
         val searchEditText = binding.searchEditText
@@ -69,7 +72,7 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
                         p2: Int,
                         p3: Int
                     ) {
-                        sendBlocking(newText.toString())
+                        trySendBlocking(newText.toString())
 
                     }
 
@@ -87,8 +90,6 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
     private fun initList(){
         cityAdapter = RegionsAdapter(true, true) { city ->
             binding.searchEditText.setText(city)
-
-
         }
         with(binding.citiesList){
             adapter = cityAdapter
@@ -96,13 +97,6 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
             setHasFixedSize(true)
         }
     }
-
-
-
-
-
-
-
 
     private fun initToolbar(){
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }
@@ -156,13 +150,5 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
             presenter.collectRegionSearchFlow(searchFlow, cities)
 
         cityAdapter.updateList(citiesList)
-
-        Log.d("mylog", citiesList.toString())
-
     }
-
-    override fun successNewCode() {
-
-    }
-
 }

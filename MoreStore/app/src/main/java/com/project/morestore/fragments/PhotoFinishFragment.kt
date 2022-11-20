@@ -20,14 +20,19 @@ import com.project.morestore.models.ProductPhoto
 import com.project.morestore.models.SuggestionModels
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PhotoFinishFragment : MvpAppCompatFragment(R.layout.fragment_photo_finish), MainMvpView {
     private val binding: FragmentPhotoFinishBinding by viewBinding()
     private val args: PhotoFinishFragmentArgs by navArgs()
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var isBackgroundDeleted = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -112,7 +117,6 @@ class PhotoFinishFragment : MvpAppCompatFragment(R.layout.fragment_photo_finish)
 
         }
         binding.imageView27.setOnClickListener {
-            Log.d("MyDebug", "photo onClick")
             if (args.isVideo)
                 playVideo()
         }
@@ -182,18 +186,6 @@ class PhotoFinishFragment : MvpAppCompatFragment(R.layout.fragment_photo_finish)
 
     override fun error(message: String) {
 
-    }
-
-    override fun showOnBoarding() {
-
-    }
-
-    override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
-
-    }
-
-    override fun loginFailed() {
-        TODO("Not yet implemented")
     }
 
     override fun success() {

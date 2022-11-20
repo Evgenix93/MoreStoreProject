@@ -14,8 +14,9 @@ import com.project.morestore.repositories.UserRepository
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class ToolbarCartPresenter(val context: Context, val selectedMenu: OrdersSliderMenu)
+class ToolbarCartPresenter @Inject constructor(val context: Context, val selectedMenu: OrdersSliderMenu)
     : MvpPresenter<ToolbarCartView>() {
 
     private lateinit var adapter: SliderMenuAdapter<OrdersSliderMenu>

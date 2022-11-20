@@ -29,19 +29,24 @@ import com.project.morestore.models.*
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
 import com.project.morestore.mvpviews.OrderDetailsView
+import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.presenters.OrderDetailsPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details), OrderDetailsView {
     private val binding: FragmentOrderDetailsBinding by viewBinding()
     private val args: OrderDetailsFragmentArgs by navArgs()
     private var orderStatus: OrderStatus? = null
     private lateinit var orderItem: OrderItem
-    //private var currentDeliveryPrice: Float? = null
-    private val presenter by moxyPresenter { OrderDetailsPresenter(requireContext()) }
+    @Inject
+    lateinit var orderDetailsPresenter: OrderDetailsPresenter
+    private val presenter by moxyPresenter { orderDetailsPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

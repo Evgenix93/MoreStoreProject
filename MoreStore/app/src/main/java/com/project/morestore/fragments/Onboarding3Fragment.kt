@@ -19,14 +19,19 @@ import com.project.morestore.mvpviews.OnBoardingMvpView
 
 import com.project.morestore.presenters.OnboardingPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3), OnBoardingMvpView {
     private val binding: FragmentOnboarding3Binding by viewBinding()
     private val args: Onboarding3FragmentArgs by navArgs()
     private var categoryAdapter: CategoryAdapter by autoCleared()
-    private val presenter by moxyPresenter { OnboardingPresenter(requireContext()) }
+    @Inject
+    lateinit var onboardingPresenter: OnboardingPresenter
+    private val presenter by moxyPresenter { onboardingPresenter }
     private var onBoardingData: BrandsPropertiesDataWrapper? = null
     private var allBrands: List<ProductBrand> = emptyList()
 
@@ -36,13 +41,6 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
         setClickListeners()
         getCategories()
         getOnBoardingData()
-
-        /* binding.allCheckBox.setOnCheckedChangeListener { _, isChecked ->
-             binding.luxuryCheckBox.isChecked = isChecked
-             binding.middleCheckBox.isChecked = isChecked
-             binding.massCheckBox.isChecked = isChecked
-             binding.economyCheckBox.isChecked = isChecked
-         } */
     }
 
     private fun initRecyclerView() {
@@ -58,7 +56,6 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
 
     private fun setClickListeners() {
         binding.continueBtn.setOnClickListener {
-            //presenter.safeCategories(categoryAdapter.loadSegments1Checked())
             if(args.fromProfile.not())
                 presenter.saveCategories(categoryAdapter.loadSegments2Checked().also{Log.d("MyDebug", "segments checked = $it")})
             else{
@@ -84,12 +81,6 @@ class Onboarding3Fragment : MvpAppCompatFragment(R.layout.fragment_onboarding3),
 
                 presenter.saveOnBoardingData(luxBrands + middleBrands + massBrands + ecoBrands,
                 onBoardingData?.data?.property?.split(";")?.mapNotNull { it.toLongOrNull() }.orEmpty())
-
-
-
-
-
-
             }
         }
         binding.backIcon.setOnClickListener { findNavController().popBackStack() }

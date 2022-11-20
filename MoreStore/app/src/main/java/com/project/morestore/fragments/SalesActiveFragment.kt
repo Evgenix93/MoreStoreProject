@@ -20,18 +20,24 @@ import com.project.morestore.models.cart.CartItem
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.models.slidermenu.SliderMenu
+import com.project.morestore.mvpviews.SalesActiveMvpView
 import com.project.morestore.mvpviews.SalesMvpView
 import com.project.morestore.presenters.SalesPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesMvpView {
+@AndroidEntryPoint
+class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesActiveMvpView {
     private val binding: FragmentOrdersBinding by viewBinding()
     private var salesAdapter: SalesAdapter by autoCleared()
     private var menuAdapter: SliderMenuAdapter<OrdersSliderMenu> by autoCleared()
-    private val presenter by moxyPresenter { SalesPresenter(requireContext()) }
+    @Inject
+    lateinit var salesPresenter: SalesPresenter
+    private val presenter by moxyPresenter { salesPresenter }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,9 +123,6 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
         ) {
             val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
             when (it) {
-                OrdersSliderMenu.SALES -> {
-
-                }
                 OrdersSliderMenu.SALES_HISTORY -> {
                     findNavController().navigate(R.id.salesHistoryFragment, null, navOptions)
                 }
@@ -132,6 +135,7 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
                 OrdersSliderMenu.ORDERS -> {
                    findNavController().navigate(R.id.ordersActiveFragment, null, navOptions)
                 }
+                else -> {}
             }
         }.also{menuAdapter = it}
         binding.toolbar.sliderMenu.scrollToPosition(2)
@@ -161,7 +165,6 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
     }
 
     override fun onSalesLoaded(sales: List<Order>, addresses: List<OfferedOrderPlace>, users: List<User?>, dialogs: List<DialogWrapper>) {
-        Log.d("MyDebug", "onSalesLoaded")
         binding.loader.isVisible = false
         updateSalesList(sales, addresses, users, dialogs)
     }

@@ -4,26 +4,9 @@ import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 import kotlin.reflect.KClass
 
-interface FavoritesMvpView: MvpView {
-
-    @OneExecution
-    fun loading()
-
-    @OneExecution
-    fun favoritesLoaded(list: List<*>)
-
-    @OneExecution
-    fun error(message: String)
-
-    @OneExecution
-    fun isGuest()
+interface FavoritesMvpView: MainMvpView {
 
     @OneExecution
     fun emptyList()
-
-    @OneExecution
-    fun success()
-
-
 
 }

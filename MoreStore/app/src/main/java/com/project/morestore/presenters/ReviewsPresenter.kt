@@ -9,13 +9,13 @@ import com.project.morestore.repositories.ReviewRepository
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class ReviewsPresenter(
+class ReviewsPresenter @Inject constructor(
     private val userId :Long,
     private val data :ReviewRepository,
-    context: Context
+    private val orderRepository: OrdersRepository
 ) :MvpPresenter<ReviewView>() {
-    private val orderRepository = OrdersRepository(context)
 
     override fun attachView(view: ReviewView?) {
         super.attachView(view)

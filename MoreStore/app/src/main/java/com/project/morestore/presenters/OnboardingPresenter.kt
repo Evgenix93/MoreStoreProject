@@ -12,40 +12,23 @@ import com.project.morestore.repositories.AuthRepository
 
 import com.project.morestore.repositories.ProductRepository
 import com.project.morestore.repositories.UserRepository
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
+import javax.inject.Inject
 
 
-class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() {
-    private val repository = ProductRepository(context)
-    private val authRepository = AuthRepository(context)
-    private val userRepository = UserRepository(context)
+class OnboardingPresenter @Inject constructor(
+    private val repository: ProductRepository,
+            private val authRepository: AuthRepository,
+            private val userRepository: UserRepository
+) : MvpPresenter<OnBoardingMvpView>() {
 
     private val categoryIdList = mutableListOf<Int>()
-
-    fun getAllSizes() {
-        presenterScope.launch {
-            viewState.loading()
-            val response = repository.getAllSizes()
-            when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-
-            }
-
-        }
-
-    }
 
     private fun getProperties(propertyId: Long) {
         presenterScope.launch {
@@ -53,18 +36,9 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
             val response = repository.getProperties()
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
-
+                else -> viewState.error(errorMessage(response))
             }
-
         }
-
     }
 
     fun getTopSizes() {
@@ -122,13 +96,7 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
             val response = repository.getCategories()
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("Нет интернета")
-                else -> viewState.error("Ошибка")
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -210,7 +178,6 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
             val middleBrands = mutableListOf<Long>()
             val massBrands = mutableListOf<Long>()
             val ecoBrands = mutableListOf<Long>()
-            Log.d("MyDebug", "segments = ${filter.segments}")
             filter.segments.forEachIndexed { index, selected ->
                  if(selected && index == 0) {
                     Log.d("MyDebug", "segments isNotEmpty")
@@ -226,11 +193,11 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
                    ecoBrands.addAll( brands.filter { it.idCategory == (index + 1).toLong() }.map { it.id })
 
             }
-            Log.d("MyDebug", "luxBrands = $luxBrands")
+
             val response = userRepository.saveBrandsProperties(luxBrands + middleBrands + massBrands + ecoBrands, propertiesId)
             when (response?.code()) {
                 200 -> saveFilter(isMale)
-                null -> viewState.error("Ошибка")
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -240,7 +207,7 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
             val response = userRepository.saveBrandsProperties(brandsId, propertiesId)
             when (response?.code()) {
                 200 -> viewState.success()
-                null -> viewState.error("Ошибка")
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -251,13 +218,9 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
             val response = userRepository.loadBrandsProperties()
             when(response?.code()){
                 200 -> {
-                    Log.d("MyDebug", "load brandsPropert success")
                     viewState.loaded(response.body()!!)
                 }
-                null -> viewState.error("Ошибка")
-                else -> {
-                    viewState.error("Ошибка")
-                }
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -268,54 +231,20 @@ class OnboardingPresenter(context: Context) : MvpPresenter<OnBoardingMvpView>() 
             val response = repository.getBrands()
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("Нет интернета")
-                else -> viewState.error("Ошибка")
+                else -> viewState.error(errorMessage(response))
             }
-
-
         }
     }
 
     private suspend fun getAllBrandsInstant(): List<ProductBrand>{
 
-
             val response = repository.getBrands()
             when (response?.code()) {
                 200 -> return response.body()!!
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                    return emptyList()
-                }
-                500 -> {
-                    viewState.error("500 Internal Server Error")
-                    return emptyList()
-                }
-                null -> {
-                    viewState.error("Нет интернета")
-                    return emptyList()
-                }
                 else -> {
-                    viewState.error("Ошибка")
+                    viewState.error(errorMessage(response))
                     return emptyList()
                 }
             }
-
-
-
-    }
-
-
-    private suspend fun getStringFromResponse(body: ResponseBody): String {
-        return withContext(Dispatchers.IO) {
-            val str = body.string()
-            Log.d("mylog", str)
-            str
-        }
     }
 }

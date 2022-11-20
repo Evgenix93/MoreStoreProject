@@ -10,6 +10,7 @@ import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCabinetGuestBinding
 
+
 class CabinetGuestFragment: Fragment(R.layout.fragment_cabinet_guest) {
     private val binding: FragmentCabinetGuestBinding by viewBinding()
 

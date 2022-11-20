@@ -36,17 +36,23 @@ import com.project.morestore.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentMainBinding
 import com.project.morestore.models.*
 import com.project.morestore.models.Filter
+import com.project.morestore.mvpviews.MainFragmentMvpView
 import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
-    private val presenter by moxyPresenter { MainPresenter(requireContext()) }
+@AndroidEntryPoint
+class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainFragmentMvpView {
+    @Inject lateinit var mainPresenter: MainPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private val binding: FragmentMainBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
     private var kidsProductAdapter: ProductAdapter by autoCleared()
@@ -66,13 +72,10 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         setClickListeners()
         initPermissionLauncher()
         getCurrentUserAddress()
-
     }
 
     private fun showUnreadMessagesStatus(){
         presenter.showUnreadMessages()
-        //getUserData()
-
     }
 
     private fun bindFilter(filter: Filter) {
@@ -113,7 +116,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 )
             }
 
-
         with(binding.forWomenRecyclerView) {
             adapter = productAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -125,10 +127,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             layoutManager = GridLayoutManager(requireContext(), 2)
             isNestedScrollingEnabled = false
         }
-
-
-
-
     }
 
     private fun initViewPager() {
@@ -201,7 +199,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 }
 
                 override fun onTextChanged(newText: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    sendBlocking(newText.toString())
+                    trySendBlocking(newText.toString())
                     currentSuggestionModels = null
 
                 }
@@ -219,74 +217,24 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
 
     private fun setClickListeners() {
         binding.materialCardView10.setOnClickListener {
-            presenter.updateBrand(
-                ProductBrand(
-                    1232,
-                    "ZARA",
-                    3,
-                    true,
-                    false
-                )
-            )
+            updateBrand(1232, "ZARA", 3)
         }
         binding.materialCardView11.setOnClickListener {
-            presenter.updateBrand(
-                ProductBrand(
-                    1045,
-                    "STRADIVARIUS",
-                    3,
-                    true,
-                    false
-                )
-            )
+            updateBrand(1045, "STRADIVARIUS", 3)
         }
         binding.materialCardView12.setOnClickListener {
-            presenter.updateBrand(
-                ProductBrand(
-                    468,
-                    "H&M",
-                    3,
-                    true,
-                    false
-                )
-            )
+            updateBrand(468, "H&M", 3)
         }
         binding.materialCardView13.setOnClickListener {
-            presenter.updateBrand(
-                ProductBrand(
-                    685,
-                    "MANGO",
-                    3,
-                    true,
-                    false
-                )
-            )
+            updateBrand(685, "MANGO", 3)
         }
         binding.materialCardView14.setOnClickListener {
-            presenter.updateBrand(
-                ProductBrand(
-                    625,
-                    "LEVI'S",
-                    2,
-                    true,
-                    false
-                )
-            )
+            updateBrand(625, "LEVI'S", 2)
         }
+
         binding.materialCardView15.setOnClickListener {
-            presenter.updateBrand(
-                ProductBrand(
-                    588,
-                    "LACOSTE",
-                    2,
-                    true,
-                    false
-                )
-            )
+            updateBrand(588, "LACOSTE", 2)
         }
-
-
-
 
         binding.moreBrandsTextView.setOnClickListener { findNavController().navigate(R.id.brandsFragment) }
         binding.offersTextView.setOnClickListener {
@@ -304,7 +252,7 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         }
         binding.searchBtn.setOnClickListener {
             val queryStr = binding.toolbarMain.searchEditText.text.toString()
-            Log.d("mylog", "query: $queryStr")
+
             if (currentSuggestionModels != null)
                 presenter.getSuggestionProducts(currentSuggestionModels!!)
             else
@@ -333,19 +281,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             presenter.updateProductCategories(
                 listOf(
                     ProductCategory(2, "Верхняя одежда", true)
-                   // ProductCategory(3, "Бельё", true),
-                   // ProductCategory(4, "Брюки", true),
-                   // ProductCategory(6, "Платья и Сарафаны", true),
-                   // ProductCategory(7, "Юбки", true),
-                    //ProductCategory(9, "Джинсы", true),
-                    //ProductCategory(11, "Шорты", true),
-                    //ProductCategory(12, "Топы и майки", true),
-                    //ProductCategory(14, "Домашняя одежда", true),
-                    //ProductCategory(15, "Джемперы и Свитеры", true),
-                    //ProductCategory(17, "Пиджаки и костюмы", true),
-                    //ProductCategory(18, "Блузки", true),
-                    //ProductCategory(10, "Одежда для беременных", true),
-                    //ProductCategory(13, "Одежда больших размеров", true)
                 )
             )
         }
@@ -381,7 +316,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             presenter.updateProductCategories(
                 listOf(
                     ProductCategory(21, "Школьная форма", true),
-                    //ProductCategory(22, "Праздничные костюмы", true)
                 )
             )
         }
@@ -416,20 +350,12 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             }
             locationProvider.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, cancelToken ).addOnCompleteListener { task ->
                 if(task.isSuccessful){
-                   // Log.d("mylog", task.result.longitude.toString())
                     task.result?.let {
                         presenter.getCityByCoordinates("${it.latitude},${it.longitude}")
                     }
                     task.result ?: run {
-
-
                     }
-                }else{
-
-
-
                 }
-
             }
 
         }catch (e: SecurityException){
@@ -441,7 +367,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ granted ->
             if(granted)
                 getCity()
-
         }
     }
 
@@ -453,6 +378,16 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         presenter.getCurrentUserAddress()
     }
 
+    private fun updateBrand(id: Long, name: String, idCategory: Long){
+        presenter.updateBrand(ProductBrand(
+            id,
+            name,
+            idCategory,
+            true,
+            false
+        ))
+    }
+
 
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -460,14 +395,13 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     override fun loaded(result: Any) {
-        Log.d("mytest", result.toString())
         if (result is List<*>) {
             if(result.firstOrNull() is Banner){
                 viewPagerAdapter.updateList(result as List<Banner>)
                 return
             }
             if(result.firstOrNull() is BrandsPropertiesDataWrapper){
-                Log.d("mytest", "onBoardingLoaded")
+
                 val properties = (result.last() as BrandsPropertiesDataWrapper).data.property
                 if(properties?.contains("140") == true && !properties.contains("141"))
                     presenter.getBanners(3)
@@ -477,11 +411,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                     presenter.getBanners(1)
                 if(properties?.contains("140") == true && properties.contains("141"))
                     presenter.getBanners(1)
-
                 loadFilter()
-
                 return
-
 
             }
             if (!isMainLoaded) {
@@ -498,9 +429,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                     bundleOf("query" to product?.text.orEmpty())
                 )
                 return
-
             }
-
+            Log.d("MyTag", "kidsUpdateList: $result")
             kidsProductAdapter.updateList(result as List<Product>)
         }
 
@@ -512,10 +442,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
             loadFilter()
             presenter.getBanners(1)
         }
-
-        //if(result is User)
-          //  if(result.phone == null)
-        //        findNavController().navigate(MainFragmentDirections.actionMainFragmentToRegistration3Fragment(phoneOrEmail = result.email.orEmpty(), userId = result.id.toInt(), fromMainFragment = true))
 
         if(result is Address){
             if(result.fullAddress?.isNotEmpty() == true)
@@ -535,7 +461,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 )
                     loadOnboardingData()
             showUnreadMessagesStatus()
-            //showOnBoarding()
         }
         if(result is Boolean){
             (activity as MainActivity).showUnreadMessagesIcon(result)
@@ -547,7 +472,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     override fun showOnBoarding() {
-        Log.d("MyDebug", "showOnBoarding mainFragment")
         findNavController().navigate(MainFragmentDirections.actionMainFragmentToOnboarding1Fragment())
     }
 
@@ -558,7 +482,6 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 R.layout.item_suggestion_textview,
                 list
             ) { position, string ->
-                Log.d("mylog", "click position $position")
                 binding.toolbarMain.searchEditText.dismissDropDown()
                 presenter.cancelSearchJob()
                 binding.toolbarMain.searchEditText.setAdapter(null)
@@ -578,5 +501,4 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     override fun success() {
         findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment())
     }
-
 }

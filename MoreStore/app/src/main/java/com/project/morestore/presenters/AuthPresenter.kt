@@ -1,7 +1,6 @@
 package com.project.morestore.presenters
 
 import android.content.Context
-import android.net.Uri
 import com.project.morestore.util.isEmailValid
 
 
@@ -11,23 +10,19 @@ import com.project.morestore.models.RegistrationData
 import com.project.morestore.models.SocialType
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
+import com.project.morestore.mvpviews.AuthPhoneMvpView
 import com.project.morestore.repositories.AuthRepository
-import com.project.morestore.repositories.ProductRepository
-import com.project.morestore.repositories.UserRepository
+import com.project.morestore.util.errorMessage
+import com.project.morestore.util.getStringFromResponse
 import com.project.morestore.util.isPhoneValid
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
-import okhttp3.ResponseBody
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
-
-    private val repository = AuthRepository(context)
-
+class AuthPresenter @Inject constructor(private val repository: AuthRepository) : MvpPresenter<AuthMvpView>() {
 
     fun register(
         phone: String? = null,
@@ -74,13 +69,11 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                     }
                 }
                 400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
+                    val bodyString = response.errorBody()!!.getStringFromResponse()
                     if (step == 1) {
                         if (bodyString.contains("Этот номер зарегистрирован") || bodyString
                                 .contains("Эта почта зарегистрирована")
                         ) {
-                            //getNewCode(phone, email)
-                            //viewState.error("401")
                             login(
                                 phone = phone,
                                 email = email,
@@ -97,14 +90,9 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                         viewState.error(bodyString)
                     }
                 }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
+                else -> viewState.error(errorMessage(response))
             }
-
         }
-
-
     }
 
     fun login(
@@ -149,17 +137,9 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                         viewState.success(response.body()!!, if(isFromRegistration) true else null)
                     }
                 }
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
+                else -> viewState.error(errorMessage(response))
             }
         }
-
-
     }
 
     fun getUserData() {
@@ -179,10 +159,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                     }
 
                 }
-                400 -> {
-                    viewState.error("Ошибка")
-                }
-                null -> viewState.error("Нет интернета")
+               else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -195,15 +172,9 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             val response = repository.getNewCode(phone?.trim(), email?.trim())
             when (response?.code()) {
                 200 -> {
-                    viewState.successNewCode(response.body()!!)
+                    (viewState as AuthPhoneMvpView).successNewCode(response.body()!!)
                 }
-                400 -> {
-                    val bodyString = getStringFromResponse(response.errorBody()!!)
-                    viewState.error(bodyString)
-                }
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("нет интернета")
-                else -> viewState.error("ошибка")
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -214,9 +185,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
             val response = repository.getSocialLoginUrl(SocialType(type))
             when (response?.code()) {
                 200 -> viewState.success(response.body()!!)
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("Нет интернета")
+                else -> viewState.error(errorMessage(response))
             }
         }
     }
@@ -230,22 +199,9 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                     repository.setupToken(response.body()?.token!!)
                     viewState.success(response.body()!!)
                 }
-                400 -> viewState.error(getStringFromResponse(response.errorBody()!!))
-                500 -> viewState.error("500 Internal Server Error")
-                null -> viewState.error("Нет интернета")
+                else -> viewState.error(errorMessage(response))
             }
         }
-    }
-
-
-    private suspend fun getStringFromResponse(body: ResponseBody): String {
-        return withContext(Dispatchers.IO) {
-            val str = body.string()
-            Log.d("mylog", str)
-            str
-        }
-
-
     }
 
     private fun checkUserData(user: User): Boolean {
@@ -265,11 +221,7 @@ class AuthPresenter(context: Context) : MvpPresenter<AuthMvpView>() {
                     Log.d("mylog", exception.message.toString())
                     viewState.error(exception.message.orEmpty())
                     it.resume(null)
-
                 }
         }
     }
-
-
-
 }

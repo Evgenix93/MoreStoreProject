@@ -15,13 +15,18 @@ import com.project.morestore.models.SizeLine
 import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_sizes_shoes), UserMvpView {
     private val binding: FragmentFilterSizesShoesBinding by viewBinding()
     private var sizeAdapter: SizeLineAdapter by autoCleared()
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject
+    lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
 
     private var isForWomen = true
     private var isSizesLoaded = false
@@ -47,10 +52,6 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
-
-
-
-
     }
 
     private fun getSizes(){
@@ -106,7 +107,6 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
 
     override fun onStop() {
         super.onStop()
-
         saveShoosSizes()
     }
 
@@ -132,37 +132,16 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
                     .map {
                         val list = it.ico?.split(';').orEmpty()
                         SizeLine(it.id.toInt(), it.name, "", list[0].removePrefix("FR").removeSurrounding("'"), list[1].removePrefix("US").removeSurrounding("'"), list[2].removePrefix("UK").removeSurrounding("'"), false, idCategory = it.idCategory?.toInt()!!)
-
                     }
-                //(result as List<Size>).filter { it.id_category == 3 }.sortedBy { it.toInt() }
-                  //  .ma
-            //if(FilterState.filter.chosenShoosSizes.size == listShoosSizes.size + 1){
-              //  sizeAdapter.updateList(FilterState.filter.chosenShoosSizes, null)//+ listOf(SizeLine(0, "", "", "", "", "", false)))
-            //}else {
                 sizeAdapter.updateList(listShoosSizes + listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1)), null)
-            //}
-            //shoosSizes = listShoosSizes
+
             isSizesLoaded = true
             loadFilter()
 
-        }//else{
-           // val sizes = result as List<SizeLine>
-           // if(shoosSizes.size == sizes.size){
-             //   sizeAdapter.updateList(sizes, null)
-            //}
-        //}
-
+        }
         if(result is Filter){
             bindFilter(result)
 
         }
-
-
-    }
-
-
-
-    override fun successNewCode() {
-
     }
 }

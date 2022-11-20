@@ -14,13 +14,21 @@ import com.project.morestore.databinding.FragmentRegistration1Binding
 import com.project.morestore.models.RegistrationResponse
 import com.project.morestore.models.User
 import com.project.morestore.mvpviews.AuthMvpView
+import com.project.morestore.mvpviews.AuthPhoneMvpView
 import com.project.morestore.presenters.AuthPresenter
+import com.project.morestore.presenters.UserPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_registration1), AuthMvpView {
+@AndroidEntryPoint
+class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_registration1),
+    AuthPhoneMvpView {
     private val binding: FragmentRegistration1Binding by viewBinding()
-    private val presenter by moxyPresenter { AuthPresenter(requireContext()) }
+    @Inject
+    lateinit var authPresenter: AuthPresenter
+    private val presenter by moxyPresenter { authPresenter }
     private val args: RegistrationLogin1FragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,18 +113,11 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     override fun error(message: String) {
         showLoading(false)
-        //if(message == "401"){
-           // val isEmail = binding.phoneEmailEditText.text.toString().contains(Regex("[a-z]"))
-
-            //return
-        //}
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun loading() {
-        Log.d("mylog", "loading")
         showLoading(true)
-
     }
 
 

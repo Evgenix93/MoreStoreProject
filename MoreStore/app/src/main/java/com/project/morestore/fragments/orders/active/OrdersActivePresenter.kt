@@ -19,6 +19,7 @@ import com.project.morestore.models.cart.CartItem
 import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
 import com.project.morestore.repositories.*
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -88,7 +89,7 @@ class OrdersActivePresenter(val context: Context)
 
                 override fun payForOrder(orderItem: OrderItem) {
                     presenterScope.launch {
-                        viewState.loading()
+                        viewState.loading(true)
                         val isYandex = orderItem.deliveryInfo == "yandex"
                         if (isYandex) {
                             val toAddress = orderItem.cdekYandexAddress
@@ -117,13 +118,6 @@ class OrdersActivePresenter(val context: Context)
                 val cartItems = getCartItems() ?: return@launch
                 val dialogs = getDialogs()
                 val orderItems = orders.filter { it.cart != null && it.status == 0 }.sortedBy{order ->
-                  /*  val timestamp = orderAddresses.find{address -> address.idOrder == order.id}
-                        ?.address?.substringAfter(';')?.toLongOrNull()
-                    if(timestamp != null)
-                        (timestamp - System.currentTimeMillis())
-                    else {
-                        null
-                    }*/
                     val address = orderAddresses.find { order.id == it.idOrder }
                     when{
                         order.cart?.first()?.statusUser?.buy == null -> 2
@@ -169,9 +163,6 @@ class OrdersActivePresenter(val context: Context)
                         if(order.pay == 2 && buySuggest?.status != 2){
                             if(!order.isPayment && buySuggest?.status == 1)
                                 status = OrderStatus.NOT_PAYED
-                            //else{
-                                //if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1)
-                                  //  status = OrderStatus.MEETING_NOT_ACCEPTED
                                 if(buySuggest?.status == 0 || buySuggest?.status == null)
                                     status = OrderStatus.NOT_SUBMITTED
                                 if(order.idCdek != null && order.delivery == 3 && order.isPayment){
@@ -197,7 +188,7 @@ class OrdersActivePresenter(val context: Context)
                                 if(order.idCdek == null && order.idYandex == null && order.isPayment){
                                     status = OrderStatus.MEETING_NOT_ACCEPTED
                                 }
-                            //}
+
                         }
 
                         val discountedPrice = when{
@@ -210,8 +201,6 @@ class OrdersActivePresenter(val context: Context)
 
                     OrderItem(
                         id = order.id,
-                        //userIcon = user?.avatar?.photo.toString(),
-                        //userName = user?.name.orEmpty(),
                         user = user,
                         photo = order.cart.first().photo.first().photo,
                         name = order.cart.first().name,
@@ -251,53 +240,8 @@ class OrdersActivePresenter(val context: Context)
                 adapter = OrdersAdapter(filteredOrderItems, listener, {user -> viewState.navigate(user) }, {
                     viewState.navigate(it)
                 })
-
-
-                /*adapter = OrdersAdapter(
-                    listOf(
-                        OrderItem(
-                            123123121,
-                            bmp,
-                            "Екатерина",
-                            bmp,
-                            "Кеды",
-                            100,
-                            "18 апреля",
-                            "CДЭK",
-                            OrderStatus.RECEIVED,
-                            null,
-                            null
-                        ),
-                        OrderItem(
-                            123123121,
-                            bmp,
-                            "Екатерина",
-                            bmp,
-                            "Кеды",
-                            100,
-                            "18 апреля",
-                            "CДЭK",
-                            OrderStatus.CHANGE_MEETING,
-                            null,
-                            null
-                        ),
-                        OrderItem(
-                            123123121,
-                            bmp,
-                            "Екатерина",
-                            bmp,
-                            "Кеды",
-                            100,
-                            "18 апреля",
-                            "CДЭK",
-                            OrderStatus.AT_COURIER,
-                            null,
-                            null
-                        )
-                    ),
-                    listener
-                )*/
                 viewState.initActiveOrders(adapter!!)
+                viewState.loading(false)
             }
         }
 
@@ -307,69 +251,37 @@ class OrdersActivePresenter(val context: Context)
         val response = ordersRepository.getAllOrders()
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("нет интернета")
-                null
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
             404 -> emptyList()
-            else -> null
-
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                viewState.loading(false)
+                null
+            }
         }
-
-
     }
 
     private suspend fun getSellerUser(userId: Long): User?{
         val response = userRepository.getSellerInfo(userId)
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("нет интернета")
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                viewState.loading(false)
                 null
             }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
-            else -> null
-
         }
-
-
     }
 
     private suspend fun getOrderAddresses(): List<OfferedOrderPlace>?{
         val response = ordersRepository.getOrderAddresses()
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("Нет интернета")
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()?.string().orEmpty())
-                null
-            }
             404 -> emptyList()
-
-            else -> null
-
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                viewState.loading(false)
+                null
+            }
         }
     }
 
@@ -387,20 +299,11 @@ class OrdersActivePresenter(val context: Context)
                     adapter = null
                     initContent()
                 }
-                null -> {
-                    viewState.showMessage("нет интернета")
-
+                else -> {
+                    viewState.showMessage(errorMessage(response))
+                    viewState.loading(false)
+                    null
                 }
-                400 -> {
-                    viewState.showMessage(response.errorBody()!!.string())
-
-                }
-                500 -> {
-                    viewState.showMessage("500 Internal Server Error")
-
-                }
-                else -> {}
-
             }
         }
     }
@@ -410,20 +313,11 @@ class OrdersActivePresenter(val context: Context)
             val response = ordersRepository.submitReceiveOrder(OrderId(orderId))
             when(response?.code()){
                 200 -> viewState.navigate(R.id.ordersHistoryFragment)
-                null -> {
-                    viewState.showMessage("нет интернета")
-
+                else -> {
+                    viewState.showMessage(errorMessage(response))
+                    viewState.loading(false)
+                    null
                 }
-                400 -> {
-                    viewState.showMessage(response.errorBody()!!.string())
-
-                }
-                500 -> {
-                    viewState.showMessage("500 Internal Server Error")
-
-                }
-                else -> {}
-
             }
 
         }
@@ -438,35 +332,26 @@ class OrdersActivePresenter(val context: Context)
         val response = ordersRepository.getCartItems(authRepository.getUserId())
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("нет интернета")
-                null
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
             404 -> emptyList()
-            else -> null
-
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                viewState.loading(false)
+                null
+            }
         }
-
-
     }
 
     private suspend fun getFinalYandexGoPrice(toAddress: String, product: Product, promo: String? = null): Float?{
         val fromCoords = geoRepository.getCoordsByAddress(product.address?.fullAddress!!)?.body()?.coords
             if(fromCoords == null){
                 viewState.showMessage("ошибка оценки стоимости")
+                viewState.loading(false)
                 return null
             }
             val toCoords = geoRepository.getCoordsByAddress(toAddress)?.body()?.coords
             if(toCoords == null){
                 viewState.showMessage("ошибка оценки стоимости")
+                viewState.loading(false)
                 return null
             }
             val items = listOf(YandexItem(
@@ -496,33 +381,12 @@ class OrdersActivePresenter(val context: Context)
                     val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.05)) - (promoInfo?.sum ?: 0)
                     finalPrice.toFloat()
                 }
-                400 -> {
-                    viewState.showMessage(response.errorBody()!!.string())
+                else -> {
+                    viewState.showMessage(errorMessage(response))
+                    viewState.loading(false)
                     null
-
-
                 }
-                null -> {
-                    viewState.showMessage("нет интернета")
-                    null
-
-                }
-                500 -> {
-                    viewState.showMessage("500 internal server error")
-                    null
-
-
-                }
-                else -> null
             }
-
-
-
-
-
-
-
-
     }
 
     private suspend fun getPromoInfo(code: String): PromoCode?{
@@ -531,23 +395,15 @@ class OrdersActivePresenter(val context: Context)
             200 -> {
                 response.body()
             }
-            null -> {
-                viewState.showMessage("нет интернета")
-                null
-
-            }
             404 -> {
                 viewState.showMessage("промокод не найден")
-                null
-
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
+                viewState.loading(false)
                 null
             }
             else -> {
+                viewState.showMessage(errorMessage(response))
+                viewState.loading(false)
                 null
-
             }
         }
 
@@ -560,16 +416,10 @@ class OrdersActivePresenter(val context: Context)
                 200 -> {
                     viewState.payment(response.body()!!, orderId)
                 }
-                400 -> {
-                    viewState.showMessage(response.errorBody()!!.string())
+                else -> {
+                    viewState.showMessage(errorMessage(response))
+                    viewState.loading(false)
                 }
-                null -> {
-                    viewState.showMessage("нет интернета")
-                }
-                500 -> {
-                    viewState.showMessage("500 Internal Server Error")
-                }
-                else -> viewState.showMessage("ошибка")
             }
         }
 
@@ -603,45 +453,13 @@ class OrdersActivePresenter(val context: Context)
                     val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.05)) - (promoInfo?.sum ?: 0)
                     finalPrice.toFloat()
                 }
-                400 -> {
-                    viewState.showMessage(response.errorBody()!!.string())
-                    null
-                }
-                null -> {
-                    viewState.showMessage("нет интернета")
-                    null
-                }
-                500 -> {
-                    viewState.showMessage("500 internal server error")
-                    null
-                }
                 else -> {
-                    viewState.showMessage("ошибка")
+                    viewState.showMessage(errorMessage(response))
+                    viewState.loading(false)
                     null
                 }
             }
 
     }
-    /*private suspend fun initAdapter(): OrdersAdapter{
-        val orders = getAllOrders()
-        if(orders == null){
-            adapter = OrdersAdapter(emptyList(), listener)
-            return@launch
-        }
 
-        val orderItems = orders.filter { it.cart != null }.map { order ->
-            OrderItem(
-                order.id,
-                Glide.with(context)
-                    .load(order.cart.first().photo.first().photo)
-                    .submit()
-                    .get()
-                    .toBitmap()
-            )
-
-
-        }
-
-
-    }*/
 }

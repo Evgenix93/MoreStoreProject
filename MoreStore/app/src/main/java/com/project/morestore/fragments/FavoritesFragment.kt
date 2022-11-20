@@ -20,14 +20,21 @@ import com.project.morestore.models.FavoriteSearch
 import com.project.morestore.models.Product
 import com.project.morestore.models.ProductBrand
 import com.project.morestore.models.User
+import com.project.morestore.mvpviews.FavoritesMainMvpView
 import com.project.morestore.mvpviews.FavoritesMvpView
+import com.project.morestore.mvpviews.MainMvpView
 import com.project.morestore.presenters.FavoritesPresenter
 import com.project.morestore.util.setSelectListener
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
+@AndroidEntryPoint
+class FavoritesFragment :BottomNavigationFragment(), FavoritesMainMvpView {
     private lateinit var views :FragmentFavoritesBinding
-    private val presenter by moxyPresenter { FavoritesPresenter(requireContext()) }
+    @Inject
+    lateinit var favoritesPresenter: FavoritesPresenter
+    private val presenter by moxyPresenter { favoritesPresenter }
     private  var selectedTab: TabLayout.Tab? = null
 
     override fun onCreateView(
@@ -38,7 +45,6 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //indicateTabAt(-1)
         tokenCheck()
         with(views){
             toolbar.title.setText(R.string.favorites_container_title)
@@ -116,7 +122,8 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
 
     }
 
-    override fun favoritesLoaded(list: List<*>) {
+    override fun loaded(result: Any) {
+        val list = result as List<*>
         when(list[0]){
             is Product -> {
                 val countTextView = views.tabs.getTabAt(0)?.view?.findViewById<TextView>(R.id.count)
@@ -138,10 +145,7 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
                 countTextView?.isVisible = true
                 countTextView?.text = list.size.toString()
             }
-
-
         }
-
     }
 
     override fun error(message: String) {
@@ -151,10 +155,6 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMvpView{
     override fun isGuest() {
         val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
         findNavController().navigate(R.id.cabinetGuestFragment, bundleOf(CabinetGuestFragment.FRAGMENT_ID to R.id.favoritesFragment), navOptions)
-    }
-
-    override fun emptyList() {
-
     }
 
     override fun success() {

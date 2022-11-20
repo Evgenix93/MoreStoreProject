@@ -1,8 +1,13 @@
 package com.project.morestore.util
 
 import android.text.TextUtils
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
+import retrofit2.Response
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -27,4 +32,21 @@ fun Calendar.diffInDays(after :Calendar) :Int{
 
 fun String.isFilled(minLength :Int = 1) :Boolean{
     return this.trim().length >= minLength
+}
+
+suspend fun ResponseBody.getStringFromResponse(): String{
+    return withContext(Dispatchers.IO) {
+        val str = this@getStringFromResponse.string()
+        Log.d("mylog", str)
+        str
+    }
+}
+
+suspend fun errorMessage(response: Response<*>?): String{
+  return  when(response?.code()){
+        400 -> response.errorBody()!!.getStringFromResponse()
+        500 -> "500 Internal Server Error"
+        null -> "нет сети"
+        else -> "неизвестная ошибка"
+    }
 }

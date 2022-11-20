@@ -10,6 +10,7 @@ import com.project.morestore.models.cart.OrderItem
 import com.project.morestore.models.cart.OrderStatus
 import com.project.morestore.mvpviews.OrderDetailsView
 import com.project.morestore.repositories.*
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,15 +18,17 @@ import moxy.MvpPresenter
 import moxy.presenterScope
 import okhttp3.ResponseBody
 import java.util.*
+import javax.inject.Inject
 
-class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>()  {
-    private val ordersRepository = OrdersRepository(context)
-    private val chatRepository = ChatRepository(context)
-    private val authRepository = AuthRepository(context)
-    private val salesRepository = SalesRepository()
-    private val productRepository = ProductRepository(context)
-    private val userRepository = UserRepository(context)
-    private val geoRepository = GeoRepository()
+class OrderDetailsPresenter @Inject constructor(
+    private val ordersRepository: OrdersRepository,
+            private val chatRepository: ChatRepository,
+            private val authRepository: AuthRepository,
+            private val salesRepository: SalesRepository,
+            private val productRepository: ProductRepository,
+            private val userRepository: UserRepository,
+            private val geoRepository: GeoRepository
+): MvpPresenter<OrderDetailsView>()  {
 
      fun acceptOrderPlace(orderId: Long, addressId: Long, address: String, asBuyer: Boolean) {
          presenterScope.launch {
@@ -44,23 +47,9 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                      viewState.orderStatusChanged(if (asBuyer) OrderStatus.RECEIVED else OrderStatus.RECEIVED_SELLER)
 
                  }
-                 null -> {
-                     viewState.loading(false)
-                     viewState.showMessage("нет интернета")
-
-                 }
-                 400 -> {
-                     viewState.loading(false)
-                     viewState.showMessage(response.errorBody()!!.string())
-
-                 }
-                 500 -> {
-                     viewState.loading(false)
-                     viewState.showMessage("500 Internal Server Error")
-
-                 }
                  else -> {
                      viewState.loading(false)
+                     viewState.showMessage(errorMessage(response))
                  }
              }
          }
@@ -89,57 +78,6 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
           }
       }
 
-    fun addDealPlace(orderId: Long, address: String){
-        presenterScope.launch{
-            val response = salesRepository.addDealPlace(orderId, address)
-            when(response?.code()){
-                200 -> {
-
-                viewState.loading(false)
-                    if(response.body()!!)
-                        viewState.orderStatusChanged(OrderStatus.MEETING_NOT_ACCEPTED_SELLER)
-                    else
-                        viewState.showMessage("Ошибка при добавлении адреса")
-                }
-                400 -> {
-                    viewState.showMessage(getError(response.errorBody()!!))
-                    viewState.loading(false)
-                }
-                null -> {
-                    viewState.showMessage("Нет интернета")
-                    viewState.loading(false)
-                }
-            }
-        }
-    }
-
-    /*fun acceptOrderPlace(offeredOrderPlaceChange: OfferedOrderPlaceChange){
-        presenterScope.launch {
-            val response = ordersRepository.changeOrderPlaceStatus(offeredOrderPlaceChange)
-            when(response?.code()){
-                200 -> {
-                    viewState.orderStatusChanged(OrderStatus.RECEIVED_SELLER)
-                }
-                null -> {
-                    viewState.onError("нет интернета")
-
-                }
-                400 -> {
-                    viewState.onError(response.errorBody()!!.string())
-
-                }
-                500 -> {
-                    viewState.onError("500 Internal Server Error")
-
-                }
-                else -> {}
->>>>>>> origin/main
-
-            }
-        }
-    }*/
-
-
      fun submitReceiveOrder(orderId: Long){
         presenterScope.launch {
             val response = ordersRepository.submitReceiveOrder(OrderId(orderId))
@@ -148,25 +86,11 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                     viewState.loading(false)
                     viewState.orderStatusChanged(OrderStatus.RECEIVED_SUCCESSFULLY)
                 }
-                null -> {
+                else -> {
                     viewState.loading(false)
-                    viewState.showMessage("нет интернета")
-
+                    viewState.showMessage(errorMessage(response))
                 }
-                400 -> {
-                    viewState.loading(false)
-                    viewState.showMessage(response.errorBody()!!.string())
-
-                }
-                500 -> {
-                    viewState.loading(false)
-                    viewState.showMessage("500 Internal Server Error")
-
-                }
-                else -> {viewState.loading(false)}
-
             }
-
         }
     }
 
@@ -181,25 +105,13 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                     viewState.loading(false)
                     viewState.orderStatusChanged(if (authRepository.getUserId() == orderItem.sellerId) OrderStatus.DECLINED else OrderStatus.DECLINED_BUYER)
                 }
-                400 -> {
-                    viewState.loading(false)
-                    viewState.showMessage(response.errorBody()?.string().orEmpty())
-                }
-                500 -> {
-                    viewState.loading(false)
-                    viewState.showMessage("500 Internal Server Error")
-                }
-                null -> {
-                    viewState.loading(false)
-                    viewState.showMessage("нет интернета")
-                }
                 404 -> {
                     viewState.loading(false)
                     viewState.showMessage("ошибка 404 not found")
                 }
                 else -> {
                     viewState.loading(false)
-                    viewState.showMessage("ошибка")
+                    viewState.showMessage(errorMessage(response))
                 }
             }
         }
@@ -211,18 +123,8 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             when(response?.code()){
                 200 -> {
                     getOrderItem(orderItem.id)
-                   /*when {
-                       orderItem.newAddress == null -> viewState.orderStatusChanged(OrderStatus.ADD_MEETING)
-                       orderItem.offeredOrderPlace?.type == OfferedPlaceType.PROPOSED.value -> viewState.orderStatusChanged(OrderStatus.MEETING_NOT_ACCEPTED_SELLER)
-                       orderItem.offeredOrderPlace?.type == OfferedPlaceType.APPLICATION.value -> viewState.orderStatusChanged(OrderStatus.CHANGE_MEETING_SELLER)
-                   }*/
                 }
-                400 -> {
-                    val bodyString = getError(response.errorBody()!!)
-                    viewState.showMessage(bodyString)
-                }
-                500 -> viewState.showMessage("500 Internal Server Error")
-                null -> viewState.showMessage("Ошибка")
+                else -> viewState.showMessage(errorMessage(response))
             }
         }
     }
@@ -236,28 +138,16 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                     viewState.loading(false)
                     viewState.productLoaded(response.body()?.first()!!)
                 }
-                400 -> {
-                    viewState.loading(false)
-                    viewState.showMessage(response.errorBody()?.string().orEmpty())
-                }
-                500 -> {
-                    viewState.loading(false)
-                    viewState.showMessage("500 Internal Server Error")
-                }
-                null -> {
-                    viewState.loading(false)
-                    viewState.showMessage("нет интернета")
-                }
+
                 404 -> {
                     viewState.loading(false)
                     viewState.showMessage("ошибка 404 not found")
                 }
                 else -> {
                     viewState.loading(false)
-                    viewState.showMessage("ошибка")
+                    viewState.showMessage(errorMessage(response))
                 }
             }
-
         }
     }
 
@@ -266,14 +156,12 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             viewState.loading(true)
             val orders = getAllOrders()
             var order = orders?.find { it.id == orderId }
-            Log.d("Mylog", "order: ${order.toString()}")
             if(order == null){
                 val sales = getAllSales()
                 order = sales?.find { it.id == orderId }
             }
             order ?: return@launch
             val isBuyer = order.idUser == authRepository.getUserId()
-            Log.d("mylog", "orderUserId ${order.idUser}")
             val dialog = getAllDialogs()?.find { it.product?.id == order.cart?.first()?.id }
             val discountedPrice = when{
                 order.cart?.first()?.statusUser?.price?.status == 1 -> order.cart?.first()?.statusUser?.price?.value?.toIntOrNull()
@@ -369,8 +257,6 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
 
             val orderItem = OrderItem(
                 id = order.id,
-                //userIcon = user?.avatar?.photo.toString(),
-                //userName = user?.name.orEmpty(),
                 user = user,
                 photo = order.cart?.first()?.photo?.first()?.photo!!,
                 name = order.cart?.first()?.name.orEmpty(),
@@ -396,16 +282,7 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 yandexGoOrderId = order.idYandex
 
             )
-
             viewState.orderItemLoaded(orderItem)
-
-
-
-
-
-
-
-
         }
     }
 
@@ -429,152 +306,65 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 viewState.loading(false)
                 response.body()
             }
-            null -> {
-                viewState.showMessage("нет интернета")
-                viewState.loading(false)
-                null
-            }
-            400 -> {
-                viewState.loading(false)
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.loading(false)
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
             404 -> {
                 viewState.loading(false)
                 emptyList()
             }
             else -> {
                 viewState.loading(false)
+                viewState.showMessage(errorMessage(response))
                 null
             }
-
         }
-
-
     }
 
     private suspend fun getAllSales(): List<Order>?{
         val response = salesRepository.getSales()
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("нет интернета")
-                null
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
             404 -> emptyList()
-            else -> null
-
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                null
+            }
         }
-
-
     }
 
     private suspend fun getAllDialogs(): List<DialogWrapper>?{
         val response = chatRepository.getDialogs()
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("нет интернета")
-                null
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
             404 -> emptyList()
-            else -> null
-
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                null
+            }
         }
-
-
     }
 
     private suspend fun getUserById(id: Long): User?{
         val response = userRepository.getUser(id)
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("нет интернета")
-                null
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
             404 -> null
-            else -> null
-
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                null
+            }
         }
-
-
     }
 
     private suspend fun getOfferedAddresses(): List<OfferedOrderPlace>?{
         val response = ordersRepository.getOrderAddresses()
         return when(response?.code()){
             200 -> response.body()
-            null -> {
-                viewState.showMessage("нет интернета")
-                null
-            }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            500 -> {
-                viewState.showMessage("500 Internal Server Error")
-                null
-            }
             404 -> emptyList()
-            else -> null
-
-        }
-
-
-    }
-
-    /*fun cancelBuyRequest(info: ChatFunctionInfo){
-        presenterScope.launch {
-            val response = chatRepository.cancelBuyRequest(info)
-            when (response?.code()) {
-                200 -> {
-                    viewState.orderStatusChanged(OrderStatus.DECLINED)
-                }
-                400 -> {
-                    val bodyString = getError(response.errorBody()!!)
-                    viewState.onError(bodyString)
-                }
-                500 -> viewState.onError("500 Internal Server Error")
-                null -> viewState.onError("нет интернета")
-                404 -> viewState.onError("ошибка 404 not found")
-                else -> viewState.onError("ошибка")
->>>>>>> origin/main
-
+            else -> {
+                viewState.showMessage(errorMessage(response))
+                null
             }
-
         }
-    }*/
+    }
 
     fun getPaymentUrl(sum: Float, orderId: Long){
         presenterScope.launch {
@@ -585,19 +375,10 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                     viewState.loading(false)
                     viewState.payment(response.body()!!, orderId)
                 }
-                400 -> {
+                else -> {
                     viewState.loading(false)
-                    viewState.showMessage(getError(response.errorBody()!!))
+                    viewState.showMessage(errorMessage(response))
                 }
-                null -> {
-                    viewState.loading(false)
-                    viewState.showMessage("нет интернета")
-                }
-                500 -> {
-                    viewState.loading(false)
-                    viewState.showMessage("500 Internal Server Error")
-                }
-                else -> viewState.loading(false)
             }
         }
 
@@ -634,19 +415,10 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                     viewState.setFinalPrice(finalPrice.toFloat())
                     viewState.loading(false)
                 }
-                400 -> {
+                else -> {
                     viewState.loading(false)
-                    viewState.showMessage(response.errorBody()!!.string())
+                    viewState.showMessage(errorMessage(response))
                 }
-                null -> {
-                    viewState.loading(false)
-                    viewState.showMessage("нет интернета")
-                }
-                500 -> {
-                    viewState.loading(false)
-                    viewState.showMessage("500 internal server error")
-                }
-                else -> {viewState.loading(false)}
             }
         }
     }
@@ -694,32 +466,11 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                     viewState.setFinalPrice(finalPrice.toFloat())
                     viewState.loading(false)
                 }
-                400 -> {
-                    viewState.showMessage(response.errorBody()!!.string())
+                else -> {
                     viewState.loading(false)
-
-
+                    viewState.showMessage(errorMessage(response))
                 }
-                null -> {
-                    viewState.showMessage("нет интернета")
-                    viewState.loading(false)
-
-                }
-                500 -> {
-                    viewState.showMessage("500 internal server error")
-                    viewState.loading(false)
-
-
-                }
-                else -> viewState.loading(false)
             }
-
-
-
-
-
-
-
         }
     }
 
@@ -729,8 +480,6 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             val order = getAllSales()?.find { it.id == orderId }
             order ?: return@launch
             viewState.navigateToCreateDelivery(order)
-
-
         }
     }
 
@@ -758,28 +507,12 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
         val response = ordersRepository.createYandexGoOrder(order)
         return when(response?.code()){
             200 -> response.body()
-            400 -> {
-                viewState.loading(false)
-                viewState.showMessage(response.errorBody()!!.string())
-                null
-            }
-            null -> {
-                viewState.loading(false)
-                viewState.showMessage("нет интернета")
-                null
-
-            }
-            500 -> {
-                viewState.loading(false)
-                viewState.showMessage("500 internal server error")
-                null
-            }
             else -> {
                 viewState.loading(false)
+                viewState.showMessage(errorMessage(response))
                 null
             }
         }
-
     }
 
     private suspend fun getPromoInfo(code: String): PromoCode?{
@@ -788,23 +521,15 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
                 200 -> {
                      response.body()
                 }
-                null -> {
-                    viewState.showMessage("нет интернета")
-                    null
-
-                }
                 404 -> {
                     viewState.showMessage("промокод не найден")
                     null
 
                 }
-                400 -> {
-                    viewState.showMessage(response.errorBody()!!.string())
-                    null
-                }
-                else -> {
-                    null
 
+                else -> {
+                    viewState.showMessage(errorMessage(response))
+                    null
                 }
             }
 
@@ -816,35 +541,14 @@ class OrderDetailsPresenter(context: Context): MvpPresenter<OrderDetailsView>() 
             200 -> {
                 response.body()?.code == null
             }
-            null -> {
-                viewState.showMessage("нет интернета")
-                false
 
-            }
             404 -> {
                 false
             }
-            400 -> {
-                viewState.showMessage(response.errorBody()!!.string())
-                false
-            }
-            500 -> {
-                viewState.showMessage("500 internal server error")
-                false
-            }
             else -> {
+                viewState.showMessage(errorMessage(response))
                 false
-
             }
         }
     }
-
-
-
-    private suspend fun getError(errorBody: ResponseBody): String{
-        return  withContext(Dispatchers.IO){
-            errorBody.string()
-        }
-    }
-
 }

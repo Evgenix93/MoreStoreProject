@@ -9,6 +9,7 @@ import com.project.morestore.models.Feedback
 import com.project.morestore.models.FeedbackItem
 import com.project.morestore.mvpviews.FeedbackPhotoView
 import com.project.morestore.repositories.ReviewRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -17,12 +18,10 @@ import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
 import java.io.ByteArrayOutputStream
+import javax.inject.Inject
 
-class FeedbackPhotoPresenter(
-    private val applicationContext :Context,
-    private val productId :Long,
-    private val rate :Byte,
-    private val feedback :String
+class FeedbackPhotoPresenter @Inject constructor(
+    @ApplicationContext private val applicationContext :Context
 ) :MvpPresenter<FeedbackPhotoView>() {
     private val data = ReviewRepository()
     private var photos = mutableListOf(FeedbackItem.AddPhoto(), FeedbackItem.Description())
@@ -40,7 +39,7 @@ class FeedbackPhotoPresenter(
         viewState.showPhotos(photos)
     }
 
-    fun createFeedback(){
+    fun createFeedback(productId: Long, rate: Byte, feedback: String){
         presenterScope.launch {
             val jobs = photos.filterIsInstance<FeedbackItem.Photo>()
                 .map { async { getBase64photos(it.photo) } }

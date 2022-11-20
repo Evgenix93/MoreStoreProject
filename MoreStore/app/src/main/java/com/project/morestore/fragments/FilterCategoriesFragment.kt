@@ -19,13 +19,16 @@ import com.project.morestore.mvpviews.UserMvpView
 import com.project.morestore.presenters.UserPresenter
 import com.project.morestore.singletones.FilterState
 import com.project.morestore.util.autoCleared
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categories), UserMvpView {
     private val binding: FragmentCategoriesBinding by viewBinding()
-    private lateinit var checkBoxes: List<CheckBox>
-    private val presenter by moxyPresenter { UserPresenter(requireContext()) }
+    @Inject lateinit var userPresenter: UserPresenter
+    private val presenter by moxyPresenter { userPresenter }
     private var productCategoriesAdapter: ProductCategoriesAdapter by autoCleared()
     private var categories = listOf<Boolean>()
 
@@ -55,10 +58,8 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
     }
 
     private fun saveCategories() {
-        Log.d("MyDebug", "saveCategories")
         if(categories != productCategoriesAdapter.getProductCategories().map{it.isChecked}) {
             presenter.clearSizes()
-            Log.d("MyDebug", "clearSizes")
         }
         presenter.saveCategories(productCategoriesAdapter.getProductCategories())
     }
@@ -103,9 +104,5 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
                categories = result.categories.map{it.isChecked!!}
             }
         }
-    }
-
-    override fun successNewCode() {
-
     }
 }

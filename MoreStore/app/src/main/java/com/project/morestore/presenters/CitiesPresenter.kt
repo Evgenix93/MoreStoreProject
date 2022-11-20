@@ -12,7 +12,7 @@ class CitiesPresenter(
     private val selectedIds :LongArray,
     private val network :CitiesApi
 ) : MvpPresenter<CitiesView>() {
-    private var cities = arrayOf<Region>()
+    private var cities = listOf<Region>()
     private var filtered = listOf<Region>()
         set(value){
             field = value
@@ -28,7 +28,7 @@ class CitiesPresenter(
             if(type == Type.SINGLE) {
                 cities = networkCities
             } else {
-                cities = arrayOf(Region(0, "Все города", 0, false), *networkCities)
+                cities = listOf(Region(0, "Все города", 0, false), *networkCities.toTypedArray())
                 if(selectedIds.isNotEmpty() && selectedIds[0] == 0L) cities.forEach { it.isChecked = true }
                 else cities.forEach { it.isChecked = selectedIds.contains(it.id) }
             }

@@ -36,8 +36,11 @@ import com.yandex.mapkit.map.*
 import com.yandex.mapkit.search.SearchFactory
 import com.yandex.mapkit.search.SearchManagerType
 import com.yandex.runtime.ui_view.ViewProvider
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MapMarkerAddressesFragment :MapMarkerFragment(), MapMarkerAddressesView {
 
     companion object{
@@ -56,10 +59,11 @@ class MapMarkerAddressesFragment :MapMarkerFragment(), MapMarkerAddressesView {
     private val bottomBehavior : BottomSheetBehavior<LinearLayout> by lazy {
         BottomSheetBehavior.from(views.bottomSheet)
     }
+
+    @Inject
+    lateinit var mapMarkerAddressesPresenter: MapMarkerAddressesPresenter
     private val presenter :MapMarkerAddressesPresenter by moxyPresenter {
-        SearchFactory.initialize(requireContext());
-        val search = SearchFactory.getInstance().createSearchManager(SearchManagerType.ONLINE)
-        MapMarkerAddressesPresenter(search, Geolocator(requireContext()))
+        mapMarkerAddressesPresenter
     }
     private lateinit var searchMarker :PlacemarkMapObject
     private val markerListener = object :SimpleMapItemDragListener{

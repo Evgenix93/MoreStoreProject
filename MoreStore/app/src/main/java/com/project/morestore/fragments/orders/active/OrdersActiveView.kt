@@ -21,7 +21,7 @@ interface OrdersActiveView : MvpView {
     @OneExecution
     fun showMessage(message: String)
     @OneExecution
-    fun loading()
+    fun loading(isLoading: Boolean)
     @OneExecution
     fun navigateToChat(userId: Long, productId: Long)
     @OneExecution
