@@ -1,6 +1,6 @@
 package com.project.morestore.di
 
-import com.project.morestore.apis.*
+import com.project.morestore.data.apis.*
 import com.project.morestore.data.models.CalendarAdapter
 
 import com.project.morestore.util.TokenInterceptor

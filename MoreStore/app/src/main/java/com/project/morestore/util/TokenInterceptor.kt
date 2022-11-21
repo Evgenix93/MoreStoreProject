@@ -1,6 +1,6 @@
 package com.project.morestore.util
 
-import com.project.morestore.singletones.Token
+import com.project.morestore.data.singletones.Token
 import okhttp3.Interceptor
 import okhttp3.Response
 

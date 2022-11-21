@@ -53,6 +53,7 @@ suspend fun errorMessage(response: Response<*>?): String{
   return  when(response?.code()){
         400 -> response.errorBody()!!.getStringFromResponse()
         500 -> "500 Internal Server Error"
+        404 -> "ошибка 404"
         null -> "нет сети"
         else -> "неизвестная ошибка"
     }

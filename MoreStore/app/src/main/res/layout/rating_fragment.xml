@@ -39,7 +39,7 @@
         android:gravity="center"
         >
 
-        <com.project.morestore.widgets.RatingBar
+        <com.project.morestore.presentation.widgets.RatingBar
             android:id="@+id/rating"
             android:layout_width="248dp"
             android:layout_height="40dp"

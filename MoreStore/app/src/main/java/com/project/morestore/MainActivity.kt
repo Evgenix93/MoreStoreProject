@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -19,11 +20,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.project.morestore.databinding.ActivityMainBinding
-import com.project.morestore.fragments.CatalogFragment
-import com.project.morestore.fragments.SellerProfileFragment
-import com.project.morestore.fragments.SplashScreenFragmentDirections
-import com.project.morestore.mvpviews.MainMvpView
-import com.project.morestore.presenters.MainPresenter
+import com.project.morestore.presentation.fragments.CatalogFragment
+import com.project.morestore.presentation.fragments.SellerProfileFragment
+import com.project.morestore.presentation.fragments.SplashScreenFragmentDirections
+import com.project.morestore.presentation.mvpviews.MainMvpView
+import com.project.morestore.domain.presenters.MainPresenter
 import com.project.morestore.util.MessagingService
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatActivity
@@ -280,10 +281,9 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
         val status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
         return if (status != ConnectionResult.SUCCESS) {
             Log.e("googlePlay", "Error")
-            // ask user to update google play services and manage the error.
             false
         } else {
-            // 3
+
             Log.i("googlePlay", "Google play services updated")
             true
         }
@@ -307,6 +307,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
     }
 
     override fun error(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 
     }
 

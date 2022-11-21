@@ -60,9 +60,9 @@ dependencies {
     debugImplementation project(':stub')
 
     //navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.4.2"
-    implementation "androidx.navigation:navigation-ui-ktx:2.4.2"
-    implementation "androidx.fragment:fragment-ktx:1.4.1"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
+    implementation "androidx.fragment:fragment-ktx:1.5.4"
 
     //viewBinding
     implementation 'com.kirich1409.viewbindingpropertydelegate:viewbindingpropertydelegate:1.4.1'
