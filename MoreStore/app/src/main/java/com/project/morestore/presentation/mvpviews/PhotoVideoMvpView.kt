@@ -12,8 +12,7 @@ interface PhotoVideoMvpView: PhotoMvpView {
     @OneExecution
     fun videoEnded(file: File)
 
-    @OneExecution
-    fun error()
+
 
     @OneExecution
     fun videoError()

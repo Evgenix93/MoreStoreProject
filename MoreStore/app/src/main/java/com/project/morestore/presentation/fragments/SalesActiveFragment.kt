@@ -18,8 +18,8 @@ import com.project.morestore.data.models.*
 import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.data.models.slidermenu.SliderMenu
-import com.project.morestore.presentation.mvpviews.SalesActiveMvpView
 import com.project.morestore.domain.presenters.SalesPresenter
+import com.project.morestore.presentation.mvpviews.SalesMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -27,7 +27,7 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesActiveMvpView {
+class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesMvpView {
     private val binding: FragmentOrdersBinding by viewBinding()
     private var salesAdapter: SalesAdapter by autoCleared()
     private var menuAdapter: SliderMenuAdapter<OrdersSliderMenu> by autoCleared()
@@ -171,9 +171,7 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
         showToast(message)
     }
 
-    override fun onDealPlaceAdded() {
 
-    }
 
     override fun onDealPlaceAccepted() {
         getSales()

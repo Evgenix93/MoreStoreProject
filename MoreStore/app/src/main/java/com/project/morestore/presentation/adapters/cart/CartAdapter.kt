@@ -90,7 +90,7 @@ class CartAdapter(
     ///////////////////////////////////////////////////////////////////////////
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartItemHolder {
-        val binding = ItemCartProductBinding.inflate(LayoutInflater.from(parent.context)).root
+        val binding = ItemCartProductBinding.inflate(LayoutInflater.from(parent.context), parent, false).root
         return CartItemHolder(binding)
     }
 

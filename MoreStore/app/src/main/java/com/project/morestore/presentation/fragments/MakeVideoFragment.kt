@@ -47,7 +47,6 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
     private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var filePickerLauncher: ActivityResultLauncher<Array<String>>
     private var counterJob: Job? = null
-    private var currentCameraProvider: ProcessCameraProvider? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,10 +66,10 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
-            // Used to bind the lifecycle of cameras to the lifecycle owner
+
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            //currentCameraProvider = cameraProvider
-            // Preview
+
+
             val preview = Preview.Builder()
                 .build()
                 .also {
@@ -84,7 +83,7 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
             videoCapture = VideoCapture.withOutput(recorder)
             imageCapture = ImageCapture.Builder().build()
 
-            // Select back camera as a default
+            // Select back camera
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
@@ -108,8 +107,7 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                 MotionEvent.ACTION_DOWN -> {
                     val videoCapture = videoCapture ?: return@setOnTouchListener true
                     Log.d("mylog", "key down")
-                    //currentCameraProvider?.unbind(imageCapture)
-                    //bindUseCase(videoCapture)
+
 
 
                     presenter.photoVideoBtnPressed(videoCapture)
@@ -121,7 +119,7 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
                     Log.d("mylog", "key up")
                     recording?.stop()
                     recording = null
-                    //bindUseCase(imageCapture)
+
                     if(binding.viewFinder.bitmap != null)
                     presenter.photoVideoBtnReleased(binding.viewFinder.bitmap!!)
                     true
@@ -185,24 +183,6 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
         }
     }
 
-    private fun bindUseCase(case: UseCase){
-        try {
-            // Unbind use cases before rebinding
-            currentCameraProvider?.unbindAll()
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-            val preview = Preview.Builder()
-                .build()
-                .also {
-                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
-                }
-            currentCameraProvider
-                ?.bindToLifecycle(this, cameraSelector, preview, case)
-        } catch (exc: Exception) {
-            Log.e("mylog", "Use case binding failed", exc)
-        }
-
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         counterJob?.cancel()
@@ -236,9 +216,7 @@ class MakeVideoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), Ph
 
     }
 
-    override fun error() {
 
-    }
 
     override fun videoError() {
         recording?.close()

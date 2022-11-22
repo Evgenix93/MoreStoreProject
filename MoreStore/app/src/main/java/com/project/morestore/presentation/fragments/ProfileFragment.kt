@@ -15,8 +15,10 @@ import com.project.morestore.databinding.FragmentProfileBinding
 import com.project.morestore.data.models.Address
 import com.project.morestore.data.models.BrandsPropertiesDataWrapper
 import com.project.morestore.data.models.Card
+import com.project.morestore.domain.presenters.ProfilePresenter
 import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.mvpviews.ProfileMvpView
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,9 +27,9 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpView {
+class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileMvpView {
     @Inject
-    lateinit var userPresenter: UserPresenter
+    lateinit var userPresenter: ProfilePresenter
     private val presenter by moxyPresenter { userPresenter }
     private val binding: FragmentProfileBinding by viewBinding()
     private val args: ProfileFragmentArgs by navArgs()
@@ -119,8 +121,7 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), UserMvpV
         presenter.deleteCard(card)
     }
 
-    override fun success(result: Any) {
-    }
+
 
     override fun error(message: String) {
         binding.loaderProgressBar.isVisible = false

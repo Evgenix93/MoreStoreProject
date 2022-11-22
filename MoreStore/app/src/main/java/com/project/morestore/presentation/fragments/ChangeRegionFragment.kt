@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +13,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.presentation.adapters.RegionsAdapter
-import com.project.morestore.databinding.FragmentChangeRegionBinding
+
 import com.project.morestore.data.models.Address
 import com.project.morestore.data.models.Region
 import com.project.morestore.presentation.mvpviews.UserMvpView
@@ -27,7 +28,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_region), UserMvpView {
-    private val binding: FragmentChangeRegionBinding by viewBinding()
+    private val binding: com.project.morestore.databinding.FragmentChangeRegionBinding by viewBinding()
     @Inject lateinit var userPresenter: UserPresenter
     private val presenter by moxyPresenter { userPresenter }
     private var cities = listOf<Region>()
@@ -122,20 +123,24 @@ class ChangeRegionFragment : MvpAppCompatFragment(R.layout.fragment_change_regio
     }
 
     override fun success(result: Any) {
+        binding.loader.isVisible = false
         findNavController().popBackStack()
 
     }
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
     override fun loading() {
+        binding.loader.isVisible = true
 
     }
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         val citiesList = (result as List<Region>)
         if(cities.isEmpty()) {
             cities = citiesList

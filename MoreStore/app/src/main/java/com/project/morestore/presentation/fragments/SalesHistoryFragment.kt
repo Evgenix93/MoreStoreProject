@@ -19,8 +19,10 @@ import com.project.morestore.data.models.User
 import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.data.models.slidermenu.SliderMenu
+import com.project.morestore.domain.presenters.SalesHistoryPresenter
 import com.project.morestore.presentation.mvpviews.SalesMvpView
 import com.project.morestore.domain.presenters.SalesPresenter
+import com.project.morestore.presentation.mvpviews.SalesHistoryMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -28,12 +30,12 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesMvpView {
+class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesHistoryMvpView {
     private val binding: FragmentOrdersBinding by viewBinding()
     private var salesAdapter: SalesAdapter by autoCleared()
     private var menuAdapter: SliderMenuAdapter<OrdersSliderMenu> by autoCleared()
     @Inject
-    lateinit var salesPresenter: SalesPresenter
+    lateinit var salesPresenter: SalesHistoryPresenter
     private val presenter by moxyPresenter { salesPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -166,8 +168,6 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
         menuAdapter.changeSalesHistorySize(inactiveSales.size)
     }
 
-    override fun onDealPlaceAdded() {
 
-    }
 
 }

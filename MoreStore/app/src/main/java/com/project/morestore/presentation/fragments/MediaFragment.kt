@@ -8,10 +8,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.project.morestore.R
@@ -19,8 +21,8 @@ import com.project.morestore.presentation.adapters.MediaAdapter
 import com.project.morestore.databinding.FragmentMediaBinding
 import com.project.morestore.presentation.fragments.base.FullscreenFragment
 
-import com.project.morestore.presentation.mvpviews.MainMvpView
-import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.domain.presenters.MediaPresenter
+import com.project.morestore.presentation.mvpviews.BaseMvpView
 import com.project.morestore.util.createRect
 import com.project.morestore.util.dp
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,10 +30,10 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MediaFragment() : FullscreenFragment(), MainMvpView {
+class MediaFragment() : FullscreenFragment(), BaseMvpView {
     private lateinit var views :FragmentMediaBinding
     @Inject
-    lateinit var mainPresenter: MainPresenter
+    lateinit var mainPresenter: MediaPresenter
     private val presenter by moxyPresenter { mainPresenter }
     private var currentPage :Int = 0
 
@@ -122,19 +124,21 @@ class MediaFragment() : FullscreenFragment(), MainMvpView {
     }
 
     override fun loaded(result: Any) {
+        views.loader.isVisible = false
         startActivity(result as Intent)
 
     }
 
     override fun loading() {
+        views.loader.isVisible = true
 
     }
 
     override fun error(message: String) {
+        views.loader.isVisible = false
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
     }
 
-    override fun success() {
 
-    }
 }

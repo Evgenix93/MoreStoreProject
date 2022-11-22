@@ -600,5 +600,21 @@
     <string name="good_condition">хорошее</string>
     <string name="edit_search">Редактирование поиска</string>
     <string name="write_naming">Укажите название</string>
+    <string name="product_dimensions">Размеры товара</string>
+    <string name="write_product_dimens_info">Пожалуйста, укажите размеры товара. Это поможет нам рассчитать стоимость отправки вашего товара сервисом СДЭК</string>
+    <string name="weight">Вес (кг)</string>
+    <string name="length">Длина (см)</string>
+    <string name="width">Ширина (см)</string>
+    <string name="height">Высота (см)</string>
+    <string name="product_name">Название товара</string>
+    <string name="costing">Стоимость</string>
+    <string name="dimension">Размер</string>
+    <string name="eu_ru_it">EU/RU/IT</string>
+    <string name="fr">FR</string>
+    <string name="us">US</string>
+    <string name="uk">UK</string>
+    <string name="how_selling_work">Как происходит продажа</string>
+    <string name="choose_shoos_type">Выберите тип: Обувь</string>
+    <string name="choose_style">Уточните фасон</string>
     <!--endregion city-->
 </resources>

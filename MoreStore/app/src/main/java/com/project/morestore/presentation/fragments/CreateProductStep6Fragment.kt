@@ -19,8 +19,10 @@ import com.project.morestore.presentation.dialogs.ArchiveProductDialog
 import com.project.morestore.presentation.dialogs.DeleteProductDialog
 import com.project.morestore.presentation.dialogs.SaveProductDialog
 import com.project.morestore.data.models.*
+import com.project.morestore.domain.presenters.CreateProductPresenter
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.mvpviews.CreateProductMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -30,13 +32,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_product_details),
-    MainMvpView {
+    CreateProductMvpView {
     private val binding: FragmentAddProductDetailsBinding by viewBinding()
     private var optionsAdapter: OptionsAdapter by autoCleared()
     private val args: CreateProductStep6FragmentArgs by navArgs()
     @Inject
-    lateinit var mainPresenter: MainPresenter
-    private val presenter: MainPresenter by moxyPresenter { mainPresenter }
+    lateinit var mainPresenter: CreateProductPresenter
+    private val presenter by moxyPresenter { mainPresenter }
     private var firstLaunch = true
     private var isSavingDraftProduct = false
 
@@ -400,8 +402,6 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun success() {
 
-    }
 
 }

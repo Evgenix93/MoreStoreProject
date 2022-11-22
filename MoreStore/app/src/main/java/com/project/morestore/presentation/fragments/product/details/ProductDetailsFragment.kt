@@ -466,6 +466,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         when (result) {
             is List<*> -> {
                 if(result.isEmpty()) return
@@ -527,15 +528,18 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     override fun loading() {
+        binding.loader.isVisible = true
 
     }
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
     override fun success() {
+        binding.loader.isVisible = false
         findNavController().navigate(R.id.catalogFragment)
     }
 

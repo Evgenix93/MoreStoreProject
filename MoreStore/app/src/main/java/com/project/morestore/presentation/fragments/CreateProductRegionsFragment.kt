@@ -14,8 +14,10 @@ import com.project.morestore.R
 import com.project.morestore.presentation.adapters.RegionsAdapter
 import com.project.morestore.databinding.FragmentRegionsBinding
 import com.project.morestore.data.models.Region
+import com.project.morestore.domain.presenters.CreateProductPresenter
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.mvpviews.CreateProductMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
@@ -26,10 +28,10 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), MainMvpView {
+class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), CreateProductMvpView {
     private val binding: FragmentRegionsBinding by viewBinding()
     private var regionsAdapter: RegionsAdapter by autoCleared()
-    @Inject lateinit var mainPresenter: MainPresenter
+    @Inject lateinit var mainPresenter: CreateProductPresenter
     private val presenter by moxyPresenter { mainPresenter }
     private var regions = listOf<Region>()
     private lateinit var searchFlow: Flow<String>
@@ -110,9 +112,7 @@ class CreateProductRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regio
 
     }
 
-    override fun success() {
 
-    }
 
     override fun loading() {
         showLoading(true)

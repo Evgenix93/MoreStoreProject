@@ -44,7 +44,7 @@ class Onboarding5Fragment: MvpAppCompatFragment(R.layout.fragment_onboarding5), 
     }
 
     override fun loaded(result: List<Any>) {
-        TODO("Not yet implemented")
+
     }
 
     override fun error(message: String) {

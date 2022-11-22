@@ -97,13 +97,19 @@ class AddCardFragment: MvpAppCompatFragment(R.layout.fragment_add_card), AddCard
 
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
     }
 
     override fun success() {
+        binding.loader.isVisible = false
         findNavController().popBackStack()
 
+    }
+
+    override fun loading() {
+        binding.loader.isVisible = true
     }
 
 

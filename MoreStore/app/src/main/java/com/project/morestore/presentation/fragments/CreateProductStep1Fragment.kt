@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,8 +12,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.presentation.adapters.ForWhoCreateProductAdapter
 import com.project.morestore.databinding.FragmentCreateProductStep1Binding
+import com.project.morestore.domain.presenters.CreateProductPresenter
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.mvpviews.CreateProductMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -21,11 +24,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateProductStep1Fragment : MvpAppCompatFragment(R.layout.fragment_create_product_step1),
-    MainMvpView {
+    CreateProductMvpView {
     private val binding: FragmentCreateProductStep1Binding by viewBinding()
     private var forWhoAdapter: ForWhoCreateProductAdapter by autoCleared()
     @Inject
-    lateinit var mainPresenter: MainPresenter
+    lateinit var mainPresenter: CreateProductPresenter
     private val presenter by moxyPresenter { mainPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,6 +88,7 @@ class CreateProductStep1Fragment : MvpAppCompatFragment(R.layout.fragment_create
 
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
        val isTokenEmpty = result as Boolean
         if(isTokenEmpty) {
             val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
@@ -97,13 +101,13 @@ class CreateProductStep1Fragment : MvpAppCompatFragment(R.layout.fragment_create
     }
 
     override fun loading() {
+        binding.loader.isVisible = true
     }
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun success() {
 
-    }
 }

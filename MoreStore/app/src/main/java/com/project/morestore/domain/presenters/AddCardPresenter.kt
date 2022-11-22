@@ -18,6 +18,7 @@ class AddCardPresenter @Inject constructor(@ApplicationContext private val conte
 
     fun addCard(cardNumber: String){
         presenterScope.launch {
+            viewState.loading()
             if (!checkCardNumber(cardNumber)) {
                 viewState.error(context.getString(R.string.write_correct_card_number))
                 return@launch
@@ -46,7 +47,7 @@ class AddCardPresenter @Inject constructor(@ApplicationContext private val conte
             val response = cardRepository.addCard(Card(id = null, number = cardNumber, active = 1))
             when(response?.code()){
                 200 -> if(response.body()!!.contains("error")) viewState.error(response.body()!!)
-                else (viewState as MainFragmentMvpView).success()
+                else viewState.success()
                 else -> viewState.error(errorMessage(response))
             }
         }

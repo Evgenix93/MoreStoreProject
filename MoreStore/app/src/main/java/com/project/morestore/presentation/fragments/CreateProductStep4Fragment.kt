@@ -3,6 +3,7 @@ package com.project.morestore.presentation.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,8 +13,10 @@ import com.project.morestore.presentation.adapters.CloathStyleCreateProductAdapt
 import com.project.morestore.databinding.FragmentCreateProductStep4Binding
 import com.project.morestore.data.models.Property
 import com.project.morestore.data.models.Property2
+import com.project.morestore.domain.presenters.CreateProductPresenter
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.mvpviews.CreateProductMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -21,12 +24,12 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateProductStep4Fragment: MvpAppCompatFragment(R.layout.fragment_create_product_step4), MainMvpView {
+class CreateProductStep4Fragment: MvpAppCompatFragment(R.layout.fragment_create_product_step4), CreateProductMvpView {
     private val binding: FragmentCreateProductStep4Binding by viewBinding()
     private var styleAdapter: CloathStyleCreateProductAdapter by autoCleared()
     private val args: CreateProductStep4FragmentArgs by navArgs()
     @Inject
-    lateinit var mainPresenter: MainPresenter
+    lateinit var mainPresenter: CreateProductPresenter
     private val presenter by moxyPresenter { mainPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,19 +83,20 @@ class CreateProductStep4Fragment: MvpAppCompatFragment(R.layout.fragment_create_
     }
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         styleAdapter.updateList(result as List<Property>)
 
     }
 
     override fun loading() {
+        binding.loader.isVisible = true
 
     }
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun success() {
 
-    }
 }

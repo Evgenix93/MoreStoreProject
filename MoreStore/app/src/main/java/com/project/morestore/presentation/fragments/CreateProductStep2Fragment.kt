@@ -3,6 +3,7 @@ package com.project.morestore.presentation.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,8 +12,10 @@ import com.project.morestore.R
 import com.project.morestore.presentation.adapters.CategoryCreateProductAdapter
 import com.project.morestore.databinding.FragmentCreateProductStep2Binding
 import com.project.morestore.data.models.ProductCategory
+import com.project.morestore.domain.presenters.CreateProductPresenter
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.mvpviews.CreateProductMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -20,11 +23,11 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateProductStep2Fragment: MvpAppCompatFragment(R.layout.fragment_create_product_step2), MainMvpView {
+class CreateProductStep2Fragment: MvpAppCompatFragment(R.layout.fragment_create_product_step2), CreateProductMvpView {
     private val binding: FragmentCreateProductStep2Binding by viewBinding()
     private var categoryAdapter: CategoryCreateProductAdapter by autoCleared()
     @Inject
-    lateinit var mainPresenter: MainPresenter
+    lateinit var mainPresenter: CreateProductPresenter
     private val presenter by moxyPresenter { mainPresenter }
     private val args: CreateProductStep2FragmentArgs by navArgs()
 
@@ -79,20 +82,21 @@ class CreateProductStep2Fragment: MvpAppCompatFragment(R.layout.fragment_create_
     }
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         categoryAdapter.updateList(result as List<ProductCategory>)
 
     }
 
     override fun loading() {
+        binding.loader.isVisible = true
 
     }
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun success() {
 
-    }
 
 }

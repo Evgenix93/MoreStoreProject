@@ -1,14 +1,13 @@
 package com.project.morestore.presentation.mvpviews
 
+import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 
-interface SalesActiveMvpView: SalesMvpView {
-
-
+interface LoadingMvpView : MvpView {
+    @OneExecution
+    fun loading()
 
     @OneExecution
-    fun onDealPlaceAccepted()
+    fun error(message: String)
 
-    @OneExecution
-    fun onDealStatusChanged()
 }

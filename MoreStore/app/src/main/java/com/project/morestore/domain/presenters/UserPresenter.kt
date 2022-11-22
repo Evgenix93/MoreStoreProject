@@ -852,59 +852,9 @@ class UserPresenter @Inject constructor(
         }
     }
 
-    fun getCards(){
-        viewState.loading()
-        presenterScope.launch {
-            val response = cardRepository.getCards()
-            when(response?.code()){
-              200 -> {
-                  viewState.loaded(response.body()!!)
-              }
-              404 -> viewState.loaded(listOf<Card>())
-              else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun deleteCard(card: Card){
-        viewState.loading()
-        presenterScope.launch{
-            val response = cardRepository.deleteCard(card)
-            when(response?.code()){
-                200 -> {
-                    getCards()
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun chooseCard(cards: List<Card>){
-        viewState.loading()
-        presenterScope.launch{
-            cards.forEach{
-                val deleteResponse = cardRepository.deleteCard(it)
-                when(deleteResponse?.code()){
-                    404 -> {viewState.error(getStringFromResponse(deleteResponse.errorBody()!!))
-                        return@launch}
-                    else -> {
-                        viewState.error(errorMessage(deleteResponse))
-                        return@launch
-                    }
-                }
-            }
-            cards.forEach{
-                val addResponse = cardRepository.addCard(Card(null, it.number, it.active))
-                when(addResponse?.code()){
-                    404 -> {viewState.error(getStringFromResponse(addResponse.errorBody()!!))
-                        return@launch}
-                    else -> {
-                        viewState.error(errorMessage(addResponse))
-                        return@launch
-                    }
-                }
-            }
-            getCards()
-        }
-    }
+
+
+
 }

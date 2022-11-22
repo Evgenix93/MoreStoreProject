@@ -502,7 +502,7 @@ class MainPresenter  @Inject constructor(
         filter.chosenForWho = chosenForWho
         filter.categories = listOf(ProductCategory(0, "Stub", false)) + productCategories
         userRepository.updateFilter(filter)
-        (viewState as MainFragmentMvpView).success()
+        viewState.success()
     }
 
     fun loadFilter() {
@@ -518,68 +518,14 @@ class MainPresenter  @Inject constructor(
         filter.chosenForWho = chosenForWho
         filter.brands = listOf(ProductBrand(0, "Stub", 0, null, null), brand.apply { isChecked = true })
         userRepository.updateFilter(filter)
-        (viewState as MainFragmentMvpView).success()
+        viewState.success()
     }
 
-    fun getCategories(forWho: Int) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.getProductCategories()
-            when (response?.code()) {
-                200 -> {
-                    when (forWho) {
-                        0 -> {
-                            viewState.loaded(response.body()!!.filterNot {
-                                it.id == 8 || it.id == 21 || it.id == 22
-                            })
-                        }
-                        1 -> {
-                            viewState.loaded(response.body()!!.filterNot {
-                                it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
-                                        it.id == 18 || it.id == 21 || it.id == 22
-                            })
-                        }
-                        2 -> {
-                            viewState.loaded(response.body()!!.filterNot {
-                                it.id == 4 || it.id == 6 || it.id == 7 || it.id == 10 ||
-                                        it.id == 18
-                            })
-                        }
 
-                    }
 
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun getBrands() {
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.getBrands()
-            when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun collectBrandSearchFlow(flow: Flow<String>, brands: List<ProductBrand>) {
-        searchJob2 = flow
-                .debounce(3000)
-                .mapLatest { query ->
-                    withContext(Dispatchers.IO) {
-                        brands.filter { it.name.contains(query, true) }
-                    }
 
-                }
-                .onEach { result ->
-                    viewState.loaded(result)
-
-                }.launchIn(presenterScope)
-
-    }
 
 
     private fun getProperties(propertyId: Long) {
@@ -593,116 +539,20 @@ class MainPresenter  @Inject constructor(
         }
     }
 
-    fun getSizes(forWho: Int, idCategory: Int) {
-        when (forWho) {
-            0 -> {
-                val isBottomSizes = when (idCategory) {
-                    4 -> true
-                    7 -> true
-                    9 -> true
-                    11 -> true
-                    else -> false
-                }
-                if (isBottomSizes) {
-                    getProperties(5)
-                } else {
-                    getProperties(4)
-                }
-            }
-            1 -> {
-                val isBottomSizes = when (idCategory) {
-                    8 -> true
-                    9 -> true
-                    11 -> true
-                    else -> false
-                }
-                if (isBottomSizes) {
-                    getProperties(2)
-                } else {
-                    getProperties(1)
-                }
-            }
-            2 -> {
-                val isBottomSizes = when (idCategory) {
-                    8 -> true
-                    9 -> true
-                    11 -> true
-                    else -> false
-                }
-                if (isBottomSizes) {
-                    getProperties(8)
-                } else {
-                    getProperties(7)
-                }
-            }
-        }
-    }
-
-    fun getSizesShoos(forWho: Int) {
-        when (forWho) {
-            0 -> {
-                getProperties(6)
-            }
-            1 -> {
-                getProperties(3)
-            }
-            2 -> {
-                getProperties(9)
-            }
-        }
-    }
-
-    fun getColors() {
-        getProperties(12)
-    }
-
-    fun getMaterials() {
-        getProperties(13)
-    }
-
-    fun collectMaterialSearchFlow(flow: Flow<String>, materials: List<Property>) {
-        searchJob2 = flow
-                .debounce(3000)
-                .mapLatest { query ->
-                    withContext(Dispatchers.IO) {
-                        materials.filter { it.name.contains(query, true) }
-                    }
-
-                }
-                .onEach { result ->
-                    viewState.loaded(result)
-
-                }.launchIn(presenterScope)
-
-    }
 
 
-    fun getAllCities() {
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.getCities()
-            when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun collectRegionSearchFlow(flow: Flow<String>, regions: List<Region>) {
-        searchJob = flow
-                .debounce(3000)
-                .mapLatest { query ->
-                    withContext(Dispatchers.IO) {
-                        regions.filter { it.name.contains(query, true) }
-                    }
 
-                }
-                .onEach { result ->
-                    viewState.loaded(result)
 
-                }.launchIn(presenterScope)
 
-    }
+
+
+
+
+
+
+
+
 
     fun getToken() = authRepository.getToken()
 
@@ -710,7 +560,7 @@ class MainPresenter  @Inject constructor(
         presenterScope.launch {
             viewState.loading()
             if(getToken().isEmpty()) {
-                getProducts(isFiltered = false)
+                getProducts(isFiltered = true)
                 getBanners(1)
                 return@launch
             }
@@ -732,98 +582,11 @@ class MainPresenter  @Inject constructor(
         }
     }
 
-    fun createProduct() {
-        presenterScope.launch {
-            viewState.loading()
-            val productAddress = productRepository.loadCreateProductData().address
-            val productStatus = productRepository.loadCreateProductData().status
-            updateCreateProductData(address = productAddress?.replace("ул. ", "")
-                ?.replace("дом ", ""), status = productStatus ?: 1)
 
-            val response = productRepository.createProduct()
-            when (response?.code()) {
-                200 -> {
-                    val photosUploaded = uploadProductPhotos(response.body()?.first()?.id!!)
-                    val videosUploaded = uploadProductVideos(response.body()?.first()?.id!!)
-                    if(productStatus == 5)
-                        changeProductStatus(response.body()!!.first().id, 5)
-                    else
-                        if (photosUploaded && videosUploaded)
-                           viewState.loaded(response.body()!!.first())
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun createDraftProduct() {
-        val currentProductData = productRepository.loadCreateProductData()
-        if(currentProductData.address != null) {
-            if (currentProductData.id == null)
-                createProduct()
-            else
-                changeProduct()
-        }else{
-            presenterScope.launch{
-                val addresses = addressesRepository.getAllAddresses()
-                if(addresses.isNotEmpty()){
-                    val address = addresses.first()
-                    val cityStr = address.address.city
-                    val streetStr = "ул. ${address.address.street}"
-                    val houseStr = "дом ${address.address.house}"
-                    val strings =
-                        arrayOf(cityStr, streetStr, houseStr)
-                    val chosenAddressStr = strings.joinToString(", ")
-                    updateCreateProductData(address = chosenAddressStr, status = 5)
-                    if (currentProductData.id == null)
-                        createProduct()
-                    else
-                        changeProduct()
-                }else
-                    viewState.error(context.getString(R.string.for_saving_draft_create_address))
-            }
 
-        }
-    }
 
-    fun updateCreateProductData(
-            forWho: Int? = null,
-            idCategory: Int? = null,
-            idBrand: Long? = null,
-            phone: String? = null,
-            price: String? = null,
-            sale: Float? = null,
-            about: String? = null,
-            address: String? = null,
-            addressCdek: String? = null,
-            extProperty: Property2? = null,
-            extProperties: List<Property2>? = null,
-            id: Long? = null,
-            newPrice: String? = null,
-            name: String? = null,
-            status: Int? = null,
-            dimensions: ProductDimensions? = null
-    ) {
-        productRepository.updateCreateProductData(
-                forWho,
-                idCategory,
-                idBrand,
-                phone,
-                price,
-                sale,
-                about,
-                address,
-                addressCdek,
-                extProperty,
-                extProperties,
-                id,
-                newPrice,
-                name,
-                status,
-                dimensions
-        )
-        viewState.loaded(Unit)
-    }
+
 
     fun updateCreateProductDataPhotosVideos(photoVideo: File, position: Int) {
         productRepository.updateCreateProductPhotoVideo(photoVideo, position)
@@ -844,130 +607,37 @@ class MainPresenter  @Inject constructor(
         presenterScope.launch {
             val success = productRepository.updateCreateProductPhotoVideo(bitmap, position)
             if (success)
-                (viewState as MainFragmentMvpView).success()
+                viewState.success()
             else viewState.error("ошибка")
         }
     }
 
-    fun updateCreateProductDataPhotosVideosFromWeb(webUris: MutableMap<Int, String>) {
-        presenterScope.launch {
-            val fileMap = productRepository.loadCreateProductPhotosVideos()
-            webUris.forEach { entry ->
-                if (fileMap[entry.key] != null)
-                    webUris.remove(entry.key)
-            }
-
-            val success = webUris.map { entry ->
-                productRepository.updateCreateProductDataPhotoVideoFromWeb(entry.value, entry.key)
-            }
-            if (success.all { it })
-                (viewState as MainFragmentMvpView).success()
-            else viewState.error("ошибка")
-        }
-    }
-
-    fun removeProperty(propertyCategory: Long) {
-        productRepository.removeProperty(propertyCategory)
-    }
-
-    fun loadCreateProductData() {
-        viewState.loaded(productRepository.loadCreateProductData())
-    }
-
-    fun clearCreateProductData() {
-        productRepository.clearCreateProductData()
-    }
-
-    fun loadCreateProductPhotosVideos() {
-        viewState.loaded(productRepository.loadCreateProductPhotosVideos())
-    }
 
 
-    private suspend fun uploadProductPhotos(productId: Long): Boolean {
-        val photosVideosMap = productRepository.loadCreateProductPhotosVideos()
-        val photos =
-                photosVideosMap.filter { it.value.extension == "jpg" || it.value.extension == "png" || it.value.extension == "webp" }
-                        .toSortedMap().map { it.value }
 
-        if (photos.isEmpty()) {
-            return true
-        }
 
-        val response = productRepository.uploadProductPhotos(photos, productId)
-        when (response?.code()) {
-            200 -> {
-                return true
-            }
-            else -> {
-                viewState.error(errorMessage(response))
-               return false
-            }
-        }
-    }
 
-    private suspend fun uploadProductVideos(productId: Long): Boolean {
-        val photosVideosMap = productRepository.loadCreateProductPhotosVideos()
-        val videos = photosVideosMap.filter { it.value.extension == "mp4" }
-                .map { it.value }
 
-        if (videos.isEmpty()) {
-            return true
-        }
 
-        val response = productRepository.uploadProductVideos(videos, productId)
-        return when (response?.code()) {
-            200 -> {
-                true
-            }
-            else -> {
-                viewState.error(errorMessage(response))
-                false
-            }
-        }
-    }
 
-    fun getShoosTypes() {
-        getProperties(15)
-    }
 
-    fun getJeansStyles() {
-        getProperties(17)
-    }
 
-    fun getTopClotStyles() {
-        getProperties(18)
-    }
 
-    fun changeProductStatus(productId: Long, status: Int) {
-        presenterScope.launch {
-            val response = productRepository.changeProductStatus(productId, status)
-            when (response?.code()) {
-                200 -> viewState.loaded("Success")
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    private fun changeProduct() {
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.changeProductData()
-            when (response?.code()) {
-                200 -> {
-                    val photosUploaded = uploadProductPhotos(response.body()?.first()?.id!!)
-                    val videosUploaded = uploadProductVideos(response.body()?.first()?.id!!)
-                    if (photosUploaded && videosUploaded)
-                        viewState.loaded(response.body()!!.first())
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun changeProductAndPublish() {
-        updateCreateProductData(status = 0)
-        changeProduct()
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     fun deletePhotoBackground(file: File? = null, uri: Uri? = null) {
         presenterScope.launch {
@@ -1100,15 +770,5 @@ class MainPresenter  @Inject constructor(
         }
     }
 
-    fun getActiveCard(){
-        presenterScope.launch {
-            viewState.loading()
-            val response = cardRepository.getCards()
-            when(response?.code()){
-                200 -> viewState.loaded(response.body()!!.find { it.active == 1 } ?: emptyList<Card>())
-                404 -> {viewState.loaded(emptyList<Card>())}
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
+
 }

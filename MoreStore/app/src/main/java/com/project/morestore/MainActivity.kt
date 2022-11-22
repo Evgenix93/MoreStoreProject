@@ -20,11 +20,13 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.project.morestore.databinding.ActivityMainBinding
+import com.project.morestore.domain.presenters.MainActivityPresenter
 import com.project.morestore.presentation.fragments.CatalogFragment
 import com.project.morestore.presentation.fragments.SellerProfileFragment
 import com.project.morestore.presentation.fragments.SplashScreenFragmentDirections
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.mvpviews.BaseMvpView
 import com.project.morestore.util.MessagingService
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatActivity
@@ -33,9 +35,9 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity : MvpAppCompatActivity(), MainMvpView {
+class MainActivity : MvpAppCompatActivity(), BaseMvpView {
     private val binding: ActivityMainBinding by viewBinding()
-    @Inject lateinit var mainPresenter: MainPresenter
+    @Inject lateinit var mainPresenter: MainActivityPresenter
     private val presenter by moxyPresenter { mainPresenter }
     private var isMessagesUnread = false
     private val messageReceiver = object : BroadcastReceiver(){
@@ -311,8 +313,6 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
 
     }
 
-    override fun success() {
 
-    }
 }
 

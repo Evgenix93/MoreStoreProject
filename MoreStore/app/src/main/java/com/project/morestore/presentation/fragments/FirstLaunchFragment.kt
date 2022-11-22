@@ -16,20 +16,14 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch), MainMvpView {
+class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch) {
     private val binding: FragmentFirstLaunchBinding by viewBinding()
-    @Inject lateinit var mainPresenter: MainPresenter
-    private val presenter by moxyPresenter { mainPresenter }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hideBottomNavBar()
         setClickListeners()
-    }
-
-    private fun checkToken(){
-        presenter.checkToken()
-
     }
 
 
@@ -51,20 +45,6 @@ class FirstLaunchFragment: MvpAppCompatFragment(R.layout.fragment_first_launch),
        mainActivity.showBottomNavBar(false)
    }
 
-    override fun loaded(result: Any) {
 
-    }
-
-    override fun loading() {
-
-    }
-
-    override fun error(message: String) {
-
-    }
-
-    override fun success() {
-
-    }
 
 }

@@ -15,8 +15,10 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentCreateProductAddPhotoBinding
 import com.project.morestore.presentation.dialogs.SaveProductDialog
 import com.project.morestore.data.models.CreatedProductId
+import com.project.morestore.domain.presenters.CreateProductPresenter
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.mvpviews.CreateProductMvpView
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -25,10 +27,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateProductAddPhotoFragment :
-    MvpAppCompatFragment(R.layout.fragment_create_product_add_photo), MainMvpView {
+    MvpAppCompatFragment(R.layout.fragment_create_product_add_photo), CreateProductMvpView {
     private val binding: FragmentCreateProductAddPhotoBinding by viewBinding()
     private val args: CreateProductAddPhotoFragmentArgs by navArgs()
-    @Inject lateinit var mainPresenter: MainPresenter
+    @Inject lateinit var mainPresenter: CreateProductPresenter
     private val presenter by moxyPresenter { mainPresenter }
     private var uriMap = mutableMapOf<Int, String>()
 
@@ -139,6 +141,11 @@ class CreateProductAddPhotoFragment :
 
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
+        if(result is Unit){
+            findNavController().popBackStack()
+            return
+        }
 
         if (result is CreatedProductId) {
             findNavController().navigate(R.id.mainFragment)
@@ -222,15 +229,15 @@ class CreateProductAddPhotoFragment :
 
 
     override fun loading() {
+        binding.loader.isVisible = true
 
     }
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
 
-    override fun success() {
 
-    }
 }

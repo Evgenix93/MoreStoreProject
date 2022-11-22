@@ -392,9 +392,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
     override fun setFinalPrice(price: Float) {
 
-        //currentDeliveryPrice = price
-        //val sumWithDelivery = orderItem.price + price
-        //val finalSum = sumWithDelivery + (sumWithDelivery * 0.05)
+
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.DOWN
         binding.newPriceTextView.text = "${df.format(price).replace(',', '.')} ₽"
@@ -434,13 +432,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             binding.dealPlaceTextView.isVisible = true
 
         }
-        /*if(order.deliveryInfo == "yandex"){
-            binding.icon.setImageResource(R.drawable.ic_package)
-            binding.icon.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.white, null))
-            binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.blue4, null))
-            binding.title.setText(R.string.myAddress_pickup)
-        }*/
-        //if(order.deliveryInfo == "СДЕК"){
+
             if(address?.contains("cdek code:") == true) {
                 binding.icon.setImageResource(R.drawable.ic_envelope)
                 binding.icon.backgroundTintList =
@@ -452,7 +444,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 binding.icon.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.blue4, null))
                 binding.title.setText(R.string.myAddress_pickup)
             }
-        //}
+
 
     }
 
