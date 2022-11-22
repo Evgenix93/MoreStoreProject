@@ -236,7 +236,6 @@ class CreateProductAddPhotoFragment :
     override fun error(message: String) {
         binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     }
 
 

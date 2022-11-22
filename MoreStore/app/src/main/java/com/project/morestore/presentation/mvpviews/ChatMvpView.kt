@@ -3,9 +3,10 @@ package com.project.morestore.presentation.mvpviews
 import android.net.Uri
 import com.project.morestore.data.models.*
 import com.project.morestore.util.MessageActionType
+import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 
-interface ChatMvpView: MainMvpView {
+interface ChatMvpView: LoadingMvpView {
 
     @OneExecution
     fun dialogLoaded(dialog: DialogWrapper)

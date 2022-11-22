@@ -13,8 +13,10 @@ import com.project.morestore.data.models.Filter
 import com.project.morestore.data.models.Property
 import com.project.morestore.data.models.Size
 import com.project.morestore.data.models.SizeLine
+import com.project.morestore.domain.presenters.FilterPresenter
 import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.mvpviews.FilterView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -23,14 +25,14 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_kids),
-    UserMvpView {
+    FilterView {
     private val binding: FragmentFilterSizesKidsBinding by viewBinding()
     private var topSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var bottomSizeCardAdapter: SizeCardsAdapter by autoCleared()
     private var shoesSizeCardAdapter: SizeCardsAdapter by autoCleared()
     @Inject
-    lateinit var userPresenter: UserPresenter
-    private val presenter by moxyPresenter { userPresenter }
+    lateinit var filterPresenter: FilterPresenter
+    private val presenter by moxyPresenter { filterPresenter }
     private var isForKids = false
     private var isForWomen = true
     private var isForMen = false
@@ -302,10 +304,6 @@ class FilterKidsSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_si
     override fun onStop() {
         super.onStop()
         saveSizes()
-    }
-
-    override fun success(result: Any) {
-
     }
 
     override fun error(message: String) {

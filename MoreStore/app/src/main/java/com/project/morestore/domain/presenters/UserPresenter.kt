@@ -101,38 +101,7 @@ class UserPresenter @Inject constructor(
     }
 
 
-    fun changeUserData2(
-        phone: String? = null,
-        email: String? = null,
-        step: Int? = null,
-        code: String? = null
-    ) {
-        presenterScope.launch {
-            viewState.loading()
-            val unmaskedPhone = phone?.filter { it != '(' && it != ')' && it != '-' }
-            if (email != null && !email.trim().isEmailValid()) {
-                viewState.error(context.getString(R.string.email_format_incorrect))
-                return@launch
-            }
-            if (unmaskedPhone != null && !unmaskedPhone.trim().isPhoneValid()) {
-                viewState.error(context.getString(R.string.phone_format_incorrect))
-                return@launch
-            }
-            val response = userRepository.changeUserData2(
-                phone = unmaskedPhone?.trim(),
-                email = email?.trim(),
-                step = step,
-                code = code
-            )
 
-            when (response?.code()) {
-                200 -> {
-                    viewState.success(Unit)
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
     private fun getUserInfo() {
         presenterScope.launch {
@@ -247,22 +216,9 @@ class UserPresenter @Inject constructor(
         }
     }
 
-    fun getNewCode(phone: String? = null, email: String? = null) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = authRepository.getNewCode(phone?.trim(), email?.trim())
-            when (response?.code()) {
-                200 -> {
-                    (viewState as RegistrationMvpView).successNewCode()
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun safePhotoUri(uri: Uri) {
-        photoUri = uri
-    }
+
+
 
 
     private fun uploadPhoto(uri: Uri) {
@@ -310,59 +266,11 @@ class UserPresenter @Inject constructor(
         }
     }
 
-    fun getAllSizesWomen(){
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.getProperties()
-            when (response?.code()) {
-                200 -> {
-                            val topSizes = response.body()!!.filter { it.idCategory == 4L }
-                            val bottomSizes = response.body()!!.filter { it.idCategory == 5L }
-                            val shoesSizes = response.body()!!.filter { it.idCategory == 6L }
-                            viewState.loaded(topSizes)
-                            viewState.loaded(bottomSizes)
-                            viewState.loaded(shoesSizes)
-                        }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun getAllSizesMen(){
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.getProperties()
-            when (response?.code()) {
-                200 -> {
-                    val topSizes = response.body()!!.filter { it.idCategory == 1L }
-                    val bottomSizes = response.body()!!.filter { it.idCategory == 2L }
-                    val shoesSizes = response.body()!!.filter { it.idCategory == 3L }
-                    viewState.loaded(topSizes)
-                    viewState.loaded(bottomSizes)
-                    viewState.loaded(shoesSizes)
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
-    fun getAllSizesKids(){
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.getProperties()
-            when (response?.code()) {
-                200 -> {
-                    val topSizes = response.body()!!.filter { it.idCategory == 7L }
-                    val bottomSizes = response.body()!!.filter { it.idCategory == 8L }
-                    val shoesSizes = response.body()!!.filter { it.idCategory == 9L }
-                    viewState.loaded(topSizes)
-                    viewState.loaded(bottomSizes)
-                    viewState.loaded(shoesSizes)
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
+
+
+
 
     private fun getProperties(propertyId: Long) {
         presenterScope.launch {
@@ -377,9 +285,7 @@ class UserPresenter @Inject constructor(
         }
     }
 
-    fun getMaterials() {
-        getProperties(13)
-    }
+
 
     fun getTopSizesWomen() {
         getProperties(4)
@@ -399,6 +305,7 @@ class UserPresenter @Inject constructor(
     }
 
     fun getBottomSizesMen() {
+        changeUserData()
         getProperties(2)
     }
 
@@ -641,33 +548,6 @@ class UserPresenter @Inject constructor(
         viewState.loaded(userRepository.getFilter())
     }
 
-    fun saveColors(colors: List<Property>) {
-        val filter = userRepository.getFilter()
-        filter.colors = colors
-        userRepository.updateFilter(filter)
-    }
-
-    fun saveMaterials(materials: List<MaterialLine>) {
-        val filter = userRepository.getFilter().apply { chosenMaterials = materials }
-        userRepository.updateFilter(filter)
-    }
-
-    fun saveConditions(conditions: List<Boolean>) {
-        userRepository.saveConditions(conditions)
-    }
-
-    fun loadConditions() {
-        val conditions = userRepository.loadConditions()
-        if (conditions.isNotEmpty()) {
-            viewState.loaded(conditions)
-        }
-    }
-
-    fun saveForWho(forWho: List<Boolean>) {
-        val filter = userRepository.getFilter()
-        filter.chosenForWho = forWho
-        userRepository.updateFilter(filter)
-    }
 
 
     fun saveTopSizes(sizes: List<SizeLine>) {
@@ -678,7 +558,6 @@ class UserPresenter @Inject constructor(
                 ) else listOf(SizeLine(0, "", "", "", "", "", false, idCategory = -1))
         }
         userRepository.updateFilter(filter)
-
     }
 
     fun clearSizes(){
@@ -704,7 +583,6 @@ class UserPresenter @Inject constructor(
 
         }
         userRepository.updateFilter(filter)
-
     }
 
     fun saveBottomSizes(sizes: List<SizeLine>) {
@@ -750,20 +628,6 @@ class UserPresenter @Inject constructor(
         userRepository.updateFilter(filter)
     }
 
-    fun saveTopSizesKids(sizes: List<SizeLine>) {
-        val filter = userRepository.getFilter().apply { chosenTopSizesKids = sizes }
-        userRepository.updateFilter(filter)
-    }
-
-    fun saveBottomSizesKids(sizes: List<SizeLine>) {
-        val filter = userRepository.getFilter().apply { chosenBottomSizesKids = sizes }
-        userRepository.updateFilter(filter)
-    }
-
-    fun saveShoosSizesKids(sizes: List<SizeLine>) {
-        val filter = userRepository.getFilter().apply { chosenShoosSizesKids = sizes }
-        userRepository.updateFilter(filter)
-    }
 
     fun saveStatuses(statuses: List<Boolean>) {
         val filter = userRepository.getFilter()
@@ -771,22 +635,7 @@ class UserPresenter @Inject constructor(
         userRepository.updateFilter(filter)
     }
 
-    fun saveStyles(styles: List<Boolean>) {
-        val filter = userRepository.getFilter()
-        val propertyStyles = styles.mapIndexedNotNull { index, isChecked ->
 
-            when (index) {
-                0 -> Property(143, "Вечерний", null, null, isChecked)
-                1 -> Property(108, "Деловой", null, null, isChecked)
-                2 -> Property(109, "Повседневный", null, null, isChecked)
-                3 -> Property(110, "Спортивный", null, null, isChecked)
-                else -> null
-            }
-
-        }
-        filter.chosenStyles = propertyStyles
-        userRepository.updateFilter(filter)
-    }
 
     fun loadStyles() {
         val styles = userRepository.getFilter().chosenStyles
@@ -820,9 +669,7 @@ class UserPresenter @Inject constructor(
         userRepository.updateFilter(filter)
     }
 
-    fun getColors() {
-        getProperties(12)
-    }
+
 
     fun loadOnboardingData() {
         presenterScope.launch {

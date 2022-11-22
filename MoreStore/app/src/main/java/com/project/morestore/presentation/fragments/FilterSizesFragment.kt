@@ -17,8 +17,10 @@ import com.project.morestore.data.models.Filter
 import com.project.morestore.data.models.Property
 
 import com.project.morestore.data.models.SizeLine
+import com.project.morestore.domain.presenters.FilterPresenter
 import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.mvpviews.FilterView
 
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,14 +30,14 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_colthes),
-    UserMvpView {
+    FilterView {
     private val binding: FragmentFilterSizesColthesBinding by viewBinding()
     private var sizeAdapter: SizeLineAdapter by autoCleared()
     private var isForWomen = true
     private var isSizesLoaded = false
     @Inject
-    lateinit var userPresenter: UserPresenter
-    private val presenter by moxyPresenter { userPresenter }
+    lateinit var filterPresenter: FilterPresenter
+    private val presenter by moxyPresenter { filterPresenter }
     private val args: FilterSizesFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -147,9 +149,6 @@ class FilterSizesFragment : MvpAppCompatFragment(R.layout.fragment_filter_sizes_
 
     }
 
-    override fun success(result: Any) {
-
-    }
 
     override fun error(message: String) {
         showLoading(false)

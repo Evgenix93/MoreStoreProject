@@ -19,8 +19,6 @@ class Onboarding1Fragment : Fragment(R.layout.fragment_onboarding1) {
 
     }
 
-
-
     private fun setClickListeners(){
         binding.forMaleBtn.setOnClickListener {
             findNavController().navigate(

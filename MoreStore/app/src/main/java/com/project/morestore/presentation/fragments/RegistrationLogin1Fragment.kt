@@ -117,8 +117,6 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
         showLoading(true)
     }
 
-
-
     override fun successNewCode(result: Any) {
         showLoading(false)
             findNavController().navigate(
@@ -128,7 +126,6 @@ class RegistrationLogin1Fragment : MvpAppCompatFragment(R.layout.fragment_regist
                     args.isLogin
                 )
             )
-
 
     }
 

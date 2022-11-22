@@ -768,14 +768,9 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
         presenter.readMessages(dialog.dialog.id)
     }
 
-
     override fun error(message: String) {
         showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun success() {
-
     }
 
     override fun currentUserIdLoaded(id: Long) {
@@ -840,7 +835,4 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
         findNavController().navigate(ChatFragmentDirections.actionChatFragmentToCreateOrderFragment(product, cartId))
     }
 
-    override fun loaded(result: Any) {
-
-    }
 }

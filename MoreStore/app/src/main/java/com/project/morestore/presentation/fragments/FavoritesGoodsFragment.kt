@@ -2,6 +2,8 @@ package com.project.morestore.presentation.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +29,6 @@ class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
                 isSeller = false
             )
         )
-
     }
 
     override val emptyList by lazy {
@@ -55,24 +56,23 @@ class FavoritesGoodsFragment : ListFragment(), FavoritesMvpView {
 
 
     override fun loading() {
-
+      loader.isVisible = true
     }
 
     override fun loaded(result: Any) {
+        loader.isVisible = false
         val list = result as List<*>
         showList()
         productAdapter.updateList(list as List<Product>)
     }
 
     override fun error(message: String) {
-
+        loader.isVisible = false
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun emptyList() {
         showEmptyList {findNavController().navigate(R.id.catalogFragment) }
     }
 
-    override fun success() {
-
-    }
 }

@@ -15,8 +15,10 @@ import com.project.morestore.databinding.FragmentFilterMaterialsBinding
 import com.project.morestore.data.models.Filter
 import com.project.morestore.data.models.MaterialLine
 import com.project.morestore.data.models.Property
+import com.project.morestore.domain.presenters.FilterPresenter
 import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.mvpviews.FilterView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
@@ -26,12 +28,12 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_materials), UserMvpView {
+class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_materials), FilterView {
     private val binding: FragmentFilterMaterialsBinding by viewBinding()
     private var materialAdapter: MaterialAdapter by autoCleared()
     @Inject
-    lateinit var userPresenter: UserPresenter
-    private val presenter by moxyPresenter { userPresenter }
+    lateinit var filterPresenter: FilterPresenter
+    private val presenter by moxyPresenter { filterPresenter }
     private var searchInitiated = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,9 +58,6 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
-
-
-
 
     }
 
@@ -130,9 +129,6 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
 
     }
 
-    override fun success(result: Any) {
-
-    }
 
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -140,7 +136,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
     }
 
     override fun loading() {
-
+       binding.loader.isVisible = true
     }
 
     override fun loaded(result: Any) {

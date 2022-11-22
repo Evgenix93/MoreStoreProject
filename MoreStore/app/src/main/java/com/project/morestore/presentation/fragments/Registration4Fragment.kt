@@ -11,8 +11,10 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration1Binding
 import androidx.core.view.isVisible
 import com.project.morestore.MainActivity
+import com.project.morestore.domain.presenters.RegistrationPresenter
 import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.mvpviews.RegistrationMvpView
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -20,12 +22,12 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registration1), UserMvpView {
+class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registration1), RegistrationMvpView {
     private val binding: FragmentRegistration1Binding by viewBinding()
     private val args: Registration4FragmentArgs by navArgs()
     @Inject
-    lateinit var userPresenter: UserPresenter
-    private val presenter by moxyPresenter { userPresenter }
+    lateinit var registrationPresenter: RegistrationPresenter
+    private val presenter by moxyPresenter { registrationPresenter }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,7 +85,7 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
         binding.loader.isVisible = loading
     }
 
-    override fun success(result: Any) {
+    override fun success() {
         showLoading(false)
         findNavController().navigate(
             Registration4FragmentDirections.actionRegistration4FragmentToRegistration5Fragment(
@@ -100,11 +102,6 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     override fun loading() {
         showLoading(true)
-
-    }
-
-    override fun loaded(result: Any) {
-        TODO("Not yet implemented")
     }
 
 }

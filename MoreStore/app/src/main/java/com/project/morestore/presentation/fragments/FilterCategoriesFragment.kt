@@ -13,8 +13,10 @@ import com.project.morestore.databinding.FragmentCategoriesBinding
 import com.project.morestore.data.models.Filter
 
 import com.project.morestore.data.models.ProductCategory
+import com.project.morestore.domain.presenters.FilterPresenter
 import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.mvpviews.FilterView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -22,10 +24,10 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categories), UserMvpView {
+class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categories), FilterView {
     private val binding: FragmentCategoriesBinding by viewBinding()
-    @Inject lateinit var userPresenter: UserPresenter
-    private val presenter by moxyPresenter { userPresenter }
+    @Inject lateinit var filterPresenter: FilterPresenter
+    private val presenter by moxyPresenter { filterPresenter }
     private var productCategoriesAdapter: ProductCategoriesAdapter by autoCleared()
     private var categories = listOf<Boolean>()
 
@@ -73,19 +75,17 @@ class FilterCategoriesFragment : MvpAppCompatFragment(R.layout.fragment_categori
         presenter.getProductCategories()
     }
 
-    override fun success(result: Any) {
-
-    }
-
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun loading() {
-
+       binding.loader.isVisible = true
     }
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         when(result){
             is List<*> -> {
                val productCategories = result as List<ProductCategory>

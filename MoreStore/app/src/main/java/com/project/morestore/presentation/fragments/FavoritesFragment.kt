@@ -20,6 +20,7 @@ import com.project.morestore.data.models.FavoriteSearch
 import com.project.morestore.data.models.Product
 import com.project.morestore.data.models.ProductBrand
 import com.project.morestore.data.models.User
+import com.project.morestore.domain.presenters.FavoritesMainPresenter
 import com.project.morestore.presentation.mvpviews.FavoritesMainMvpView
 import com.project.morestore.domain.presenters.FavoritesPresenter
 import com.project.morestore.util.setSelectListener
@@ -31,8 +32,8 @@ import javax.inject.Inject
 class FavoritesFragment :BottomNavigationFragment(), FavoritesMainMvpView {
     private lateinit var views :FragmentFavoritesBinding
     @Inject
-    lateinit var favoritesPresenter: FavoritesPresenter
-    private val presenter by moxyPresenter { favoritesPresenter }
+    lateinit var favoritesMainPresenter: FavoritesMainPresenter
+    private val presenter by moxyPresenter { favoritesMainPresenter }
     private  var selectedTab: TabLayout.Tab? = null
 
     override fun onCreateView(
@@ -116,10 +117,6 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMainMvpView {
         presenter.tokenCheck()
     }
 
-    override fun loading() {
-
-    }
-
     override fun loaded(result: Any) {
         val list = result as List<*>
         when(list[0]){
@@ -146,16 +143,10 @@ class FavoritesFragment :BottomNavigationFragment(), FavoritesMainMvpView {
         }
     }
 
-    override fun error(message: String) {
-
-    }
-
     override fun isGuest() {
         val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
         findNavController().navigate(R.id.cabinetGuestFragment, bundleOf(CabinetGuestFragment.FRAGMENT_ID to R.id.favoritesFragment), navOptions)
     }
 
-    override fun success() {
 
-    }
 }

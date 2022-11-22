@@ -74,7 +74,6 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         binding.toolbar.backIcon.setOnClickListener {
             findNavController().popBackStack()
 
-
         }
     }
 
@@ -88,12 +87,7 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         binding.userPhoneTextView.addTextChangedListener(listener)
 
         binding.userPhoneTextView.setText(user.phone)
-        val diffSeconds = System.currentTimeMillis()/1000 - user.createdAt!!.toLong()
-            //val dayDiff = diffSeconds/86400
-        //val monthDiff = dayDiff/30
-        val calendar = Calendar.getInstance().apply { timeInMillis = user.createdAt.toLong() * 1000 }
-        //binding.timeFromRegistrationTextView.text = if(monthDiff > 0)"зарегистрирован(а) $monthDiff месяца назад"
-        //else "зарегистрирован(а) $dayDiff дня назад"
+        val calendar = Calendar.getInstance().apply { timeInMillis = user.createdAt!!.toLong() * 1000 }
         Log.d("mylog", "calendar ${calendar.get(Calendar.MONTH)}")
         binding.timeFromRegistrationTextView.text =
             "зарегистрирован(а) ${calendar.get(Calendar.DAY_OF_MONTH)}.${calendar.get(Calendar.MONTH) + 1}.${calendar.get(Calendar.YEAR)}"
@@ -124,9 +118,6 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         }
     }
 
-    private fun getSellersWishList(){
-        presenter.getSellersWishList()
-    }
 
     private fun initSubscribeBtn(isFavorite: Boolean){
         if(isFavorite){
@@ -139,11 +130,10 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
             binding.subscribeBtn.setIconResource(R.drawable.ic_plus)
         }
 
-
     }
 
-
     override fun success(result: Any) {
+        binding.loader.isVisible = false
         isSellerFavorite = isSellerFavorite.not()
         val message = if(isSellerFavorite) "Продавец добален в избранное"
         else "Продавец убран из избранного"
@@ -153,14 +143,16 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
     }
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun loading() {
-
+       binding.loader.isVisible = true
     }
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         when(result){
             is User -> {
                 showUserInfo(result)
@@ -176,7 +168,6 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
                 }
             }
         }
-
     }
 
     companion object{

@@ -56,9 +56,8 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
     }
 
 
-
     override fun loading() {
-
+       loader.isVisible = true
     }
 
     override fun loaded(result: Any) {
@@ -91,7 +90,4 @@ class FavoritesBrandsFragment :ListFragment(), FavoritesMvpView {
         showEmptyList { findNavController().navigate(R.id.catalogFragment) }
     }
 
-    override fun success() {
-
-    }
 }

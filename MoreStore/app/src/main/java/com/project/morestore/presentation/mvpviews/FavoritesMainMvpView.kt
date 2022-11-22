@@ -1,9 +1,11 @@
 package com.project.morestore.presentation.mvpviews
 
+import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 
-interface FavoritesMainMvpView: MainMvpView {
+interface FavoritesMainMvpView: ResultLoadedMvpView {
 
     @OneExecution
     fun isGuest()
+
 }

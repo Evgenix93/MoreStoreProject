@@ -144,11 +144,6 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
                     null
             }.joinToString(", ")
 
-       /* binding.sizesGreenDotImageView.isVisible =
-            (filter.chosenTopSizesWomen.all { it.isSelected } || filter.chosenTopSizesWomen.all { !it.isSelected }).not() ||
-                    (filter.chosenBottomSizesWomen.all { it.isSelected } || filter.chosenBottomSizesWomen.all { !it.isSelected }).not() ||
-                    (filter.chosenShoosSizesWomen.all { it.isSelected } || filter.chosenShoosSizesWomen.all { !it.isSelected }).not()*/
-
 
         val sizes = when(filter.chosenForWho.indexOf(true)) {
             0 -> filter.chosenTopSizesWomen + filter.chosenBottomSizesWomen + filter.chosenShoosSizesWomen
@@ -313,7 +308,7 @@ class FilterFragment : MvpAppCompatFragment(R.layout.fragment_filter), UserMvpVi
     }
 
     override fun loading() {
-
+      binding.loader.isVisible = true
     }
 
     override fun loaded(result: Any) {

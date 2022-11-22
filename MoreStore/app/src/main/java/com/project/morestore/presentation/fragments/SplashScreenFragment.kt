@@ -8,6 +8,8 @@ import com.project.morestore.MainActivity
 import com.project.morestore.R
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.domain.presenters.SplashScreenPresenter
+import com.project.morestore.presentation.mvpviews.ResultLoadedMvpView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,11 +19,11 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen), MainMvpView {
+class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen), ResultLoadedMvpView {
     private var job: Job? = null
     @Inject
-    lateinit var mainPresenter: MainPresenter
-    private val presenter by moxyPresenter { mainPresenter }
+    lateinit var splashScreenPresenter: SplashScreenPresenter
+    private val presenter by moxyPresenter { splashScreenPresenter }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,18 +56,5 @@ class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen
             navigate(result)
 
         }
-
-    }
-
-    override fun loading() {
-
-    }
-
-    override fun error(message: String) {
-
-    }
-
-    override fun success() {
-
     }
 }

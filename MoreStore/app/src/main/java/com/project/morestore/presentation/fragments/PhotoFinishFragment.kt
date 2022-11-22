@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.view.drawToBitmap
@@ -183,7 +184,7 @@ class PhotoFinishFragment : MvpAppCompatFragment(R.layout.fragment_photo_finish)
     }
 
     override fun error(message: String) {
-
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun success() {

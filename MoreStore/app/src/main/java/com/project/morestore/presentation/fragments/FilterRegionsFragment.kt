@@ -15,8 +15,10 @@ import com.project.morestore.presentation.adapters.RegionsAdapter
 import com.project.morestore.databinding.FragmentRegionsBinding
 import com.project.morestore.data.models.Address
 import com.project.morestore.data.models.Region
+import com.project.morestore.domain.presenters.FilterPresenter
 import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.mvpviews.FilterView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
@@ -27,12 +29,12 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), UserMvpView {
+open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions), FilterView {
    protected val binding: FragmentRegionsBinding by viewBinding()
    private var regionsAdapter: RegionsAdapter by autoCleared()
     @Inject
-    lateinit var userPresenter: UserPresenter
-    private val presenter by moxyPresenter { userPresenter }
+    lateinit var filterPresenter: FilterPresenter
+    private val presenter by moxyPresenter { filterPresenter }
     private var regions = listOf<Region>()
     private lateinit var searchFlow: Flow<String>
 
@@ -131,10 +133,6 @@ open class FilterRegionsFragment: MvpAppCompatFragment(R.layout.fragment_regions
         binding.loader.isVisible = loading
     }
 
-
-    override fun success(result: Any) {
-
-    }
 
     override fun error(message: String) {
         showLoading(false)

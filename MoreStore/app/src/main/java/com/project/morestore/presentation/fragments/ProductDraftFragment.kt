@@ -2,6 +2,7 @@ package com.project.morestore.presentation.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -12,6 +13,9 @@ import com.project.morestore.data.models.FeedbackProduct
 import com.project.morestore.data.models.Product
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.domain.presenters.ProductDraftPresenter
+import com.project.morestore.presentation.mvpviews.ProductDraftView
+import com.project.morestore.presentation.mvpviews.ResultLoadedMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -19,11 +23,11 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft), MainMvpView {
+class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft), ProductDraftView {
     private val binding: FragmentProductDraftBinding by viewBinding()
     @Inject
-    lateinit var mainPresenter: MainPresenter
-    private val presenter by moxyPresenter { mainPresenter }
+    lateinit var productDraftPresenter: ProductDraftPresenter
+    private val presenter by moxyPresenter { productDraftPresenter }
     private var productAdapter: FeedbackProductsAdapter by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,7 +40,6 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
 
     private fun getDraftProducts(){
         presenter.getUserProductsWithStatus(5)
-
     }
 
     private fun initList(){
@@ -112,10 +115,7 @@ class ProductDraftFragment: MvpAppCompatFragment(R.layout.fragment_product_draft
     }
 
     override fun error(message: String) {
-
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    override fun success() {
-
-    }
 }
