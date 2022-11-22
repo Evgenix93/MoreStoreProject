@@ -238,8 +238,6 @@ class CabinetFragment: BottomNavigationFragment(R.layout.fragment_cabinet), User
 
     override fun loading() {
         showLoading(true)
-
-
     }
 
     override fun loaded(result: Any) {

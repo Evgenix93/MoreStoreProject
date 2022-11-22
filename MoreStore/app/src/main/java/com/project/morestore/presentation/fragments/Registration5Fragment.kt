@@ -12,6 +12,8 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration2Binding
 import com.project.morestore.presentation.mvpviews.RegistrationMvpView
 import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.Registration5Presenter
+import com.project.morestore.presentation.mvpviews.Registration5View
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -19,11 +21,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registration2),
-    RegistrationMvpView {
+    Registration5View {
     private val binding: FragmentRegistration2Binding by viewBinding()
     @Inject
-    lateinit var userPresenter: UserPresenter
-    private val presenter by moxyPresenter { userPresenter }
+    lateinit var registration5Presenter: Registration5Presenter
+    private val presenter by moxyPresenter { registration5Presenter }
     private val args: Registration5FragmentArgs by navArgs()
     private var isEmail = false
     private lateinit var timer: CountDownTimer
@@ -112,7 +114,7 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
     }
 
 
-    override fun success(result: Any) {
+    override fun success() {
         showLoading(false)
         findNavController().navigate(Registration5FragmentDirections.actionRegistration5FragmentToOnboarding1Fragment())
 
@@ -129,9 +131,6 @@ class Registration5Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
 
     }
 
-    override fun loaded(result: Any) {
-        TODO("Not yet implemented")
-    }
 
     override fun successNewCode() {
         showLoading(false)

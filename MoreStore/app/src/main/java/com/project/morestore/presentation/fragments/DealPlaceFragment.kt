@@ -14,8 +14,9 @@ import com.project.morestore.R
 import com.project.morestore.databinding.FragmentDealPlaceBinding
 import com.project.morestore.presentation.dialogs.MenuBottomDialogDateFragment
 import com.project.morestore.data.models.*
+import com.project.morestore.domain.presenters.DealPlacePresenter
 
-import com.project.morestore.presentation.mvpviews.SalesDealPlaceMvpView
+import com.project.morestore.presentation.mvpviews.DealPlaceMvpView
 import com.project.morestore.domain.presenters.SalesPresenter
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -24,11 +25,11 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), SalesDealPlaceMvpView {
+class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), DealPlaceMvpView {
     private val binding: FragmentDealPlaceBinding by viewBinding()
     @Inject
-    lateinit var salesPresenter: SalesPresenter
-    private val presenter by moxyPresenter{salesPresenter}
+    lateinit var dealPresenter: DealPlacePresenter
+    private val presenter by moxyPresenter{dealPresenter}
     private val args: DealPlaceFragmentArgs by navArgs()
     private var chosenAddress: MyAddress? = null
     private var chosenTime: Calendar? = null
@@ -168,13 +169,19 @@ class DealPlaceFragment: MvpAppCompatFragment(R.layout.fragment_deal_place), Sal
         }
     }
 
-    override fun onError(message: String) {
+    override fun error(message: String) {
+        binding.loader.isVisible = false
         showToast(message)
     }
 
     override fun onDealPlaceAdded() {
+        binding.loader.isVisible = false
         showToast(getString(R.string.address_added))
         findNavController().popBackStack()
+    }
+
+    override fun loading() {
+      binding.loader.isVisible = true
     }
 
 

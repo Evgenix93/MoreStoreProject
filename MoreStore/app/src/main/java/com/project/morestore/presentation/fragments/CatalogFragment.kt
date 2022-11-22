@@ -20,6 +20,7 @@ import com.project.morestore.data.models.Address
 import com.project.morestore.data.models.Filter
 import com.project.morestore.data.models.Product
 import com.project.morestore.data.models.SuggestionModels
+import com.project.morestore.domain.presenters.CatalogPresenter
 import com.project.morestore.presentation.mvpviews.CatalogMvpView
 import com.project.morestore.domain.presenters.MainPresenter
 import com.project.morestore.util.autoCleared
@@ -34,8 +35,8 @@ import javax.inject.Inject
 class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), CatalogMvpView {
     private val binding: FragmentCatalogBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
-    @Inject lateinit var mainPresenter: MainPresenter
-    private val presenter by moxyPresenter { mainPresenter }
+    @Inject lateinit var catalogPresenter: CatalogPresenter
+    private val presenter by moxyPresenter { catalogPresenter }
     private val args: CatalogFragmentArgs? by navArgs()
     private var currentSuggestionModels: SuggestionModels? = null
     private var queryStr: String? = null
@@ -208,11 +209,6 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), Catalog
                 else -> true
             }
         }
-
-
-
-
-
     }
 
     override fun onDestroyView() {
@@ -264,19 +260,12 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), Catalog
 
     override fun loading() {
         binding.loader.isVisible = true
-
     }
 
     override fun error(message: String) {
         binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-
     }
-
-    override fun success() {
-
-    }
-
 
     override fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>) {
         binding.loader.isVisible = false
@@ -302,5 +291,4 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), Catalog
     companion object {
         const val USE_FILTER = "use_filter"
     }
-
 }

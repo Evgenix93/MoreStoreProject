@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,7 +52,6 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getFavoriteSearches()
@@ -60,8 +60,6 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
         view.setBackgroundResource(R.color.white)
         this.adapter = SearchesAdapter { favoriteSearch ->
             findNavController().navigate(FavoritesFragmentDirections.actionFavoritesFragmentToEditFavoriteSearchFragment(favoriteSearchId = favoriteSearch.id))
-
-
         }
         list.adapter = this.adapter
 
@@ -80,10 +78,11 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
     }
 
     override fun loading() {
-
+        loader.isVisible = true
     }
 
     override fun loaded(result: Any) {
+        loader.isVisible = false
         val list = result as List<*>
         adapter.setItems(list as List<FavoriteSearch>)
         showList()
@@ -92,17 +91,12 @@ class FavoritesSearchFragment :ListFragment(), FavoritesMvpView {
     }
 
     override fun error(message: String) {
+        loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     }
-
 
     override fun emptyList() {
         showEmptyList { findNavController().navigate(R.id.catalogFragment) }
-
     }
 
-    override fun success() {
-
-    }
 }

@@ -12,8 +12,10 @@ import com.project.morestore.databinding.FragmentFilterSizesShoesBinding
 import com.project.morestore.data.models.Filter
 import com.project.morestore.data.models.Property
 import com.project.morestore.data.models.SizeLine
+import com.project.morestore.domain.presenters.FilterPresenter
 import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.mvpviews.FilterView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -21,12 +23,12 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_sizes_shoes), UserMvpView {
+class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_sizes_shoes), FilterView {
     private val binding: FragmentFilterSizesShoesBinding by viewBinding()
     private var sizeAdapter: SizeLineAdapter by autoCleared()
     @Inject
-    lateinit var userPresenter: UserPresenter
-    private val presenter by moxyPresenter { userPresenter }
+    lateinit var filterPresenter: FilterPresenter
+    private val presenter by moxyPresenter { filterPresenter }
 
     private var isForWomen = true
     private var isSizesLoaded = false
@@ -110,9 +112,6 @@ class FilterShoosSizesFragment: MvpAppCompatFragment(R.layout.fragment_filter_si
         saveShoosSizes()
     }
 
-    override fun success(result: Any) {
-
-    }
 
     override fun error(message: String) {
         showLoading(false)

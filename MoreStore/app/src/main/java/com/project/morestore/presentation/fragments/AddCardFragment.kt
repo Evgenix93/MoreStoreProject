@@ -90,21 +90,15 @@ class AddCardFragment: MvpAppCompatFragment(R.layout.fragment_add_card), AddCard
                 binding.editText.setText(scanResult?.cardNumber)
             }
 
-
         }
     }
 
-
-
     override fun error(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-
     }
 
     override fun success() {
         findNavController().popBackStack()
 
     }
-
-
 }

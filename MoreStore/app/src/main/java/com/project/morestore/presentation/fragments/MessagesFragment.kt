@@ -12,6 +12,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -30,10 +31,13 @@ import com.project.morestore.data.models.*
 import com.project.morestore.presentation.mvpviews.MessagesMvpView
 import com.project.morestore.domain.presenters.ChatPresenter
 import com.project.morestore.data.singletones.Token
+import com.project.morestore.domain.presenters.MessagesPresenter
+import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.util.MessagingService
 import com.project.morestore.util.MiddleDivider
 import com.project.morestore.util.setSelectListener
 import dagger.hilt.android.AndroidEntryPoint
+import moxy.MvpView
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -42,8 +46,8 @@ import kotlin.reflect.KClass
 class MessagesFragment : BottomNavigationFragment(), MessagesMvpView {
     private lateinit var views: FragmentMessagesBinding
     @Inject
-    lateinit var chatPresenter: ChatPresenter
-    private val presenter by moxyPresenter { chatPresenter }
+    lateinit var messagesPresenter: MessagesPresenter
+    private val presenter by moxyPresenter { messagesPresenter }
     private val args: MessagesFragmentArgs by navArgs()
     private val adapter = ChatsAdapter {
          if (it is Chat.Support) {
@@ -165,12 +169,9 @@ class MessagesFragment : BottomNavigationFragment(), MessagesMvpView {
 
     }
 
+
     override fun error(message: String) {
-
-    }
-
-    override fun success() {
-
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun showDialogCount(type: String, count: Int) {
@@ -180,8 +181,6 @@ class MessagesFragment : BottomNavigationFragment(), MessagesMvpView {
             Chat.Deal::class.java.simpleName -> views.tabs.getTabAt(1)?.view?.findViewById<TextView>(R.id.count)?.text = count.toString()//?.fill(0, "Все", count)
             Chat.Lot::class.java.simpleName -> views.tabs.getTabAt(2)?.view?.findViewById<TextView>(R.id.count)?.text = count.toString()//?.fill(0, "Все", count)
 
-
-
         }
     }
 
@@ -190,8 +189,6 @@ class MessagesFragment : BottomNavigationFragment(), MessagesMvpView {
             0 -> views.tabs.getTabAt(0)?.view?.findViewById<ImageView>(R.id.unreadIcon)?.isVisible = unread//?.fill(0, "Все", count)
             1 -> views.tabs.getTabAt(1)?.view?.findViewById<ImageView>(R.id.unreadIcon)?.isVisible = unread//?.fill(0, "Все", count)
             2 -> views.tabs.getTabAt(2)?.view?.findViewById<ImageView>(R.id.unreadIcon)?.isVisible = unread//?.fill(0, "Все", count)
-
         }
     }
-
 }

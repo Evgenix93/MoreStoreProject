@@ -69,10 +69,7 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
             } else {
                 presenter.getNewCode(phone = args.phoneOrEmail)
             }
-
         }
-
-
     }
 
     private fun initToolbar() {
@@ -136,8 +133,6 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
 
     }
 
-
-
     override fun successNewCode(result: Any) {
         showLoading(false)
         binding.getNewCodeTextView.isVisible = false
@@ -172,6 +167,5 @@ class RegistrationLogin2Fragment : MvpAppCompatFragment(R.layout.fragment_regist
                     )
                 )
         }
-
     }
 }

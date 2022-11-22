@@ -22,6 +22,7 @@ import com.project.morestore.data.models.SizeLine
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.FavoritesPresenter
 import com.project.morestore.data.singletones.FilterState
+import com.project.morestore.domain.presenters.EditFavoriteSearchPresenter
 import com.project.morestore.util.NotificationType
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
@@ -30,8 +31,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class EditFavoriteSearchFragment : FullscreenFragment(), MainMvpView {
     private lateinit var binding: FragmentEditFavoriteSearchBinding
-    @Inject lateinit var favoritesPresenter: FavoritesPresenter
-    private val presenter by moxyPresenter { favoritesPresenter }
+    @Inject lateinit var editFavoriteSearchPresenter: EditFavoriteSearchPresenter
+    private val presenter by moxyPresenter { editFavoriteSearchPresenter }
     private var filter = Filter()
     private val args: EditFavoriteSearchFragmentArgs by navArgs()
     private var firstTimeLoaded = false
@@ -60,11 +61,7 @@ class EditFavoriteSearchFragment : FullscreenFragment(), MainMvpView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenter.reserveFilter()
-
-
-
     }
-
 
 
     override fun onResume() {
@@ -96,7 +93,6 @@ class EditFavoriteSearchFragment : FullscreenFragment(), MainMvpView {
     }
 
 
-
     private fun loadFilter(){
         if(firstTimeLoaded)
         presenter.getFilter()
@@ -111,7 +107,6 @@ class EditFavoriteSearchFragment : FullscreenFragment(), MainMvpView {
         }
 
         presenter.getFavoriteSearchById(args.favoriteSearchId)
-
 
     }
 
@@ -299,7 +294,6 @@ class EditFavoriteSearchFragment : FullscreenFragment(), MainMvpView {
         }
 
         binding.safeFilterBtn.setOnClickListener {
-
             saveFilter()
         }
 
@@ -367,8 +361,6 @@ class EditFavoriteSearchFragment : FullscreenFragment(), MainMvpView {
 
     override fun loading() {
         showLoading(true)
-
-
     }
 
     override fun loaded(result: Any) {
@@ -389,7 +381,6 @@ class EditFavoriteSearchFragment : FullscreenFragment(), MainMvpView {
     override fun error(message: String) {
         showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     }
 
     override fun success() {

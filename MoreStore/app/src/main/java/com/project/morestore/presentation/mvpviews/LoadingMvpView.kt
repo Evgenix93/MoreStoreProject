@@ -3,11 +3,11 @@ package com.project.morestore.presentation.mvpviews
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 
-interface SalesDealPlaceMvpView: MvpView {
+interface LoadingMvpView: MvpView {
 
     @OneExecution
-    fun onDealPlaceAdded()
+    fun loading()
 
     @OneExecution
-    fun onError(message: String)
+    fun error(message: String)
 }

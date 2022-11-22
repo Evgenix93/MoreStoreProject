@@ -1,8 +1,9 @@
 package com.project.morestore.presentation.mvpviews
 
+import com.project.morestore.data.models.SuggestionModels
 import moxy.viewstate.strategy.alias.OneExecution
 
-interface MainFragmentMvpView: CatalogMvpView {
+interface MainFragmentMvpView: MainMvpView {
 
     @OneExecution
     fun showOnBoarding()
@@ -10,5 +11,6 @@ interface MainFragmentMvpView: CatalogMvpView {
     @OneExecution
     fun loginFailed()
 
-
+    @OneExecution
+    fun loadedSuggestions(list: List<String>, objectList: List<SuggestionModels>)
 }

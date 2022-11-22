@@ -16,10 +16,12 @@ import com.project.morestore.R
 import com.project.morestore.presentation.adapters.ChatsAdapter
 import com.project.morestore.databinding.FragmentLotchatsBinding
 import com.project.morestore.presentation.fragments.base.BottomNavigationFragment
-
 import com.project.morestore.data.models.*
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.ChatPresenter
+import com.project.morestore.domain.presenters.LotChatsPresenter
+import com.project.morestore.presentation.mvpviews.MessagesMvpView
+import com.project.morestore.presentation.mvpviews.ResultLoadedMvpView
 import com.project.morestore.util.MessagingService
 import com.project.morestore.util.MiddleDivider
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,10 +29,10 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LotChatsFragment : BottomNavigationFragment(), MainMvpView {
+class LotChatsFragment : BottomNavigationFragment(), ResultLoadedMvpView {
     private lateinit var views :FragmentLotchatsBinding
-    @Inject lateinit var chatPresenter: ChatPresenter
-    private val presenter by moxyPresenter { chatPresenter }
+    @Inject lateinit var lotChatsPresenter: LotChatsPresenter
+    private val presenter by moxyPresenter { lotChatsPresenter }
     private val adapter = ChatsAdapter {
         findNavController().navigate(
                 R.id.chatFragment,
@@ -39,8 +41,8 @@ class LotChatsFragment : BottomNavigationFragment(), MainMvpView {
                     Chat::class.java.simpleName to Chat.Personal::class.java.simpleName
                 )
             )
-
     }
+
     private val messageReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, intent: Intent?) {
             val dialogId = intent?.getLongExtra(MessagingService.MESSAGE_KEY, -1L)
@@ -97,9 +99,6 @@ class LotChatsFragment : BottomNavigationFragment(), MainMvpView {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(messageReceiver)
     }
 
-
-
-
     companion object{
         const val PRODUCT_ID_KEY = "product_id"
         const val PRODUCT_NAME = "product_name"
@@ -107,21 +106,9 @@ class LotChatsFragment : BottomNavigationFragment(), MainMvpView {
         const val PRODUCT_IMAGE_KEY = "product_image"
     }
 
-    override fun loading() {
-
-    }
-
     override fun loaded(result: Any) {
         val dialogs = result as List<Chat>
         adapter.setItems(dialogs)
-    }
-
-    override fun error(message: String) {
-
-    }
-
-    override fun success() {
-
     }
 
 }

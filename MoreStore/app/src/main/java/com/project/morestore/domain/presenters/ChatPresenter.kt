@@ -28,7 +28,7 @@ class ChatPresenter @Inject constructor(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
     private val cartRepository: CartRepository
-) : MvpPresenter<MainMvpView>() {
+) : MvpPresenter<ChatMvpView>() {
 
     private var dialogId: Long? = null
     private var tabPosition: Int = 0
@@ -73,15 +73,6 @@ class ChatPresenter @Inject constructor(
         }
     }
 
-    fun getTabPosition(): Int = tabPosition
-
-    fun showDialogs(userId: Long){
-        when(tabPosition){
-            0 -> showAllDialogs(userId)
-            1 -> showDealDialogs(userId)
-            2 -> showLotDialogs(userId)
-        }
-    }
 
     fun addMessage(text: String){
         presenterScope.launch {
@@ -97,7 +88,6 @@ class ChatPresenter @Inject constructor(
 
     private suspend fun getSupportDialog(): List<Chat>{
         viewState.loading()
-
             val response = chatRepository.getDialogs()
             when (response?.code()) {
                 200 -> {
@@ -119,9 +109,6 @@ class ChatPresenter @Inject constructor(
                     return emptyList()
                 }
             }
-
-
-
     }
 
     fun deleteDialog(dialogId: Long){
@@ -248,58 +235,6 @@ class ChatPresenter @Inject constructor(
         }
     }
 
-    fun showDealDialogs(userId: Long){
-        presenterScope.launch {
-            viewState.loading()
-            tabPosition = 1
-            val dialogs = getDealDialogs(userId)
-            viewState.loaded(dialogs)
-            (viewState as MessagesMvpView).showDialogCount(Chat.Deal::class.java.simpleName, dialogs.size)
-            val isUnread = dialogs.find { it.isUnread } != null
-            (viewState as MessagesMvpView).showUnreadTab(1, isUnread)
-        }
-    }
-
-    fun showLotDialogs(userId: Long){
-        presenterScope.launch {
-            viewState.loading()
-            tabPosition = 2
-            val dialogs = getLotDialogs(userId)
-            viewState.loaded(dialogs)
-            (viewState as MessagesMvpView).showDialogCount(Chat.Lot::class.java.simpleName, dialogs.size)
-            val isUnread = dialogs.find { it.isUnread } != null
-            (viewState as MessagesMvpView).showUnreadTab(2, isUnread)
-
-        }
-    }
-
-    fun showAllDialogs(userId: Long){
-        presenterScope.launch {
-            viewState.loading()
-            tabPosition = 0
-            val dealDialogs = getDealDialogs(userId)
-            val lotDialogs = getLotDialogs(userId)
-            val allDialogs = getSupportDialog() + dealDialogs + lotDialogs
-            (viewState as MessagesMvpView).showDialogCount(Chat::class.java.simpleName, allDialogs.size)
-            (viewState as MessagesMvpView).showDialogCount(Chat.Deal::class.java.simpleName, dealDialogs.size)
-            (viewState as MessagesMvpView).showDialogCount(Chat.Lot::class.java.simpleName, lotDialogs.size)
-            val isUnread = allDialogs.find { it.isUnread } != null
-            val isUnreadDeals = dealDialogs.find { it.isUnread } != null
-            val isUnreadLots = lotDialogs.find { it.isUnread } != null
-            (viewState as MessagesMvpView).showUnreadTab(0, isUnread)
-            (viewState as MessagesMvpView).showUnreadTab(1, isUnreadDeals)
-            (viewState as MessagesMvpView).showUnreadTab(2, isUnreadLots)
-
-            viewState.loaded(allDialogs)
-        }
-    }
-
-    fun showProductDialogs(id: Long){
-        presenterScope.launch {
-            viewState.loading()
-            viewState.loaded(getDialogsByProductId(id))
-        }
-    }
 
     fun uploadPhotoVideo(uris: List<Uri>, message: String){
         presenterScope.launch {
@@ -474,39 +409,6 @@ class ChatPresenter @Inject constructor(
         }
     }
 
-    fun handlePushMessageLotsChatFragment(dialogId: Long, productId: Long){
-        presenterScope.launch {
-            val dialog = chatRepository.getDialogById(dialogId)?.body()
-            dialog?.let {
-                if(it.product?.id == productId)
-                    showProductDialogs(productId)
-            }
-
-        }
-    }
-
-    fun handlePushMessageMessagesFragment(dialogId: Long, chatType: String){
-        presenterScope.launch {
-            val dialog = chatRepository.getDialogById(dialogId)?.body()
-            val userId = authRepository.getUserId()
-            dialog?.let {
-                when(chatType){
-                    Chat.Deal::class.simpleName -> {
-                        if(it.product?.idUser != userId && it.dialog.user.id != 1L)
-                            showDealDialogs(-1)
-                    }
-                    Chat.Lot::class.simpleName -> {
-                        if(it.product?.idUser == userId)
-                            showLotDialogs(-1)
-                    }
-                    else -> showAllDialogs(-1)
-                }
-
-            }
-
-        }
-
-    }
 
     fun buyProduct(productId: Long, userId: Long){
         presenterScope.launch {

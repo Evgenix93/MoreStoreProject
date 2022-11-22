@@ -169,6 +169,7 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
     }
 
     override fun success(result: Any) {
+        binding.loader.isVisible = false
         brandsAdapter.updateWishedInfo(result as List<Long>, false)
         val brand = brandsAdapter.getCurrentList().find { it.id == result.first() }
         val message = if(brand?.isWished == true) getString(R.string.added_to_favorites) else getString(R.string.deleted_from_favorites)
@@ -182,14 +183,14 @@ class FilterBrandsFragment : MvpAppCompatFragment(R.layout.fragment_brands), Use
     override fun error(message: String) {
         binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     }
 
     override fun loading() {
-
+     binding.loader.isVisible = true
     }
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         when(result){
             is Boolean -> {
                 if (!result) {

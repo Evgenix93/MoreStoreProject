@@ -6,7 +6,7 @@ import com.project.morestore.R
 import com.project.morestore.data.models.*
 import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.presentation.mvpviews.SalesActiveMvpView
-import com.project.morestore.presentation.mvpviews.SalesDealPlaceMvpView
+import com.project.morestore.presentation.mvpviews.DealPlaceMvpView
 import com.project.morestore.presentation.mvpviews.SalesMvpView
 import com.project.morestore.data.repositories.*
 import com.project.morestore.util.errorMessage
@@ -24,7 +24,7 @@ class SalesPresenter @Inject constructor(
         private val authRepository: AuthRepository,
         private val chatRepository: ChatRepository,
         private val cartRepository: CartRepository
-): MvpPresenter<SalesDealPlaceMvpView>() {
+): MvpPresenter<SalesMvpView>() {
 
     fun getSales(isHistory: Boolean){
         presenterScope.launch {
@@ -42,7 +42,7 @@ class SalesPresenter @Inject constructor(
                     val activeSales = sales.filter{it.status == 0}
                     val inactiveSales = sales.filter{it.status == 1}
                     if(isHistory) {
-                        (viewState as SalesMvpView).onSalesLoaded(inactiveSales, addresses, avatars, emptyList())
+                        viewState.onSalesLoaded(inactiveSales, addresses, avatars, emptyList())
                     }
                     else {
                         val dialogs = getDialogs().reversed()
@@ -78,7 +78,7 @@ class SalesPresenter @Inject constructor(
                                 }
                            it
                        }
-                        (viewState as SalesMvpView).onSalesLoaded(activeSalesSorted, addresses, avatars, dialogs)
+                        viewState.onSalesLoaded(activeSalesSorted, addresses, avatars, dialogs)
                     }
                     val cartItems = getCartItems() ?: emptyList()
                     val orderItems = getOrderItems()?.filter{it.cart != null}
@@ -90,35 +90,22 @@ class SalesPresenter @Inject constructor(
                     val activeSalesFiltered = activeSales.filter { activeSales.find { saleCheck ->
                         saleCheck.id != it.id && saleCheck.cart?.first()?.id == it.cart?.first()?.id &&
                                 saleCheck.idUser == it.idUser && saleCheck.id > it.id } == null }
-                    (viewState as SalesMvpView).onItemsLoaded(cartItems, filteredOrderItems, activeSalesFiltered, inactiveOrders, inactiveSales)
+                    viewState.onItemsLoaded(cartItems, filteredOrderItems, activeSalesFiltered, inactiveOrders, inactiveSales)
                 }
                 404 -> {
-                    (viewState as SalesMvpView).onSalesLoaded(emptyList(), emptyList(), emptyList(), emptyList())
+                    viewState.onSalesLoaded(emptyList(), emptyList(), emptyList(), emptyList())
                     val cartItems = getCartItems() ?: emptyList()
                     val orderItems = getOrderItems()?.filter{it.cart != null}
                     val activeOrders = orderItems?.filter { it.status == 0 } ?: emptyList()
                     val inactiveOrders = orderItems?.filter{it.status == 1}.also{Log.d("Sales", "inactiveOrders = $it")} ?: emptyList()
-                    (viewState as SalesMvpView).onItemsLoaded(cartItems, activeOrders, emptyList(), inactiveOrders, emptyList())
+                    viewState.onItemsLoaded(cartItems, activeOrders, emptyList(), inactiveOrders, emptyList())
                 }
                else -> viewState.onError(errorMessage(response))
             }
         }
     }
 
-    fun addDealPlace(orderId: Long, address: String){
-        presenterScope.launch{
-            val response = salesRepository.addDealPlace(orderId, address)
-            when(response?.code()){
-                200 -> {
-                    if(response.body()!!)
-                        (viewState as SalesActiveMvpView).onDealPlaceAdded()
-                    else
-                        viewState.onError("Ошибка при добавлении адреса")
-                }
-                else -> viewState.onError(errorMessage(response))
-            }
-        }
-        }
+
 
    private suspend fun getUser(id: Long): User? {
        val response = userRepository.getUser(id)

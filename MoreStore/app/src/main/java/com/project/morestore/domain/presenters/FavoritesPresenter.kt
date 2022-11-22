@@ -18,8 +18,7 @@ import javax.inject.Inject
 
 class FavoritesPresenter @Inject constructor(
     private val userRepository: UserRepository,
-private val productRepository: ProductRepository,
-private val authRepository: AuthRepository): MvpPresenter<MainMvpView>() {
+private val productRepository: ProductRepository): MvpPresenter<FavoritesMvpView>() {
 
     fun getProductWishList() {
         presenterScope.launch {
@@ -28,7 +27,7 @@ private val authRepository: AuthRepository): MvpPresenter<MainMvpView>() {
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 404 -> {
-                    (viewState as FavoritesMvpView).emptyList()
+                    viewState.emptyList()
 
                 }
                 else -> viewState.error(errorMessage(response))
@@ -36,10 +35,7 @@ private val authRepository: AuthRepository): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun tokenCheck() {
-        if(authRepository.isTokenEmpty())
-            (viewState as FavoritesMainMvpView).isGuest()
-    }
+
 
     fun getSellersWishList(){
         presenterScope.launch {
@@ -48,7 +44,7 @@ private val authRepository: AuthRepository): MvpPresenter<MainMvpView>() {
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 404 -> {
-                    (viewState as FavoritesMvpView).emptyList()
+                    viewState.emptyList()
 
                 }
                 else -> viewState.error(errorMessage(response))
@@ -67,7 +63,7 @@ private val authRepository: AuthRepository): MvpPresenter<MainMvpView>() {
                     viewState.loaded(searches)
                 }
                 404 -> {
-                    (viewState as FavoritesMvpView).emptyList()
+                    viewState.emptyList()
 
                 }
                 else -> viewState.error(errorMessage(response))
@@ -75,76 +71,6 @@ private val authRepository: AuthRepository): MvpPresenter<MainMvpView>() {
         }
     }
 
-    fun getFavoriteSearchById(id: Long){
-        presenterScope.launch {
-            viewState.loading()
-            val response = userRepository.getFavoriteSearchById(id)
-            when (response?.code()) {
-                200 -> {
-                    viewState.loaded(listOf(response.body()!!))
-
-                }
-                404 -> {
-                    (viewState as FavoritesMvpView).emptyList()
-
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
-
-    fun saveFavoriteSearch(filter: Filter) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = userRepository.saveFavoriteSearch(FavoriteSearchValue(value = filter))
-            when (response?.code()) {
-                200 -> {
-                    viewState.success()
-                }
-                404 -> {
-                    (viewState as FavoritesMvpView).emptyList()
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
-
-    fun editFavoriteSearch(id: Long, filter: Filter){
-        presenterScope.launch {
-            viewState.loading()
-            val response = userRepository.editFavoriteSearch(FavoriteSearchValue(id, filter))
-            when (response?.code()) {
-                200 -> {
-                    viewState.success()
-
-
-                }
-                404 -> {
-                    (viewState as FavoritesMvpView).emptyList()
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
-
-    fun deleteFavoriteSearch(id: Long){
-        presenterScope.launch {
-            viewState.loading()
-            val response = userRepository.deleteFavoriteSearch(Id(id))
-            when (response?.code()) {
-                200 -> {
-                    viewState.success()
-
-
-                }
-                404 -> {
-                    (viewState as FavoritesMvpView).emptyList()
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-
-        }
-    }
 
     fun getBrandWishList() {
         presenterScope.launch {
@@ -152,7 +78,7 @@ private val authRepository: AuthRepository): MvpPresenter<MainMvpView>() {
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
                 404 -> {
-                    (viewState as FavoritesMvpView).emptyList()
+                    viewState.emptyList()
                 }
                 else -> viewState.error(errorMessage(response))
             }
@@ -177,20 +103,9 @@ private val authRepository: AuthRepository): MvpPresenter<MainMvpView>() {
         }
     }
 
-
-    fun reserveFilter(){
-        userRepository.reserveFilter()
-    }
-
-    fun restoreFilter(){
-        userRepository.restoreFilter()
-    }
-
     fun getFilter(){
         viewState.loaded(listOf(userRepository.getFilter()))
     }
 
-    fun updateFilter(filter: Filter){
-        userRepository.updateFilter(filter)
-    }
+
 }
