@@ -9,8 +9,9 @@ import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class MessagesPresenter(
+class MessagesPresenter @Inject constructor(
     private val chatRepository: ChatRepository,
     private val authRepository: AuthRepository
 ): MvpPresenter<MessagesMvpView>() {

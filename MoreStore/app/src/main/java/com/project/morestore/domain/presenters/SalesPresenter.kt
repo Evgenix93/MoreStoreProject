@@ -103,22 +103,7 @@ class SalesPresenter @Inject constructor(
         }
     }
 
-    fun addDealPlace(orderId: Long, address: String){
-        presenterScope.launch{
-            val response = salesRepository.addDealPlace(orderId, address)
-            when(response?.code()){
-                200 -> {
-                    if(response.body()!!)
-                       {}//viewState.onDealPlaceAdded()
-                    else
-                        viewState.onError("Ошибка при добавлении адреса")
-                }
-                else -> viewState.onError(errorMessage(response))
-            }
-        }
-        }
-
-   private suspend fun getUser(id: Long): User? {
+    private suspend fun getUser(id: Long): User? {
        val response = userRepository.getUser(id)
       return when(response?.code()){
            200 -> response.body()!!

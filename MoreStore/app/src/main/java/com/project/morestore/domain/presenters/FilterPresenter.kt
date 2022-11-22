@@ -12,8 +12,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class FilterPresenter(
+class FilterPresenter @Inject constructor(
     private val userRepository: UserRepository,
     private val productRepository: ProductRepository
 ): MvpPresenter<FilterView> (){

@@ -13,8 +13,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class RegistrationPresenter(@ApplicationContext private val context: Context,
+class RegistrationPresenter @Inject constructor(@ApplicationContext private val context: Context,
                             private val userRepository: UserRepository
 ): MvpPresenter<RegistrationMvpView>() {
     private var photoUri: Uri? = null

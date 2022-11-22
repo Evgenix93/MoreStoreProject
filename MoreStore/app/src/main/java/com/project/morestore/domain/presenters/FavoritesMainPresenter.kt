@@ -7,8 +7,9 @@ import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class FavoritesMainPresenter(private val userRepository: UserRepository, private val authRepository: AuthRepository)
+class FavoritesMainPresenter @Inject constructor(private val userRepository: UserRepository, private val authRepository: AuthRepository)
     : MvpPresenter<FavoritesMainMvpView>() {
 
     fun getProductWishList() {

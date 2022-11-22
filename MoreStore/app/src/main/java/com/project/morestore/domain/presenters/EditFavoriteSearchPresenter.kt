@@ -11,8 +11,9 @@ import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class EditFavoriteSearchPresenter(
+class EditFavoriteSearchPresenter @Inject constructor(
     private val userRepository: UserRepository
 ): MvpPresenter<MainMvpView>() {
 

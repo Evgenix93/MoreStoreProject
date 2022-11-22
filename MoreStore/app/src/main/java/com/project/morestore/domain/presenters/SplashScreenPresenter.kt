@@ -5,8 +5,9 @@ import com.project.morestore.presentation.mvpviews.ResultLoadedMvpView
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class SplashScreenPresenter(
+class SplashScreenPresenter @Inject constructor(
     private val authRepository: AuthRepository
 ): MvpPresenter<ResultLoadedMvpView>() {
 

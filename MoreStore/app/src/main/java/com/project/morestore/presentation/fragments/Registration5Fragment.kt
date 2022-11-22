@@ -10,9 +10,7 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentRegistration2Binding
-import com.project.morestore.presentation.mvpviews.RegistrationMvpView
-import com.project.morestore.domain.presenters.UserPresenter
-import com.project.morestore.presentation.Registration5Presenter
+import com.project.morestore.domain.presenters.Registration5Presenter
 import com.project.morestore.presentation.mvpviews.Registration5View
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment

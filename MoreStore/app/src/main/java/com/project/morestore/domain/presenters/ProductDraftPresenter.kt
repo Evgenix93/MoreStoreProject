@@ -9,8 +9,9 @@ import com.project.morestore.util.getStringFromResponse
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class ProductDraftPresenter(
+class ProductDraftPresenter @Inject constructor(
     private val productRepository: ProductRepository
 ): MvpPresenter<ProductDraftView>() {
 

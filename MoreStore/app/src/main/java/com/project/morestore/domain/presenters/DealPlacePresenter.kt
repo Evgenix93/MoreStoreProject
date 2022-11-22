@@ -6,8 +6,9 @@ import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class DealPlacePresenter(private val salesRepository: SalesRepository): MvpPresenter<DealPlaceMvpView>() {
+class DealPlacePresenter @Inject constructor(private val salesRepository: SalesRepository): MvpPresenter<DealPlaceMvpView>() {
 
     fun addDealPlace(orderId: Long, address: String){
         presenterScope.launch{

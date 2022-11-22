@@ -13,8 +13,9 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
+import javax.inject.Inject
 
-class CatalogPresenter(
+class CatalogPresenter @Inject constructor(
     private val userRepository: UserRepository,
     private val productRepository: ProductRepository,
     private val authRepository: AuthRepository
