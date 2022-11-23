@@ -12,13 +12,14 @@ import com.project.morestore.data.repositories.AuthRepository
 import com.project.morestore.data.repositories.CartRepository
 import com.project.morestore.data.repositories.OrdersRepository
 import com.project.morestore.data.repositories.SalesRepository
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import javax.inject.Inject
 
-class ToolbarCartPresenter @Inject constructor(@ApplicationContext val context: Context,
+class ToolbarCartPresenter @Inject constructor(@ActivityContext val context: Context,
                                                private val ordersRepository: OrdersRepository,
                                                private val authRepository: AuthRepository,
                                                private val saleRepository: SalesRepository,

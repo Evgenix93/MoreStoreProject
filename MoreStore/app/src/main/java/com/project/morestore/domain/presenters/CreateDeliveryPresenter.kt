@@ -9,6 +9,7 @@ import com.project.morestore.data.repositories.OrdersRepository
 import com.project.morestore.data.repositories.ProductRepository
 import com.project.morestore.data.repositories.UserRepository
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,11 +18,11 @@ import moxy.presenterScope
 import javax.inject.Inject
 
 class CreateDeliveryPresenter @Inject constructor(
-    @ApplicationContext private val context: Context,
-private val userRepository: UserRepository,
-private val orderRepository: OrdersRepository,
-private val productRepository: ProductRepository,
-private val geoRepository: GeoRepository): MvpPresenter<CreateDeliveryMvpView>() {
+    @ActivityContext private val context: Context,
+    private val userRepository: UserRepository,
+    private val orderRepository: OrdersRepository,
+    private val productRepository: ProductRepository,
+    private val geoRepository: GeoRepository): MvpPresenter<CreateDeliveryMvpView>() {
 
 
     private var currentUser: User? = null

@@ -6,13 +6,14 @@ import com.project.morestore.data.models.Card
 import com.project.morestore.presentation.mvpviews.AddCardMvpView
 import com.project.morestore.data.repositories.CardRepository
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import javax.inject.Inject
 
-class AddCardPresenter @Inject constructor(@ApplicationContext private val context: Context,
+class AddCardPresenter @Inject constructor(@ActivityContext private val context: Context,
                                            private val cardRepository: CardRepository): MvpPresenter<AddCardMvpView>() {
 
     fun addCard(cardNumber: String){

@@ -9,6 +9,7 @@ import com.project.morestore.data.models.cart.OrderStatus
 import com.project.morestore.presentation.mvpviews.OrderDetailsView
 import com.project.morestore.data.repositories.*
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
@@ -17,14 +18,14 @@ import java.util.*
 import javax.inject.Inject
 
 class OrderDetailsPresenter @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @ActivityContext private val context: Context,
     private val ordersRepository: OrdersRepository,
-            private val chatRepository: ChatRepository,
-            private val authRepository: AuthRepository,
-            private val salesRepository: SalesRepository,
-            private val productRepository: ProductRepository,
-            private val userRepository: UserRepository,
-            private val geoRepository: GeoRepository
+    private val chatRepository: ChatRepository,
+    private val authRepository: AuthRepository,
+    private val salesRepository: SalesRepository,
+    private val productRepository: ProductRepository,
+    private val userRepository: UserRepository,
+    private val geoRepository: GeoRepository
 ): MvpPresenter<OrderDetailsView>()  {
 
      fun acceptOrderPlace(orderId: Long, addressId: Long, address: String, asBuyer: Boolean) {

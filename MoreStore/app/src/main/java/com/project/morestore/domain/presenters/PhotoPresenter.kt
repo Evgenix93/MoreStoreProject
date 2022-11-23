@@ -6,11 +6,12 @@ import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
 import com.project.morestore.data.repositories.PhotoVideoRepository
 import com.project.morestore.presentation.mvpviews.PhotoMvpView
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import moxy.MvpPresenter
 import javax.inject.Inject
 
-class PhotoPresenter @Inject constructor(@ApplicationContext private val context: Context,
+class PhotoPresenter @Inject constructor(@ActivityContext private val context: Context,
                                          private val repository: PhotoVideoRepository): MvpPresenter<PhotoMvpView>() {
 
     fun takePhoto(imageCapture: ImageCapture){

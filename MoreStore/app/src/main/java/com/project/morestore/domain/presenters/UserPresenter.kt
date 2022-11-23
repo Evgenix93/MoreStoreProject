@@ -7,12 +7,12 @@ import com.project.morestore.R
 import com.project.morestore.data.models.ProductBrand
 import com.project.morestore.data.models.Region
 import com.project.morestore.data.models.*
-import com.project.morestore.presentation.mvpviews.RegistrationMvpView
 import com.project.morestore.presentation.mvpviews.UserMvpView
 import com.project.morestore.data.repositories.*
 import com.project.morestore.util.errorMessage
 import com.project.morestore.util.isEmailValid
 import com.project.morestore.util.isPhoneValid
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,13 +25,12 @@ import okhttp3.ResponseBody
 import javax.inject.Inject
 
 class UserPresenter @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @ActivityContext private val context: Context,
     private val userRepository: UserRepository,
-        private val authRepository: AuthRepository,
-        private val productRepository: ProductRepository,
-        private val reviewsRepository: ReviewRepository,
-        private val cardRepository: CardRepository
-        ) : MvpPresenter<UserMvpView>() {
+    private val authRepository: AuthRepository,
+    private val productRepository: ProductRepository,
+    private val reviewsRepository: ReviewRepository
+) : MvpPresenter<UserMvpView>() {
 
     private lateinit var user: User
     private var photoUri: Uri? = null

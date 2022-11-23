@@ -8,13 +8,14 @@ import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.data.repositories.*
 import com.project.morestore.presentation.mvpviews.SalesHistoryMvpView
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import javax.inject.Inject
 
-class SalesHistoryPresenter @Inject constructor(@ApplicationContext private val context: Context,
+class SalesHistoryPresenter @Inject constructor(@ActivityContext private val context: Context,
                                                 private val salesRepository: SalesRepository,
                                                 private val ordersRepository: OrdersRepository,
                                                 private val userRepository: UserRepository,

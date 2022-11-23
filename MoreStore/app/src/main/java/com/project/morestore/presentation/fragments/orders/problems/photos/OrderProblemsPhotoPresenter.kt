@@ -8,6 +8,7 @@ import com.project.morestore.data.models.PhotoVideo
 import com.project.morestore.data.models.ProductProblemsData
 import com.project.morestore.data.repositories.OrdersRepository
 import com.project.morestore.data.repositories.ProductRepository
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import moxy.MvpPresenter
@@ -15,7 +16,7 @@ import moxy.presenterScope
 import java.io.File
 import javax.inject.Inject
 
-class OrderProblemsPhotoPresenter @Inject constructor(@ApplicationContext val context: Context,
+class OrderProblemsPhotoPresenter @Inject constructor(@ActivityContext val context: Context,
                                                       private val ordersRepository: OrdersRepository,
                                                       private val productRepository: ProductRepository) : MvpPresenter<OrderProblemsPhotosView>() {
 

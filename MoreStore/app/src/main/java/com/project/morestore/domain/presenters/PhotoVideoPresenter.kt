@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import com.project.morestore.presentation.mvpviews.PhotoVideoMvpView
 import com.project.morestore.data.repositories.PhotoVideoRepository
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,7 +20,7 @@ import moxy.presenterScope
 import javax.inject.Inject
 
 class PhotoVideoPresenter @Inject constructor(
-    @ApplicationContext val context: Context,
+    @ActivityContext val context: Context,
     private val repository: PhotoVideoRepository
 ): MvpPresenter<PhotoVideoMvpView>() {
 

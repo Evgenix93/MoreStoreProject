@@ -8,6 +8,7 @@ import com.project.morestore.presentation.mvpviews.Registration5View
 import com.project.morestore.util.errorMessage
 import com.project.morestore.util.isEmailValid
 import com.project.morestore.util.isPhoneValid
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
@@ -15,7 +16,7 @@ import moxy.presenterScope
 import javax.inject.Inject
 
 class Registration5Presenter @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @ActivityContext private val context: Context,
     private val userRepository: UserRepository,
     private val authRepository: AuthRepository
 ): MvpPresenter<Registration5View>() {

@@ -16,6 +16,7 @@ import com.project.morestore.data.repositories.AuthRepository
 import com.project.morestore.util.errorMessage
 import com.project.morestore.util.getStringFromResponse
 import com.project.morestore.util.isPhoneValid
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
@@ -24,7 +25,7 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class AuthPresenter @Inject constructor(@ApplicationContext private val context: Context,
+class AuthPresenter @Inject constructor(@ActivityContext private val context: Context,
                                         private val repository: AuthRepository) : MvpPresenter<AuthMvpView>() {
 
     fun register(

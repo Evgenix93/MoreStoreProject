@@ -9,6 +9,7 @@ import com.project.morestore.data.repositories.CardRepository
 import com.project.morestore.data.repositories.ProductRepository
 import com.project.morestore.presentation.mvpviews.CreateProductMvpView
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -18,7 +19,7 @@ import moxy.MvpPresenter
 import moxy.presenterScope
 import javax.inject.Inject
 
-class CreateProductPresenter @Inject constructor(@ApplicationContext private val context: Context,
+class CreateProductPresenter @Inject constructor(@ActivityContext private val context: Context,
                                                  private val productRepository: ProductRepository,
                                                  private val addressesRepository: AddressesRepository,
                                                  private val authRepository: AuthRepository,

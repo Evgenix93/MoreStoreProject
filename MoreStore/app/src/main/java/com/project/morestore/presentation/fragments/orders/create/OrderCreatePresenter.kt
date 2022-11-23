@@ -7,6 +7,7 @@ import com.project.morestore.data.models.*
 import com.project.morestore.data.repositories.*
 
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
@@ -16,7 +17,7 @@ import java.util.*
 import javax.inject.Inject
 
 class OrderCreatePresenter @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @ActivityContext private val context: Context,
     private val orderRepository: OrdersRepository,
     private val salesRepository: SalesRepository,
     private val chatRepository: ChatRepository,

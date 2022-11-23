@@ -12,6 +12,7 @@ import com.project.morestore.data.repositories.UserRepository
 import com.project.morestore.data.repositories.*
 import com.project.morestore.util.errorMessage
 import com.project.morestore.util.ProductStatus
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -23,7 +24,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class MainPresenter  @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @ActivityContext private val context: Context,
     private val authRepository: AuthRepository,
     private val productRepository: ProductRepository,
     private val userRepository: UserRepository,

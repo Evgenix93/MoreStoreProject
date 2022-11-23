@@ -9,6 +9,7 @@ import com.project.morestore.data.models.Feedback
 import com.project.morestore.data.models.FeedbackItem
 import com.project.morestore.presentation.mvpviews.FeedbackPhotoView
 import com.project.morestore.data.repositories.ReviewRepository
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.async
@@ -21,7 +22,7 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 class FeedbackPhotoPresenter @Inject constructor(
-    @ApplicationContext private val applicationContext :Context,
+    @ActivityContext private val applicationContext :Context,
     private val data: ReviewRepository
 ) :MvpPresenter<FeedbackPhotoView>() {
 

@@ -12,6 +12,7 @@ import com.project.morestore.data.models.cart.OrderHistoryStatus
 import com.project.morestore.data.repositories.OrdersRepository
 import com.project.morestore.data.repositories.UserRepository
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
@@ -19,7 +20,7 @@ import moxy.presenterScope
 import java.util.*
 import javax.inject.Inject
 
-class OrdersHistoryPresenter @Inject constructor(@ApplicationContext private val context: Context,
+class OrdersHistoryPresenter @Inject constructor(@ActivityContext private val context: Context,
                                                  private val ordersRepository: OrdersRepository,
                                                  private val userRepository: UserRepository)
     : MvpPresenter<OrdersHistoryView>() {
