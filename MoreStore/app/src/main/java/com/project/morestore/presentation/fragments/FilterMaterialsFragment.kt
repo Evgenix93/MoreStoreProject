@@ -131,6 +131,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
 
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     }
@@ -140,6 +141,7 @@ class FilterMaterialsFragment: MvpAppCompatFragment(R.layout.fragment_filter_mat
     }
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         when (result){
             is Filter -> bindFilter(result)
             is List<*> -> {

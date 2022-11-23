@@ -77,6 +77,7 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), Filt
 
 
     override fun error(message: String) {
+        binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
@@ -85,6 +86,7 @@ class FilterColorsFragment: MvpAppCompatFragment(R.layout.fragment_colors), Filt
     }
 
     override fun loaded(result: Any) {
+        binding.loader.isVisible = false
         when(result){
             is List<*> -> {
                 val properties = result as List<Property>
