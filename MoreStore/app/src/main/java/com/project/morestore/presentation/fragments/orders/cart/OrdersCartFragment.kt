@@ -11,20 +11,16 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.MainActivity
 import com.project.morestore.R
-import com.project.morestore.presentation.adapters.SliderMenuAdapter
-import com.project.morestore.presentation.adapters.cart.CartAdapter
-import com.project.morestore.databinding.FragmentOrdersCartBinding
-import com.project.morestore.presentation.dialogs.DeleteDialog
-import com.project.morestore.presentation.fragments.CabinetGuestFragment
 import com.project.morestore.data.models.Product
-
 import com.project.morestore.data.models.User
 import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
-import com.project.morestore.presentation.mvpviews.MainMvpView
-import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.databinding.FragmentOrdersCartBinding
 import com.project.morestore.domain.presenters.toolbar.cart.ToolbarCartPresenter
+import com.project.morestore.presentation.adapters.SliderMenuAdapter
+import com.project.morestore.presentation.adapters.cart.CartAdapter
+import com.project.morestore.presentation.dialogs.DeleteDialog
+import com.project.morestore.presentation.fragments.CabinetGuestFragment
 import com.project.morestore.presentation.mvpviews.ToolbarCartView
-
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -32,15 +28,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class OrdersCartFragment
-    : MvpAppCompatFragment(R.layout.fragment_orders_cart), OrdersCartView, ToolbarCartView,
-    MainMvpView {
+    : MvpAppCompatFragment(R.layout.fragment_orders_cart), OrdersCartView, ToolbarCartView{
 
     @Inject
     lateinit var ordersCartPresenter: OrdersCartPresenter
     private val presenter by moxyPresenter { ordersCartPresenter }
-    @Inject
-    lateinit var _mainPresenter: MainPresenter
-    private val mainPresenter by moxyPresenter { _mainPresenter }
 
     @Inject
     lateinit var _toolbarPresenter: ToolbarCartPresenter
@@ -63,7 +55,7 @@ class OrdersCartFragment
         tokenCheck()
         showBottomNav()
         initToolbar()
-        mainPresenter.getUserId()
+        presenter.getUserId()
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -133,7 +125,7 @@ class OrdersCartFragment
                 Log.d("MyDebug", "userId = $result")
                 showLoading(true)
                 presenter.loadCartData(result) {
-                    mainPresenter.removeProductFromCart(it.product.id, userId)
+                    presenter.removeProductFromCart(it.product.id, userId)
                 }
             }
             is Boolean -> {
@@ -151,16 +143,13 @@ class OrdersCartFragment
         showLoading(false)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         if(message.contains("Товар уже забронирован"))
-            mainPresenter.getUserId()
+            presenter.getUserId()
     }
 
     override fun showDeleteDialog(deleteDialog: DeleteDialog) {
         if (isAdded) {
             deleteDialog.show()
         }
-    }
-
-    override fun success() {
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -181,7 +170,7 @@ class OrdersCartFragment
     }
 
     private fun tokenCheck(){
-        mainPresenter.tokenCheck()
+        presenter.tokenCheck()
     }
 
     private fun showLoading(isLoading: Boolean){

@@ -10,14 +10,12 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
-import com.project.morestore.databinding.FragmentCreateProductConditionBinding
-import com.project.morestore.presentation.dialogs.SaveProductDialog
 import com.project.morestore.data.models.CreateProductData
 import com.project.morestore.data.models.CreatedProductId
 import com.project.morestore.data.models.Property2
+import com.project.morestore.databinding.FragmentCreateProductConditionBinding
 import com.project.morestore.domain.presenters.CreateProductPresenter
-import com.project.morestore.presentation.mvpviews.MainMvpView
-import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.dialogs.SaveProductDialog
 import com.project.morestore.presentation.mvpviews.CreateProductMvpView
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment

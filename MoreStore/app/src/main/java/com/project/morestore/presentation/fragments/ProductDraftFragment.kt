@@ -7,15 +7,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
-import com.project.morestore.presentation.adapters.FeedbackProductsAdapter
-import com.project.morestore.databinding.FragmentProductDraftBinding
 import com.project.morestore.data.models.FeedbackProduct
 import com.project.morestore.data.models.Product
-import com.project.morestore.presentation.mvpviews.MainMvpView
-import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.databinding.FragmentProductDraftBinding
 import com.project.morestore.domain.presenters.ProductDraftPresenter
+import com.project.morestore.presentation.adapters.FeedbackProductsAdapter
 import com.project.morestore.presentation.mvpviews.ProductDraftView
-import com.project.morestore.presentation.mvpviews.ResultLoadedMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment

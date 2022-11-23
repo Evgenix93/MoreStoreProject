@@ -5,18 +5,23 @@ import com.project.morestore.R
 import com.project.morestore.presentation.adapters.cart.CartAdapter
 import com.project.morestore.presentation.dialogs.DeleteDialog
 import com.project.morestore.data.models.cart.CartItem
+import com.project.morestore.data.repositories.AuthRepository
 import com.project.morestore.data.repositories.CartRepository
 import com.project.morestore.data.repositories.ProductRepository
 import com.project.morestore.util.errorMessage
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
 import javax.inject.Inject
 
-class OrdersCartPresenter @Inject constructor(@ApplicationContext val context: Context,
-                                              private val productRepository: ProductRepository,
-                                              private val cartRepository: CartRepository) : MvpPresenter<OrdersCartView>() {
+class OrdersCartPresenter @Inject constructor(
+    @ActivityContext val context: Context,
+    private val productRepository: ProductRepository,
+    private val cartRepository: CartRepository,
+    private val authRepository: AuthRepository
+    ) : MvpPresenter<OrdersCartView>() {
 
     private lateinit var adapter: CartAdapter
 
@@ -69,5 +74,33 @@ class OrdersCartPresenter @Inject constructor(@ApplicationContext val context: C
             }, {user ->  viewState.navigate(user) })
             viewState.initCart(adapter)
         }
+    }
+
+    fun getUserId() {
+        viewState.loaded(authRepository.getUserId())
+    }
+
+    fun removeProductFromCart(
+        productId: Long,
+        userId: Long? = null,
+    ) {
+        presenterScope.launch {
+            viewState.loading()
+            val response = cartRepository.removeCartItem(
+                productId = productId,
+                userId = userId
+            )
+
+            when (response?.code()) {
+                200 -> {
+                    viewState.loaded("")
+                }
+                else -> viewState.error(errorMessage(response))
+            }
+        }
+    }
+
+    fun tokenCheck() {
+        viewState.loaded(authRepository.isTokenEmpty())
     }
 }

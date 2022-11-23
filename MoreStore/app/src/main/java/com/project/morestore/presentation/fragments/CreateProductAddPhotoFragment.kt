@@ -12,12 +12,10 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
-import com.project.morestore.databinding.FragmentCreateProductAddPhotoBinding
-import com.project.morestore.presentation.dialogs.SaveProductDialog
 import com.project.morestore.data.models.CreatedProductId
+import com.project.morestore.databinding.FragmentCreateProductAddPhotoBinding
 import com.project.morestore.domain.presenters.CreateProductPresenter
-import com.project.morestore.presentation.mvpviews.MainMvpView
-import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.dialogs.SaveProductDialog
 import com.project.morestore.presentation.mvpviews.CreateProductMvpView
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
