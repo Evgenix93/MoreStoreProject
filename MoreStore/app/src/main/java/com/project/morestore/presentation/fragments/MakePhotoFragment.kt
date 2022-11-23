@@ -17,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentMakePhotoBinding
+import com.project.morestore.domain.presenters.PhotoPresenter
 import com.project.morestore.presentation.mvpviews.PhotoMvpView
 import com.project.morestore.domain.presenters.PhotoVideoPresenter
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +30,7 @@ import javax.inject.Inject
 class MakePhotoFragment : MvpAppCompatFragment(R.layout.fragment_make_photo), PhotoMvpView {
     private val binding: FragmentMakePhotoBinding by viewBinding()
     @Inject
-    lateinit var photoVideoPresenter: PhotoVideoPresenter
+    lateinit var photoVideoPresenter: PhotoPresenter
     private val presenter by moxyPresenter { photoVideoPresenter }
     private val args: MakePhotoFragmentArgs by navArgs()
     private lateinit var permissionLauncher: ActivityResultLauncher<String>

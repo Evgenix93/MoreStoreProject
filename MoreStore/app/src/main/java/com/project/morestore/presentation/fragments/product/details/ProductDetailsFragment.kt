@@ -34,6 +34,8 @@ import com.project.morestore.data.models.*
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
 import com.project.morestore.data.singletones.Token
+import com.project.morestore.domain.presenters.ProductDetailsPresenter
+import com.project.morestore.presentation.mvpviews.ProductDetailsMvpView
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,12 +46,12 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), MainMvpView {
+class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), ProductDetailsMvpView {
 
     private val binding: FragmentProductBinding by viewBinding()
     private var productAdapter: ProductAdapter by autoCleared()
     private val args: ProductDetailsFragmentArgs by navArgs()
-    @Inject lateinit var mainPresenter: MainPresenter
+    @Inject lateinit var mainPresenter: ProductDetailsPresenter
     private val presenter by moxyPresenter { mainPresenter }
     private var isLiked = false
     private var product: Product? = null

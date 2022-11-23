@@ -1,9 +1,9 @@
 package com.project.morestore.presentation.mvpviews
 
-import moxy.MvpView
 import moxy.viewstate.strategy.alias.OneExecution
 
-interface EditFavoriteSearchView: BaseMvpView {
+interface PhotoFinishMvpView: BaseMvpView {
+
     @OneExecution
     fun success()
 }

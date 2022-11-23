@@ -54,6 +54,13 @@ class CreateProductNameFragment : MvpAppCompatFragment(R.layout.fragment_create_
     private fun setClickListeners() {
         binding.sendBtn.setOnClickListener {
             presenter.updateCreateProductData(name = binding.nameEditText.text.toString())
+            findNavController().navigate(
+                CreateProductNameFragmentDirections.actionCreateProductNameFragmentToCreateProductStep6Fragment(
+                    category = args.category,
+                    brand = args.brand,
+                    forWho = args.forWho
+                )
+            )
         }
     }
 
@@ -68,13 +75,7 @@ class CreateProductNameFragment : MvpAppCompatFragment(R.layout.fragment_create_
 
     override fun loaded(result: Any) {
         binding.loader.isVisible = false
-        findNavController().navigate(
-            CreateProductNameFragmentDirections.actionCreateProductNameFragmentToCreateProductStep6Fragment(
-                category = args.category,
-                brand = args.brand,
-                forWho = args.forWho
-            )
-        )
+
     }
 
     override fun loading() {

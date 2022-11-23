@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class EditFavoriteSearchPresenter @Inject constructor(
     private val userRepository: UserRepository
-): MvpPresenter<MainMvpView>() {
+): MvpPresenter<EditFavoriteSearchView>() {
 
     fun reserveFilter(){
         userRepository.reserveFilter()

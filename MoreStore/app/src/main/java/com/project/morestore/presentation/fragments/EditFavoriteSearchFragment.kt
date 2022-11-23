@@ -23,13 +23,14 @@ import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.FavoritesPresenter
 import com.project.morestore.data.singletones.FilterState
 import com.project.morestore.domain.presenters.EditFavoriteSearchPresenter
+import com.project.morestore.presentation.mvpviews.EditFavoriteSearchView
 import com.project.morestore.util.NotificationType
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EditFavoriteSearchFragment : FullscreenFragment(), MainMvpView {
+class EditFavoriteSearchFragment : FullscreenFragment(), EditFavoriteSearchView {
     private lateinit var binding: FragmentEditFavoriteSearchBinding
     @Inject lateinit var editFavoriteSearchPresenter: EditFavoriteSearchPresenter
     private val presenter by moxyPresenter { editFavoriteSearchPresenter }

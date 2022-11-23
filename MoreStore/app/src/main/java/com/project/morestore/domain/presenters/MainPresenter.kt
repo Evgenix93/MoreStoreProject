@@ -1,12 +1,9 @@
 package com.project.morestore.domain.presenters
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
 import com.google.firebase.messaging.FirebaseMessaging
 import com.project.morestore.R
 import com.project.morestore.data.models.*
-import com.project.morestore.presentation.mvpviews.MainFragmentMvpView
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.data.repositories.AuthRepository
 import com.project.morestore.data.repositories.ChatRepository
@@ -16,15 +13,11 @@ import com.project.morestore.data.repositories.*
 import com.project.morestore.util.errorMessage
 import com.project.morestore.util.ProductStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import moxy.MvpPresenter
 import moxy.presenterScope
-import okhttp3.ResponseBody
-import java.io.File
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -35,67 +28,10 @@ class MainPresenter  @Inject constructor(
     private val productRepository: ProductRepository,
     private val userRepository: UserRepository,
     private val chatRepository: ChatRepository,
-    private val addressesRepository: AddressesRepository,
-    private val cardRepository: CardRepository,
     private val cartRepository: CartRepository
 ) : MvpPresenter<MainMvpView>() {
 
     private var searchJob: Job? = null
-    private var searchJob2: Job? = null
-
-    fun addProductToWishList(id: Long) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = userRepository.addProductToWishList(BrandWishList(listOf(id)))
-            when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
-                404 -> {
-                    viewState.loaded(emptyList<Product>())
-                    viewState.error(getStringFromResponse(response.errorBody()!!))
-
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
-
-    fun getProductWishList() {
-        presenterScope.launch {
-            viewState.loading()
-            val response = userRepository.getProductWishList()
-            when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
-                404 -> {
-                    viewState.loaded(emptyList<Product>())
-                    viewState.error(getStringFromResponse(response.errorBody()!!))
-
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
-
-    fun checkToken() {
-        presenterScope.launch {
-            val token = authRepository.loadToken()
-            val tokenSaveTime = authRepository.loadTokenSaveTime()
-            val tokenExpiresTime = authRepository.loadTokenExpires()
-
-            if (token == null || tokenSaveTime == null || tokenExpiresTime == null) {
-                viewState.loaded(false)
-                return@launch
-            }
-
-            val diffTime = System.currentTimeMillis() - tokenSaveTime
-            val isExpired = (diffTime / 1000) / 60 > tokenExpiresTime
-            if (isExpired) {
-                viewState.loaded(false)
-            } else {
-                authRepository.setupToken(token)
-                viewState.loaded(true)
-            }
-        }
-    }
 
 
     fun getProducts(
@@ -191,25 +127,7 @@ class MainPresenter  @Inject constructor(
         }
     }
 
-    fun addProductToCart(
-            productId: Long,
-            userId: Long? = null,
-    ) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = cartRepository.addCartItem(
-                    productId = productId,
-                    userId = userId
-            )
 
-            when (response?.code()) {
-                200 -> {
-                    viewState.loaded("")
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
     fun removeProductFromCart(
         productId: Long,
@@ -229,24 +147,6 @@ class MainPresenter  @Inject constructor(
                 else -> viewState.error(errorMessage(response))
             }
         }
-    }
-
-    fun getUserProductsWithStatus(status: Int) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.getCurrentUserProductsWithStatus(status)
-            when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
-
-                404 -> {
-                    viewState.loaded(emptyList<Product>())
-                    viewState.error(getStringFromResponse(response.errorBody()!!))
-
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-
     }
 
     fun getSuggestionProducts(suggestionModels: SuggestionModels) {
@@ -322,54 +222,6 @@ class MainPresenter  @Inject constructor(
         }
     }
 
-    fun getYouMayLikeProducts(category: Category?) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = if (category == null) productRepository.getYouMayLikeProducts(4, authRepository.getUserId())
-            else productRepository.getProducts(limit = 4, filter = Filter(categories = listOf(ProductCategory(category.id, category.name, true)), chosenForWho = listOf()))
-            when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
-
-    fun changeUserCity(city: String? = null, region: Region? = null) {
-        presenterScope.launch {
-            viewState.loading()
-            val filter = userRepository.getFilter()
-            city ?: run {
-                filter.currentLocation = null
-                filter.isCurrentLocationChosen = true
-                userRepository.updateFilter(filter)
-                viewState.loaded(Unit)
-                return@launch
-            }
-            region?.let {
-                filter.currentLocation = region
-                filter.isCurrentLocationFirstLoaded = false
-                filter.isCurrentLocationChosen = true
-                userRepository.updateFilter(filter)
-                viewState.loaded(Unit)
-                return@launch
-            }
-            val cities = productRepository.getCities()?.body()
-            cities ?: run {
-                viewState.error("Ошибка")
-                return@launch
-            }
-            val foundCity = cities.find { it.name == city }
-            foundCity ?: run {
-                viewState.error("Ошибка")
-                return@launch
-            }
-            filter.currentLocation = foundCity
-            filter.isCurrentLocationFirstLoaded = false
-            filter.isCurrentLocationChosen = true
-            userRepository.updateFilter(filter)
-            viewState.loaded(Unit)
-        }
-    }
 
     fun changeCurrentUserAddress(address: Address){
         userRepository.changeCurrentUserAddress(address)
@@ -378,9 +230,7 @@ class MainPresenter  @Inject constructor(
         viewState.loaded(userRepository.getCurrentUserAddress() ?: Address("", -1))
     }
 
-    fun shareProduct(id: Long) {
-        viewState.loaded(productRepository.getShareProductIntent(id))
-    }
+
 
     fun getFilter() {
         viewState.loaded(userRepository.getFilter())
@@ -469,7 +319,7 @@ class MainPresenter  @Inject constructor(
                                 suggestionObjects.add(SuggestionModels(listOf(product)))
                             }
 
-                            (viewState as MainFragmentMvpView).loadedSuggestions(suggestionsList, suggestionObjects)
+                            viewState.loadedSuggestions(suggestionsList, suggestionObjects)
                         }
 
                     }
@@ -482,13 +332,6 @@ class MainPresenter  @Inject constructor(
         searchJob?.cancel()
     }
 
-
-    private suspend fun getStringFromResponse(body: ResponseBody): String {
-        return withContext(Dispatchers.IO) {
-            val str = body.string()
-            str
-        }
-    }
 
     fun updateProductCategories(productCategories: List<ProductCategory>) {
         var chosenForWho = userRepository.getFilter().chosenForWho
@@ -522,38 +365,6 @@ class MainPresenter  @Inject constructor(
     }
 
 
-
-
-
-
-
-
-    private fun getProperties(propertyId: Long) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.getProperties()
-            when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!.filter { it.idCategory == propertyId })
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     fun getToken() = authRepository.getToken()
 
     fun getUserData() {
@@ -575,83 +386,13 @@ class MainPresenter  @Inject constructor(
                 }
                 404 -> {
                     viewState.error(context.getString(R.string.not_logged_in))
-                    (viewState as MainFragmentMvpView).loginFailed()
+                    viewState.loginFailed()
                 }
                 else -> viewState.error(errorMessage(response))
             }
         }
     }
 
-
-
-
-
-
-
-    fun updateCreateProductDataPhotosVideos(photoVideo: File, position: Int) {
-        productRepository.updateCreateProductPhotoVideo(photoVideo, position)
-        viewState.success()
-    }
-
-    fun updateCreateProductDataPhotosVideos(photoVideoUri: Uri, position: Int) {
-        presenterScope.launch {
-            val success = productRepository.updateCreateProductPhotoVideo(photoVideoUri, position)
-            if (success)
-                viewState.success()
-            else viewState.error("ошибка")
-
-        }
-    }
-
-    fun updateCreateProductDataPhotosVideos(bitmap: Bitmap, position: Int) {
-        presenterScope.launch {
-            val success = productRepository.updateCreateProductPhotoVideo(bitmap, position)
-            if (success)
-                viewState.success()
-            else viewState.error("ошибка")
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    fun deletePhotoBackground(file: File? = null, uri: Uri? = null) {
-        presenterScope.launch {
-            viewState.loading()
-            val response = productRepository.deletePhotoBackground(file, uri)
-            when (response?.code()) {
-                200 -> {
-                    viewState.loaded(response.body()!!.first())
-
-                }
-                else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
 
     fun loadOnboardingData() {
         presenterScope.launch {
@@ -669,43 +410,6 @@ class MainPresenter  @Inject constructor(
         viewState.loaded(authRepository.getUserId())
     }
 
-    fun loadCart(userId: Long?, productId: Long, callback: (hasValue: Boolean)->Unit) {
-        presenterScope.launch {
-            val response = cartRepository.getCartItems(
-                userId = userId
-            )
-
-            when (response?.code()) {
-                200 -> {
-                    val inCart = response.body()?.find { it.product.id == productId }
-                    callback(inCart != null)
-                }
-                401 -> {}
-               else -> viewState.error(errorMessage(response))
-            }
-        }
-    }
-
-    fun getDialogs() {
-        presenterScope.launch {
-            val response = chatRepository.getDialogs()
-            when (response?.code()) {
-                200 -> viewState.loaded(response.body()!!)
-            }
-        }
-    }
-
-    fun playVideo(fileUri: Uri? = null, file: File? = null) {
-        presenterScope.launch {
-            viewState.loading()
-            val intent = productRepository.getPlayVideoIntent(fileUri, file)
-            if (intent == null) {
-                viewState.error("ошибка")
-                return@launch
-            }
-            viewState.loaded(intent)
-        }
-    }
 
     fun tokenCheck() {
         viewState.loaded(authRepository.isTokenEmpty())
@@ -747,14 +451,7 @@ class MainPresenter  @Inject constructor(
         }
     }
 
-   fun viewProduct(idProduct: Long){
-       presenterScope.launch{
-          val response = productRepository.viewProduct(authRepository.getUserId(), idProduct)
-           when(response?.code()){
-               200 -> viewState.loaded(response.body()!!)
-           }
-       }
-   }
+
 
     fun getBanners(sex: Int){
         presenterScope.launch {

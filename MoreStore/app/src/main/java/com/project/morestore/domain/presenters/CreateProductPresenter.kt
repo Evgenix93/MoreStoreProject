@@ -8,7 +8,6 @@ import com.project.morestore.data.repositories.AuthRepository
 import com.project.morestore.data.repositories.CardRepository
 import com.project.morestore.data.repositories.ProductRepository
 import com.project.morestore.presentation.mvpviews.CreateProductMvpView
-import com.project.morestore.presentation.mvpviews.MainFragmentMvpView
 import com.project.morestore.util.errorMessage
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -131,7 +130,7 @@ class CreateProductPresenter @Inject constructor(@ApplicationContext private val
             status,
             dimensions
         )
-        viewState.loaded(Unit)
+        //viewState.loaded(Unit)
     }
 
     private suspend fun uploadProductPhotos(productId: Long): Boolean {

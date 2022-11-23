@@ -23,10 +23,11 @@ import com.project.morestore.domain.presenters.MyAddressesPresenter
 import com.project.morestore.util.attachNavigation
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MyAddressesFragment :FullscreenFragment(), MyAddressesView {
     private val args: MyAddressesFragmentArgs by navArgs()
     private val adapter = MyAddressesAdapter{

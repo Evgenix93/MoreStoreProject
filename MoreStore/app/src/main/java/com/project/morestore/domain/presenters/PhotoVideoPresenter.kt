@@ -26,28 +26,7 @@ class PhotoVideoPresenter @Inject constructor(
     private var pressedTime: Long = 0
     private var prepareVideoJob: Job? = null
 
-    fun takePhoto(imageCapture: ImageCapture){
 
-        val file = repository.createFileForPhoto()
-        val outputOptions = ImageCapture.OutputFileOptions
-            .Builder(file)
-            .build()
-
-
-        imageCapture.takePicture(
-            outputOptions,
-            ContextCompat.getMainExecutor(context),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onError(exc: ImageCaptureException) {
-                }
-
-                override fun
-                        onImageSaved(output: ImageCapture.OutputFileResults){
-                    viewState.onPhotoCaptured(file)
-                }
-            }
-        )
-    }
 
 
     fun takeVideo(videoCapture: VideoCapture<Recorder>){

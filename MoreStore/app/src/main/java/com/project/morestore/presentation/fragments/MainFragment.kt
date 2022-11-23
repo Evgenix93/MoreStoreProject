@@ -27,8 +27,8 @@ import com.project.morestore.presentation.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentMainBinding
 import com.project.morestore.data.models.*
 import com.project.morestore.data.models.Filter
-import com.project.morestore.presentation.mvpviews.MainFragmentMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
@@ -39,7 +39,7 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainFragmentMvpView {
+class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     @Inject lateinit var mainPresenter: MainPresenter
     private val presenter by moxyPresenter { mainPresenter }
     private val binding: FragmentMainBinding by viewBinding()

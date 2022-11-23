@@ -4,7 +4,6 @@ import android.content.Context
 import com.project.morestore.R
 import com.project.morestore.data.models.Card
 import com.project.morestore.presentation.mvpviews.AddCardMvpView
-import com.project.morestore.presentation.mvpviews.MainFragmentMvpView
 import com.project.morestore.data.repositories.CardRepository
 import com.project.morestore.util.errorMessage
 import dagger.hilt.android.qualifiers.ApplicationContext

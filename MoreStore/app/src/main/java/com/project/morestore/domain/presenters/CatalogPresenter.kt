@@ -5,7 +5,6 @@ import com.project.morestore.data.repositories.AuthRepository
 import com.project.morestore.data.repositories.ProductRepository
 import com.project.morestore.data.repositories.UserRepository
 import com.project.morestore.presentation.mvpviews.CatalogMvpView
-import com.project.morestore.presentation.mvpviews.MainFragmentMvpView
 import com.project.morestore.util.ProductStatus
 import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.Job
@@ -313,7 +312,7 @@ class CatalogPresenter @Inject constructor(
                             suggestionObjects.add(SuggestionModels(listOf(product)))
                         }
 
-                        (viewState as MainFragmentMvpView).loadedSuggestions(suggestionsList, suggestionObjects)
+                        viewState.loadedSuggestions(suggestionsList, suggestionObjects)
                     }
 
                 }

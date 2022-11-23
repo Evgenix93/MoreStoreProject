@@ -19,6 +19,8 @@ import com.project.morestore.databinding.FragmentPhotoFinishBinding
 import com.project.morestore.data.models.ProductPhoto
 import com.project.morestore.presentation.mvpviews.MainMvpView
 import com.project.morestore.domain.presenters.MainPresenter
+import com.project.morestore.domain.presenters.PhotoFinishPresenter
+import com.project.morestore.presentation.mvpviews.PhotoFinishMvpView
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -26,11 +28,11 @@ import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PhotoFinishFragment : MvpAppCompatFragment(R.layout.fragment_photo_finish), MainMvpView {
+class PhotoFinishFragment : MvpAppCompatFragment(R.layout.fragment_photo_finish), PhotoFinishMvpView {
     private val binding: FragmentPhotoFinishBinding by viewBinding()
     private val args: PhotoFinishFragmentArgs by navArgs()
     @Inject
-    lateinit var mainPresenter: MainPresenter
+    lateinit var mainPresenter: PhotoFinishPresenter
     private val presenter by moxyPresenter { mainPresenter }
     private var isBackgroundDeleted = false
 
