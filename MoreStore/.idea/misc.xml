@@ -52,10 +52,12 @@
         <entry key="..\:/Android developing/MoreStoreFreelance/MoreStore/app/src/main/res/layout/toolbar.xml" value="0.38435228730226595" />
         <entry key="..\:/Android developing/MoreStoreFreelance/MoreStore/app/src/main/res/layout/toolbar_create_product.xml" value="0.38435228730226595" />
         <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/container_empty.xml" value="0.5020833333333333" />
+        <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/delete_dialog.xml" value="0.29010416666666666" />
         <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/fragment_buyers.xml" value="0.5020833333333333" />
         <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/fragment_catalog.xml" value="0.5020833333333333" />
         <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/fragment_categories.xml" value="0.5020833333333333" />
         <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/fragment_colors.xml" value="0.5020833333333333" />
+        <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/fragment_create_product_styles.xml" value="0.522051282051282" />
         <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/fragment_deal_place.xml" value="0.5020833333333333" />
         <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/fragment_favorites.xml" value="0.4947916666666667" />
         <entry key="..\:/Android developing/MoreStoreRefactor/MoreStore/app/src/main/res/layout/fragment_filter.xml" value="0.5302083333333333" />
@@ -274,30 +276,9 @@
         <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_add_card.xml" value="0.38903985507246375" />
         <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_buyers.xml" value="0.38903985507246375" />
         <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_categories.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_change_region.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_add_photo.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_colors.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_condition.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_description.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_materials.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_name.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_package.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_price.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_sizes.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_sizes_shoos.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_step1.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_step2.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_step3.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_step4.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_create_product_styles.xml" value="0.38903985507246375" />
         <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_first_launch.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_media.xml" value="0.38903985507246375" />
         <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_onboarding6.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_orders_cart.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_product.xml" value="0.38903985507246375" />
         <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_regions.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/fragment_social_login.xml" value="0.38903985507246375" />
-        <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/item_cart_product.xml" value="0.38903985507246375" />
         <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/item_create_product_element.xml" value="0.38903985507246375" />
         <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/item_material_line.xml" value="0.38903985507246375" />
         <entry key="..\:/android apps/android reserve copies/MoreStoreProject/MoreStore/app/src/main/res/layout/widget_titledtextfield.xml" value="0.38903985507246375" />

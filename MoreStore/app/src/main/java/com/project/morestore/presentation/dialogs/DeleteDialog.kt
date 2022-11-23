@@ -2,6 +2,7 @@ package com.project.morestore.presentation.dialogs
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.project.morestore.R
@@ -17,7 +18,7 @@ class DeleteDialog(
     private val cancelText :String = context.getString(R.string.deleteDialog_cancel),
     private val cancelCallback :(()->Unit)? = null
 ) :AlertDialog(context, R.style.App_Dialog_AlertTransparent) {
-    private val views = DeleteDialogBinding.inflate(context.inflater)
+    private val views = DeleteDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setView(views.root)
