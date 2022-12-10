@@ -616,5 +616,6 @@
     <string name="how_selling_work">Как происходит продажа</string>
     <string name="choose_shoos_type">Выберите тип: Обувь</string>
     <string name="choose_style">Уточните фасон</string>
+    <string name="feedback_on_moderation">Отзыв на модерации</string>
     <!--endregion city-->
 </resources>

@@ -44,6 +44,7 @@ class FeedbackProductFragment() :FullscreenFragment(), FeedbackProductView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.getProducts(requireArguments().getLong(USER_ID))
         with(views){
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
             list.adapter = adapter

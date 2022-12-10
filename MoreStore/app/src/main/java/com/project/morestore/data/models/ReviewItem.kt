@@ -19,7 +19,8 @@ class Review(
     val photo :Array<ReviewPhoto>?,
     val text :String,
     val rate :Byte,
-    val date :Calendar
+    val date :Calendar,
+    val status: Byte
 )
 
  abstract class ReviewListItem{

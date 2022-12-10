@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
 import com.project.morestore.data.models.Feedback
+import com.project.morestore.data.models.Feedback.Companion.FEEDBACK_ACTIVE_STATUS
+import com.project.morestore.data.models.Feedback.Companion.FEEDBACK_ON_MODERATION_STATUS
 import com.project.morestore.data.models.FeedbackItem
 import com.project.morestore.presentation.mvpviews.FeedbackPhotoView
 import com.project.morestore.data.repositories.ReviewRepository
@@ -45,8 +47,9 @@ class FeedbackPhotoPresenter @Inject constructor(
         presenterScope.launch {
             val jobs = photos.filterIsInstance<FeedbackItem.Photo>()
                 .map { async { getBase64photos(it.photo) } }
-            data.createReview(Feedback(productId, rate, feedback), jobs.awaitAll())
-            viewState.showSuccess(rate < 4)
+            val status = if(rate > 3) FEEDBACK_ACTIVE_STATUS else FEEDBACK_ON_MODERATION_STATUS
+            data.createReview(Feedback(productId, rate, feedback, status.toByte()), jobs.awaitAll())
+            viewState.showSuccess(rate > 3)
         }
     }
 
@@ -64,5 +67,7 @@ class FeedbackPhotoPresenter @Inject constructor(
        data.saveMediaUris(uris)
        viewState.mediaUrisSaved()
    }
+
+
 
 }

@@ -1,9 +1,12 @@
 package com.project.morestore.domain.presenters
 
+import com.project.morestore.data.models.Feedback.Companion.FEEDBACK_ACTIVE_STATUS
 import com.project.morestore.data.models.ReviewItem
 import com.project.morestore.presentation.mvpviews.ReviewView
 import com.project.morestore.data.repositories.OrdersRepository
 import com.project.morestore.data.repositories.ReviewRepository
+
+
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -25,7 +28,8 @@ class ReviewsPresenter @Inject constructor(
                         it.cart?.first()?.idUser == userId
                     } != null)
             else viewState.showReviewButton(false)
-            viewState.showReviews(data.getReviews(userId).map { ReviewItem(it) })
+            viewState.showReviews(data.getReviews(userId)
+                .filter { it.status == FEEDBACK_ACTIVE_STATUS.toByte() }.map { ReviewItem(it) })
         }
 
     }

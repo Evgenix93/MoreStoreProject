@@ -87,9 +87,10 @@ class FeedbackPhotoFragment :MvpAppCompatFragment(), FeedbackPhotoView{
 
     override fun showSuccess(review :Boolean) {
         views.progressBar.isVisible = false
+        val title = if(review) getString(R.string.feedback_complete_title) else getString(R.string.feedback_on_moderation)
         FeedbackCompleteDialog(requireContext(), {
             findNavController().popBackStack(R.id.sellerProfileFragment, false)
-        }).show()
+        }, title = title).show()
     }
 
     override fun mediaUrisSaved() {

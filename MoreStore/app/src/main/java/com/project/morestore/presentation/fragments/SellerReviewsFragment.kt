@@ -15,11 +15,12 @@ import com.project.morestore.presentation.mvpviews.ReviewView
 import com.project.morestore.domain.presenters.ReviewsPresenter
 import com.project.morestore.util.dp
 import com.project.morestore.util.setSpace
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
     companion object{
         const val USER_ID = "id"

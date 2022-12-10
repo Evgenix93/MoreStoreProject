@@ -57,7 +57,7 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.setInfo(requireArguments().getParcelable(EDIT_ADDRESS))
+        presenter.setInfo(arguments?.getParcelable(EDIT_ADDRESS))
 
         with(views.toolbar){
             root.attachNavigation()
