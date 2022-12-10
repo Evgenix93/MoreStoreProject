@@ -156,6 +156,10 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
     }
 
     override fun notFoundCity() {
+        if(views.city.text != "Выберите город") {
+            presenter.city = views.city.text.toString()
+            return
+        }
         views.city.setText(R.string.myAddress_new_address_city_notFound)
         views.city.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray2))
         views.city.setBackgroundResource(R.drawable.bg_rect_bordlight_round4)
