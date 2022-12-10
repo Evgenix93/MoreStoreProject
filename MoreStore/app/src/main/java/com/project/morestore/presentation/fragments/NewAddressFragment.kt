@@ -108,7 +108,7 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
                 findNavController().navigate(R.id.citiesFragment, bundleOf(TYPE to 0))
             }
             save.setOnClickListener {
-                presenter.save(defaultAddress.isChecked, requireArguments().getParcelable(EDIT_ADDRESS))
+                presenter.save(defaultAddress.isChecked, arguments?.getParcelable(EDIT_ADDRESS))
             }
             arguments?.getParcelable<MyAddress>(EDIT_ADDRESS)?.let {
                 showFullname(it.name)
@@ -146,6 +146,10 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
     }
 
     override fun showCity(city :String) {
+        if(views.city.text != "Выберите город") {
+            presenter.city = views.city.text.toString()
+            return
+        }
         views.city.text = city
         views.city.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
         views.city.setBackgroundResource(R.drawable.bg_rect_borddark_round4)
