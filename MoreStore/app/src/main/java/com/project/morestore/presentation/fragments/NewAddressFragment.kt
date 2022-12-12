@@ -131,11 +131,13 @@ class NewAddressFragment :MvpAppCompatFragment(), NewAddressView {
     }
 
     override fun showFullname(fullname :String) {
-        views.fullname.setText(fullname)
+        if(views.fullname.text.isEmpty())
+           views.fullname.setText(fullname)
     }
 
     override fun showPhone(phone :String) {
-        views.phoneNumber.setText(phone)
+        if(views.phoneNumber.text.toString() == "+7 (")
+           views.phoneNumber.setText(phone)
     }
 
     override fun showFavorite(isFavorite: Boolean) {

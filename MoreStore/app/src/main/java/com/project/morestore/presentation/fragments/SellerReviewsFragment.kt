@@ -52,7 +52,7 @@ class SellerReviewsFragment(): MvpAppCompatFragment(), ReviewView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.initReviews(requireArguments().getLong(USER_ID))
+        presenter.initReviews(arguments?.getLong(USER_ID))
         list.adapter = adapter
         list.setSpace(8.dp)
     }

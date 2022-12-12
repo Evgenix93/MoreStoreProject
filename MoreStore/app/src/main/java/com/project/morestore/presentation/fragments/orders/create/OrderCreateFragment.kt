@@ -150,6 +150,12 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             binding.anotherCityRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
         }
 
+        if(product.packageDimensions.length == null){
+            binding.yandexRadioBtn.isEnabled = false
+            binding.yandexRadioBtn.buttonDrawable?.alpha = 125
+            binding.yandexRadioBtn.setTextColor(resources.getColor(R.color.gray1, null))
+        }
+
         binding.yandexRadioBtn.setText("По городу ${product.address?.fullAddress?.substringBefore(",")} (Яндекс Go)")
     }
 

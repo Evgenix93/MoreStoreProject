@@ -19,7 +19,8 @@ class ReviewsPresenter @Inject constructor(
 
 
 
-     fun initReviews(userId: Long){
+     fun initReviews(userId: Long?){
+         userId ?: return
         presenterScope.launch {
             val response = orderRepository.getAllOrders()
             if (response?.code() == 200)

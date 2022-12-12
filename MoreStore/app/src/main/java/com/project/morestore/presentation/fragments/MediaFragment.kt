@@ -50,7 +50,7 @@ class MediaFragment() : FullscreenFragment(), BaseMvpView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBarsColor(Color.BLACK)
-        val photos = requireArguments().getStringArray(PHOTOS)?: arrayOf()
+        val photos = arguments?.getStringArray(PHOTOS)?: arrayOf()
         with(views){
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
             textIndicator.text = "1 из ${photos.size}"

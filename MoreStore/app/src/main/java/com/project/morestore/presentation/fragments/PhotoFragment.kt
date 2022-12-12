@@ -37,7 +37,7 @@ class PhotoFragment: Fragment(R.layout.fragment_photo) {
             .load(arguments?.getString(PHOTO))
             .into(binding.photoImageView)
 
-        if(requireArguments().getBoolean(IS_SOLD, false))
+        if(arguments?.getBoolean(IS_SOLD, false) == true)
             binding.photoImageView.alpha = 0.5f
 
     }

@@ -11,7 +11,8 @@ class FeedbackProductPresenter @Inject constructor(
     private val data: ReviewRepository
 ) :MvpPresenter<FeedbackProductView>(){
 
-    fun getProducts(userId: Long) {
+    fun getProducts(userId: Long?) {
+        userId ?: return
         presenterScope.launch {
             viewState.showProducts(data.getUserProducts(userId).toList())
         }
