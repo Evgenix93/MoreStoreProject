@@ -55,7 +55,7 @@ class OrdersActiveFragment
         toolBarCartPresenter.initMenu(OrdersSliderMenu.ORDERS)
         showBottomNav()
         initToolbar()
-        showLoading(true)
+
     }
 
     ///////////////////////////////////////////////////////////////////////////
