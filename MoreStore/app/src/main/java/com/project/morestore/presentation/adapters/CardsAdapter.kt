@@ -15,10 +15,7 @@ class CardsAdapter(private val choose: (List<Card>) -> Unit, private val delete:
 
     fun updateCards(newCards: List<Card>){
        cards = newCards
-        if(cards.isNotEmpty())
-        if(cards.all{it.active == 0})
-            cards.first().active = 1
-         notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 
     fun loading(loading: Boolean){

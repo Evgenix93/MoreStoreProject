@@ -73,7 +73,12 @@ class ProfilePresenter @Inject constructor(private val userRepository: UserRepos
             val response = cardRepository.getCards()
             when(response?.code()){
                 200 -> {
-                    viewState.loaded(response.body()!!)
+                    val cards = response.body()!!
+                    if(cards.isNotEmpty() && cards.all{it.active == 0}){
+                        cards.first().active = 1
+                        chooseCard(cards)
+                    }else
+                        viewState.loaded(response.body()!!)
                 }
                 404 -> viewState.loaded(listOf<Card>())
                 else -> viewState.error(errorMessage(response))
