@@ -244,7 +244,9 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             11 -> "Декабря"
             else -> ""
         }
-        binding.deliveryDateTextView.text = "${calendar.get(Calendar.DAY_OF_MONTH)} $month"
+        binding.deliveryDateTextView.text = if(binding.anotherCityRadioBtn.isChecked)
+                                               "${calendar.get(Calendar.DAY_OF_MONTH)} $month"
+                                            else "сегодня"
     }
 
     override fun applyPromo(promo: PromoCode?) {

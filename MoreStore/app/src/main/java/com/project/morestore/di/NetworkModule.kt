@@ -35,7 +35,7 @@ class NetworkModule {
     @Provides
     fun getRetrofit(client: OkHttpClient): Retrofit{
         return Retrofit.Builder()
-            .baseUrl("https://vm-f0c61e3b.na4u.ru/api/v1/")
+            .baseUrl("https://more.store/api/v1/")
             .client(client)
             .addConverterFactory(
                 MoshiConverterFactory.create(

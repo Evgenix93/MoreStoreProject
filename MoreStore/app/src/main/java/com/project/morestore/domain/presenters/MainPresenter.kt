@@ -402,6 +402,7 @@ class MainPresenter  @Inject constructor(
                 200 -> {
                     viewState.loaded(response.body()!!)
                 }
+                404 -> viewState.showOnBoarding()
                 else -> viewState.error(errorMessage(response))
             }
         }

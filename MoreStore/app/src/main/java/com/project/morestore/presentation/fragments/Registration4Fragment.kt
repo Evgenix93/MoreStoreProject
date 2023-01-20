@@ -48,7 +48,7 @@ class Registration4Fragment : MvpAppCompatFragment(R.layout.fragment_registratio
             binding.skipStepTextView.isVisible = true
             binding.skipStepTextView.setOnClickListener {
                 findNavController().navigate(
-                    Registration4FragmentDirections.actionRegistration4FragmentToMainFragment()
+                    Registration4FragmentDirections.actionRegistration4FragmentToOnboarding1Fragment()
                 )
             }
         }

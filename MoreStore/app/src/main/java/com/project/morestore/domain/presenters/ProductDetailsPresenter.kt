@@ -202,6 +202,7 @@ class ProductDetailsPresenter @Inject constructor(private val userRepository: Us
             else productRepository.getProducts(limit = 4, filter = Filter(categories = listOf(ProductCategory(category.id, category.name, true)), chosenForWho = listOf()))
             when (response?.code()) {
                 200 -> viewState.loaded(response.body()!!)
+                404 -> {}
                 else -> viewState.error(errorMessage(response))
             }
         }
@@ -241,6 +242,7 @@ class ProductDetailsPresenter @Inject constructor(private val userRepository: Us
                     callback(inCart != null)
                 }
                 401 -> {}
+                404 -> {}
                 else -> viewState.error(errorMessage(response))
             }
         }

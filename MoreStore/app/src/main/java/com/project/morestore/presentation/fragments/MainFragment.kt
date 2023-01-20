@@ -390,6 +390,9 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
                 return
             }
             if(result.firstOrNull() is BrandsPropertiesDataWrapper){
+                if((result.first() as BrandsPropertiesDataWrapper).id == -1L){
+                    presenter.getBanners(1)
+                }
 
                 val properties = (result.last() as BrandsPropertiesDataWrapper).data.property
                 if(properties?.contains("140") == true && !properties.contains("141"))
