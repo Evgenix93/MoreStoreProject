@@ -1,6 +1,7 @@
 package com.project.morestore.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -140,8 +141,10 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
             if(result is List<*>){
               if(result.isNotEmpty() && result.first() is BrandsPropertiesDataWrapper)
               brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
-              else
+              else {
+                  Log.d("MyDebug", "cards test = $result")
                   cardsAdapter.updateCards(result as List<Card>)
+              }
             }
         else {
                 val currentAddress = result as Address

@@ -28,7 +28,10 @@ class AddCardPresenter @Inject constructor(@ActivityContext private val context:
             when(cardsResponse?.code()){
                 200 -> {
                     val cards = cardsResponse.body()!!
-
+                    if(cards.find{it.number == cardNumber} != null) {
+                        viewState.error("Такая карта уже добавлена")
+                        return@launch
+                    }
                     cards.forEach{
                         val deleteResponse = cardRepository.deleteCard(it)
                         if(deleteResponse?.code() != 200) {
@@ -42,6 +45,7 @@ class AddCardPresenter @Inject constructor(@ActivityContext private val context:
                         }
                     }
                 }
+                404 -> {}
                 else -> viewState.error(errorMessage(cardsResponse))
             }
             val response = cardRepository.addCard(Card(id = null, number = cardNumber, active = 1))
