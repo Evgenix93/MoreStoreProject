@@ -15,8 +15,10 @@ class CardsAdapter(private val choose: (List<Card>) -> Unit, private val delete:
 
     fun updateCards(newCards: List<Card>){
        cards = newCards
-       notifyItemRangeChanged(0, cards.lastIndex)
-
+        if(cards.isNotEmpty())
+        if(cards.all{it.active == 0})
+            cards.first().active = 1
+         notifyDataSetChanged()
     }
 
     fun loading(loading: Boolean){
@@ -36,11 +38,13 @@ class CardsAdapter(private val choose: (List<Card>) -> Unit, private val delete:
                binding.radioButtonImageView.setImageResource(R.drawable.ic_radiobutton_not_checked)
 
           binding.radioButtonImageView.setOnClickListener{
+              if(card.active == 1)
+                  return@setOnClickListener
               if(loading)
                   return@setOnClickListener
 
-                  cards.filter{it.active == 1}.forEach { it.active = 0 }
-                  card.active = if(card.active == 0) 1 else 0
+                  cards.forEach { it.active = 0 }
+                  card.active = 1
                   choose(cards)
           }
           binding.trashImageView.setOnClickListener{

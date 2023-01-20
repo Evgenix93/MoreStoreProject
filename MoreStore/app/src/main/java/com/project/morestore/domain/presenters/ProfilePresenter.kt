@@ -44,6 +44,7 @@ class ProfilePresenter @Inject constructor(private val userRepository: UserRepos
                 when(deleteResponse?.code()){
                     404 -> {viewState.error(deleteResponse.errorBody()!!.getStringFromResponse())
                         return@launch}
+                    200 -> {}
                     else -> {
                         viewState.error(errorMessage(deleteResponse))
                         return@launch
@@ -53,6 +54,7 @@ class ProfilePresenter @Inject constructor(private val userRepository: UserRepos
             cards.forEach{
                 val addResponse = cardRepository.addCard(Card(null, it.number, it.active))
                 when(addResponse?.code()){
+                    200 -> {}
                     404 -> {viewState.error(addResponse.errorBody()!!.getStringFromResponse())
                         return@launch}
                     else -> {
