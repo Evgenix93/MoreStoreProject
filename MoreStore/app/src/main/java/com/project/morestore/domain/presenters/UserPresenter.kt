@@ -197,7 +197,8 @@ class UserPresenter @Inject constructor(
             when (response?.code()) {
                 200 -> {
                     val currentUserId = authRepository.getUserId()
-                    response.body()?.forEach {
+                   val sellerProducts = response.body()?.filter{it.status == 1}
+                    sellerProducts?.forEach {
                         val status = when (it.statusUser?.order?.status) {
                             0 -> if (it.statusUser.order.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
                             else if (it.idUser == currentUserId && it.statusUser.buy?.status != 2) 6
@@ -205,9 +206,9 @@ class UserPresenter @Inject constructor(
                             1 -> 8
                             else -> 1
                         }
-                        it.status = status
+                           it.status = status
                     }
-                    viewState.loaded(response.body()!!)
+                    viewState.loaded(sellerProducts!!)
                 }
                 404 -> viewState.loaded(emptyList<Product>())
                 else -> viewState.error(errorMessage(response))
