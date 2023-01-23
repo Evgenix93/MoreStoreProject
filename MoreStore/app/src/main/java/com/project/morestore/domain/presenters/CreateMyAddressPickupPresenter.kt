@@ -22,7 +22,10 @@ class CreateMyAddressPickupPresenter @Inject constructor(
         }
     }
 
-    override fun save(fullname :String, phoneNumber :String, myAddress: MyAddress, cdekAddress: CdekAddress){
+    override fun save(fullname :String, phoneNumber :String, myAddress: MyAddress?, cdekAddress: CdekAddress?){
+        if(cdekAddress == null){
+            return
+        }
         presenterScope.launch(displayError) {
             waitingDelegate.show()
             addressNetwork.createAddress(

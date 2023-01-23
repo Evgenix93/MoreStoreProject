@@ -66,14 +66,14 @@ class MyAddressPickupFragment : MvpAppCompatFragment(), MyAddressPickupView {
             presenter.save(
                 views.fullname.string,
                 views.phoneNumber.string,
-                requireArguments().getParcelable(EDIT_ADDRESS)!!,
-                requireArguments().getParcelable(ADDRESS)!!
+                requireArguments().getParcelable(EDIT_ADDRESS),
+                requireArguments().getParcelable(ADDRESS)
             )
         }
         views.phoneNumber.setPhoneField()
         views.phoneNumber.setText("+7 (")
         views.defaultAddress.setOnCheckedChangeListener { _, check -> presenter.changeDefault(check) }
-        presenter.setInfo(requireArguments().getParcelable(EDIT_ADDRESS)!!)
+        if(isEdit) presenter.setInfo(requireArguments().getParcelable(EDIT_ADDRESS)!!)
     }
 
     override fun showFullname(fullname: String) = views.fullname.setText(fullname)

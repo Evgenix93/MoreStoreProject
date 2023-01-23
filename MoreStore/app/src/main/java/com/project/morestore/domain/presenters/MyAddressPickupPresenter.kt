@@ -13,7 +13,7 @@ abstract class MyAddressPickupPresenter (
     protected val addressNetwork :AddressesRepository
 ) : MvpPresenter<MyAddressPickupView>() {
 
-    abstract fun save(fullname :String, phoneNumber :String, myAddress: MyAddress, cdekAddress: CdekAddress)
+    abstract fun save(fullname :String, phoneNumber :String, myAddress: MyAddress?, cdekAddress: CdekAddress?)
 
     protected val waitingDelegate = LoadingPresenter()
     protected val displayError = CoroutineExceptionHandler { _, ex ->

@@ -13,7 +13,10 @@ class EditMyAddressPickupPresenter @Inject constructor (
 ) :MyAddressPickupPresenter(addressNetwork) {
 
 
-    override fun save(fullname :String, phoneNumber :String, myAddress: MyAddress, cdekAddress: CdekAddress){
+    override fun save(fullname :String, phoneNumber :String, myAddress: MyAddress?, cdekAddress: CdekAddress?){
+        if(myAddress == null){
+            return
+        }
         presenterScope.launch(displayError) {
             waitingDelegate.show()
             addressNetwork.editAddress(
