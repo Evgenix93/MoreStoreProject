@@ -7,7 +7,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-class CdekAddress(val code: String, val location :Location): Parcelable {
+class CdekAddress(val code: String, val location :Location, val type: String,
+                  @Json(name = "is_handout") val isHandout: Boolean,
+                  @Json(name = "is_reception") val isReception: Boolean): Parcelable {
 
     @Parcelize
     @JsonClass(generateAdapter = true)
@@ -23,6 +25,10 @@ class CdekAddress(val code: String, val location :Location): Parcelable {
         val lon :Double,
         val address :String
     ): Parcelable
+
+    companion object{
+        const val TYPE_PVZ = "PVZ"
+    }
 
     /*
     {

@@ -52,6 +52,7 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
             val conf = Bitmap.Config.ARGB_8888 // see other conf types
             Bitmap.createBitmap(100, 100, conf)
             presenterScope.launch {
+                viewState.loading(true)
                 val orders = getAllOrders()?.reversed() ?: return@launch
                 val orderAddresses = getOrderAddresses() ?: return@launch
                 val cartItems = getCartItems() ?: return@launch
@@ -80,6 +81,7 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
 
                     val buySuggest = order.cart.first().statusUser?.buy
                     var deliveryInfo: String? = null
+                        var info: CdekOrderInfo? = null
                     var status = when(buySuggest?.status) {
                         0 -> OrderStatus.NOT_SUBMITTED
                         1 -> {
@@ -108,7 +110,7 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
                                     status = OrderStatus.NOT_SUBMITTED
                                 if(order.idCdek != null && order.delivery == 3 && order.isPayment){
                                     Log.d("mylog", "cdek")
-                                    val info = ordersRepository.getCdekOrderInfo(order.idCdek)?.body()
+                                     info = ordersRepository.getCdekOrderInfo(order.idCdek)?.body()
                                     if (info?.entity?.statuses?.first()?.code == CdekStatuses.INVALID)
                                         status = OrderStatus.DELIVERY_STATUS_NOT_VALID
                                      else if(info?.entity?.statuses?.first() != null) {
@@ -133,8 +135,8 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
                         }
 
                         val discountedPrice = when{
-                            order.cart.first().statusUser?.price?.status == 1 -> order.cart.first().statusUser?.price?.value?.toIntOrNull()
-                            order.cart.first().statusUser?.sale?.status == 1 -> order.cart.first().statusUser?.sale?.value?.toIntOrNull()
+                            order.cart.first().statusUser?.price?.status == 1 -> order.cart.first().statusUser?.price?.value?.toFloatOrNull()
+                            order.cart.first().statusUser?.sale?.status == 1 -> order.cart.first().statusUser?.sale?.value?.toFloatOrNull()
                             else -> null
 
                         }
@@ -145,7 +147,7 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
                         user = user,
                         photo = order.cart.first().photo.first().photo,
                         name = order.cart.first().name,
-                        price = discountedPrice ?: order.cart.first().priceNew?.toInt() ?: 0,
+                        price = discountedPrice ?: order.cart.first().priceNew ?: 0f,
                         deliveryDate = if(time == null || time.timeInMillis == 0L)"-" else
                             "${time.get(Calendar.DAY_OF_MONTH)}.${time.get(Calendar.MONTH) + 1}.${time.get(Calendar.YEAR)}",
                         deliveryInfo = when (order.delivery) {
@@ -166,7 +168,8 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
                         buyerId = order.idUser,
                         cdekYandexAddress = order.placeAddress,
                         deliveryStatusInfo = deliveryInfo,
-                        yandexGoOrderId = order.idYandex
+                        yandexGoOrderId = order.idYandex,
+                        cdekInfoEntity = info
 
                                 )
 
@@ -351,9 +354,9 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
 
     }
 
-    private fun getPaymentUrl(sum: Float, orderId: Long){
+    private fun getPaymentUrl(sum: Float, orderId: Long, sellerPayout: Float){
         presenterScope.launch {
-            val response = ordersRepository.payForOrder(PayOrderInfo(sum, orderId))
+            val response = ordersRepository.payForOrder(PayOrderInfo(sum, orderId, sellerPayout ))
             when(response?.code()){
                 200 -> {
                     viewState.loading(false)
@@ -450,7 +453,7 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
                             promo = orderItem.promo)
                         finalPrice ?: viewState.loading(false)
                         finalPrice ?: return@launch
-                        getPaymentUrl(sum = finalPrice, orderItem.id)
+                        getPaymentUrl(sum = finalPrice, orderItem.id, orderItem.price)
                     }else{
                         val toAddress = orderItem.cdekYandexAddress
                         val finalPrice = getFinalCdekPrice(
@@ -459,7 +462,7 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
                             promo = orderItem.promo)
                         finalPrice ?: viewState.loading(false)
                         finalPrice ?: return@launch
-                        getPaymentUrl(sum = finalPrice, orderId = orderItem.id)
+                        getPaymentUrl(sum = finalPrice, orderId = orderItem.id, orderItem.price)
                     }
                 }
 

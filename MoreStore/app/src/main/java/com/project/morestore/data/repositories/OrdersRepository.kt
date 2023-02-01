@@ -209,7 +209,7 @@ class OrdersRepository @Inject constructor(private val ordersApi: OrdersApi) {
         }
     }
 
-    suspend fun createCdekOrder(order: CdekOrder): Response<Unit>? {
+    suspend fun createCdekOrder(order: CdekOrder): Response<CreateCdekResponse>? {
         return try {
             ordersApi.createCdekOrder(order)
         } catch (e: Exception) {
@@ -266,7 +266,7 @@ class OrdersRepository @Inject constructor(private val ordersApi: OrdersApi) {
             if (e is IOException) {
                 null
             } else {
-                Log.d("mylog", e.message.toString())
+                Log.d("mylog", "get yandex info: ${e.message.toString()}")
                 try {
                     val response = ordersApi.getYandexGoOrderInfoGetError(id)
                     if (response.code() == 500) {
@@ -313,7 +313,7 @@ class OrdersRepository @Inject constructor(private val ordersApi: OrdersApi) {
         return try {
             ordersApi.getCdekOrderInfo(id)
         }catch (e: Throwable){
-            Log.d("mylog", e.message.toString())
+            Log.d("mylog", "get Cdek info: ${e.message.toString()}")
             null
         }
     }

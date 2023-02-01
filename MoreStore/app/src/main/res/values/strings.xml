@@ -458,7 +458,7 @@
     <!--region my addresses-->
     <string name="myAddress_title">Мои адреса</string>
     <string name="myAddress_pickup">Адрес курьерской доставки</string>
-    <string name="myAddress_delivery">Адрес пункта выдачи</string>
+    <string name="myAddress_delivery">Адрес пункта выдачи (ПВЗ)</string>
     <string name="myAddress_addAddress">Добавить адрес</string>
 
     <string name="myAddress_empty">Здесь пока нет ни одного адреса</string>
@@ -617,5 +617,8 @@
     <string name="choose_shoos_type">Выберите тип: Обувь</string>
     <string name="choose_style">Уточните фасон</string>
     <string name="feedback_on_moderation">Отзыв на модерации</string>
+    <string name="pvz">ПВЗ</string>
+    <string name="postamat">Постамат</string>
+    <string name="cdek_postamat_delivery_address">Адрес пункта выдачи (Постамат)</string>
     <!--endregion city-->
 </resources>

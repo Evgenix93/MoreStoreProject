@@ -27,7 +27,7 @@ class EditMyAddressPickupPresenter @Inject constructor (
                     myAddress.cdekCode,
                     fullname,
                     isDefault,
-                    AddressType.CDEK.id
+                    myAddress.type
                 )
             )
             waitingDelegate.hide()

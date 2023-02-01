@@ -53,6 +53,11 @@ class MyAddressesAdapter(val callback :(MyAddress)->Unit) : RecyclerView.Adapter
                         icon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(views.root.context, R.color.white))
                         title.setText(R.string.myAddress_pickup)
                     }
+                    AddressType.CDEK_POSTAMAT.id -> {
+                        icon.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(views.root.context, R.color.green))
+                        icon.setImageResource(R.drawable.ic_envelope)
+                        title.setText(R.string.cdek_postamat_delivery_address)
+                    }
                 }
                 address.text = addressLine(myAddress.address)
                 name.text = myAddress.name

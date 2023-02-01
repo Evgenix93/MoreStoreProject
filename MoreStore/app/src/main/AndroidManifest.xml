@@ -20,7 +20,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_more_store_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MoreStore">
+        android:theme="@style/Theme.MoreStore"
+        android:largeHeap="true">
         <activity
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"

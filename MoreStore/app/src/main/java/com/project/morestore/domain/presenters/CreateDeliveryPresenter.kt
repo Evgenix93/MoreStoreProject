@@ -75,13 +75,16 @@ class CreateDeliveryPresenter @Inject constructor(
             )
             val shipmenPoin1 = order.cart.first().addressCdek?.substringAfter("cdek code:")
             val isCdekPickupPoint = order.placeAddress.contains("cdek code:")
+            val isCdekPickupPostamat = order.placeAddress.contains("cdek code postamat:")
             val shipmentPoint2 = if(isCdekPickupPoint)
                                     order.placeAddress.substringAfter("cdek code:")
+                                 else if(isCdekPickupPostamat)
+                                     order.placeAddress.substringAfter("cdek code postamat:")
                                  else null
-            val location = if(isCdekPickupPoint.not())
+            val location = if(isCdekPickupPoint.not() && isCdekPickupPostamat.not())
                               CdekLocation(address = order.placeAddress)
                            else null
-            val tariff = if(isCdekPickupPoint) 136 else 137
+            val tariff = if(isCdekPickupPoint) 136 else if(isCdekPickupPostamat) 368 else 137
 
             val items = CdekItems(
                 name = order.cart.first().name,

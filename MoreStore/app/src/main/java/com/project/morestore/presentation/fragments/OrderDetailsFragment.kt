@@ -49,8 +49,9 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         if(args.orderItem != null) {
-            bind(args.orderItem!!)
-            presenter.getProductById(args.orderItem!!.productId)
+            //bind(args.orderItem!!)
+            //presenter.getProductById(args.orderItem!!.productId)
+            presenter.getOrderItem(args.orderItem!!.id)
         }
         else presenter.getOrderItem(args.orderId)
         getSupportDialog()
@@ -78,6 +79,15 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
         setAddress(order)
         presenter.initProfile(order)
         binding.chosenDeliveryTypeTextView.text = order.deliveryInfo
+        if(order.cdekInfoEntity != null){
+            binding.deliveryTypeInfoTextView.isVisible = true
+            binding.DeliveryOrderNumberTypeTextView.isVisible = true
+            //binding.DeliveryOrderRefToInfoTextView.isVisible = true
+            binding.DeliveryOrderNumberTypeTextView.text = order.cdekInfoEntity.entity.cdekNumber
+            binding.DeliveryOrderRefToInfoTextView.setOnClickListener {
+                findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToCdekInfoFragment(order.cdekInfoEntity))
+            }
+        }
         setStatusInfo(order)
         setOrderStatus(order)
         binding.sellerAvatarImageView.setOnClickListener {
@@ -404,7 +414,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     val formattedSum = df.format(price).replace(',', '.').toFloat()
                     presenter.getPaymentUrl(
                         formattedSum,
-                        orderItem.id
+                        orderItem.id,
+                        orderItem.price
                     )
                 }catch (e: Throwable){
                     showMessage(e.message.toString())

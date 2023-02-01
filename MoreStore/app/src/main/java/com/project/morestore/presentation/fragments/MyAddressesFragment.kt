@@ -95,7 +95,8 @@ class MyAddressesFragment :FullscreenFragment(), MyAddressesView {
         val addressesToShow: Array<MyAddress> = when(args.addressType){
             ADDRESSES_ALL -> addresses
             ADDRESSES_HOME -> addresses.filter { it.type == AddressType.HOME.id }.toTypedArray()
-            ADDRESSES_CDEK -> addresses.filter { it.type == AddressType.CDEK.id }.toTypedArray()
+            ADDRESSES_CDEK -> addresses.filter { if(args.isSeller) it.type == AddressType.CDEK.id
+                                                else it.type != AddressType.HOME.id}.toTypedArray()
             else -> addresses
         }
         adapter.setItems(addressesToShow)
@@ -113,7 +114,9 @@ class MyAddressesFragment :FullscreenFragment(), MyAddressesView {
         setFragmentResultListener(MapMarkerPickupsFragment.KEY_ADDRESS){ _, bundle ->
             showUserData(bundle.getParcelable(PICKUP_ADDRESS)!!)
         }
-        findNavController().navigate(R.id.mapMarkerPickupsFragment, bundleOf(MapMarkerPickupsFragment.REGION to region.name))
+        findNavController().navigate(R.id.mapMarkerPickupsFragment,
+            bundleOf(MapMarkerPickupsFragment.REGION to region.name,
+            MapMarkerPickupsFragment.IS_FOR_SELLER to args.isSeller))
     }
 
     private fun showUserData(cdekAddress :CdekAddress){

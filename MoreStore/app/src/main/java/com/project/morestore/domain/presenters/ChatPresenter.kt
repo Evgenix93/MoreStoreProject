@@ -323,7 +323,7 @@ class ChatPresenter @Inject constructor(
     fun sendPriceSuggest(dialogId: Long, value: Int){
         presenterScope.launch {
             viewState.loading()
-            val response = chatRepository.sendPriceSuggest(ChatFunctionInfo(dialogId = dialogId, value = value))
+            val response = chatRepository.sendPriceSuggest(ChatFunctionInfo(dialogId = dialogId, value = value.toFloat()))
             when (response?.code()) {
                 200 -> {
                     (viewState as ChatMvpView).actionMessageSent(response.body()!!, MessageActionType.PRICE_SUGGEST)

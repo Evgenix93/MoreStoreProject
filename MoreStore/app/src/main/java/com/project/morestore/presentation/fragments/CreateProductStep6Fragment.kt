@@ -345,7 +345,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
         findNavController().navigate(
             CreateProductStep6FragmentDirections
                 .actionCreateProductStep6FragmentToMyAddressesFragment(true,
-                    MyAddressesFragment.ADDRESSES_CDEK))
+                    MyAddressesFragment.ADDRESSES_CDEK, isSeller = true))
     }
 
 

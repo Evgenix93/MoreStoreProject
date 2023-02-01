@@ -5,6 +5,7 @@ import android.widget.RadioButton
 import androidx.recyclerview.widget.RecyclerView
 import com.project.morestore.R
 import com.project.morestore.data.models.CdekAddress
+import com.project.morestore.presentation.fragments.MapMarkerPickupsFragment
 import com.project.morestore.util.inflater
 
 class PickupAddressesAdapter(val callback :(CdekAddress) -> Unit) :RecyclerView.Adapter<PickupAddressesAdapter.PickupAddressHolder>() {
@@ -28,7 +29,9 @@ class PickupAddressesAdapter(val callback :(CdekAddress) -> Unit) :RecyclerView.
 
     override fun onBindViewHolder(holder: PickupAddressHolder, position: Int) {
         val item = items[position]
-        holder.button.text = item.location.address
+        val typeText = if(item.type == CdekAddress.TYPE_PVZ) holder.itemView.context.getString(R.string.pvz)
+                       else holder.itemView.context.getString(R.string.postamat)
+        holder.button.text = "${item.location.address} ($typeText)"
         holder.text = item.location.address
         holder.button.isChecked = item == selected
     }

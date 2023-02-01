@@ -35,7 +35,8 @@ class CreateMyAddressPickupPresenter @Inject constructor(
                     mapAddress(cdekAddress),
                     cdekAddress.code,
                     isDefault,
-                    AddressType.CDEK.id
+                    if(cdekAddress.type == CdekAddress.TYPE_PVZ) AddressType.CDEK.id
+                    else AddressType.CDEK_POSTAMAT.id
                 )
             )
             waitingDelegate.hide()

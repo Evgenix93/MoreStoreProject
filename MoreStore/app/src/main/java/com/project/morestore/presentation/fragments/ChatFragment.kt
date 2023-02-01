@@ -63,7 +63,7 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
               presenter.submitBuy(ChatFunctionInfo(
                    dialogId = requireArguments().getLong(DIALOG_ID_KEY),
                    suggest = (it as Message.Special.DealRequest).suggestId,
-                   value = it.price
+                   value = it.price.toFloat()
               ))
 
         },
@@ -743,7 +743,7 @@ class ChatFragment : FullscreenFragment(), MenuBottomDialogFragment.Callback,
         }
          adapter.addMessage(Message.Special.PriceAccepted(discount))
          val dialogId = requireArguments().getLong(DIALOG_ID_KEY)
-         presenter.offerDiscount(ChatFunctionInfo(dialogId = dialogId, value = discount.toInt()))
+         presenter.offerDiscount(ChatFunctionInfo(dialogId = dialogId, value = discount.toFloat()))
     }
 
     companion object {

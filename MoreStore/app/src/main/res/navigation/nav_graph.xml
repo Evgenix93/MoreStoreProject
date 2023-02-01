@@ -1058,7 +1058,7 @@
             android:defaultValue="0L" />
     </fragment>
 
-        android:label="FavoritesFragment" />
+
     <fragment
         android:id="@+id/myAddressesFragment"
         android:name="com.project.morestore.presentation.fragments.MyAddressesFragment"
@@ -1071,6 +1071,10 @@
             android:name="addressType"
             app:argType="string"
             android:defaultValue="ALL" />
+        <argument
+            android:name="isSeller"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/newAddressFragment"
@@ -1294,6 +1298,9 @@
         <action
             android:id="@+id/action_orderDetailsFragment_to_createDeliveryFragment"
             app:destination="@id/createDeliveryFragment" />
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_cdekInfoFragment"
+            app:destination="@id/cdekInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/blackListFragment"
@@ -1326,5 +1333,13 @@
         android:id="@+id/createProductStylesFragment"
         android:name="com.project.morestore.presentation.fragments.CreateProductStylesFragment"
         android:label="CreateProductStylesFragment" />
+    <fragment
+        android:id="@+id/cdekInfoFragment"
+        android:name="com.project.morestore.presentation.fragments.CdekInfoFragment"
+        android:label="CdekInfoFragment" >
+        <argument
+            android:name="cdekInfo"
+            app:argType="com.project.morestore.data.models.CdekOrderInfo" />
+    </fragment>
 
 </navigation>

@@ -47,6 +47,7 @@ class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, Camer
         const val REGION = "region"
         const val KEY_ADDRESS = "key_address"
         const val PICKUP_ADDRESS = "pickup_address"
+        const val IS_FOR_SELLER = "is_for_seller"
     }
     private val behavior :BottomSheetBehavior<View> by lazy {
         (views.bottomSheet.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomSheetBehavior<View>
@@ -142,9 +143,12 @@ class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, Camer
     }
 
     override fun showAddresses(addresses: Array<CdekAddress>) {
-        listAdapter.setItems(addresses.map { it })
+        val filteredAddresses = if(args.getBoolean(IS_FOR_SELLER, false))
+                                   addresses.filter { it.type == CdekAddress.TYPE_PVZ && it.isReception }
+                                else addresses.toList()
+        listAdapter.setItems(filteredAddresses.map { it })
 
-        addresses.forEach {
+        filteredAddresses.forEach {
             views.map.map.mapObjects.addPlacemark(
                 Point(it.location.lat, it.location.lon),
                 ViewProvider(View(requireContext()).apply{

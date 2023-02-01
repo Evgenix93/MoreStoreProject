@@ -510,7 +510,11 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
             val housingStr = if(address?.address?.housing != null) "кп.${address.address.housing}" else null
             val buildingStr = if(address?.address?.building != null) "стр.${address.address.building}" else null
             val apartmentStr = if(address?.address?.apartment != null) "кв.${address.address.apartment}" else null
-            val cdekCode = if(address?.cdekCode != null) "cdek code:${address.cdekCode}" else null
+            val cdekCode = if(address?.cdekCode != null && address.type == AddressType.CDEK.id)
+                                  "cdek code:${address.cdekCode}"
+                           else if(address?.cdekCode != null && address.type == AddressType.CDEK_POSTAMAT.id)
+                                  "cdek code postamat:${address.cdekCode}"
+                           else null
             val strings =
                 arrayOf(cityStr, streetStr, houseStr, housingStr, buildingStr, apartmentStr, cdekCode).filterNotNull()
             binding.chosenAddressTextView.text = strings.joinToString(", ")

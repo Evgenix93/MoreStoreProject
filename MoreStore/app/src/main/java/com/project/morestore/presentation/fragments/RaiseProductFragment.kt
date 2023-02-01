@@ -97,7 +97,6 @@ class RaiseProductFragment: MvpAppCompatFragment(R.layout.fragment_raise_product
                 request: WebResourceRequest?
             ): Boolean {
                 return if (request?.url.toString().contains("success")) {
-                    view?.isVisible = false
                     val tariff = binding.pricesViewPager.currentItem + 1
                     findNavController().navigate(RaiseProductFragmentDirections.actionRaiseProductFragmentToSuccessPromoteFragment(
                         tariff

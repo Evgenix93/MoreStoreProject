@@ -162,14 +162,14 @@ class OrderDetailsPresenter @Inject constructor(
             val isBuyer = order.idUser == authRepository.getUserId()
             val dialog = getAllDialogs()?.find { it.product?.id == order.cart?.first()?.id }
             val discountedPrice = when{
-                order.cart?.first()?.statusUser?.price?.status == 1 -> order.cart?.first()?.statusUser?.price?.value?.toIntOrNull()
-                order.cart?.first()?.statusUser?.sale?.status == 1 -> order.cart?.first()?.statusUser?.sale?.value?.toIntOrNull()
+                order.cart?.first()?.statusUser?.price?.status == 1 -> order.cart?.first()?.statusUser?.price?.value?.toFloatOrNull()
+                order.cart?.first()?.statusUser?.sale?.status == 1 -> order.cart?.first()?.statusUser?.sale?.value?.toFloatOrNull()
                 else -> null
 
             }
             val chatFunctionInfo = if( dialog != null && order.cart?.first()?.statusUser?.buy?.status != 2)
                 ChatFunctionInfo(dialogId = dialog.dialog.id, suggest = order.cart?.first()?.statusUser?.buy?.id,
-                    value = discountedPrice ?: order.cart?.first()?.priceNew?.toInt() )
+                    value = discountedPrice ?: order.cart?.first()?.priceNew )
             else null
             val user = if(isBuyer) getUserById(order.idSeller ?: -1) else getUserById(order.idUser ?: -1)
             val address = getOfferedAddresses()?.find { it.idOrder == orderId }
@@ -178,6 +178,8 @@ class OrderDetailsPresenter @Inject constructor(
             else null
             val buySuggest = order.cart?.first()?.statusUser?.buy
             var status: OrderStatus = OrderStatus.MEETING_NOT_ACCEPTED
+            var info: CdekOrderInfo? = null
+            var deliveryInfo: String? = null
             if(isBuyer)
             status = when(buySuggest?.status) {
                 0 -> OrderStatus.NOT_SUBMITTED
@@ -248,6 +250,28 @@ class OrderDetailsPresenter @Inject constructor(
                     if((buySuggest?.status == 0 || buySuggest?.status == null) && !isBuyer)
                         status = OrderStatus.NOT_SUBMITTED_SELLER
 
+                    if(order.idCdek != null && order.delivery == 3 && order.isPayment){
+                        info = ordersRepository.getCdekOrderInfo(order.idCdek!!)?.body()
+                        if (info?.entity?.statuses?.first()?.code == CdekStatuses.INVALID)
+                            status = OrderStatus.DELIVERY_STATUS_NOT_VALID
+                        else if(info?.entity?.statuses?.first() != null) {
+                            status = OrderStatus.DELIVERY_STATUS_ACCEPTED
+                            deliveryInfo = info.entity.statuses.first().name
+                        }
+                        else if(info == null)
+                            status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
+                        else status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
+
+                    }
+
+                    if(order.idYandex != null && order.delivery == 2 && order.isPayment){
+                        val infoYandex = ordersRepository.getYandexGoOrderInfo(order.idYandex!!)?.body()
+                        if(infoYandex != null){
+                            status = OrderStatus.DELIVERY_STATUS_ACCEPTED
+                            deliveryInfo = YandexDeliveryStatus.statuses[infoYandex.status]
+                        }else status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
+                    }
+
                 }
             }
 
@@ -258,7 +282,7 @@ class OrderDetailsPresenter @Inject constructor(
                 user = user,
                 photo = order.cart?.first()?.photo?.first()?.photo!!,
                 name = order.cart?.first()?.name.orEmpty(),
-                price = discountedPrice ?: order.cart?.first()?.priceNew?.toInt() ?: 0,
+                price = discountedPrice ?: order.cart?.first()?.priceNew ?: 0f,
                 deliveryDate = if(time == null || time.timeInMillis == 0L)"-" else
                     "${time.get(Calendar.DAY_OF_MONTH)}.${time.get(Calendar.MONTH) + 1}.${time.get(Calendar.YEAR)}",
                 deliveryInfo = when (order.delivery) {
@@ -277,7 +301,9 @@ class OrderDetailsPresenter @Inject constructor(
                 product = order.cart?.first()!!,
                 chatFunctionInfo,
                 cdekYandexAddress = order.placeAddress,
-                yandexGoOrderId = order.idYandex
+                yandexGoOrderId = order.idYandex,
+                deliveryStatusInfo = deliveryInfo,
+                cdekInfoEntity = info
 
             )
             viewState.orderItemLoaded(orderItem)
@@ -364,10 +390,10 @@ class OrderDetailsPresenter @Inject constructor(
         }
     }
 
-    fun getPaymentUrl(sum: Float, orderId: Long){
+    fun getPaymentUrl(sum: Float, orderId: Long, sellerPayout: Float){
         presenterScope.launch {
             viewState.loading(true)
-            val response = ordersRepository.payForOrder(PayOrderInfo(sum, orderId))
+            val response = ordersRepository.payForOrder(PayOrderInfo(sum, orderId, sellerPayout))
             when(response?.code()){
                 200 -> {
                     viewState.loading(false)
@@ -392,11 +418,12 @@ class OrderDetailsPresenter @Inject constructor(
                 weight = ((product.packageDimensions.weight ?: "0.3").toFloat() * 1000).toInt().toString()
             )
             val isCdekPickupPoint = toAddress.contains("cdek code:")
-            val tariff = if(isCdekPickupPoint) 136 else 137
+            val isCdekPickupPostamat = toAddress.contains("cdek code postamat:")
+            val tariff = if(isCdekPickupPoint) 136 else if(isCdekPickupPostamat) 368 else 137
             val info = CdekCalculatePriceInfo(
                 tariff_code = tariff,
                 from_location = AddressString(product.addressCdek?.substringBefore("cdek code") ?: ""),
-                to_location = AddressString(toAddress.substringBefore("cdek code")),
+                to_location = AddressString(toAddress.substringBefore(if(isCdekPickupPoint)"cdek code" else "cdek code postamat:")),
                 packages = dimensions
             )
             val response = ordersRepository.getCdekPrice(info)

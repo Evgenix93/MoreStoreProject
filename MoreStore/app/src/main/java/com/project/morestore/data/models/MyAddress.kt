@@ -35,4 +35,4 @@ data class MyAddressData(
     val type :Int
 ) :Parcelable
 
-enum class AddressType(val id :Int){ HOME(0), CDEK(1) }
+enum class AddressType(val id :Int){ HOME(0), CDEK(1), CDEK_POSTAMAT(2) }

@@ -1,10 +1,7 @@
 package com.project.morestore.data.models.cart
 
 import android.os.Parcelable
-import com.project.morestore.data.models.ChatFunctionInfo
-import com.project.morestore.data.models.OfferedOrderPlace
-import com.project.morestore.data.models.Product
-import com.project.morestore.data.models.User
+import com.project.morestore.data.models.*
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -18,7 +15,7 @@ data class OrderItem(
     val photo: String,
     val name: String,
 
-    val price: Int,
+    val price: Float,
     val deliveryDate: String,
     val deliveryInfo: String,
 
@@ -36,5 +33,6 @@ data class OrderItem(
     val cdekYandexAddress: String? = null,
     val promo: String? = null,
     val deliveryStatusInfo: String? = null,
-    val yandexGoOrderId: String? = null
+    val yandexGoOrderId: String? = null,
+    val cdekInfoEntity: CdekOrderInfo? = null
 ): Parcelable

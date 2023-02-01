@@ -36,7 +36,7 @@ class MapMarkerPickupsPresenter @Inject constructor(
         Point(0.0, 0.0)
     )
     private val searchRegionStub get() = VisibleRegionUtils.toPolygon(stubRegion)
-    private var allAddresses :Array<CdekAddress>? = arrayOf()
+    private var allAddresses :List<CdekAddress>? = listOf()
     private var visibleMap :VisibleRegion = stubRegion
     private var selected :CdekAddress? = null
 
@@ -57,11 +57,13 @@ class MapMarkerPickupsPresenter @Inject constructor(
             loadingDelegate.show()
             allAddresses =
                 try {
-                    pickupNetwork.getCdekAddresses()
+                    pickupNetwork.getCdekAddresses()//.filter {
+                        //it.type == CdekAddress.TYPE_PVZ && it.isHandout && it.isReception }
                 }catch (e: Throwable){
-                    if(e is IOException)
-                        viewState.showMessage("нет интернета")
-                    else viewState.showMessage("Сервисы СДЭК недоступны")
+                    viewState.showMessage("ошибка: ${e.message.toString()}")
+                    //if(e is IOException)
+                        //viewState.showMessage("нет интернета")
+                    //else viewState.showMessage("Сервисы СДЭК недоступны")
                     null
                 }
             loadingDelegate.hide()

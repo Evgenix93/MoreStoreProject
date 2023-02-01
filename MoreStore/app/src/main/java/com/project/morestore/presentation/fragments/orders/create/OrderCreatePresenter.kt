@@ -227,10 +227,13 @@ class OrderCreatePresenter @Inject constructor(
                 height = product.packageDimensions.height,
                 weight = (product.packageDimensions.weight!!.toFloat() * 1000).toInt().toString()
             )
+            val isCdekPickupPostamat = toAddress.contains("cdek code postamat:")
             val info = CdekCalculatePriceInfo(
-                tariff_code = if(toPickUpPoint) 136 else 137,
+                tariff_code = if(toPickUpPoint && !isCdekPickupPostamat) 136
+                              else if(toPickUpPoint && isCdekPickupPostamat) 368
+                              else 137,
                 from_location = AddressString(product.addressCdek?.substringBefore("cdek code:") ?: ""),
-                to_location = AddressString(toAddress.substringBefore("cdek code:")),
+                to_location = AddressString(toAddress.substringBefore(if(!isCdekPickupPostamat) "cdek code:" else "cdek code postamat:" )),
                 packages = dimensions
             )
             val response = orderRepository.getCdekPrice(info)

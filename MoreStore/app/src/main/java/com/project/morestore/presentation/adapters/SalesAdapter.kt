@@ -248,7 +248,7 @@ class SalesAdapter(
                         ChatFunctionInfo(
                             dialogId = dialog!!.dialog.id,
                             suggest = buySuggest.id,
-                            value = specialPrice
+                            value = specialPrice?.toFloat()
                         )
                     )
                 }
@@ -335,7 +335,7 @@ class SalesAdapter(
                 user = user,
                 photo = order.cart!!.first().photo.first().photo,
                 name = order.cart.first().name,
-                price = getSpecialPrice(order) ?: 0,
+                price = getSpecialPrice(order)?.toFloat() ?: 0f,
                 deliveryDate = date,
                 deliveryInfo = when (order.delivery) {
                     OrderCreateFragment.TAKE_FROM_SELLER -> itemView.context.getString(R.string.take_from_seller)
@@ -352,7 +352,7 @@ class SalesAdapter(
                     ChatFunctionInfo(
                         dialogId = dialog.dialog.id,
                         suggest = buySuggest.id,
-                        value = getSpecialPrice(order)
+                        value = getSpecialPrice(order)?.toFloat()
                     )else null,
                 offeredOrderPlace = address,
                 product = order.cart.first(),

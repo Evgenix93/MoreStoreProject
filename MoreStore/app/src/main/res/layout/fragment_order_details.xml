@@ -507,6 +507,43 @@
                     android:textColor="@color/black"/>
 
 
+                <TextView
+                    android:id="@+id/deliveryTypeInfoTextView"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="60dp"
+                    android:text="Номер заказа"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+
+
+                <TextView
+                    android:id="@+id/DeliveryOrderNumberTypeTextView"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginBottom="24dp"
+                    android:textAppearance="@style/regular_14"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/DeliveryOrderRefToInfoTextView"
+                    android:text="подробнее"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginBottom="24dp"
+                    android:textAppearance="@style/regular_14"
+                    android:textColor="@color/green"/>
+
+
                 <ImageView
                     android:id="@+id/deliveryIcon"
                     android:layout_width="wrap_content"

@@ -7,5 +7,5 @@ interface CdekAddressApi {
 
     //cdek/addresses
     @GET("cdek/addresses")
-    suspend fun getCdekAddresses(): Array<CdekAddress>
+    suspend fun getCdekAddresses(): List<CdekAddress>
 }

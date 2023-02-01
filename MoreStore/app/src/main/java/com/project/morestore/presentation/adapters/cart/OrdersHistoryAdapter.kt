@@ -39,7 +39,7 @@ class OrdersHistoryAdapter(
                     productId = items[adapterPosition].productId,
                     newTime = items[adapterPosition].newTime,
                     sellerId = items[adapterPosition].sellerId,
-                    price = items[adapterPosition].price,
+                    price = items[adapterPosition].price.toFloat(),
                     status = OrderStatus.RECEIVED_SUCCESSFULLY
                 )
                 )
