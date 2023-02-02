@@ -22,7 +22,7 @@ data class Order(
     val idUser: Long?,
     @Json(name = "id_seller")
     val idSeller: Long?,
-    val sum: Int,
+    val sum: Float,
     @Json(name = "is_payment")
     val isPayment: Boolean,
     @Json(name = "id_cdek")

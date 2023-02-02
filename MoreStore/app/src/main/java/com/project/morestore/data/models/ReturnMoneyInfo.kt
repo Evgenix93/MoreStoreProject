@@ -5,5 +5,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ReturnMoneyInfo(
     val orderId: String,
-    val amount: Int
+    val amount: Float
 )

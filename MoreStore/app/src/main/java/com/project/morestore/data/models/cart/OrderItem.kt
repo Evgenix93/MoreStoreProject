@@ -35,6 +35,6 @@ data class OrderItem(
     val deliveryStatusInfo: String? = null,
     val yandexGoOrderId: String? = null,
     val cdekInfoEntity: CdekOrderInfo? = null,
-    val sberId: String?,
-    val sum: Int
+    val sberId: String? = null,
+    val sum: Float? = null
 ): Parcelable

@@ -101,7 +101,7 @@ class OrderDetailsPresenter @Inject constructor(
                     if(orderItem.yandexGoOrderId != null)
                         cancelYandexGoOrder(orderItem.yandexGoOrderId)
                     if(orderItem.sberId != null)
-                    ordersRepository.returnMoney(ReturnMoneyInfo(orderItem.sberId, orderItem.sum))
+                    ordersRepository.returnMoney(ReturnMoneyInfo(orderItem.sberId, orderItem.sum ?: 0f))
                     viewState.loading(false)
                     viewState.orderStatusChanged(if (authRepository.getUserId() == orderItem.sellerId) OrderStatus.DECLINED else OrderStatus.DECLINED_BUYER)
                 }
