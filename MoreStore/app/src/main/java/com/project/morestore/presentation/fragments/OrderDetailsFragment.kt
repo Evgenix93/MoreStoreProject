@@ -309,6 +309,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
                 }
                 OrderStatus.DELIVERY_STATUS_ACCEPTED -> {
+                    binding.cancelTextView.isVisible = false
                     orderItemStatusBlock.isVisible = true
                     orderItemStatusContent.text = order.deliveryStatusInfo
                     binding.orderItemAcceptBlock.isVisible = false
@@ -316,6 +317,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
                 }
                 OrderStatus.DELIVERY_STATUS_NOT_DEFINED -> {
+                    binding.cancelTextView.isVisible = false
                     orderItemStatusBlock.isVisible = true
                     orderItemStatusContent.text = "Неизвестный статус доставки"
                     binding.orderItemAcceptBlock.isVisible = false

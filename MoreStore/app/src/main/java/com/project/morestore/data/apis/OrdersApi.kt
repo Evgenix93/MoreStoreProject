@@ -56,6 +56,9 @@ interface OrdersApi {
     @POST("sber/registration")
     suspend fun payOrder(@Body payInfo: PayOrderInfo): Response<PaymentUrl>
 
+    @POST("sber/return_money")
+    suspend fun returnMoney(@Body returnMoneyInfo: ReturnMoneyInfo): Response<Unit>
+
     @POST("sber/registration")
     suspend fun payOrderGetError(@Body payInfo: PayOrderInfo): Response<String>
 

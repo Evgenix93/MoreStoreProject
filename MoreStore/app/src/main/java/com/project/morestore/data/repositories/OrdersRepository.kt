@@ -184,6 +184,14 @@ class OrdersRepository @Inject constructor(private val ordersApi: OrdersApi) {
         }
     }
 
+   suspend fun returnMoney(returnMoneyInfo: ReturnMoneyInfo): Response<Unit>?{
+       return try {
+           ordersApi.returnMoney(returnMoneyInfo)
+       }catch(e: Exception){
+               null
+       }
+   }
+
     suspend fun getCdekPrice(info: CdekCalculatePriceInfo): Response<DeliveryPrice>?{
         return try {
             ordersApi.getCdekPrice(info)

@@ -100,6 +100,8 @@ class OrderDetailsPresenter @Inject constructor(
                 200 -> {
                     if(orderItem.yandexGoOrderId != null)
                         cancelYandexGoOrder(orderItem.yandexGoOrderId)
+                    if(orderItem.sberId != null)
+                    ordersRepository.returnMoney(ReturnMoneyInfo(orderItem.sberId, orderItem.sum))
                     viewState.loading(false)
                     viewState.orderStatusChanged(if (authRepository.getUserId() == orderItem.sellerId) OrderStatus.DECLINED else OrderStatus.DECLINED_BUYER)
                 }
@@ -303,8 +305,9 @@ class OrderDetailsPresenter @Inject constructor(
                 cdekYandexAddress = order.placeAddress,
                 yandexGoOrderId = order.idYandex,
                 deliveryStatusInfo = deliveryInfo,
-                cdekInfoEntity = info
-
+                cdekInfoEntity = info,
+                sberId = order.sberId,
+                sum = order.sum
             )
             viewState.orderItemLoaded(orderItem)
         }

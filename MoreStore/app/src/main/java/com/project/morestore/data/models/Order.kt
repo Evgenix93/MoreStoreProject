@@ -30,5 +30,6 @@ data class Order(
     @Json(name = "id_yandex")
     val idYandex: String?,
     var deliveryStatus: String? = null,
-    val comment: String?
+    val comment: String?,
+    val sberId: String?
 ): Parcelable
