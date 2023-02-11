@@ -14,6 +14,9 @@ interface OrdersApi {
     @POST("product/cart")
     suspend fun addToCart(@Body productData: AddCartData): Response<Boolean>
 
+    @POST("product/cart")
+    suspend fun addToCartGetError(@Body productData: AddCartData): Response<String>
+
     @HTTP(method = "DELETE", path = "product/cart", hasBody = true)
     suspend fun removeFromCart(@Body productData: AddCartData): Response<Boolean>
 

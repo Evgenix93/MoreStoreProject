@@ -3,6 +3,10 @@ package com.project.morestore.presentation.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -11,21 +15,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.project.morestore.R
-import com.project.morestore.presentation.adapters.CardsAdapter
-import com.project.morestore.databinding.FragmentProfileBinding
 import com.project.morestore.data.models.Address
 import com.project.morestore.data.models.BrandsPropertiesDataWrapper
 import com.project.morestore.data.models.Card
+import com.project.morestore.data.singletones.Token
+import com.project.morestore.databinding.FragmentProfileBinding
 import com.project.morestore.domain.presenters.ProfilePresenter
-import com.project.morestore.presentation.mvpviews.UserMvpView
-import com.project.morestore.domain.presenters.UserPresenter
+import com.project.morestore.presentation.adapters.CardsAdapter
 import com.project.morestore.presentation.mvpviews.ProfileMvpView
+import com.project.morestore.util.JsObject
 import com.project.morestore.util.autoCleared
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileMvpView {
@@ -36,6 +44,7 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
     private val args: ProfileFragmentArgs by navArgs()
     private lateinit var brandsPropertiesDataWrapper: BrandsPropertiesDataWrapper
     private var cardsAdapter: CardsAdapter by autoCleared()
+    private var shouldChooseLastCard: Boolean = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,6 +56,10 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
         initCardList()
         getCards()
     }
+
+
+
+
 
     private fun initToolbar(){
         binding.toolbar.titleTextView.text = "Профиль"
@@ -95,7 +108,8 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
         }
 
         binding.addCardTextView.setOnClickListener{
-            findNavController().navigate(R.id.addCardFragment)
+            //findNavController().navigate(R.id.addCardFragment)
+            openAddCardWebPage()
         }
 
     }
@@ -122,6 +136,43 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
         presenter.deleteCard(card)
     }
 
+    private fun openAddCardWebPage(){
+        binding.webView.isVisible = true
+        binding.webView.webViewClient = object : WebViewClient(){
+            override fun onPageFinished(view: WebView?, url: String?) {
+                view?.loadUrl(
+                    "javascript:(function() {" +
+                            "window.parent.addEventListener ('message', function(event) {" +
+                            " Android.receiveMessage(JSON.stringify(event.data));if(JSON.stringify(event.data).includes(\"SUCCESS\")) window.location.href = \"https://more.store\";});" +
+                            "})()"
+
+                )
+            }
+
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                Log.d("headers", request?.requestHeaders.toString())
+                if(!request?.url.toString().contains("card")) {
+                    view?.isVisible = false
+                    shouldChooseLastCard = true
+                    getCards()
+                }
+
+                return true
+            }
+
+
+        }
+
+        binding.webView.settings.userAgentString = "Chrome/56.0.0.0 Mobile"
+        binding.webView.settings.javaScriptEnabled = true
+        binding.webView.addJavascriptInterface(JsObject(), "Android")
+        binding.webView.loadUrl("https://more.store/ukassa/card?token=${Token.token.substringAfter("Bearer ")}")
+
+    }
+
 
 
     override fun error(message: String) {
@@ -143,7 +194,15 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
               brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
               else {
                   Log.d("MyDebug", "cards test = $result")
-                  cardsAdapter.updateCards(result as List<Card>)
+                  if(shouldChooseLastCard){
+                      (result as List<Card>).forEachIndexed() { index, card ->
+                          if(index != result.lastIndex)
+                              card.active = 0
+                      }
+                      presenter.chooseCard(result)
+                      shouldChooseLastCard = false
+                  }else
+                      cardsAdapter.updateCards(result as List<Card>)
               }
             }
         else {

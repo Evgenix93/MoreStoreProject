@@ -464,8 +464,10 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
                 else {
                     val recipientCity = address.substringBefore(",")
                     val senderCity = args.product.address?.fullAddress?.substringBefore(",")
-                    if( senderCity == recipientCity)
+                    if( senderCity == recipientCity) {
+                        Log.d("mylog", "$senderCity, $recipientCity")
                         presenter.getYandexPrice(toAddress = address, product = args.product)
+                    }
                     else {
                         binding.totalWithDeliveryCardView.isVisible = false
                         showMessage("Доставка yandex доступна только по городу $senderCity")
@@ -574,10 +576,6 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
     }
 
     private fun showScreenWithDelivery(show: Boolean ){
-        if(binding.anotherCityRadioBtn.isChecked && chosenAddressStr.isNotEmpty())
-            presenter.getCdekPrice(toAddress = chosenAddressStr, args.product, binding.toPickUpPointRadioButton.isChecked)
-        if(binding.yandexRadioBtn.isChecked && chosenAddressStr.isNotEmpty())
-            presenter.getYandexPrice(toAddress = chosenAddressStr, args.product)
         binding.chosenDeliveryPlaceWindow.isVisible = show
         binding.commentWindow.isVisible = show
         binding.deliveryPriceInfoTextView.isVisible = show

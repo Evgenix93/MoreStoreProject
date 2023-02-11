@@ -7,6 +7,7 @@ import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.util.DeviceUtils
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
+import java.io.IOException
 import javax.inject.Inject
 
 class CartRepository @Inject constructor(private val ordersApi: OrdersApi) {
@@ -38,10 +39,24 @@ class CartRepository @Inject constructor(private val ordersApi: OrdersApi) {
         return try {
             ordersApi.addToCart(body)
         } catch (e: Exception) {
-            Response.error(
-                400, e.message?.toResponseBody(null)
-                    ?: "сетевая ошибка".toResponseBody(null)
-            )
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
+                try {
+                    val response = ordersApi.addToCartGetError(body)
+                    if (response.code() == 500) {
+                        Response.error(500, "".toResponseBody(null))
+                    } else {
+                        Response.error(
+                            400,
+                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                        )
+                    }
+                } catch (e: Throwable) {
+                    Response.error(400, e.message.toString().toResponseBody(null))
+                }
+            }
         }
     }
 
