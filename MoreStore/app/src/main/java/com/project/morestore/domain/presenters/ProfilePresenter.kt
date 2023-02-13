@@ -7,6 +7,7 @@ import com.project.morestore.data.repositories.UserRepository
 import com.project.morestore.presentation.mvpviews.ProfileMvpView
 import com.project.morestore.util.errorMessage
 import com.project.morestore.util.getStringFromResponse
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -37,6 +38,7 @@ class ProfilePresenter @Inject constructor(private val userRepository: UserRepos
     }
 
     fun chooseCard(cards: List<Card>){
+        Log.d("MyDebugCard", "choose card")
         viewState.loading()
         presenterScope.launch{
             cards.forEach{
@@ -68,8 +70,10 @@ class ProfilePresenter @Inject constructor(private val userRepository: UserRepos
     }
 
     fun getCards(){
+        Log.d("MyDebugCard", "getCards")
         viewState.loading()
         presenterScope.launch {
+            delay(1000)
             val response = cardRepository.getCards()
             when(response?.code()){
                 200 -> {

@@ -143,7 +143,7 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
                 view?.loadUrl(
                     "javascript:(function() {" +
                             "window.parent.addEventListener ('message', function(event) {" +
-                            " Android.receiveMessage(JSON.stringify(event.data));if(JSON.stringify(event.data).includes(\"SUCCESS\")) window.location.href = \"https://more.store\";});" +
+                            " Android.receiveMessage(JSON.stringify(event.data));if(JSON.stringify(event.data).includes(\"SUCCESS\")) window.location.href = \"superJessy\";});" +
                             "})()"
 
                 )
@@ -154,7 +154,8 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
                 request: WebResourceRequest?
             ): Boolean {
                 Log.d("headers", request?.requestHeaders.toString())
-                if(!request?.url.toString().contains("card")) {
+                if(request?.url.toString().contains("superJessy") && !shouldChooseLastCard) {
+                    Log.d("MyDebugCard", "override url loading")
                     view?.isVisible = false
                     shouldChooseLastCard = true
                     getCards()
@@ -193,7 +194,7 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
               if(result.isNotEmpty() && result.first() is BrandsPropertiesDataWrapper)
               brandsPropertiesDataWrapper = (result as List<BrandsPropertiesDataWrapper>).last()
               else {
-                  Log.d("MyDebug", "cards test = $result")
+                  Log.d("MyDebugCard", "cards test = $result")
                   if(shouldChooseLastCard){
                       (result as List<Card>).forEachIndexed() { index, card ->
                           if(index != result.lastIndex)
