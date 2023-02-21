@@ -3,6 +3,7 @@ package com.project.morestore.presentation.fragments
 import android.Manifest
 import android.graphics.PointF
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +40,9 @@ import com.yandex.mapkit.map.*
 import com.yandex.mapkit.map.Map
 import com.yandex.runtime.ui_view.ViewProvider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
@@ -70,6 +75,7 @@ class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, Camer
     private val presenter :MapMarkerPickupsPresenter by moxyPresenter {
         mapMarkerPickupsPresenter
     }
+    private val currentMapObjects = mutableListOf<PlacemarkMapObject>()
 
     override fun onCreateView(
         inflater : LayoutInflater,
@@ -143,25 +149,44 @@ class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, Camer
     }
 
     override fun showAddresses(addresses: Array<CdekAddress>) {
-        val filteredAddresses = if(args.getBoolean(IS_FOR_SELLER, false))
-                                   addresses.filter { it.type == CdekAddress.TYPE_PVZ && it.isReception }
-                                else addresses.toList()
-        listAdapter.setItems(filteredAddresses.map { it })
+        val marksToDelete = mutableListOf<PlacemarkMapObject>()
+        val filteredAddresses = if (args.getBoolean(IS_FOR_SELLER, false))
+                addresses.filter { it.type == CdekAddress.TYPE_PVZ && it.isReception }
+            else addresses.toList()
+            listAdapter.setItems(filteredAddresses.map { it })
+            currentMapObjects.forEach { mapObject ->
+                    if (filteredAddresses.find {
+                            it.location.lat == mapObject.geometry.latitude &&
+                                    it.location.lon == mapObject.geometry.longitude
+                        } == null)
+                        marksToDelete.add(mapObject)
+                }
+                marksToDelete.forEach {
+                    views.map.map.mapObjects.remove(it)
+                    currentMapObjects.remove(it)
+                }
 
-        filteredAddresses.forEach {
-            views.map.map.mapObjects.addPlacemark(
-                Point(it.location.lat, it.location.lon),
-                ViewProvider(View(requireContext()).apply{
-                    setBackgroundResource(R.drawable.ic_geomarker_pickup)
-                }),//todo change to bitmap
-                IconStyle().setAnchor(PointF(0.5f, 1f))
-            ).apply {
-                addTapListener { _, _ -> presenter.selectMarker(it); true }
+
+            filteredAddresses.forEach {
+                if (currentMapObjects.find { mapObject ->
+                        it.location.lat == mapObject.geometry.latitude
+                                && it.location.lon == mapObject.geometry.longitude
+                    } == null)
+                    views.map.map.mapObjects.addPlacemark(
+                        Point(it.location.lat, it.location.lon),
+                        ViewProvider(View(requireContext()).apply {
+                            setBackgroundResource(R.drawable.ic_geomarker_pickup)
+                        }),//todo change to bitmap
+                        IconStyle().setAnchor(PointF(0.5f, 1f))
+                    ).apply {
+                        addTapListener { _, _ -> presenter.selectMarker(it); true }
+                        currentMapObjects.add(this)
+                    }
             }
-        }
-        //todo filter marker on new/showed/outside
-        //todo add only new markers
-        //todo remove outside markers
+            //todo filter marker on new/showed/outside
+            //todo add only new markers
+            //todo remove outside markers
+
     }
 
     override fun showLoading(show: Boolean) {
@@ -203,6 +228,13 @@ class MapMarkerPickupsFragment :MapMarkerFragment(), MapMarkerPickupsView, Camer
         p2: CameraUpdateReason,
         p3: Boolean
     ) {
+        Log.d("zoom", p1.zoom.toString())
+        if(p1.zoom <= 11.7){
+            views.map.map.mapObjects.clear()
+            currentMapObjects.clear()
+            return
+        }
         if(p3)presenter.onMoveMap(p0.visibleRegion)
+
     }
 }

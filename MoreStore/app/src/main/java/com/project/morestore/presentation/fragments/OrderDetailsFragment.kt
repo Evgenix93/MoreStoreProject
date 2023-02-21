@@ -270,7 +270,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
                     orderItemDeliveryChangeTitle.text = "К сожалению продавец отклонил сделку"
-                    cancelTextView.isVisible = false
+                    //cancelTextView.isVisible = false
                     orderItemAcceptBlock.isVisible = false
                     orderItemStatusBlock.isVisible = false
 
@@ -280,7 +280,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemChangeDeliveryAcceptButton.isVisible = false
                     orderItemChangeDeliveryDeclineButton.isVisible = false
                     orderItemDeliveryChangeTitle.text = "К сожалению покупатель отклонил сделку"
-                    cancelTextView.isVisible = false
+                    //cancelTextView.isVisible = false
                     orderItemStatusBlock.isVisible = false
                     orderItemAcceptBlock.isVisible = false
                 }
@@ -289,7 +289,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     address.text = order.newAddress
                     orderItemStatusBlock.isVisible = false
                     orderItemHistoryStatusBlock.isVisible = true
-                    cancelTextView.isVisible = false
+                    //cancelTextView.isVisible = false
                     orderItemAcceptBlock.isVisible = false
                 }
                 OrderStatus.NOT_PAYED -> {
@@ -310,7 +310,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
                 }
                 OrderStatus.DELIVERY_STATUS_ACCEPTED -> {
-                    binding.cancelTextView.isVisible = false
+                    //binding.cancelTextView.isVisible = false
                     orderItemStatusBlock.isVisible = true
                     orderItemStatusContent.text = order.deliveryStatusInfo
                     binding.orderItemAcceptBlock.isVisible = false
@@ -318,7 +318,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
                 }
                 OrderStatus.DELIVERY_STATUS_NOT_DEFINED -> {
-                    binding.cancelTextView.isVisible = false
+                    //binding.cancelTextView.isVisible = false
                     orderItemStatusBlock.isVisible = true
                     orderItemStatusContent.text = "Неизвестный статус доставки"
                     binding.orderItemAcceptBlock.isVisible = false

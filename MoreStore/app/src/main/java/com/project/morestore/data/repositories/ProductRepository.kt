@@ -464,7 +464,7 @@ class ProductRepository @Inject constructor(@ApplicationContext private val cont
     }
 
     fun getShareProductIntent(id: Long): Intent {
-        val uri = Uri.withAppendedPath(Uri.parse("https://morestore.ru/products/"), id.toString())
+        val uri = Uri.withAppendedPath(Uri.parse("https://more.store/product/"), id.toString())
         return Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, uri.toString())

@@ -389,6 +389,7 @@ class UserPresenter @Inject constructor(
                 200 -> viewState.loaded(response.body()!!)
                 404 -> {
                 }
+                401 -> {}
                 else -> viewState.error(errorMessage(response))
             }
         }

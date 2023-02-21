@@ -2,6 +2,7 @@ package com.project.morestore.domain.presenters
 
 import com.project.morestore.data.models.*
 import com.project.morestore.data.repositories.*
+import com.project.morestore.data.singletones.Token
 import com.project.morestore.presentation.mvpviews.ProductDetailsMvpView
 import com.project.morestore.util.ProductStatus
 import com.project.morestore.util.errorMessage
@@ -196,6 +197,7 @@ class ProductDetailsPresenter @Inject constructor(private val userRepository: Us
     }
 
     fun getYouMayLikeProducts(category: Category?) {
+        if(Token.token.isEmpty()) return
         presenterScope.launch {
             viewState.loading()
             val response = if (category == null) productRepository.getYouMayLikeProducts(4, authRepository.getUserId())

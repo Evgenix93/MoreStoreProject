@@ -76,10 +76,10 @@ class MainActivity : MvpAppCompatActivity(), BaseMvpView {
     }
 
     private fun handleIntent(intent: Intent){
-        if(intent.data?.path?.contains("products") == true)
+        if(intent.data?.path?.contains("product") == true)
         intent.data?.let {
             findNavController(R.id.fragmentContainerView).navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToProductDetailsFragment(null, it.lastPathSegment.orEmpty(), false))
-        }else if(intent.data?.path?.contains("users") == true)
+        }else if(intent.data?.path?.contains("profile") == true)
             intent.data?.let{
                 findNavController(R.id.fragmentContainerView).navigate(R.id.sellerProfileFragment, bundleOf(
                     SellerProfileFragment.USER_ID to it.lastPathSegment?.toLong()))

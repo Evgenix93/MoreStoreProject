@@ -113,7 +113,7 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
         }
         binding.shareImageView.setOnClickListener {
             val userId = presenter.getUser().id
-            val intent = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, "https://morestore.ru/users/$userId")
+            val intent = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, "https://more.store/profile/$userId")
             startActivity(intent)
         }
     }

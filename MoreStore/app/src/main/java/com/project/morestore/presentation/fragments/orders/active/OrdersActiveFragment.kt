@@ -1,6 +1,7 @@
 package com.project.morestore.presentation.fragments.orders.active
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -109,6 +110,7 @@ class OrdersActiveFragment
     ///////////////////////////////////////////////////////////////////////////
 
     override fun initActiveOrders(adapter: OrdersAdapter) {
+        Log.d("active orders", adapter.itemCount.toString())
         binding.ordersRecyclerView.adapter = adapter
 
     }

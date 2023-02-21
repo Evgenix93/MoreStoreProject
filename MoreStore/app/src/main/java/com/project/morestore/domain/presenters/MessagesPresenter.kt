@@ -98,7 +98,7 @@ class MessagesPresenter @Inject constructor(
                             true
                         else
                             it.dialog.user.id == userId
-                    }?.map { dialogWrapper ->
+                    }?.sortedByDescending { it.dialog.lastMessage?.date }?.map { dialogWrapper ->
                         Chat.Deal(
                             dialogWrapper.dialog.id,
                             dialogWrapper.product?.name ?: "",
@@ -133,9 +133,9 @@ class MessagesPresenter @Inject constructor(
                 val lots = products?.map { product ->
                     response.body()?.filter { dialogWrapper ->
                         dialogWrapper.product == product
-                    }.orEmpty()
+                    }.orEmpty().sortedByDescending { it.dialog.lastMessage?.date }
                 }
-                val chats =  lots?.map { lot ->  //response.body()?.filter {it.product.idUser == userId }?.map { dialogWrapper ->
+                val chats =  lots?.sortedByDescending { it.first().dialog.lastMessage?.date }?.map { lot ->  //response.body()?.filter {it.product.idUser == userId }?.map { dialogWrapper ->
                     val isUnread = lot.find { it.dialog.lastMessage?.idSender != userId && it.dialog.lastMessage?.is_read == 0 } != null
                     val buyersStr = when (lot.size){
                         1 -> "покупатель"

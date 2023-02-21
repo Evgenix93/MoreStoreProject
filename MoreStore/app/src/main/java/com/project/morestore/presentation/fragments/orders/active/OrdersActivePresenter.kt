@@ -128,8 +128,8 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
                                         deliveryInfo = YandexDeliveryStatus.statuses[info.status]
                                     }else status = OrderStatus.DELIVERY_STATUS_NOT_DEFINED
                                 }
-                                if(order.idCdek == null && order.idYandex == null && order.isPayment){
-                                    status = OrderStatus.MEETING_NOT_ACCEPTED
+                                if(order.idCdek == null && order.idYandex == null && order.isPayment && buySuggest?.status == 1){
+                                    status = OrderStatus.DELIVERY
                                 }
 
                         }
@@ -187,6 +187,7 @@ class OrdersActivePresenter @Inject constructor(@ActivityContext val context: Co
 
                 viewState.initActiveOrders(adapter!!)
                 viewState.loading(false)
+                Log.d("orders count", orderItems.size.toString())
             }
         }
 

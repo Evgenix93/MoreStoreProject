@@ -244,7 +244,7 @@ class OrderDetailsPresenter @Inject constructor(
                 }
                 else{
                     if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1 && isBuyer)
-                        status = OrderStatus.MEETING_NOT_ACCEPTED
+                        status = OrderStatus.DELIVERY
                     if(order.idCdek == null && order.idYandex == null && buySuggest?.status == 1 && !isBuyer)
                         status = OrderStatus.CREATE_DELIVERY
                     if((buySuggest?.status == 0 || buySuggest?.status == null) && isBuyer)
@@ -452,6 +452,7 @@ class OrderDetailsPresenter @Inject constructor(
     }
 
     fun getFinalYandexGoPrice(toAddress: String, product: Product, promo: String? = null){
+        if(product.packageDimensions.height == null) return
         presenterScope.launch {
             viewState.loading(true)
             val fromCoords = geoRepository.getCoordsByAddress(product.address?.fullAddress!!)?.body()?.coords
