@@ -207,7 +207,7 @@ class OrdersRepository @Inject constructor(private val ordersApi: OrdersApi) {
                     } else {
                         Response.error(
                             400,
-                            response.body()?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
+                            response.body()?.errors?.first()?.message?.toResponseBody(null) ?: e.message.toString().toResponseBody(null)
                         )
                     }
                 } catch (e: Throwable) {

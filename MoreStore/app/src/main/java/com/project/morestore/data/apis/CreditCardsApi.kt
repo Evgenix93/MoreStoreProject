@@ -1,11 +1,10 @@
 package com.project.morestore.data.apis
 
 import com.project.morestore.data.models.Card
+import com.project.morestore.data.models.CardActiveData
 import com.project.morestore.data.models.Id
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface CreditCardsApi {
 
@@ -20,4 +19,9 @@ interface CreditCardsApi {
 
     @POST("user/delete_card")
     suspend fun deleteCard(@Body cardId: Id): Response<Unit>
+
+    @POST("user/card/edit/{id}")
+    suspend fun chooseCard(@Path("id") cardid: Long, @Body cardActiveData: CardActiveData): Response<String>
+
+
 }

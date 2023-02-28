@@ -2,6 +2,7 @@ package com.project.morestore.domain.presenters
 
 import android.util.Log
 import com.project.morestore.data.models.Card
+import com.project.morestore.data.models.CardActiveData
 import com.project.morestore.data.repositories.CardRepository
 import com.project.morestore.data.repositories.UserRepository
 import com.project.morestore.presentation.mvpviews.ProfileMvpView
@@ -37,11 +38,11 @@ class ProfilePresenter @Inject constructor(private val userRepository: UserRepos
         }
     }
 
-    fun chooseCard(cards: List<Card>){
+    fun chooseCard(cardId: Long){
         Log.d("MyDebugCard", "choose card")
         viewState.loading()
         presenterScope.launch{
-            cards.forEach{
+            /*cards.forEach{
                 val deleteResponse = cardRepository.deleteCard(it)
                 when(deleteResponse?.code()){
                     404 -> {viewState.error(deleteResponse.errorBody()!!.getStringFromResponse())
@@ -64,8 +65,14 @@ class ProfilePresenter @Inject constructor(private val userRepository: UserRepos
                         return@launch
                     }
                 }
+            }*/
+
+            val response = cardRepository.chooseCard(cardId, CardActiveData(active = 1))
+            when(response?.code()){
+                200 -> getCards()
+                else -> viewState.error(errorMessage(response))
             }
-            getCards()
+            //getCards()
         }
     }
 
@@ -79,8 +86,8 @@ class ProfilePresenter @Inject constructor(private val userRepository: UserRepos
                 200 -> {
                     val cards = response.body()!!
                     if(cards.isNotEmpty() && cards.all{it.active == 0}){
-                        cards.first().active = 1
-                        chooseCard(cards)
+                        //cards.first().active = 1
+                        chooseCard(cards.first().id!!)
                     }else
                         viewState.loaded(response.body()!!)
                 }

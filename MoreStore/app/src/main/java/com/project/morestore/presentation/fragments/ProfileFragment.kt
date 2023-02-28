@@ -119,8 +119,8 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
     }
 
    private fun initCardList(){
-        cardsAdapter = CardsAdapter ({cards ->
-        presenter.chooseCard(cards)
+        cardsAdapter = CardsAdapter ({cardId ->
+        presenter.chooseCard(cardId)
         }, {deleteCard(it)})
         binding.cardsRecyclerView.apply {
             adapter = cardsAdapter
@@ -196,11 +196,11 @@ class ProfileFragment: MvpAppCompatFragment(R.layout.fragment_profile), ProfileM
               else {
                   Log.d("MyDebugCard", "cards test = $result")
                   if(shouldChooseLastCard){
-                      (result as List<Card>).forEachIndexed() { index, card ->
-                          if(index != result.lastIndex)
-                              card.active = 0
-                      }
-                      presenter.chooseCard(result)
+                      //(result as List<Card>).forEachIndexed() { index, card ->
+                        //  if(index != result.lastIndex)
+                          //    card.active = 0
+                      //}
+                      presenter.chooseCard((result.last() as Card).id!!)
                       shouldChooseLastCard = false
                   }else
                       cardsAdapter.updateCards(result as List<Card>)

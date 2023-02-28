@@ -9,7 +9,7 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemCardBinding
 import com.project.morestore.data.models.Card
 
-class CardsAdapter(private val choose: (List<Card>) -> Unit, private val delete: (Card) -> Unit): RecyclerView.Adapter<CardsAdapter.CardViewHolder>() {
+class CardsAdapter(private val choose: (cardId: Long) -> Unit, private val delete: (Card) -> Unit): RecyclerView.Adapter<CardsAdapter.CardViewHolder>() {
     private var cards = listOf<Card>()
     private var loading = false
 
@@ -40,9 +40,7 @@ class CardsAdapter(private val choose: (List<Card>) -> Unit, private val delete:
               if(loading)
                   return@setOnClickListener
 
-                  cards.forEach { it.active = 0 }
-                  card.active = 1
-                  choose(cards)
+              choose(card.id!!)
           }
           binding.trashImageView.setOnClickListener{
               delete(card)

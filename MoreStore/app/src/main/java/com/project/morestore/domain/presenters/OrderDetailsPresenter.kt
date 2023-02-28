@@ -229,7 +229,7 @@ class OrderDetailsPresenter @Inject constructor(
                     null -> status = OrderStatus.ADD_MEETING
                 }
 
-            if(order.status == 1) status = OrderStatus.RECEIVED_SUCCESSFULLY
+
 
             if(order.pay == 2 && buySuggest?.status != 2){
                 if(!order.isPayment) {
@@ -277,6 +277,8 @@ class OrderDetailsPresenter @Inject constructor(
                 }
             }
 
+            if(order.status == 1) status = OrderStatus.RECEIVED_SUCCESSFULLY
+
 
 
             val orderItem = OrderItem(
@@ -307,7 +309,7 @@ class OrderDetailsPresenter @Inject constructor(
                 deliveryStatusInfo = deliveryInfo,
                 cdekInfoEntity = info,
                 sberId = order.sberId,
-                sum = order.sum
+                sum = order.wallet?.sum?.toFloat()
             )
             viewState.orderItemLoaded(orderItem)
         }

@@ -3,6 +3,7 @@ package com.project.morestore.data.repositories
 import android.util.Log
 import com.project.morestore.data.apis.CreditCardsApi
 import com.project.morestore.data.models.Card
+import com.project.morestore.data.models.CardActiveData
 import com.project.morestore.data.models.Id
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
@@ -57,6 +58,19 @@ class CardRepository @Inject constructor(private val cardApi: CreditCardsApi) {
             if (e is IOException) {
                 null
             } else {
+                Response.error(400, e.message.toString().toResponseBody(null))
+            }
+        }
+    }
+
+    suspend fun chooseCard(cardId: Long, activeData: CardActiveData): Response<String>? {
+        return try {
+            cardApi.chooseCard(cardId, activeData)
+        } catch (e: Exception) {
+            if (e is IOException) {
+                null
+            } else {
+                Log.d("mylog", e.message.toString())
                 Response.error(400, e.message.toString().toResponseBody(null))
             }
         }

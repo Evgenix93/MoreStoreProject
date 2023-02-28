@@ -535,6 +535,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
     }
 
     override fun error(message: String) {
+        if(message.contains("500")) return
         binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 

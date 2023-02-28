@@ -263,6 +263,7 @@ class CatalogFragment : MvpAppCompatFragment(R.layout.fragment_catalog), Catalog
     }
 
     override fun error(message: String) {
+        if(message.contains("500")) return
         binding.loader.isVisible = false
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }

@@ -69,7 +69,7 @@ interface OrdersApi {
     suspend fun getCdekPrice(@Body info: CdekCalculatePriceInfo): Response<DeliveryPrice>
 
     @POST("cdek/price")
-    suspend fun getCdekPriceError(@Body info: CdekCalculatePriceInfo): Response<String>
+    suspend fun getCdekPriceError(@Body info: CdekCalculatePriceInfo): Response<CdekErrorInfo>
 
     @POST("cdek/add_new")
     suspend fun createCdekOrder(@Body order: CdekOrder): Response<CreateCdekResponse>

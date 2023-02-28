@@ -31,5 +31,6 @@ data class Order(
     val idYandex: String?,
     var deliveryStatus: String? = null,
     val comment: String?,
-    val sberId: String?
+    val sberId: String?,
+    val wallet: OrderWallet?
 ): Parcelable
