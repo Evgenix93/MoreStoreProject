@@ -24,10 +24,10 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
         Option("Описание", false),
         Option("Местоположение", true),
         Option("Пункт отправки CDEK", false),
+        Option("Размеры товара", false),
         Option("Цвет", false),
         Option("Материал", false),
-        Option("Стиль", false),
-        Option("Размеры товара", false)
+        Option("Стиль", false)
     )
 
     class OptionViewHolder(view: View, onClick: (Int) -> Unit) : RecyclerView.ViewHolder(view) {
@@ -41,7 +41,7 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
 
         fun bind(option: Option, context: Context) {
             binding.nameTextView.text = option.name
-            if (adapterPosition > 5)
+            if (adapterPosition > 7)
                 binding.starTextView.isVisible = false
             if (option.isChecked)
                 binding.checkImageView.imageTintList =
@@ -75,13 +75,13 @@ class OptionsAdapter(private val context: Context, val onClick: (Int) -> Unit) :
         options[3].isChecked = size != null
         options[4].isChecked = about != null && about != ""
         options[5].isChecked = region != null
+        options[5].address = region
         options[6].isChecked = createProductData.addressCdek != null
         options[6].address = createProductData.addressCdek
-        options[7].isChecked = colors.isNotEmpty()
-        options[8].isChecked = materials.isNotEmpty()
-        options[9].isChecked = styles.isNotEmpty()
-        options[5].address = region
-        options[10].isChecked = dimensions?.length != null
+        options[7].isChecked = dimensions?.length != null
+        options[8].isChecked = colors.isNotEmpty()
+        options[9].isChecked = materials.isNotEmpty()
+        options[10].isChecked = styles.isNotEmpty()
         notifyDataSetChanged()
     }
 
