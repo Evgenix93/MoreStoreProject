@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.util.Range
+import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -34,6 +37,7 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.util.zip.Inflater
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -314,6 +318,14 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemStatusBlock.isVisible = true
                     orderItemStatusContent.text = order.deliveryStatusInfo
                     binding.orderItemAcceptBlock.isVisible = false
+                    /*order.cdekInfoEntity?.entity?.statuses?.forEachIndexed {index, info ->
+                        if(index != 0) {
+                            val statusTextView = LayoutInflater.from(requireContext())
+                                .inflate(R.layout.delivery_status_textview, statusHistory, false)
+                            (statusTextView as TextView).text = info.name
+                            statusHistory.addView(statusTextView)
+                        }
+                    }*/
 
 
                 }
