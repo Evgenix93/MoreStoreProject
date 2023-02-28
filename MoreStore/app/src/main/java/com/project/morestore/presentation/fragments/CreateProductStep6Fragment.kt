@@ -127,10 +127,10 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
                      presenter.updateCreateProductData(addressCdek = address)
                     loadCreateProductData()}
                 }
-                7 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
-                8 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
-                9 -> findNavController().navigate(R.id.createProductStylesFragment)
-                10 -> {findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCreateProductPackageFragment())}
+                7 -> {findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCreateProductPackageFragment())}
+                8 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductColorsFragment())
+                9 -> findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductFragmentToCreateProductMaterialsFragment())
+                10 -> findNavController().navigate(R.id.createProductStylesFragment)
             }
 
         }
@@ -277,7 +277,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
 
     private fun initCreateProductButton() {
         val options = optionsAdapter.getList().toMutableList()
-        if (options.take(6).all { it.isChecked }) {
+        if (options.take(8).all { it.isChecked }) {
             binding.addPhotoInfoTextView.text = getString(R.string.excellent_all_filled)
             binding.placeProductButton.isClickable = true
             binding.placeProductButton.backgroundTintList =
@@ -380,7 +380,7 @@ class CreateProductStep6Fragment : MvpAppCompatFragment(R.layout.fragment_add_pr
             findNavController().navigate(CreateProductStep6FragmentDirections.actionCreateProductStep6FragmentToCabinetFragment())
         }else if (result is Card){
             binding.warningImageView.setImageResource(R.drawable.ic_check_round_fill)
-            binding.warningImageView.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.green, null))
+            binding.warningImageView.imageTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.green, null))
             binding.cardInfoTitleTextView.text = resources.getString(R.string.card_added)
             binding.warningInfoTextView.text = resources.getString(R.string.card_added_info)
             binding.addCardButton.isVisible = false
