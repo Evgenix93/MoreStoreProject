@@ -114,8 +114,8 @@ class CreateProductPriceFragment: MvpAppCompatFragment(R.layout.fragment_create_
 
 
       val createProductData = result as com.project.morestore.data.models.CreateProductData
-      binding.originalPriceEditText.setText("${createProductData.price?.toFloat()?.toInt() ?: ""}")
-      binding.salePriceEditText.setText("${createProductData.priceNew?.toFloat()?.toInt() ?: ""}")
+      binding.originalPriceEditText.setText("${createProductData.price?.toFloatOrNull()?.toInt() ?: ""}")
+      binding.salePriceEditText.setText("${createProductData.priceNew?.toFloatOrNull()?.toInt() ?: ""}")
         binding.toolbar.actionIcon.setOnClickListener {
             if(result.id == null)
                 SaveProductDialog { presenter.createDraftProduct() }.show(childFragmentManager, null)

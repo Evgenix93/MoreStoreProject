@@ -1,6 +1,7 @@
 package com.project.morestore.presentation.fragments
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,8 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -27,8 +30,10 @@ import com.project.morestore.presentation.adapters.SuggestionArrayAdapter
 import com.project.morestore.databinding.FragmentMainBinding
 import com.project.morestore.data.models.*
 import com.project.morestore.data.models.Filter
+import com.project.morestore.data.singletones.Token
 import com.project.morestore.domain.presenters.MainPresenter
 import com.project.morestore.presentation.mvpviews.MainMvpView
+import com.project.morestore.util.NotificationChannels
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
@@ -47,11 +52,12 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     private var kidsProductAdapter: ProductAdapter by autoCleared()
     private var isMainLoaded = false
     private var currentSuggestionModels: SuggestionModels? = null
-    private lateinit var permissionLauncher: ActivityResultLauncher<String>
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
     private var viewPagerAdapter: MainFragmenViewPagerAdapter by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("mylog", "token: ${Token.token}")
         isMainLoaded = false
         getUserData()
         showBottomNavBar()
@@ -61,6 +67,8 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
         setClickListeners()
         initPermissionLauncher()
         getCurrentUserAddress()
+
+        //createTestNotificationn()
     }
 
     private fun showUnreadMessagesStatus(){
@@ -353,14 +361,16 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     }
 
     private fun initPermissionLauncher(){
-        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ granted ->
-            if(granted)
+        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ granted ->
+            if(granted[Manifest.permission.ACCESS_FINE_LOCATION] == true)
                 getCity()
         }
     }
 
     private fun requestPermissions(){
-        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        val permissions = if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+                          else arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.POST_NOTIFICATIONS)
+        permissionLauncher.launch(permissions)
     }
 
     private fun getCurrentUserAddress(){
@@ -493,4 +503,13 @@ class MainFragment : MvpAppCompatFragment(R.layout.fragment_main), MainMvpView {
     override fun success() {
         findNavController().navigate(MainFragmentDirections.actionMainFragmentToCatalogFragment())
     }
+
+    /*private fun createTestNotificationn(){
+        val notification = NotificationCompat.Builder(requireContext(), NotificationChannels.IMPORTANT_CHANNEL_ID)
+            .setContentTitle("title")
+            .setContentText("text")
+            .setSmallIcon(R.drawable.ic_logo)
+            .build()
+        NotificationManagerCompat.from(requireContext()).notify(1, notification)
+    }*/
 }

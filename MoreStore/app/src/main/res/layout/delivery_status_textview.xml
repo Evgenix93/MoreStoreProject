@@ -1,15 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/orderItemStatusContent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="9dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
+        android:fontFamily="@font/manrope_regular"
+        android:text="Отслеживание"
+        android:textColor="@color/gray2"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/statusList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:id="@+id/statusList"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@+id/descriptionTextView"
+    app:layout_constraintStart_toStartOf="parent"
+        >
+
+    <ImageView
+        android:id="@+id/statusImageView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_tracking_icon"/>
+
+
+<TextView
+    android:id="@+id/statusTextView"
+    android:text="gert"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="11dp"
+    android:layout_marginStart="10dp"
     android:fontFamily="@font/manrope_regular"
-    android:textColor="@color/blue4"
+    android:textColor="@color/gray2"
     android:textSize="14sp"
     app:layout_constraintStart_toStartOf="@+id/orderItemDeliveryTitle"
     app:layout_constraintTop_toBottomOf="@+id/orderItemDeliveryContent"
-    >
+    />
 
-</TextView>
+
+
+</LinearLayout>
+
+</LinearLayout>

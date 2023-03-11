@@ -259,7 +259,7 @@
     <string name="salePrice">Продать за цену</string>
     <string name="show_discount">Мы автоматически рассчитаем и покажем\nпокупателю скидку, которую вы сделали</string>
     <string name="you_created_product">Поздравляем!\nВы создали товар на MoreStore</string>
-    <string name="you_created_product_info">В течении 24 часов наши специалисты\nпроверят ваше объявление. Если оно\nсоответсвует требованиям нашего\nмагазина, мы опубликуем его.</string>
+    <string name="you_created_product_info">В течении 24 часов наши специалисты\nпроверят ваше объявление. Если оно\nсоответствует требованиям нашего\nмагазина, мы опубликуем его.</string>
     <string name="you_created_product_info2"><![CDATA[Проверить статус объявления можно тут:\nЛичный кабинет > Мои объявления >\nНа модерации]]></string>
     <string name="delete">Удалить</string>
     <string name="archive">Архивировать</string>

@@ -436,7 +436,7 @@ class CreateProductPresenter @Inject constructor(@ActivityContext private val co
     }
 
     fun changeProductAndPublish() {
-        updateCreateProductData(status = 0)
+        updateCreateProductData(status = 1)
         changeProduct()
     }
 

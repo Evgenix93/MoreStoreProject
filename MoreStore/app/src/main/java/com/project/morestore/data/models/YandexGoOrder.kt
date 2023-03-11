@@ -88,3 +88,47 @@ object YandexDeliveryStatus{
     "cancelled_with_items_on_hands" to	"Клиент платно отменил заявку без необходимости возврата груза",
     "failed" to	"При выполнение заказа произошла ошибка")
 }
+
+object PositiveYandexKeys{
+    val keys = listOf(
+                "new",
+                "estimating",
+                "ready_for_approval",
+                "accepted",
+                "performer_lookup",
+                "performer_draft",
+                "performer_found",
+                "pickup_arrived",
+                "ready_for_pickup_confirmation",
+                "pickuped",
+                "delivery_arrived",
+                "ready_for_delivery_confirmation",
+                "pay_waiting",
+                "delivered",
+                "delivered_finish",
+                "returning",
+                "return_arrived",
+                "ready_for_return_confirmation",
+                "returned",
+                "returned_finish",
+
+
+    )
+}
+
+object NegativeYandexKeys{
+    val keys = listOf(
+        "estimating_failed",
+        "performer_not_found",
+        "failed",
+        "cancelled",
+        "cancelled_with_payment",
+        "cancelled_by_taxi",
+        "cancelled_with_items_on_hands"
+    )
+}
+
+data class YandexStatusKeys(
+    val key: String,
+    val isPositive: Boolean
+)

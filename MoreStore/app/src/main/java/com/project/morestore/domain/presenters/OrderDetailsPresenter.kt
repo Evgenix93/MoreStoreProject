@@ -182,6 +182,7 @@ class OrderDetailsPresenter @Inject constructor(
             var status: OrderStatus = OrderStatus.MEETING_NOT_ACCEPTED
             var info: CdekOrderInfo? = null
             var deliveryInfo: String? = null
+            var infoYandex: YandexOrderInfoBody? = null
             if(isBuyer)
             status = when(buySuggest?.status) {
                 0 -> OrderStatus.NOT_SUBMITTED
@@ -203,15 +204,14 @@ class OrderDetailsPresenter @Inject constructor(
                 }
                 else -> OrderStatus.NOT_SUBMITTED
             }
-            else
+            else {
                 when (address?.type) {
                     OfferedPlaceType.PROPOSED.value -> {
 
                         if (address.status == 0) {
                             status = OrderStatus.MEETING_NOT_ACCEPTED_SELLER
 
-                        }
-                        else {
+                        } else {
                             status = OrderStatus.RECEIVED_SELLER
 
                         }
@@ -228,6 +228,14 @@ class OrderDetailsPresenter @Inject constructor(
                     }
                     null -> status = OrderStatus.ADD_MEETING
                 }
+
+                if(buySuggest?.status == 0) status = OrderStatus.NOT_SUBMITTED_SELLER
+                if(buySuggest?.status == 2) {
+                    if(buySuggest.idCanceled == authRepository.getUserId() )
+                        OrderStatus.DECLINED
+                    else OrderStatus.DECLINED_BUYER
+                }
+            }
 
 
 
@@ -267,7 +275,7 @@ class OrderDetailsPresenter @Inject constructor(
                     }
 
                     if(order.idYandex != null && order.delivery == 2 && order.isPayment){
-                        val infoYandex = ordersRepository.getYandexGoOrderInfo(order.idYandex!!)?.body()
+                         infoYandex = ordersRepository.getYandexGoOrderInfo(order.idYandex!!)?.body()
                         if(infoYandex != null){
                             status = OrderStatus.DELIVERY_STATUS_ACCEPTED
                             deliveryInfo = YandexDeliveryStatus.statuses[infoYandex.status]
@@ -309,7 +317,8 @@ class OrderDetailsPresenter @Inject constructor(
                 deliveryStatusInfo = deliveryInfo,
                 cdekInfoEntity = info,
                 sberId = order.sberId,
-                sum = order.wallet?.sum?.toFloat()
+                sum = order.wallet?.sum?.toFloat(),
+                yandexGoStatusKey = infoYandex?.status
             )
             viewState.orderItemLoaded(orderItem)
         }

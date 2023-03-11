@@ -11,9 +11,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.FrameLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.text.toSpannable
@@ -30,6 +29,7 @@ import com.project.morestore.presentation.dialogs.YesNoDialog
 import com.project.morestore.data.models.*
 import com.project.morestore.data.models.cart.OrderItem
 import com.project.morestore.data.models.cart.OrderStatus
+import com.project.morestore.data.singletones.Token
 import com.project.morestore.presentation.mvpviews.OrderDetailsView
 import com.project.morestore.domain.presenters.OrderDetailsPresenter
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,6 +77,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
     private fun bind(order: OrderItem) {
         Log.d("mylog", "orderStatus ${order.status}")
         Log.d("mylog", "order address ${order.cdekYandexAddress}")
+        if(order.sellerId == Token.userId)
+            binding.infoTextView.text = "Вы получите деньги, как только покупатель подтвердит получение товара"
         orderItem = order
         getDeliveryPrice(order)
         binding.allBlocks.isVisible = true
@@ -315,17 +317,44 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                 }
                 OrderStatus.DELIVERY_STATUS_ACCEPTED -> {
                     //binding.cancelTextView.isVisible = false
-                    orderItemStatusBlock.isVisible = true
-                    orderItemStatusContent.text = order.deliveryStatusInfo
+                    orderItemStatusBlock.isVisible = false
+
+
                     binding.orderItemAcceptBlock.isVisible = false
-                    /*order.cdekInfoEntity?.entity?.statuses?.forEachIndexed {index, info ->
-                        if(index != 0) {
-                            val statusTextView = LayoutInflater.from(requireContext())
-                                .inflate(R.layout.delivery_status_textview, statusHistory, false)
-                            (statusTextView as TextView).text = info.name
-                            statusHistory.addView(statusTextView)
+                    order.cdekInfoEntity?.entity?.statuses?.reversed()?.forEachIndexed {index, info ->
+                        val isCurrent = index == order.cdekInfoEntity.entity.statuses.lastIndex
+                        val statusView = createDeliveryStatusView(text = info.name, isCurrent = isCurrent, isFirst = index == 0 )
+                        statusHistory.addView(statusView)
+
+
+                    }
+
+                    if(order.yandexGoStatusKey != null){
+                        Log.d("mylog", "yandex status")
+                        val statusHistoryList = mutableListOf<String>()
+                        if (NegativeYandexKeys.keys.contains(order.yandexGoStatusKey)){
+                            val statusText = YandexDeliveryStatus.statuses[order.yandexGoStatusKey] ?: ""
+                            val statusView = createDeliveryStatusView(text= statusText, isCurrent = true, isFirst = true, isPositive = false)
+                            statusHistory.addView(statusView)
+                            return
+
                         }
-                    }*/
+                        for (it in PositiveYandexKeys.keys) {
+                            statusHistoryList.add(YandexDeliveryStatus.statuses[it] ?: "")
+                            if (order.yandexGoStatusKey == it) break
+
+                        }
+                        statusHistoryList.forEachIndexed { index, status ->
+                            val isCurrent = index == statusHistoryList.lastIndex
+                            val isFirst = index == 0
+                            val statusView = createDeliveryStatusView(text = status, isCurrent = isCurrent, isFirst = isFirst)
+                            statusHistory.addView(statusView)
+                        }
+                        Log.d("mylog", statusHistoryList.toString())
+
+
+
+                    }
 
 
                 }
@@ -576,5 +605,30 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
             presenter.getFinalCdekPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product, promo = order.promo)
         if(order.deliveryInfo == "yandex")
             presenter.getFinalYandexGoPrice(toAddress = order.cdekYandexAddress ?: "", product = order.product, promo = order.promo)
+    }
+
+    private fun createDeliveryStatusView(text: String, isCurrent: Boolean, isFirst: Boolean, isPositive: Boolean = true): View{
+         val statusView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.delivery_status_textview, LinearLayout(requireContext()), false)
+        val statusText = statusView.findViewById<TextView>(R.id.statusTextView)
+        statusText.text = text
+
+        if(isCurrent){
+            val icon = statusView.findViewById<ImageView>(R.id.statusImageView)
+            icon.setImageResource(R.drawable.ic_checkcircle)
+            icon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.blue4), android.graphics.PorterDuff.Mode.SRC_IN)
+            statusText.setTextColor(ContextCompat.getColor(requireContext(), R.color.blue4))
+
+        }
+        if(isFirst){
+            statusView.findViewById<TextView>(R.id.descriptionTextView).isVisible = true
+        }
+        if(!isPositive){
+            val icon = statusView.findViewById<ImageView>(R.id.statusImageView)
+            icon.setImageResource(R.drawable.ic_cross)
+            icon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red), android.graphics.PorterDuff.Mode.SRC_IN)
+        }
+
+        return statusView
     }
 }

@@ -15,8 +15,8 @@ android {
         applicationId "com.project.morestore"
         minSdk 21
         targetSdk 33
-        versionCode 21
-        versionName "1.5.6"
+        versionCode 27
+        versionName "1.6.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "MAP_KEY", "\"58d995df-fec6-45dd-aeb9-f913994fd48f\"")
