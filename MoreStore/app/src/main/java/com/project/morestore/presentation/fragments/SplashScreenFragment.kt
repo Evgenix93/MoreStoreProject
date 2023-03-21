@@ -49,10 +49,11 @@ class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen
         job = lifecycleScope.launch {
             delay(2000)
             if(isLogined) {
-                Log.d("mylog", "extras: ${requireActivity().intent?.getStringExtra(MessagingService.ORDER_KEY)}")
+                Log.d("mylog", "extras: ${requireActivity().intent?.extras}")
                 val orderId = requireActivity().intent?.getStringExtra(MessagingService.ORDER_KEY)
                 val orderIdLong = requireActivity().intent?.getLongExtra(MessagingService.ORDER_KEY, -1L)
                 Log.d("mylog", "orderId: $orderId")
+                Log.d("mylog", "orderIdLong: $orderIdLong")
                 if(orderId?.isNotEmpty() == true || (orderIdLong != null && orderIdLong != -1L)) {
                     requireActivity().intent = null
                     findNavController().navigate(

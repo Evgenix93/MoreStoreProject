@@ -108,6 +108,7 @@ class SalesAdapter(
         }
 
         private fun bindMainInfo(order: Order, address: OfferedOrderPlace?, user: User?){
+            binding.orderItemId.text = "№ ${order.id}"
             binding.orderItemDeliveryDateText.text = when (order.delivery) {
                 1 -> itemView.context.getString(R.string.self_pickup)
                 2 -> itemView.context.getString(R.string.yandex_go)

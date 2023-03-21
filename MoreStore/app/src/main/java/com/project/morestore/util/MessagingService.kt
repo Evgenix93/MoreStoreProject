@@ -58,12 +58,13 @@ class MessagingService: FirebaseMessagingService() {
     }
 
     private fun createOrderStatusChangeNotification(orderId: Long, text: String, title: String){
+        Log.d("mylog", "orderIdFromNotification: $orderId")
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
                                             && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) return
         val intent = Intent(this, MainActivity::class.java).apply {
             putExtra(ORDER_KEY, orderId)
         }
-        val pendingIntent = PendingIntent.getActivity(this, NOTIFICATION_REQUEST_CODE, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getActivity(this, NOTIFICATION_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(this, NotificationChannels.IMPORTANT_CHANNEL_ID)
             .setContentTitle(title)

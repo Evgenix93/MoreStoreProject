@@ -12,10 +12,11 @@ import com.bumptech.glide.Glide
 
 import com.project.morestore.R
 import com.project.morestore.databinding.FragmentPhotoBinding
-import com.project.morestore.util.ClickWrapper
+
 
 class PhotoFragment: Fragment(R.layout.fragment_photo) {
     private val binding: FragmentPhotoBinding by viewBinding()
+    var onClick: () -> Unit = {}
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -23,8 +24,7 @@ class PhotoFragment: Fragment(R.layout.fragment_photo) {
         loadPhoto()
 
         binding.root.setOnClickListener {
-            val clickWrapper = arguments?.getParcelable<ClickWrapper>(ON_CLICK)
-            clickWrapper?.onClick?.invoke()
+            onClick()
         }
 
         if(arguments?.getString(PHOTO)?.contains("mp4") == true)
@@ -45,11 +45,10 @@ class PhotoFragment: Fragment(R.layout.fragment_photo) {
    companion object {
        const val IS_SOLD = "is sold"
        const val PHOTO = "photo"
-       private const val ON_CLICK = "on_click"
        fun createInstance(photo: String, isSold: Boolean, onClick: () -> Unit): PhotoFragment {
            return PhotoFragment().apply {
+               this.onClick = onClick
                arguments = Bundle().apply {
-                   putParcelable(ON_CLICK, ClickWrapper(onClick))
                    putString(PHOTO, photo)
                    putBoolean(IS_SOLD, isSold)
                }

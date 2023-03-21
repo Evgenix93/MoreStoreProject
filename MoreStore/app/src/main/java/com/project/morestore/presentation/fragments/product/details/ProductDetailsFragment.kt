@@ -61,6 +61,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("mylog", "onViewCreated product details")
         initList()
         initToolBar()
         initViews()

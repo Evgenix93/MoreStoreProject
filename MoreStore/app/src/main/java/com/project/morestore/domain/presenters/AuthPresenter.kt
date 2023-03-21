@@ -201,6 +201,7 @@ class AuthPresenter @Inject constructor(@ActivityContext private val context: Co
             when (response?.code()) {
                 200 -> {
                     repository.setupToken(response.body()?.token!!)
+                    repository.saveToken(response.body()?.token.orEmpty(), response.body()?.expires ?: 0)
                     viewState.success(response.body()!!)
                 }
                 else -> viewState.error(errorMessage(response))

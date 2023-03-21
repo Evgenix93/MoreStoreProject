@@ -1,6 +1,7 @@
 package com.project.morestore.domain.presenters
 
 import android.content.Context
+import android.util.Log
 import com.project.morestore.R
 import com.project.morestore.presentation.fragments.orders.create.OrderCreateFragment
 import com.project.morestore.data.models.*
@@ -152,6 +153,7 @@ class OrderDetailsPresenter @Inject constructor(
     }
 
     fun getOrderItem(orderId: Long){
+        Log.d("mylog", "orderToLoad: $orderId")
         presenterScope.launch {
             viewState.loading(true)
             val orders = getAllOrders()
@@ -231,7 +233,7 @@ class OrderDetailsPresenter @Inject constructor(
 
                 if(buySuggest?.status == 0) status = OrderStatus.NOT_SUBMITTED_SELLER
                 if(buySuggest?.status == 2) {
-                    if(buySuggest.idCanceled == authRepository.getUserId() )
+                    status = if(buySuggest.idCanceled == authRepository.getUserId() )
                         OrderStatus.DECLINED
                     else OrderStatus.DECLINED_BUYER
                 }
