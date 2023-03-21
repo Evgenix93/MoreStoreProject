@@ -285,7 +285,7 @@
     </fragment>
     <fragment
         android:id="@+id/cabinetFragment"
-        android:name="com.project.morestore.presentation.fragments.CabinetFragment"
+        android:name="com.project.morestore.presentation.fragments.MyProductsFragment"
         android:label="CabinetFragment" >
         <action
             android:id="@+id/action_cabinetFragment_to_firstLaunchFragment3"
