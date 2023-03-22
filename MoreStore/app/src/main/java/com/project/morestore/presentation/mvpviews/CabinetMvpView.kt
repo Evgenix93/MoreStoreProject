@@ -16,4 +16,7 @@ interface CabinetMvpView: MvpView {
     fun currentUserLoaded(user: User)
     @AddToEnd
     fun showProductsCounts(countList: List<Int>)
+
+    fun showSalesCount(activeSalesCount:Int, finishedSalesCount:Int)
+    fun showOrdersCount(activeOrdersCount:Int, finishedOrdersCount:Int)
 }
