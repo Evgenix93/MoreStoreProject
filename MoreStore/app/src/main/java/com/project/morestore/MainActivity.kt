@@ -24,8 +24,6 @@ import com.project.morestore.domain.presenters.MainActivityPresenter
 import com.project.morestore.presentation.fragments.CatalogFragment
 import com.project.morestore.presentation.fragments.SellerProfileFragment
 import com.project.morestore.presentation.fragments.SplashScreenFragmentDirections
-import com.project.morestore.presentation.mvpviews.MainMvpView
-import com.project.morestore.domain.presenters.MainPresenter
 import com.project.morestore.presentation.mvpviews.BaseMvpView
 import com.project.morestore.util.MessagingService
 import dagger.hilt.android.AndroidEntryPoint
@@ -143,7 +141,7 @@ class MainActivity : MvpAppCompatActivity(), BaseMvpView {
                             R.drawable.ic_chat,
                             null
                         )
-                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                    bottomNavBar.menu.findItem(R.id.myProductsFragment).icon =
                         ResourcesCompat.getDrawable(
                             resources,
                             R.drawable.ic_user_circle,
@@ -161,7 +159,7 @@ class MainActivity : MvpAppCompatActivity(), BaseMvpView {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_create_product, null)
                     bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
-                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                    bottomNavBar.menu.findItem(R.id.myProductsFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
                 }
 
@@ -175,7 +173,7 @@ class MainActivity : MvpAppCompatActivity(), BaseMvpView {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_plus2, null)
                     bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
-                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                    bottomNavBar.menu.findItem(R.id.myProductsFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
                 }
 
@@ -189,13 +187,13 @@ class MainActivity : MvpAppCompatActivity(), BaseMvpView {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_create_product, null)
                     bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat2, null)
-                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                    bottomNavBar.menu.findItem(R.id.myProductsFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
 
                 }
 
                 R.id.cabinetFragment -> {
-                    bottomNavBar.selectedItemId = R.id.cabinetFragment
+                    bottomNavBar.selectedItemId = R.id.myProductsFragment
                     bottomNavBar.menu.findItem(R.id.mainFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_house2, null)
                     bottomNavBar.menu.findItem(R.id.catalogFragment).icon =
@@ -204,7 +202,7 @@ class MainActivity : MvpAppCompatActivity(), BaseMvpView {
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_create_product, null)
                     bottomNavBar.menu.findItem(R.id.messagesFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
-                    bottomNavBar.menu.findItem(R.id.cabinetFragment).icon =
+                    bottomNavBar.menu.findItem(R.id.myProductsFragment).icon =
                         ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle2, null)
 
                 }
@@ -246,7 +244,7 @@ class MainActivity : MvpAppCompatActivity(), BaseMvpView {
                     true
                 }
 
-                R.id.cabinetFragment -> if (navController.currentDestination?.id != R.id.cabinetFragment) {
+                R.id.myProductsFragment -> if (navController.currentDestination?.id != R.id.cabinetFragment) {
                     navController.navigate(R.id.cabinetFragment)
                     true
                 } else {
@@ -264,7 +262,7 @@ class MainActivity : MvpAppCompatActivity(), BaseMvpView {
             menu.findItem(R.id.catalogFragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_tshirt, null)
             menu.findItem(R.id.createProductStep1Fragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_create_product, null)
             menu.findItem(R.id.messagesFragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_chat, null)
-            menu.findItem(R.id.cabinetFragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
+            menu.findItem(R.id.myProductsFragment).icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_user_circle, null)
         }
     }
 

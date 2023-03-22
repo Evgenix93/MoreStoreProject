@@ -1,6 +1,350 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray3"
+    >
+
+    <include
+        android:id="@+id/toolbarMain"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarMain"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/profileWindow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/profile_info_background"
+        >
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/avatarImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:scaleType="centerCrop"
+            android:padding="3dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="24dp"
+            tools:src="@drawable/avatar"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:strokeColor="@color/gray12"
+            app:strokeWidth="3dp" />
+
+        <TextView
+            android:id="@+id/userNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="82dp"
+            android:layout_marginTop="30dp"
+            tools:text="Ирина Иванова"
+            android:textAppearance="@style/bold_16"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/userPhoneTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black4"
+            android:editable="false"
+            android:layout_marginStart="82dp"
+            android:layout_marginTop="58dp"
+            android:fontFamily="@font/manrope_regular"
+            tools:text="+7 (919) 157-80-60"
+            android:textColor="@color/gray13"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="65dp"
+            android:layout_height="32dp"
+            android:background="@drawable/oval"
+            android:backgroundTint="@color/gray11"
+            android:layout_gravity="end"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="10dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_star"
+            android:layout_gravity="end"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="51dp"/>
+
+        <TextView
+            android:id="@+id/userRatingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="5.0"
+            android:layout_gravity="end"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="22dp"
+            android:textAppearance="@style/bold_16"
+            android:textColor="@color/white"/>
+
+
+        <TextView
+            android:id="@+id/timeFromRegistrationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="98dp"
+            android:fontFamily="@font/manrope_regular"
+            tools:text="зарегистрирован(а) 2 месяца назад"
+            android:textColor="@color/gray2"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/shareImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="95dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_sharenetwork" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/profileBtn"
+            android:layout_width="162dp"
+            android:layout_height="46dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/black4"
+            app:cardCornerRadius="7dp"
+            app:strokeColor="@color/gray10"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/ic_edit_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="61dp"
+                android:text="Профиль"
+                android:textAppearance="@style/bold_16"
+                android:textColor="@color/white" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView android:id="@+id/myAddresses"
+            android:layout_width="162dp"
+            android:layout_height="46dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/black4"
+            app:cardElevation="0dp">
+
+
+            <ImageView
+                android:id="@+id/addressImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="35dp"
+                android:src="@drawable/ic_map" />
+
+            <TextView
+                android:id="@+id/addressesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="67dp"
+                android:text="Адреса"
+                android:textAppearance="@style/bold_16"
+                android:textColor="@color/white" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </FrameLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"
+            android:text="Мои товары"/>
+
+        <TextView
+            android:id="@+id/activeProductsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:text="Активные"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            />
+
+        <TextView
+            android:id="@+id/activeProductsCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="55dp"/>
+
+        <TextView
+            android:id="@+id/onModerationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:text="На модерации"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="88dp"
+            />
+
+        <TextView
+            android:id="@+id/onModerationProductsCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="88dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="93dp"/>
+
+        <TextView
+            android:id="@+id/archiveProductsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:text="Архив"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="126dp"
+            />
+
+        <TextView
+            android:id="@+id/archiveProductsCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="126dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="131dp"/>
+
+        <TextView
+            android:id="@+id/draftProductsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:text="Черновики"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="164dp"
+            android:layout_marginBottom="16dp"
+            />
+
+        <TextView
+            android:id="@+id/draftProductsCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="164dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="169dp"/>
+
+
+
+
+
+
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

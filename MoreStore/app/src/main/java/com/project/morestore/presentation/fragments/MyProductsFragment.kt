@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -48,6 +49,7 @@ class MyProductsFragment: BottomNavigationFragment(R.layout.fragment_my_products
     private var reviewsAdapter: ReviewsAdapter by autoCleared()
     private var emptyActiveListImageRes = R.drawable.glasses_women
     private var emptyOnModerationImageRes = R.drawable.shoe_women
+    private val args: MyProductsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,6 +60,15 @@ class MyProductsFragment: BottomNavigationFragment(R.layout.fragment_my_products
         initProductsButtons()
         initList()
         getFilter()
+        showSelectedProducts()
+    }
+
+    private fun showSelectedProducts(){
+        when(args.productTypeInt){
+            0 -> binding.activeProductsBtn.callOnClick()
+            1 -> binding.onModerationBtn.callOnClick()
+            2 -> binding.archivedProductsBtn.callOnClick()
+        }
     }
 
     private fun checkToken(){
@@ -145,6 +156,8 @@ class MyProductsFragment: BottomNavigationFragment(R.layout.fragment_my_products
             presenter.getCurrentUserReviews()
             setUpActiveButton(binding.reviewsBtn, binding.reviewsCountTextView, binding.reviewsTextView)
         }
+
+
     }
 
     private fun setUpActiveButton(btn: FrameLayout, countTextView: TextView, listNameTextView: TextView){
@@ -249,7 +262,8 @@ class MyProductsFragment: BottomNavigationFragment(R.layout.fragment_my_products
             binding.profileBtn.setOnClickListener {
                 findNavController().navigate(MyProductsFragmentDirections.actionCabinetFragmentToProfileFragment(result))
             }
-            getProducts(true, false)
+            if(args.productTypeInt == -1)
+               getProducts(true, false)
             return
         }
         if(result is Boolean) {

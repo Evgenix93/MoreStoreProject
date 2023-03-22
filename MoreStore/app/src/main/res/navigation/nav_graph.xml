@@ -284,7 +284,7 @@
             android:defaultValue="-1L" />
     </fragment>
     <fragment
-        android:id="@+id/cabinetFragment"
+        android:id="@+id/myProductsFragment"
         android:name="com.project.morestore.presentation.fragments.MyProductsFragment"
         android:label="CabinetFragment" >
         <action
@@ -305,6 +305,10 @@
         <action
             android:id="@+id/action_cabinetFragment_to_createProductStep1Fragment"
             app:destination="@id/createProductStep1Fragment" />
+        <argument
+            android:name="productTypeInt"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
     <dialog
         android:id="@+id/resumeRegisterDialog"
@@ -851,7 +855,7 @@
             app:destination="@id/deleteProductDialog" />
         <action
             android:id="@+id/action_createProductStep6Fragment_to_cabinetFragment"
-            app:destination="@id/cabinetFragment" />
+            app:destination="@id/myProductsFragment" />
         <action
             android:id="@+id/action_createProductStep6Fragment_to_mainFragment"
             app:destination="@id/mainFragment" />
@@ -1343,6 +1347,23 @@
         <argument
             android:name="cdekInfo"
             app:argType="com.project.morestore.data.models.CdekOrderInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/cabinetFragment"
+        android:name="com.project.morestore.presentation.fragments.CabinetFragment"
+        android:label="CabinetFragment" >
+        <action
+            android:id="@+id/action_cabinetFragment_to_myProductsFragment"
+            app:destination="@id/myProductsFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_productDraftFragment"
+            app:destination="@id/productDraftFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_profileFragment2"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_myAddressesFragment"
+            app:destination="@id/myAddressesFragment" />
     </fragment>
 
 </navigation>
