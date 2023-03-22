@@ -113,7 +113,9 @@ class ToolbarCartPresenter @Inject constructor(@ActivityContext val context: Con
             val salesItems = getSalesItems()
             val filteredOrderItems = orderItems?.filter { orderItems.find { orderCheck -> orderCheck.id != it.id && orderCheck.cart?.first()?.id == it.cart?.first()?.id &&
                     orderCheck.id > it.id } == null &&
-                    cartItems?.find { cartItem -> cartItem.product.id == it.cart?.first()?.id } == null}
+                    cartItems?.find { cartItem -> cartItem.product.id == it.cart?.first()?.id  } == null
+                    && orderItems.find { initialOrder -> initialOrder.id != it.id && initialOrder.cart?.first()?.id == it.cart?.first()?.id &&
+                    initialOrder.status == 1} == null}
             val activeSalesFiltered = salesItems?.filter { salesItems.find { saleCheck ->
                 saleCheck.id != it.id && saleCheck.cart?.first()?.id == it.cart?.first()?.id &&
                         saleCheck.idUser == it.idUser && saleCheck.id > it.id } == null }

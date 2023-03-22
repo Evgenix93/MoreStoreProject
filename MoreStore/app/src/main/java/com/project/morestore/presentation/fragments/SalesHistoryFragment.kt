@@ -22,7 +22,9 @@ import com.project.morestore.data.models.slidermenu.SliderMenu
 import com.project.morestore.domain.presenters.SalesHistoryPresenter
 import com.project.morestore.presentation.mvpviews.SalesMvpView
 import com.project.morestore.domain.presenters.SalesPresenter
+import com.project.morestore.domain.presenters.toolbar.cart.ToolbarCartPresenter
 import com.project.morestore.presentation.mvpviews.SalesHistoryMvpView
+import com.project.morestore.presentation.mvpviews.ToolbarCartView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -30,18 +32,22 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesHistoryMvpView {
+class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesHistoryMvpView, ToolbarCartView {
     private val binding: FragmentOrdersBinding by viewBinding()
     private var salesAdapter: SalesAdapter by autoCleared()
     private var menuAdapter: SliderMenuAdapter<OrdersSliderMenu> by autoCleared()
     @Inject
     lateinit var salesPresenter: SalesHistoryPresenter
+    @Inject
+    lateinit var toolBarPresenterRef: ToolbarCartPresenter
     private val presenter by moxyPresenter { salesPresenter }
+    private val toolBarPresenter by moxyPresenter { toolBarPresenterRef }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolBarPresenter.initMenu(OrdersSliderMenu.SALES_HISTORY)
         initToolbar()
-        initMenuList()
+        //initMenuList()
         initSalesHistoryList()
         getSalesHistory()
     }
@@ -161,13 +167,24 @@ class SalesHistoryFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sale
         inactiveOrders: List<Order>,
         inactiveSales: List<Order>
     ) {
-        menuAdapter.changeCartItemsSize(cartItems.size)
+        /*menuAdapter.changeCartItemsSize(cartItems.size)
         menuAdapter.changeOrdersItemsSize(activeOrders.size)
         menuAdapter.changeSalesItemsSize(activeSales.size)
         menuAdapter.changeOrderHistorySize(inactiveOrders.size)
-        menuAdapter.changeSalesHistorySize(inactiveSales.size)
+        menuAdapter.changeSalesHistorySize(inactiveSales.size)*/
     }
 
+    override fun initMenuAdapter(adapter: SliderMenuAdapter<OrdersSliderMenu>) {
+        binding.toolbar.sliderMenu.adapter = adapter
+        binding.toolbar.sliderMenu.scrollToPosition(4)
+    }
+
+    override fun navigate(pageId: Int?) {
+        val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
+        if (pageId != null) {
+            findNavController().navigate(pageId, null, navOptions)
+        }else findNavController().popBackStack()
+    }
 
 
 }

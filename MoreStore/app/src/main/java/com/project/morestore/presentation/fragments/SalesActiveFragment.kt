@@ -19,7 +19,10 @@ import com.project.morestore.data.models.cart.CartItem
 import com.project.morestore.data.models.slidermenu.OrdersSliderMenu
 import com.project.morestore.data.models.slidermenu.SliderMenu
 import com.project.morestore.domain.presenters.SalesPresenter
+import com.project.morestore.domain.presenters.toolbar.cart.ToolbarCartPresenter
+import com.project.morestore.presentation.fragments.orders.active.OrdersActiveFragmentDirections
 import com.project.morestore.presentation.mvpviews.SalesMvpView
+import com.project.morestore.presentation.mvpviews.ToolbarCartView
 import com.project.morestore.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
@@ -27,19 +30,23 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesMvpView {
+class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), SalesMvpView, ToolbarCartView {
     private val binding: FragmentOrdersBinding by viewBinding()
     private var salesAdapter: SalesAdapter by autoCleared()
     private var menuAdapter: SliderMenuAdapter<OrdersSliderMenu> by autoCleared()
     @Inject
     lateinit var salesPresenter: SalesPresenter
+    @Inject
+    lateinit var toolBarPresenterRef: ToolbarCartPresenter
     private val presenter by moxyPresenter { salesPresenter }
+    private val toolBarPresenter by moxyPresenter { toolBarPresenterRef }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolBarPresenter.initMenu(OrdersSliderMenu.SALES)
         initToolbar()
-        initMenuList()
+        //initMenuList()
         initSalesList()
         getSales()
     }
@@ -185,14 +192,26 @@ class SalesActiveFragment: MvpAppCompatFragment(R.layout.fragment_orders), Sales
         inactiveOrders: List<Order>,
         inactiveSales: List<Order>
     ) {
-        menuAdapter.changeCartItemsSize(cartItems.size)
+        /*menuAdapter.changeCartItemsSize(cartItems.size)
         menuAdapter.changeOrdersItemsSize(activeOrders.size)
         menuAdapter.changeSalesItemsSize(activeSales.size)
         menuAdapter.changeOrderHistorySize(inactiveOrders.size)
-        menuAdapter.changeSalesHistorySize(inactiveSales.size)
+        menuAdapter.changeSalesHistorySize(inactiveSales.size)*/
     }
 
     override fun onDealStatusChanged() {
         getSales()
+    }
+
+    override fun initMenuAdapter(adapter: SliderMenuAdapter<OrdersSliderMenu>) {
+        binding.toolbar.sliderMenu.adapter = adapter
+        binding.toolbar.sliderMenu.scrollToPosition(2)
+    }
+
+    override fun navigate(pageId: Int?) {
+        val navOptions =  NavOptions.Builder().setPopUpTo(findNavController().previousBackStackEntry!!.destination.id, false).build()
+        if (pageId != null) {
+            findNavController().navigate(pageId, null, navOptions)
+        }else findNavController().popBackStack()
     }
 }
