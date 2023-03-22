@@ -1,8 +1,6 @@
 package com.project.morestore.domain.presenters
 
-import com.project.morestore.data.repositories.AuthRepository
-import com.project.morestore.data.repositories.ProductRepository
-import com.project.morestore.data.repositories.UserRepository
+import com.project.morestore.data.repositories.*
 import com.project.morestore.presentation.mvpviews.CabinetMvpView
 import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
@@ -12,14 +10,32 @@ import javax.inject.Inject
 
 class CabinetPresenter @Inject constructor(private val userRepository: UserRepository,
                                            private val authRepository: AuthRepository,
-                                           private val productRepository: ProductRepository): MvpPresenter<CabinetMvpView>() {
+                                           private val productRepository: ProductRepository,
+                                           private val salesRepository: SalesRepository,
+                                           private val ordersRepository: OrdersRepository,
+                                           private val cartRepository: CartRepository,
+                                           private val reviewRepository: ReviewRepository): MvpPresenter<CabinetMvpView>() {
 
 
     fun checkToken() {
         viewState.isLoggedIn(authRepository.isTokenEmpty().not())
     }
 
-     fun getUserInfo() {
+    fun getUserData() {
+        presenterScope.launch {
+            viewState.loading(true)
+            val response = authRepository.getUserData()
+            when (response?.code()) {
+                200 -> {
+                    authRepository.setupUserId(response.body()!!.id)
+                    getUserInfo()
+                }
+                else -> viewState.error(errorMessage(response))
+            }
+        }
+    }
+
+     private fun getUserInfo() {
         presenterScope.launch {
             viewState.loading(true)
             val response = userRepository.getCurrentUserInfo()
@@ -93,4 +109,11 @@ class CabinetPresenter @Inject constructor(private val userRepository: UserRepos
             viewState.showOrdersCount(filteredOrderItems.size, inactiveOrders.size)
             }
         }
+
+    fun getReviewCount(){
+        presenterScope.launch {
+            val reviews = reviewRepository.getReviews(authRepository.getUserId())
+            viewState.showReviewCount(reviews.size)
+        }
+    }
 }

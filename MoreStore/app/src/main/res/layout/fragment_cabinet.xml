@@ -342,13 +342,9 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
 
-    </ScrollView>
 
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/gray3">
+
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mySalesMaterialCardView"
@@ -561,5 +557,21 @@
             android:layout_gravity="end"/>
 
     </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNewProductBtn2"
+                style="@style/buttonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="18dp"
+                android:text="Разместить объявление"
+                 />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

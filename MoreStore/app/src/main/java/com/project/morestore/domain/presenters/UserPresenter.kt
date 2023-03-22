@@ -693,9 +693,29 @@ class UserPresenter @Inject constructor(
     }
 
     fun getCurrentUserReviews(){
+        Log.d("mylog", "getReviews")
         presenterScope.launch {
             viewState.loading()
             val reviews = reviewsRepository.getReviews(authRepository.getUserId()).map { ReviewItem(it) }
+            val response =  productRepository.getCurrentUserProducts()
+            when (response?.code()){
+                200 -> {
+                    response.body()?.forEach {
+                        val status = when {
+                            it.statusUser?.order?.status == 1 -> 8
+                            it.statusUser?.order?.status == 0 -> 6
+                            else -> it.status
+                        }
+                        it.status = status
+                    }
+
+                    viewState.loaded(listOf(response.body()!!
+                        .filter { it.status == 1 || it.status == 6 }.size,
+                        response.body()!!.filter { it.status == 0 }.size,
+                        response.body()!!.filter { it.status == 8 }.size,
+                        reviews.size))
+                }
+            }
             viewState.loaded(reviews)
         }
     }

@@ -68,6 +68,7 @@ class MyProductsFragment: BottomNavigationFragment(R.layout.fragment_my_products
             0 -> binding.activeProductsBtn.callOnClick()
             1 -> binding.onModerationBtn.callOnClick()
             2 -> binding.archivedProductsBtn.callOnClick()
+            3 -> binding.reviewsBtn.callOnClick()
         }
     }
 
@@ -298,7 +299,12 @@ class MyProductsFragment: BottomNavigationFragment(R.layout.fragment_my_products
                 binding.archivedCountTextView.text = sizes[2].toString()
                 binding.reviewsCountTextView.text = sizes[3].toString()
             }else {
+                Log.d("mylog", "reviews loaded")
+                Log.d("mylog", "reviews $result")
                 showLoading(false)
+                binding.productList.isVisible = true
+                binding.createNewProductBtn.isVisible = false
+                binding.createNewProductBtn2.isVisible = true
                 binding.productList.setSpace(8.dp)
                 binding.productList.adapter = reviewsAdapter
                 binding.productList.layoutManager = LinearLayoutManager(requireContext())
