@@ -1,5 +1,6 @@
 package com.project.morestore.presentation.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -158,6 +159,15 @@ class CabinetFragment: BottomNavigationFragment(R.layout.fragment_cabinet), Cabi
         }
         binding.createNewProductBtn2.setOnClickListener {
             findNavController().navigate(R.id.createProductStep1Fragment)
+        }
+        binding.shareImageView.setOnClickListener{
+            val userId = presenter.getUser().id
+            val intent = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, "https://morestore.ru/users/$userId")
+            startActivity(intent)
+        }
+        binding.toolbarMain.actionIcon.setOnClickListener {
+            presenter.clearToken()
+            findNavController().navigate(R.id.firstLaunchFragment)
         }
     }
 

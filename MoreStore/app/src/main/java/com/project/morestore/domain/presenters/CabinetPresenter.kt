@@ -1,5 +1,6 @@
 package com.project.morestore.domain.presenters
 
+import com.project.morestore.data.models.User
 import com.project.morestore.data.repositories.*
 import com.project.morestore.presentation.mvpviews.CabinetMvpView
 import com.project.morestore.util.errorMessage
@@ -15,6 +16,8 @@ class CabinetPresenter @Inject constructor(private val userRepository: UserRepos
                                            private val ordersRepository: OrdersRepository,
                                            private val cartRepository: CartRepository,
                                            private val reviewRepository: ReviewRepository): MvpPresenter<CabinetMvpView>() {
+
+    private lateinit var user: User
 
 
     fun checkToken() {
@@ -42,6 +45,7 @@ class CabinetPresenter @Inject constructor(private val userRepository: UserRepos
             when (response?.code()) {
                 200 -> {
                     viewState.loading(false)
+                    user = response.body()!!
                     viewState.currentUserLoaded(response.body()!!)
                 }
                 else -> {
@@ -113,6 +117,19 @@ class CabinetPresenter @Inject constructor(private val userRepository: UserRepos
         presenterScope.launch {
             val reviews = reviewRepository.getReviews(authRepository.getUserId())
             viewState.showReviewCount(reviews.size)
+        }
+    }
+
+    fun getUser() = user
+
+    fun setUser(user: User) {
+        this.user = user
+    }
+
+    fun clearToken() {
+        presenterScope.launch {
+            authRepository.clearToken()
+
         }
     }
 }
