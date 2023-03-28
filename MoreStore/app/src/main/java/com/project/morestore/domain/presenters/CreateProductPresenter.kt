@@ -61,7 +61,7 @@ class CreateProductPresenter @Inject constructor(@ActivityContext private val co
             val productAddress = productRepository.loadCreateProductData().address
             val productStatus = productRepository.loadCreateProductData().status
             updateCreateProductData(address = productAddress?.replace("ул. ", "")
-                ?.replace("дом ", ""), status = productStatus ?: 1)
+                ?.replace("дом ", ""))
 
             val response = productRepository.createProduct()
             when (response?.code()) {
