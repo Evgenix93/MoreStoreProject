@@ -38,11 +38,12 @@ class MessagingService: FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         Log.d("fire", "onMessageReceived ${message.data}")
-        val orderid = message.data["id_type"]?.toLong()
-        val changeOrderStatusText = message.data["text"]
-        val changeOrderStatusTitle = message.data["title"]
-        if(orderid != null){
-            createOrderStatusChangeNotification(orderid, changeOrderStatusText.orEmpty(), changeOrderStatusTitle.orEmpty())
+        val id = message.data["id_type"]?.toLong()
+        val text = message.data["text"]
+        val title = message.data["title"]
+        val pushType = message.data["type"]
+        if(id != null){
+            createNotification(id, text.orEmpty(), title.orEmpty(), pushType.orEmpty())
             return
         }
         val dialogId = message.data["message"]?.substringAfter(":")?.substringBefore("}")?.toLong()
@@ -57,14 +58,16 @@ class MessagingService: FirebaseMessagingService() {
 
     }
 
-    private fun createOrderStatusChangeNotification(orderId: Long, text: String, title: String){
-        Log.d("mylog", "orderIdFromNotification: $orderId")
+    private fun createNotification(id: Long, text: String, title: String, pushType: String){
+        Log.d("mylog", "IdFromNotification: $id")
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
                                             && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) return
         val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra(ORDER_KEY, orderId)
+            putExtra(PUSH_TYPE, pushType)
+            putExtra(ID, id)
+
         }
-        val pendingIntent = PendingIntent.getActivity(this, NOTIFICATION_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getActivity(this, NOTIFICATION_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val notification = NotificationCompat.Builder(this, NotificationChannels.IMPORTANT_CHANNEL_ID)
             .setContentTitle(title)
@@ -72,7 +75,7 @@ class MessagingService: FirebaseMessagingService() {
             .setSmallIcon(R.drawable.ic_logo)
             .setContentIntent(pendingIntent)
             .build()
-        NotificationManagerCompat.from(this).notify(orderId.toInt(), notification)
+        NotificationManagerCompat.from(this).notify(id.toInt(), notification)
     }
 
 
@@ -80,8 +83,13 @@ class MessagingService: FirebaseMessagingService() {
     companion object {
         const val MESSAGE_KEY = "message_key"
         const val MESSAGE_INTENT = "message_intent"
-        const val ORDER_KEY = "id_type"
+        const val ID = "id_type"
         const val NOTIFICATION_REQUEST_CODE = 123
+        const val NEW_PRICE_PUSH = "order_new_price_wishlist"
+        const val NEW_PRODUCT_PUSH = "order_new_wishlist"
+        const val PRODUCT_SOLD_PUSH = "order_new_status_wishlist"
+        const val ORDER_NEW_STATUS_PUSH = "order_new_status"
+        const val PUSH_TYPE = "type"
 
     }
 }

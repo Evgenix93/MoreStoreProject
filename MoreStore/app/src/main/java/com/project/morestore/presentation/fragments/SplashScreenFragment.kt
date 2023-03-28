@@ -50,20 +50,31 @@ class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen
             delay(2000)
             if(isLogined) {
                 Log.d("mylog", "extras: ${requireActivity().intent?.extras}")
-                val orderId = requireActivity().intent?.getStringExtra(MessagingService.ORDER_KEY)
-                val orderIdLong = requireActivity().intent?.getLongExtra(MessagingService.ORDER_KEY, -1L)
-                Log.d("mylog", "orderId: $orderId")
-                Log.d("mylog", "orderIdLong: $orderIdLong")
-                if(orderId?.isNotEmpty() == true || (orderIdLong != null && orderIdLong != -1L)) {
-                    requireActivity().intent = null
-                    findNavController().navigate(
-                        SplashScreenFragmentDirections.actionSplashScreenFragmentToOrderDetailsFragment(
-                            orderId = orderId?.toLong() ?: orderIdLong ?: -1
+                val id = requireActivity().intent?.getStringExtra(MessagingService.ID)
+                val idLong = requireActivity().intent?.getLongExtra(MessagingService.ID, -1L)
+                val pushType = requireActivity().intent?.getStringExtra(MessagingService.PUSH_TYPE)
+                Log.d("mylog", "orderId: $id")
+                Log.d("mylog", "orderIdLong: $idLong")
+                when (pushType) {
+                   MessagingService.ORDER_NEW_STATUS_PUSH -> {
+                       requireActivity().intent = null
+                       findNavController().navigate(
+                           SplashScreenFragmentDirections.actionSplashScreenFragmentToOrderDetailsFragment(
+                               orderId = id?.toLong() ?: idLong ?: -1
+                           )
+                       )
+                   }
+
+                    MessagingService.NEW_PRICE_PUSH, MessagingService.NEW_PRODUCT_PUSH, MessagingService.PRODUCT_SOLD_PUSH -> {
+                        requireActivity().intent = null
+                        findNavController().navigate(
+                            SplashScreenFragmentDirections.actionSplashScreenFragmentToProductDetailsFragment(productId = id ?: idLong.toString(),
+                                product = null, isSeller = false )
                         )
-                    )
+                    }
+
+                    else -> findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToMainFragment())
                 }
-                else
-                    findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToMainFragment())
             }
             else findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToFirstLaunchFragment())
         }

@@ -194,7 +194,8 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemStatusBlock.isVisible = true
                     orderItemStatusImage.setImageResource(R.drawable.ic_checkcircle)
                     orderItemAcceptBlock.visibility = View.VISIBLE
-                    orderItemStatusContent.text = requireContext().getString(R.string.active_order_recivied)
+                    orderItemStatusContent.text = getString(R.string.active_order_recivied)
+                    myAddressBlock.isVisible = true
                     address.text = order.newAddress?.substringBefore(";")
                     orderItemAcceptButton.setOnClickListener {
                         YesNoDialog(
