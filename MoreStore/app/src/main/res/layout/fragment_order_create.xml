@@ -1004,7 +1004,7 @@
                     android:textColor="@color/green"
                     android:layout_gravity="end"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginTop="168dp"/>
+                    android:layout_marginTop="190dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
