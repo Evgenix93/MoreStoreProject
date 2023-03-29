@@ -107,7 +107,7 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
 
         binding.profileBtn.setOnClickListener{
            if(presenter.getUser().isBlackList == true)
-               Toast.makeText(requireContext(), "Собеседник вас заблокировал", Toast.LENGTH_LONG).show()
+               Toast.makeText(requireContext(), getString(R.string.companion_blocked_you), Toast.LENGTH_LONG).show()
             else
                 findNavController().navigate(SellerProfileFragmentDirections.actionSellerProfileFragmentToMessagesFragment(presenter.getUser().id))
         }
@@ -121,11 +121,11 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
 
     private fun initSubscribeBtn(isFavorite: Boolean){
         if(isFavorite){
-            binding.subscribeBtn.text = "Отписаться"
+            binding.subscribeBtn.text = getString(R.string.unsubscribe)
             binding.subscribeBtn.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.black4, null))
             binding.subscribeBtn.setIconResource(R.drawable.ic_x)
         }else{
-            binding.subscribeBtn.text = "Подписаться"
+            binding.subscribeBtn.text = getString(R.string.subscribe)
             binding.subscribeBtn.backgroundTintList = ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.green, null))
             binding.subscribeBtn.setIconResource(R.drawable.ic_plus)
         }
@@ -135,8 +135,8 @@ class SellerProfileFragment: MvpAppCompatFragment(R.layout.fragment_seller_profi
     override fun success(result: Any) {
         binding.loader.isVisible = false
         isSellerFavorite = isSellerFavorite.not()
-        val message = if(isSellerFavorite) "Продавец добален в избранное"
-        else "Продавец убран из избранного"
+        val message = if(isSellerFavorite) getString(R.string.seller_added_to_favorites)
+        else getString(R.string.seller_removed_from_favorites)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         initSubscribeBtn(isSellerFavorite)
 

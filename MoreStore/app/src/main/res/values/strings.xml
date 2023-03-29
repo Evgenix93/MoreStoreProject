@@ -620,5 +620,9 @@
     <string name="pvz">ПВЗ</string>
     <string name="postamat">Постамат</string>
     <string name="cdek_postamat_delivery_address">Адрес пункта выдачи (Постамат)</string>
+    <string name="seller_added_to_favorites">Продавец добавлен в избранное</string>
+    <string name="seller_removed_from_favorites">Продавец убран из избранного</string>
+    <string name="subscribe">Подписаться</string>
+    <string name="unsubscribe">Отписаться</string>
     <!--endregion city-->
 </resources>
