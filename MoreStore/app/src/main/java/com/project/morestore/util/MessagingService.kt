@@ -38,7 +38,7 @@ class MessagingService: FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         Log.d("fire", "onMessageReceived ${message.data}")
-        val id = message.data["id_type"]?.toLong()
+        val id = message.data["id_type"]?.filter { it.isDigit() }?.toLong()
         val text = message.data["text"]
         val title = message.data["title"]
         val pushType = message.data["type"]

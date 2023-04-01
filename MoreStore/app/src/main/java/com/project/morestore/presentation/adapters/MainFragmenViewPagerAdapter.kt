@@ -12,7 +12,7 @@ class MainFragmenViewPagerAdapter(fragment: Fragment): FragmentStateAdapter(frag
     }
 
     override fun createFragment(position: Int): Fragment {
-        return MainViewPagerFragment(list[position])
+        return MainViewPagerFragment.createInstance(list[position])
         }
 
     fun updateList(newList: List<Banner>){

@@ -231,67 +231,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cartProductDeliveryContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cartProductPriceContainer">
-
-            <TextView
-                android:id="@+id/cartProductDelivery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/manrope_regular"
-                android:text="@string/cart_delivery"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/cartProductDeliveryInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:fontFamily="@font/manrope_regular"
-                android:text="@string/cart_delivery_more"
-                android:textColor="@color/gray2"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/cartProductDelivery"
-                app:layout_constraintStart_toEndOf="@+id/cartProductDelivery"
-                app:layout_constraintTop_toTopOf="@+id/cartProductDelivery" />
-
-            <TextView
-                android:id="@+id/cartProductDeliveryAdditional"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:fontFamily="@font/manrope_bold"
-                android:text="@string/cart_price_from"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/cartProductDeliveryCost"
-                app:layout_constraintEnd_toStartOf="@+id/cartProductDeliveryCost"
-                app:layout_constraintTop_toTopOf="@+id/cartProductDeliveryCost" />
-
-            <TextView
-                android:id="@+id/cartProductDeliveryCost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/manrope_bold"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/cartProductDelivery"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/cartProductDelivery"
-                tools:text="500 R" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/orderItemDeliveryChangeIcon"
@@ -299,7 +238,7 @@
             android:layout_height="20dp"
             android:src="@drawable/ic_warning"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cartProductDeliveryContainer"
+            app:layout_constraintTop_toBottomOf="@id/cartProductPriceContainer"
             android:layout_marginTop="10dp"
             android:visibility="gone"/>
 
@@ -328,6 +267,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cartProductDeliveryContainer" />
+            app:layout_constraintTop_toBottomOf="@+id/cartProductPriceContainer" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -11,8 +11,9 @@ import com.project.morestore.R
 import com.project.morestore.databinding.ItemBannerBinding
 import com.project.morestore.data.models.Banner
 
-class MainViewPagerFragment(private val banner: Banner): Fragment(R.layout.item_banner) {
+class MainViewPagerFragment: Fragment(R.layout.item_banner) {
     private val binding: ItemBannerBinding by viewBinding()
+    private lateinit var banner: Banner
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,5 +30,11 @@ class MainViewPagerFragment(private val banner: Banner): Fragment(R.layout.item_
         binding.titleTextView.setTextColor(Color.parseColor(banner.color.title))
         binding.descriptionTextView.setTextColor(Color.parseColor(banner.color.text))
 
+    }
+
+    companion object {
+        fun createInstance(banner: Banner): MainViewPagerFragment{
+            return MainViewPagerFragment().apply { this.banner = banner }
+        }
     }
 }

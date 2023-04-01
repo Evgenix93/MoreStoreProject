@@ -28,6 +28,8 @@ class SplashScreenPresenter @Inject constructor(
                 viewState.loaded(false)
             } else {
                 authRepository.setupToken(token)
+                val response = authRepository.getUserData()
+                response?.let { authRepository.setupUserId(it.body()?.id ?: 0) }
                 viewState.loaded(true)
             }
         }

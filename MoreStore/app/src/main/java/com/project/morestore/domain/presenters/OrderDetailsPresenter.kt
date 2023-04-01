@@ -154,6 +154,10 @@ class OrderDetailsPresenter @Inject constructor(
 
     fun getOrderItem(orderId: Long){
         Log.d("mylog", "orderToLoad: $orderId")
+        if (authRepository.getUserId() == 0L){
+            viewState.showMessage("id текущего пользователя отсутствует")
+            return
+        }
         presenterScope.launch {
             viewState.loading(true)
             val orders = getAllOrders()

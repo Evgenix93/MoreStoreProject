@@ -100,9 +100,9 @@ class CartAdapter(
         holder.binding.cartProductPurchaseButton.setOnClickListener() {
             onPurchaseClickListener(item)
         }
-        holder.binding.cartProductDeliveryAdditional.setOnClickListener() {
-            onDeliveryClickListener(item)
-        }
+        //holder.binding.cartProductDeliveryAdditional.setOnClickListener() {
+          //  onDeliveryClickListener(item)
+        //}
         holder.binding.cartProductUserDelete.setOnClickListener {
             onDeleteClickListener(item)
         }
