@@ -603,7 +603,7 @@ class OrderCreateFragment : MvpAppCompatFragment(R.layout.fragment_order_create)
 
     private fun getFinalSum(productPrice: Float, deliveryPrice: Float): Float{
         val sumWithDelivery = productPrice + deliveryPrice
-        return sumWithDelivery + (sumWithDelivery * 0.05f)
+        return sumWithDelivery + (sumWithDelivery * 0.07f)
 
     }
 

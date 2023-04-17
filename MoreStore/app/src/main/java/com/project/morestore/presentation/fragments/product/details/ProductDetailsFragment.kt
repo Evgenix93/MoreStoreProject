@@ -281,6 +281,7 @@ class ProductDetailsFragment : MvpAppCompatFragment(R.layout.fragment_product), 
         else binding.heartIcon.imageTintList = null
        when(product.status){
            0 -> {
+               binding.addToCartBtn.isVisible = false
                binding.promoteInfoCard.isVisible = false
                binding.promoteActiveFrameLayout.isVisible = false
              if(product.commentModeration != null || product.property?.any{

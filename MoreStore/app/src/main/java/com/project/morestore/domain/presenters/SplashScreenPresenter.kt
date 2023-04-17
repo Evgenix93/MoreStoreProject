@@ -2,6 +2,7 @@ package com.project.morestore.domain.presenters
 
 import com.project.morestore.data.repositories.AuthRepository
 import com.project.morestore.presentation.mvpviews.ResultLoadedMvpView
+import com.project.morestore.util.errorMessage
 import kotlinx.coroutines.launch
 import moxy.MvpPresenter
 import moxy.presenterScope
@@ -30,6 +31,16 @@ class SplashScreenPresenter @Inject constructor(
                 authRepository.setupToken(token)
                 val response = authRepository.getUserData()
                 response?.let { authRepository.setupUserId(it.body()?.id ?: 0) }
+                if(response == null) {
+                    viewState.loaded("нет сети")
+                    return@launch
+                }
+                if(response.code() != 200){
+                    val errorText = errorMessage(response)
+                    viewState.loaded("не удалось получить пользователя, ошибка: $errorText")
+                    return@launch
+                }
+
                 viewState.loaded(true)
             }
         }

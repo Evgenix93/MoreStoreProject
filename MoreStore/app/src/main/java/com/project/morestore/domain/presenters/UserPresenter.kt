@@ -159,6 +159,7 @@ class UserPresenter @Inject constructor(
                 200 -> {
                     response.body()?.forEach {
                         val status = when {
+                            it.status == 0 -> 0
                             it.statusUser?.order?.status == 1 -> 8
                             it.statusUser?.order?.status == 0 -> 6
                             else -> it.status

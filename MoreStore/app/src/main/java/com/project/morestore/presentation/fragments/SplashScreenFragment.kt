@@ -3,6 +3,7 @@ package com.project.morestore.presentation.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -84,6 +85,9 @@ class SplashScreenFragment: MvpAppCompatFragment(R.layout.fragment_splash_screen
         if(result is Boolean){
             navigate(result)
 
+        }
+        if(result is String){
+            Toast.makeText(requireContext(), result, Toast.LENGTH_LONG).show()
         }
     }
 }

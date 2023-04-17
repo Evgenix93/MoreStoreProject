@@ -321,7 +321,7 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
                     orderItemStatusBlock.isVisible = false
 
 
-                    binding.orderItemAcceptBlock.isVisible = false
+                    binding.orderItemAcceptBlock.isVisible = Token.userId != order.sellerId
                     order.cdekInfoEntity?.entity?.statuses?.reversed()?.forEachIndexed {index, info ->
                         val isCurrent = index == order.cdekInfoEntity.entity.statuses.lastIndex
                         val statusView = createDeliveryStatusView(text = info.name, isCurrent = isCurrent, isFirst = index == 0 )
@@ -356,6 +356,28 @@ class OrderDetailsFragment: MvpAppCompatFragment(R.layout.fragment_order_details
 
 
                     }
+
+                    orderItemAcceptButton.setOnClickListener {
+                        YesNoDialog(
+                            requireContext().getString(R.string.active_order_accept_dialog_title),
+                            null,
+                            object : YesNoDialog.onClickListener {
+                                override fun onYesClick() {
+                                    presenter.submitReceiveOrder(order.id)
+                                }
+
+                                override fun onNoClick() {
+
+                                }
+
+                            }).show(childFragmentManager, null)
+
+                    }
+                    orderItemAcceptProblemsButton.setOnClickListener {
+                        findNavController().navigate(OrderDetailsFragmentDirections.actionOrderDetailsFragmentToOrderProblemsFragment(order.productId))
+                    }
+                    orderItemAcceptButton.text = "Подтвердить получение товара"
+                    orderItemAcceptProblemsButton.text = "Проблема с товаром"
 
 
                 }

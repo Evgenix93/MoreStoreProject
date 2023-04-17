@@ -456,7 +456,7 @@ class OrderDetailsPresenter @Inject constructor(
                     }
                     val promoInfo = if(promo != null) getPromoInfo(promo) else null
                     val priceWithDelivery = (discountedPrice?.toFloatOrNull() ?: product.priceNew ?: product.price) + response.body()!!.total_sum
-                    val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.05)) - (promoInfo?.sum ?: 0)
+                    val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.07)) - (promoInfo?.sum ?: 0)
                     viewState.setFinalPrice(finalPrice.toFloat())
                     viewState.loading(false)
                 }
@@ -508,7 +508,7 @@ class OrderDetailsPresenter @Inject constructor(
                     }
                     val promoInfo = if(promo != null) getPromoInfo(promo) else null
                     val priceWithDelivery = (discountedPrice?.toFloatOrNull() ?: product.priceNew ?: product.price) + response.body()?.price!!.toFloat()
-                    val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.05)) - (promoInfo?.sum ?: 0)
+                    val finalPrice = (priceWithDelivery + (priceWithDelivery * 0.07)) - (promoInfo?.sum ?: 0)
                     viewState.setFinalPrice(finalPrice.toFloat())
                     viewState.loading(false)
                 }

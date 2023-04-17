@@ -74,6 +74,7 @@ class MessagingService: FirebaseMessagingService() {
             .setContentText(text)
             .setSmallIcon(R.drawable.ic_logo)
             .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .build()
         NotificationManagerCompat.from(this).notify(id.toInt(), notification)
     }
