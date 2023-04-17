@@ -305,6 +305,14 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/statusHistory"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/orderItemStatusBlock"
+                        android:layout_marginStart="12dp"/>
+
+                    <LinearLayout
                         android:id="@+id/orderItemHistoryStatusBlock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -414,7 +422,7 @@
                             android:paddingBottom="2dp"
                             android:text="@string/active_order_new_meeting_place"
                             android:textColor="@color/black"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             app:layout_constraintStart_toEndOf="@+id/orderItemDeliveryChangeIcon"
                             app:layout_constraintTop_toTopOf="@+id/orderItemDeliveryChangeIcon" />
 
@@ -505,6 +513,43 @@
                     tools:text="В другой город "
                     android:textAppearance="@style/regular_14"
                     android:textColor="@color/black"/>
+
+
+                <TextView
+                    android:id="@+id/deliveryTypeInfoTextView"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="60dp"
+                    android:text="Номер заказа"
+                    android:textAppearance="@style/regular_16"
+                    android:textColor="@color/gray2" />
+
+
+
+                <TextView
+                    android:id="@+id/DeliveryOrderNumberTypeTextView"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginBottom="24dp"
+                    android:textAppearance="@style/regular_14"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/DeliveryOrderRefToInfoTextView"
+                    android:text="подробнее"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginBottom="24dp"
+                    android:textAppearance="@style/regular_14"
+                    android:textColor="@color/green"/>
 
 
                 <ImageView

@@ -1,207 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray3"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    >
 
     <include
         android:id="@+id/toolbarMain"
         layout="@layout/toolbar" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView17"
-        android:layout_width="match_parent"
-        android:layout_height="91dp"
-        android:layout_marginTop="174dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarMain">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarMain"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <HorizontalScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
-
-                <FrameLayout
-                    android:id="@+id/activeProductsBtn"
-                    android:layout_width="114dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:background="@drawable/product_status_btn_shape"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="8dp"
-                    app:cardElevation="0dp">
-
-                    <TextView
-                        android:id="@+id/activeProductsTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="12dp"
-                        android:text="Активные"
-                        android:textAppearance="@font/manrope_medium"
-                        android:textColor="@color/green"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/activeCountTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_semibold"
-                        android:textColor="@color/green"
-                        android:textSize="10sp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="86dp"
-                        android:background="@drawable/circle_background"
-                        android:gravity="center"
-                        android:text="0" />
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/onModerationBtn"
-                    android:layout_width="145dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/product_status_btn_shape"
-                    android:backgroundTint="@color/white"
-                    >
-
-                    <TextView
-                        android:id="@+id/onModerationTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="12dp"
-                        android:text="На модерации"
-                        android:textAppearance="@font/manrope_medium"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/onModerationCountTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_semibold"
-                        android:textColor="@color/gray2"
-                        android:textSize="10sp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="117dp"
-                        android:background="@drawable/circle_background"
-                        android:backgroundTint="@color/gray3"
-                        android:gravity="center"
-                        android:text="0" />
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/archivedProductsBtn"
-                    android:layout_width="89dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/product_status_btn_shape"
-                    android:backgroundTint="@color/white"
-                    >
-
-                    <TextView
-                        android:id="@+id/archiveTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="12dp"
-                        android:text="Архив"
-                        android:textAppearance="@font/manrope_medium"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/archivedCountTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_semibold"
-                        android:textColor="@color/gray2"
-                        android:textSize="10sp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="61dp"
-                        android:background="@drawable/circle_background"
-                        android:backgroundTint="@color/gray3"
-                        android:gravity="center"
-                        android:text="0" />
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/reviewsBtn"
-                    android:layout_width="114dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:background="@drawable/product_status_btn_shape"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="8dp"
-                    app:cardElevation="0dp"
-                    android:backgroundTint="@color/white">
-
-                    <TextView
-                        android:id="@+id/reviewsTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="12dp"
-                        android:text="Отзывы"
-                        android:textAppearance="@font/manrope_medium"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/reviewsCountTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/manrope_semibold"
-                        android:textColor="@color/gray2"
-                        android:textSize="10sp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="76dp"
-                        android:background="@drawable/circle_background"
-                        android:gravity="center"
-                        android:text="0"
-                        android:backgroundTint="@color/gray3"/>
-
-                </FrameLayout>
-
-
-
-            </LinearLayout>
-
-        </HorizontalScrollView>
-
-    </com.google.android.material.card.MaterialCardView>
+            android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/profileWindow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/profile_info_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarMain">
+        >
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/avatarImageView"
@@ -350,103 +178,409 @@
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/productList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:layout_marginStart="4dp"
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView17" />
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
 
-    <ScrollView
-        android:id="@+id/emptyScrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView17">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"
+            android:text="Мои товары"/>
+
+        <TextView
+            android:id="@+id/activeProductsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:text="Активные"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            />
+
+        <TextView
+            android:id="@+id/activeProductsCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="55dp"/>
+
+        <TextView
+            android:id="@+id/onModerationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:text="На модерации"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="88dp"
+            />
+
+        <TextView
+            android:id="@+id/onModerationProductsCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="88dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="93dp"/>
+
+        <TextView
+            android:id="@+id/archiveProductsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:text="Архив"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="126dp"
+            />
+
+        <TextView
+            android:id="@+id/archiveProductsCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="126dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="131dp"/>
+
+        <TextView
+            android:id="@+id/draftProductsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:text="Черновики"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="164dp"
+            android:layout_marginBottom="16dp"
+            />
+
+        <TextView
+            android:id="@+id/draftProductsCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="164dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="169dp"/>
 
 
-            <ImageView
-                android:id="@+id/glassesImageView"
-                android:visibility="gone"
-                android:layout_width="172dp"
-                android:layout_height="90dp"
-                android:layout_marginTop="68dp"
-                android:src="@drawable/glasses_women"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/noProductsTextView"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Здесь пока что ничего нет"
-                android:textAppearance="@style/bold_16"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/glassesImageView" />
+
+
+
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mySalesMaterialCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Мои продажи"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="11dp"/>
+
+        <TextView
+            android:id="@+id/inProcessSalesTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="В процессе"
+            android:background="?attr/selectableItemBackground"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"/>
+
+        <TextView
+            android:id="@+id/finishedSalesTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Завершенные"
+            android:background="?attr/selectableItemBackground"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="80dp"/>
+
+        <TextView
+            android:id="@+id/reviewsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Отзывы"
+            android:background="?attr/selectableItemBackground"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="110dp"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/inProcessSalesCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/finishedSalesCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/reviewsCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="110dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_marginTop="53dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_marginTop="83dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_marginTop="113dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toBottomOf="@id/mySalesMaterialCardView"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Мои заказы"
+            android:textAppearance="@style/regular_16"
+            android:textColor="@color/gray2"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="11dp"/>
+
+        <TextView
+            android:id="@+id/inProcessOrdersTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="В процессе"
+            android:background="?attr/selectableItemBackground"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"/>
+
+        <TextView
+            android:id="@+id/finishedOrdersTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Завершенные"
+            android:background="?attr/selectableItemBackground"
+            android:textAppearance="@style/regular_14"
+            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="20dp"/>
+
+
+        <TextView
+            android:id="@+id/inProcessOrdersCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/finishedOrdersCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_semibold"
+            android:textColor="@color/gray2"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="@color/gray3"
+            android:gravity="center"
+            android:text="0" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_marginTop="53dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_polygon"
+            android:layout_marginTop="83dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"/>
+
+    </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/createNewProductBtn"
+                android:id="@+id/createNewProductBtn2"
                 style="@style/buttonStyle"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="44dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="18dp"
                 android:text="Разместить объявление"
-                app:backgroundTint="?attr/colorSecondary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/noProductsTextView" />
+                 />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </ScrollView>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/createNewProductBtn2"
-        style="@style/buttonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="8dp"
-        android:text="Разместить объявление"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/loader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:indeterminateTint="@color/green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/materialCardView17" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

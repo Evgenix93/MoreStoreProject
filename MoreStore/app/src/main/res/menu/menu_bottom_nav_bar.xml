@@ -24,7 +24,7 @@
         android:title="@string/messages" />
 
     <item
-        android:id="@+id/cabinetFragment"
+        android:id="@+id/myProductsFragment"
         android:icon="@drawable/ic_user_circle"
         android:title="@string/cabinet" />
 

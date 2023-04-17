@@ -22,3 +22,4 @@
 
 -keepnames class androidx.navigation.fragment.NavHostFragment
 -keep class * extends androidx.fragment.app.Fragment{}
+-keep class com.project.morestore.data.models.cart.OrderItem

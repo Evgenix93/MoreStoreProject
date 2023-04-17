@@ -381,7 +381,7 @@
                 android:paddingBottom="2dp"
                 android:text="@string/active_order_new_meeting_place"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/orderItemDeliveryChangeIcon"
                 app:layout_constraintTop_toTopOf="@+id/orderItemDeliveryChangeIcon" />
 

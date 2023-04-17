@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/firstLaunchFragment"
-        android:name="com.project.morestore.fragments.FirstLaunchFragment"
+        android:name="com.project.morestore.presentation.fragments.FirstLaunchFragment"
         android:label="FirstLaunchFragment" >
         <action
             android:id="@+id/action_firstLaunchFragment_to_loginDialog"
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/registration1Fragment"
-        android:name="com.project.morestore.fragments.RegistrationLogin1Fragment"
+        android:name="com.project.morestore.presentation.fragments.RegistrationLogin1Fragment"
         android:label="Registration1Fragment" >
         <action
             android:id="@+id/action_registration1Fragment_to_registration2Fragment"
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/registration2Fragment"
-        android:name="com.project.morestore.fragments.RegistrationLogin2Fragment"
+        android:name="com.project.morestore.presentation.fragments.RegistrationLogin2Fragment"
         android:label="Registration2Fragment" >
         <argument
             android:name="phoneOrEmail"
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/registration3Fragment"
-        android:name="com.project.morestore.fragments.Registration3Fragment"
+        android:name="com.project.morestore.presentation.fragments.Registration3Fragment"
         android:label="Registration3Fragment" >
         <argument
             android:name="phoneOrEmail"
@@ -89,7 +89,7 @@
     </fragment>
     <fragment
         android:id="@+id/registration4Fragment"
-        android:name="com.project.morestore.fragments.Registration4Fragment"
+        android:name="com.project.morestore.presentation.fragments.Registration4Fragment"
         android:label="Registration4Fragment" >
         <argument
             android:name="phoneOrEmail"
@@ -100,13 +100,16 @@
         <action
             android:id="@+id/action_registration4Fragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_registration4Fragment_to_onboarding1Fragment"
+            app:destination="@id/onboarding1Fragment" />
     </fragment>
 
 
 
     <fragment
         android:id="@+id/onboarding1Fragment"
-        android:name="com.project.morestore.fragments.Onboarding1Fragment"
+        android:name="com.project.morestore.presentation.fragments.Onboarding1Fragment"
         android:label="Onboarding1Fragment" >
         <action
             android:id="@+id/action_onboarding1Fragment_to_onboarding2Fragment"
@@ -114,7 +117,7 @@
     </fragment>
     <fragment
         android:id="@+id/onboarding2Fragment"
-        android:name="com.project.morestore.fragments.Onboarding2Fragment"
+        android:name="com.project.morestore.presentation.fragments.Onboarding2Fragment"
         android:label="Onboarding2Fragment" >
         <action
             android:id="@+id/action_onboarding2Fragment_to_onboarding3Fragment"
@@ -129,7 +132,7 @@
     </fragment>
     <fragment
         android:id="@+id/onboarding3Fragment"
-        android:name="com.project.morestore.fragments.Onboarding3Fragment"
+        android:name="com.project.morestore.presentation.fragments.Onboarding3Fragment"
         android:label="Onboarding3Fragment" >
         <action
             android:id="@+id/action_onboarding3Fragment_to_onboarding4Fragment"
@@ -144,7 +147,7 @@
     </fragment>
     <fragment
         android:id="@+id/onboarding4Fragment"
-        android:name="com.project.morestore.fragments.Onboarding4Fragment"
+        android:name="com.project.morestore.presentation.fragments.Onboarding4Fragment"
         android:label="Onboarding4Fragment" >
         <action
             android:id="@+id/action_onboarding4Fragment_to_onboarding5Fragment"
@@ -155,7 +158,7 @@
     </fragment>
     <fragment
         android:id="@+id/onboarding5Fragment"
-        android:name="com.project.morestore.fragments.Onboarding5Fragment"
+        android:name="com.project.morestore.presentation.fragments.Onboarding5Fragment"
         android:label="Onboarding5Fragment" >
         <argument
             android:name="isMale"
@@ -165,30 +168,8 @@
             app:destination="@id/mainFragment" />
     </fragment>
     <fragment
-        android:id="@+id/onboarding6FemaleFragment"
-        android:name="com.project.morestore.fragments.Onboarding6FemaleFragment"
-        android:label="Onboarding6FemaleFragment" >
-        <action
-            android:id="@+id/action_onboarding6FemaleFragment_to_loginDialog"
-            app:destination="@id/loginDialog" />
-        <action
-            android:id="@+id/action_onboarding6FemaleFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/onboarding6MaleFragment"
-        android:name="com.project.morestore.fragments.Onboarding6MaleFragment"
-        android:label="Onboarding6MaleFragment" >
-        <action
-            android:id="@+id/action_onboarding6MaleFragment_to_loginDialog"
-            app:destination="@id/loginDialog" />
-        <action
-            android:id="@+id/action_onboarding6MaleFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.project.morestore.fragments.SplashScreenFragment"
+        android:name="com.project.morestore.presentation.fragments.SplashScreenFragment"
         android:label="SplashScreenFragment" >
         <action
             android:id="@+id/action_splashScreenFragment_to_firstLaunchFragment"
@@ -202,10 +183,13 @@
         <action
             android:id="@+id/action_splashScreenFragment_to_sellerProfileFragment"
             app:destination="@id/sellerProfileFragment" />
+        <action
+            android:id="@+id/action_splashScreenFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/registration5Fragment"
-        android:name="com.project.morestore.fragments.Registration5Fragment"
+        android:name="com.project.morestore.presentation.fragments.Registration5Fragment"
         android:label="Registration5Fragment" >
         <argument
             android:name="phoneOrEmail"
@@ -216,7 +200,7 @@
     </fragment>
     <dialog
         android:id="@+id/loginDialog"
-        android:name="com.project.morestore.LoginDialog"
+        android:name="com.project.morestore.presentation.dialogs.LoginDialog"
         android:label="LoginDialog" >
         <action
             android:id="@+id/action_loginDialog_to_registration1Fragment"
@@ -227,7 +211,7 @@
     </dialog>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.project.morestore.fragments.MainFragment"
+        android:name="com.project.morestore.presentation.fragments.MainFragment"
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment_to_onboarding1Fragment"
@@ -253,7 +237,7 @@
     </fragment>
     <fragment
         android:id="@+id/catalogFragment"
-        android:name="com.project.morestore.fragments.CatalogFragment"
+        android:name="com.project.morestore.presentation.fragments.CatalogFragment"
         android:label="CatalogFragment" >
         <action
             android:id="@+id/action_catalogFragment_to_productDetailsFragment"
@@ -271,7 +255,7 @@
             android:defaultValue="@null" />
         <argument
             android:name="productCategories"
-            app:argType="com.project.morestore.models.ProductCategory[]"
+            app:argType="com.project.morestore.data.models.ProductCategory[]"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -283,13 +267,10 @@
             android:id="@+id/action_catalogFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/createFragment"
-        android:name="com.project.morestore.fragments.CreateFragment"
-        android:label="CreateFragment" />
+
     <fragment
         android:id="@+id/messagesFragment"
-        android:name="com.project.morestore.fragments.MessagesFragment"
+        android:name="com.project.morestore.presentation.fragments.MessagesFragment"
         android:label="MessagesFragment" >
         <action
             android:id="@+id/action_messagesFragment_to_chatLotsFragment"
@@ -303,8 +284,8 @@
             android:defaultValue="-1L" />
     </fragment>
     <fragment
-        android:id="@+id/cabinetFragment"
-        android:name="com.project.morestore.fragments.CabinetFragment"
+        android:id="@+id/myProductsFragment"
+        android:name="com.project.morestore.presentation.fragments.MyProductsFragment"
         android:label="CabinetFragment" >
         <action
             android:id="@+id/action_cabinetFragment_to_firstLaunchFragment3"
@@ -324,10 +305,14 @@
         <action
             android:id="@+id/action_cabinetFragment_to_createProductStep1Fragment"
             app:destination="@id/createProductStep1Fragment" />
+        <argument
+            android:name="productTypeInt"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
     <dialog
         android:id="@+id/resumeRegisterDialog"
-        android:name="com.project.morestore.ResumeRegisterDialog"
+        android:name="com.project.morestore.presentation.dialogs.ResumeRegisterDialog"
         android:label="ResumeRegisterDialog" >
         <argument
             android:name="isEmail"
@@ -350,7 +335,7 @@
     </dialog>
     <fragment
         android:id="@+id/loginSocialFragment"
-        android:name="com.project.morestore.fragments.LoginSocialFragment"
+        android:name="com.project.morestore.presentation.fragments.LoginSocialFragment"
         android:label="LoginSocialFragment" >
         <argument
             android:name="socialType"
@@ -367,7 +352,7 @@
     </fragment>
     <fragment
         android:id="@+id/filterSizesFragment"
-        android:name="com.project.morestore.fragments.FilterSizesFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterSizesFragment"
         android:label="FilterSizesFragment" >
         <argument
             android:name="idCategory"
@@ -375,15 +360,15 @@
     </fragment>
     <fragment
         android:id="@+id/filterMaterialsFragment"
-        android:name="com.project.morestore.fragments.FilterMaterialsFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterMaterialsFragment"
         android:label="FilterMaterialsFragment" />
     <fragment
         android:id="@+id/productDetailsFragment"
-        android:name="com.project.morestore.fragments.product.details.ProductDetailsFragment"
+        android:name="com.project.morestore.presentation.fragments.product.details.ProductDetailsFragment"
         android:label="ProductDetailsFragment" >
         <argument
             android:name="product"
-            app:argType="com.project.morestore.models.Product"
+            app:argType="com.project.morestore.data.models.Product"
             app:nullable="true" />
         <argument
             android:name="productId"
@@ -416,7 +401,7 @@
     </fragment>
     <fragment
         android:id="@+id/changeRegionFragment"
-        android:name="com.project.morestore.fragments.ChangeRegionFragment"
+        android:name="com.project.morestore.presentation.fragments.ChangeRegionFragment"
         android:label="ChangeRegionFragment" >
         <action
             android:id="@+id/action_changeRegionFragment_to_autoLocationFragment"
@@ -428,44 +413,44 @@
     </fragment>
     <fragment
         android:id="@+id/filterForWhoFragment"
-        android:name="com.project.morestore.fragments.FilterForWhoFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterForWhoFragment"
         android:label="FilterForWhoFragment" />
     <fragment
         android:id="@+id/filterConditionFragment"
-        android:name="com.project.morestore.fragments.FilterConditionFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterConditionFragment"
         android:label="FilterConditionFragment" />
     <fragment
         android:id="@+id/filterStyleFragment"
-        android:name="com.project.morestore.fragments.FilterStyleFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterStyleFragment"
         android:label="FilterStyleFragment" />
     <fragment
         android:id="@+id/filterProductStatusFragment"
-        android:name="com.project.morestore.fragments.FilterProductStatusFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterProductStatusFragment"
         android:label="FilterProductStatusFragment" />
     <fragment
         android:id="@+id/brandsFragment"
-        android:name="com.project.morestore.fragments.FilterBrandsFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterBrandsFragment"
         android:label="BrandsFragment" >
         <action
             android:id="@+id/action_brandsFragment_to_catalogFragment"
             app:destination="@id/catalogFragment" />
         <argument
             android:name="brands"
-            app:argType="com.project.morestore.models.ProductBrand[]"
+            app:argType="com.project.morestore.data.models.ProductBrand[]"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/regionsFragment"
-        android:name="com.project.morestore.fragments.FilterRegionsFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterRegionsFragment"
         android:label="RegionsFragment" />
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.project.morestore.fragments.FilterCategoriesFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterCategoriesFragment"
         android:label="CategoriesFragment" />
     <fragment
         android:id="@+id/filterFragment"
-        android:name="com.project.morestore.fragments.FilterFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterFragment"
         android:label="FilterFragment" >
         <action
             android:id="@+id/action_filterFragment_to_categoriesFragment"
@@ -506,11 +491,11 @@
     </fragment>
     <fragment
         android:id="@+id/colorsFragment"
-        android:name="com.project.morestore.fragments.FilterColorsFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterColorsFragment"
         android:label="ColorsFragment" />
     <fragment
         android:id="@+id/autoLocationFragment"
-        android:name="com.project.morestore.fragments.AutoLocationFragment"
+        android:name="com.project.morestore.presentation.fragments.AutoLocationFragment"
         android:label="AutoLocationFragment" >
         <argument
             android:name="isForFilter"
@@ -519,15 +504,15 @@
     </fragment>
     <fragment
         android:id="@+id/filterShoosSizesFragment"
-        android:name="com.project.morestore.fragments.FilterShoosSizesFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterShoosSizesFragment"
         android:label="FilterShoosSizesFragment" />
     <fragment
         android:id="@+id/filterKidsSizesFragment"
-        android:name="com.project.morestore.fragments.FilterKidsSizesFragment"
+        android:name="com.project.morestore.presentation.fragments.FilterKidsSizesFragment"
         android:label="FilterKidsSizesFragment" />
     <fragment
         android:id="@+id/cabinetGuestFragment"
-        android:name="com.project.morestore.fragments.CabinetGuestFragment"
+        android:name="com.project.morestore.presentation.fragments.CabinetGuestFragment"
         android:label="CabinetGuestFragment" >
         <action
             android:id="@+id/action_cabinetGuestFragment_to_loginDialog"
@@ -535,11 +520,11 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.project.morestore.fragments.ProfileFragment"
+        android:name="com.project.morestore.presentation.fragments.ProfileFragment"
         android:label="ProfileFragment" >
         <argument
             android:name="user"
-            app:argType="com.project.morestore.models.User" />
+            app:argType="com.project.morestore.data.models.User" />
         <action
             android:id="@+id/action_profileFragment_to_productDraftFragment"
             app:destination="@id/productDraftFragment" />
@@ -564,11 +549,11 @@
     </fragment>
     <fragment
         android:id="@+id/sellerProfileFragment"
-        android:name="com.project.morestore.fragments.SellerProfileFragment"
+        android:name="com.project.morestore.presentation.fragments.SellerProfileFragment"
         android:label="SellerProfileFragment" >
         <argument
             android:name="user"
-            app:argType="com.project.morestore.models.User"
+            app:argType="com.project.morestore.data.models.User"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -584,7 +569,7 @@
     </fragment>
     <fragment
         android:id="@+id/createProductStep1Fragment"
-        android:name="com.project.morestore.fragments.CreateProductStep1Fragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductStep1Fragment"
         android:label="CreateProductStep1Fragment" >
         <action
             android:id="@+id/action_createProductStep1Fragment_to_createProductStep2Fragment"
@@ -601,7 +586,7 @@
     </fragment>
     <fragment
         android:id="@+id/createProductStep2Fragment"
-        android:name="com.project.morestore.fragments.CreateProductStep2Fragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductStep2Fragment"
         android:label="CreateProductStep2Fragment" >
         <argument
             android:name="forWho"
@@ -621,7 +606,7 @@
     </fragment>
     <fragment
         android:id="@+id/createProductStep3Fragment"
-        android:name="com.project.morestore.fragments.CreateProductStep3Fragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductStep3Fragment"
         android:label="CreateProductStep3Fragment" >
         <action
             android:id="@+id/action_createProductStep3Fragment_to_createProductHowToSellFragment"
@@ -631,14 +616,14 @@
             app:destination="@id/createProductStep5Fragment" />
         <argument
             android:name="category"
-            app:argType="com.project.morestore.models.ProductCategory" />
+            app:argType="com.project.morestore.data.models.ProductCategory" />
         <argument
             android:name="forWho"
             app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/createProductStep4Fragment"
-        android:name="com.project.morestore.fragments.CreateProductStep4Fragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductStep4Fragment"
         android:label="CreateProductStep4Fragment" >
         <action
             android:id="@+id/action_createProductStep4Fragment_to_createProductHowToSellFragment"
@@ -648,7 +633,7 @@
             app:destination="@id/createProductStep5Fragment" />
         <argument
             android:name="category"
-            app:argType="com.project.morestore.models.ProductCategory" />
+            app:argType="com.project.morestore.data.models.ProductCategory" />
         <argument
             android:name="forWho"
             app:argType="integer" />
@@ -658,7 +643,7 @@
     </fragment>
     <fragment
         android:id="@+id/createProductStep5Fragment"
-        android:name="com.project.morestore.fragments.CreateProductStep5Fragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductStep5Fragment"
         android:label="CreateProductStep5Fragment" >
         <action
             android:id="@+id/action_createProductStep5Fragment_to_createProductHowToSellFragment"
@@ -668,7 +653,7 @@
             app:destination="@id/addBrandFragment" />
         <argument
             android:name="category"
-            app:argType="com.project.morestore.models.ProductCategory" />
+            app:argType="com.project.morestore.data.models.ProductCategory" />
         <argument
             android:name="forWho"
             app:argType="integer" />
@@ -681,7 +666,7 @@
     </fragment>
     <fragment
         android:id="@+id/createProductSizesClothFragment"
-        android:name="com.project.morestore.fragments.CreateProductSizesClothFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductSizesClothFragment"
         android:label="CreateProductSizesClothFragment" >
         <argument
             android:name="forWho"
@@ -692,7 +677,7 @@
     </fragment>
     <fragment
         android:id="@+id/createProductSizesShoosFragment"
-        android:name="com.project.morestore.fragments.CreateProductSizesShoosFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductSizesShoosFragment"
         android:label="CreateProductSizesShoosFragment" >
         <argument
             android:name="forWho"
@@ -700,7 +685,7 @@
     </fragment>
     <fragment
         android:id="@+id/makePhotoFragment"
-        android:name="com.project.morestore.fragments.MakePhotoFragment"
+        android:name="com.project.morestore.presentation.fragments.MakePhotoFragment"
         android:label="MakePhotoFragment" >
         <action
             android:id="@+id/action_makePhotoFragment_to_photoFinishFragment"
@@ -711,15 +696,15 @@
     </fragment>
     <fragment
         android:id="@+id/addCardFragment"
-        android:name="com.project.morestore.fragments.AddCardFragment"
+        android:name="com.project.morestore.presentation.fragments.AddCardFragment"
         android:label="AddCardFragment" />
     <fragment
         android:id="@+id/createProductHowToSellFragment"
-        android:name="com.project.morestore.fragments.CreateProductHowToSellFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductHowToSellFragment"
         android:label="CreateProductHowToSellFragment" />
     <fragment
         android:id="@+id/createProductAddPhotoFragment"
-        android:name="com.project.morestore.fragments.CreateProductAddPhotoFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductAddPhotoFragment"
         android:label="CreateProductAddPhotoFragment" >
         <action
             android:id="@+id/action_createProductAddPhotoFragment_to_makePhotoFragment"
@@ -732,51 +717,51 @@
             app:argType="boolean" />
         <argument
             android:name="product"
-            app:argType="com.project.morestore.models.Product"
+            app:argType="com.project.morestore.data.models.Product"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/addBrandFragment"
-        android:name="com.project.morestore.fragments.AddBrandFragment"
+        android:name="com.project.morestore.presentation.fragments.AddBrandFragment"
         android:label="CreateProductAddBrandFragment" >
         <action
             android:id="@+id/action_createProductAddBrandFragment_to_createProductStep6Fragment"
             app:destination="@id/createProductStep6Fragment" />
         <argument
             android:name="category"
-            app:argType="com.project.morestore.models.ProductCategory" />
+            app:argType="com.project.morestore.data.models.ProductCategory" />
         <argument
             android:name="forWho"
             app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/createProductColorsFragment"
-        android:name="com.project.morestore.fragments.CreateProductColorsFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductColorsFragment"
         android:label="CreateProductColorsFragment" />
     <fragment
         android:id="@+id/createProductConditionFragment"
-        android:name="com.project.morestore.fragments.CreateProductConditionFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductConditionFragment"
         android:label="CreateProductConditionFragment" />
     <fragment
         android:id="@+id/createProductDescriptionFragment"
-        android:name="com.project.morestore.fragments.CreateProductDescriptionFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductDescriptionFragment"
         android:label="CreateProductDescriptionFragment" />
     <fragment
         android:id="@+id/createProductMaterialsFragment"
-        android:name="com.project.morestore.fragments.CreateProductMaterialsFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductMaterialsFragment"
         android:label="CreateProductMaterialsFragment" />
     <fragment
         android:id="@+id/createProductPriceFragment"
-        android:name="com.project.morestore.fragments.CreateProductPriceFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductPriceFragment"
         android:label="CreateProductPriceFragment" />
     <fragment
         android:id="@+id/createProductRegionsFragment"
-        android:name="com.project.morestore.fragments.CreateProductRegionsFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductRegionsFragment"
         android:label="CreateProductRegionsFragment" />
     <dialog
         android:id="@+id/deleteProductDialog"
-        android:name="com.project.morestore.dialogs.DeleteProductDialog"
+        android:name="com.project.morestore.presentation.dialogs.DeleteProductDialog"
         android:label="DeleteProductDialog" >
         <argument
             android:name="isDelete"
@@ -784,15 +769,15 @@
     </dialog>
     <dialog
         android:id="@+id/saveProductDialog"
-        android:name="com.project.morestore.dialogs.SaveProductDialog"
+        android:name="com.project.morestore.presentation.dialogs.SaveProductDialog"
         android:label="SaveProductDialog" />
     <dialog
         android:id="@+id/skipStepDialog"
-        android:name="com.project.morestore.dialogs.SkipStepDialog"
+        android:name="com.project.morestore.presentation.dialogs.SkipStepDialog"
         android:label="SkipStepDialog" >
         <argument
             android:name="category"
-            app:argType="com.project.morestore.models.ProductCategory" />
+            app:argType="com.project.morestore.data.models.ProductCategory" />
         <argument
             android:name="forWho"
             app:argType="integer" />
@@ -808,7 +793,7 @@
     </dialog>
     <fragment
         android:id="@+id/createProductStep6Fragment"
-        android:name="com.project.morestore.fragments.CreateProductStep6Fragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductStep6Fragment"
         android:label="CreateProductStep6Fragment">
         <action
             android:id="@+id/action_createProductFragment_to_createProductSizesClothFragment"
@@ -842,7 +827,7 @@
             app:destination="@id/createProductPriceFragment" />
         <argument
             android:name="category"
-            app:argType="com.project.morestore.models.ProductCategory"
+            app:argType="com.project.morestore.data.models.ProductCategory"
             app:nullable="true"
             android:defaultValue="@null" />
         <action
@@ -850,7 +835,7 @@
             app:destination="@id/createProductHowToSellFragment" />
         <argument
             android:name="brand"
-            app:argType="com.project.morestore.models.ProductBrand"
+            app:argType="com.project.morestore.data.models.ProductBrand"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -862,7 +847,7 @@
             app:destination="@id/productDetailsFragment" />
         <argument
             android:name="product"
-            app:argType="com.project.morestore.models.Product"
+            app:argType="com.project.morestore.data.models.Product"
             app:nullable="true"
             android:defaultValue="@null" />
         <action
@@ -870,7 +855,7 @@
             app:destination="@id/deleteProductDialog" />
         <action
             android:id="@+id/action_createProductStep6Fragment_to_cabinetFragment"
-            app:destination="@id/cabinetFragment" />
+            app:destination="@id/myProductsFragment" />
         <action
             android:id="@+id/action_createProductStep6Fragment_to_mainFragment"
             app:destination="@id/mainFragment" />
@@ -883,7 +868,7 @@
     </fragment>
     <fragment
         android:id="@+id/photoFinishFragment"
-        android:name="com.project.morestore.fragments.PhotoFinishFragment"
+        android:name="com.project.morestore.presentation.fragments.PhotoFinishFragment"
         android:label="PhotoFinishFragment" >
         <argument
             android:name="photoFile"
@@ -900,7 +885,7 @@
     </fragment>
     <fragment
         android:id="@+id/makeVideoFragment"
-        android:name="com.project.morestore.fragments.MakeVideoFragment"
+        android:name="com.project.morestore.presentation.fragments.MakeVideoFragment"
         android:label="MakeVideoFragment" >
         <action
             android:id="@+id/action_makeVideoFragment_to_photoFinishFragment"
@@ -911,11 +896,11 @@
     </fragment>
     <dialog
         android:id="@+id/productIsCreatedDialog"
-        android:name="com.project.morestore.dialogs.ProductIsCreatedDialog"
+        android:name="com.project.morestore.presentation.dialogs.ProductIsCreatedDialog"
         android:label="ProductIsCreatedDialog" />
     <fragment
         android:id="@+id/chatLotsFragment"
-        android:name="com.project.morestore.fragments.LotChatsFragment"
+        android:name="com.project.morestore.presentation.fragments.LotChatsFragment"
         android:label="ChatLotsFragment" >
         <action
             android:id="@+id/action_chatLotsFragment_to_chatFragment"
@@ -923,7 +908,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.project.morestore.fragments.ChatFragment"
+        android:name="com.project.morestore.presentation.fragments.ChatFragment"
         android:label="ChatFragment" >
         <action
             android:id="@+id/action_chatFragment_to_mediaFragment"
@@ -946,11 +931,11 @@
     </fragment>
     <fragment
         android:id="@+id/mediaFragment"
-        android:name="com.project.morestore.fragments.MediaFragment"
+        android:name="com.project.morestore.presentation.fragments.MediaFragment"
         android:label="MediaFragment" />
     <fragment
         android:id="@+id/feedbackProductFragment"
-        android:name="com.project.morestore.fragments.FeedbackProductFragment"
+        android:name="com.project.morestore.presentation.fragments.FeedbackProductFragment"
         android:label="FeedbackProductFragment" >
         <action
             android:id="@+id/action_feedbackProductFragment_to_ratingFragment"
@@ -958,7 +943,7 @@
     </fragment>
     <fragment
         android:id="@+id/ratingFragment"
-        android:name="com.project.morestore.fragments.RatingFragment"
+        android:name="com.project.morestore.presentation.fragments.RatingFragment"
         android:label="RatingFragment" >
         <action
             android:id="@+id/action_ratingFragment_to_feedbackFragment"
@@ -966,7 +951,7 @@
     </fragment>
     <fragment
         android:id="@+id/feedbackFragment"
-        android:name="com.project.morestore.fragments.FeedbackFragment"
+        android:name="com.project.morestore.presentation.fragments.FeedbackFragment"
         android:label="FeedbackFragment" >
         <action
             android:id="@+id/action_feedbackFragment_to_feedbackPhotoFragment"
@@ -974,7 +959,7 @@
     </fragment>
     <fragment
         android:id="@+id/feedbackPhotoFragment"
-        android:name="com.project.morestore.fragments.FeedbackPhotoFragment"
+        android:name="com.project.morestore.presentation.fragments.FeedbackPhotoFragment"
         android:label="FeedbackPhotoFragment" >
         <argument
             android:name="isChat"
@@ -983,17 +968,17 @@
     </fragment>
     <fragment
         android:id="@+id/createProductNameFragment"
-        android:name="com.project.morestore.fragments.CreateProductNameFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductNameFragment"
         android:label="CreateProductNameFragment" >
         <action
             android:id="@+id/action_createProductNameFragment_to_createProductStep6Fragment"
             app:destination="@id/createProductStep6Fragment" />
         <argument
             android:name="category"
-            app:argType="com.project.morestore.models.ProductCategory" />
+            app:argType="com.project.morestore.data.models.ProductCategory" />
         <argument
             android:name="brand"
-            app:argType="com.project.morestore.models.ProductBrand"
+            app:argType="com.project.morestore.data.models.ProductBrand"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -1002,7 +987,7 @@
     </fragment>
     <fragment
         android:id="@+id/productDraftFragment"
-        android:name="com.project.morestore.fragments.ProductDraftFragment"
+        android:name="com.project.morestore.presentation.fragments.ProductDraftFragment"
         android:label="ProductDraftFragment" >
         <action
             android:id="@+id/action_productDraftFragment_to_createProductStep6Fragment"
@@ -1010,7 +995,7 @@
     </fragment>
     <fragment
         android:id="@+id/raiseProductFragment"
-        android:name="com.project.morestore.fragments.RaiseProductFragment"
+        android:name="com.project.morestore.presentation.fragments.RaiseProductFragment"
         android:label="RaiseProductFragment" >
         <action
             android:id="@+id/action_raiseProductFragment_to_addCardFragment"
@@ -1024,7 +1009,7 @@
     </fragment>
     <fragment
         android:id="@+id/successPromoteFragment"
-        android:name="com.project.morestore.fragments.SuccessPromoteFragment"
+        android:name="com.project.morestore.presentation.fragments.SuccessPromoteFragment"
         android:label="SuccessPromoteFragment" >
         <argument
             android:name="tariff"
@@ -1032,11 +1017,11 @@
     </fragment>
     <fragment
         android:id="@+id/createOrderFragment"
-        android:name="com.project.morestore.fragments.orders.create.OrderCreateFragment"
+        android:name="com.project.morestore.presentation.fragments.orders.create.OrderCreateFragment"
         android:label="CreateOrderFragment" >
         <argument
             android:name="product"
-            app:argType="com.project.morestore.models.Product" />
+            app:argType="com.project.morestore.data.models.Product" />
         <argument
             android:name="cartId"
             app:argType="long" />
@@ -1055,7 +1040,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.project.morestore.fragments.FavoritesFragment"
+        android:name="com.project.morestore.presentation.fragments.FavoritesFragment"
         android:label="FavoritesFragment" >
         <action
             android:id="@+id/action_favoritesFragment_to_productDetailsFragment"
@@ -1072,7 +1057,7 @@
     </fragment>
     <fragment
         android:id="@+id/editFavoriteSearchFragment"
-        android:name="com.project.morestore.fragments.EditFavoriteSearchFragment"
+        android:name="com.project.morestore.presentation.fragments.EditFavoriteSearchFragment"
         android:label="EditFavoriteSearchFragment" >
         <argument
             android:name="favoriteSearchId"
@@ -1080,10 +1065,10 @@
             android:defaultValue="0L" />
     </fragment>
 
-        android:label="FavoritesFragment" />
+
     <fragment
         android:id="@+id/myAddressesFragment"
-        android:name="com.project.morestore.fragments.MyAddressesFragment"
+        android:name="com.project.morestore.presentation.fragments.MyAddressesFragment"
         android:label="MyAddressesFragment" >
         <argument
             android:name="isSelectAddress"
@@ -1093,26 +1078,30 @@
             android:name="addressType"
             app:argType="string"
             android:defaultValue="ALL" />
+        <argument
+            android:name="isSeller"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/newAddressFragment"
-        android:name="com.project.morestore.fragments.NewAddressFragment"
+        android:name="com.project.morestore.presentation.fragments.NewAddressFragment"
         android:label="NewAddressFragment" />
     <fragment
         android:id="@+id/mapMarkerAddressesFragment"
-        android:name="com.project.morestore.fragments.MapMarkerAddressesFragment"
+        android:name="com.project.morestore.presentation.fragments.MapMarkerAddressesFragment"
         android:label="MapMarkerAddressesFragment" />
     <fragment
         android:id="@+id/mapMarkerPickupsFragment"
-        android:name="com.project.morestore.fragments.MapMarkerPickupsFragment"
+        android:name="com.project.morestore.presentation.fragments.MapMarkerPickupsFragment"
         android:label="MapMarkerPickupsFragment" />
     <fragment
         android:id="@+id/citiesFragment"
-        android:name="com.project.morestore.fragments.CitiesFragment"
+        android:name="com.project.morestore.presentation.fragments.CitiesFragment"
         android:label="CitiesFragment" />
     <dialog
         android:id="@+id/forWhoDialog"
-        android:name="com.project.morestore.dialogs.ForWhoDialog"
+        android:name="com.project.morestore.presentation.dialogs.ForWhoDialog"
         android:label="ForWhoDialog" >
         <argument
             android:name="isMale"
@@ -1120,11 +1109,11 @@
     </dialog>
     <fragment
         android:id="@+id/profileForWhoFragment"
-        android:name="com.project.morestore.fragments.ProfileForWhoFragment"
+        android:name="com.project.morestore.presentation.fragments.ProfileForWhoFragment"
         android:label="ProfileForWhoFragment" />
     <fragment
         android:id="@+id/waitReviewSellersFragment"
-        android:name="com.project.morestore.fragments.WaitReviewSellersFragment"
+        android:name="com.project.morestore.presentation.fragments.WaitReviewSellersFragment"
         android:label="WaitReviewSellersFragment" >
         <action
             android:id="@+id/action_waitReviewSellersFragment_to_sellerProfileFragment"
@@ -1132,11 +1121,11 @@
     </fragment>
     <fragment
         android:id="@+id/myAddressPickupFragment"
-        android:name="com.project.morestore.fragments.MyAddressPickupFragment"
+        android:name="com.project.morestore.presentation.fragments.MyAddressPickupFragment"
         android:label="MyAddressPickupFragment" />
     <fragment
         android:id="@+id/ordersCartFragment"
-        android:name="com.project.morestore.fragments.orders.cart.OrdersCartFragment"
+        android:name="com.project.morestore.presentation.fragments.orders.cart.OrdersCartFragment"
         android:label="OrdersCartFragment" >
         <action
             android:id="@+id/action_ordersCartFragment_to_ordersHistoryFragment"
@@ -1162,7 +1151,7 @@
     </fragment>
     <fragment
         android:id="@+id/ordersHistoryFragment"
-        android:name="com.project.morestore.fragments.orders.history.OrdersHistoryFragment"
+        android:name="com.project.morestore.presentation.fragments.orders.history.OrdersHistoryFragment"
         android:label="OrdersHistoryFragment" >
         <action
             android:id="@+id/action_ordersHistoryFragment_to_ordersCartFragment"
@@ -1188,7 +1177,7 @@
     </fragment>
     <fragment
         android:id="@+id/ordersActiveFragment"
-        android:name="com.project.morestore.fragments.orders.active.OrdersActiveFragment"
+        android:name="com.project.morestore.presentation.fragments.orders.active.OrdersActiveFragment"
         android:label="OrdersActiveFragment" >
         <action
             android:id="@+id/action_ordersActiveFragment_to_ordersCartFragment"
@@ -1220,7 +1209,7 @@
     </fragment>
     <fragment
         android:id="@+id/orderProblemsFragment"
-        android:name="com.project.morestore.fragments.orders.problems.OrderProblemsFragment"
+        android:name="com.project.morestore.presentation.fragments.orders.problems.OrderProblemsFragment"
         android:label="OrderProblemsFragment" >
         <action
             android:id="@+id/action_orderProblemsFragment_to_orderProblemsPhotoFragment"
@@ -1231,11 +1220,11 @@
     </fragment>
     <fragment
         android:id="@+id/orderProblemsPhotoFragment"
-        android:name="com.project.morestore.fragments.orders.problems.photos.OrderProblemsPhotoFragment"
+        android:name="com.project.morestore.presentation.fragments.orders.problems.photos.OrderProblemsPhotoFragment"
         android:label="OrderProblemsPhotoFragment" >
         <argument
             android:name="problemData"
-            app:argType="com.project.morestore.models.ProductProblemsData" />
+            app:argType="com.project.morestore.data.models.ProductProblemsData" />
         <action
             android:id="@+id/action_orderProblemsPhotoFragment_to_ordersActiveFragment"
             app:destination="@id/ordersActiveFragment"
@@ -1248,7 +1237,7 @@
     </fragment>
     <fragment
         android:id="@+id/salesActiveFragment"
-        android:name="com.project.morestore.fragments.SalesActiveFragment"
+        android:name="com.project.morestore.presentation.fragments.SalesActiveFragment"
         android:label="SalesActiveFragment" >
         <action
             android:id="@+id/action_salesActiveFragment_to_dealPlaceFragment"
@@ -1265,7 +1254,7 @@
     </fragment>
     <fragment
         android:id="@+id/dealPlaceFragment"
-        android:name="com.project.morestore.fragments.DealPlaceFragment"
+        android:name="com.project.morestore.presentation.fragments.DealPlaceFragment"
         android:label="DealPlaceFragment" >
         <argument
             android:name="orderId"
@@ -1276,7 +1265,7 @@
     </fragment>
     <fragment
         android:id="@+id/salesHistoryFragment"
-        android:name="com.project.morestore.fragments.SalesHistoryFragment"
+        android:name="com.project.morestore.presentation.fragments.SalesHistoryFragment"
         android:label="SalesHistoryFragment" >
         <action
             android:id="@+id/action_salesHistoryFragment_to_sellerProfileFragment"
@@ -1287,11 +1276,11 @@
     </fragment>
     <fragment
         android:id="@+id/orderDetailsFragment"
-        android:name="com.project.morestore.fragments.OrderDetailsFragment"
+        android:name="com.project.morestore.presentation.fragments.OrderDetailsFragment"
         android:label="OrderDetailsFragment" >
         <argument
             android:name="orderItem"
-            app:argType="com.project.morestore.models.cart.OrderItem"
+            app:argType="com.project.morestore.data.models.cart.OrderItem"
             app:nullable="true"
             android:defaultValue="@null" />
         <action
@@ -1316,18 +1305,21 @@
         <action
             android:id="@+id/action_orderDetailsFragment_to_createDeliveryFragment"
             app:destination="@id/createDeliveryFragment" />
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_cdekInfoFragment"
+            app:destination="@id/cdekInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/blackListFragment"
-        android:name="com.project.morestore.fragments.BlackListFragment"
+        android:name="com.project.morestore.presentation.fragments.BlackListFragment"
         android:label="BlackListFragment" />
     <fragment
         android:id="@+id/createProductPackageFragment"
-        android:name="com.project.morestore.fragments.CreateProductPackageFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductPackageFragment"
         android:label="CreateProductPackageFragment" />
     <fragment
         android:id="@+id/successOrderPaymentFragment"
-        android:name="com.project.morestore.fragments.SuccessOrderPaymentFragment"
+        android:name="com.project.morestore.presentation.fragments.SuccessOrderPaymentFragment"
         android:label="SuccessOrderPaymentFragment" >
         <action
             android:id="@+id/action_successOrderPaymentFragment_to_orderDetailsFragment"
@@ -1338,15 +1330,40 @@
     </fragment>
     <fragment
         android:id="@+id/createDeliveryFragment"
-        android:name="com.project.morestore.fragments.CreateDeliveryFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateDeliveryFragment"
         android:label="CreateDeliveryFragment" >
         <argument
             android:name="order"
-            app:argType="com.project.morestore.models.Order" />
+            app:argType="com.project.morestore.data.models.Order" />
     </fragment>
     <fragment
         android:id="@+id/createProductStylesFragment"
-        android:name="com.project.morestore.fragments.CreateProductStylesFragment"
+        android:name="com.project.morestore.presentation.fragments.CreateProductStylesFragment"
         android:label="CreateProductStylesFragment" />
+    <fragment
+        android:id="@+id/cdekInfoFragment"
+        android:name="com.project.morestore.presentation.fragments.CdekInfoFragment"
+        android:label="CdekInfoFragment" >
+        <argument
+            android:name="cdekInfo"
+            app:argType="com.project.morestore.data.models.CdekOrderInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/cabinetFragment"
+        android:name="com.project.morestore.presentation.fragments.CabinetFragment"
+        android:label="CabinetFragment" >
+        <action
+            android:id="@+id/action_cabinetFragment_to_myProductsFragment"
+            app:destination="@id/myProductsFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_productDraftFragment"
+            app:destination="@id/productDraftFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_profileFragment2"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_cabinetFragment_to_myAddressesFragment"
+            app:destination="@id/myAddressesFragment" />
+    </fragment>
 
 </navigation>

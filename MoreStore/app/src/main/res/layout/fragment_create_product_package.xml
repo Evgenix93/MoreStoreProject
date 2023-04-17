@@ -8,7 +8,7 @@
         android:id="@+id/priceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Размеры товара"
+        android:text="@string/product_dimensions"
         android:textAppearance="@style/bold_24"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.13"
@@ -21,7 +21,7 @@
         android:id="@+id/setPriceTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Пожалуйста, укажите размеры товара. Это поможет нам рассчитать стоимость отправки вашего товара сервисом СДЭК"
+        android:text="@string/write_product_dimens_info"
         app:layout_constraintTop_toBottomOf="@id/priceTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
         android:id="@+id/weightTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Вес (кг)"
+        android:text="@string/weight"
         app:layout_constraintTop_toBottomOf="@id/setPriceTextView"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
@@ -69,7 +69,7 @@
         android:id="@+id/lengthTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Длина (см)"
+        android:text="@string/length"
         app:layout_constraintTop_toBottomOf="@id/weightTextView"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
@@ -104,7 +104,7 @@
         android:id="@+id/widthTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ширина (см)"
+        android:text="@string/width"
         app:layout_constraintTop_toBottomOf="@id/lengthTextView"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
@@ -139,7 +139,7 @@
         android:id="@+id/heightTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Высота (см)"
+        android:text="@string/height"
         app:layout_constraintTop_toBottomOf="@id/widthTextView"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
@@ -189,5 +189,16 @@
 
     <include layout="@layout/toolbar_create_product"
         android:id="@+id/toolbar"/>
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/green"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
